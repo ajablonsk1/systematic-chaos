@@ -1,5 +1,5 @@
 {
-	graph: [
+	"graph": [
 		{
 			"id": -1,
 			"type": "start",
@@ -54,7 +54,7 @@
 			"question": "Jeśli zawiniesz kabel kawałkiem folii aluminiowej, jaki rodzaj skrętki Ci to przypomina?",
 			"questionHint": "?",
 			"difficulty": "Trudne",
-			"options": null
+			"options": null,
 			"points": 30,
 			"next": [4],
 		},
@@ -64,7 +64,7 @@
 			"question": "Jaki rodzaj powszechnie używanego kabla byłby możliwy do użytku po użyciu jak skakanka? Dlaczego ten?",
 			"questionHint": "Kable 2",
 			"difficulty": "Średnie",
-			"options": null
+			"options": null,
 			"points": 20,
 			"next": [-2],
 		},
@@ -74,25 +74,25 @@
 			"question": "Zakoduj swoje imię i nazwisko za pomocą kodowania NRZI. ",
 			"questionHint": "Kable 2",
 			"difficulty": "Trudne",
-			"options": null
+			"options": null,
 			"points": 30,
 			"next": [-2],
 		},
 	],
-	accessDates: [
+	accessDates: {
 		"all": {
-			start: 2020-04-23T18:25:43.511Z,
-			end: 2020-04-30T18:25:43.511Z,
+			start: "2020-04-23T18:25:43.511Z",
+			end: "2020-04-30T18:25:43.511Z",
 		},
 		"pn-1440-A": {
-			start: 2020-04-23T18:25:43.511Z,
-			end: 2020-04-30T18:25:43.511Z,
-		}
-		"pn-1440-B": {
-			start: 2020-03-10T18:25:43.511Z,
-			end: 2020-04-17T18:25:43.511Z,
+			start: "2020-04-23T18:25:43.511Z",
+			end: "2020-04-30T18:25:43.511Z",
 		},
-	],
+		"pn-1440-B": {
+			start: "2020-03-10T18:25:43.511Z",
+			end: "2020-04-17T18:25:43.511Z",
+		},
+	},
 	"type": "expedition",
 	"desc": "Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!",
 	"requiredInfo": "skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą",
