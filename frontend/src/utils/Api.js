@@ -8,3 +8,15 @@ export function getStartQuestions() {
     );
     return startQuestions;
 }
+
+export function getExampleQuestion(){
+    let question = expedition.graph[2];
+
+    return {
+        category: question.questionHint,
+        points: question.points,
+        content: question.question,
+        answers: question.options,
+        type: question.type
+    }
+}

@@ -3,7 +3,10 @@
     --content-margin-x: 20px;
     --content-margin-y: 5px;
     --content-width-with-margin: calc(100vw - var(--sidebar-width) - 2*var(--content-margin-x));
-    --content-width-without-margin: calc(100vw - var(--sidebar-width))
+    --content-width-without-margin: calc(100vw - var(--sidebar-width));
+
+    --font-color: #FFB30D;
+    --dark-blue: #001542;
 }
 
 body {
