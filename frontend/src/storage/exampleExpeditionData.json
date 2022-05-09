@@ -1,0 +1,98 @@
+{
+    "graph": [
+        {
+            "id": -1,
+            "type": "start",
+            "question": null,
+            "questionHint": null,
+            "difficulty": null,
+            "options": null,
+            "points": 0,
+            "next": [0, 1, 2]
+        },
+        {
+            "id": -2,
+            "type": "end",
+            "question": null,
+            "questionHint": null,
+            "difficulty": null,
+            "options": null,
+            "points": 0,
+            "next": null
+        },
+        {
+            "id": 0,
+            "type": "closed",
+            "question": "Które urządzenia można połączyć ze sobą skrętką “prostą”?",
+            "questionHint": "Kable",
+            "difficulty": "Łatwe",
+            "options": [
+                "komputer z routerem",
+                "komputer z komputerem",
+                "router z routerem",
+                "router ze switchem"
+            ],
+            "points": 10,
+            "next": [3]
+        },
+        {
+            "id": 1,
+            "type": "closed",
+            "question": "Czy ciąg znaków 1001100101101010010110 to poprawnie zakodowany za pomocą kodu Manchester ciąg 10100111001?",
+            "questionHint": "Manchester",
+            "difficulty": "Średnie",
+            "options": ["Tak", "Nie"],
+            "points": 20,
+            "next": [3, 4]
+        },
+        {
+            "id": 2,
+            "type": "open",
+            "question": "Jeśli zawiniesz kabel kawałkiem folii aluminiowej, jaki rodzaj skrętki Ci to przypomina?",
+            "questionHint": "?",
+            "difficulty": "Trudne",
+            "options": null,
+            "points": 30,
+            "next": [4]
+        },
+        {
+            "id": 3,
+            "type": "open",
+            "question": "Jaki rodzaj powszechnie używanego kabla byłby możliwy do użytku po użyciu jak skakanka? Dlaczego ten?",
+            "questionHint": "Kable 2",
+            "difficulty": "Średnie",
+            "options": null,
+            "points": 20,
+            "next": [-2]
+        },
+        {
+            "id": 4,
+            "type": "open",
+            "question": "Zakoduj swoje imię i nazwisko za pomocą kodowania NRZI. ",
+            "questionHint": "Kable 2",
+            "difficulty": "Trudne",
+            "options": null,
+            "points": 30,
+            "next": [-2]
+        }
+    ],
+    "accessDates": {
+        "all": {
+            "start": "2020-04-23T18:25:43.511Z",
+            "end": "2020-04-30T18:25:43.511Z"
+        },
+        "pn-1440-A": {
+            "start": "2020-04-23T18:25:43.511Z",
+            "end": "2020-04-30T18:25:43.511Z"
+        },
+        "pn-1440-B": {
+            "start": "2020-03-10T18:25:43.511Z",
+            "end": "2020-04-17T18:25:43.511Z"
+        }
+    },
+    "type": "expedition",
+    "desc": "Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!",
+    "requiredInfo": "skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą",
+    "points": 60,
+    "points_100": 30
+}
