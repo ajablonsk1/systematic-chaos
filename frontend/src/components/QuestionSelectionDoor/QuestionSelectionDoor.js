@@ -1,11 +1,12 @@
 import React from 'react';
-import {Background, Door, DoorColumn} from "./QuestionSelectionDoorStyles";
+import {Door, DoorColumn} from "./QuestionSelectionDoorStyles";
 import {Button, Row} from "react-bootstrap";
+import {ContentWithoutMargin} from "../App/AppGeneralStyles";
 
 
 function generateDoor(question, key){
     return(
-        <DoorColumn key={key}>
+        <DoorColumn key={key} xl={4} md={12}>
             <Row className='mx-auto'>
                 <h3>{question.DIFFICULTY.toUpperCase()}</h3>
             </Row>
@@ -27,11 +28,11 @@ function generateDoor(question, key){
 
 function QuestionSelectionDoor({questions}) {
     return (
-        <Background>
+        <ContentWithoutMargin>
             <Row>
                 {questions.map((question, key) => generateDoor(question, key))}
             </Row>
-        </Background>
+        </ContentWithoutMargin>
     );
 }
 
