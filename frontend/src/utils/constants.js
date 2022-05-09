@@ -1,5 +1,6 @@
 export const PageRoutes = {
     HOME: "/",
+    QUESTION_SELECTION: "/doors-selection"
     // TODO: add new path routes in the future
 }
 
