@@ -1,4 +1,5 @@
 import expedition from '../storage/exampleExpeditionData.json';
+import chapters from '../storage/exampleChapterList.json';
 import { START_GRAPH_NODE_ID } from './constants';
 
 export function getStartQuestions() {
@@ -7,4 +8,10 @@ export function getStartQuestions() {
         expedition.graph.find(x => x.id === nextNodeId)
     );
     return startQuestions;
+}
+
+//should be enough to get chapter selection working, activityMap handled by another API call
+
+export function getChapters() {
+    return chapters;
 }
