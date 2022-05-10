@@ -1,0 +1,37 @@
+{
+    "chapters": [
+        {
+            "id": 0,
+            "name": "Rozdział 1",
+            "unlockCriteria": {
+                "mustFulfill": "NONE",
+                "requirements": null
+            },
+            "nextChapterID": "1"
+        },
+        {
+            "id": 1,
+            "name": "Rozdział 2",
+            "unlockCriteria": {
+                "mustFulfill": "ANY",
+                "requirements": {
+                    "score": 15,
+                    "time": null
+                }
+            },
+            "nextChapterID": "2"
+        },
+        {
+            "id": 2,
+            "name": "Rozdział 3",
+            "unlockCriteria": {
+                "mustFulfill": "ANY",
+                "requirements": {
+                    "score": 15,
+                    "time": null
+                }
+            },
+            "nextChapterID": null
+        }
+    ]
+}
