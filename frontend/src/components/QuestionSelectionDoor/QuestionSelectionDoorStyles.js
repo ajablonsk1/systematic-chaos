@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import door from "./resources/door.png";
-import background from "./resources/background.png";
+import door from "../../utils/resources/door.png";
+import background from "../../utils/resources/background.png";
 import {Col} from "react-bootstrap";
 
 
@@ -15,7 +15,6 @@ export const Door = styled.div`
     background-size: auto 100%;
   }
 `;
-
 
 export const DoorColumn = styled(Col)`
   display: flex;

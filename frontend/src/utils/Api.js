@@ -13,7 +13,18 @@ export function getStartQuestions(chapterID, expeditionID) {
     return startQuestions;
 }
 
+export function getExampleQuestion() {
+    let question = expedition.graph[2];
 
+    return {
+        category: question.questionHint,
+        points: question.points,
+        content: question.question,
+        answers: question.options,
+        type: question.type,
+        multipleChoice: question.multipleChoice,
+    };
+}
 //check whether currentNodeID is not END_GRAPH_NODE_ID before function call
 
 export function getNextQuestions(chapterID, expeditionID, currentNodeID) {
@@ -24,20 +35,17 @@ export function getNextQuestions(chapterID, expeditionID, currentNodeID) {
     return nextQuestions;
 }
 
-
 //currently wrapped in "activityMap" since it will be probably an extracted part of chapter info
 
 export function getActivityMap(chapterID) {
     return mapData;
 }
 
-
 //hard-coded expedition for now, will get correct activities later
 
 export function getActivityAtID(chapterID, activityID) {
     return expedition;
 }
-
 
 //should be enough to get chapter selection working, activityMap handled by another API call
 

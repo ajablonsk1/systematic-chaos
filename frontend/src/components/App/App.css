@@ -2,8 +2,12 @@
     --sidebar-width: 280px;
     --content-margin-x: 20px;
     --content-margin-y: 5px;
-    --content-width-with-margin: calc(100vw - var(--sidebar-width) - 2*var(--content-margin-x));
-    --content-width-without-margin: calc(100vw - var(--sidebar-width))
+    --content-width-with-margin: calc(100vw - var(--sidebar-width) - 2 * var(--content-margin-x));
+    --content-width-without-margin: calc(100vw - var(--sidebar-width));
+
+    --font-color: #ffb30d;
+    --dark-blue: #001542;
+    --button-green: #085454;
 }
 
 body {
@@ -11,4 +15,16 @@ body {
     height: 100vh;
     position: absolute;
     overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+    *::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    * {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
 }
