@@ -27,3 +27,9 @@ export function getNextQuestions(chapterID, expeditionID, currentNodeID) {
 export function getActivityMap(chapterID) {
     return mapData;
 }
+
+//hard-coded expedition for now, will get correct activities later
+
+export function getActivityAtID(chapterID, activityID) {
+    return expedition;
+}
