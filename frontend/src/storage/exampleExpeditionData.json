@@ -8,7 +8,8 @@
             "difficulty": null,
             "options": null,
             "points": 0,
-            "next": [0, 1, 2]
+            "next": [0, 1, 2],
+            "multipleChoice": null
         },
         {
             "id": -2,
@@ -18,7 +19,8 @@
             "difficulty": null,
             "options": null,
             "points": 0,
-            "next": null
+            "next": null,
+            "multipleChoice": null
         },
         {
             "id": 0,
@@ -33,7 +35,8 @@
                 "router ze switchem"
             ],
             "points": 10,
-            "next": [3]
+            "next": [3],
+            "multipleChoice": true
         },
         {
             "id": 1,
@@ -43,7 +46,8 @@
             "difficulty": "Średnie",
             "options": ["Tak", "Nie"],
             "points": 20,
-            "next": [3, 4]
+            "next": [3, 4],
+            "multipleChoice": false
         },
         {
             "id": 2,
@@ -53,7 +57,8 @@
             "difficulty": "Trudne",
             "options": null,
             "points": 30,
-            "next": [4]
+            "next": [4],
+            "multipleChoice": null
         },
         {
             "id": 3,
@@ -63,7 +68,8 @@
             "difficulty": "Średnie",
             "options": null,
             "points": 20,
-            "next": [-2]
+            "next": [-2],
+            "multipleChoice": null
         },
         {
             "id": 4,
@@ -73,7 +79,8 @@
             "difficulty": "Trudne",
             "options": null,
             "points": 30,
-            "next": [-2]
+            "next": [-2],
+            "multipleChoice": null
         }
     ],
     "accessDates": {

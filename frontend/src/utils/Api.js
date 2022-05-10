@@ -9,7 +9,7 @@ export function getStartQuestions() {
     return startQuestions;
 }
 
-export function getExampleQuestion(){
+export function getExampleQuestion() {
     let question = expedition.graph[2];
 
     return {
@@ -17,6 +17,7 @@ export function getExampleQuestion(){
         points: question.points,
         content: question.question,
         answers: question.options,
-        type: question.type
-    }
+        type: question.type,
+        multipleChoice: question.multipleChoice,
+    };
 }
