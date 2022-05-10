@@ -6,8 +6,8 @@ function QuestionAndOptions({ props }) {
 
     return (
         <ContentWithBackground>
-            <Row style={{ height: '80vh' }}>
-                <Col xs={8}>
+            <Row style={{ margin: 0 }}>
+                <Col lg={8}>
                     <QuestionCard>
                         <div>{category}</div>
                         <div>
@@ -16,14 +16,16 @@ function QuestionAndOptions({ props }) {
                         <div>Punkty: {points}</div>
                     </QuestionCard>
                 </Col>
-                <Col xs={4} className={'p-0'}>
+                <Col lg={4} className="py-lg-0 py-3">
                     {answers.map(answer => (
-                        <Answer key={answer}>
-                            <Col xs={1}>
+                        <Answer key={answer} className="mx-lg-0 mx-auto">
+                            <Col xxl={1} xs={2}>
                                 <input name="answer" type={multipleChoice ? 'checkbox' : 'radio'} />
                                 {/* <span className='checkmark'/> */}
                             </Col>
-                            <Col xs={11}>{answer}</Col>
+                            <Col xxl={11} xs={10}>
+                                {answer}
+                            </Col>
                         </Answer>
                     ))}
                     <ButtonRow>

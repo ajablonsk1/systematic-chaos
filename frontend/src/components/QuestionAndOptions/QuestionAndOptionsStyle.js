@@ -9,16 +9,17 @@ export const ContentWithBackground = styled(ContentWithoutMargin)`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 20px;
 `;
 
 export const QuestionCard = styled.div`
-    width: 100%;
     height: 80vh;
 
     background-color: var(--dark-blue);
     color: var(--font-color);
-    margin: 10px;
+    margin: 0;
     text-align: center;
+    /* width: calc(100% - var(--margin)); */
 
     & div:first-child {
         font-size: 50px;
@@ -51,12 +52,12 @@ export const QuestionCard = styled.div`
 `;
 
 export const Answer = styled(Row)`
-    margin: 10px 0 0 0;
     padding: 20px 10px;
     font-size: 23px;
     background-color: var(--dark-blue);
     color: var(--font-color);
     max-width: 95%;
+    margin: 0 0 10px;
 
     & > * {
         padding: 5px;
