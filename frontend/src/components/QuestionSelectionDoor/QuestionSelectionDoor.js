@@ -50,7 +50,7 @@ function QuestionSelectionDoor() {
         } else {
             setQuestions(getParentQuestions(+parentId, +expeditionId));
         }
-    }, [parentId]);
+    }, [parentId, expeditionId, navigate]);
 
     return (
         <ContentWithoutMargin>
