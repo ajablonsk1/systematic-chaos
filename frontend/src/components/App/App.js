@@ -24,16 +24,19 @@ function App() {
 
                             {/*//TODO: change it when mock data set will be ready*/}
                             <Route
-                                path={PageRoutes.QUESTION_SELECTION}
+                                path={`${PageRoutes.QUESTION_SELECTION}/:expeditionId/:parentId`}
                                 element={<QuestionSelectionDoor />}
                             />
 
                             <Route
-                                path={PageRoutes.QUESTION_ANSWER}
+                                path={`${PageRoutes.QUESTION_ANSWER}/:expeditionId/:questionId`}
                                 element={<QuestionAndOptions />}
                             />
 
-                            <Route path={PageRoutes.EXPEDITION_INFO} element={<ExpeditionInfo />} />
+                            <Route
+                                path={`${PageRoutes.EXPEDITION_INFO}/:expeditionId`}
+                                element={<ExpeditionInfo />}
+                            />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>

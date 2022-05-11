@@ -15,13 +15,14 @@ export function getStartQuestions(chapterID, expeditionID) {
 
 export function getParentQuestions(parentID, expeditionID) {
     // todo: take the appropriate expedition from the expedition list in the future
+
     return expedition.graph
         .find(node => node.id === parentID)
         .next.map(questionId => getQuestionForDoor(expeditionID, questionId));
 }
 
 function getQuestionForDoor(expeditionId, questionID) {
-    let question = expedition.graph[questionID];
+    let question = expedition.graph.find(q => q.id === questionID);
 
     return {
         id: question.id,
@@ -31,7 +32,7 @@ function getQuestionForDoor(expeditionId, questionID) {
 }
 
 export function getQuestion(expeditionID, questionID) {
-    let question = expedition.graph[questionID];
+    let question = expedition.graph.find(q => q.id === questionID);
 
     return {
         id: question.id,

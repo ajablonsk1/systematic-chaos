@@ -20,7 +20,7 @@ function Loader() {
     return (
         <SpinnerContainer>
             <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
+                <span />
             </Spinner>
         </SpinnerContainer>
     );
