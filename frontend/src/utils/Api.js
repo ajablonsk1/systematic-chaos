@@ -13,10 +13,28 @@ export function getStartQuestions(chapterID, expeditionID) {
     return startQuestions;
 }
 
-export function getExampleQuestion() {
-    let question = expedition.graph[2];
+export function getParentQuestions(parentID, expeditionID) {
+    // todo: take the appropriate expedition from the expedition list in the future
+    return expedition.graph
+        .find(node => node.id === parentID)
+        .next.map(questionId => getQuestionForDoor(expeditionID, questionId));
+}
+
+function getQuestionForDoor(expeditionId, questionID) {
+    let question = expedition.graph[questionID];
 
     return {
+        id: question.id,
+        difficulty: question.difficulty,
+        category: question.questionHint,
+    };
+}
+
+export function getQuestion(expeditionID, questionID) {
+    let question = expedition.graph[questionID];
+
+    return {
+        id: question.id,
         category: question.questionHint,
         points: question.points,
         content: question.question,

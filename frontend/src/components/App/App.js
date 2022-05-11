@@ -1,13 +1,13 @@
-import './App.css';
 import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Sidebar from '../Sidebar/Sidebar';
+import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
+import ExpeditionInfo from '../ExpeditionInfo/ExpeditionInfo';
 import GameMap from '../GameMap/GameMap';
 import NotFound from '../NotFoundPage/NotFound';
-import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
-import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor';
-import { getExampleQuestion, getStartQuestions } from '../../utils/Api';
 import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions';
+import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor';
+import Sidebar from '../Sidebar/Sidebar';
+import './App.css';
 
 function App() {
     return (
@@ -25,13 +25,15 @@ function App() {
                             {/*//TODO: change it when mock data set will be ready*/}
                             <Route
                                 path={PageRoutes.QUESTION_SELECTION}
-                                element={<QuestionSelectionDoor questions={getStartQuestions()} />}
+                                element={<QuestionSelectionDoor />}
                             />
 
                             <Route
                                 path={PageRoutes.QUESTION_ANSWER}
-                                element={<QuestionAndOptions props={getExampleQuestion()} />}
+                                element={<QuestionAndOptions />}
                             />
+
+                            <Route path={PageRoutes.EXPEDITION_INFO} element={<ExpeditionInfo />} />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>

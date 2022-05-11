@@ -1,8 +1,33 @@
 import { Col, Row } from 'react-bootstrap';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react/cjs/react.production.min';
+import { useState } from 'react/cjs/react.production.min';
+import { getQuestion } from '../../utils/Api';
+import { PageRoutes } from '../../utils/constants';
 import { Answer, ButtonRow, ContentWithBackground, QuestionCard } from './QuestionAndOptionsStyle';
 
-function QuestionAndOptions({ props }) {
-    const { category, answers, points, content, multipleChoice } = props;
+function QuestionAndOptions() {
+    const { expeditionId, questionId } = useParams();
+    const [{ id, category, answers, points, content, multipleChoice }, setQuestion] = useState();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (expeditionId == null || questionId == null) {
+            navigate(PageRoutes.HOME);
+        } else {
+            setQuestion(getQuestion(+expeditionId, +questionId));
+        }
+    }, [
+        expeditionId,
+        id,
+        category,
+        answers,
+        points,
+        content,
+        multipleChoice,
+        questionId,
+        navigate,
+    ]);
 
     return (
         <ContentWithBackground>
@@ -29,7 +54,14 @@ function QuestionAndOptions({ props }) {
                         </Answer>
                     ))}
                     <ButtonRow>
-                        <button>Wyślij</button>
+                        <button
+                            onClick={() =>
+                                // todo: send answer
+                                navigate(`${PageRoutes.QUESTION_SELECTION}/${expeditionId}/${id}`)
+                            }
+                        >
+                            Wyślij
+                        </button>
                     </ButtonRow>
                 </Col>
             </Row>
