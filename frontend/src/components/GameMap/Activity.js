@@ -13,8 +13,8 @@ function Activity(props) {
 
     useEffect(() => {
         const updateSize = () => {
-            setWidth(props.parent.current.offsetWidth / props.mapSizeY * 0.95); // * 0.95 prevents wraping row
-            setHeight(props.parent.current.offsetHeight / props.mapSizeX * 0.95);
+            setWidth(props.parent.current.offsetWidth / props.mapSizeY * 0.90); // * 0.90 prevents wraping row
+            setHeight(props.parent.current.offsetHeight / props.mapSizeX * 0.90);
         }
 
         if (props.parent.current) 

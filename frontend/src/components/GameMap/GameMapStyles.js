@@ -15,4 +15,9 @@ export const Border = styled.div`
   background: url("${background}") no-repeat;
   background-size: cover;
 
+  @media(max-width: 768px){
+    left: 0;
+    width: 100vw!important;
+  }
+
 `;
