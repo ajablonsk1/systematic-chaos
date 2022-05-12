@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { Border } from './ChapterStyles';
-import { Container, Row } from 'react-bootstrap';
+import { Border, MyContainer } from './ChapterStyles';
+import { Row } from 'react-bootstrap';
 import Activity from './Activity';
 
 
@@ -41,9 +41,9 @@ function Chapter(props) {
     
     return (
         <Border ref = { parentRef }>
-            <Container>
+            <MyContainer fluid>
                 {activities}
-            </Container>
+            </MyContainer>
         </Border>
     );
 }

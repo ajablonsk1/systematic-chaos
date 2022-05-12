@@ -10,7 +10,6 @@ function Activity(props) {
     const [width, setWidth] = useState(100);
     const [height, setHeight] = useState(100);
 
-
     useEffect(() => {
         const updateSize = () => {
             setWidth(props.parent.current.offsetWidth / props.mapSizeY * 0.90); // * 0.90 prevents wraping row

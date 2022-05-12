@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button'
 export const Square = styled(Button)`
   margin: 1px;
   background-color: transparent;
-  border: 1px solid white;
+  border: 2px solid white;
 
   &:hover {
     background-color: transparent;
