@@ -71,3 +71,19 @@ export function getActivityAtID(chapterID, activityID) {
 export function getChapters() {
     return chapters;
 }
+
+export function getExpeditionPoints(expeditionId) {
+    return getExpedition(expeditionId).points;
+}
+
+export function getExpedition(expeditionId) {
+    // TODO: get expedition using expeditionId from expeditions list
+    return expedition;
+}
+
+export function getExpeditionPointsClosed(expeditionId) {
+    let expedition = getExpedition(expeditionId);
+    return expedition.graph
+        .filter(question => question.type === 'closed')
+        .reduce((q1, q2) => q1.points + q2.points);
+}

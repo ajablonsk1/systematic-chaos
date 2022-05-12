@@ -43,6 +43,7 @@ function ClosedQuestionPage(props) {
             // save answer and go to next doors selection
             actualAnswersList.push(answerToAdd);
             localStorage.setItem('userAnswers', JSON.stringify(actualAnswersList));
+            console.log(localStorage);
 
             navigate(`${PageRoutes.QUESTION_SELECTION}/${props.expeditionId}/${props.question.id}`);
         }

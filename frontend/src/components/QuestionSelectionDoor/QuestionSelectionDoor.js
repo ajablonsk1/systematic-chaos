@@ -59,6 +59,7 @@ function QuestionSelectionDoor() {
             ) : (
                 <>
                     {questions.find(q => q.id === -2) ? (
+                        // TODO: think about better solution - displaying expedition summary using url "doors-selection/:id/:id" is weird
                         <ExpeditionSummary />
                     ) : (
                         <Row>
