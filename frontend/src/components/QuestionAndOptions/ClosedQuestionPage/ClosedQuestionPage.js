@@ -31,7 +31,19 @@ function ClosedQuestionPage(props) {
         }
         // if acceptWarning == null or true
         if (acceptWarning !== false) {
-            // todo: save user answers in localStorage
+            // get actual answers list from expedition
+            let actualAnswersList = JSON.parse(localStorage.getItem('userAnswers')) || [];
+
+            // new answer from actual question
+            let answerToAdd = {
+                questionId: props.question.id,
+                answers: userAnswers,
+            };
+
+            // save answer and go to next doors selection
+            actualAnswersList.push(answerToAdd);
+            localStorage.setItem('userAnswers', JSON.stringify(actualAnswersList));
+
             navigate(`${PageRoutes.QUESTION_SELECTION}/${props.expeditionId}/${props.question.id}`);
         }
     };

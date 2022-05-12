@@ -29,10 +29,10 @@
             "questionHint": "Kable",
             "difficulty": "Łatwe",
             "options": [
-                "komputer z routerem",
+                "hub z routerem",
                 "komputer z komputerem",
-                "router z routerem",
-                "router ze switchem"
+                "switch z routerem",
+                "hub ze switchem"
             ],
             "points": 10,
             "next": [3],
