@@ -35,7 +35,7 @@
                 "hub ze switchem"
             ],
             "points": 10,
-            "next": [3],
+            "next": [3, 1],
             "multipleChoice": true
         },
         {
@@ -46,7 +46,7 @@
             "difficulty": "Średnie",
             "options": ["Tak", "Nie"],
             "points": 20,
-            "next": [3, 4],
+            "next": [3, 4, -2],
             "multipleChoice": false
         },
         {

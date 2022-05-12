@@ -58,7 +58,7 @@ function QuestionSelectionDoor() {
                 <Loader />
             ) : (
                 <>
-                    {questions.includes(-2) ? (
+                    {questions.find(q => q.id === -2) ? (
                         <ExpeditionSummary />
                     ) : (
                         <Row>
