@@ -32,7 +32,6 @@ export function buildNavLink(to, content){
             as={Link}
             key={to}
             to={to}
-            style={{}}
         >
             <span>{content}</span>
         </NavLinkStyles>
