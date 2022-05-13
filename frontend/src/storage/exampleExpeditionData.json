@@ -46,7 +46,7 @@
             "difficulty": "Średnie",
             "options": ["Tak", "Nie"],
             "points": 20,
-            "next": [3, 4, -2],
+            "next": [-2],
             "multipleChoice": false
         },
         {
