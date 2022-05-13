@@ -13,7 +13,37 @@ export function getStartQuestions(chapterID, expeditionID) {
     return startQuestions;
 }
 
+export function getParentQuestions(parentID, expeditionID) {
+    // todo: take the appropriate expedition from the expedition list in the future
 
+    return expedition.graph
+        .find(node => node.id === parentID)
+        .next.map(questionId => getQuestionForDoor(expeditionID, questionId));
+}
+
+function getQuestionForDoor(expeditionId, questionID) {
+    let question = expedition.graph.find(q => q.id === questionID);
+
+    return {
+        id: question.id,
+        difficulty: question.difficulty,
+        category: question.questionHint,
+    };
+}
+
+export function getQuestion(expeditionID, questionID) {
+    let question = expedition.graph.find(q => q.id === questionID);
+
+    return {
+        id: question.id,
+        category: question.questionHint,
+        points: question.points,
+        content: question.question,
+        answers: question.options,
+        type: question.type,
+        multipleChoice: question.multipleChoice,
+    };
+}
 //check whether currentNodeID is not END_GRAPH_NODE_ID before function call
 
 export function getNextQuestions(chapterID, expeditionID, currentNodeID) {
@@ -24,13 +54,11 @@ export function getNextQuestions(chapterID, expeditionID, currentNodeID) {
     return nextQuestions;
 }
 
-
 //currently wrapped in "activityMap" since it will be probably an extracted part of chapter info
 
 export function getActivityMap(chapterID) {
     return mapData;
 }
-
 
 //hard-coded expedition for now, will get correct activities later
 
@@ -38,9 +66,24 @@ export function getActivityAtID(chapterID, activityID) {
     return expedition;
 }
 
-
 //should be enough to get chapter selection working, activityMap handled by another API call
 
 export function getChapters() {
     return chapters;
+}
+
+export function getExpeditionPoints(expeditionId) {
+    return getExpedition(expeditionId).points;
+}
+
+export function getExpedition(expeditionId) {
+    // TODO: get expedition using expeditionId from expeditions list
+    return expedition;
+}
+
+export function getExpeditionPointsClosed(expeditionId) {
+    let expedition = getExpedition(expeditionId);
+    return expedition.graph
+        .filter(question => question.type === 'closed')
+        .reduce((q1, q2) => q1.points + q2.points);
 }

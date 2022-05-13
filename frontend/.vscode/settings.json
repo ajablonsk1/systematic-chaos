@@ -1,0 +1,5 @@
+{
+    "terminal.integrated.fontSize": 18,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always"
+}
