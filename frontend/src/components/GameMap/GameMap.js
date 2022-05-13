@@ -1,13 +1,16 @@
 import React from 'react';
 import { getActivityMap } from '../../utils/Api';
+import { ContentWithoutMargin } from '../App/AppGeneralStyles';
 import Chapter from './Chapter';
-import { Border } from './GameMapStyles';
+import { Background } from './GameMapStyles';
 
 function GameMap(props) {
     return (
-        <Border>
-             <Chapter activityMap={getActivityMap(0)}></Chapter>
-        </Border>
+        <ContentWithoutMargin>
+            <Background>
+                <Chapter activityMap={getActivityMap(0)}></Chapter>
+            </Background>
+        </ContentWithoutMargin>
     );
 }
 
