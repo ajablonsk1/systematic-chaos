@@ -44,7 +44,6 @@ export function buildNavLinkMobile(to, content){
             as={Link}
             key={to}
             to={to}
-            style={{}}
         >
             <FontAwesomeIcon icon={content}/>
         </NavLinkStylesMobile>
