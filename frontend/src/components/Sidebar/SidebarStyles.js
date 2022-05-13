@@ -5,7 +5,7 @@ import { Navbar, Nav } from 'react-bootstrap';
 export const SidebarEdit = styled(Navbar)`
     width: var(--sidebar-width);
     height: 100vh;
-    background-color: var(--dark-blue); // TODO: use figma color, this is for testing only
+    background-color: var(--dark-blue);
     position: fixed;
     top: 0;
     left: 0;
