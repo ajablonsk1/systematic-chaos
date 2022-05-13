@@ -5,6 +5,12 @@ import { PageRoutes } from '../../../utils/constants';
 import { ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle';
 import { UserAnswerArea } from './OpenQuestionStyle';
 
+function fitAreaToContent(text) {
+    const maxHeight = 300; // px
+    text.style.height = '0';
+    text.style.height = Math.min(text.scrollHeight, maxHeight) + 'px';
+}
+
 export default function OpenQuestionPage(props) {
     const userAnswer = useRef();
     const navigate = useNavigate();
@@ -48,7 +54,11 @@ export default function OpenQuestionPage(props) {
                 </QuestionCard>
             </Col>
             <Col xs={12}>
-                <UserAnswerArea ref={userAnswer} placeholder="Twoja odpowiedź..."></UserAnswerArea>
+                <UserAnswerArea
+                    ref={userAnswer}
+                    placeholder="Twoja odpowiedź..."
+                    onInput={() => fitAreaToContent(userAnswer.current)}
+                ></UserAnswerArea>
             </Col>
             <ButtonRow className="w-50">
                 <button onClick={() => saveAnswer()}>Wyślij</button>
