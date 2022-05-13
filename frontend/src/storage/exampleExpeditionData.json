@@ -29,13 +29,13 @@
             "questionHint": "Kable",
             "difficulty": "Łatwe",
             "options": [
-                "komputer z routerem",
+                "hub z routerem",
                 "komputer z komputerem",
-                "router z routerem",
-                "router ze switchem"
+                "switch z routerem",
+                "hub ze switchem"
             ],
             "points": 10,
-            "next": [3],
+            "next": [3, 1],
             "multipleChoice": true
         },
         {
@@ -46,7 +46,7 @@
             "difficulty": "Średnie",
             "options": ["Tak", "Nie"],
             "points": 20,
-            "next": [3, 4],
+            "next": [-2],
             "multipleChoice": false
         },
         {

@@ -1,38 +1,40 @@
-import { Col, Row } from 'react-bootstrap';
-import { Answer, ButtonRow, ContentWithBackground, QuestionCard } from './QuestionAndOptionsStyle';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import ClosedQuestionPage from './ClosedQuestionPage/ClosedQuestionPage';
+import { getQuestion } from '../../utils/Api';
+import { PageRoutes } from '../../utils/constants';
+import Loader from '../Loader/Loader';
+import { ContentWithBackground } from './QuestionAndOptionsStyle';
 
-function QuestionAndOptions({ props }) {
-    const { category, answers, points, content, multipleChoice } = props;
+function QuestionAndOptions() {
+    const { expeditionId, questionId } = useParams();
+    const [question, setQuestion] = useState();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (expeditionId == null || questionId == null) {
+            navigate(PageRoutes.HOME);
+        } else {
+            setQuestion(getQuestion(+expeditionId, +questionId));
+        }
+    }, [questionId, expeditionId, navigate]);
 
     return (
         <ContentWithBackground>
-            <Row style={{ margin: 0 }}>
-                <Col lg={8}>
-                    <QuestionCard>
-                        <div>{category}</div>
-                        <div>
-                            <p>{content}</p>
-                        </div>
-                        <div>Punkty: {points}</div>
-                    </QuestionCard>
-                </Col>
-                <Col lg={4} className="py-lg-0 py-3">
-                    {answers.map(answer => (
-                        <Answer key={answer} className="mx-lg-0 mx-auto">
-                            <Col xxl={1} xs={2}>
-                                <input name="answer" type={multipleChoice ? 'checkbox' : 'radio'} />
-                                {/* <span className='checkmark'/> */}
-                            </Col>
-                            <Col xxl={11} xs={10}>
-                                {answer}
-                            </Col>
-                        </Answer>
-                    ))}
-                    <ButtonRow>
-                        <button>Wyślij</button>
-                    </ButtonRow>
-                </Col>
-            </Row>
+            {question === undefined ? (
+                <Loader />
+            ) : (
+                <>
+                    {question.type === 'open' ? (
+                        <div>hello</div>
+                    ) : (
+                        <ClosedQuestionPage
+                            expeditionId={expeditionId}
+                            question={question}
+                        ></ClosedQuestionPage>
+                    )}
+                </>
+            )}
         </ContentWithBackground>
     );
 }

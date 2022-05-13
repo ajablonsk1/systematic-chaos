@@ -1,7 +1,8 @@
 export const PageRoutes = {
     HOME: '/',
     QUESTION_SELECTION: '/doors-selection',
-    QUESTION_ANSWER: '/question/:id'
+    QUESTION_ANSWER: '/question',
+    EXPEDITION_INFO: '/expedition-info',
     // TODO: add new path routes in the future
 };
 
