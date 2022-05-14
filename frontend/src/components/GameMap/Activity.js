@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { getActivityImg } from '../../utils/constants';
 import { Square, ActivityImg } from './ActivityStyles';
-import ExpeditionImg from './resources/expedition.png';
-import InformationImg from './resources/information.png';
-import SurveyImg from './resources/survey.png';
-import TaskImg from './resources/task.png';
-
 
 function Activity(props) {
     const [width, setWidth] = useState(100);
@@ -31,22 +27,6 @@ function Activity(props) {
         return true;
     }
 
-    const getImg = (type) => {
-        switch(type) {
-            case "expedition":
-                return ExpeditionImg
-            case "information":
-                return InformationImg;
-            case "survey":
-                return SurveyImg;
-            case "task":
-                return TaskImg;
-            default:
-                return;
-          }
-
-    }
-
     const getContent = () => {
         if (props.props)
         {
@@ -57,7 +37,7 @@ function Activity(props) {
             const activity = props.props;
             const type = activity.activityType;
 
-            return <ActivityImg src={getImg(type)}></ActivityImg>
+            return <ActivityImg src={getActivityImg(type)}></ActivityImg>
         }
         return;
     }

@@ -1,3 +1,8 @@
+import ExpeditionImg from './resources/activities/expedition.png';
+import InformationImg from './resources/activities/information.png';
+import SurveyImg from './resources/activities/survey.png';
+import TaskImg from './resources/activities/task.png';
+
 export const PageRoutes = {
     HOME: '/',
     QUESTION_SELECTION: '/doors-selection',
@@ -17,3 +22,18 @@ export const TeacherSidebarTitles = {
 
 export const START_GRAPH_NODE_ID = -1;
 export const END_GRAPH_NODE_ID = -2;
+
+export const getActivityImg = (type) => {
+    switch(type) {
+        case "expedition":
+            return ExpeditionImg
+        case "information":
+            return InformationImg;
+        case "survey":
+            return SurveyImg;
+        case "task":
+            return TaskImg;
+        default:
+            return;
+      }
+}
