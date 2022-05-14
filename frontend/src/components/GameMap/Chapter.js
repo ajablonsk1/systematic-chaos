@@ -6,17 +6,11 @@ import Activity from './Activity';
 
 function getActivityFromMap(map, x, y)
 {
-    for (const activity of map.activities)
-    {
-        if (activity.posX === x && activity.posY === y) 
-            return activity;
-    }
-    return null;
+    return map.activities.find(activity => activity.posX === x && activity.posY === y) || null
 }
 
 function Chapter(props) {
     const parentRef = useRef();
-
     const map = props.activityMap.activityMap;
     const activities = []
     

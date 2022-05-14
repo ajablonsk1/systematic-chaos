@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { getActivityImg } from '../../utils/constants';
 import { Square, ActivityImg } from './ActivityStyles';
 
 function Activity(props) {
-    const [width, setWidth] = useState(100);
-    const [height, setHeight] = useState(100);
+    const gameSquare = useRef();
 
     useEffect(() => {
         const updateSize = () => {
-            setWidth(props.parent.current.offsetWidth / props.mapSizeY * 0.90); // * 0.90 prevents wraping row
-            setHeight(props.parent.current.offsetHeight / props.mapSizeX * 0.90);
+            // * 0.90 - prevents rows wrapping
+            gameSquare.current.style.width = props.parent.current.offsetWidth / props.mapSizeY * 0.90 + "px";
+            gameSquare.current.style.height = props.parent.current.offsetHeight / props.mapSizeX * 0.90 + "px";
         }
 
         if (props.parent.current) 
@@ -20,7 +20,7 @@ function Activity(props) {
             }, false);
         }
         
-    }, [width, height, props])
+    }, [gameSquare, props])
 
     const isUnlocked = () => {
         // TODO
@@ -30,16 +30,13 @@ function Activity(props) {
     const getContent = () => {
         if (props.props)
         {
-            if (!isUnlocked())
+            if (isUnlocked())
             {
-                return;
+                const activity = props.props;
+                const type = activity.activityType;
+                return <ActivityImg src={getActivityImg(type)}></ActivityImg>
             }
-            const activity = props.props;
-            const type = activity.activityType;
-
-            return <ActivityImg src={getActivityImg(type)}></ActivityImg>
         }
-        return;
     }
 
     const startActivity = () => {
@@ -47,18 +44,15 @@ function Activity(props) {
     }
 
     const getBackgroundColor = () => {
-        if (props.props)
-        {
-            return 'white';
-        }
-        return 'transparent';
+        return props.props ? 'white' : 'transparent'
     }
 
     return (
         <Square 
             variant="outline-light" 
-            style={{width: width + 'px', height: height + 'px', background: getBackgroundColor()}} 
+            style={{background: getBackgroundColor()}} 
             onClick={startActivity}
+            ref={gameSquare}
         >
             {getContent()}
         </Square>
