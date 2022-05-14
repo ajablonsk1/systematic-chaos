@@ -22,6 +22,12 @@ export default function ExpeditionSummary() {
             setMaxPoints(getExpeditionPoints(expeditionId));
             setScoredPoints(getUserPoints());
             setClosedQuestionPoints(getExpeditionPointsClosed(expeditionId));
+
+            // I think we should remove using items from storage
+            localStorage.removeItem('userAnswers');
+            localStorage.removeItem('userOpenAnswers');
+
+            //TODO: send user answers from open questions to the database (+ notification to the teacher)
         }
     }, [expeditionId, navigate]);
 

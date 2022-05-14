@@ -5,6 +5,7 @@ import { getQuestion } from '../../utils/Api';
 import { PageRoutes } from '../../utils/constants';
 import Loader from '../Loader/Loader';
 import { ContentWithBackground } from './QuestionAndOptionsStyle';
+import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage';
 
 function QuestionAndOptions() {
     const { expeditionId, questionId } = useParams();
@@ -26,12 +27,9 @@ function QuestionAndOptions() {
             ) : (
                 <>
                     {question.type === 'open' ? (
-                        <div>hello</div>
+                        <OpenQuestionPage expeditionId={expeditionId} question={question} />
                     ) : (
-                        <ClosedQuestionPage
-                            expeditionId={expeditionId}
-                            question={question}
-                        ></ClosedQuestionPage>
+                        <ClosedQuestionPage expeditionId={expeditionId} question={question} />
                     )}
                 </>
             )}
