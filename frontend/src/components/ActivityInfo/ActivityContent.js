@@ -14,7 +14,7 @@ export default function ActivityContent(props) {
     const points = localStorage.getItem('currentScore');
     const navigate = useNavigate();
     return (
-        <Col style={{ overflowY: 'scroll', 'text-align': 'center' }}>
+        <Col style={{ overflowY: 'scroll', textAlign: 'center' }}>
             <Row>
                 {/* TODO: add more complete type switch later */}
                 <ActivityImg src={getActivityImg(props.activity.type)}></ActivityImg>
@@ -46,9 +46,9 @@ export default function ActivityContent(props) {
                     style={{
                         bottom: 0,
                         position: 'fixed',
-                        'margin-left': 'auto',
-                        'margin-right': 'auto',
-                        'margin-bottom': '20px',
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        marginBottom: '20px',
                         transform: 'translate(-50%, -50%)',
                     }}
                     onClick={() => {
