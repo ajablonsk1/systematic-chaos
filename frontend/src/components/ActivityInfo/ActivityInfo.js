@@ -7,7 +7,6 @@ import { getActivityAtID } from '../../utils/Api';
 import ActivityContent from './ActivityContent';
 
 export default function ActivityInfo() {
-    const navigate = useNavigate();
     const { activityId } = useParams();
 
     useEffect(() => {
@@ -20,7 +19,11 @@ export default function ActivityInfo() {
     return (
         <ContentWithoutMargin>
             <InfoContainer>
-                {activityId === undefined ? <Loader /> : <ActivityContent activity={activity} />}
+                {activityId === undefined ? (
+                    <Loader />
+                ) : (
+                    <ActivityContent activity={activity} activityId={activityId} />
+                )}
             </InfoContainer>
         </ContentWithoutMargin>
     );

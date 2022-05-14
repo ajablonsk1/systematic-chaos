@@ -1,25 +1,57 @@
-import { Row, Col } from 'react-bootstrap';
-import { Image } from 'react-bootstrap';
-//maybe move to shared?
+import { useNavigate } from 'react-router-dom';
+import { Row, Col, Button } from 'react-bootstrap';
 import { getActivityImg } from '../../utils/constants';
-import { ActivityImg } from './ActivityImg';
+import {
+    ActivityImg,
+    ActivityType,
+    ActivityName,
+    FullDivider,
+    SmallDivider,
+} from './ActivityInfoStyles';
+import { PageRoutes, START_GRAPH_NODE_ID } from '../../utils/constants';
 export default function ActivityContent(props) {
     // console.log(props.activity);
-
+    const points = localStorage.getItem('currentScore');
+    const navigate = useNavigate();
     return (
         <Col>
             <Row>
-                {/* add type switch later */}
+                {/* TODO: add more complete type switch later */}
                 <ActivityImg src={getActivityImg(props.activity.type)}></ActivityImg>
+                <ActivityType>Ekspedycja</ActivityType>
 
-                <h1>Ekspedycja</h1>
-
-                <h1>{props.activity.name}</h1>
+                <ActivityName>{props.activity.name}</ActivityName>
             </Row>
+            <FullDivider />
+            <p>{props.activity.desc}</p>
+            <SmallDivider />
+            <p>Wymagana wiedza:</p>
+            <p>{props.activity.requiredInfo}</p>
+            <div style={{ height: '5vh' }}></div>
+            {points && <p>Obecna liczba punktów - {points}</p>}
+            <p>Maksymalna liczba punktów do zdobycia - {props.activity.points}</p>
+            <p>Liczba punktów licząca się jako 100% - {props.activity.points_100}</p>
+            <div style={{ height: '5vh' }}></div>
+            {/* TODO: check which group the user is in and get either 'all' or the group the user belongs to*/}
+            <p>
+                Data dostępności aktywności - od {props.activity.accessDates.all.start} do{' '}
+                {props.activity.accessDates.all.end}
+            </p>
 
-            <h1>LOL</h1>
-            <h2>LEL</h2>
-            <h3>LMAO</h3>
+            {/* TODO: compare with current time, decide on time/date format */}
+            <p>Pozostało 5 dni, 10 godzin, 23 minuty, 23 sekundy</p>
+            <div style={{ height: '1vh' }}></div>
+            <Button
+                onClick={() => {
+                    localStorage.removeItem('userAnswers');
+                    localStorage.removeItem('userOpenAnswers');
+                    navigate(
+                        `${PageRoutes.QUESTION_SELECTION}/${props.activityId}/${START_GRAPH_NODE_ID}`
+                    );
+                }}
+            >
+                Rozpocznij
+            </Button>
         </Col>
     );
 }
