@@ -11,4 +11,7 @@ export const InfoContainer = styled(Container)`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    width: 95%;
+    height: 80%;
+    margin-top: 20px;
 `;

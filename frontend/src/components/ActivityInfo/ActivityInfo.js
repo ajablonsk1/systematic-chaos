@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { InfoContainer } from './InfoContainer';
 import Loader from '../Loader/Loader';
 import { ContentWithoutMargin } from '../App/AppGeneralStyles';
@@ -18,7 +18,7 @@ export default function ActivityInfo() {
     // in the future we can get activity from activitys list using id in props
     return (
         <ContentWithoutMargin>
-            <InfoContainer>
+            <InfoContainer fluid>
                 {activityId === undefined ? (
                     <Loader />
                 ) : (

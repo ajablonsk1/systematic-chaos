@@ -14,7 +14,7 @@ export default function ActivityContent(props) {
     const points = localStorage.getItem('currentScore');
     const navigate = useNavigate();
     return (
-        <Col>
+        <Col style={{ overflowY: 'scroll', 'text-align': 'center' }}>
             <Row>
                 {/* TODO: add more complete type switch later */}
                 <ActivityImg src={getActivityImg(props.activity.type)}></ActivityImg>
@@ -40,18 +40,28 @@ export default function ActivityContent(props) {
 
             {/* TODO: compare with current time, decide on time/date format */}
             <p>Pozostało 5 dni, 10 godzin, 23 minuty, 23 sekundy</p>
-            <div style={{ height: '1vh' }}></div>
-            <Button
-                onClick={() => {
-                    localStorage.removeItem('userAnswers');
-                    localStorage.removeItem('userOpenAnswers');
-                    navigate(
-                        `${PageRoutes.QUESTION_SELECTION}/${props.activityId}/${START_GRAPH_NODE_ID}`
-                    );
-                }}
-            >
-                Rozpocznij
-            </Button>
+
+            <div style={{ height: '120px' }}>
+                <Button
+                    style={{
+                        bottom: 0,
+                        position: 'fixed',
+                        'margin-left': 'auto',
+                        'margin-right': 'auto',
+                        'margin-bottom': '20px',
+                        transform: 'translate(-50%, -50%)',
+                    }}
+                    onClick={() => {
+                        localStorage.removeItem('userAnswers');
+                        localStorage.removeItem('userOpenAnswers');
+                        navigate(
+                            `${PageRoutes.QUESTION_SELECTION}/${props.activityId}/${START_GRAPH_NODE_ID}`
+                        );
+                    }}
+                >
+                    Rozpocznij
+                </Button>
+            </div>
         </Col>
     );
 }
