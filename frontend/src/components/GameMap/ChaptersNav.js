@@ -1,8 +1,8 @@
 import React from 'react';
-import { Tabs} from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap';
 import Chapter from './Chapter';
 import { getActivityMap, getChapters } from '../../utils/Api';
-import { ChapterTab } from './ChaptersNavStyles';
+import './ChaptersNav.css';
 
 
 function ChaptersNav(props) {
@@ -17,14 +17,14 @@ function ChaptersNav(props) {
     {
         let map = getActivityMap(0); // TODO: getting proper activity
         tabs.push(
-            <ChapterTab key={chapter.id} eventKey={chapter.id} title={chapter.name} style={{height: "100vh"}}>
+            <Tab key={chapter.id} eventKey={chapter.id} title={chapter.name} style={{height: "100vh"}}>
                 <Chapter activityMap={map}></Chapter>
-            </ChapterTab>
+            </Tab>
         )
     }
 
     return (
-        <Tabs defaultActiveKey={getFrontChapterID()} id="uncontrolled-tab-example" className="mb-3"
+        <Tabs defaultActiveKey={getFrontChapterID()} id="chaptersNav" className="mb-3"
         unmountOnExit={true}>
             {tabs}
         </Tabs>
