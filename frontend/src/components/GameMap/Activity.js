@@ -8,8 +8,13 @@ function Activity(props) {
     useEffect(() => {
         const updateSize = () => {
             // * 0.90 - prevents rows wrapping
-            gameSquare.current.style.width = props.parent.current.offsetWidth / props.mapSizeY * 0.90 + "px";
-            gameSquare.current.style.height = props.parent.current.offsetHeight / props.mapSizeX * 0.90 + "px";
+            if (gameSquare != null && gameSquare.current != null) 
+            {
+                gameSquare.current.style.width = 
+                    props.parent.current.offsetWidth / props.mapSizeY * 0.90 + "px";
+                gameSquare.current.style.height = 
+                    props.parent.current.offsetHeight / props.mapSizeX * 0.90 + "px";
+            }
         }
 
         if (props.parent.current) 
