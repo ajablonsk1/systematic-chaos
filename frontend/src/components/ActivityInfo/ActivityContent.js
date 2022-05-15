@@ -9,13 +9,22 @@ import {
     SmallDivider,
 } from './ActivityInfoStyles';
 import { PageRoutes, START_GRAPH_NODE_ID } from '../../utils/constants';
+
 export default function ActivityContent(props) {
     // console.log(props.activity);
     const points = localStorage.getItem('currentScore');
     const navigate = useNavigate();
     return (
         <>
-            <Col style={{ overflowY: 'scroll', textAlign: 'center' }}>
+            <Col
+                className="invisible-scroll"
+                style={{
+                    overflowY: 'scroll',
+                    scroll: 'hidden',
+                    textAlign: 'center',
+                    scrollbarWidth: 'none',
+                }}
+            >
                 <Col
                     style={{
                         position: 'sticky',
