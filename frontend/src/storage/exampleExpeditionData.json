@@ -98,6 +98,7 @@
         }
     },
     "id": 0,
+    "name": "Dżungla kabli",
     "type": "expedition",
     "desc": "Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!",
     "requiredInfo": "skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą",

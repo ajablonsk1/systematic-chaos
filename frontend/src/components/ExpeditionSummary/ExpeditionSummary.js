@@ -22,10 +22,10 @@ export default function ExpeditionSummary() {
             setMaxPoints(getExpeditionPoints(expeditionId));
             setScoredPoints(getUserPoints());
             setClosedQuestionPoints(getExpeditionPointsClosed(expeditionId));
+            localStorage.setItem('currentScore', getUserPoints());
 
-            // I think we should remove using items from storage
-            localStorage.removeItem('userAnswers');
-            localStorage.removeItem('userOpenAnswers');
+            // Moved removing question answers from localStorage to onClick navigate to fix a bug
+            // Also starting the expedition clears answers
 
             //TODO: send user answers from open questions to the database (+ notification to the teacher)
         }
@@ -63,7 +63,14 @@ export default function ExpeditionSummary() {
                     </Row>
                     <Row>
                         <ButtonRow>
-                            <button className="w-100" onClick={() => navigate(PageRoutes.HOME)}>
+                            <button
+                                className="w-100"
+                                onClick={() => {
+                                    localStorage.removeItem('userAnswers');
+                                    localStorage.removeItem('userOpenAnswers');
+                                    navigate(PageRoutes.HOME);
+                                }}
+                            >
                                 Wróć do strony głównej
                             </button>
                         </ButtonRow>

@@ -2,18 +2,24 @@ import ExpeditionImg from './resources/activities/expedition.png';
 import InformationImg from './resources/activities/information.png';
 import SurveyImg from './resources/activities/survey.png';
 import TaskImg from './resources/activities/task.png';
-import { faChessBoard, faHouse, faRankingStar, faCertificate, faStar} from '@fortawesome/free-solid-svg-icons'
+import {
+    faChessBoard,
+    faHouse,
+    faRankingStar,
+    faCertificate,
+    faStar,
+} from '@fortawesome/free-solid-svg-icons';
 
 export const PageRoutes = {
     HOME: '/',
     QUESTION_SELECTION: '/doors-selection',
     QUESTION_ANSWER: '/question',
-    EXPEDITION_INFO: '/expedition-info',
+    ACTIVITY_INFO: '/activity-info',
     GAME_CARD: '/card-game',
     GAME_MAP: '/game-map',
     POINTS: '/points',
     RANKING: '/ranking',
-    BADGES_ACHIEVEMENTS: '/badges-achievements'
+    BADGES_ACHIEVEMENTS: '/badges-achievements',
     // TODO: add new path routes in the future
 };
 
@@ -33,17 +39,32 @@ export const TeacherSidebarTitles = {
 export const START_GRAPH_NODE_ID = -1;
 export const END_GRAPH_NODE_ID = -2;
 
-export const getActivityImg = (type) => {
-    switch(type) {
-        case "expedition":
-            return ExpeditionImg
-        case "information":
+export const getActivityImg = type => {
+    switch (type) {
+        case 'expedition':
+            return ExpeditionImg;
+        case 'information':
             return InformationImg;
-        case "survey":
+        case 'survey':
             return SurveyImg;
-        case "task":
+        case 'task':
             return TaskImg;
         default:
             return;
-      }
-}
+    }
+};
+
+export const getActivityTypeName = type => {
+    switch (type) {
+        case 'expedition':
+            return 'Ekspedycja';
+        case 'information':
+            return 'Wytyczne';
+        case 'survey':
+            return 'Sondaż';
+        case 'task':
+            return 'Zadanie bojowe';
+        default:
+            return;
+    }
+};
