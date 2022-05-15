@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Navbar, Nav } from 'react-bootstrap';
 
-
 export const SidebarEdit = styled(Navbar)`
     width: var(--sidebar-width);
     height: 100vh;
@@ -26,12 +25,12 @@ export const LogoDiv = styled.div`
 `;
 
 export const MobileNavbar = styled.div`
-  background-color: var(--dark-blue);
-  width: 100vw;
-  height: 100px;
-  position: fixed;
-  top: 100%;
-  left: 0;
-  transform: translateY(-50%);
-  z-index: 3;
+    background-color: var(--dark-blue);
+    width: 100vw;
+    height: 100px;
+    position: fixed;
+    top: 100%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 3;
 `;

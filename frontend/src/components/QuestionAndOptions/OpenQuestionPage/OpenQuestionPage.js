@@ -61,7 +61,9 @@ export default function OpenQuestionPage(props) {
                 ></UserAnswerArea>
             </Col>
             <ButtonRow className="w-50">
-                <button onClick={() => saveAnswer()}>Wyślij</button>
+                <button style={{ marginBottom: '50px' }} onClick={() => saveAnswer()}>
+                    Wyślij
+                </button>
             </ButtonRow>
         </Row>
     );

@@ -81,7 +81,9 @@ function ClosedQuestionPage(props) {
                     </Answer>
                 ))}
                 <ButtonRow>
-                    <button onClick={() => saveAnswers()}>Wyślij</button>
+                    <button style={{ marginBottom: '50px' }} onClick={() => saveAnswers()}>
+                        Wyślij
+                    </button>
                 </ButtonRow>
             </Col>
         </Row>

@@ -11,20 +11,20 @@ function Activity(props) {
     useEffect(() => {
         const updateSize = () => {
             // * 0.90 - prevents rows wrapping
-             if (gameSquare != null && gameSquare.current != null) {
-                gameSquare.current.style.width =
-                    (props.parent.current.offsetWidth / props.mapSizeY) * 0.9 + 'px';
-                gameSquare.current.style.height =
-                    (props.parent.current.offsetHeight / props.mapSizeX) * 0.9 + 'px';
-            }
+            //  if (gameSquare != null && gameSquare.current != null) {
+            //     gameSquare.current.style.width =
+            //         (props.parent.current.offsetWidth / props.mapSizeY) * 0.9 + 'px';
+            //     gameSquare.current.style.height =
+            //         (props.parent.current.offsetHeight / props.mapSizeX) * 0.9 + 'px';
+            // }
         };
 
         if (props.parent.current) {
-            updateSize();
+            //updateSize();
             window.addEventListener(
                 'resize',
                 () => {
-                    updateSize();
+                    //updateSize();
                 },
                 false
             );
@@ -58,7 +58,7 @@ function Activity(props) {
     return (
         <Square
             variant="outline-light"
-            style={{ background: getBackgroundColor() }}
+            style={{ background: getBackgroundColor(), width: '120px', height: '120px' }}
             onClick={startActivity}
             ref={gameSquare}
         >
