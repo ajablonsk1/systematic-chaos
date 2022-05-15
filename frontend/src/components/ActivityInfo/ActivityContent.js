@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Button } from 'react-bootstrap';
-import { getActivityImg } from '../../utils/constants';
+import { getActivityImg, getActivityTypeName } from '../../utils/constants';
 import {
     ActivityImg,
     ActivityType,
@@ -21,14 +21,12 @@ export default function ActivityContent(props) {
                         position: 'sticky',
                         top: '0',
                         height: 'auto',
-
                         backgroundColor: 'var(--dark-blue)',
                     }}
                 >
                     <Row style={{ backgroundColor: 'var(--dark-blue)' }}>
-                        {/* TODO: add more complete type switch later */}
                         <ActivityImg src={getActivityImg(props.activity.type)}></ActivityImg>
-                        <ActivityType>Ekspedycja</ActivityType>
+                        <ActivityType>{getActivityTypeName(props.activity.type)}</ActivityType>
                         <ActivityName>{props.activity.name}</ActivityName>
                     </Row>
                     <FullDivider />
@@ -45,6 +43,7 @@ export default function ActivityContent(props) {
                     <p>Liczba punktów licząca się jako 100% - {props.activity.points_100}</p>
                     <div style={{ height: '5vh' }}></div>
                     {/* TODO: check which group the user is in and get either 'all' or the group the user belongs to*/}
+                    {/* Also look into how we will store dates on the back, this is currently a placeholder */}
                     <p>
                         Data dostępności aktywności - od {props.activity.accessDates.all.start} do{' '}
                         {props.activity.accessDates.all.end}
@@ -70,6 +69,7 @@ export default function ActivityContent(props) {
                                 marginLeft: 'auto',
                                 marginRight: 'auto',
                                 marginBottom: '10px',
+                                backgroundColor: '#085454',
                             }}
                             onClick={() => {
                                 localStorage.removeItem('userAnswers');

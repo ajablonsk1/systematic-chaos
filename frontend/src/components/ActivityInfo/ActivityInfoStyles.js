@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from 'react-bootstrap';
 
 export const ActivityImg = styled.img`
     height: 40px;
@@ -34,4 +35,13 @@ export const FullDivider = styled.hr`
 export const SmallDivider = styled.hr`
     background-color: var(--font-color);
     width: 20%;
+`;
+
+export const StartActivityButton = styled(Button)`
+    background-color: var(--green);
+    bottom: 0;
+    position: 'absolute';
+    margin-left: 'auto';
+    margin-right: 'auto';
+    margin-bottom: '20px';
 `;

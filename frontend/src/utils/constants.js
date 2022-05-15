@@ -53,3 +53,18 @@ export const getActivityImg = type => {
             return;
     }
 };
+
+export const getActivityTypeName = type => {
+    switch (type) {
+        case 'expedition':
+            return 'Ekspedycja';
+        case 'information':
+            return 'Wytyczne';
+        case 'survey':
+            return 'Sondaż';
+        case 'task':
+            return 'Zadanie bojowe';
+        default:
+            return;
+    }
+};

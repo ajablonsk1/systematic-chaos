@@ -8,10 +8,11 @@ export const InfoContainer = styled(Container)`
     background-color: var(--dark-blue);
     color: var(--font-color);
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 95%;
-    height: 80%;
+    max-height: 80%;
     margin-top: 20px;
+    scroll: 'hidden';
 `;
