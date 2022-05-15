@@ -10,22 +10,37 @@ function ChaptersNav(props) {
     const chapters = getChapters() ? getChapters().chapters : [];
 
     const getFrontChapterID = () => {
-        return chapters.length > 0 ? chapters[0].id : null;
+        let frontChapter = chapters.find(chapter => isChapterUnlocked(chapter));
+        return frontChapter ? frontChapter.id : null;
+    }
+
+    const isChapterUnlocked = (chapter) => {
+        // TODO
+        return true;
     }
 
     for (const chapter of chapters)
     {
-        let map = getActivityMap(0); // TODO: getting proper activity
+        let map = getActivityMap(0); // TODO: getting proper activity map
         tabs.push(
-            <Tab key={chapter.id} eventKey={chapter.id} title={chapter.name} style={{height: "100vh"}}>
+            <Tab 
+                key={chapter.id} 
+                eventKey={chapter.id} 
+                title={chapter.name}
+                disabled={!isChapterUnlocked(chapter)}
+                style={{height: "100vh"}}
+            >
                 <Chapter activityMap={map}></Chapter>
             </Tab>
         )
     }
 
     return (
-        <Tabs defaultActiveKey={getFrontChapterID()} id="chaptersNav" className="mb-3"
-        unmountOnExit={true}>
+        <Tabs defaultActiveKey={getFrontChapterID()} 
+            id="chaptersNav" 
+            className="mb-3"
+            unmountOnExit={true}
+        >
             {tabs}
         </Tabs>
     );
