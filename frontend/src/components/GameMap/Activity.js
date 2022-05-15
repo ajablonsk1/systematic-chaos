@@ -11,7 +11,7 @@ function Activity(props) {
     useEffect(() => {
         const updateSize = () => {
             // * 0.90 - prevents rows wrapping
-            if (gameSquare !== null) {
+             if (gameSquare != null && gameSquare.current != null) {
                 gameSquare.current.style.width =
                     (props.parent.current.offsetWidth / props.mapSizeY) * 0.9 + 'px';
                 gameSquare.current.style.height =
