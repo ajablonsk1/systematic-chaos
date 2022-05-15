@@ -15,4 +15,6 @@ export const InfoContainer = styled(Container)`
     max-height: 80%;
     margin-top: 20px;
     scroll: 'hidden';
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
 `;

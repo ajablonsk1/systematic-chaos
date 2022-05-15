@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 import { getActivityImg, getActivityTypeName } from '../../utils/constants';
 import {
     ActivityImg,
@@ -7,70 +7,65 @@ import {
     ActivityName,
     FullDivider,
     SmallDivider,
+    ButtonFooter,
+    ActivityCol,
+    HeaderRow,
+    HeaderCol,
+    Spacer,
+    StartActivityButton,
 } from './ActivityInfoStyles';
 import { PageRoutes, START_GRAPH_NODE_ID } from '../../utils/constants';
+
 export default function ActivityContent(props) {
-    // console.log(props.activity);
     const points = localStorage.getItem('currentScore');
+
+    //TODO: currently hardcoded for "all" group, we need to check which group the user is in later
+    const startDate = new Date(props.activity.accessDates.all.start);
+    const endDate = new Date(props.activity.accessDates.all.end);
+
+    console.log(startDate.toLocaleDateString());
+
     const navigate = useNavigate();
     return (
         <>
-            <Col style={{ overflowY: 'scroll', textAlign: 'center' }}>
-                <Col
-                    style={{
-                        position: 'sticky',
-                        top: '0',
-                        height: 'auto',
-                        backgroundColor: 'var(--dark-blue)',
-                    }}
-                >
-                    <Row style={{ backgroundColor: 'var(--dark-blue)' }}>
+            <ActivityCol className="invisible-scroll">
+                <HeaderCol>
+                    <HeaderRow>
                         <ActivityImg src={getActivityImg(props.activity.type)}></ActivityImg>
                         <ActivityType>{getActivityTypeName(props.activity.type)}</ActivityType>
                         <ActivityName>{props.activity.name}</ActivityName>
-                    </Row>
+                    </HeaderRow>
                     <FullDivider />
-                </Col>
+                </HeaderCol>
 
                 <div>
                     <p>{props.activity.desc}</p>
                     <SmallDivider />
                     <p>Wymagana wiedza:</p>
                     <p>{props.activity.requiredInfo}</p>
-                    <div style={{ height: '5vh' }}></div>
+                    <Spacer />
+
                     {points && <p>Obecna liczba punktów - {points}</p>}
                     <p>Maksymalna liczba punktów do zdobycia - {props.activity.points}</p>
                     <p>Liczba punktów licząca się jako 100% - {props.activity.points_100}</p>
-                    <div style={{ height: '5vh' }}></div>
+                    <Spacer />
+
                     {/* TODO: check which group the user is in and get either 'all' or the group the user belongs to*/}
                     {/* Also look into how we will store dates on the back, this is currently a placeholder */}
                     <p>
-                        Data dostępności aktywności - od {props.activity.accessDates.all.start} do{' '}
-                        {props.activity.accessDates.all.end}
+                        Data dostępności aktywności - od{' '}
+                        {startDate.toLocaleDateString() + ' ' + startDate.toLocaleTimeString()} do{' '}
+                        {endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString()}
                     </p>
+
                     {/* TODO: compare with current time, decide on time/date format */}
                     <p>Pozostało 5 dni, 10 godzin, 23 minuty, 23 sekundy</p>
                 </div>
 
-                <div
-                    style={{
-                        position: 'sticky',
-                        bottom: 0,
-                        margin: 0,
-                        backgroundColor: 'var(--dark-blue)',
-                    }}
-                >
+                <ButtonFooter>
                     <Col>
                         <FullDivider />
-                        <Button
-                            style={{
-                                bottom: 0,
-                                position: 'relative',
-                                marginLeft: 'auto',
-                                marginRight: 'auto',
-                                marginBottom: '10px',
-                                backgroundColor: '#085454',
-                            }}
+                        <StartActivityButton
                             onClick={() => {
                                 localStorage.removeItem('userAnswers');
                                 localStorage.removeItem('userOpenAnswers');
@@ -80,10 +75,10 @@ export default function ActivityContent(props) {
                             }}
                         >
                             Rozpocznij
-                        </Button>
+                        </StartActivityButton>
                     </Col>
-                </div>
-            </Col>
+                </ButtonFooter>
+            </ActivityCol>
         </>
     );
 }

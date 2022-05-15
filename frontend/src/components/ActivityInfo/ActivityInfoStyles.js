@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 
 export const ActivityImg = styled.img`
     height: 40px;
@@ -38,10 +38,39 @@ export const SmallDivider = styled.hr`
 `;
 
 export const StartActivityButton = styled(Button)`
-    background-color: var(--green);
     bottom: 0;
-    position: 'absolute';
-    margin-left: 'auto';
-    margin-right: 'auto';
-    margin-bottom: '20px';
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+    background-color: #085454;
+`;
+
+export const ButtonFooter = styled.div`
+    position: sticky;
+    bottom: 0;
+    margin: 0;
+    background-color: var(--dark-blue);
+`;
+
+export const ActivityCol = styled(Col)`
+    overflow-y: scroll;
+    scroll: hidden;
+    text-align: center;
+    scrollbar-width: none;
+`;
+
+export const HeaderRow = styled(Row)`
+    backgroundcolor: var(--dark-blue);
+`;
+
+export const HeaderCol = styled(Col)`
+    position: sticky;
+    top: 0;
+    height: auto;
+    background-color: var(--dark-blue);
+`;
+
+export const Spacer = styled.div`
+    height: 5vh;
 `;
