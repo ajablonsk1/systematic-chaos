@@ -1,7 +1,7 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
-import ExpeditionInfo from '../ExpeditionInfo/ExpeditionInfo';
+import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import GameMap from '../GameMap/GameMap';
 import NotFound from '../NotFoundPage/NotFound';
 import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions';
@@ -34,8 +34,8 @@ function App() {
                             />
 
                             <Route
-                                path={`${PageRoutes.EXPEDITION_INFO}/:expeditionId`}
-                                element={<ExpeditionInfo />}
+                                path={`${PageRoutes.ACTIVITY_INFO}/:activityId`}
+                                element={<ActivityInfo />}
                             />
 
                             <Route path="*" element={<NotFound />} />
