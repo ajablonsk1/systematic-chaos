@@ -9,15 +9,15 @@ function Activity(props) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const updateSize = () => {
-            // * 0.90 - prevents rows wrapping
-            //  if (gameSquare != null && gameSquare.current != null) {
-            //     gameSquare.current.style.width =
-            //         (props.parent.current.offsetWidth / props.mapSizeY) * 0.9 + 'px';
-            //     gameSquare.current.style.height =
-            //         (props.parent.current.offsetHeight / props.mapSizeX) * 0.9 + 'px';
-            // }
-        };
+        // const updateSize = () => {
+        //     // * 0.90 - prevents rows wrapping
+        //     //  if (gameSquare != null && gameSquare.current != null) {
+        //     //     gameSquare.current.style.width =
+        //     //         (props.parent.current.offsetWidth / props.mapSizeY) * 0.9 + 'px';
+        //     //     gameSquare.current.style.height =
+        //     //         (props.parent.current.offsetHeight / props.mapSizeX) * 0.9 + 'px';
+        //     // }
+        // };
 
         if (props.parent.current) {
             //updateSize();
