@@ -12,6 +12,7 @@ const Content = styled.div`
     }
 `;
 
+//TODO: check if Margin ver is broken without overflow
 export const ContentWithMargin = styled(Content)`
     //width: var(--content-width-with-margin)!important;
     width: calc(var(--content-width-with-margin) - 2 * var(--content-margin-x));
@@ -20,4 +21,5 @@ export const ContentWithMargin = styled(Content)`
 export const ContentWithoutMargin = styled(Content)`
     width: var(--content-width-without-margin);
     margin: 0;
+    overflow: hidden;
 `;
