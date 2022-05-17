@@ -10,19 +10,19 @@ function Legend(props) {
             <LegendRow>
                 <LegendCol className="md-4">
                     <ActivityImg src={getActivityImg('expedition')}></ActivityImg>
-                    <ActivityLabel>Expedition</ActivityLabel>
+                    <ActivityLabel>Ekspedycja</ActivityLabel>
                 </LegendCol>
                 <LegendCol className="md-4">
                     <ActivityImg src={getActivityImg('task')}></ActivityImg>
-                    <ActivityLabel>Task</ActivityLabel>
+                    <ActivityLabel>Zadanie bojowe</ActivityLabel>
                 </LegendCol>
                 <LegendCol className="md-4">
                     <ActivityImg src={getActivityImg('survey')}></ActivityImg>
-                    <ActivityLabel>Survey</ActivityLabel>
+                    <ActivityLabel>Wywiad</ActivityLabel>
                 </LegendCol>
                 <LegendCol className="md-4">
                     <ActivityImg src={getActivityImg('information')}></ActivityImg>
-                    <ActivityLabel>Information</ActivityLabel>
+                    <ActivityLabel>Wytyczne</ActivityLabel>
                 </LegendCol>
             </LegendRow>
         </Container>
