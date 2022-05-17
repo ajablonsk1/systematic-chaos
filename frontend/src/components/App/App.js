@@ -21,6 +21,7 @@ function App() {
                         <Routes>
                             {/*//TODO: new path routes in the future*/}
                             <Route path={PageRoutes.HOME} element={<GameMap />} />
+                            <Route path={PageRoutes.GAME_MAP} element={<GameMap />} />
 
                             {/*//TODO: change it when mock data set will be ready*/}
                             <Route
