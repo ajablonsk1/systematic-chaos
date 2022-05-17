@@ -28,6 +28,7 @@ export const ActivityLabel = styled.div`
 export const ActivityImg = styled.img`
     width: 30%;
     height: auto;
+    vertical-align: top;
 
     @media(max-width: 768px){
         width: 20%;
@@ -40,14 +41,11 @@ export const LegendCol = styled(Col)`
     margin-right: 10px;
     border: 1px solid black;
 
-    @media(max-width: 768px){
-        margin-bottom: 120px;
-    }
 
 `;
 
 export const LegendRow = styled(Row)`
     @media(max-width: 768px){
-        padding-bottom: 20px;
+        padding-bottom: 100px;
     }
 `
