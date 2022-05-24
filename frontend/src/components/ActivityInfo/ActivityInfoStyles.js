@@ -55,9 +55,7 @@ export const ButtonFooter = styled.div`
 
 export const ActivityCol = styled(Col)`
     overflow-y: scroll;
-    scroll: hidden;
     text-align: center;
-    scrollbar-width: none;
 `;
 
 export const HeaderRow = styled(Row)`

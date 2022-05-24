@@ -14,7 +14,7 @@ export default function ActivityInfo() {
     // in the future we can get activity from activitys list using id in props
     return (
         <Content>
-            <InfoContainer fluid>
+            <InfoContainer fluid className="p-0">
                 {activityId === undefined ? (
                     <Loader />
                 ) : (

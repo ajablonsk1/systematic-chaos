@@ -7,7 +7,7 @@ import { LegendCol } from './LegendStyles';
 function Legend(props) {
     return (
         <Container>
-            <Row className="m-0">
+            <Row className="m-0 mb-5">
                 <LegendCol lg={3} md={6} xs={12} className="my-2">
                     <div>
                         <img src={getActivityImg('expedition')} alt="Ekspedycja" />
@@ -26,7 +26,7 @@ function Legend(props) {
                         <p>Wywiad</p>
                     </div>
                 </LegendCol>
-                <LegendCol lg={3} md={6} xs={12} className="my-2">
+                <LegendCol lg={3} md={6} xs={12} className="my-2 mb-md-2 mb-5">
                     <div>
                         <img src={getActivityImg('information')} alt="Wytyczne" />
                         <p>Wytyczne</p>
