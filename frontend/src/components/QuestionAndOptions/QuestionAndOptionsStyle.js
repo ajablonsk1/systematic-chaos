@@ -1,9 +1,9 @@
 import { Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import background from '../../utils/resources/background.png';
-import { ContentWithoutMargin } from '../App/AppGeneralStyles';
+import { Content } from '../App/AppGeneralStyles';
 
-export const ContentWithBackground = styled(ContentWithoutMargin)`
+export const ContentWithBackground = styled(Content)`
     background: url('${background}') no-repeat center center fixed;
     background-size: cover;
     display: flex;

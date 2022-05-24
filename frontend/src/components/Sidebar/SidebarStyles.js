@@ -1,36 +1,47 @@
 import styled from 'styled-components';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export const SidebarEdit = styled(Navbar)`
-    width: var(--sidebar-width);
-    height: 100vh;
     background-color: var(--dark-blue);
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
     padding: 0;
+    height: 100vh;
+`;
+
+export const NavBarTextContainer = styled(Container)`
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+
+    & #logo:hover {
+        color: var(--font-color);
+    }
 `;
 
 export const NavEdit = styled(Nav)`
-    font-size: 23px;
+    font-size: 1.5vw;
     margin-top: 3vh;
-    width: 100%;
     padding: 10px;
+    width: 100%;
 `;
 
-export const LogoDiv = styled.div`
+export const LogoDiv = styled(Link)`
     color: var(--font-color);
-    font-size: 26px;
+    font-size: 1.7vw;
     margin-top: 10px;
+    text-align: center;
 `;
 
-export const MobileNavbar = styled.div`
+export const MobileNav = styled.div`
     background-color: var(--dark-blue);
-    width: 100vw;
-    height: 100px;
+    width: 100%;
+    padding: 10px 0;
     position: fixed;
     top: 100%;
     left: 0;
-    transform: translateY(-50%);
+    transform: translateY(-100%);
     z-index: 3;
 `;

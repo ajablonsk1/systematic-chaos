@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { InfoContainer } from './InfoContainer';
 import Loader from '../Loader/Loader';
-import { ContentWithoutMargin } from '../App/AppGeneralStyles';
+import { Content } from '../App/AppGeneralStyles';
 import { getActivityAtID } from '../../utils/Api';
 import ActivityContent from './ActivityContent';
 
@@ -17,7 +17,7 @@ export default function ActivityInfo() {
 
     // in the future we can get activity from activitys list using id in props
     return (
-        <ContentWithoutMargin>
+        <Content>
             <InfoContainer fluid>
                 {activityId === undefined ? (
                     <Loader />
@@ -25,6 +25,6 @@ export default function ActivityInfo() {
                     <ActivityContent activity={activity} activityId={activityId} />
                 )}
             </InfoContainer>
-        </ContentWithoutMargin>
+        </Content>
     );
 }

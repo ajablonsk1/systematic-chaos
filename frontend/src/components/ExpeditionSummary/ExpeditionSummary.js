@@ -7,6 +7,7 @@ import { PageRoutes } from '../../utils/constants';
 import { getExpeditionPoints, getExpeditionPointsClosed } from '../../utils/Api';
 import Loader from '../Loader/Loader';
 import { getUserPoints } from '../../utils/pointsCalculator';
+import { Content } from '../App/AppGeneralStyles';
 
 export default function ExpeditionSummary() {
     const navigate = useNavigate();
@@ -32,11 +33,11 @@ export default function ExpeditionSummary() {
     }, [expeditionId, navigate]);
 
     return (
-        <SummaryContainer>
+        <Content>
             {maxPoints === undefined ? (
                 <Loader />
             ) : (
-                <>
+                <SummaryContainer>
                     <Row className="m-0">
                         <h2>Gratulacje, ukończyłeś ekspedycję!</h2>
                     </Row>
@@ -75,8 +76,8 @@ export default function ExpeditionSummary() {
                             </button>
                         </ButtonRow>
                     </Row>
-                </>
+                </SummaryContainer>
             )}
-        </SummaryContainer>
+        </Content>
     );
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Door, DoorColumn } from './QuestionSelectionDoorStyles';
 import { Button, Row } from 'react-bootstrap';
-import { ContentWithoutMargin } from '../App/AppGeneralStyles';
+import { Content } from '../App/AppGeneralStyles';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
 import { getParentQuestions } from '../../utils/Api';
@@ -53,7 +53,7 @@ function QuestionSelectionDoor() {
     }, [parentId, expeditionId, navigate]);
 
     return (
-        <ContentWithoutMargin>
+        <Content>
             {questions === undefined ? (
                 <Loader />
             ) : (
@@ -62,7 +62,7 @@ function QuestionSelectionDoor() {
                         // TODO: think about better solution - displaying expedition summary using url "doors-selection/:id/:id" is weird
                         <ExpeditionSummary />
                     ) : (
-                        <Row>
+                        <Row className="m-0">
                             {questions.map((question, key) =>
                                 generateDoor(question, navigate, expeditionId, questions.length)
                             )}
@@ -70,7 +70,7 @@ function QuestionSelectionDoor() {
                     )}
                 </>
             )}
-        </ContentWithoutMargin>
+        </Content>
     );
 }
 
