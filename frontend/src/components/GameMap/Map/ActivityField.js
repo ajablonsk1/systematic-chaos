@@ -43,7 +43,7 @@ export default function AcrivityField({ activity }) {
 
     const startActivity = () => {
         // TODO, currently goes to the hard-coded expedition activity but it should be OK once we implement a 'real' activity getter in API
-        navigate(`${PageRoutes.ACTIVITY_INFO}/${activity.id}/`);
+        navigate(`${PageRoutes.ACTIVITY_INFO}`, { state: { activityId: activity.id } });
     };
 
     return (

@@ -40,12 +40,14 @@ function ClosedQuestionPage(props) {
                 answers: userAnswers,
             };
 
-            // save answer and go to next doors selection
-            actualAnswersList.push(answerToAdd);
-            localStorage.setItem('userAnswers', JSON.stringify(actualAnswersList));
-            console.log(localStorage);
-
-            navigate(`${PageRoutes.QUESTION_SELECTION}/${props.expeditionId}/${props.question.id}`);
+            if (!actualAnswersList.find(answer => answer.questionId === answerToAdd.questionId)) {
+                // save answer and go to next doors selection only if user didn't answer this question before
+                actualAnswersList.push(answerToAdd);
+                localStorage.setItem('userAnswers', JSON.stringify(actualAnswersList));
+            }
+            navigate(`${PageRoutes.QUESTION_SELECTION}`, {
+                state: { activityId: props.expeditionId, nodeId: props.question.id },
+            });
         }
     };
 
