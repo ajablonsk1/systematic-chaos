@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Row } from 'react-bootstrap';
 import { SummaryContainer } from './ExpeditionSummaryStyle';
 import { ButtonRow } from '../QuestionAndOptions/QuestionAndOptionsStyle';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
 import { getExpeditionPoints, getExpeditionPointsClosed } from '../../utils/Api';
 import Loader from '../Loader/Loader';
 import { getUserPoints } from '../../utils/pointsCalculator';
+import { Content } from '../App/AppGeneralStyles';
 
-export default function ExpeditionSummary() {
+export default function ExpeditionSummary({ expeditionId }) {
     const navigate = useNavigate();
-    const { expeditionId } = useParams();
     const [maxPoints, setMaxPoints] = useState();
     const [scoredPoints, setScoredPoints] = useState();
     const [closedQuestionPoints, setClosedQuestionPoints] = useState();
@@ -32,11 +32,11 @@ export default function ExpeditionSummary() {
     }, [expeditionId, navigate]);
 
     return (
-        <SummaryContainer>
+        <Content>
             {maxPoints === undefined ? (
                 <Loader />
             ) : (
-                <>
+                <SummaryContainer>
                     <Row className="m-0">
                         <h2>Gratulacje, ukończyłeś ekspedycję!</h2>
                     </Row>
@@ -75,8 +75,8 @@ export default function ExpeditionSummary() {
                             </button>
                         </ButtonRow>
                     </Row>
-                </>
+                </SummaryContainer>
             )}
-        </SummaryContainer>
+        </Content>
     );
 }

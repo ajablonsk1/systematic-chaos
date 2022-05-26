@@ -1,17 +1,14 @@
 import React from 'react';
-import { ContentWithoutMargin } from '../App/AppGeneralStyles';
-import ChaptersNav from './ChaptersNav';
-import { Background } from './GameMapStyles';
-import Legend from './Legend';
+import ChaptersNav from './ChaptersList/ChaptersNav';
+import { GameContent } from './GameMapStyles';
+import Legend from './Legend/Legend';
 
-function GameMap(props) {
+function GameMap() {
     return (
-        <ContentWithoutMargin>
-            <Background>
-                <ChaptersNav></ChaptersNav>
-                <Legend></Legend>
-            </Background>
-        </ContentWithoutMargin>
+        <GameContent>
+            <ChaptersNav></ChaptersNav>
+            <Legend></Legend>
+        </GameContent>
     );
 }
 

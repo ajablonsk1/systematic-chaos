@@ -1,8 +1,8 @@
 import React from 'react';
-import { Tabs, Tab } from 'react-bootstrap';
-import Chapter from './Chapter';
-import { getActivityMap, getChapters } from '../../utils/Api';
-import './ChaptersNav.css';
+import { Tab } from 'react-bootstrap';
+import { getActivityMap, getChapters } from '../../../utils/Api';
+import ChapterMap from '../Map/ChapterMap';
+import { TabColored } from './ChaptersNavStyle';
 
 function ChaptersNav(props) {
     const tabs = [];
@@ -26,23 +26,21 @@ function ChaptersNav(props) {
                 eventKey={chapter.id}
                 title={chapter.name}
                 disabled={!isChapterUnlocked(chapter)}
-                styles={{ width: '100px', height: '100px' }}
             >
-                <Chapter activityMap={map}></Chapter>
+                <ChapterMap map={map.activityMap} />
             </Tab>
         );
     }
 
     return (
-        <Tabs
+        <TabColored
             defaultActiveKey={getFrontChapterID()}
             id="chaptersNav"
-            className="mb-3"
+            className="mb-3 justify-content-center"
             unmountOnExit={true}
-            styles={{ height: '100%', marginBottom: '50px' }}
         >
             {tabs}
-        </Tabs>
+        </TabColored>
     );
 }
 

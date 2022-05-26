@@ -1,27 +1,27 @@
 import React from 'react';
-import {buildNavLink, buildNavLinkMobile} from "./navBuilder";
-import {SidebarEdit, NavEdit, LogoDiv, MobileNavbar} from "./SidebarStyles";
-import {Container, Nav} from "react-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFire } from '@fortawesome/free-solid-svg-icons'
+import { faFire } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Nav } from 'react-bootstrap';
+import { PageRoutes } from '../../utils/constants';
+import { buildNavLink } from './navBuilder';
+import { LogoDiv, NavBarTextContainer, NavEdit, SidebarEdit } from './SidebarStyles';
 
-function Sidebar({link_titles}) {
+function Sidebar({ link_titles }) {
     return (
-        <>
-        <SidebarEdit variant="dark" className="d-md-block d-none">
-            <Container className="d-flex flex-column">
-                <LogoDiv id="logo"><p><FontAwesomeIcon style={{marginRight: '10px'}} icon={faFire} />Systematic Chaos</p></LogoDiv>
-                <NavEdit className="me-auto d-flex flex-column" id="menu-options">
+        <SidebarEdit variant="dark">
+            <NavBarTextContainer>
+                <Nav.Link as={LogoDiv} to={PageRoutes.HOME} key={PageRoutes.HOME} id="logo">
+                    <p>
+                        <FontAwesomeIcon style={{ marginRight: '10px' }} icon={faFire} />
+                        <br />
+                        Systematic Chaos
+                    </p>
+                </Nav.Link>
+                <NavEdit className="d-flex flex-column" id="menu-options">
                     {link_titles.map(([to, linkTitle]) => buildNavLink(to, linkTitle[0]))}
                 </NavEdit>
-            </Container>
+            </NavBarTextContainer>
         </SidebarEdit>
-        <MobileNavbar className="d-md-none d-sm-block">
-            <Nav className="d-flex justify-content-center">
-                {link_titles.map(([to, linkTitle]) => buildNavLinkMobile(to, linkTitle[1]))}
-            </Nav>
-        </MobileNavbar>
-        </>
     );
 }
 

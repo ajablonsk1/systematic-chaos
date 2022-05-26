@@ -34,11 +34,15 @@ export default function OpenQuestionPage(props) {
                 answer: userAnswer.current.value,
             };
 
-            // save answer and go to next doors selection
-            actualAnswersList.push(answerToAdd);
-            localStorage.setItem('userOpenAnswers', JSON.stringify(actualAnswersList));
-            console.log(localStorage.getItem('userOpenAnswers'));
-            navigate(`${PageRoutes.QUESTION_SELECTION}/${props.expeditionId}/${props.question.id}`);
+            if (!actualAnswersList.find(answer => answer.questionId === answerToAdd.questionId)) {
+                // save answer and go to next doors selection only if user didn't answer this question before
+                actualAnswersList.push(answerToAdd);
+                localStorage.setItem('userOpenAnswers', JSON.stringify(actualAnswersList));
+            }
+
+            navigate(`${PageRoutes.QUESTION_SELECTION}`, {
+                state: { activityId: props.expeditionId, nodeId: props.question.id },
+            });
         }
     };
 

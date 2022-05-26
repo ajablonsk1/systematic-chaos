@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ClosedQuestionPage from './ClosedQuestionPage/ClosedQuestionPage';
 import { getQuestion } from '../../utils/Api';
 import { PageRoutes } from '../../utils/constants';
@@ -8,9 +8,10 @@ import { ContentWithBackground } from './QuestionAndOptionsStyle';
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage';
 
 function QuestionAndOptions() {
-    const { expeditionId, questionId } = useParams();
     const [question, setQuestion] = useState();
     const navigate = useNavigate();
+    const location = useLocation();
+    const { activityId: expeditionId, nodeId: questionId } = location.state;
 
     useEffect(() => {
         if (expeditionId == null || questionId == null) {

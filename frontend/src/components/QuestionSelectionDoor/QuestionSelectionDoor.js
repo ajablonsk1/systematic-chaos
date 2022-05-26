@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Door, DoorColumn } from './QuestionSelectionDoorStyles';
 import { Button, Row } from 'react-bootstrap';
-import { ContentWithoutMargin } from '../App/AppGeneralStyles';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Content } from '../App/AppGeneralStyles';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
 import { getParentQuestions } from '../../utils/Api';
 import Loader from '../Loader/Loader';
@@ -29,7 +29,9 @@ function generateDoor(question, navigate, expeditionId, noDoors) {
             <Row className="mx-auto">
                 <Button
                     onClick={() =>
-                        navigate(`${PageRoutes.QUESTION_ANSWER}/${expeditionId}/${question.id}`)
+                        navigate(`${PageRoutes.QUESTION_ANSWER}`, {
+                            state: { activityId: expeditionId, nodeId: question.id },
+                        })
                     }
                 >
                     Wybierz
@@ -40,9 +42,10 @@ function generateDoor(question, navigate, expeditionId, noDoors) {
 }
 
 function QuestionSelectionDoor() {
-    const { expeditionId, parentId } = useParams();
     const navigate = useNavigate();
     const [questions, setQuestions] = useState();
+    const location = useLocation();
+    const { activityId: expeditionId, nodeId: parentId } = location.state;
 
     useEffect(() => {
         if (parentId == null || expeditionId == null) {
@@ -53,16 +56,15 @@ function QuestionSelectionDoor() {
     }, [parentId, expeditionId, navigate]);
 
     return (
-        <ContentWithoutMargin>
+        <Content>
             {questions === undefined ? (
                 <Loader />
             ) : (
                 <>
                     {questions.find(q => q.id === -2) ? (
-                        // TODO: think about better solution - displaying expedition summary using url "doors-selection/:id/:id" is weird
-                        <ExpeditionSummary />
+                        <ExpeditionSummary expeditionId={expeditionId} />
                     ) : (
-                        <Row>
+                        <Row className="m-0">
                             {questions.map((question, key) =>
                                 generateDoor(question, navigate, expeditionId, questions.length)
                             )}
@@ -70,7 +72,7 @@ function QuestionSelectionDoor() {
                     )}
                 </>
             )}
-        </ContentWithoutMargin>
+        </Content>
     );
 }
 
