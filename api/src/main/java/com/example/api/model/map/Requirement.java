@@ -25,7 +25,7 @@ public class Requirement {
 
     @OneToMany(mappedBy = "requirementFinished")
     private List<Activity> finishedActivities;
-    private Integer points;
+    private Integer experienceRequired;
 
     @OneToMany(mappedBy = "requirement")
     private List<AccessDate> accessDates;

@@ -27,4 +27,5 @@ public class Group {
     @ManyToOne
     @JoinColumn(name = "accessDate_id")
     private AccessDate accessDate;
+    private String groupKey;
 }

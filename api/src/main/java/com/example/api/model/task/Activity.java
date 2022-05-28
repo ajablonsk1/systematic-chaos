@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Getter
 @Setter
@@ -22,6 +23,7 @@ public class Activity {
     private String description;
     private Integer posX;
     private Integer posY;
+    private Integer experiance;
 
     @OneToOne
     private Requirement requirement;

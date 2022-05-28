@@ -13,5 +13,5 @@ import javax.persistence.*;
 @Entity
 public class Task extends Activity {
     private String requiredKnowledge;
-    private String points;
+    private Integer maxPoints;
 }

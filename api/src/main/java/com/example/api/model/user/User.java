@@ -23,6 +23,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+    private Integer level;
+    private Integer experiance;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
