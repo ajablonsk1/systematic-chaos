@@ -20,6 +20,7 @@ export const PageRoutes = {
     POINTS: '/points',
     RANKING: '/ranking',
     BADGES_ACHIEVEMENTS: '/badges-achievements',
+    LOGIN_REGISTRATION: '/login-registration',
     // TODO: add new path routes in the future
 };
 
@@ -67,4 +68,30 @@ export const getActivityTypeName = type => {
         default:
             return;
     }
+};
+
+export const RegistrationLabelsAndTypes = {
+    fullname: ['Imię i nazwisko', 'text'],
+    email: ['Email', 'email'],
+    code: ['Klucz dostępu', 'text'],
+    type: ['Typ osobowości postaci', 'select'],
+    password: ['Hasło', 'password'],
+    passwordRepeat: ['Powtórz hasło', 'password'],
+};
+
+export const HeroDescriptions = {
+    warrior: `Skupiony na zdolnościach walki, całkowicie pozbawiony magicznych zdolności. 
+            Łatwiej mu pokonać trudnego przeciwnika (daje raz w miesiącu możliwość podmiany 
+            treści pytania trudnego na treść pytania łatwego w ekspedycji bez zmiany ilości puntków za zadanie).
+            W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz.`,
+    wizard: `Przejawiający zdolności magiczne, lecz fizycznie słaby. Dzięki swoim czarom może cofnąć się w grafie
+            ekspedycji do wyboru pytania (anulować ostatni wybór) i wybrać inne (umiejętność dostępna raz na miesiąc).
+            W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz.`,
+    priest: `Specjalizujący się w uzdrawianiu. Dzięki swoim umiejętnościom uzdrawiania może dodać sobie 5pkt po zakończeniu
+            ekspedycji. Umiejętność ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
+            lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`,
+    rogue: `Potrafi poruszać się bezszelestnie, skradanie to jego dominująca umiejętność. Dzięki swoim zdolnościom 
+            umożliwi Ci pominąć jedno pytanie w ekspedycji na poziomie łatwym warte nie więcej niż 5pkt. Umiejętność
+            ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
+            lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`,
 };
