@@ -6,6 +6,7 @@ import CombatTask from '../CombatTask/CombatTask';
 import GameMap from '../GameMap/GameMap';
 import LoginAndRegistration from '../LoginAndRegistrationPage/LoginAndRegistration';
 import NotFound from '../NotFoundPage/NotFound';
+import Points from '../PointsPage/Points';
 import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions';
 import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor';
 import MobileNavbar from '../Sidebar/MobileNavbar';
@@ -48,6 +49,11 @@ function App() {
                             />
 
                             <Route path={`${PageRoutes.COMBAT_TASK}`} element={<CombatTask />} />
+
+                            <Route
+                                path={`${PageRoutes.POINTS}`}
+                                element={<Points />}
+                            />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>
