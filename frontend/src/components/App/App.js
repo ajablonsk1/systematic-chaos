@@ -2,6 +2,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
+import CombatTask from '../CombatTask/CombatTask';
 import GameMap from '../GameMap/GameMap';
 import LoginAndRegistration from '../LoginAndRegistrationPage/LoginAndRegistration';
 import NotFound from '../NotFoundPage/NotFound';
@@ -45,6 +46,8 @@ function App() {
                                 path={`${PageRoutes.LOGIN_REGISTRATION}`}
                                 element={<LoginAndRegistration />}
                             />
+
+                            <Route path={`${PageRoutes.COMBAT_TASK}`} element={<CombatTask />} />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>
