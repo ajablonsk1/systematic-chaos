@@ -3,21 +3,23 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import GameMap from '../GameMap/GameMap';
+import LoginAndRegistration from '../LoginAndRegistrationPage/LoginAndRegistration';
 import NotFound from '../NotFoundPage/NotFound';
 import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions';
 import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor';
 import MobileNavbar from '../Sidebar/MobileNavbar';
 import Sidebar from '../Sidebar/Sidebar';
 import './App.css';
+import { MobileNavCol, SidebarCol } from './AppGeneralStyles';
 
 function App() {
     return (
         <Container fluid className="p-0">
             <Row style={{ minHeight: '100vh', margin: 0 }}>
                 <Router>
-                    <Col xs={2} className="d-md-block d-none p-0">
+                    <SidebarCol xs={2}>
                         <Sidebar link_titles={Object.entries(UserSidebarTitles)} />
-                    </Col>
+                    </SidebarCol>
                     <Col md={10} xs={12} className="p-0">
                         <Routes>
                             {/*//TODO: new path routes in the future*/}
@@ -39,12 +41,17 @@ function App() {
                                 element={<ActivityInfo />}
                             />
 
+                            <Route
+                                path={`${PageRoutes.LOGIN_REGISTRATION}`}
+                                element={<LoginAndRegistration />}
+                            />
+
                             <Route path="*" element={<NotFound />} />
                         </Routes>
                     </Col>
-                    <Col className="d-md-none d-block" xs={12}>
+                    <MobileNavCol xs={12}>
                         <MobileNavbar link_titles={Object.entries(UserSidebarTitles)} />
-                    </Col>
+                    </MobileNavCol>
                 </Router>
             </Row>
         </Container>
