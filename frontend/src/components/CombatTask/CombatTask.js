@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import { Content } from '../App/AppGeneralStyles';
 import Loader from '../Loader/Loader';
 import { InfoContainer } from '../ActivityInfo/InfoContainer';
-import { Container, Row } from 'react-bootstrap';
 import {
     HeaderRow,
     HeaderCol,
@@ -13,7 +12,6 @@ import {
     FullDivider,
     ActivityCol,
     SmallDivider,
-    Spacer,
 } from '../ActivityInfo/ActivityInfoStyles';
 import { getActivityImg, getActivityTypeName } from '../../utils/constants';
 import FileService from './FileService';

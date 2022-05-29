@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getActivityImg, getActivityPath, PageRoutes } from '../../../utils/constants';
+import { getActivityImg, getActivityPath } from '../../../utils/constants';
 
 const ActivityCol = styled(Col)`
     border: 2px black solid;
