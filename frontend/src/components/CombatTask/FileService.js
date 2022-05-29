@@ -11,7 +11,7 @@ import download from 'downloadjs';
 
 export default function FileService({ taskId }) {
     const fileInput = useRef(null);
-    const [fileChoosen, setFileChoosen] = useState(null);
+    const [fileChosen, setFileChosen] = useState(null);
     const loggedUserName = 'Jan Kowalski'; // delete later
     const [task, setTask] = useState(getCombatTask(taskId));
     const [isRemoving, startRemoving] = useTransition();
@@ -19,10 +19,10 @@ export default function FileService({ taskId }) {
 
     const saveFile = () => {
         startAdding(() => {
-            addFile(task.id, fileChoosen);
+            addFile(task.id, fileChosen);
             setTask(getCombatTask(taskId));
             fileInput.current.value = '';
-            setFileChoosen(null);
+            setFileChosen(null);
         });
     };
 
@@ -44,7 +44,7 @@ export default function FileService({ taskId }) {
         getBase64(event.target).then(data => {
             file.content = data;
         });
-        setFileChoosen(file);
+        setFileChosen(file);
     };
 
     const downloadFile = fileId => {
@@ -90,7 +90,7 @@ export default function FileService({ taskId }) {
             <strong>Dodaj pliki:</strong>
             <br />
             <input ref={fileInput} type="file" className="mb-5 mt-3" onChange={chooseFile} />
-            <Button disabled={!fileChoosen} onClick={() => saveFile()}>
+            <Button disabled={!fileChosen} onClick={() => saveFile()}>
                 {isAdding ? <Spinner /> : <span>Dodaj</span>}
             </Button>
         </>
