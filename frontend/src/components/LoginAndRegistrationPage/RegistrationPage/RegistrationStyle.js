@@ -5,6 +5,13 @@ export const Info = styled(Button)`
     justify-content: center;
     align-items: center;
     margin-left: 5px;
+    background-color: var(--button-green);
+    border-color: var(--button-green);
+
+    &:hover {
+        background-color: green;
+        border-color: green;
+    }
 `;
 
 export const Description = styled.div`

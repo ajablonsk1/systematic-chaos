@@ -58,7 +58,7 @@ export default function LoginForm() {
                                             role="status"
                                         />
                                     ) : (
-                                        <span>Załóż konto</span>
+                                        <span>Zaloguj</span>
                                     )}
                                 </Button>
                             </Col>

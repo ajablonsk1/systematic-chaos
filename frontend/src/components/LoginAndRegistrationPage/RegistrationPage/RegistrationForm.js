@@ -3,6 +3,7 @@ import { ErrorMessage, Formik, Field } from 'formik';
 import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { HeroDescriptions, RegistrationLabelsAndTypes } from '../../../utils/constants';
 import { Description, Info } from './RegistrationStyle';
+import { validateConfirmPassword, validateEmail, validatePassword } from './validators';
 
 export default function RegistrationForm({ isStudent }) {
     const [character, setCharacter] = useState('warrior');
@@ -37,9 +38,12 @@ export default function RegistrationForm({ isStudent }) {
             validate={values => {
                 const errors = {};
                 if (!values.fullname) errors.fullname = 'Pole wymagane.';
-                // errors.email = validateEmail(values.email);
-                // errors.password = validatePassword(values.password);
-                // errors.passwordRepeat = validatePasswordRepeat(values.passwordRepeat);
+                errors.email = validateEmail(values.email);
+                errors.password = validatePassword(values.password);
+                errors.passwordRepeat = validateConfirmPassword(
+                    values.password,
+                    values.passwordRepeat
+                );
 
                 if (isStudent) {
                     if (!values.code) errors.code = 'Pole wymagane';
