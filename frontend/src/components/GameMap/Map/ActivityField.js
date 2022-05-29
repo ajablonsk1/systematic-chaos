@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useRef } from 'react';
 import { Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { getActivityImg, PageRoutes } from '../../../utils/constants';
+import { getActivityImg, getActivityPath, PageRoutes } from '../../../utils/constants';
 
 const ActivityCol = styled(Col)`
     border: 2px black solid;
@@ -41,9 +41,12 @@ export default function AcrivityField({ activity }) {
         window.addEventListener('resize', setHeight); // always when window resize
     });
 
+    // TODO, currently goes to the hard-coded expedition activity but it should be OK once we implement a 'real' activity getter in API
     const startActivity = () => {
-        // TODO, currently goes to the hard-coded expedition activity but it should be OK once we implement a 'real' activity getter in API
-        navigate(`${PageRoutes.ACTIVITY_INFO}`, { state: { activityId: activity.id } });
+        console.log(activity);
+        navigate(`${getActivityPath(activity.activityType)}`, {
+            state: { activityId: activity.id },
+        });
     };
 
     return (

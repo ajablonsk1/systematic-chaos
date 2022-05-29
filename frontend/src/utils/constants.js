@@ -21,6 +21,7 @@ export const PageRoutes = {
     RANKING: '/ranking',
     BADGES_ACHIEVEMENTS: '/badges-achievements',
     LOGIN_REGISTRATION: '/login-registration',
+    COMBAT_TASK: '/combat-task',
     // TODO: add new path routes in the future
 };
 
@@ -69,6 +70,17 @@ export const getActivityTypeName = type => {
             return;
     }
 };
+
+export const getActivityPath = type => {
+    switch(type){
+        case 'expedition':
+            return PageRoutes.ACTIVITY_INFO;
+        case 'task':
+            return PageRoutes.COMBAT_TASK;
+        default:
+            return;
+    }
+}
 
 export const RegistrationLabelsAndTypes = {
     fullname: ['Imię i nazwisko', 'text'],
