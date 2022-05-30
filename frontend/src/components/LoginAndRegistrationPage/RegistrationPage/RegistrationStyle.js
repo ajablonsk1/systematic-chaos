@@ -21,8 +21,9 @@ export const Description = styled.div`
     z-index: 2;
     padding: 5px;
     border: 2px solid black;
-    max-height: 500px;
+    max-height: 300px;
     overflow-y: scroll;
+    bottom: 100%;
 
     & p {
         color: blue;
