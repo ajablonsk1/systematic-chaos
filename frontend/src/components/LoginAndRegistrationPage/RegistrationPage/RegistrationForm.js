@@ -91,12 +91,13 @@ export default function RegistrationForm({ isStudent }) {
                                                     style={{ display: 'none' }}
                                                     className="align-items-center flex-column"
                                                 >
-                                                    <p onClick={() => toggleDescription()}>Ukryj</p>
                                                     {HeroDescriptions[character]}
                                                     <img
                                                         src={HeroImg[character]}
                                                         alt={character}
                                                     />{' '}
+                                                    <br />
+                                                    <p onClick={() => toggleDescription()}>Ukryj</p>
                                                 </Description>
                                             </div>
                                         ) : (
