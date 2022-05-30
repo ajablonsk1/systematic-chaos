@@ -23,14 +23,6 @@ export default function RegistrationForm({ isStudent }) {
         setCharacter(event.target.value);
     };
 
-    // how to do it better ?
-    const toggleDescription = () => {
-        if (description.current.style.display === 'none') {
-            description.current.style.display = 'flex';
-        } else {
-            description.current.style.display = 'none';
-        }
-    };
 
     return (
         <Formik
