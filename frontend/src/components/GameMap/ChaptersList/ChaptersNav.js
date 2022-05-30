@@ -1,8 +1,9 @@
 import React from 'react';
 import { Tab } from 'react-bootstrap';
-import { getActivityMap, getChapters } from '../../../utils/Api';
+import { getChapters } from '../../../utils/Api';
 import ChapterMap from '../Map/ChapterMap';
 import { TabColored } from './ChaptersNavStyle';
+import {getActivityMap} from '../../../storage/activityMap'
 
 function ChaptersNav(props) {
     const tabs = [];

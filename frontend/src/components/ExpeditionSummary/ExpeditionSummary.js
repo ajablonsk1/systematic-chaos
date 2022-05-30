@@ -8,6 +8,7 @@ import { getExpeditionPoints, getExpeditionPointsClosed } from '../../utils/Api'
 import Loader from '../Loader/Loader';
 import { getUserPoints } from '../../utils/pointsCalculator';
 import { Content } from '../App/AppGeneralStyles';
+import { setCompleted } from '../../storage/activityMap';
 
 export default function ExpeditionSummary({ expeditionId }) {
     const navigate = useNavigate();
@@ -30,6 +31,13 @@ export default function ExpeditionSummary({ expeditionId }) {
             //TODO: send user answers from open questions to the database (+ notification to the teacher)
         }
     }, [expeditionId, navigate]);
+
+    const finishExpedition = () => {
+        localStorage.removeItem('userAnswers');
+        localStorage.removeItem('userOpenAnswers');
+        setCompleted(0, expeditionId);
+        navigate(PageRoutes.HOME);
+    };
 
     return (
         <Content>
@@ -63,14 +71,7 @@ export default function ExpeditionSummary({ expeditionId }) {
                     </Row>
                     <Row>
                         <ButtonRow>
-                            <button
-                                className="w-100"
-                                onClick={() => {
-                                    localStorage.removeItem('userAnswers');
-                                    localStorage.removeItem('userOpenAnswers');
-                                    navigate(PageRoutes.HOME);
-                                }}
-                            >
+                            <button className="w-100" onClick={() => finishExpedition()}>
                                 Wróć do strony głównej
                             </button>
                         </ButtonRow>
