@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ErrorMessage, Formik, Field } from 'formik';
 import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
-import { HeroDescriptions, RegistrationLabelsAndTypes } from '../../../utils/constants';
+import { HeroDescriptions, HeroImg, RegistrationLabelsAndTypes } from '../../../utils/constants';
 import { Description, Info } from './RegistrationStyle';
 import { validateConfirmPassword, validateEmail, validatePassword } from './validators';
 
@@ -21,15 +21,6 @@ export default function RegistrationForm({ isStudent }) {
 
     const changeCharacter = event => {
         setCharacter(event.target.value);
-    };
-
-    // how to do it better ?
-    const toggleDescription = () => {
-        if (description.current.style.display === 'none') {
-            description.current.style.display = 'block';
-        } else {
-            description.current.style.display = 'none';
-        }
     };
 
     return (
@@ -85,13 +76,16 @@ export default function RegistrationForm({ isStudent }) {
                                                         Łotrzyk
                                                     </option>
                                                 </Field>
-                                                <Info onClick={() => toggleDescription()}>i</Info>
+                                                <Info>i</Info>
                                                 <Description
                                                     ref={description}
-                                                    style={{ display: 'none' }}
+                                                    style={{
+                                                        display: 'none',
+                                                    }}
+                                                    className="align-items-center flex-column"
                                                 >
-                                                    {HeroDescriptions[character]} <br />
-                                                    <p onClick={() => toggleDescription()}>Ukryj</p>
+                                                    {HeroDescriptions[character]}
+                                                    <img src={HeroImg[character]} alt={character} />
                                                 </Description>
                                             </div>
                                         ) : (

@@ -8,25 +8,25 @@ export const Info = styled(Button)`
     background-color: var(--button-green);
     border-color: var(--button-green);
 
-    &:hover {
-        background-color: green;
-        border-color: green;
+    &:hover + div {
+        display: flex !important;
     }
 `;
 
 export const Description = styled.div`
     position: absolute;
-    background-color: white;
-    color: black;
+    background-color: var(--button-green);
+    color: white;
     z-index: 2;
-    padding: 5px;
-    border: 2px solid black;
+    padding: 25px;
+    bottom: 70%;
+    right: 0%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 89% 75%, 94% 100%, 50% 75%, 0% 75%);
+    width: 500px;
+    height: 400px;
 
-    & p {
-        color: blue;
-        text-decoration: underline;
-        cursor: pointer;
-        text-align: center;
-        display: inline;
+    @media (max-width: 768px) {
+        width: auto;
+        height: 70vh;
     }
 `;
