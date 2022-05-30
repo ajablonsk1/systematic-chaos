@@ -1,5 +1,5 @@
 import { Col, Container, Row } from 'react-bootstrap';
-import { BrowserRouter as Router, HashRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CombatTask from '../CombatTask/CombatTask';
