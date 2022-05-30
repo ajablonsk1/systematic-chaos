@@ -9,6 +9,10 @@ import {
     faCertificate,
     faStar,
 } from '@fortawesome/free-solid-svg-icons';
+import priestImg from '../storage/resources/pope.png';
+import rogueImg from '../storage/resources/rogue_73x128.png';
+import warriorImg from '../storage/resources/warrior_72x128.png';
+import wizardImg from '../storage/resources/wizard_73x128.png';
 
 export const PageRoutes = {
     HOME: '/',
@@ -72,7 +76,7 @@ export const getActivityTypeName = type => {
 };
 
 export const getActivityPath = type => {
-    switch(type){
+    switch (type) {
         case 'expedition':
             return PageRoutes.ACTIVITY_INFO;
         case 'task':
@@ -80,7 +84,7 @@ export const getActivityPath = type => {
         default:
             return;
     }
-}
+};
 
 export const RegistrationLabelsAndTypes = {
     fullname: ['Imię i nazwisko', 'text'],
@@ -106,4 +110,11 @@ export const HeroDescriptions = {
             umożliwi Ci pominąć jedno pytanie w ekspedycji na poziomie łatwym warte nie więcej niż 5pkt. Umiejętność
             ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
             lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`,
+};
+
+export const HeroImg = {
+    warrior: warriorImg,
+    wizard: wizardImg,
+    priest: priestImg,
+    rogue: rogueImg,
 };

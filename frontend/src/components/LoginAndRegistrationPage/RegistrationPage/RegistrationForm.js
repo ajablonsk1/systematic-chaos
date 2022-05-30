@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ErrorMessage, Formik, Field } from 'formik';
 import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
-import { HeroDescriptions, RegistrationLabelsAndTypes } from '../../../utils/constants';
+import { HeroDescriptions, HeroImg, RegistrationLabelsAndTypes } from '../../../utils/constants';
 import { Description, Info } from './RegistrationStyle';
 import { validateConfirmPassword, validateEmail, validatePassword } from './validators';
 
@@ -26,7 +26,7 @@ export default function RegistrationForm({ isStudent }) {
     // how to do it better ?
     const toggleDescription = () => {
         if (description.current.style.display === 'none') {
-            description.current.style.display = 'block';
+            description.current.style.display = 'flex';
         } else {
             description.current.style.display = 'none';
         }
@@ -89,8 +89,14 @@ export default function RegistrationForm({ isStudent }) {
                                                 <Description
                                                     ref={description}
                                                     style={{ display: 'none' }}
+                                                    className="align-items-center flex-column"
                                                 >
                                                     {HeroDescriptions[character]} <br />
+                                                    <img
+                                                        src={HeroImg[character]}
+                                                        alt={character}
+                                                    />{' '}
+                                                    <br />
                                                     <p onClick={() => toggleDescription()}>Ukryj</p>
                                                 </Description>
                                             </div>
