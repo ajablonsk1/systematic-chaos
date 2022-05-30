@@ -14,18 +14,20 @@ import rogueImg from '../storage/resources/rogue.png';
 import warriorImg from '../storage/resources/warrior.png';
 import wizardImg from '../storage/resources/wizard.png';
 
+const HEAD = '/systematic-chaos';
+
 export const PageRoutes = {
     HOME: '/',
-    QUESTION_SELECTION: '/doors-selection',
-    QUESTION_ANSWER: '/question',
-    ACTIVITY_INFO: '/activity-info',
-    GAME_CARD: '/card-game',
-    GAME_MAP: '/game-map',
-    POINTS: '/points',
-    RANKING: '/ranking',
-    BADGES_ACHIEVEMENTS: '/badges-achievements',
-    LOGIN_REGISTRATION: '/login-registration',
-    COMBAT_TASK: '/combat-task',
+    QUESTION_SELECTION: HEAD + '/doors-selection',
+    QUESTION_ANSWER: HEAD + '/question',
+    ACTIVITY_INFO: HEAD + '/activity-info',
+    GAME_CARD: HEAD + '/card-game',
+    GAME_MAP: HEAD + '/game-map',
+    POINTS: HEAD + '/points',
+    RANKING: HEAD + '/ranking',
+    BADGES_ACHIEVEMENTS: HEAD + '/badges-achievements',
+    LOGIN_REGISTRATION: HEAD + '/login-registration',
+    COMBAT_TASK: HEAD + '/combat-task',
     // TODO: add new path routes in the future
 };
 
