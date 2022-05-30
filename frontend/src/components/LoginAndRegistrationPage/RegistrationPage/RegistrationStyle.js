@@ -24,4 +24,9 @@ export const Description = styled.div`
     clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 89% 75%, 94% 100%, 50% 75%, 0% 75%);
     width: 500px;
     height: 400px;
+
+    @media (max-width: 768px) {
+        width: auto;
+        height: 70vh;
+    }
 `;
