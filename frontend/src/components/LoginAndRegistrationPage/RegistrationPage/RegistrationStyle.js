@@ -7,29 +7,26 @@ export const Info = styled(Button)`
     margin-left: 5px;
     background-color: var(--button-green);
     border-color: var(--button-green);
+    transition: visibility 0.5s linear;
 
-    &:hover {
-        background-color: green;
-        border-color: green;
+    &:hover + div {
+        /* background-color: green;
+        border-color: green; */
+        display: flex !important;
+        visibility: visible !important;
     }
 `;
 
 export const Description = styled.div`
     position: absolute;
-    background-color: white;
-    color: black;
+    background-color: var(--button-green);
+    color: white;
     z-index: 2;
     padding: 5px;
-    border: 2px solid black;
-    max-height: 300px;
-    overflow-y: scroll;
-    bottom: 100%;
-
-    & p {
-        color: blue;
-        text-decoration: underline;
-        cursor: pointer;
-        text-align: center;
-        display: inline;
-    }
+    bottom: 70%;
+    right: 0%;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);
+    width: 500px;
+    height: 400px;
+    padding: 5px;
 `;

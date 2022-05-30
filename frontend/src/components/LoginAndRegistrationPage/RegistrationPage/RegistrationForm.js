@@ -85,10 +85,13 @@ export default function RegistrationForm({ isStudent }) {
                                                         Łotrzyk
                                                     </option>
                                                 </Field>
-                                                <Info onClick={() => toggleDescription()}>i</Info>
+                                                <Info>i</Info>
                                                 <Description
                                                     ref={description}
-                                                    style={{ display: 'none' }}
+                                                    style={{
+                                                        display: 'none',
+                                                        visibility: 'hidden',
+                                                    }}
                                                     className="align-items-center flex-column"
                                                 >
                                                     {HeroDescriptions[character]}
@@ -96,8 +99,6 @@ export default function RegistrationForm({ isStudent }) {
                                                         src={HeroImg[character]}
                                                         alt={character}
                                                     />{' '}
-                                                    <br />
-                                                    <p onClick={() => toggleDescription()}>Ukryj</p>
                                                 </Description>
                                             </div>
                                         ) : (
