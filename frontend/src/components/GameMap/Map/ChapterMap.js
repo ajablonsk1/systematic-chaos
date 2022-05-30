@@ -32,7 +32,12 @@ export default function ChapterMap({ map }) {
                     {rows.map((row, idx1) => (
                         <Row key={idx1} className="mx-auto">
                             {row.map((activity, idx2) => (
-                                <ActivityField key={idx2} activity={activity} />
+                                <ActivityField
+                                    key={idx2}
+                                    activity={activity}
+                                    posX={idx2}
+                                    posY={idx1}
+                                />
                             ))}
                         </Row>
                     ))}

@@ -8,6 +8,7 @@ import moment from 'moment';
 import 'moment/locale/pl';
 import { getBase64 } from './fileConverter';
 import download from 'downloadjs';
+import { setCompleted } from '../../storage/activityMap';
 
 export default function FileService({ taskId }) {
     const fileInput = useRef(null);
@@ -23,6 +24,9 @@ export default function FileService({ taskId }) {
             setTask(getCombatTask(taskId));
             fileInput.current.value = '';
             setFileChosen(null);
+
+            // if user has saved a file, activity is complete
+            setCompleted(0, taskId);
         });
     };
 

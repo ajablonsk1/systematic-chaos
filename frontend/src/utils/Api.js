@@ -1,5 +1,4 @@
 import expedition from '../storage/exampleExpeditionData.json';
-import mapData from '../storage/exampleActivityMap.json';
 import chapters from '../storage/exampleChapterList.json';
 import { START_GRAPH_NODE_ID } from './constants';
 
@@ -52,12 +51,6 @@ export function getNextQuestions(chapterID, expeditionID, currentNodeID) {
         expedition.graph.find(x => x.id === nextNodeId)
     );
     return nextQuestions;
-}
-
-//currently wrapped in "activityMap" since it will be probably an extracted part of chapter info
-
-export function getActivityMap(chapterID) {
-    return mapData;
 }
 
 //hard-coded expedition for now, will get correct activities later
