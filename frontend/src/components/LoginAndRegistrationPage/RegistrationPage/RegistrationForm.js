@@ -23,7 +23,6 @@ export default function RegistrationForm({ isStudent }) {
         setCharacter(event.target.value);
     };
 
-
     return (
         <Formik
             initialValues={initialValues}
@@ -82,15 +81,11 @@ export default function RegistrationForm({ isStudent }) {
                                                     ref={description}
                                                     style={{
                                                         display: 'none',
-                                                        visibility: 'hidden',
                                                     }}
                                                     className="align-items-center flex-column"
                                                 >
                                                     {HeroDescriptions[character]}
-                                                    <img
-                                                        src={HeroImg[character]}
-                                                        alt={character}
-                                                    />{' '}
+                                                    <img src={HeroImg[character]} alt={character} />
                                                 </Description>
                                             </div>
                                         ) : (

@@ -10,9 +10,9 @@ import {
     faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import priestImg from '../storage/resources/pope.png';
-import rogueImg from '../storage/resources/rogue_73x128.png';
-import warriorImg from '../storage/resources/warrior_72x128.png';
-import wizardImg from '../storage/resources/wizard_73x128.png';
+import rogueImg from '../storage/resources/rogue.png';
+import warriorImg from '../storage/resources/warrior.png';
+import wizardImg from '../storage/resources/wizard.png';
 
 export const PageRoutes = {
     HOME: '/',
