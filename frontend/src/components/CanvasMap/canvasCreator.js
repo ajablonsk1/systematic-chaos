@@ -27,7 +27,7 @@ export let GameMap = function (canvas, heroType) {
     this.flipHorizontally = false;
 
     this.setCanvasSize = () => {
-        this.canvas.style.width = '100%';
+        this.canvas.style.width = '70%';
         this.canvas.width = canvas.offsetWidth;
         const height = Math.round((this.canvas.width * 3) / 4); // game map has a proportion 4:3
         this.canvas.style.height = height + 'px';
