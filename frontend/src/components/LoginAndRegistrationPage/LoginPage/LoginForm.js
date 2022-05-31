@@ -1,12 +1,13 @@
 import React from 'react';
-import { ErrorMessage, Formik, Field } from 'formik';
+import { Formik } from 'formik';
 import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { FormCol } from '../FormCol';
 
 export default function LoginForm() {
     return (
         <Formik
             initialValues={{
-                email: '',
+                opinion: '',
                 password: '',
             }}
             validate={values => {
@@ -24,21 +25,8 @@ export default function LoginForm() {
                 <Form>
                     <Container>
                         <Row className="mx-auto">
-                            {/* //TODO: pomyśleć o funkcji generującej Col */}
-                            <Col className="form-group" xs={12}>
-                                <h6>Email</h6>
-                                <Field className="form-control" type="email" name="email" />
-                                <ErrorMessage name="email" component="div">
-                                    {msg => <div style={{ color: 'var(--font-color)' }}>{msg}</div>}
-                                </ErrorMessage>
-                            </Col>
-                            <Col className="form-group" xs={12}>
-                                <h6>Hasło</h6>
-                                <Field className="form-control" type="password" name="password" />
-                                <ErrorMessage name="password" component="div">
-                                    {msg => <div style={{ color: 'var(--font-color)' }}>{msg}</div>}
-                                </ErrorMessage>
-                            </Col>
+                            {FormCol('Email', 'email', 'email')}
+                            {FormCol('Hasło', 'password', 'password')}
                         </Row>
                         <Row className="mt-4 d-flex justify-content-center">
                             <Col sm={12} className="d-flex justify-content-center mb-2">
