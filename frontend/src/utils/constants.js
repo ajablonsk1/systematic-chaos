@@ -14,18 +14,38 @@ import InformationImg from './resources/activities/information.png';
 import SurveyImg from './resources/activities/survey.png';
 import TaskImg from './resources/activities/task.png';
 
-import warrior1 from '../storage/resources/warrior/warrior_f0.png';
-import warrior2 from '../storage/resources/warrior/warrior_f1.png';
-import warrior11 from '../storage/resources/warrior/warrior_f10.png';
-import warrior12 from '../storage/resources/warrior/warrior_f11.png';
-import warrior3 from '../storage/resources/warrior/warrior_f2.png';
-import warrior4 from '../storage/resources/warrior/warrior_f3.png';
-import warrior5 from '../storage/resources/warrior/warrior_f4.png';
-import warrior6 from '../storage/resources/warrior/warrior_f5.png';
-import warrior7 from '../storage/resources/warrior/warrior_f6.png';
-import warrior8 from '../storage/resources/warrior/warrior_f7.png';
-import warrior9 from '../storage/resources/warrior/warrior_f8.png';
-import warrior10 from '../storage/resources/warrior/warrior_f9.png';
+// import warrior1 from '../storage/resources/warrior/warrior_f0.png';
+// import warrior2 from '../storage/resources/warrior/warrior_f1.png';
+// import warrior11 from '../storage/resources/warrior/warrior_f10.png';
+// import warrior12 from '../storage/resources/warrior/warrior_f11.png';
+// import warrior3 from '../storage/resources/warrior/warrior_f2.png';
+// import warrior4 from '../storage/resources/warrior/warrior_f3.png';
+// import warrior5 from '../storage/resources/warrior/warrior_f4.png';
+// import warrior6 from '../storage/resources/warrior/warrior_f5.png';
+// import warrior7 from '../storage/resources/warrior/warrior_f6.png';
+// import warrior8 from '../storage/resources/warrior/warrior_f7.png';
+// import warrior9 from '../storage/resources/warrior/warrior_f8.png';
+// import warrior10 from '../storage/resources/warrior/warrior_f9.png';
+
+
+import warrior1 from '../storage/resources/warrior/0.png';
+import warrior2 from '../storage/resources/warrior/1.png';
+import warrior11 from '../storage/resources/warrior/10.png';
+import warrior12 from '../storage/resources/warrior/11.png';
+import warrior3 from '../storage/resources/warrior/2.png';
+import warrior4 from '../storage/resources/warrior/3.png';
+import warrior5 from '../storage/resources/warrior/4.png';
+import warrior6 from '../storage/resources/warrior/5.png';
+import warrior7 from '../storage/resources/warrior/6.png';
+import warrior8 from '../storage/resources/warrior/7.png';
+import warrior9 from '../storage/resources/warrior/8.png';
+import warrior10 from '../storage/resources/warrior/9.png';
+import warrior13 from '../storage/resources/warrior/12.png';
+import warrior14 from '../storage/resources/warrior/13.png';
+import warrior15 from '../storage/resources/warrior/14.png';
+import warrior16 from '../storage/resources/warrior/15.png';
+import warrior17 from '../storage/resources/warrior/16.png';
+
 
 export const PageRoutes = {
     HOME: '/',
@@ -146,6 +166,11 @@ export const HeroDataset = {
         warrior10,
         warrior11,
         warrior12,
+        warrior13,
+        warrior14,
+        warrior15,
+        warrior16,
+        warrior17,
     ],
     wizard: wizardImg,
     priest: priestImg,

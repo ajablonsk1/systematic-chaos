@@ -25,6 +25,8 @@ export let GameMap = function (canvas, heroType) {
     this.player = null;
     this.playerImgIterator = 0;
     this.flipHorizontally = false;
+    this.mapScaler = 16;
+    this.onePlayerStep = 4;
 
     this.setCanvasSize = () => {
         this.canvas.style.width = '70%';
@@ -45,6 +47,8 @@ export let GameMap = function (canvas, heroType) {
             sizeY: (img.height * playerSizeX) / img.width,
             x: this.map.playerStartX,
             y: this.map.playerStartY,
+            stepX: 0,
+            stepY: 0,
         };
     };
 
@@ -60,16 +64,16 @@ export let GameMap = function (canvas, heroType) {
 
         if (this.flipHorizontally) {
             this.ctx.translate(
-                this.player.x * this.step + 2 * img.width,
-                this.player.y * this.step - img.height
+                this.player.x * this.step + this.player.stepX + 2 * img.width,
+                this.player.y * this.step - img.height + this.player.stepY
             );
             this.ctx.scale(-1, 1);
         }
 
         this.player.img = this.ctx.drawImage(
             img,
-            this.flipHorizontally ? 0 : this.player.x * this.step,
-            this.flipHorizontally ? 0 : this.player.y * this.step - img.height,
+            this.flipHorizontally ? 0 : this.player.x * this.step + this.player.stepX,
+            this.flipHorizontally ? 0 : this.player.y * this.step - img.height + this.player.stepY,
             this.player.sizeX,
             this.player.sizeY
         );
@@ -85,23 +89,55 @@ export let GameMap = function (canvas, heroType) {
         switch (pressedKey.key) {
             case 'ArrowUp':
                 if (this.player.y - 1 > 0) {
-                    this.player.y -= this.map.binMap[this.player.y - 1][this.player.x];
+                    this.player.stepY -= this.onePlayerStep;
+
+                    if (this.player.stepY % this.mapScaler === 0) {
+                        const availability = this.map.binMap[this.player.y - 1][this.player.x];
+                        this.player.y -= availability;
+                        this.player.stepY = availability
+                            ? 0
+                            : this.player.stepY + this.onePlayerStep;
+                    }
                 }
                 break;
             case 'ArrowDown':
                 if (this.player.y + 1 < this.map.binMap.length) {
-                    this.player.y += this.map.binMap[this.player.y + 1][this.player.x];
+                    this.player.stepY += this.onePlayerStep;
+
+                    if (this.player.stepY % this.mapScaler === 0) {
+                        const availability = this.map.binMap[this.player.y + 1][this.player.x];
+                        this.player.y += availability;
+                        this.player.stepY = availability
+                            ? 0
+                            : this.player.stepY - this.onePlayerStep;
+                    }
                 }
                 break;
             case 'ArrowLeft':
                 if (this.player.x - 1 > 0) {
-                    this.player.x -= this.map.binMap[this.player.y][this.player.x - 1];
+                    this.player.stepX -= this.onePlayerStep;
+
+                    if (this.player.stepX % this.mapScaler === 0) {
+                        const availability = this.map.binMap[this.player.y][this.player.x - 1];
+                        this.player.x -= availability;
+                        this.player.stepX = availability
+                            ? 0
+                            : this.player.stepX + this.onePlayerStep;
+                    }
                 }
                 this.flipHorizontally = true;
                 break;
             case 'ArrowRight':
                 if (this.player.x + 1 < this.map.binMap[this.player.y].length) {
-                    this.player.x += this.map.binMap[this.player.y][this.player.x + 1];
+                    this.player.stepX += this.onePlayerStep;
+
+                    if (this.player.stepX % this.mapScaler === 0) {
+                        const availability = this.map.binMap[this.player.y][this.player.x + 1];
+                        this.player.x += availability;
+                        this.player.stepX = availability
+                            ? 0
+                            : this.player.stepX - this.onePlayerStep;
+                    }
                 }
                 this.flipHorizontally = false;
                 break;
@@ -123,8 +159,11 @@ export let GameMap = function (canvas, heroType) {
     this.run = function () {
         this.setCanvasSize();
         this.map = createMap();
-        this.step = (16 * this.canvas.width) / this.map.imgWidth;
-        this.player = this.createPlayer();
-        this.map.img.onload = this.draw;
+        this.step = (this.mapScaler * this.canvas.width) / this.map.imgWidth;
+
+        this.map.img.onload = () => {
+            this.player = this.createPlayer();
+            this.player.img.onload = this.draw;
+        };
     };
 };
