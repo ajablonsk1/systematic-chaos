@@ -26,7 +26,7 @@ export let GameMap = function (canvas, heroType) {
     this.playerImgIterator = 0;
     this.flipHorizontally = false;
     this.mapScaler = 16;
-    this.onePlayerStep = 4;
+    this.onePlayerStep = 2;
 
     this.setCanvasSize = () => {
         this.canvas.style.width = '70%';

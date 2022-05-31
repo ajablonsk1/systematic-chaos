@@ -37,7 +37,7 @@ import warrior5 from '../storage/resources/warrior/4.png';
 import warrior6 from '../storage/resources/warrior/5.png';
 import warrior7 from '../storage/resources/warrior/6.png';
 import warrior8 from '../storage/resources/warrior/7.png';
-import warrior9 from '../storage/resources/warrior/8.png';
+// import warrior9 from '../storage/resources/warrior/8.png';
 import warrior10 from '../storage/resources/warrior/9.png';
 import warrior13 from '../storage/resources/warrior/12.png';
 import warrior14 from '../storage/resources/warrior/13.png';
@@ -162,7 +162,7 @@ export const HeroDataset = {
         warrior6,
         warrior7,
         warrior8,
-        warrior9,
+        // warrior9,
         warrior10,
         warrior11,
         warrior12,
