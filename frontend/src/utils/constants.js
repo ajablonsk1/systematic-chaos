@@ -27,7 +27,6 @@ import TaskImg from './resources/activities/task.png';
 // import warrior9 from '../storage/resources/warrior/warrior_f8.png';
 // import warrior10 from '../storage/resources/warrior/warrior_f9.png';
 
-
 import warrior1 from '../storage/resources/warrior/0.png';
 import warrior2 from '../storage/resources/warrior/1.png';
 import warrior11 from '../storage/resources/warrior/10.png';
@@ -46,7 +45,6 @@ import warrior15 from '../storage/resources/warrior/14.png';
 import warrior16 from '../storage/resources/warrior/15.png';
 import warrior17 from '../storage/resources/warrior/16.png';
 
-
 export const PageRoutes = {
     HOME: '/',
     QUESTION_SELECTION: '/doors-selection',
@@ -59,6 +57,7 @@ export const PageRoutes = {
     BADGES_ACHIEVEMENTS: '/badges-achievements',
     LOGIN_REGISTRATION: '/login-registration',
     COMBAT_TASK: '/combat-task',
+    CANVAS: '/canvas',
     // TODO: add new path routes in the future
 };
 
@@ -68,6 +67,7 @@ export const UserSidebarTitles = {
     [PageRoutes.POINTS]: ['Punkty', faStar],
     [PageRoutes.RANKING]: ['Ranking', faRankingStar],
     [PageRoutes.BADGES_ACHIEVEMENTS]: ['Odznaki i osiągnięcia', faCertificate],
+    [PageRoutes.CANVAS]: ['Świat gry', faChessBoard],
     // TODO: add new elements to the map according to the sidebar in Figma, e.g. [PathRoutes.GAME_MAP]: "Mapa Gry"
 };
 
