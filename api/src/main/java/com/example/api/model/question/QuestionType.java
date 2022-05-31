@@ -1,9 +1,9 @@
 package com.example.api.model.question;
 
 public enum QuestionType {
-    OPENED("opened"),
-    SINGLE_CHOICE("single choice"),
-    MULTIPLE_CHOICE("multiple choice");
+    OPENED("OPENED"),
+    SINGLE_CHOICE("SINGLE_CHOICE"),
+    MULTIPLE_CHOICE("MULTIPLE_CHOICE");
 
     private final String type;
 
