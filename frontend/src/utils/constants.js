@@ -28,6 +28,7 @@ export const PageRoutes = {
     BADGES_ACHIEVEMENTS: HEAD + '/badges-achievements',
     LOGIN_REGISTRATION: HEAD + '/login-registration',
     COMBAT_TASK: HEAD + '/combat-task',
+    SURVEY_TASK: HEAD + '/survey-task',
     // TODO: add new path routes in the future
 };
 
@@ -83,6 +84,8 @@ export const getActivityPath = type => {
             return PageRoutes.ACTIVITY_INFO;
         case 'task':
             return PageRoutes.COMBAT_TASK;
+        case 'survey':
+            return PageRoutes.SURVEY_TASK;
         default:
             return;
     }

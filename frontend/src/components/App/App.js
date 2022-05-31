@@ -13,6 +13,7 @@ import MobileNavbar from '../Sidebar/MobileNavbar';
 import Sidebar from '../Sidebar/Sidebar';
 import './App.css';
 import { MobileNavCol, SidebarCol } from './AppGeneralStyles';
+import SurveyTask from '../SurveyTask/SurveyTask';
 
 function App() {
     return (
@@ -50,10 +51,9 @@ function App() {
 
                             <Route path={`${PageRoutes.COMBAT_TASK}`} element={<CombatTask />} />
 
-                            <Route
-                                path={`${PageRoutes.POINTS}`}
-                                element={<Points />}
-                            />
+                            <Route path={`${PageRoutes.POINTS}`} element={<Points />} />
+
+                            <Route path={`${PageRoutes.SURVEY_TASK}`} element={<SurveyTask />} />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>
