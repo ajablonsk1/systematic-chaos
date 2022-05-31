@@ -1,7 +1,8 @@
 import { Col, Container, Row } from 'react-bootstrap';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
+import CanvasMap from '../CanvasMap/CanvasMap';
 import CombatTask from '../CombatTask/CombatTask';
 import GameMap from '../GameMap/GameMap';
 import LoginAndRegistration from '../LoginAndRegistrationPage/LoginAndRegistration';
@@ -18,7 +19,7 @@ function App() {
     return (
         <Container fluid className="p-0">
             <Row style={{ minHeight: '100vh', margin: 0 }}>
-                <HashRouter>
+                <BrowserRouter>
                     <SidebarCol xs={2}>
                         <Sidebar link_titles={Object.entries(UserSidebarTitles)} />
                     </SidebarCol>
@@ -50,10 +51,9 @@ function App() {
 
                             <Route path={`${PageRoutes.COMBAT_TASK}`} element={<CombatTask />} />
 
-                            <Route
-                                path={`${PageRoutes.POINTS}`}
-                                element={<Points />}
-                            />
+                            <Route path={`${PageRoutes.POINTS}`} element={<Points />} />
+
+                            <Route path={`/canvas`} element={<CanvasMap />} />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>
@@ -61,7 +61,7 @@ function App() {
                     <MobileNavCol xs={12}>
                         <MobileNavbar link_titles={Object.entries(UserSidebarTitles)} />
                     </MobileNavCol>
-                </HashRouter>
+                </BrowserRouter>
             </Row>
         </Container>
     );
