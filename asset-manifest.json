@@ -1,18 +1,19 @@
 {
   "files": {
     "main.css": "/systematic-chaos/static/css/main.0f2ba070.css",
-    "main.js": "/systematic-chaos/static/js/main.8b141c89.js",
+    "main.js": "/systematic-chaos/static/js/main.d8f27ff8.js",
     "static/js/787.cda612ba.chunk.js": "/systematic-chaos/static/js/787.cda612ba.chunk.js",
     "static/media/background.png": "/systematic-chaos/static/media/background.c22f4223ab3b30d307a9.png",
+    "static/media/map_1_sc.png": "/systematic-chaos/static/media/map_1_sc.501f03026533b4fbadaf.png",
     "static/media/game_example.png": "/systematic-chaos/static/media/game_example.1dd58aabf47b93e6f88e.png",
     "static/media/graduated-white.png": "/systematic-chaos/static/media/graduated-white.193ba885e91de82f42dd.png",
     "index.html": "/systematic-chaos/index.html",
     "main.0f2ba070.css.map": "/systematic-chaos/static/css/main.0f2ba070.css.map",
-    "main.8b141c89.js.map": "/systematic-chaos/static/js/main.8b141c89.js.map",
+    "main.d8f27ff8.js.map": "/systematic-chaos/static/js/main.d8f27ff8.js.map",
     "787.cda612ba.chunk.js.map": "/systematic-chaos/static/js/787.cda612ba.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0f2ba070.css",
-    "static/js/main.8b141c89.js"
+    "static/js/main.d8f27ff8.js"
   ]
 }
