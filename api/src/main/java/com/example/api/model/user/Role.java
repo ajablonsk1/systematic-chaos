@@ -1,9 +1,9 @@
 package com.example.api.model.user;
 
 public enum Role {
-    STUDENT("student"),
-    PROFESSOR("professor"),
-    ADMIN("admin");
+    STUDENT("STUDENT"),
+    PROFESSOR("PROFESSOR"),
+    ADMIN("ADMIN");
 
     private final String name;
 

@@ -1,9 +1,9 @@
 package com.example.api.model.question;
 
 public enum Difficulty {
-    EASY("easy"),
-    MEDIUM("medium"),
-    HARD("hard");
+    EASY("EASY"),
+    MEDIUM("MEDIUM"),
+    HARD("HARD");
 
     private final String difficulty;
 

@@ -1,9 +1,9 @@
 package com.example.api.model.map;
 
 public enum MustFulfil {
-    NONE("none"),
-    ANY("any"),
-    ALL("all");
+    NONE("NONE"),
+    ANY("ANY"),
+    ALL("ALL");
 
     private final String mustFulfil;
 
