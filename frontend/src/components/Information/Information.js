@@ -39,7 +39,7 @@ export default function Information() {
                             <InformationImage src={image} alt={idx} key={idx}/>
                         ))}
                     </div>
-                    <SmallDivider />
+                    {information.images.length ? <SmallDivider /> : <></>}
                     <div>
                         <p>{information.content}</p>
                     </div>
