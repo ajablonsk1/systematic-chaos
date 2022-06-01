@@ -14,9 +14,10 @@ import { useLocation } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import { InfoContainer } from '../ActivityInfo/InfoContainer';
 import { getSurveyTask } from '../../storage/surveyTask';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import { Row, Col, Button, Spinner, Form, Container } from 'react-bootstrap';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsDown, faThumbsUp, faFaceMeh } from '@fortawesome/free-solid-svg-icons';
 export default function FeedbackTask() {
     const location = useLocation();
     //also chapterID later
@@ -25,7 +26,9 @@ export default function FeedbackTask() {
     //later with correct ids
     const task = getSurveyTask(null, taskId);
 
-    console.log(task);
+    //console.log(task);
+
+    //const [score, setScore] = useState(3);
 
     return (
         <Content>
@@ -57,7 +60,7 @@ export default function FeedbackTask() {
                             <Formik
                                 initialValues={{
                                     opinion: '',
-                                    score: '',
+                                    score: '3',
                                 }}
                                 validate={values => {
                                     const errors = {};
@@ -74,6 +77,60 @@ export default function FeedbackTask() {
                                     <Form>
                                         <Container>
                                             <Row className="mx-auto"></Row>
+                                            <p>
+                                                Jakie są Twoje wrażenia z tego rodziału? Co można
+                                                zmienić, poprawić, a co było w porządku?
+                                            </p>
+                                            <Field
+                                                as="textarea"
+                                                type="text"
+                                                name="opinion"
+                                                style={{
+                                                    width: '80%',
+                                                    color: '#ffb30d',
+                                                    border: '1px solid #ffb30d',
+                                                    backgroundColor: '#001542',
+                                                }}
+                                                onChange={() => {
+                                                    console.log(values);
+                                                }}
+                                            />
+                                            <Row className="mt-4 w-80">
+                                                <Col>
+                                                    <FontAwesomeIcon icon={faThumbsDown} />
+                                                    <FontAwesomeIcon icon={faThumbsDown} />
+                                                </Col>
+
+                                                <Col>
+                                                    <FontAwesomeIcon icon={faThumbsDown} />
+                                                </Col>
+
+                                                <Col>
+                                                    <FontAwesomeIcon icon={faFaceMeh} />
+                                                </Col>
+
+                                                <Col>
+                                                    <FontAwesomeIcon icon={faThumbsUp} />
+                                                </Col>
+
+                                                <Col>
+                                                    <FontAwesomeIcon icon={faThumbsUp} />
+                                                    <FontAwesomeIcon icon={faThumbsUp} />
+                                                </Col>
+                                            </Row>
+                                            <Row className="mt-4 justify-content-center">
+                                                <Field
+                                                    type="range"
+                                                    min={1}
+                                                    max={5}
+                                                    name="score"
+                                                    //na razie jest ok
+                                                    style={{
+                                                        width: '82%',
+                                                        accentColor: 'var(--button-green)',
+                                                    }}
+                                                ></Field>
+                                            </Row>
 
                                             <Row className="mt-4 d-flex justify-content-center">
                                                 <Col
