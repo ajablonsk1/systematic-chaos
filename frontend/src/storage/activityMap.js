@@ -58,21 +58,6 @@ const activityMap = {
                 completed: false,
             },
             {
-                id: 4,
-                activityType: 'survey',
-                posX: 4,
-                posY: 4,
-                unlockCriteria: {
-                    mustFulfill: 'ANY',
-                    requirements: {
-                        finished: [0],
-                        score: null,
-                        time: null,
-                    },
-                },
-                completed: false,
-            },
-            {
                 id: 5,
                 activityType: 'expedition',
                 posX: 7,
