@@ -5,6 +5,7 @@ import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CanvasMap from '../CanvasMap/CanvasMap';
 import CombatTask from '../CombatTask/CombatTask';
 import GameMap from '../GameMap/GameMap';
+import Information from '../Information/Information';
 import LoginAndRegistration from '../LoginAndRegistrationPage/LoginAndRegistration';
 import NotFound from '../NotFoundPage/NotFound';
 import Points from '../PointsPage/Points';
@@ -14,6 +15,7 @@ import MobileNavbar from '../Sidebar/MobileNavbar';
 import Sidebar from '../Sidebar/Sidebar';
 import './App.css';
 import { MobileNavCol, SidebarCol } from './AppGeneralStyles';
+import SurveyTask from '../SurveyTask/SurveyTask';
 
 function App() {
     return (
@@ -51,9 +53,13 @@ function App() {
 
                             <Route path={`${PageRoutes.COMBAT_TASK}`} element={<CombatTask />} />
 
+                            <Route path={`/canvas`} element={<CanvasMap />} />
+
                             <Route path={`${PageRoutes.POINTS}`} element={<Points />} />
 
-                            <Route path={`/canvas`} element={<CanvasMap />} />
+                            <Route path={`${PageRoutes.SURVEY_TASK}`} element={<SurveyTask />} />
+                            
+                            <Route path={`${PageRoutes.INFORMATION}`} element={<Information />} />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>

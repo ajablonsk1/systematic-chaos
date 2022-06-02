@@ -114,6 +114,10 @@ export const getActivityPath = type => {
             return PageRoutes.ACTIVITY_INFO;
         case 'task':
             return PageRoutes.COMBAT_TASK;
+        case 'survey':
+            return PageRoutes.SURVEY_TASK;
+        case 'information':
+            return PageRoutes.INFORMATION;
         default:
             return;
     }

@@ -10,6 +10,10 @@ body {
     display: none;
 }
 
+.invisible-scroll {
+    scrollbar-width: none;
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

@@ -29,6 +29,7 @@ export default function RegistrationForm({ isStudent }) {
             validate={values => {
                 const errors = {};
                 if (!values.fullname) errors.fullname = 'Pole wymagane.';
+
                 errors.email = validateEmail(values.email);
                 errors.password = validatePassword(values.password);
                 errors.passwordRepeat = validateConfirmPassword(
@@ -39,6 +40,14 @@ export default function RegistrationForm({ isStudent }) {
                 if (isStudent) {
                     if (!values.code) errors.code = 'Pole wymagane';
                 }
+
+                // without this, errors contains keys with empty string which should not be considered errors
+                Object.keys(errors).forEach(key => {
+                    if (errors[key] === '') {
+                        delete errors[key];
+                    }
+                });
+
                 return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
@@ -46,8 +55,8 @@ export default function RegistrationForm({ isStudent }) {
                 setSubmitting(false);
             }}
         >
-            {({ isSubmitting, values, errors }) => (
-                <Form>
+            {({ isSubmitting, values, errors, handleSubmit }) => (
+                <Form onSubmit={handleSubmit}>
                     <Container>
                         <Row className="mx-auto">
                             {Object.keys(initialValues).map((key, idx) => (
