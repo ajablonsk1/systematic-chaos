@@ -7,7 +7,7 @@ export default function LoginForm() {
     return (
         <Formik
             initialValues={{
-                opinion: '',
+                email: '',
                 password: '',
             }}
             validate={values => {
@@ -21,8 +21,8 @@ export default function LoginForm() {
                 setSubmitting(false);
             }}
         >
-            {({ isSubmitting, values, errors }) => (
-                <Form>
+            {({ isSubmitting, values, errors, handleSubmit }) => (
+                <Form onSubmit={handleSubmit}>
                     <Container>
                         <Row className="mx-auto">
                             {FormCol('Email', 'email', 'email')}

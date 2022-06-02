@@ -16,19 +16,15 @@ import { InfoContainer } from '../ActivityInfo/InfoContainer';
 import { getSurveyTask } from '../../storage/surveyTask';
 import { Formik, Field } from 'formik';
 import { Row, Col, Button, Spinner, Form, Container } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsDown, faThumbsUp, faFaceMeh } from '@fortawesome/free-solid-svg-icons';
+import { IconColumn } from './IconColumn';
+
 export default function FeedbackTask() {
     const location = useLocation();
     //also chapterID later
     const { activityId: taskId } = location.state;
-    console.log(taskId);
     //later with correct ids
     const task = getSurveyTask(null, taskId);
-
-    //console.log(task);
-
-    //const [score, setScore] = useState(3);
 
     return (
         <Content>
@@ -73,8 +69,8 @@ export default function FeedbackTask() {
                                     setSubmitting(false);
                                 }}
                             >
-                                {({ isSubmitting, values, errors }) => (
-                                    <Form>
+                                {({ isSubmitting, values, errors, handleSubmit }) => (
+                                    <Form onSubmit={handleSubmit}>
                                         <Container>
                                             <Row className="mx-auto"></Row>
                                             <p>
@@ -91,32 +87,14 @@ export default function FeedbackTask() {
                                                     border: '1px solid #ffb30d',
                                                     backgroundColor: '#001542',
                                                 }}
-                                                onChange={() => {
-                                                    console.log(values);
-                                                }}
                                             />
+
                                             <Row className="mt-4 w-80">
-                                                <Col>
-                                                    <FontAwesomeIcon icon={faThumbsDown} />
-                                                    <FontAwesomeIcon icon={faThumbsDown} />
-                                                </Col>
-
-                                                <Col>
-                                                    <FontAwesomeIcon icon={faThumbsDown} />
-                                                </Col>
-
-                                                <Col>
-                                                    <FontAwesomeIcon icon={faFaceMeh} />
-                                                </Col>
-
-                                                <Col>
-                                                    <FontAwesomeIcon icon={faThumbsUp} />
-                                                </Col>
-
-                                                <Col>
-                                                    <FontAwesomeIcon icon={faThumbsUp} />
-                                                    <FontAwesomeIcon icon={faThumbsUp} />
-                                                </Col>
+                                                <IconColumn icons={[faThumbsDown, faThumbsDown]} />
+                                                <IconColumn icons={[faThumbsDown]} />
+                                                <IconColumn icons={[faFaceMeh]} />
+                                                <IconColumn icons={[faThumbsUp]} />
+                                                <IconColumn icons={[faThumbsUp, faThumbsUp]} />
                                             </Row>
                                             <Row className="mt-4 justify-content-center">
                                                 <Field
@@ -124,7 +102,6 @@ export default function FeedbackTask() {
                                                     min={1}
                                                     max={5}
                                                     name="score"
-                                                    //na razie jest ok
                                                     style={{
                                                         width: '82%',
                                                         accentColor: 'var(--button-green)',

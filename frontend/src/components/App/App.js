@@ -1,5 +1,5 @@
 import { Col, Container, Row } from 'react-bootstrap';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CombatTask from '../CombatTask/CombatTask';
@@ -19,7 +19,7 @@ function App() {
     return (
         <Container fluid className="p-0">
             <Row style={{ minHeight: '100vh', margin: 0 }}>
-                <HashRouter>
+                <BrowserRouter>
                     <SidebarCol xs={2}>
                         <Sidebar link_titles={Object.entries(UserSidebarTitles)} />
                     </SidebarCol>
@@ -61,7 +61,7 @@ function App() {
                     <MobileNavCol xs={12}>
                         <MobileNavbar link_titles={Object.entries(UserSidebarTitles)} />
                     </MobileNavCol>
-                </HashRouter>
+                </BrowserRouter>
             </Row>
         </Container>
     );
