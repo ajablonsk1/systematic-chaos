@@ -2,6 +2,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
+import CanvasMap from '../CanvasMap/CanvasMap';
 import CombatTask from '../CombatTask/CombatTask';
 import GameMap from '../GameMap/GameMap';
 import Information from '../Information/Information';
@@ -52,6 +53,7 @@ function App() {
 
                             <Route path={`${PageRoutes.COMBAT_TASK}`} element={<CombatTask />} />
 
+                            <Route path={`/canvas`} element={<CanvasMap />} />
 
                             <Route path={`${PageRoutes.POINTS}`} element={<Points />} />
 
