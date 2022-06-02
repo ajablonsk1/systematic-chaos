@@ -1,7 +1,10 @@
 package com.example.api.model.user;
 
 import com.example.api.model.group.Group;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -12,6 +15,13 @@ import javax.persistence.*;
 @Entity
 @Table(name="\"user\"")
 public class User {
+
+    public User(String email, String password, Role role){
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

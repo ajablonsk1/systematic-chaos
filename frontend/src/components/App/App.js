@@ -4,6 +4,7 @@ import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CombatTask from '../CombatTask/CombatTask';
 import GameMap from '../GameMap/GameMap';
+import Information from '../Information/Information';
 import LoginAndRegistration from '../LoginAndRegistrationPage/LoginAndRegistration';
 import NotFound from '../NotFoundPage/NotFound';
 import Points from '../PointsPage/Points';
@@ -51,9 +52,12 @@ function App() {
 
                             <Route path={`${PageRoutes.COMBAT_TASK}`} element={<CombatTask />} />
 
+
                             <Route path={`${PageRoutes.POINTS}`} element={<Points />} />
 
                             <Route path={`${PageRoutes.SURVEY_TASK}`} element={<SurveyTask />} />
+                            
+                            <Route path={`${PageRoutes.INFORMATION}`} element={<Information />} />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>
