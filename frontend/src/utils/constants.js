@@ -50,7 +50,7 @@ export const PageRoutes = {
     QUESTION_SELECTION: '/doors-selection',
     QUESTION_ANSWER: '/question',
     ACTIVITY_INFO: '/activity-info',
-    GAME_CARD: '/card-game',
+    GAME_CARD: '/game-card',
     GAME_MAP: '/game-map',
     POINTS: '/points',
     RANKING: '/ranking',

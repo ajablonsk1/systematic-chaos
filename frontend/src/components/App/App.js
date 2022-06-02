@@ -16,6 +16,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import './App.css';
 import { MobileNavCol, SidebarCol } from './AppGeneralStyles';
 import SurveyTask from '../SurveyTask/SurveyTask';
+import GameCard from '../GameCard/GameCard';
 
 function App() {
     return (
@@ -58,8 +59,10 @@ function App() {
                             <Route path={`${PageRoutes.POINTS}`} element={<Points />} />
 
                             <Route path={`${PageRoutes.SURVEY_TASK}`} element={<SurveyTask />} />
-                            
+
                             <Route path={`${PageRoutes.INFORMATION}`} element={<Information />} />
+
+                            <Route path={`${PageRoutes.GAME_CARD}`} element={<GameCard />} />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>
