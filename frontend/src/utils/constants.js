@@ -58,6 +58,7 @@ export const PageRoutes = {
     LOGIN_REGISTRATION: '/login-registration',
     COMBAT_TASK: '/combat-task',
     CANVAS: '/canvas',
+    GROUPS: '/groups',
     // TODO: add new path routes in the future
 };
 

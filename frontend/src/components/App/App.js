@@ -16,6 +16,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import './App.css';
 import { MobileNavCol, SidebarCol } from './AppGeneralStyles';
 import SurveyTask from '../SurveyTask/SurveyTask';
+import Groups from '../GroupsPage/Groups';
 
 function App() {
     return (
@@ -60,6 +61,8 @@ function App() {
                             <Route path={`${PageRoutes.SURVEY_TASK}`} element={<SurveyTask />} />
                             
                             <Route path={`${PageRoutes.INFORMATION}`} element={<Information />} />
+
+                            <Route path={`${PageRoutes.GROUPS}`} element={<Groups />} />
 
                             <Route path="*" element={<NotFound />} />
                         </Routes>
