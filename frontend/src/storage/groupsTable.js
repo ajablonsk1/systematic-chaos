@@ -1,4 +1,4 @@
-const groups = [
+let groups = [
     {
         name: "pn-1440A",
         code: "pn-1440A"
@@ -58,6 +58,32 @@ const groups = [
     
 ]
 
+export const AddGroupResults = {
+    NAME_TAKEN_ERROR: "Nazwa grupy jest zajęta",
+    CODE_TAKEN_ERROR: "Kod grupy jest zajęty",
+    SUCCESS: "Grupa została dodana"
+}
+
 export function getTableContent() {
     return groups;
+}
+
+export function addGroup(name, code) {
+    let erorrs = [];
+
+    if (groups.filter(group => group.name === name).length > 0) erorrs.push(AddGroupResults.NAME_TAKEN_ERROR);
+    if (groups.filter(group => group.code === code).length > 0) erorrs.push(AddGroupResults.CODE_TAKEN_ERROR);
+
+    if (erorrs.length > 0) return erorrs;
+    else {
+        groups.push(
+            {
+                name: name,
+                code: code,
+            }
+        );
+        return AddGroupResults.SUCCESS;
+    }
+    
+
 }
