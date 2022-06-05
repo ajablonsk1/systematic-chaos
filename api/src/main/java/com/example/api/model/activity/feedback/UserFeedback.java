@@ -1,4 +1,4 @@
-package com.example.api.model.task;
+package com.example.api.model.activity.feedback;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,14 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class FileTaskResult extends TaskResult{
-    @Lob
-    private byte[] file;
+public class UserFeedback extends Feedback{
+    private Integer rate;
 }

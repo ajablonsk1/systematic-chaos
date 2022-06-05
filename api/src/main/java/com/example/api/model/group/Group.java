@@ -25,7 +25,6 @@ public class Group {
     private List<User> users;
 
     @ManyToOne
-    @JoinColumn(name = "accessDate_id")
     private AccessDate accessDate;
-    private String groupKey;
+    private String invitationCode;
 }

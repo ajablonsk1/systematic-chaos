@@ -1,5 +1,6 @@
-package com.example.api.model.task;
+package com.example.api.model.activity.result;
 
+import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Answer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +9,9 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.HashMap;
-import java.util.Map;
+import javax.persistence.OneToOne;
+import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +19,10 @@ import java.util.Map;
 @AllArgsConstructor
 @Entity
 public class GraphTaskResult extends TaskResult {
-    @OneToMany(mappedBy = "graphTaskResult")
-    private Map<Long, Answer> answers = new HashMap<>();
+    @OneToMany
+    private List<Answer> answers = new LinkedList<>();
+
+    @OneToOne
+    private GraphTask graphTask;
 }
 

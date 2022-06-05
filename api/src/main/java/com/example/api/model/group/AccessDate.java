@@ -19,13 +19,6 @@ public class AccessDate {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
-    @OneToMany(mappedBy = "accessDate")
-    private List<Group> groups;
     private Date dateFrom;
     private Date dateTo;
-
-    @ManyToOne
-    @JoinColumn(name = "requirement_id")
-    private Requirement requirement;
 }

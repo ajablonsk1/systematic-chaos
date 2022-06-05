@@ -1,4 +1,4 @@
-package com.example.api.model.task;
+package com.example.api.model.activity.result;
 
 import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
@@ -12,15 +12,15 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class TaskResult {
+@MappedSuperclass
+public abstract class TaskResult {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @OneToOne
-    private Task task;
-
-    @OneToOne
     private User user;
+
+    private Double pointsReceived = 0.0;
 }
