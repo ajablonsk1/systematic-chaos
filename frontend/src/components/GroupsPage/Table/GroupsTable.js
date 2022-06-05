@@ -6,7 +6,8 @@ export default function GroupsTable() {
     const tableContent = getTableContent();
 
     return (
-        <TableContainer striped bordered hover>
+        // marginBottom prevents last records coverage by add button
+        <TableContainer striped bordered hover style={{"marginBottom": "150px",}}>
             <thead>
                 <tr>
                     <th>Nr</th>

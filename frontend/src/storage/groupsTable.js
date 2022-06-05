@@ -39,6 +39,22 @@ const groups = [
         name: "supergrupa",
         code: "supergrupa"
     },
+    {
+        name: "x-grupa",
+        code: "x-grupa"
+    },
+    {
+        name: "supergrupa1",
+        code: "supergrupa1"
+    },
+    {
+        name: "x1-grupa",
+        code: "x1-grupa"
+    },
+    {
+        name: "supergrupa2",
+        code: "supergrupa2"
+    },
     
 ]
 
