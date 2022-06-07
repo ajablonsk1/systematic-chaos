@@ -55,7 +55,7 @@ public class GraphTaskResultService {
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
         if(result == null) {
             log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task with given id " + id + " does not exist");
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
         List<Answer> answers = result.getAnswers()
                 .stream()
@@ -69,7 +69,7 @@ public class GraphTaskResultService {
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
         if(result == null) {
             log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task with given id " + id + " does not exist");
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
         List<Answer> answers = result.getAnswers()
                 .stream()
@@ -84,7 +84,7 @@ public class GraphTaskResultService {
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
         if(result == null) {
             log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task with given id " + id + " does not exist");
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
         result.setPointsReceived(result.getPointsReceived() + form.getPoints());
         return result.getPointsReceived();
@@ -96,7 +96,7 @@ public class GraphTaskResultService {
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
         if(result == null) {
             log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task with given id " + id + " does not exist");
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
         result.setPointsReceived(form.getPoints());
         return result.getPointsReceived();

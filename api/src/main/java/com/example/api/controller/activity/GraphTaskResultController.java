@@ -6,6 +6,7 @@ import com.example.api.form.GraphTaskResultSaveForm;
 import com.example.api.form.SetPointsForm;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.service.activity.result.GraphTaskResultService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
