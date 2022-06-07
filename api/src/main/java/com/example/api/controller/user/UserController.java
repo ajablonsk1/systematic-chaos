@@ -66,7 +66,7 @@ public class UserController {
             User user = userService.getUser(email);
             String accessToken = JWT.create()
                     .withSubject(user.getEmail())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 100))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                     .withIssuer(request.getRequestURI())
                     .withClaim("roles", List.of(user.getAccountType().getName()))
                     .sign(algorithm);
@@ -76,7 +76,7 @@ public class UserController {
             response.setContentType(APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), tokens);
         } else {
-            throw new BadRequestHeadersException("Refresh token is missing!");
+            throw new BadRequestHeadersException("Refresh token is missing or is invalid!");
         }
     }
 }
