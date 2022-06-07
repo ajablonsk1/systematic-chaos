@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-const NavLinkStyles = styled(Nav.Link)`
+export const NavLinkStyles = styled(Nav.Link)`
     color: white;
     padding: 9px 0;
     &:hover{
@@ -15,7 +15,7 @@ const NavLinkStyles = styled(Nav.Link)`
     }
 `;
 
-const NavLinkStylesMobile = styled(Nav.Link)`
+export const NavLinkStylesMobile = styled(Nav.Link)`
     font-size: 26px;
     color: white;
     padding: 5px 13px;
@@ -25,7 +25,6 @@ const NavLinkStylesMobile = styled(Nav.Link)`
   }
 `;
 
-// TODO: add style
 export function buildNavLink(to, content){
     return (
         <NavLinkStyles

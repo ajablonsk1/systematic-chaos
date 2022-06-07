@@ -51,7 +51,6 @@ export default function AcrivityField({ activity, posX, posY }) {
 
     // TODO, currently goes to the hard-coded expedition activity but it should be OK once we implement a 'real' activity getter in API
     const startActivity = () => {
-        console.log(activity);
         navigate(`${getActivityPath(activity.activityType)}`, {
             state: { activityId: activity.id },
         });

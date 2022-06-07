@@ -3,10 +3,16 @@ import { faFire } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Nav } from 'react-bootstrap';
 import { PageRoutes } from '../../utils/constants';
-import { buildNavLink } from './navBuilder';
+import { buildNavLink, NavLinkStyles } from './navBuilder';
 import { LogoDiv, NavBarTextContainer, NavEdit, SidebarEdit } from './SidebarStyles';
+import { connect } from 'react-redux';
+import { logout } from '../../actions/auth';
+import { Link } from 'react-router-dom';
 
-function Sidebar({ link_titles }) {
+function Sidebar(props) {
+    const link_titles = props.link_titles;
+    const logOut = () => props.dispatch(logout());
+
     return (
         <SidebarEdit variant="dark">
             <NavBarTextContainer>
@@ -19,10 +25,22 @@ function Sidebar({ link_titles }) {
                 </Nav.Link>
                 <NavEdit className="d-flex flex-column" id="menu-options">
                     {link_titles.map(([to, linkTitle]) => buildNavLink(to, linkTitle[0]))}
+
+                    <NavLinkStyles
+                        as={Link}
+                        key={'logout'}
+                        to={PageRoutes.HOME}
+                        onClick={() => logOut()}
+                    >
+                        <span>Wyloguj</span>
+                    </NavLinkStyles>
                 </NavEdit>
             </NavBarTextContainer>
         </SidebarEdit>
     );
 }
 
-export default Sidebar;
+function mapStateToProps(state) {
+    return {};
+}
+export default connect(mapStateToProps)(Sidebar);

@@ -2,8 +2,12 @@ import React from 'react';
 import { Formik } from 'formik';
 import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { FormCol } from '../FormCol';
+import { login } from '../../../actions/auth';
+import { connect } from 'react-redux';
 
-export default function LoginForm() {
+function LoginForm(props) {
+    const { dispatch } = props;
+
     return (
         <Formik
             initialValues={{
@@ -17,7 +21,7 @@ export default function LoginForm() {
                 return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-                alert(JSON.stringify(values, null, 2));
+                dispatch(login(values)); // that should be enought
                 setSubmitting(false);
             }}
         >
@@ -57,3 +61,8 @@ export default function LoginForm() {
         </Formik>
     );
 }
+
+function mapStateToProps(state) {
+    return {};
+}
+export default connect(mapStateToProps)(LoginForm);
