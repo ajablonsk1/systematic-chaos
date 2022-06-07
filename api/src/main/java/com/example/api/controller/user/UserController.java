@@ -6,7 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.TokenException;
+import com.example.api.error.exception.BadRequestHeadersException;
+import com.example.api.error.exception.WrongBodyParametersNumberException;
 import com.example.api.form.RegisterUserForm;
 import com.example.api.model.user.User;
 import com.example.api.service.user.UserService;
@@ -37,8 +38,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> saveUser(@RequestBody RegisterUserForm form)
-            throws EntityNotFoundException, EntityAlreadyInDatabaseException {
+    public ResponseEntity<Long> saveUser(@RequestBody RegisterUserForm form)
+            throws EntityNotFoundException, EntityAlreadyInDatabaseException, WrongBodyParametersNumberException {
         return ResponseEntity.ok().body(userService.registerUser(form));
     }
 
@@ -54,7 +55,7 @@ public class UserController {
 
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws EntityNotFoundException,
-            TokenException, IOException {
+            BadRequestHeadersException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String refreshToken = authorizationHeader.substring("Bearer ".length());
@@ -75,7 +76,7 @@ public class UserController {
             response.setContentType(APPLICATION_JSON_VALUE);
             new ObjectMapper().writeValue(response.getOutputStream(), tokens);
         } else {
-            throw new TokenException("Refresh token is missing!");
+            throw new BadRequestHeadersException("Refresh token is missing!");
         }
     }
 }

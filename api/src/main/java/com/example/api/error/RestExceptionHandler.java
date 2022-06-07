@@ -1,9 +1,6 @@
 package com.example.api.error;
 
-import com.example.api.error.exception.EntityAlreadyInDatabaseException;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.TokenException;
-import com.example.api.error.exception.WrongAnswerTypeException;
+import com.example.api.error.exception.*;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -43,8 +40,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
-    @ExceptionHandler(TokenException.class)
-    public ResponseEntity<Object> handleTokenException(TokenException ex) {
+    @ExceptionHandler(WrongBodyParametersNumberException.class)
+    public ResponseEntity<Object> handleWrongAnswerTypeException(WrongBodyParametersNumberException ex) {
+        ApiError apiError = new ApiError(BAD_REQUEST, ex.getMessage(), ex);
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(BadRequestHeadersException.class)
+    public ResponseEntity<Object> handleTokenException(BadRequestHeadersException ex) {
         return handleExceptionWithStatusCode(NOT_FOUND, ex);
     }
 

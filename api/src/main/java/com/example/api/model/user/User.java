@@ -1,6 +1,7 @@
 package com.example.api.model.user;
 
 import com.example.api.model.group.Group;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +18,11 @@ import javax.persistence.*;
 public class User {
 
     public User(String email, String firstName, String lastName,
-                AccountType accountType, HeroType heroType) {
+                AccountType accountType) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.accountType = accountType;
-        this.heroType = heroType;
     }
 
     @Id
@@ -44,5 +44,6 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
+    @JsonManagedReference
     private Group group;
 }

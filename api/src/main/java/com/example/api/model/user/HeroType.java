@@ -4,7 +4,7 @@ public enum HeroType {
     WARRIOR("WARRIOR"),
     WIZARD("WIZARD"),
     PRIEST("PRIEST"),
-    ROUGE("ROUGE");
+    ROGUE("ROGUE");
 
     private final String type;
 
