@@ -2,8 +2,10 @@ package com.example.api.service.user;
 
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.WrongBodyParametersNumberException;
 import com.example.api.form.RegisterUserForm;
 import com.example.api.model.group.Group;
+import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
@@ -48,25 +50,40 @@ public class UserService implements UserDetailsService {
         return userRepo.save(user);
     }
 
-    public User registerUser(RegisterUserForm form) throws EntityNotFoundException, EntityAlreadyInDatabaseException {
+    public Long registerUser(RegisterUserForm form) throws EntityNotFoundException, EntityAlreadyInDatabaseException, WrongBodyParametersNumberException {
         String email = form.getEmail();
         log.info("Registering user {}", email);
         User dbUser = userRepo.findUserByEmail(email);
         if(dbUser != null) {
             log.error("User {} already exist in database", email);
-            throw new EntityAlreadyInDatabaseException("User " + email + " already exist in database");
-        }
-        String code = form.getInvitationCode();
-        Group group = groupRepo.findGroupByInvitationCode(code);
-        if(group == null) {
-            log.error("Group with invitational code {} not found in database", code);
-            throw new EntityNotFoundException("Group with invitational code" + code + " not found in database");
+            throw new EntityAlreadyInDatabaseException("User " + email + " already exists in database");
         }
         User user = new User(form.getEmail(), form.getFirstName(), form.getLastName(),
-                form.getAccountType(), form.getHeroType());
+                form.getAccountType());
+        if(form.getAccountType() == AccountType.STUDENT){
+            if(form.getHeroType() == null || form.getInvitationCode() == null) {
+                log.error("Request body for registering student requires 6 body parameters");
+                throw new WrongBodyParametersNumberException("Request body for registering student requires 6 body parameters",
+                        List.of("firstName", "lastName", "email", "password", "heroType", "invitationCode"));
+            }
+            String code = form.getInvitationCode();
+            Group group = groupRepo.findGroupByInvitationCode(code);
+            if(group == null) {
+                log.error("Group with invitational code {} not found in database", code);
+                throw new EntityNotFoundException("Group with invitational code" + code + " not found in database");
+            }
+            user.setGroup(group);
+            user.setHeroType(form.getHeroType());
+        } else {
+            if(form.getHeroType() != null || form.getInvitationCode() != null){
+                log.error("Request body for registering professor requires 4 body parameters");
+                throw new WrongBodyParametersNumberException("Request body for registering professor requires 4 body parameters",
+                        List.of("firstName", "lastName", "email", "password"));
+            }
+        }
         user.setPassword(passwordEncoder.encode(form.getPassword()));
-        user.setGroup(group);
-        return userRepo.save(user);
+        userRepo.save(user);
+        return user.getId();
     }
 
     public User getUser(String email) throws EntityNotFoundException {

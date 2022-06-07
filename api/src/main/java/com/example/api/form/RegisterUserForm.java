@@ -11,7 +11,7 @@ public class RegisterUserForm {
     @Schema(required = true) private String lastName;
     @Schema(required = true) private String email;
     @Schema(required = true) private String password;
-    @Schema(required = true) private String invitationCode;
+    @Schema(required = false) private String invitationCode;
     @Schema(required = true) private AccountType accountType;
-    @Schema(required = true) private HeroType heroType;
+    @Schema(required = false) private HeroType heroType;
 }
