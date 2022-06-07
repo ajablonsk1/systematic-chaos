@@ -1,4 +1,4 @@
-package com.example.api.model.task;
+package com.example.api.model.activity.task;
 
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Requirement;
@@ -13,8 +13,8 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Activity {
+@MappedSuperclass
+public abstract class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -26,12 +26,4 @@ public class Activity {
 
     @OneToOne
     private Requirement requirement;
-
-    @ManyToOne
-    @JoinColumn(name = "requirementFinished_id")
-    private Requirement requirementFinished;
-
-    @ManyToOne
-    @JoinColumn(name = "activityMap_id")
-    private ActivityMap activityMap;
 }

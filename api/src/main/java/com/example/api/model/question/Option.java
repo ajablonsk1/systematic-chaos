@@ -17,12 +17,9 @@ public class Option {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String content;
+    private boolean isCorrect;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
-
-    @ManyToOne
-    @JoinColumn(name = "answer_id")
-    private Answer answer;
 }

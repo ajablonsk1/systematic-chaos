@@ -1,4 +1,4 @@
-package com.example.api.model.task;
+package com.example.api.model.activity.feedback;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Task extends Activity {
-    private String requiredKnowledge;
-    private Integer maxPoints;
+public class ProfessorFeedback extends Feedback{
+    private Integer points;
 }

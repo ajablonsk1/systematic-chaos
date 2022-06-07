@@ -1,11 +1,12 @@
 package com.example.api.model.question;
 
 
-import com.example.api.model.task.GraphTask;
+import com.example.api.model.activity.task.GraphTask;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -31,12 +32,11 @@ public class Question {
 
     @OneToMany(mappedBy = "question")
     private List<Option> options = new LinkedList<>();
-    private Integer points;
+    private Double points;
 
     @ManyToMany
     private List<Question> next = new LinkedList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "graphTask_id")
-    private GraphTask graphTask;
+    @Nullable
+    private String answerForOpenedQuestion;
 }

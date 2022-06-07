@@ -1,4 +1,4 @@
-package com.example.api.model.task;
+package com.example.api.model.activity.task;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,4 +10,6 @@ import javax.persistence.Entity;
 @Setter
 @NoArgsConstructor
 @Entity
-public class Info extends Activity{ }
+public class Info extends Activity {
+
+}

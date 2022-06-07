@@ -1,4 +1,4 @@
-package com.example.api.model.task;
+package com.example.api.model.activity.task;
 
 import com.example.api.model.question.Question;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class GraphTask extends Task{
-    @OneToMany(mappedBy = "graphTask")
+public class GraphTask extends Task {
+    @OneToMany
     private List<Question> questions;
 }

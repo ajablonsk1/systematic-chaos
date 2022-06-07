@@ -1,9 +1,11 @@
-package com.example.api.model.task;
+package com.example.api.model.activity.feedback;
 
+import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -11,14 +13,17 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class Feedback {
+@MappedSuperclass
+public abstract class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    private String content;
 
     @OneToOne
-    private Task task;
-    private Integer points;
-    private String content;
+    private User from;
+
+    @OneToOne
+    @Nullable
+    private User to;
 }
