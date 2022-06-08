@@ -16,6 +16,8 @@ import Sidebar from '../Sidebar/Sidebar';
 import './App.css';
 import { SidebarCol } from './AppGeneralStyles';
 import SurveyTask from '../SurveyTask/SurveyTask';
+import Groups from '../GroupsPage/Groups';
+import GroupAddition from '../GroupAdditionPage/GroupAddition';
 import GameCard from '../GameCard/GameCard';
 import PageGuard from '../PageGuard/PageGuard';
 import { Role } from '../../utils/userRole';
@@ -137,6 +139,24 @@ function App(props) {
                                         </PageGuard>
                                     }
                                 />
+
+                            <Route 
+                                path={`${PageRoutes.GROUPS}`} 
+                                element={
+                                    <PageGuard role={Role.LOGGED_IN}>
+                                        <Groups />
+                                    </PageGuard>
+                                } 
+                            />
+
+                            <Route 
+                                path={`${PageRoutes.GROUP_ADDITION}`} 
+                                element={
+                                    <PageGuard role={Role.LOGGED_IN}>
+                                        <GroupAddition />
+                                    </PageGuard>
+                                } 
+                            />
 
                                 <Route
                                     path={`${PageRoutes.GAME_CARD}`}

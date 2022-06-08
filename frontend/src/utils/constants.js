@@ -43,6 +43,9 @@ export const PageRoutes = {
     BADGES_ACHIEVEMENTS: '/badges-achievements',
     COMBAT_TASK: '/combat-task',
     CANVAS: '/canvas',
+    INFORMATION: '/information',
+    GROUPS: '/groups',
+    GROUP_ADDITION: '/group-addition',
     // TODO: add new path routes in the future
 };
 
