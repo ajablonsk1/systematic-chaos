@@ -1,7 +1,8 @@
 package com.example.api.model.map;
 
+import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.group.AccessDate;
-import com.example.api.model.task.Activity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +24,14 @@ public class Requirement {
     @Enumerated(EnumType.STRING)
     private MustFulfil mustFulfil;
 
-    @OneToMany(mappedBy = "requirementFinished")
-    private List<Activity> finishedActivities;
+    @OneToMany
+    private List<GraphTask> finishedGraphTasks;
+
+    @OneToMany
+    private List<FileTask> finishedFileTasks;
+
     private Integer experienceRequired;
 
-    @OneToMany(mappedBy = "requirement")
+    @OneToMany
     private List<AccessDate> accessDates;
 }

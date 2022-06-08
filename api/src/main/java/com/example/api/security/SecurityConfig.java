@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -27,10 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity security) throws Exception {
         security.csrf().disable();
         security.sessionManagement().sessionCreationPolicy(STATELESS);
-        security.authorizeRequests().antMatchers("/api/login/**").permitAll();
         security.authorizeRequests().anyRequest().permitAll();
         security.addFilter(new AuthenticationFilter(authenticationManager()));
         security.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        security.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
     }
 
     @Override

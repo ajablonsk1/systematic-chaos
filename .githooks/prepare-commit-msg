@@ -1,0 +1,15 @@
+#!/bin/sh
+project_prefix="SC"
+branchname=$(git branch | grep ^'*' | sed 's/\* //g' | cut -f1,2 -d'-')
+if [ "$branchname" = "main" ] || [ "$branchname" = "develop" ]
+    then
+    exit
+fi
+
+originalmessage=`cat $1`
+
+if [[ $originalmessage == $branchname* ]] || [[ $originalmessage == "[$branchname]"* ]] || [[ $originalmessage == "[$project_prefix"* ]] || [[ $originalmessage == "$project_prefix"* ]] || [[ $originalmessage == "[NT]"* ]]
+    then
+    exit
+fi
+echo "[$branchname] $originalmessage" > $1

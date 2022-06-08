@@ -7,24 +7,24 @@ export default function PointsTable() {
     const tableContent = getTableContent();
 
     return (
-        <TableContainer striped bordered hover>
+        <TableContainer className='mb-md-0 mb-5' striped bordered hover>
             <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Liczba punktów</th>
-                    <th>Typ aktywności</th>
-                    <th>Nazwa aktywności</th>
-                </tr>
+            <tr className='w-100'>
+                <th className='w-25'>Data</th>
+                <th className='w-25'>Liczba punktów</th>
+                <th className='w-25'>Typ aktywności</th>
+                <th className='w-25'>Nazwa aktywności</th>
+            </tr>
             </thead>
             <tbody>
-                {tableContent.map((row, idx) => (
-                    <tr key={idx}>
-                        <td>{row.date}</td>
-                        <td>{row.points}</td>
-                        <td>{getActivityTypeName(row.activityType)}</td>
-                        <td>{row.activityName}</td>
-                    </tr>
-                ))}
+            {tableContent.map((row, idx) => (
+                <tr className='w-100' key={idx}>
+                    <td className='w-25'>{row.date}</td>
+                    <td className='w-25'>{row.points}</td>
+                    <td className='w-25'>{getActivityTypeName(row.activityType)}</td>
+                    <td className='w-25'>{row.activityName}</td>
+                </tr>
+            ))}
             </tbody>
         </TableContainer>
     );
