@@ -16,6 +16,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import './App.css';
 import { SidebarCol } from './AppGeneralStyles';
 import SurveyTask from '../SurveyTask/SurveyTask';
+import GameCard from '../GameCard/GameCard';
 import PageGuard from '../PageGuard/PageGuard';
 import { Role } from '../../utils/userRole';
 import { connect } from 'react-redux';
@@ -133,6 +134,15 @@ function App(props) {
                                     element={
                                         <PageGuard role={Role.LOGGED_IN}>
                                             <Information />
+                                        </PageGuard>
+                                    }
+                                />
+
+                                <Route
+                                    path={`${PageRoutes.GAME_CARD}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IN}>
+                                            <GameCard />
                                         </PageGuard>
                                     }
                                 />
