@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -30,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         security.authorizeRequests().anyRequest().permitAll();
         security.addFilter(new AuthenticationFilter(authenticationManager()));
         security.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+        security.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
     }
 
     @Override
