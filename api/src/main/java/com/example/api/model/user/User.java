@@ -1,6 +1,7 @@
 package com.example.api.model.user;
 
 import com.example.api.model.group.Group;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +17,12 @@ import javax.persistence.*;
 @Table(name="\"user\"")
 public class User {
 
-    public User(String email, String password, Role role){
+    public User(String email, String firstName, String lastName,
+                AccountType accountType) {
         this.email = email;
-        this.password = password;
-        this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.accountType = accountType;
     }
 
     @Id
@@ -32,11 +35,15 @@ public class User {
     private Integer indexNumber;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private AccountType accountType;
     private Integer level;
     private Integer experiance;
 
+    @Enumerated(EnumType.STRING)
+    private HeroType heroType;
+
     @ManyToOne
     @JoinColumn(name = "group_id")
+    @JsonManagedReference
     private Group group;
 }

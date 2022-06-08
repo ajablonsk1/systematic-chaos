@@ -69,9 +69,6 @@ export default function ActivityContent(props) {
                             onClick={() => {
                                 localStorage.removeItem('userAnswers');
                                 localStorage.removeItem('userOpenAnswers');
-                                // navigate(
-                                //     `${PageRoutes.QUESTION_SELECTION}/${props.activityId}/${START_GRAPH_NODE_ID}`
-                                // );
                                 navigate(`${PageRoutes.QUESTION_SELECTION}`, {
                                     state: {
                                         activityId: props.activityId,
