@@ -46,6 +46,7 @@ export const PageRoutes = {
     INFORMATION: '/information',
     GROUPS: '/groups',
     GROUP_ADDITION: '/group-addition',
+    TEACHER_HOME: '/dashboard',
     // TODO: add new path routes in the future
 };
 
