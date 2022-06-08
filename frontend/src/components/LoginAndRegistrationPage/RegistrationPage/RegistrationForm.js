@@ -4,9 +4,12 @@ import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { HeroDescriptions, HeroImg, RegistrationLabelsAndTypes } from '../../../utils/constants';
 import { Description, Info } from './RegistrationStyle';
 import { validateConfirmPassword, validateEmail, validatePassword } from './validators';
+import { register } from '../../../actions/auth';
+import { AccountType, HeroType } from '../../../utils/userRole';
+import { connect } from 'react-redux';
 
-export default function RegistrationForm({ isStudent }) {
-    const [character, setCharacter] = useState('warrior');
+function RegistrationForm(props) {
+    const [character, setCharacter] = useState(HeroType.WARRIOR);
     const description = useRef(null);
     const initialValues = {
         fullname: '',
@@ -14,9 +17,9 @@ export default function RegistrationForm({ isStudent }) {
         password: '',
         passwordRepeat: '',
     };
-    if (isStudent) {
-        initialValues.code = '';
-        initialValues.type = '';
+    if (props.isStudent) {
+        initialValues.invitationCode = '';
+        initialValues.heroType = '';
     }
 
     const changeCharacter = event => {
@@ -29,6 +32,8 @@ export default function RegistrationForm({ isStudent }) {
             validate={values => {
                 const errors = {};
                 if (!values.fullname) errors.fullname = 'Pole wymagane.';
+                else if (values.fullname.split(' ').length < 2)
+                    errors.fullname = 'Podaj imię i nazwisko, pamiętaj o spacji';
 
                 errors.email = validateEmail(values.email);
                 errors.password = validatePassword(values.password);
@@ -37,8 +42,8 @@ export default function RegistrationForm({ isStudent }) {
                     values.passwordRepeat
                 );
 
-                if (isStudent) {
-                    if (!values.code) errors.code = 'Pole wymagane';
+                if (props.isStudent) {
+                    if (!values.invitationCode) errors.invitationCode = 'Pole wymagane';
                 }
 
                 // without this, errors contains keys with empty string which should not be considered errors
@@ -51,7 +56,11 @@ export default function RegistrationForm({ isStudent }) {
                 return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-                alert(JSON.stringify(values, null, 2));
+                values.firstName = values.fullname.split(' ').slice(0, -1).join(' ');
+                values.lastName = values.fullname.split(' ').slice(-1).join(' ');
+                values.accountType = props.isStudent ? AccountType.STUDENT : AccountType.PROFESSOR;
+                values.heroType = props.isStudent ? character : null;
+                props.dispatch(register(values));
                 setSubmitting(false);
             }}
         >
@@ -63,25 +72,25 @@ export default function RegistrationForm({ isStudent }) {
                                 <Col className="form-group" md={6} key={idx}>
                                     <h6>{RegistrationLabelsAndTypes[key][0]}</h6>
                                     <>
-                                        {key === 'type' ? (
+                                        {key === 'heroType' ? (
                                             <div className="d-flex align-items-center">
                                                 <Field
                                                     className="form-control"
                                                     as="select"
-                                                    name="type"
+                                                    name="heroType"
                                                     onChange={changeCharacter}
                                                     value={character}
                                                 >
-                                                    <option id="warrior" value="warrior">
+                                                    <option id="warrior" value={HeroType.WARRIOR}>
                                                         Wojownik
                                                     </option>
-                                                    <option id="wizard" value="wizard">
+                                                    <option id="wizard" value={HeroType.WIZARD}>
                                                         Czarodziej
                                                     </option>
-                                                    <option id="priest" value="priest">
+                                                    <option id="priest" value={HeroType.PRIEST}>
                                                         Kapłan
                                                     </option>
-                                                    <option id="rogue" value="rogue">
+                                                    <option id="rogue" value={HeroType.ROGUE}>
                                                         Łotrzyk
                                                     </option>
                                                 </Field>
@@ -143,3 +152,9 @@ export default function RegistrationForm({ isStudent }) {
         </Formik>
     );
 }
+
+function mapStateToProps(state) {
+    return {};
+}
+
+export default connect(mapStateToProps)(RegistrationForm);
