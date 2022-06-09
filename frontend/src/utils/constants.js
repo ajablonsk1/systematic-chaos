@@ -47,6 +47,7 @@ export const PageRoutes = {
     GROUPS: '/groups',
     GROUP_ADDITION: '/group-addition',
     TEACHER_HOME: '/dashboard',
+    SURVEY_TASK: '/survey-task',
     // TODO: add new path routes in the future
 };
 
