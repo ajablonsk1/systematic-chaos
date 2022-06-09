@@ -23,14 +23,9 @@ import PageGuard from '../PageGuard/PageGuard';
 import { Role } from '../../utils/userRole';
 import { connect } from 'react-redux';
 import AuthVerify from '../../common/auth-verify';
-import { logout } from '../../actions/auth';
 import { ToastContainer } from 'react-toastify';
 
 function App(props) {
-    const logOut = () => {
-        props.dispatch(logout());
-    };
-
     return (
         <>
             <Container fluid className="p-0">
@@ -52,7 +47,7 @@ function App(props) {
                                 <Route
                                     path={PageRoutes.GAME_MAP}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <GameMap />
                                         </PageGuard>
                                     }
@@ -62,7 +57,7 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.QUESTION_SELECTION}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <QuestionSelectionDoor />
                                         </PageGuard>
                                     }
@@ -71,7 +66,7 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.QUESTION_ANSWER}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <QuestionAndOptions />
                                         </PageGuard>
                                     }
@@ -80,7 +75,7 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.ACTIVITY_INFO}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <ActivityInfo />
                                         </PageGuard>
                                     }
@@ -98,7 +93,7 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.COMBAT_TASK}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <CombatTask />
                                         </PageGuard>
                                     }
@@ -107,7 +102,7 @@ function App(props) {
                                 <Route
                                     path={PageRoutes.CANVAS}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <CanvasMap />
                                         </PageGuard>
                                     }
@@ -116,7 +111,7 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.POINTS}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <Points />
                                         </PageGuard>
                                     }
@@ -125,7 +120,7 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.SURVEY_TASK}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <SurveyTask />
                                         </PageGuard>
                                     }
@@ -134,35 +129,45 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.INFORMATION}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <Information />
                                         </PageGuard>
                                     }
                                 />
 
-                            <Route 
-                                path={`${PageRoutes.GROUPS}`} 
-                                element={
-                                    <PageGuard role={Role.LOGGED_IN}>
-                                        <Groups />
-                                    </PageGuard>
-                                } 
-                            />
+                                <Route
+                                    path={`${PageRoutes.GROUPS}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+                                            <Groups />
+                                        </PageGuard>
+                                    }
+                                />
 
-                            <Route 
-                                path={`${PageRoutes.GROUP_ADDITION}`} 
-                                element={
-                                    <PageGuard role={Role.LOGGED_IN}>
-                                        <GroupAddition />
-                                    </PageGuard>
-                                } 
-                            />
+                                <Route
+                                    path={`${PageRoutes.GROUP_ADDITION}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+                                            <GroupAddition />
+                                        </PageGuard>
+                                    }
+                                />
 
                                 <Route
                                     path={`${PageRoutes.GAME_CARD}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN}>
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <GameCard />
+                                        </PageGuard>
+                                    }
+                                />
+
+                                {/* FOR TEST ONLY, DELETE LATER! */}
+                                <Route
+                                    path={`${PageRoutes.TEACHER_HOME}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+                                            <CanvasMap /> {/* whatever, testing only */}
                                         </PageGuard>
                                     }
                                 />
@@ -180,7 +185,7 @@ function App(props) {
                         >
                             <MobileNavbar link_titles={Object.entries(UserSidebarTitles)} />
                         </SidebarCol>
-                        <AuthVerify logOut={() => logOut()} />
+                        <AuthVerify />
                     </BrowserRouter>
                 </Row>
             </Container>

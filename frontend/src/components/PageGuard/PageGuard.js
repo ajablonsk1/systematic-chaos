@@ -1,47 +1,51 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { parseJwt } from '../../utils/Api';
 import { PageRoutes } from '../../utils/constants';
-import { Role } from '../../utils/userRole';
-
-const REDIRECT_ROUTES = {
-    [Role.LOGGED_IN]: PageRoutes.HOME,
-    [Role.NOT_LOGGED_IN]: PageRoutes.GAME_CARD,
-};
+import { AccountType, Role } from '../../utils/userRole';
 
 function PageGuard(props) {
     const navigate = useNavigate();
     const isLoggedIn = props.isLoggedIn;
+    const isStudent = props.user
+        ? parseJwt(props.user.access_token).roles.includes(AccountType.STUDENT)
+        : false;
     const role = props.role;
     const child = props.children;
 
     useEffect(() => {
-        let navigateRequired = false;
-
-        switch (role) {
-            case Role.LOGGED_IN:
-                navigateRequired = !isLoggedIn;
-                break;
-            case Role.NOT_LOGGED_IN:
-                navigateRequired = isLoggedIn;
-                break;
-            default:
-                break;
-        }
-
-        if (navigateRequired) {
-            navigate(REDIRECT_ROUTES[role]);
+        // think about better solution
+        if (!isLoggedIn && role !== Role.NOT_LOGGED_IN) {
+            navigate(PageRoutes.HOME);
             window.location.reload(true); // without it, sidebar not reload after redirect
+        } else {
+            if (
+                (role === Role.LOGGED_IN_AS_STUDENT ||
+                    (role === Role.NOT_LOGGED_IN && isLoggedIn)) &&
+                !isStudent
+            ) {
+                navigate(PageRoutes.TEACHER_HOME);
+                window.location.reload(true); // without it, sidebar not reload after redirect
+            } else if (
+                (role === Role.LOGGED_IS_AS_TEACHER ||
+                    (role === Role.NOT_LOGGED_IN && isLoggedIn)) &&
+                isStudent
+            ) {
+                navigate(PageRoutes.GAME_CARD);
+                window.location.reload(true); // without it, sidebar not reload after redirect
+            }
         }
-    }, [navigate, role, isLoggedIn]);
+    }, [navigate, role, isLoggedIn, isStudent]);
 
     return <>{child}</>;
 }
 
 function mapStateToProps(state) {
-    const { isLoggedIn } = state.auth;
+    const { isLoggedIn, user } = state.auth;
     return {
         isLoggedIn,
+        user,
     };
 }
 export default connect(mapStateToProps)(PageGuard);

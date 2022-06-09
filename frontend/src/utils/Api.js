@@ -80,3 +80,12 @@ export function getExpeditionPointsClosed(expeditionId) {
         .filter(question => question.type === 'closed')
         .reduce((q1, q2) => q1.points + q2.points);
 }
+
+export const parseJwt = token => {
+    try {
+        return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+        console.log(e);
+        return null;
+    }
+};

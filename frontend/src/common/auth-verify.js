@@ -1,14 +1,6 @@
 import React, { useEffect } from 'react';
 import authService from '../services/auth.service';
-
-const parseJwt = token => {
-    try {
-        return JSON.parse(atob(token.split('.')[1]));
-    } catch (e) {
-        console.log(e);
-        return null;
-    }
-};
+import { parseJwt } from '../utils/Api';
 
 export default function AuthVerify(props) {
     let pathname = window.location.pathname;
