@@ -24,6 +24,7 @@ import { Role } from '../../utils/userRole';
 import { connect } from 'react-redux';
 import AuthVerify from '../../common/auth-verify';
 import { ToastContainer } from 'react-toastify';
+import Grades from '../Grades/Grades';
 
 function App(props) {
     return (
@@ -159,6 +160,13 @@ function App(props) {
                                         <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <GameCard />
                                         </PageGuard>
+                                    }
+                                />
+
+                                <Route
+                                    path={`${PageRoutes.GRADES}`}
+                                    element={
+                                        <Grades />
                                     }
                                 />
 

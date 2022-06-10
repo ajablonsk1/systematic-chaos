@@ -4,6 +4,7 @@ import {
     faHouse,
     faRankingStar,
     faStar,
+    faAward,
 } from '@fortawesome/free-solid-svg-icons';
 import priestImg from '../storage/resources/pope.png';
 import rogueImg from '../storage/resources/rogue.png';
@@ -48,6 +49,7 @@ export const PageRoutes = {
     GROUP_ADDITION: '/group-addition',
     TEACHER_HOME: '/dashboard',
     SURVEY_TASK: '/survey-task',
+    GRADES: '/grades',
     // TODO: add new path routes in the future
 };
 
@@ -55,6 +57,7 @@ export const UserSidebarTitles = {
     [PageRoutes.GAME_CARD]: ['Karta gry', faHouse],
     [PageRoutes.GAME_MAP]: ['Mapa gry', faChessBoard],
     [PageRoutes.POINTS]: ['Punkty', faStar],
+    [PageRoutes.GRADES]: ['Oceny', faAward],
     [PageRoutes.RANKING]: ['Ranking', faRankingStar],
     [PageRoutes.BADGES_ACHIEVEMENTS]: ['Odznaki i osiągnięcia', faCertificate],
     [PageRoutes.CANVAS]: ['Świat gry', faChessBoard],
@@ -169,3 +172,10 @@ export const HeroDataset = {
     priest: priestImg,
     rogue: rogueImg,
 };
+
+export const percentagesToGrade = (percentages) => {
+    if (percentages < 0.5) return 2.0;
+    else {
+        return 3.0 + Math.floor((percentages - 0.5) / 0.1) * 0.5;
+    }
+}
