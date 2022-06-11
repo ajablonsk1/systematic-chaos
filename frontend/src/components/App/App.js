@@ -166,7 +166,9 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.GRADES}`}
                                     element={
-                                        <Grades />
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+                                            <Grades />
+                                        </PageGuard>
                                     }
                                 />
 
