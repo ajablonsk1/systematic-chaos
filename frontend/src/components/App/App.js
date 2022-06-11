@@ -1,6 +1,6 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
+import { isStudent, PageRoutes, TeacherSidebarTitles, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CanvasMap from '../CanvasMap/CanvasMap';
 import CombatTask from '../CombatTask/CombatTask';
@@ -26,6 +26,7 @@ import AuthVerify from '../../common/auth-verify';
 import { ToastContainer } from 'react-toastify';
 
 function App(props) {
+    const student = isStudent(props.user);
     return (
         <>
             <Container fluid className="p-0">
@@ -39,7 +40,11 @@ function App(props) {
                                     : 'd-md-block d-none'
                             }
                         >
-                            <Sidebar link_titles={Object.entries(UserSidebarTitles)} />
+                            <Sidebar
+                                link_titles={Object.entries(
+                                    student ? UserSidebarTitles : TeacherSidebarTitles
+                                )}
+                            />
                         </SidebarCol>
                         <Col md={10} xs={12} className="p-0">
                             <Routes>
@@ -205,6 +210,9 @@ function App(props) {
 }
 
 function mapStateToProps(state) {
-    return {};
+    const { user } = state.auth;
+    return {
+        user,
+    };
 }
 export default connect(mapStateToProps)(App);

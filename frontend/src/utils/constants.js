@@ -1,9 +1,14 @@
 import {
+    fa5,
+    faArrowsToEye,
+    faBullseye,
     faCertificate,
     faChessBoard,
     faHouse,
+    faListCheck,
     faRankingStar,
     faStar,
+    faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import priestImg from '../storage/resources/pope.png';
 import rogueImg from '../storage/resources/rogue.png';
@@ -30,6 +35,8 @@ import warrior14 from '../storage/resources/warrior/13.png';
 import warrior15 from '../storage/resources/warrior/14.png';
 import warrior16 from '../storage/resources/warrior/15.png';
 import warrior17 from '../storage/resources/warrior/16.png';
+import { AccountType } from './userRole';
+import { parseJwt } from './Api';
 
 export const PageRoutes = {
     HOME: '/',
@@ -48,7 +55,11 @@ export const PageRoutes = {
     GROUP_ADDITION: '/group-addition',
     TEACHER_HOME: '/dashboard',
     SURVEY_TASK: '/survey-task',
-    // TODO: add new path routes in the future
+    GAME_SUMMARY: '/game-summary',
+    GAME_MANAGEMENT: 'game-management',
+    PARTICIPANTS: '/participants',
+    ACTIVITY_ASSESSMENT: '/activity-assessment',
+    GRADES: '/grades',
 };
 
 export const UserSidebarTitles = {
@@ -58,12 +69,18 @@ export const UserSidebarTitles = {
     [PageRoutes.RANKING]: ['Ranking', faRankingStar],
     [PageRoutes.BADGES_ACHIEVEMENTS]: ['Odznaki i osiągnięcia', faCertificate],
     [PageRoutes.CANVAS]: ['Świat gry', faChessBoard],
-    // TODO: add new elements to the map according to the sidebar in Figma, e.g. [PathRoutes.GAME_MAP]: "Mapa Gry"
 };
 
 export const TeacherSidebarTitles = {
-    // TODO
+    [PageRoutes.GAME_SUMMARY]: ['Podsumowanie gry', faBullseye],
+    [PageRoutes.RANKING]: ['Ranking', faRankingStar],
+    [PageRoutes.GAME_MANAGEMENT]: ['Zarządzanie grą', faListCheck],
+    [PageRoutes.PARTICIPANTS]: ['Uczestnicy', faUsers],
+    [PageRoutes.ACTIVITY_ASSESSMENT]: ['Sprawdzanie aktywności', faArrowsToEye],
+    [PageRoutes.GRADES]: ['Oceny', fa5],
 };
+
+export const isStudent = (user) => user ? parseJwt(user.access_token).roles.includes(AccountType.STUDENT) : false;
 
 export const START_GRAPH_NODE_ID = -1;
 export const END_GRAPH_NODE_ID = -2;
