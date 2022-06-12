@@ -1,6 +1,6 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { isStudent, PageRoutes, TeacherSidebarTitles, UserSidebarTitles } from '../../utils/constants';
+import { PageRoutes, TeacherSidebarTitles, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CanvasMap from '../CanvasMap/CanvasMap';
 import CombatTask from '../CombatTask/CombatTask';
@@ -24,6 +24,8 @@ import { Role } from '../../utils/userRole';
 import { connect } from 'react-redux';
 import AuthVerify from '../../common/auth-verify';
 import { ToastContainer } from 'react-toastify';
+import ExpeditionSummary from '../ExpeditionSummary/ExpeditionSummary';
+import { isStudent } from '../../utils/storageManager';
 
 function App(props) {
     const student = isStudent(props.user);
@@ -64,6 +66,15 @@ function App(props) {
                                     element={
                                         <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <QuestionSelectionDoor />
+                                        </PageGuard>
+                                    }
+                                />
+
+                                <Route
+                                    path={`${PageRoutes.EXPEDITION_SUMMARY}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+                                            <ExpeditionSummary />
                                         </PageGuard>
                                     }
                                 />

@@ -103,5 +103,6 @@
     "desc": "Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!",
     "requiredInfo": "skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą",
     "points": 60,
-    "points_100": 30
+    "points_100": 30,
+    "timeToSolveTask": 12
 }

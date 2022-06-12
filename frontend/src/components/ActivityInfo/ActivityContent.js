@@ -17,15 +17,25 @@ import {
 import { PageRoutes, START_GRAPH_NODE_ID } from '../../utils/constants';
 
 export default function ActivityContent(props) {
+    const navigate = useNavigate();
     const points = localStorage.getItem('currentScore');
 
     //TODO: currently hardcoded for "all" group, we need to check which group the user is in later
     const startDate = new Date(props.activity.accessDates.all.start);
     const endDate = new Date(props.activity.accessDates.all.end);
 
-    console.log(startDate.toLocaleDateString());
+    const resetStorageAndStart = () => {
+        localStorage.setItem('startDate', new Date());
+        localStorage.removeItem('userAnswers');
+        localStorage.removeItem('userOpenAnswers');
+        navigate(`${PageRoutes.QUESTION_SELECTION}`, {
+            state: {
+                activityId: props.activityId,
+                nodeId: START_GRAPH_NODE_ID,
+            },
+        });
+    };
 
-    const navigate = useNavigate();
     return (
         <>
             <ActivityCol className="invisible-scroll">
@@ -65,18 +75,7 @@ export default function ActivityContent(props) {
                 <ButtonFooter>
                     <Col>
                         <FullDivider />
-                        <StartActivityButton
-                            onClick={() => {
-                                localStorage.removeItem('userAnswers');
-                                localStorage.removeItem('userOpenAnswers');
-                                navigate(`${PageRoutes.QUESTION_SELECTION}`, {
-                                    state: {
-                                        activityId: props.activityId,
-                                        nodeId: START_GRAPH_NODE_ID,
-                                    },
-                                });
-                            }}
-                        >
+                        <StartActivityButton onClick={() => resetStorageAndStart()}>
                             Rozpocznij
                         </StartActivityButton>
                     </Col>

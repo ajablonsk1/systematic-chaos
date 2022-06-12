@@ -35,12 +35,11 @@ import warrior14 from '../storage/resources/warrior/13.png';
 import warrior15 from '../storage/resources/warrior/14.png';
 import warrior16 from '../storage/resources/warrior/15.png';
 import warrior17 from '../storage/resources/warrior/16.png';
-import { AccountType } from './userRole';
-import { parseJwt } from './Api';
 
 export const PageRoutes = {
     HOME: '/',
     QUESTION_SELECTION: '/doors-selection',
+    EXPEDITION_SUMMARY: '/expedition-summary',
     QUESTION_ANSWER: '/question',
     ACTIVITY_INFO: '/activity-info',
     GAME_CARD: '/game-card',
@@ -79,8 +78,6 @@ export const TeacherSidebarTitles = {
     [PageRoutes.ACTIVITY_ASSESSMENT]: ['Sprawdzanie aktywności', faArrowsToEye],
     [PageRoutes.GRADES]: ['Oceny', fa5],
 };
-
-export const isStudent = (user) => user ? parseJwt(user.access_token).roles.includes(AccountType.STUDENT) : false;
 
 export const START_GRAPH_NODE_ID = -1;
 export const END_GRAPH_NODE_ID = -2;
