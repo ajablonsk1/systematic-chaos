@@ -1,13 +1,28 @@
 import { Content } from '../App/AppGeneralStyles';
-import { Col, Row } from 'react-bootstrap';
-import { FullDivider, SmallDivider } from '../ActivityInfo/ActivityInfoStyles';
+import { Button, Col, Row } from 'react-bootstrap';
+import { FullDivider } from '../ActivityInfo/ActivityInfoStyles';
+import { useNavigate, useLocation } from 'react-router-dom';
+
 //https://www.flaticon.com/free-icon/user-picture_21104
 import userPicture from '../../utils/resources/user-picture.png';
 
 export default function ActivityAssessmentDetails() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    console.log(location);
+
+    //we will get data based on the id
+    const { activityId: activityId } = location.state;
+
     return (
         <Content>
-            <Col style={{ paddingTop: '15px', marginLeft: 'auto', marginRight: 'auto' }}>
+            <Col
+                style={{
+                    paddingTop: '15px',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                }}
+            >
                 <div
                     style={{
                         width: '100%',
@@ -112,15 +127,21 @@ export default function ActivityAssessmentDetails() {
                         marginRight: 'auto',
                         marginTop: '10px',
                         color: 'var(--font-color)',
+                        paddingBottom: '5px',
                     }}
                 >
                     <h4>Uwagi:</h4>
                     <textarea
-                        styles={{
-                            width: '800px',
+                        style={{
+                            width: '100%',
                             padding: '3px',
                             border: 'none',
                             maxHeight: '220px',
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                            color: 'var(--font-color)',
+                            border: '1px solid var(--font-color)',
+                            backgroundColor: 'var(--dark-blue)',
                         }}
                     ></textarea>
                 </Col>
@@ -142,7 +163,17 @@ export default function ActivityAssessmentDetails() {
                 >
                     <p style={{ top: '50%', position: 'relative', margin: '0' }}>Punkty: </p>
                     <Row style={{ display: 'flex' }}>
-                        <input style={{ width: '50px' }} type="number" min={0} max={20}></input>
+                        <input
+                            style={{
+                                width: '50px',
+                                color: 'var(--font-color)',
+                                border: '1px solid var(--font-color)',
+                                backgroundColor: 'var(--dark-blue)',
+                            }}
+                            type="number"
+                            min={0}
+                            max={20}
+                        ></input>
                         <p
                             style={{
                                 top: '50%',
@@ -156,6 +187,35 @@ export default function ActivityAssessmentDetails() {
                         </p>
                     </Row>
                 </Row>
+
+                <Button
+                    style={{
+                        marginLeft: '50%',
+                        transform: 'translateX(-50%)',
+                        marginTop: '15px',
+                        backgroundColor: 'var(--button-green)',
+                        borderColor: 'var(--button-green)',
+                    }}
+                >
+                    Zaakceptuj i przejdź do kolejnej odpowiedzi
+                </Button>
+
+                <p
+                    style={{
+                        backgroundColor: 'var(--dark-blue)',
+                        color: 'var(--font-color)',
+                        padding: '10px',
+                        width: '35%',
+                        marginBottom: '5px',
+                        marginTop: '20px',
+                        right: 0,
+                        textAlign: 'center',
+                        position: 'relative',
+                        transform: 'translateX(-100%)',
+                    }}
+                >
+                    Pozostało 29 odpowiedzi do sprawdzenia
+                </p>
             </Col>
         </Content>
     );

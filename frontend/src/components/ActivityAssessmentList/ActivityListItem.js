@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { getActivityTypeName, getActivityImg } from '../../utils/constants';
 import { ActivityImg } from '../ActivityInfo/ActivityInfoStyles';
 import { useNavigate } from 'react-router-dom';
+import { PageRoutes } from '../../utils/constants';
 
 const ActivityListItemRow = styled(Row)`
     margin-left: auto;
@@ -29,6 +30,9 @@ export default function ActivityListItem(props) {
             key={props.activity.name}
             onClick={() => {
                 console.log('Elo od ' + props.activity.name);
+                navigate(`${PageRoutes.ACTIVITY_ASSESSMENT}`, {
+                    state: { activityId: props.activity.activityId },
+                });
             }}
         >
             <ActivityImg src={getActivityImg(props.activity.type)}></ActivityImg>
