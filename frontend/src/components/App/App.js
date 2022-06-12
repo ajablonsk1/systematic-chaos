@@ -1,6 +1,11 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { isStudent, PageRoutes, TeacherSidebarTitles, UserSidebarTitles } from '../../utils/constants';
+import {
+    isStudent,
+    PageRoutes,
+    TeacherSidebarTitles,
+    UserSidebarTitles,
+} from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CanvasMap from '../CanvasMap/CanvasMap';
 import CombatTask from '../CombatTask/CombatTask';
@@ -24,6 +29,8 @@ import { Role } from '../../utils/userRole';
 import { connect } from 'react-redux';
 import AuthVerify from '../../common/auth-verify';
 import { ToastContainer } from 'react-toastify';
+import ActivityAssessmentList from '../ActivityAssessmentList/ActivityAssessmentList';
+import ActivityAssessmentDetails from '../ActivityAssessmentDetails/ActivityAssessmentDetails';
 
 function App(props) {
     const student = isStudent(props.user);
@@ -173,6 +180,24 @@ function App(props) {
                                     element={
                                         <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
                                             <CanvasMap /> {/* whatever, testing only */}
+                                        </PageGuard>
+                                    }
+                                />
+
+                                <Route
+                                    path={`${PageRoutes.ACTIVITY_ASSESSMENT_LIST}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+                                            <ActivityAssessmentList />
+                                        </PageGuard>
+                                    }
+                                />
+
+                                <Route
+                                    path={`${PageRoutes.ACTIVITY_ASSESSMENT}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+                                            <ActivityAssessmentDetails />
                                         </PageGuard>
                                     }
                                 />
