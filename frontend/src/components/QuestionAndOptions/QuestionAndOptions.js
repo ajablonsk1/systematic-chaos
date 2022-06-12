@@ -6,19 +6,13 @@ import { PageRoutes } from '../../utils/constants';
 import Loader from '../Loader/Loader';
 import { ContentWithBackground } from './QuestionAndOptionsStyle';
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage';
-import { Timer } from '../QuestionSelectionDoor/Timer';
-import { getRemainingTime, timer } from '../../utils/storageManager';
 
-function QuestionAndOptions() {
+function QuestionAndOptions(props) {
     const [question, setQuestion] = useState();
     const navigate = useNavigate();
     const location = useLocation();
     const { activityId: expeditionId, nodeId: questionId } = location.state;
-    const [remainingTimeInSeconds, setRemainingTimeInSeconds] = useState(
-        getRemainingTime(+expeditionId)
-    );
-    const [remainingTime, setRemainingTime] = useState(timer(remainingTimeInSeconds));
-    const [timerInterval, setTimerInterval] = useState();
+    const remainingTime = props.remainingTime;
 
     useEffect(() => {
         if (expeditionId == null || questionId == null) {
@@ -26,30 +20,23 @@ function QuestionAndOptions() {
         } else {
             setQuestion(getQuestion(+expeditionId, +questionId));
         }
-
-        setTimerInterval(
-            setInterval(function () {
-                setRemainingTimeInSeconds(getRemainingTime(+expeditionId));
-            }, 1000)
-        );
-    }, [questionId, expeditionId, navigate, remainingTime]);
+    }, [questionId, expeditionId, navigate]);
 
     // complete the expedition and record user responses if the expedition has not been completed
     // before the timer runs out
     useEffect(() => {
-        if (remainingTimeInSeconds === 0) {
-            clearInterval(timerInterval);
+        if (remainingTime === 0) {
             navigate(PageRoutes.EXPEDITION_SUMMARY, {
-                state: { expeditionId: expeditionId },
+                state: {
+                    expeditionId: expeditionId,
+                    remainingTime: remainingTime,
+                },
             });
-        } else {
-            setRemainingTime(timer(remainingTimeInSeconds));
         }
-    }, [remainingTimeInSeconds, expeditionId, navigate, remainingTime, timerInterval]);
+    }, [expeditionId, navigate, remainingTime]);
 
     return (
         <ContentWithBackground>
-            <Timer time={remainingTimeInSeconds}>{remainingTime}</Timer>
             {question === undefined ? (
                 <Loader />
             ) : (
