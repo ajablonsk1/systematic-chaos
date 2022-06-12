@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { isStudent, PageRoutes } from '../../utils/constants';
+import { PageRoutes } from '../../utils/constants';
+import { isStudent } from '../../utils/storageManager';
 import { Role } from '../../utils/userRole';
 
 function PageGuard(props) {

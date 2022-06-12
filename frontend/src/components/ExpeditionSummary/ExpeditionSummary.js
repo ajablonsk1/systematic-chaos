@@ -2,19 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Row } from 'react-bootstrap';
 import { SummaryContainer } from './ExpeditionSummaryStyle';
 import { ButtonRow } from '../QuestionAndOptions/QuestionAndOptionsStyle';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
+import { finishExpedition, timer } from '../../utils/storageManager';
 import { getExpeditionPoints, getExpeditionPointsClosed } from '../../utils/Api';
 import Loader from '../Loader/Loader';
 import { getUserPoints } from '../../utils/pointsCalculator';
 import { Content } from '../App/AppGeneralStyles';
-import { setCompleted } from '../../storage/activityMap';
 
-export default function ExpeditionSummary({ expeditionId }) {
+export default function ExpeditionSummary() {
     const navigate = useNavigate();
     const [maxPoints, setMaxPoints] = useState();
     const [scoredPoints, setScoredPoints] = useState();
     const [closedQuestionPoints, setClosedQuestionPoints] = useState();
+    const location = useLocation();
+    const { expeditionId, remainingTime } = location.state;
 
     useEffect(() => {
         if (expeditionId == null) {
@@ -32,12 +34,13 @@ export default function ExpeditionSummary({ expeditionId }) {
         }
     }, [expeditionId, navigate]);
 
-    const finishExpedition = () => {
-        localStorage.removeItem('userAnswers');
-        localStorage.removeItem('userOpenAnswers');
-        setCompleted(0, expeditionId);
+    const finishExpeditionAndGoHome = () => {
+        finishExpedition(expeditionId);
         navigate(PageRoutes.HOME);
     };
+
+    const showRemainingTime = () =>
+        remainingTime > 60 ? timer(remainingTime).replace(':', 'min ') + 's' : remainingTime + 's';
 
     return (
         <Content>
@@ -68,10 +71,13 @@ export default function ExpeditionSummary({ expeditionId }) {
                             Punkty z pytań otwartych:{' '}
                             <strong>0/{maxPoints - closedQuestionPoints}</strong> (nieocenione)
                         </p>
+                        <p style={{ fontSize: 20 }}>
+                            Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.
+                        </p>
                     </Row>
                     <Row>
                         <ButtonRow>
-                            <button className="w-100" onClick={() => finishExpedition()}>
+                            <button className="w-100" onClick={() => finishExpeditionAndGoHome()}>
                                 Wróć do strony głównej
                             </button>
                         </ButtonRow>
