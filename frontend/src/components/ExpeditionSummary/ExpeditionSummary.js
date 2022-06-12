@@ -17,7 +17,6 @@ export default function ExpeditionSummary() {
     const [closedQuestionPoints, setClosedQuestionPoints] = useState();
     const location = useLocation();
     const { expeditionId, remainingTime } = location.state;
-    console.log(typeof timer(remainingTime));
 
     useEffect(() => {
         if (expeditionId == null) {
