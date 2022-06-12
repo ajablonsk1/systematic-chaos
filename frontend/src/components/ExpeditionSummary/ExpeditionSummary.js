@@ -4,7 +4,7 @@ import { SummaryContainer } from './ExpeditionSummaryStyle';
 import { ButtonRow } from '../QuestionAndOptions/QuestionAndOptionsStyle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
-import { finishExpedition } from '../../utils/storageManager';
+import { finishExpedition, timer } from '../../utils/storageManager';
 import { getExpeditionPoints, getExpeditionPointsClosed } from '../../utils/Api';
 import Loader from '../Loader/Loader';
 import { getUserPoints } from '../../utils/pointsCalculator';
@@ -16,7 +16,8 @@ export default function ExpeditionSummary() {
     const [scoredPoints, setScoredPoints] = useState();
     const [closedQuestionPoints, setClosedQuestionPoints] = useState();
     const location = useLocation();
-    const { expeditionId } = location.state;
+    const { expeditionId, remainingTime } = location.state;
+    console.log(typeof timer(remainingTime));
 
     useEffect(() => {
         if (expeditionId == null) {
@@ -35,9 +36,12 @@ export default function ExpeditionSummary() {
     }, [expeditionId, navigate]);
 
     const finishExpeditionAndGoHome = () => {
-        finishExpedition(+expeditionId);
+        finishExpedition(expeditionId);
         navigate(PageRoutes.HOME);
     };
+
+    const showRemainingTime = () =>
+        remainingTime > 60 ? timer(remainingTime).replace(':', 'min ') + 's' : remainingTime + 's';
 
     return (
         <Content>
@@ -67,6 +71,9 @@ export default function ExpeditionSummary() {
                         <p style={{ fontSize: 20 }}>
                             Punkty z pytań otwartych:{' '}
                             <strong>0/{maxPoints - closedQuestionPoints}</strong> (nieocenione)
+                        </p>
+                        <p style={{ fontSize: 20 }}>
+                            Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.
                         </p>
                     </Row>
                     <Row>

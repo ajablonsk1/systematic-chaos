@@ -73,7 +73,10 @@ function QuestionSelectionDoor() {
         if (remainingTimeInSeconds === 0 || questions?.find(q => q.id === -2)) {
             clearInterval(timerInterval);
             navigate(PageRoutes.EXPEDITION_SUMMARY, {
-                state: { expeditionId: expeditionId },
+                state: { 
+                    expeditionId: expeditionId,
+                    remainingTime: remainingTimeInSeconds     
+                },
             });
         } else {
             setRemainingTime(timer(remainingTimeInSeconds));
