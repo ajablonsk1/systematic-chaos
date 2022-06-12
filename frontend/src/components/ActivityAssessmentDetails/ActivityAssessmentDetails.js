@@ -1,7 +1,7 @@
 import { Content } from '../App/AppGeneralStyles';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import { FullDivider } from '../ActivityInfo/ActivityInfoStyles';
-import { useNavigate, useLocation } from 'react-router-dom';
+//import { useLocation, useNavigate } from 'react-router-dom';
 import {
     ContentCol,
     ActivityTitle,
@@ -25,12 +25,12 @@ import {
 import userPicture from '../../utils/resources/user-picture.png';
 
 export default function ActivityAssessmentDetails() {
-    const navigate = useNavigate();
-    const location = useLocation();
+    //const navigate = useNavigate();
+    //const location = useLocation();
     //console.log(location);
 
     //we will get data based on the id
-    const { activityId: activityId } = location.state;
+    //const { activityId } = location.state;
 
     return (
         <Content>
@@ -43,7 +43,11 @@ export default function ActivityAssessmentDetails() {
                         <h4 style={{ textAlign: 'center' }}>Informacje o użytkowniku</h4>
                         <FullDivider />
                         <Row styles={{ justifyContent: 'center' }}>
-                            <img src={userPicture} style={{ paddingLeft: '20px' }}></img>
+                            <img
+                                src={userPicture}
+                                alt="profile avatar"
+                                style={{ paddingLeft: '20px' }}
+                            ></img>
                             <UserInfo>
                                 <h5 styles={{ width: '100%' }}>Użytkownik testowy</h5>
                                 <h5 styles={{ width: '100%' }}>zadanie oddane w terminie</h5>
