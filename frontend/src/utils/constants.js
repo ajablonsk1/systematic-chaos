@@ -174,8 +174,21 @@ export const HeroDataset = {
 };
 
 export const percentagesToGrade = (percentages) => {
-    if (percentages < 0.5) return 2.0;
+    const FAILINNG_GRADE = 2.0;
+    const MIN_POSITIVE_GRADE = 3.0;
+    const MIN_PERCENTAGE_FOR_POSITIVE_GRADE = 0.5;
+    const PERCENTAGE_FOR_HIGHER_GRADE = 0.1;
+    const HIGHER_GRADE_STEP = 0.5;
+
+    if (percentages < MIN_PERCENTAGE_FOR_POSITIVE_GRADE) return FAILINNG_GRADE;
     else {
-        return 3.0 + Math.floor((percentages - 0.5) / 0.1) * 0.5;
+        return (
+            MIN_POSITIVE_GRADE +
+            Math.floor(
+                (percentages - MIN_PERCENTAGE_FOR_POSITIVE_GRADE) /
+                    PERCENTAGE_FOR_HIGHER_GRADE
+            ) *
+                HIGHER_GRADE_STEP
+        );
     }
-}
+};
