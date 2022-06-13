@@ -3,8 +3,7 @@ import { Col, Row, Button } from 'react-bootstrap';
 
 export const ContentCol = styled(Col)`
     padding-top: 15px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 `;
 
 export const ActivityTitle = styled.div`
@@ -20,8 +19,7 @@ export const TopInfo = styled(Row)`
     justify-content: space-around;
     padding-top: 6px;
     max-width: 1500px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
     color: var(--font-color);
 `;
 
@@ -52,9 +50,7 @@ export const AnswerRow = styled(Row)`
     min-height: 300px;
     max-height: 500px;
     background-color: var(--dark-blue);
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
+    margin: 10px auto 0 auto;
 `;
 
 export const AnswerContent = styled.p`
@@ -71,9 +67,7 @@ export const RemarksCol = styled(Col)`
     min-height: 150px;
     max-height: 300px;
     background-color: var(--dark-blue);
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
+    margin: 10px auto 0 auto;
     color: var(--font-color);
     padding-bottom: 5px;
 `;
@@ -84,9 +78,7 @@ export const PointsRow = styled(Row)`
     justify-content: space-around;
     background-color: var(--dark-blue);
     width: 30%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
+    margin: 10px auto 0 auto;
     text-align: center;
     color: var(--font-color);
     padding: 10px;
@@ -119,8 +111,7 @@ export const RemarksTextArea = styled.textarea`
     padding: 3px;
     border: none;
     max-height: 220px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
     color: var(--font-color);
     border: 1px solid var(--font-color);
     background-color: var(--dark-blue);
@@ -131,9 +122,7 @@ export const RemainingCount = styled.p`
     color: var(--font-color);
     padding: 10px;
     width: 35%;
-    margin-bottom: 5px;
-    margin-top: 20px;
     text-align: center;
     position: relative;
-    margin-left: 65%;
+    margin: 20px 0 5px 65%;
 `;

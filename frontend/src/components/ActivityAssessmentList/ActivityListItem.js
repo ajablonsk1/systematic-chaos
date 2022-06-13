@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
 
 const ActivityListItemRow = styled(Row)`
-    margin: 20px auto 20px auto;
+    margin: 20px auto;
     width: 75%;
     background-color: var(--dark-blue);
     color: var(--font-color);
