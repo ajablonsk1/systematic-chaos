@@ -1,5 +1,11 @@
+import moment from "moment";
+import "moment/locale/pl";
 import React from "react";
-import { getGrades, getUnmarkedActivities } from "../../storage/gradesTable";
+import {
+    getGrades,
+    getUnmarkedActivities,
+    GRADES_TABLE_DATE_FROMAT,
+} from "../../storage/gradesTable";
 import { getActivityTypeName, percentagesToGrade } from "../../utils/constants";
 import { TableContainer } from "../PointsPage/Table/TableStyle";
 
@@ -19,7 +25,7 @@ const GradesTableContent = (tableType, row, idx) => {
             tableType === GradesTableType.GRADES_TABLE
                 ? row.points + "/" + row.maxPoints
                 : row.maxPoints,
-        date: row.date,
+        date: moment(row.date, GRADES_TABLE_DATE_FROMAT).fromNow(),
         activityType: getActivityTypeName(row.activityType),
     };
     return Object.entries(tableContent);
