@@ -20,9 +20,25 @@ import {
     PointsRow,
     RemainingCount,
 } from './ActivityAssesmentDetailsStyles';
-
+import { getActivityTypeName } from '../../utils/constants';
 //https://www.flaticon.com/free-icon/user-picture_21104
 import userPicture from '../../utils/resources/user-picture.png';
+
+//example result of GET - returns the first non-reviewed answer for activity of given Id
+const exampleActivityToGrade = {
+    //answerId is an example of the answer identifier - we need to have a way to save points to a given answer somehow, not sure how it works (or will work) on back
+    answerId: 1,
+    activityType: 'task',
+    activityName: 'SuperSystem I',
+    userName: 'Jan Kowalski',
+    isLate: false,
+    activityDetails:
+        'Narysuj przykład sieci składającej się z 3 routerów, 5 komputerów, 4 switchy wraz z wypisanym rodzajem użytych kabli na każdym połączeniu.',
+    userAnswer:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ullamcorper finibus magna, a pellentesque eros consequat id. Donec vitae tristique purus, quis rutrum felis. Nam ultricies, risus at pharetra fermentum, mi sem blandit lacus, eget vulputate est orci sit amet dui. Aliquam est nunc, faucibus eget congue eu, lobortis non tortor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean sodales sollicitudin ex, id viverra tellus dictum non. Etiam consectetur magna nec tortor sodales, ac dignissim eros aliquam. Integer sagittis mattis sapien. Curabitur blandit imperdiet suscipit. Phasellus placerat libero sed tristique pulvinar. Vivamus bibendum augue urna, accumsan interdum risus venenatis quis.',
+    activityPoints: 30,
+    remaining: 29,
+};
 
 export default function ActivityAssessmentDetails() {
     //const navigate = useNavigate();
@@ -36,7 +52,11 @@ export default function ActivityAssessmentDetails() {
         <Content>
             <ContentCol>
                 <ActivityTitle>
-                    <h4>Zadanie bojowe - SuperSystem I</h4>
+                    <h4>
+                        {getActivityTypeName(exampleActivityToGrade.activityType) +
+                            ' - ' +
+                            exampleActivityToGrade.activityName}
+                    </h4>
                 </ActivityTitle>
                 <TopInfo>
                     <TopInfoCard>
@@ -49,8 +69,17 @@ export default function ActivityAssessmentDetails() {
                                 style={{ paddingLeft: '20px' }}
                             ></img>
                             <UserInfo>
-                                <h5 styles={{ width: '100%' }}>Użytkownik testowy</h5>
-                                <h5 styles={{ width: '100%' }}>zadanie oddane w terminie</h5>
+                                <h5 styles={{ width: '100%' }}>
+                                    {exampleActivityToGrade.userName}
+                                </h5>
+                                {!exampleActivityToGrade.isLate && (
+                                    <h5 styles={{ width: '100%' }}>zadanie oddane w terminie</h5>
+                                )}
+                                {exampleActivityToGrade.isLate && (
+                                    <h5 styles={{ width: '100%' }}>
+                                        zadanie oddane ze spóźnieniem
+                                    </h5>
+                                )}
                             </UserInfo>
                         </Row>
                     </TopInfoCard>
@@ -58,29 +87,16 @@ export default function ActivityAssessmentDetails() {
                         <h4 style={{ textAlign: 'center' }}>Informacje o aktywności</h4>
                         <FullDivider />
                         <p style={{ marginBottom: '1px' }}>Treść:</p>
-                        <ActivityInfo>
-                            Narysuj przykład sieci składającej się z 3 routerów, 5 komputerów, 4
-                            switchy wraz z wypisanym rodzajem użytych kabli na każdym połączeniu.
-                        </ActivityInfo>
-                        <p style={{ textAlign: 'center' }}>Punkty: 30</p>
+                        <ActivityInfo>{exampleActivityToGrade.activityDetails}</ActivityInfo>
+                        <p style={{ textAlign: 'center' }}>
+                            Punkty: {exampleActivityToGrade.activityPoints}
+                        </p>
                     </TopInfoCard>
                 </TopInfo>
                 <AnswerRow>
                     <AnswerCol>
                         <h4>Odpowiedź</h4>
-                        <AnswerContent>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-                            ullamcorper finibus magna, a pellentesque eros consequat id. Donec vitae
-                            tristique purus, quis rutrum felis. Nam ultricies, risus at pharetra
-                            fermentum, mi sem blandit lacus, eget vulputate est orci sit amet dui.
-                            Aliquam est nunc, faucibus eget congue eu, lobortis non tortor. Interdum
-                            et malesuada fames ac ante ipsum primis in faucibus. Aenean sodales
-                            sollicitudin ex, id viverra tellus dictum non. Etiam consectetur magna
-                            nec tortor sodales, ac dignissim eros aliquam. Integer sagittis mattis
-                            sapien. Curabitur blandit imperdiet suscipit. Phasellus placerat libero
-                            sed tristique pulvinar. Vivamus bibendum augue urna, accumsan interdum
-                            risus venenatis quis.
-                        </AnswerContent>
+                        <AnswerContent>{exampleActivityToGrade.userAnswer}</AnswerContent>
                     </AnswerCol>
                 </AnswerRow>
 
@@ -93,12 +109,14 @@ export default function ActivityAssessmentDetails() {
                     <p style={{ top: '50%', position: 'relative', margin: '0' }}>Punkty: </p>
                     <Row style={{ display: 'flex' }}>
                         <PointsInput type="number" min={0} max={20}></PointsInput>
-                        <PointsMax>/ 20</PointsMax>
+                        <PointsMax>/ {exampleActivityToGrade.activityPoints}</PointsMax>
                     </Row>
                 </PointsRow>
 
                 <AcceptButton>Zaakceptuj i przejdź do kolejnej odpowiedzi</AcceptButton>
-                <RemainingCount>Pozostało 29 odpowiedzi do sprawdzenia</RemainingCount>
+                <RemainingCount>
+                    Pozostało {exampleActivityToGrade.remaining} odpowiedzi do sprawdzenia
+                </RemainingCount>
             </ContentCol>
         </Content>
     );
