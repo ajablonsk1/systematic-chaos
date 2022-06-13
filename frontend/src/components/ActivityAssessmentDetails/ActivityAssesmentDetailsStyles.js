@@ -44,7 +44,6 @@ export const UserInfo = styled.div`
 `;
 
 export const ActivityInfo = styled.p`
-    max-height: 120px;
     overflow-y: auto;
 `;
 
