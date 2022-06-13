@@ -58,6 +58,7 @@ export const PageRoutes = {
     GAME_MANAGEMENT: 'game-management',
     PARTICIPANTS: '/participants',
     ACTIVITY_ASSESSMENT: '/activity-assessment',
+    ACTIVITY_ASSESSMENT_LIST: '/activity-assessment-list',
     GRADES: '/grades',
 };
 
@@ -75,7 +76,7 @@ export const TeacherSidebarTitles = {
     [PageRoutes.RANKING]: ['Ranking', faRankingStar],
     [PageRoutes.GAME_MANAGEMENT]: ['Zarządzanie grą', faListCheck],
     [PageRoutes.PARTICIPANTS]: ['Uczestnicy', faUsers],
-    [PageRoutes.ACTIVITY_ASSESSMENT]: ['Sprawdzanie aktywności', faArrowsToEye],
+    [PageRoutes.ACTIVITY_ASSESSMENT_LIST]: ['Sprawdzanie aktywności', faArrowsToEye],
     [PageRoutes.GRADES]: ['Oceny', fa5],
 };
 
