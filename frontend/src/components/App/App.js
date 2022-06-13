@@ -1,11 +1,7 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import {
-    isStudent,
-    PageRoutes,
-    TeacherSidebarTitles,
-    UserSidebarTitles,
-} from '../../utils/constants';
+
+import { PageRoutes, TeacherSidebarTitles, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CanvasMap from '../CanvasMap/CanvasMap';
 import CombatTask from '../CombatTask/CombatTask';
@@ -29,8 +25,14 @@ import { Role } from '../../utils/userRole';
 import { connect } from 'react-redux';
 import AuthVerify from '../../common/auth-verify';
 import { ToastContainer } from 'react-toastify';
+
 import ActivityAssessmentList from '../ActivityAssessmentList/ActivityAssessmentList';
 import ActivityAssessmentDetails from '../ActivityAssessmentDetails/ActivityAssessmentDetails';
+
+import ExpeditionSummary from '../ExpeditionSummary/ExpeditionSummary';
+import { isStudent } from '../../utils/storageManager';
+import Timer from '../Timer/Timer';
+
 
 function App(props) {
     const student = isStudent(props.user);
@@ -70,7 +72,18 @@ function App(props) {
                                     path={`${PageRoutes.QUESTION_SELECTION}`}
                                     element={
                                         <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
-                                            <QuestionSelectionDoor />
+                                            <Timer>
+                                                <QuestionSelectionDoor />
+                                            </Timer>
+                                        </PageGuard>
+                                    }
+                                />
+
+                                <Route
+                                    path={`${PageRoutes.EXPEDITION_SUMMARY}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+                                            <ExpeditionSummary />
                                         </PageGuard>
                                     }
                                 />
@@ -79,7 +92,9 @@ function App(props) {
                                     path={`${PageRoutes.QUESTION_ANSWER}`}
                                     element={
                                         <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
-                                            <QuestionAndOptions />
+                                            <Timer>
+                                                <QuestionAndOptions />
+                                            </Timer>
                                         </PageGuard>
                                     }
                                 />
