@@ -58,7 +58,6 @@ export const AnswerRow = styled(Row)`
 `;
 
 export const AnswerContent = styled.p`
-    max-height: 120px;
     overflow-y: auto;
 `;
 
