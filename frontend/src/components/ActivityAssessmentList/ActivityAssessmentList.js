@@ -48,7 +48,12 @@ export default function ActivityAssessmentList() {
             <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
             <Col style={{ paddingTop: '50px' }}>
                 {exampleActivities.activites.map(activity => {
-                    return <ActivityListItem activity={activity} />;
+                    return (
+                        <ActivityListItem
+                            key={activity.name + activity.source}
+                            activity={activity}
+                        />
+                    );
                 })}
             </Col>
         </Content>

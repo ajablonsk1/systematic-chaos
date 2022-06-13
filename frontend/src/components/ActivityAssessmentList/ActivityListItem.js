@@ -6,10 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
 
 const ActivityListItemRow = styled(Row)`
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px auto 20px auto;
     width: 75%;
     background-color: var(--dark-blue);
     color: var(--font-color);
@@ -27,9 +24,7 @@ export default function ActivityListItem(props) {
 
     return (
         <ActivityListItemRow
-            key={props.activity.name}
             onClick={() => {
-                console.log('Elo od ' + props.activity.name);
                 navigate(`${PageRoutes.ACTIVITY_ASSESSMENT}`, {
                     state: { activityId: props.activity.activityId },
                 });
@@ -37,12 +32,9 @@ export default function ActivityListItem(props) {
         >
             <ActivityImg src={getActivityImg(props.activity.type)}></ActivityImg>
             <div>
-                {'[' +
-                    props.activity.source +
-                    '] ' +
-                    getActivityTypeName(props.activity.type) +
-                    ' - ' +
-                    props.activity.name}
+                {`[${props.activity.source}] ${getActivityTypeName(props.activity.type)} - ${
+                    props.activity.name
+                }`}
             </div>
             <div style={{ marginLeft: 'auto' }}>{props.activity.remaining + ' do sprawdzenia'}</div>
         </ActivityListItemRow>

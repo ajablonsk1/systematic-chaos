@@ -30,6 +30,10 @@ export const TopInfoCard = styled.div`
     width: 740px;
     margin-top: 5px;
     padding: 10px;
+    //tak, wiem - ale to chyba najprostszy sposób na zrobienie tego, przy czym nie jest absolutnym koszmarem
+    @media (max-width: 1800px) {
+        width: 1500px;
+    }
 `;
 
 export const UserInfo = styled.div`
@@ -40,7 +44,6 @@ export const UserInfo = styled.div`
 `;
 
 export const ActivityInfo = styled.p`
-    font-size: 0.75rem;
     max-height: 120px;
     overflow-y: auto;
 `;
@@ -56,7 +59,6 @@ export const AnswerRow = styled(Row)`
 `;
 
 export const AnswerContent = styled.p`
-    font-size: 1rem;
     max-height: 120px;
     overflow-y: auto;
 `;
