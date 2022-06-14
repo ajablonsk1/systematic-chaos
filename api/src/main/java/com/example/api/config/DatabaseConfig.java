@@ -1,5 +1,6 @@
 package com.example.api.config;
 
+import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.group.Group;
@@ -12,6 +13,9 @@ import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.OptionRepo;
 import com.example.api.repo.question.QuestionRepo;
+import com.example.api.service.activity.feedback.ProfessorFeedbackService;
+import com.example.api.service.activity.feedback.UserFeedbackService;
+import com.example.api.service.activity.feedback.form.SaveProfessorFeedbackForm;
 import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -31,19 +35,28 @@ public class DatabaseConfig {
     private final AnswerRepo answerRepo;
 
     @Bean
-    public CommandLineRunner commandLineRunner(UserService userService){
+    public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
+                                               UserFeedbackService userFeedbackService){
         return args -> {
-            User user = new User();
-            user.setEmail("student@email.com");
-            user.setPassword("1234555");
-            user.setAccountType(AccountType.STUDENT);
-            userService.saveUser(user);
+            User student = new User();
+            student.setEmail("student@gmail.com");
+            student.setPassword("12345");
+            student.setAccountType(AccountType.STUDENT);
+            userService.saveUser(student);
 
-            User user1 = new User();
-            user1.setEmail("student_debil@email.com");
-            user1.setPassword("12345");
-            user1.setAccountType(AccountType.STUDENT);
-            userService.saveUser(user1);
+
+            User student1 = new User();
+            student1.setEmail("student1@gmail.com");
+            student1.setPassword("12345");
+            student1.setAccountType(AccountType.STUDENT);
+            userService.saveUser(student1);
+
+
+            User professor = new User();
+            professor.setEmail("bmaj@gmail.com");
+            professor.setPassword("12345");
+            professor.setAccountType(AccountType.PROFESSOR);
+            userService.saveUser(professor);
 
             // IT IS NOT DONE PROPER WAY, BUT API MISS A LOT OF SERVICES AND FOR TESTING PURPOSES IT WILL BE OK
 

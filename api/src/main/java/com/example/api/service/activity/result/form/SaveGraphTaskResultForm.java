@@ -1,10 +1,10 @@
-package com.example.api.form;
+package com.example.api.service.activity.result.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-public class GraphTaskResultSaveForm {
+public class SaveGraphTaskResultForm {
     @Schema(required = true) private Long graphTaskId;
     @Schema(required = true) private String userEmail;
 }

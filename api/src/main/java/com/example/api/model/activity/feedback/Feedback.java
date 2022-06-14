@@ -22,8 +22,4 @@ public abstract class Feedback {
 
     @OneToOne
     private User from;
-
-    @OneToOne
-    @Nullable
-    private User to;
 }

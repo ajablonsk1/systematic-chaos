@@ -73,4 +73,12 @@ public class PointsCalculator {
         }
         return points;
     }
+
+    public double calculateMaxAvailablePoints(List<Answer> answers) {
+        double result = 0;
+        for(Answer answer: answers) {
+            result += answer.getQuestion().getPoints();
+        }
+        return result;
+    }
 }

@@ -1,24 +1,33 @@
-package com.example.api.controller.activity;
+package com.example.api.controller.activity.result;
 
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongAnswerTypeException;
-import com.example.api.form.GraphTaskResultSaveForm;
-import com.example.api.form.SetPointsForm;
+import com.example.api.error.exception.WrongBodyParametersNumberException;
 import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.question.Answer;
 import com.example.api.service.activity.result.GraphTaskResultService;
-import io.swagger.v3.oas.annotations.Operation;
+import com.example.api.service.activity.result.form.AddAnswerToGraphTaskForm;
+import com.example.api.service.activity.result.form.SaveGraphTaskResultForm;
+import com.example.api.service.activity.result.form.SetPointsForm;
+import com.example.api.service.activity.result.form.SetTimeSpentForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/task/graph")
+@RequestMapping("/task/graph/result")
 public class GraphTaskResultController {
     private final GraphTaskResultService graphTaskResultService;
 
-    @PostMapping("/result/save")
-    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestBody GraphTaskResultSaveForm form)
+    @PostMapping("/save")
+    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestBody SaveGraphTaskResultForm form)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form));
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<GraphTaskResult> addAnswerToResult(@RequestBody SaveGraphTaskResultForm form)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form));
     }
@@ -52,5 +61,23 @@ public class GraphTaskResultController {
     public ResponseEntity<Double> setPointsManually(@RequestBody SetPointsForm form)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskResultService.setPointsManually(form));
+    }
+
+    @GetMapping("/points/available")
+    public ResponseEntity<Double> getMaxAvailablePoints(@RequestParam Long id)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskResultService.getMaxAvailablePoints(id));
+    }
+
+    @PostMapping("/answer/add")
+    public ResponseEntity<Answer> addAnswerToGraphTaskResult(@RequestBody AddAnswerToGraphTaskForm form)
+            throws EntityNotFoundException, WrongBodyParametersNumberException {
+        return ResponseEntity.ok().body(graphTaskResultService.addAnswerToGraphTaskResult(form));
+    }
+
+    @PostMapping("/time/set")
+    public ResponseEntity<Integer> addAnswerToGraphTaskResult(@RequestBody SetTimeSpentForm form)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskResultService.setTimeSpent(form));
     }
 }

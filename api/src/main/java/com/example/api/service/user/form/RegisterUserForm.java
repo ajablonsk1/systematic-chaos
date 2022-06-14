@@ -1,7 +1,7 @@
-package com.example.api.form;
+package com.example.api.service.user.form;
 
-import com.example.api.model.user.HeroType;
 import com.example.api.model.user.AccountType;
+import com.example.api.model.user.HeroType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

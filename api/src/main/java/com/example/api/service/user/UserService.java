@@ -3,12 +3,12 @@ package com.example.api.service.user;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
-import com.example.api.form.RegisterUserForm;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.service.user.form.RegisterUserForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,7 +34,6 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepo.findUserByEmail(email);
-        log.info(email);
         if(user == null) {
             log.error("User {} not found in database", email);
             throw new UsernameNotFoundException("User" + email + " not found in database");
@@ -64,7 +63,7 @@ public class UserService implements UserDetailsService {
             if(form.getHeroType() == null || form.getInvitationCode() == null) {
                 log.error("Request body for registering student requires 6 body parameters");
                 throw new WrongBodyParametersNumberException("Request body for registering student requires 6 body parameters",
-                        List.of("firstName", "lastName", "email", "password", "heroType", "invitationCode"));
+                        List.of("firstName", "lastName", "email", "password", "heroType", "invitationCode"), 1);
             }
             String code = form.getInvitationCode();
             Group group = groupRepo.findGroupByInvitationCode(code);
@@ -78,7 +77,7 @@ public class UserService implements UserDetailsService {
             if(form.getHeroType() != null || form.getInvitationCode() != null){
                 log.error("Request body for registering professor requires 4 body parameters");
                 throw new WrongBodyParametersNumberException("Request body for registering professor requires 4 body parameters",
-                        List.of("firstName", "lastName", "email", "password"));
+                        List.of("firstName", "lastName", "email", "password"), 1);
             }
         }
         user.setPassword(passwordEncoder.encode(form.getPassword()));
