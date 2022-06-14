@@ -8,6 +8,7 @@ import {
     faListCheck,
     faRankingStar,
     faStar,
+    faAward,
     faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import priestImg from '../storage/resources/pope.png';
@@ -66,6 +67,7 @@ export const UserSidebarTitles = {
     [PageRoutes.GAME_CARD]: ['Karta gry', faHouse],
     [PageRoutes.GAME_MAP]: ['Mapa gry', faChessBoard],
     [PageRoutes.POINTS]: ['Punkty', faStar],
+    [PageRoutes.GRADES]: ['Oceny', faAward],
     [PageRoutes.RANKING]: ['Ranking', faRankingStar],
     [PageRoutes.BADGES_ACHIEVEMENTS]: ['Odznaki i osiągnięcia', faCertificate],
     [PageRoutes.CANVAS]: ['Świat gry', faChessBoard],
@@ -183,4 +185,29 @@ export const HeroDataset = {
     wizard: wizardImg,
     priest: priestImg,
     rogue: rogueImg,
+};
+
+export const percentagesToGrade = (percentages) => {
+    const FAILINNG_GRADE = 2.0;
+    const MIN_POSITIVE_GRADE = 3.0;
+    const MIN_PERCENTAGE_FOR_POSITIVE_GRADE = 0.5;
+    const PERCENTAGE_FOR_HIGHER_GRADE = 0.1;
+    const HIGHER_GRADE_STEP = 0.5;
+
+    if (percentages < MIN_PERCENTAGE_FOR_POSITIVE_GRADE) return FAILINNG_GRADE;
+    else {
+        return (
+            MIN_POSITIVE_GRADE +
+            Math.floor(
+                (percentages - MIN_PERCENTAGE_FOR_POSITIVE_GRADE) /
+                    PERCENTAGE_FOR_HIGHER_GRADE
+            ) *
+                HIGHER_GRADE_STEP
+        );
+    }
+};
+
+export const GradesTableType = {
+    GRADES_TABLE: 0,
+    UNMARKED_ACTIVITIES_TABLE: 1,
 };
