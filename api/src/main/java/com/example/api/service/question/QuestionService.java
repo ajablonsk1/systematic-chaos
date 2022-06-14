@@ -5,7 +5,6 @@ import com.example.api.model.question.Question;
 import com.example.api.repo.question.QuestionRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

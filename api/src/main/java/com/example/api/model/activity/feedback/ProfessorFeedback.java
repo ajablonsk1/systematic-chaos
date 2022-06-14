@@ -2,9 +2,6 @@ package com.example.api.model.activity.feedback;
 
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
-import com.example.api.model.activity.task.FileTask;
-import com.example.api.model.activity.task.GraphTask;
-import com.example.api.model.activity.task.Task;
 import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

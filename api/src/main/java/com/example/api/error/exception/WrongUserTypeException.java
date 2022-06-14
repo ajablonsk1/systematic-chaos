@@ -1,6 +1,5 @@
 package com.example.api.error.exception;
 
-import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 
 public class WrongUserTypeException extends Exception{

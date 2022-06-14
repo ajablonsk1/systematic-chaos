@@ -1,7 +1,6 @@
 package com.example.api.controller.question;
 
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.WrongAnswerTypeException;
 import com.example.api.model.question.Question;
 import com.example.api.service.question.QuestionService;
 import lombok.RequiredArgsConstructor;

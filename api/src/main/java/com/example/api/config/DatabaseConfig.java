@@ -1,6 +1,5 @@
 package com.example.api.config;
 
-import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.group.Group;
@@ -15,7 +14,6 @@ import com.example.api.repo.question.OptionRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
-import com.example.api.service.activity.feedback.form.SaveProfessorFeedbackForm;
 import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
