@@ -6,13 +6,9 @@ import {
     getUnmarkedActivities,
     GRADES_TABLE_DATE_FROMAT,
 } from "../../storage/gradesTable";
-import { getActivityTypeName, percentagesToGrade } from "../../utils/constants";
+import { getActivityTypeName, GradesTableType, percentagesToGrade } from "../../utils/constants";
 import { TableContainer } from "../PointsPage/Table/TableStyle";
 
-const GradesTableType = {
-    GRADES_TABLE: 0,
-    UNMARKED_ACTIVITIES_TABLE: 1,
-};
 
 const GradesTableContent = (tableType, row, idx) => {
     let tableContent = {

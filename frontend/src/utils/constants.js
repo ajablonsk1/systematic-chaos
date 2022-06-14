@@ -192,3 +192,8 @@ export const percentagesToGrade = (percentages) => {
         );
     }
 };
+
+export const GradesTableType = {
+    GRADES_TABLE: 0,
+    UNMARKED_ACTIVITIES_TABLE: 1,
+};
