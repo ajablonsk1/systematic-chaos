@@ -6,9 +6,12 @@ import {
     getUnmarkedActivities,
     GRADES_TABLE_DATE_FROMAT,
 } from "../../storage/gradesTable";
-import { getActivityTypeName, GradesTableType, percentagesToGrade } from "../../utils/constants";
+import {
+    getActivityTypeName,
+    GradesTableType,
+    percentagesToGrade,
+} from "../../utils/constants";
 import { TableContainer } from "../PointsPage/Table/TableStyle";
-
 
 const GradesTableContent = (tableType, row, idx) => {
     let tableContent = {
@@ -27,7 +30,25 @@ const GradesTableContent = (tableType, row, idx) => {
     return Object.entries(tableContent);
 };
 
-const GradesDefaultTable = (tableType, headers, tableContent) => {
+const GradesTableHeaders = (tableType) => {
+    return [
+        "Nr",
+        "Aktywność",
+        ...(tableType === GradesTableType.GRADES_TABLE
+            ? ["Ocena", "Punkty"]
+            : []),
+        ...(tableType === GradesTableType.UNMARKED_ACTIVITIES_TABLE
+            ? ["Punkty do zdobycia"]
+            : []),
+        "Data",
+        "Typ aktywności",
+    ];
+};
+
+const GradesDefaultTable = (tableType) => {
+    const headers = GradesTableHeaders(tableType);
+    const tableContent = GradesData(tableType);
+
     const content = tableContent.map((row, idx1) => {
         return (
             <tr key={idx1}>
@@ -53,37 +74,21 @@ const GradesDefaultTable = (tableType, headers, tableContent) => {
     );
 };
 
-export function GradesTable() {
-    const headers = [
-        "Nr",
-        "Aktywność",
-        "Ocena",
-        "Punkty",
-        "Data",
-        "Typ aktywności",
-    ];
-    const tableContent = getGrades();
+const GradesData = (tableType) => {
+    switch (tableType) {
+        case GradesTableType.GRADES_TABLE:
+            return getGrades();
+        case GradesTableType.UNMARKED_ACTIVITIES_TABLE:
+            return getUnmarkedActivities();
+        default:
+            return [];
+    }
+};
 
-    return GradesDefaultTable(
-        GradesTableType.GRADES_TABLE,
-        headers,
-        tableContent
-    );
+export function GradesTable() {
+    return GradesDefaultTable(GradesTableType.GRADES_TABLE);
 }
 
 export function UnmarkedActivitiesTable() {
-    const headers = [
-        "Nr",
-        "Aktywność",
-        "Punkty do zdobycia",
-        "Data",
-        "Typ aktywności",
-    ];
-    const tableContent = getUnmarkedActivities();
-
-    return GradesDefaultTable(
-        GradesTableType.UNMARKED_ACTIVITIES_TABLE,
-        headers,
-        tableContent
-    );
+    return GradesDefaultTable(GradesTableType.UNMARKED_ACTIVITIES_TABLE);
 }
