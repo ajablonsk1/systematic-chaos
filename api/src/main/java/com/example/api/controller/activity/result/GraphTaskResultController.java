@@ -33,22 +33,22 @@ public class GraphTaskResultController {
     }
 
     @GetMapping("/points/closed")
-    public ResponseEntity<Double> getPointsFromClosedQuestions(@RequestParam Long id)
+    public ResponseEntity<Double> getPointsFromClosedQuestions(@RequestParam Long graphTaskResultId)
             throws WrongAnswerTypeException, EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.getPointsFromClosedQuestions(id));
+        return ResponseEntity.ok().body(graphTaskResultService.getPointsFromClosedQuestions(graphTaskResultId));
     }
 
     @GetMapping("/points/opened")
-    public ResponseEntity<Double> getPointsFromOpenedQuestions(@RequestParam Long id)
+    public ResponseEntity<Double> getPointsFromOpenedQuestions(@RequestParam Long graphTaskResultId)
             throws WrongAnswerTypeException, EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.getPointsFromOpenedQuestions(id));
+        return ResponseEntity.ok().body(graphTaskResultService.getPointsFromOpenedQuestions(graphTaskResultId));
     }
 
     @GetMapping("/points/all")
-    public ResponseEntity<Double> saveGraphTaskResult(@RequestParam Long id)
+    public ResponseEntity<Double> getAllPoints(@RequestParam Long graphTaskResultId)
             throws WrongAnswerTypeException, EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.getPointsFromClosedQuestions(id) +
-                graphTaskResultService.getPointsFromOpenedQuestions(id));
+        return ResponseEntity.ok().body(graphTaskResultService.getPointsFromClosedQuestions(graphTaskResultId) +
+                graphTaskResultService.getPointsFromOpenedQuestions(graphTaskResultId));
     }
 
     @PostMapping("/points/add")
@@ -64,9 +64,9 @@ public class GraphTaskResultController {
     }
 
     @GetMapping("/points/available")
-    public ResponseEntity<Double> getMaxAvailablePoints(@RequestParam Long id)
+    public ResponseEntity<Double> getMaxAvailablePoints(@RequestParam Long graphTaskResultId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.getMaxAvailablePoints(id));
+        return ResponseEntity.ok().body(graphTaskResultService.getMaxAvailablePoints(graphTaskResultId));
     }
 
     @PostMapping("/answer/add")

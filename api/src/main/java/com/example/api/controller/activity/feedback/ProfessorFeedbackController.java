@@ -23,14 +23,14 @@ public class ProfessorFeedbackController {
     }
 
     @GetMapping("/task/graph")
-    public ResponseEntity<ProfessorFeedback> getProfessorFeedbackForGraphTask(@RequestParam Long id)
+    public ResponseEntity<ProfessorFeedback> getProfessorFeedbackForGraphTask(@RequestParam Long graphTaskId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForGraphTask(id));
+        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForGraphTask(graphTaskId));
     }
 
     @PostMapping("/task/file")
-    public ResponseEntity<ProfessorFeedback> getProfessorFeedbackForFileTask(@RequestParam Long id)
+    public ResponseEntity<ProfessorFeedback> getProfessorFeedbackForFileTask(@RequestParam Long fileTaskId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForFileTask(id));
+        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForFileTask(fileTaskId));
     }
 }

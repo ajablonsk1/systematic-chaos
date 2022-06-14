@@ -19,14 +19,14 @@ public class QuestionController {
     private final QuestionService questionService;
 
     @GetMapping("")
-    public ResponseEntity<Question> getQuestion(@RequestParam Long id)
+    public ResponseEntity<Question> getQuestion(@RequestParam Long questionId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(questionService.getQuestion(id));
+        return ResponseEntity.ok().body(questionService.getQuestion(questionId));
     }
 
     @GetMapping("/next")
-    public ResponseEntity<List<Question>> getNextQuestions(@RequestParam Long id)
+    public ResponseEntity<List<Question>> getNextQuestions(@RequestParam Long questionId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(questionService.getNextQuestions(id));
+        return ResponseEntity.ok().body(questionService.getNextQuestions(questionId));
     }
 }
