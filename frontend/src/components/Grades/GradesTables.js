@@ -36,10 +36,7 @@ const GradesTableHeaders = (tableType) => {
         "Aktywność",
         ...(tableType === GradesTableType.GRADES_TABLE
             ? ["Ocena", "Punkty"]
-            : []),
-        ...(tableType === GradesTableType.UNMARKED_ACTIVITIES_TABLE
-            ? ["Punkty do zdobycia"]
-            : []),
+            : ["Punkty do zdobycia"]),
         "Data",
         "Typ aktywności",
     ];
