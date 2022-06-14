@@ -1,6 +1,7 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { PageRoutes, UserSidebarTitles } from '../../utils/constants';
+
+import { PageRoutes, TeacherSidebarTitles, UserSidebarTitles } from '../../utils/constants';
 import ActivityInfo from '../ActivityInfo/ActivityInfo';
 import CanvasMap from '../CanvasMap/CanvasMap';
 import CombatTask from '../CombatTask/CombatTask';
@@ -26,7 +27,16 @@ import AuthVerify from '../../common/auth-verify';
 import { ToastContainer } from 'react-toastify';
 import Grades from '../Grades/Grades';
 
+import ActivityAssessmentList from '../ActivityAssessmentList/ActivityAssessmentList';
+import ActivityAssessmentDetails from '../ActivityAssessmentDetails/ActivityAssessmentDetails';
+
+import ExpeditionSummary from '../ExpeditionSummary/ExpeditionSummary';
+import { isStudent } from '../../utils/storageManager';
+import Timer from '../Timer/Timer';
+
+
 function App(props) {
+    const student = isStudent(props.user);
     return (
         <>
             <Container fluid className="p-0">
@@ -40,7 +50,11 @@ function App(props) {
                                     : 'd-md-block d-none'
                             }
                         >
-                            <Sidebar link_titles={Object.entries(UserSidebarTitles)} />
+                            <Sidebar
+                                link_titles={Object.entries(
+                                    student ? UserSidebarTitles : TeacherSidebarTitles
+                                )}
+                            />
                         </SidebarCol>
                         <Col md={10} xs={12} className="p-0">
                             <Routes>
@@ -59,7 +73,18 @@ function App(props) {
                                     path={`${PageRoutes.QUESTION_SELECTION}`}
                                     element={
                                         <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
-                                            <QuestionSelectionDoor />
+                                            <Timer>
+                                                <QuestionSelectionDoor />
+                                            </Timer>
+                                        </PageGuard>
+                                    }
+                                />
+
+                                <Route
+                                    path={`${PageRoutes.EXPEDITION_SUMMARY}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+                                            <ExpeditionSummary />
                                         </PageGuard>
                                     }
                                 />
@@ -68,7 +93,9 @@ function App(props) {
                                     path={`${PageRoutes.QUESTION_ANSWER}`}
                                     element={
                                         <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
-                                            <QuestionAndOptions />
+                                            <Timer>
+                                                <QuestionAndOptions />
+                                            </Timer>
                                         </PageGuard>
                                     }
                                 />
@@ -182,6 +209,24 @@ function App(props) {
                                     }
                                 />
 
+                                <Route
+                                    path={`${PageRoutes.ACTIVITY_ASSESSMENT_LIST}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+                                            <ActivityAssessmentList />
+                                        </PageGuard>
+                                    }
+                                />
+
+                                <Route
+                                    path={`${PageRoutes.ACTIVITY_ASSESSMENT}`}
+                                    element={
+                                        <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+                                            <ActivityAssessmentDetails />
+                                        </PageGuard>
+                                    }
+                                />
+
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
                         </Col>
@@ -215,6 +260,9 @@ function App(props) {
 }
 
 function mapStateToProps(state) {
-    return {};
+    const { user } = state.auth;
+    return {
+        user,
+    };
 }
 export default connect(mapStateToProps)(App);

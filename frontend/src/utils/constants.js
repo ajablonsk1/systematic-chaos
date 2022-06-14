@@ -1,10 +1,15 @@
 import {
+    fa5,
+    faArrowsToEye,
+    faBullseye,
     faCertificate,
     faChessBoard,
     faHouse,
+    faListCheck,
     faRankingStar,
     faStar,
     faAward,
+    faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import priestImg from '../storage/resources/pope.png';
 import rogueImg from '../storage/resources/rogue.png';
@@ -35,6 +40,7 @@ import warrior17 from '../storage/resources/warrior/16.png';
 export const PageRoutes = {
     HOME: '/',
     QUESTION_SELECTION: '/doors-selection',
+    EXPEDITION_SUMMARY: '/expedition-summary',
     QUESTION_ANSWER: '/question',
     ACTIVITY_INFO: '/activity-info',
     GAME_CARD: '/game-card',
@@ -49,8 +55,12 @@ export const PageRoutes = {
     GROUP_ADDITION: '/group-addition',
     TEACHER_HOME: '/dashboard',
     SURVEY_TASK: '/survey-task',
+    GAME_SUMMARY: '/game-summary',
+    GAME_MANAGEMENT: 'game-management',
+    PARTICIPANTS: '/participants',
+    ACTIVITY_ASSESSMENT: '/activity-assessment',
+    ACTIVITY_ASSESSMENT_LIST: '/activity-assessment-list',
     GRADES: '/grades',
-    // TODO: add new path routes in the future
 };
 
 export const UserSidebarTitles = {
@@ -61,11 +71,15 @@ export const UserSidebarTitles = {
     [PageRoutes.RANKING]: ['Ranking', faRankingStar],
     [PageRoutes.BADGES_ACHIEVEMENTS]: ['Odznaki i osiągnięcia', faCertificate],
     [PageRoutes.CANVAS]: ['Świat gry', faChessBoard],
-    // TODO: add new elements to the map according to the sidebar in Figma, e.g. [PathRoutes.GAME_MAP]: "Mapa Gry"
 };
 
 export const TeacherSidebarTitles = {
-    // TODO
+    [PageRoutes.GAME_SUMMARY]: ['Podsumowanie gry', faBullseye],
+    [PageRoutes.RANKING]: ['Ranking', faRankingStar],
+    [PageRoutes.GAME_MANAGEMENT]: ['Zarządzanie grą', faListCheck],
+    [PageRoutes.PARTICIPANTS]: ['Uczestnicy', faUsers],
+    [PageRoutes.ACTIVITY_ASSESSMENT_LIST]: ['Sprawdzanie aktywności', faArrowsToEye],
+    [PageRoutes.GRADES]: ['Oceny', fa5],
 };
 
 export const START_GRAPH_NODE_ID = -1;
