@@ -28,7 +28,7 @@ public class ProfessorFeedbackController {
         return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForGraphTask(graphTaskId));
     }
 
-    @PostMapping("/task/file")
+    @GetMapping("/task/file")
     public ResponseEntity<ProfessorFeedback> getProfessorFeedbackForFileTask(@RequestParam Long fileTaskId)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForFileTask(fileTaskId));
