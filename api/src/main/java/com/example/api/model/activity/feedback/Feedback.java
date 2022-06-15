@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -22,8 +21,4 @@ public abstract class Feedback {
 
     @OneToOne
     private User from;
-
-    @OneToOne
-    @Nullable
-    private User to;
 }

@@ -46,6 +46,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler(WrongUserTypeException.class)
+    public ResponseEntity<Object> handleWrongUserTypeException(WrongUserTypeException ex) {
+        ApiError apiError = new ApiError(BAD_REQUEST, ex.getMessage(), ex);
+        return buildResponseEntity(apiError);
+    }
+
     @ExceptionHandler(BadRequestHeadersException.class)
     public ResponseEntity<Object> handleTokenException(BadRequestHeadersException ex) {
         return handleExceptionWithStatusCode(NOT_FOUND, ex);

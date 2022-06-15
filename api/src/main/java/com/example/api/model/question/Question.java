@@ -1,7 +1,7 @@
 package com.example.api.model.question;
 
 
-import com.example.api.model.activity.task.GraphTask;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +31,7 @@ public class Question {
     private Difficulty difficulty;
 
     @OneToMany(mappedBy = "question")
+    @JsonManagedReference
     private List<Option> options = new LinkedList<>();
     private Double points;
 

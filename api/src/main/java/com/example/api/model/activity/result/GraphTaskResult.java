@@ -24,5 +24,7 @@ public class GraphTaskResult extends TaskResult {
 
     @OneToOne
     private GraphTask graphTask;
+
+    private int timeSpent;
 }
 

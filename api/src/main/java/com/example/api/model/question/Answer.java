@@ -1,6 +1,5 @@
 package com.example.api.model.question;
 
-import com.example.api.model.activity.result.GraphTaskResult;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
