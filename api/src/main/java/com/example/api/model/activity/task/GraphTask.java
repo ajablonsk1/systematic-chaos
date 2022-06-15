@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import java.util.LinkedList;
 import java.util.List;
 
 @Getter
@@ -17,5 +18,7 @@ import java.util.List;
 @Entity
 public class GraphTask extends Task {
     @OneToMany
-    private List<Question> questions;
+    private List<Question> questions = new LinkedList<>();
+    private Double maxPoints100;
+    private Integer timeToSolve;
 }

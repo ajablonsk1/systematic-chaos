@@ -99,4 +99,14 @@ public class UserService implements UserDetailsService {
         log.info("Fetching all users");
         return userRepo.findAll();
     }
+
+    public Group getUserGroup(String email) throws EntityNotFoundException {
+        log.info("Fetching all users");
+        User user = userRepo.findUserByEmail(email);
+        if(user == null) {
+            log.error("User {} not found in database", email);
+            throw new EntityNotFoundException("User" + email + " not found in database");
+        }
+        return user.getGroup();
+    }
 }

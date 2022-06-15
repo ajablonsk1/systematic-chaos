@@ -14,5 +14,5 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class Task extends Activity {
     private String requiredKnowledge;
-    private Integer maxPoints;
+    private Double maxPoints;
 }
