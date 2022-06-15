@@ -3,6 +3,7 @@ package com.example.api.controller.activity.result;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongAnswerTypeException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.question.Answer;
 import com.example.api.service.activity.result.GraphTaskResultService;
@@ -19,6 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/task/graph/result")
 public class GraphTaskResultController {
     private final GraphTaskResultService graphTaskResultService;
+
+    @GetMapping
+    public ResponseEntity<GraphTaskResult> getGraphTaskResult(@RequestParam Long graphTaskId, @RequestParam String studentEmail)
+            throws EntityNotFoundException, WrongUserTypeException {
+        return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResult(graphTaskId, studentEmail));
+    }
 
     @PostMapping("/save")
     public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestBody SaveGraphTaskResultForm form)
