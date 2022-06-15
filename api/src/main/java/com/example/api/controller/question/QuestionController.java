@@ -18,7 +18,7 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<Question> getQuestion(@RequestParam Long questionId)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(questionService.getQuestion(questionId));

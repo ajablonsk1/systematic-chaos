@@ -8,6 +8,7 @@ import com.example.api.error.exception.BadRequestHeadersException;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
+import com.example.api.model.group.Group;
 import com.example.api.model.user.User;
 import com.example.api.service.user.UserService;
 import com.example.api.service.user.form.RegisterUserForm;
@@ -46,6 +47,11 @@ public class UserController {
     @GetMapping("/user")
     public ResponseEntity<User> getUser(@RequestParam String email) throws EntityNotFoundException {
         return ResponseEntity.ok().body(userService.getUser(email));
+    }
+
+    @GetMapping("/user/group")
+    public ResponseEntity<Group> getUserGroup(@RequestParam String email) throws EntityNotFoundException {
+        return ResponseEntity.ok().body(userService.getUserGroup(email));
     }
 
     @GetMapping("/users")
