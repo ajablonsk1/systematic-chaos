@@ -1,10 +1,19 @@
-import { axiosApi} from '../utils/axios';
-import { METHOD } from './method';
-import { GRAPH_TASK_URL } from './urls';
+import {GRAPH_TASK_RESULT_URL, GRAPH_TASK_URL, USER_GROUP} from './urls';
+import {axiosApiGet} from "../utils/axios";
+import {parseJwt} from "../utils/Api";
 
-class StudentService {
+// todo: test extends UserService
+class StudentService{
+    getUser(){
+        return JSON.parse(localStorage.getItem("user"));
+    }
+
+    getEmail(){
+        return parseJwt(this.getUser().access_token).sub;
+    }
+
     getActivityScore(activityId) {
-        // return axiosApi(METHOD.GET, GRAPH_TASK_POINTS + '/all', {})
+        return axiosApiGet(GRAPH_TASK_RESULT_URL, {graphTaskId: activityId, studentEmail: this.getEmail()})
     }
 
     saveAnswer(activityId, questionId, answer) {}
@@ -15,7 +24,7 @@ class StudentService {
 
     // returns all info about activity
     getActivity(activityId) {
-        return axiosApi(METHOD.GET, GRAPH_TASK_URL, { id: activityId });
+        return axiosApiGet(GRAPH_TASK_URL, { id: activityId });
     }
 
     /*
@@ -92,6 +101,10 @@ class StudentService {
     getChildQuestions(parentQuestionId) {}
 
     getSurveyTask(taskId) {}
+
+    getUserGroup() {
+        return axiosApiGet(USER_GROUP, {email: this.getEmail()});
+    }
 }
 
 export default new StudentService();

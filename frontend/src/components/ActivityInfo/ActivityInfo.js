@@ -1,26 +1,35 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { InfoContainer } from './InfoContainer';
-import Loader from '../Loader/Loader';
 import { Content } from '../App/AppGeneralStyles';
 import ActivityContent from './ActivityContent';
 import StudentService from "../../services/student.service"
+import {useState} from "react";
+import {useEffect} from "react";
 
 export default function ActivityInfo() {
     const location = useLocation();
     const { activityId } = location.state;
-    const activity = StudentService.getActivity(activityId);
+    const [activity, setActivity] = useState(undefined);
 
-    // in the future we can get activity from activitys list using id in props
+
+    useEffect(() => {
+        StudentService.getActivity(activityId).then(response => {
+            setActivity(response);
+        });
+    }, [activityId])
+
+
+    //console.log(activity);
+
+    // in the future we can get activity from activities list using id in props
     return (
         <Content>
-            <InfoContainer fluid className="p-0">
-                {activityId === undefined ? (
-                    <Loader />
-                ) : (
+            {activity &&
+                <InfoContainer fluid className="p-0">
                     <ActivityContent activity={activity} activityId={activityId} />
-                )}
-            </InfoContainer>
+                </InfoContainer>
+            }
         </Content>
     );
 }

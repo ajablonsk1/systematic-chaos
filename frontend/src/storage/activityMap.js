@@ -2,7 +2,7 @@ const activityMap = { // todo: endpoint
     activityMap: {
         activities: [
             {
-                id: 0,
+                id: 16,
                 activityType: 'expedition',
                 posX: 0,
                 posY: 3,

@@ -1,6 +1,8 @@
 import expedition from '../storage/exampleExpeditionData.json';
 import chapters from '../storage/exampleChapterList.json';
 import { START_GRAPH_NODE_ID } from './constants';
+import moment from "moment";
+import 'moment/locale/pl';
 
 //for now we ignore IDs given for our mock API calls
 
@@ -89,3 +91,22 @@ export const parseJwt = token => {
         return null;
     }
 };
+
+
+export const getRemainingDate = (endDateString) => {
+    const today = moment(new Date());
+    const endDate = moment(new Date(endDateString));
+
+    // duration
+    return  Math.floor(moment.duration(endDate.diff(today)).asSeconds());
+}
+
+export const convertSecondsToStringInfo = (endDate) => {
+    const seconds = getRemainingDate(endDate);
+    const stringFormat = moment.utc(seconds * 1000).format('dd:mm:ss');
+    const splitString = stringFormat.split(':');
+
+    return `${splitString[0]} dni, ${splitString[1]} min, ${splitString[2]} sek`
+}
+
+

@@ -189,13 +189,13 @@ export const HeroDataset = {
 };
 
 export const percentagesToGrade = percentages => {
-    const FAILINNG_GRADE = 2.0;
+    const FAILING_GRADE = 2.0;
     const MIN_POSITIVE_GRADE = 3.0;
     const MIN_PERCENTAGE_FOR_POSITIVE_GRADE = 0.5;
     const PERCENTAGE_FOR_HIGHER_GRADE = 0.1;
     const HIGHER_GRADE_STEP = 0.5;
 
-    if (percentages < MIN_PERCENTAGE_FOR_POSITIVE_GRADE) return FAILINNG_GRADE;
+    if (percentages < MIN_PERCENTAGE_FOR_POSITIVE_GRADE) return FAILING_GRADE;
     else {
         return (
             MIN_POSITIVE_GRADE +

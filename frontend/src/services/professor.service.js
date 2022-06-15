@@ -1,4 +1,6 @@
-class ProfessorService{
+import UserService from "./user.service";
+
+class ProfessorService extends UserService{
 
     /* 
         answerId: Number,
