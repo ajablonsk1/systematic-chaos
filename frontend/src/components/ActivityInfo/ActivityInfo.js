@@ -3,13 +3,13 @@ import { useLocation } from 'react-router-dom';
 import { InfoContainer } from './InfoContainer';
 import Loader from '../Loader/Loader';
 import { Content } from '../App/AppGeneralStyles';
-import { getActivityAtID } from '../../utils/Api';
 import ActivityContent from './ActivityContent';
+import StudentService from "../../services/student.service"
 
 export default function ActivityInfo() {
     const location = useLocation();
     const { activityId } = location.state;
-    const activity = getActivityAtID(0, activityId);
+    const activity = StudentService.getActivity(activityId);
 
     // in the future we can get activity from activitys list using id in props
     return (

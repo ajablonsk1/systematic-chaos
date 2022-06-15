@@ -1,8 +1,10 @@
+import { FIELD_REQUIRED } from "../../../utils/constants";
+
 export const validatePassword = (values) => {
     let error = "";
     const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{1,}$/;
     if (!values) {
-        error = "Pole wymagane";
+        error = FIELD_REQUIRED;
     } else if (!passwordRegex.test(values)) {
         error = "Hasło musi zawierać przynajmniej jedną cyfrę i co najmniej jedną małą i jedną wielką literę";
     }
@@ -12,7 +14,7 @@ export const validatePassword = (values) => {
 export const validateConfirmPassword = (pass, value) => {
     let error = "";
     if (!value) {
-        error = "Pole wymagane";
+        error = FIELD_REQUIRED;
     } else if (pass && value) {
         if (pass !== value) {
             error = "Hasła się różnią.";
@@ -26,7 +28,7 @@ export const validateEmail = (email) => {
     let error = "";
 
     if(!email){
-        error = "Wymagane";
+        error = FIELD_REQUIRED;
     } else if (!regexEmail.test(email)){
         error = "Podaj poprawny adres email.";
     }

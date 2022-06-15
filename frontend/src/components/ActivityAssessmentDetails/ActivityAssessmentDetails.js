@@ -25,6 +25,7 @@ import { getActivityTypeName } from '../../utils/constants';
 import userPicture from '../../utils/resources/user-picture.png';
 
 //example result of GET - returns the first non-reviewed answer for activity of given Id
+// todo: remove it and use endpoint
 const exampleActivityToGrade = {
     //answerId is an example of the answer identifier - we need to have a way to save points to a given answer somehow, not sure how it works (or will work) on back
     answerId: 1,
@@ -41,6 +42,7 @@ const exampleActivityToGrade = {
 };
 
 export default function ActivityAssessmentDetails() {
+    // todo: remove it I think
     //const navigate = useNavigate();
     //const location = useLocation();
     //console.log(location);
@@ -72,6 +74,8 @@ export default function ActivityAssessmentDetails() {
                                 <h5 styles={{ width: '100%' }}>
                                     {exampleActivityToGrade.userName}
                                 </h5>
+
+                                {/*//TODO: we can do it better, I'm almost sure*/}
                                 {!exampleActivityToGrade.isLate && (
                                     <h5 styles={{ width: '100%' }}>zadanie oddane w terminie</h5>
                                 )}

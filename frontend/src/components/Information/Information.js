@@ -20,7 +20,7 @@ import { InformationImage } from './InformationStyles';
 export default function Information() {
     const location = useLocation()
     const { activityId: informationId } = location.state;
-    const information = getInformation(informationId);
+    const information = getInformation(informationId);  // todo: endpoint
 
     return (
         <Content>

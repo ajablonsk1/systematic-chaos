@@ -5,6 +5,8 @@ import { ActivityImg } from '../ActivityInfo/ActivityInfoStyles';
 import { useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
 
+
+// todo: move it to styles file
 const ActivityListItemRow = styled(Row)`
     margin: 20px auto;
     width: 75%;

@@ -2,6 +2,8 @@ import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import styled from 'styled-components';
 
+// todo: remove this component and use bootstrap spinner animation ?
+
 const SpinnerContainer = styled.div`
     width: 100%;
     height: 100%;

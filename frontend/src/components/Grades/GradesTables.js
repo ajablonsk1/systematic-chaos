@@ -13,6 +13,11 @@ import {
 } from "../../utils/constants";
 import { TableContainer } from "../PointsPage/Table/TableStyle";
 
+// todo: general file refactor
+
+
+
+// todo: think about refactor
 const GradesTableContent = (tableType, row, idx) => {
     let tableContent = {
         id: idx + 1,
@@ -42,6 +47,7 @@ const GradesTableHeaders = (tableType) => {
     ];
 };
 
+// todo: it looks like a component, so move to component file...
 const GradesDefaultTable = (tableType) => {
     const headers = GradesTableHeaders(tableType);
     const tableContent = GradesData(tableType);

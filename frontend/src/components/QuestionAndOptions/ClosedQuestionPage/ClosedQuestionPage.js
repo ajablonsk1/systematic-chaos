@@ -29,9 +29,12 @@ function ClosedQuestionPage(props) {
                 'Nie wybrałeś żadnej odpowiedzi. Na pewno chcesz przejść dalej?'
             );
         }
+
+        // todo: save answers is exactly the same as in open question so use a hook
         // if acceptWarning == null or true
         if (acceptWarning !== false) {
             // get actual answers list from expedition
+            // todo: use endpoint
             let actualAnswersList = JSON.parse(localStorage.getItem('userAnswers')) || [];
 
             // new answer from actual question
@@ -40,6 +43,7 @@ function ClosedQuestionPage(props) {
                 answers: userAnswers,
             };
 
+            // todo: use endpoint
             if (!actualAnswersList.find(answer => answer.questionId === answerToAdd.questionId)) {
                 // save answer and go to next doors selection only if user didn't answer this question before
                 actualAnswersList.push(answerToAdd);

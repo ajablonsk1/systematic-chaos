@@ -13,12 +13,13 @@ function QuestionAndOptions(props) {
     const location = useLocation();
     const { activityId: expeditionId, nodeId: questionId } = location.state;
     const remainingTime = props.remainingTime;
+    // todo: why we use props and location ? use first or second option
 
     useEffect(() => {
         if (expeditionId == null || questionId == null) {
             navigate(PageRoutes.HOME);
         } else {
-            setQuestion(getQuestion(+expeditionId, +questionId));
+            setQuestion(getQuestion(+expeditionId, +questionId)); // todo: use endpoint
         }
     }, [questionId, expeditionId, navigate]);
 

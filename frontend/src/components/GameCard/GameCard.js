@@ -8,6 +8,9 @@ import { GameCardBadgeList } from './GameCardBadgeList';
 import rankExample from '../../storage/resources/ranks/master.png';
 import {GameCardRankImg} from "./GameCardRankImg";
 
+
+// todo: wtf, remove it or move to another file
+// todo: endpoint needed
 const badgeList = {
     badges: [
         {
@@ -68,7 +71,7 @@ export default function GameCard() {
                                 /180
                             </h3>
                             <h2>Gratulacje!</h2>
-                            <h2>Jesteś w TOP 10%!</h2>
+                            <h2>Jesteś w TOP 10%!</h2> {/*//TODO: calculate it! */}
                         </Card.Body>
                         <GameCardButton
                             text="Sprawdź cały ranking"

@@ -7,7 +7,7 @@ import {getActivityMap} from '../../../storage/activityMap'
 
 function ChaptersNav(props) {
     const tabs = [];
-    const chapters = getChapters() ? getChapters().chapters : [];
+    const chapters = getChapters() ? getChapters().chapters : []; // todo: endpoint needed
 
     const getFrontChapterID = () => {
         let frontChapter = chapters.find(chapter => isChapterUnlocked(chapter));
@@ -15,12 +15,12 @@ function ChaptersNav(props) {
     };
 
     const isChapterUnlocked = chapter => {
-        // TODO
+        // TODO: info from backend
         return true;
     };
 
     for (const chapter of chapters) {
-        let map = getActivityMap(0); // TODO: getting proper activity map
+        let map = getActivityMap(0); // TODO: getting proper activity map, endpoint needed
         tabs.push(
             <Tab
                 key={chapter.id}

@@ -20,7 +20,7 @@ import { getCombatTask } from '../../storage/combatTask';
 export default function CombatTask() {
     const location = useLocation();
     const { activityId: taskId } = location.state;
-    const task = getCombatTask(taskId);
+    const task = getCombatTask(taskId); // todo: endpoint needed
 
     return (
         <Content>
@@ -41,13 +41,12 @@ export default function CombatTask() {
                             <h5>{task.description}</h5>
                             <SmallDivider />
                             <p>
-                                Zdobyte punkty: <strong>50 / 100</strong>
-                            </p>{' '}
-                            {/* //TODO */}
+                                Zdobyte punkty: <strong>50 / 100</strong> {/*//TODO: info from endpoint*/}
+                            </p>
                             <p>
                                 <strong>Uwagi prowadzącego:</strong> <br /> Zabrakło mi kilku
                                 rzeczy, zaznaczyłem w pliku co mi się nie podoba. Proszę sobie
-                                pobrać i sprawdzić
+                                pobrać i sprawdzić {/*//TODO: info from endpoint*/}
                             </p>
                             <SmallDivider />
                             <FileService taskId={task.id} />

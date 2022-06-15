@@ -13,27 +13,27 @@ import { setCompleted } from '../../storage/activityMap';
 export default function FileService({ taskId }) {
     const fileInput = useRef(null);
     const [fileChosen, setFileChosen] = useState(null);
-    const loggedUserName = 'Jan Kowalski'; // delete later
-    const [task, setTask] = useState(getCombatTask(taskId));
+    const loggedUserName = 'Jan Kowalski'; // TODO: delete
+    const [task, setTask] = useState(getCombatTask(taskId)); // todo: endpoint or props
     const [isRemoving, startRemoving] = useTransition();
     const [isAdding, startAdding] = useTransition();
 
     const saveFile = () => {
         startAdding(() => {
-            addFile(task.id, fileChosen);
-            setTask(getCombatTask(taskId));
+            addFile(task.id, fileChosen); // todo: endpoint
+            setTask(getCombatTask(taskId));  //todo: remove and get from props or endpoint 
             fileInput.current.value = '';
             setFileChosen(null);
 
             // if user has saved a file, activity is complete
-            setCompleted(0, taskId);
+            setCompleted(0, taskId); // todo: endpoint, post
         });
     };
 
     const remove = fileNumber => {
         startRemoving(() => {
-            removeFile(taskId, fileNumber);
-            setTask(getCombatTask(taskId));
+            removeFile(taskId, fileNumber);  // todo: use endpoint
+            setTask(getCombatTask(taskId));  // todo: wtf, props or endpoint once again
         });
     };
 
@@ -52,7 +52,7 @@ export default function FileService({ taskId }) {
     };
 
     const downloadFile = fileId => {
-        const file = getCombatTask(taskId).files[fileId];
+        const file = getCombatTask(taskId).files[fileId]; // todo: eh, really ?
         if (file.content) {
             download(file.content, file.filename);
         } else {

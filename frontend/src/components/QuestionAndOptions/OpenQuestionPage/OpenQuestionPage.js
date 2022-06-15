@@ -26,6 +26,7 @@ export default function OpenQuestionPage(props) {
         // if acceptWarning == null or true
         if (acceptWarning !== false) {
             // get actual answers list from expedition
+            // todo: get from db
             let actualAnswersList = JSON.parse(localStorage.getItem('userOpenAnswers')) || [];
 
             // new answer from actual question
@@ -34,6 +35,7 @@ export default function OpenQuestionPage(props) {
                 answer: userAnswer.current.value,
             };
 
+            // todo: use endpoint to save in db
             if (!actualAnswersList.find(answer => answer.questionId === answerToAdd.questionId)) {
                 // save answer and go to next doors selection only if user didn't answer this question before
                 actualAnswersList.push(answerToAdd);

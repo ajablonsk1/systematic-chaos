@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { getActivityByPosition } from '../../../storage/activityMap';
 import { getActivityImg, getActivityPath } from '../../../utils/constants';
 
+
+// todo: move to styles file
 const ActivityCol = styled(Col)`
     border: 2px black solid;
     border-radius: 5px;
@@ -31,6 +33,8 @@ const ActivityCol = styled(Col)`
     }
 `;
 
+
+// todo: wrong name, typo
 export default function AcrivityField({ activity, posX, posY }) {
     const activityCol = useRef(null);
     const navigate = useNavigate();

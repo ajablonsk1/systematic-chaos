@@ -82,6 +82,7 @@ export const TeacherSidebarTitles = {
     [PageRoutes.GRADES]: ['Oceny', fa5],
 };
 
+export const FIELD_REQUIRED = 'Pole wymagane.';
 export const START_GRAPH_NODE_ID = -1;
 export const END_GRAPH_NODE_ID = -2;
 
@@ -187,7 +188,7 @@ export const HeroDataset = {
     rogue: rogueImg,
 };
 
-export const percentagesToGrade = (percentages) => {
+export const percentagesToGrade = percentages => {
     const FAILINNG_GRADE = 2.0;
     const MIN_POSITIVE_GRADE = 3.0;
     const MIN_PERCENTAGE_FOR_POSITIVE_GRADE = 0.5;
@@ -199,8 +200,7 @@ export const percentagesToGrade = (percentages) => {
         return (
             MIN_POSITIVE_GRADE +
             Math.floor(
-                (percentages - MIN_PERCENTAGE_FOR_POSITIVE_GRADE) /
-                    PERCENTAGE_FOR_HIGHER_GRADE
+                (percentages - MIN_PERCENTAGE_FOR_POSITIVE_GRADE) / PERCENTAGE_FOR_HIGHER_GRADE
             ) *
                 HIGHER_GRADE_STEP
         );

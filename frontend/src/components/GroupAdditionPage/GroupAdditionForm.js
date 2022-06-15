@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { FormCol } from '../LoginAndRegistrationPage/FormCol';
 import { useNavigate } from 'react-router-dom';
-import { PageRoutes } from '../../utils/constants';
+import { FIELD_REQUIRED, PageRoutes } from '../../utils/constants';
 import { addGroup, AddGroupResults } from '../../storage/groupsTable';
 
 export default function GroupAdditionForm() {
@@ -14,6 +14,7 @@ export default function GroupAdditionForm() {
     };
 
     return (
+        // todo: think about general Form component that can be extended
         <Formik
             initialValues={{
                 name: '',
@@ -21,8 +22,8 @@ export default function GroupAdditionForm() {
             }}
             validate={values => {
                 const errors = {};
-                if (!values.name) errors.name = 'Pole wymagane';
-                if (!values.code) errors.code = 'Pole wymagane';
+                if (!values.name) errors.name = FIELD_REQUIRED;
+                if (!values.code) errors.code = FIELD_REQUIRED;
                 return errors;
             }}
             onSubmit={(values, { setSubmitting, setFieldError }) => {
@@ -65,7 +66,7 @@ export default function GroupAdditionForm() {
                                 <Button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    style={{
+                                    style={{ // todo: move to styles file
                                         backgroundColor: 'var(--button-green)',
                                         borderColor: 'var(--button-green)',
                                     }}
@@ -84,7 +85,7 @@ export default function GroupAdditionForm() {
                                 <Button
                                     className="ml-3"
                                     onClick={backToGroupsPage}
-                                    style={{
+                                    style={{ // todo: move to styles file
                                         backgroundColor: 'var(--font-color)',
                                         borderColor: 'var(--font-color)',
                                         color: `var(--dark-blue)`,

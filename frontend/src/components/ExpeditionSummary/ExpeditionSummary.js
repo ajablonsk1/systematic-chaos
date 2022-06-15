@@ -22,10 +22,10 @@ export default function ExpeditionSummary() {
         if (expeditionId == null) {
             navigate(PageRoutes.HOME);
         } else {
-            setMaxPoints(getExpeditionPoints(expeditionId));
-            setScoredPoints(getUserPoints());
-            setClosedQuestionPoints(getExpeditionPointsClosed(expeditionId));
-            localStorage.setItem('currentScore', getUserPoints());
+            setMaxPoints(getExpeditionPoints(expeditionId)); // todo: points from endpoint
+            setScoredPoints(getUserPoints()); // todo points from endpoint
+            setClosedQuestionPoints(getExpeditionPointsClosed(expeditionId)); // todo: points from endpoint
+            localStorage.setItem('currentScore', getUserPoints()); // todo: delete it and send point to database
 
             // Moved removing question answers from localStorage to onClick navigate to fix a bug
             // Also starting the expedition clears answers

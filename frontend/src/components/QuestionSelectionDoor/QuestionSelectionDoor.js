@@ -46,12 +46,13 @@ function QuestionSelectionDoor(props) {
     const location = useLocation();
     const { activityId: expeditionId, nodeId: parentId } = location.state;
     const remainingTime = props.remainingTime;
+    // todo: same situation - use props or location only
 
     useEffect(() => {
         if (parentId == null || expeditionId == null) {
             navigate(PageRoutes.HOME); //TODO: when ExpeditionInfo component will be ready, navigate to them
         } else {
-            setQuestions(getParentQuestions(+parentId, +expeditionId));
+            setQuestions(getParentQuestions(+parentId, +expeditionId));  // todo: use endpoint
         }
     }, [parentId, expeditionId, navigate]);
 

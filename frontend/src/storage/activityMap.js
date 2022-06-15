@@ -1,4 +1,4 @@
-const activityMap = {
+const activityMap = { // todo: endpoint
     activityMap: {
         activities: [
             {
@@ -74,6 +74,7 @@ const activityMap = {
     },
 };
 
+// todo: endpoint for all 
 export function getActivityMap(chapterId) {
     return activityMap;
 }

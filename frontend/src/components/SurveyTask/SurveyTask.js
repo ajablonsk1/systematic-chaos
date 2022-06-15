@@ -9,22 +9,23 @@ import {
     ActivityCol,
     SmallDivider,
 } from '../ActivityInfo/ActivityInfoStyles';
-import { getActivityImg, getActivityTypeName } from '../../utils/constants';
+import { FIELD_REQUIRED, getActivityImg, getActivityTypeName } from '../../utils/constants';
 import { useLocation } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import { InfoContainer } from '../ActivityInfo/InfoContainer';
 import { getSurveyTask } from '../../storage/surveyTask';
-import { Formik, Field } from 'formik';
-import { Row, Col, Button, Spinner, Form, Container } from 'react-bootstrap';
+import { Formik } from 'formik';
+import { Row, Col, Spinner, Form, Container } from 'react-bootstrap';
 import { faThumbsDown, faThumbsUp, faFaceMeh } from '@fortawesome/free-solid-svg-icons';
 import { IconColumn } from './IconColumn';
+import { FormButton, FormikRange, FormikTextarea } from './SurveyTaskStyle';
 
 export default function FeedbackTask() {
     const location = useLocation();
     //also chapterID later
     const { activityId: taskId } = location.state;
     //later with correct ids
-    const task = getSurveyTask(null, taskId);
+    const task = getSurveyTask(null, taskId); // todo: use endpoint
 
     return (
         <Content>
@@ -48,7 +49,8 @@ export default function FeedbackTask() {
                                 <SmallDivider />
                                 <h5>Punkty do zdobycia: {task.points}</h5>
                                 <p>
-                                    Przyznane punkty: <strong>nie</strong>
+                                    Przyznane punkty: <strong>nie</strong>{' '}
+                                    {/*// todo: info from endpoint*/}
                                 </p>{' '}
                                 <SmallDivider />
                             </div>
@@ -60,8 +62,8 @@ export default function FeedbackTask() {
                                 }}
                                 validate={values => {
                                     const errors = {};
-                                    if (!values.opinion) errors.opinion = 'Pole wymagane.';
-                                    if (!values.score) errors.score = 'Pole wymagane';
+                                    if (!values.opinion) errors.opinion = FIELD_REQUIRED;
+                                    if (!values.score) errors.score = FIELD_REQUIRED;
                                     return errors;
                                 }}
                                 onSubmit={(values, { setSubmitting }) => {
@@ -77,19 +79,14 @@ export default function FeedbackTask() {
                                                 Jakie są Twoje wrażenia z tego rodziału? Co można
                                                 zmienić, poprawić, a co było w porządku?
                                             </p>
-                                            <Field
+                                            <FormikTextarea
                                                 as="textarea"
                                                 type="text"
                                                 name="opinion"
-                                                style={{
-                                                    width: '80%',
-                                                    color: '#ffb30d',
-                                                    border: '1px solid #ffb30d',
-                                                    backgroundColor: '#001542',
-                                                }}
                                             />
 
                                             <Row className="mt-4 w-80">
+                                                {/*// todo: use mapper maybe*/}
                                                 <IconColumn icons={[faThumbsDown, faThumbsDown]} />
                                                 <IconColumn icons={[faThumbsDown]} />
                                                 <IconColumn icons={[faFaceMeh]} />
@@ -97,16 +94,12 @@ export default function FeedbackTask() {
                                                 <IconColumn icons={[faThumbsUp, faThumbsUp]} />
                                             </Row>
                                             <Row className="mt-4 justify-content-center">
-                                                <Field
+                                                <FormikRange
                                                     type="range"
                                                     min={1}
                                                     max={5}
                                                     name="score"
-                                                    style={{
-                                                        width: '82%',
-                                                        accentColor: 'var(--button-green)',
-                                                    }}
-                                                ></Field>
+                                                ></FormikRange>
                                             </Row>
 
                                             <Row className="mt-4 d-flex justify-content-center">
@@ -114,13 +107,9 @@ export default function FeedbackTask() {
                                                     sm={12}
                                                     className="d-flex justify-content-center mb-2"
                                                 >
-                                                    <Button
+                                                    <FormButton
                                                         type="submit"
                                                         disabled={isSubmitting}
-                                                        style={{
-                                                            backgroundColor: 'var(--button-green)',
-                                                            borderColor: 'var(--button-green)',
-                                                        }}
                                                     >
                                                         {isSubmitting ? (
                                                             <Spinner
@@ -132,7 +121,7 @@ export default function FeedbackTask() {
                                                         ) : (
                                                             <span>Wyślij</span>
                                                         )}
-                                                    </Button>
+                                                    </FormButton>
                                                 </Col>
                                             </Row>
                                         </Container>
