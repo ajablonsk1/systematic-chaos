@@ -6,20 +6,22 @@ import { PageRoutes } from '../../utils/constants';
 import Loader from '../Loader/Loader';
 import { ContentWithBackground } from './QuestionAndOptionsStyle';
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage';
+import StudentService from "../../services/student.service";
 
 function QuestionAndOptions(props) {
     const [question, setQuestion] = useState();
     const navigate = useNavigate();
     const location = useLocation();
-    const { activityId: expeditionId, nodeId: questionId } = location.state;
+    const { activityId: expeditionId, nodeId: questionId, taskResultId } = location.state;
     const remainingTime = props.remainingTime;
     // todo: why we use props and location ? use first or second option
 
     useEffect(() => {
-        if (expeditionId == null || questionId == null) {
+        if (expeditionId == null || questionId == null || taskResultId == null) {
             navigate(PageRoutes.HOME);
         } else {
-            setQuestion(getQuestion(+expeditionId, +questionId)); // todo: use endpoint
+            StudentService.getQuestion(questionId).then(response => {console.log(response); setQuestion(response)});
+            //setQuestion(getQuestion(+expeditionId, +questionId)); // todo: use endpoint
         }
     }, [questionId, expeditionId, navigate]);
 
@@ -42,10 +44,10 @@ function QuestionAndOptions(props) {
                 <Loader />
             ) : (
                 <>
-                    {question.type === 'open' ? (
-                        <OpenQuestionPage expeditionId={expeditionId} question={question} />
+                    {question.type === 'OPENED' ? (
+                        <OpenQuestionPage expeditionId={expeditionId} question={question} taskResultId={taskResultId} />
                     ) : (
-                        <ClosedQuestionPage expeditionId={expeditionId} question={question} />
+                        <ClosedQuestionPage expeditionId={expeditionId} question={question} taskResultId={taskResultId} />
                     )}
                 </>
             )}

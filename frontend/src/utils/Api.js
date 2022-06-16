@@ -20,6 +20,8 @@ export function getParentQuestions(parentID, expeditionID) {
     return expedition.graph
         .find(node => node.id === parentID)
         .next.map(questionId => getQuestionForDoor(expeditionID, questionId));
+
+
 }
 
 function getQuestionForDoor(expeditionId, questionID) {
@@ -37,11 +39,14 @@ export function getQuestion(expeditionID, questionID) {
 
     return {
         id: question.id,
+        //hint
         category: question.questionHint,
         points: question.points,
         content: question.question,
+        //options
         answers: question.options,
         type: question.type,
+        //jest w type
         multipleChoice: question.multipleChoice,
     };
 }

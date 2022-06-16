@@ -1,9 +1,10 @@
 import React, { useRef } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import { PageRoutes } from '../../../utils/constants';
 import { ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle';
 import { UserAnswerArea } from './OpenQuestionStyle';
+import StudentService from "../../../services/student.service";
 
 function fitAreaToContent(text) {
     const maxHeight = 300; // px
@@ -14,7 +15,6 @@ function fitAreaToContent(text) {
 export default function OpenQuestionPage(props) {
     const userAnswer = useRef();
     const navigate = useNavigate();
-
     const saveAnswer = () => {
         let acceptWarning = null;
 
@@ -25,26 +25,24 @@ export default function OpenQuestionPage(props) {
         }
         // if acceptWarning == null or true
         if (acceptWarning !== false) {
-            // get actual answers list from expedition
-            // todo: get from db
-            let actualAnswersList = JSON.parse(localStorage.getItem('userOpenAnswers')) || [];
 
             // new answer from actual question
-            let answerToAdd = {
+            let answer = {
                 questionId: props.question.id,
-                answer: userAnswer.current.value,
+                resultId: props.taskResultId,
+                answerForm: {
+                    openAnswer: userAnswer.current.value,
+                },
             };
 
-            // todo: use endpoint to save in db
-            if (!actualAnswersList.find(answer => answer.questionId === answerToAdd.questionId)) {
-                // save answer and go to next doors selection only if user didn't answer this question before
-                actualAnswersList.push(answerToAdd);
-                localStorage.setItem('userOpenAnswers', JSON.stringify(actualAnswersList));
-            }
-
-            navigate(`${PageRoutes.QUESTION_SELECTION}`, {
-                state: { activityId: props.expeditionId, nodeId: props.question.id },
+            StudentService.saveAnswer(answer).then(response => {
+                console.log(response);
+                navigate(`${PageRoutes.QUESTION_SELECTION}`, {
+                    state: { activityId: props.expeditionId, nodeId: props.question.id, taskResultId: props.taskResultId },
+                });
             });
+
+
         }
     };
 

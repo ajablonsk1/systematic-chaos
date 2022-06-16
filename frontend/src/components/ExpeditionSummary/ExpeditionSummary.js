@@ -5,10 +5,11 @@ import { ButtonRow } from '../QuestionAndOptions/QuestionAndOptionsStyle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
 import { finishExpedition, timer } from '../../utils/storageManager';
-import { getExpeditionPoints, getExpeditionPointsClosed } from '../../utils/Api';
+
 import Loader from '../Loader/Loader';
-import { getUserPoints } from '../../utils/pointsCalculator';
+
 import { Content } from '../App/AppGeneralStyles';
+import StudentService from "../../services/student.service";
 
 export default function ExpeditionSummary() {
     const navigate = useNavigate();
@@ -16,23 +17,24 @@ export default function ExpeditionSummary() {
     const [scoredPoints, setScoredPoints] = useState();
     const [closedQuestionPoints, setClosedQuestionPoints] = useState();
     const location = useLocation();
-    const { expeditionId, remainingTime } = location.state;
+    const { expeditionId, remainingTime, taskResultId } = location.state;
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
         if (expeditionId == null) {
             navigate(PageRoutes.HOME);
         } else {
-            setMaxPoints(getExpeditionPoints(expeditionId)); // todo: points from endpoint
-            setScoredPoints(getUserPoints()); // todo points from endpoint
-            setClosedQuestionPoints(getExpeditionPointsClosed(expeditionId)); // todo: points from endpoint
-            localStorage.setItem('currentScore', getUserPoints()); // todo: delete it and send point to database
 
-            // Moved removing question answers from localStorage to onClick navigate to fix a bug
-            // Also starting the expedition clears answers
+            const promise1 = StudentService.getActivityMaxPoints(taskResultId).then(response => {console.log(response); setMaxPoints(response)});
+            // TODO: For now we get points from /all, later we will get it from getActivityScore() when it gets fixed
+            //StudentService.getActivityScore()...
+            const promise2 = StudentService.getActivityAllPoints(taskResultId).then(response => {console.log(response); setScoredPoints(response)});
+            const promise3 = StudentService.getActivityPointsClosed(taskResultId).then(response => {console.log(response); setClosedQuestionPoints(response)});
 
-            //TODO: send user answers from open questions to the database (+ notification to the teacher)
+            Promise.allSettled([promise1,promise2,promise3]).then(() => {console.log("Wszystko zresolwowane"); setLoaded(true)});
+
         }
-    }, [expeditionId, navigate]);
+    }, [expeditionId, navigate, taskResultId]);
 
     const finishExpeditionAndGoHome = () => {
         finishExpedition(expeditionId);
@@ -44,7 +46,7 @@ export default function ExpeditionSummary() {
 
     return (
         <Content>
-            {maxPoints === undefined ? (
+            {!loaded ? (
                 <Loader />
             ) : (
                 <SummaryContainer>
@@ -63,13 +65,15 @@ export default function ExpeditionSummary() {
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Punkty z pytań zamkniętych:{' '}
+                            {/* there will be a closed all endpoint later*/}
                             <strong>
-                                {scoredPoints} / {closedQuestionPoints}
+                                {closedQuestionPoints} / {closedQuestionPoints}
                             </strong>
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Punkty z pytań otwartych:{' '}
-                            <strong>0/{maxPoints - closedQuestionPoints}</strong> (nieocenione)
+                            {/* there will be a closed all endpoint later*/}
+                            <strong>{scoredPoints - closedQuestionPoints}/{maxPoints - closedQuestionPoints}</strong> (nieocenione)
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.
