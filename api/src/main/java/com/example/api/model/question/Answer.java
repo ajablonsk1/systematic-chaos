@@ -15,24 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class Answer {
-
-    public Answer(Long id, Question question){
-        this.id = id;
-        this.question = question;
-    }
-
-    public Answer(Long id, @Nullable Option option, Question question){
-        this.id = id;
-        this.option = option;
-        this.question = question;
-    }
-
-    public Answer(Long id, @Nullable String openAnswer, Question question){
-        this.id = id;
-        this.openAnswer = openAnswer;
-        this.question = question;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

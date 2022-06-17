@@ -1,5 +1,6 @@
 package com.example.api.service.user;
 
+import com.example.api.dto.request.user.RegisterUserForm;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
@@ -8,7 +9,6 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.service.user.form.RegisterUserForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

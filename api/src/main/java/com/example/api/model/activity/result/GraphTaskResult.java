@@ -26,5 +26,7 @@ public class GraphTaskResult extends TaskResult {
     private GraphTask graphTask;
 
     private int timeSpent;
+
+    private boolean isAllEvaluated;
 }
 

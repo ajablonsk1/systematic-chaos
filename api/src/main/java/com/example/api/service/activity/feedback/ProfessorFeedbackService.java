@@ -1,5 +1,6 @@
 package com.example.api.service.activity.feedback;
 
+import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -9,7 +10,6 @@ import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
-import com.example.api.service.activity.feedback.form.SaveProfessorFeedbackForm;
 import com.example.api.service.activity.feedback.util.FeedbackValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

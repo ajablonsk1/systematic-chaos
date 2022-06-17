@@ -1,5 +1,9 @@
 package com.example.api.controller.activity.result;
 
+import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
+import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
+import com.example.api.dto.request.activity.result.SetPointsForm;
+import com.example.api.dto.request.activity.result.SetTimeSpentForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongAnswerTypeException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
@@ -7,10 +11,6 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.question.Answer;
 import com.example.api.service.activity.result.GraphTaskResultService;
-import com.example.api.service.activity.result.form.AddAnswerToGraphTaskForm;
-import com.example.api.service.activity.result.form.SaveGraphTaskResultForm;
-import com.example.api.service.activity.result.form.SetPointsForm;
-import com.example.api.service.activity.result.form.SetTimeSpentForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,28 +52,27 @@ public class GraphTaskResultController {
     }
 
     @GetMapping("/points/all")
-    public ResponseEntity<Double> getAllPoints(@RequestParam Long graphTaskResultId)
+    public ResponseEntity<Double> getAndSetAllPoints(@RequestParam Long graphTaskResultId)
             throws WrongAnswerTypeException, EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.getPointsFromClosedQuestions(graphTaskResultId) +
-                graphTaskResultService.getPointsFromOpenedQuestions(graphTaskResultId));
+        return ResponseEntity.ok().body(graphTaskResultService.getAndSetAllPoints(graphTaskResultId));
     }
 
-    @PostMapping("/points/add")
-    public ResponseEntity<Double> addPointsManually(@RequestBody SetPointsForm form)
-            throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.addPointsManually(form));
-    }
-
-    @PostMapping("/points/set")
-    public ResponseEntity<Double> setPointsManually(@RequestBody SetPointsForm form)
-            throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.setPointsManually(form));
-    }
-
-    @GetMapping("/points/available")
-    public ResponseEntity<Double> getMaxAvailablePoints(@RequestParam Long graphTaskResultId)
+    @GetMapping("/points/available/opened")
+    public ResponseEntity<Double> getMaxOpenedPoints(@RequestParam Long graphTaskResultId)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskResultService.getMaxAvailablePoints(graphTaskResultId));
+    }
+
+    @GetMapping("/points/available/closed")
+    public ResponseEntity<Double> getMaxClosedPoints(@RequestParam Long graphTaskResultId)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskResultService.getMaxClosedPoints(graphTaskResultId));
+    }
+
+    @GetMapping("/points/available/all")
+    public ResponseEntity<Double> getMaxAvailablePoints(@RequestParam Long graphTaskResultId)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskResultService.getMaxOpenedPoints(graphTaskResultId));
     }
 
     @PostMapping("/answer/add")

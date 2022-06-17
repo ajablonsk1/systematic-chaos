@@ -1,4 +1,4 @@
-package com.example.api.service.group.form;
+package com.example.api.dto.request.group;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
