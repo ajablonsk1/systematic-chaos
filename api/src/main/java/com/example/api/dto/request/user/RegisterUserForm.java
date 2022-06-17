@@ -1,4 +1,4 @@
-package com.example.api.service.user.form;
+package com.example.api.dto.request.user;
 
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;

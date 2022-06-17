@@ -1,9 +1,9 @@
 package com.example.api.controller.activity.feedback;
 
+import com.example.api.dto.request.activity.feedback.SaveUserFeedbackForm;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.UserFeedback;
 import com.example.api.service.activity.feedback.UserFeedbackService;
-import com.example.api.service.activity.feedback.form.SaveUserFeedbackForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

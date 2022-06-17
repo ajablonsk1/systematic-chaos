@@ -1,4 +1,4 @@
-package com.example.api.service.activity.feedback.form;
+package com.example.api.dto.request.activity.feedback;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

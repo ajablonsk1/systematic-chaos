@@ -1,5 +1,6 @@
 package com.example.api.controller.map;
 
+import com.example.api.dto.response.map.ActivityMapResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.service.map.ActivityMapService;
@@ -17,7 +18,7 @@ public class ActivityMapController {
     private final ActivityMapService activityMapService;
 
     @GetMapping
-    public ResponseEntity<ActivityMap> getActivityMap(@RequestParam Long activityMapId)
+    public ResponseEntity<ActivityMapResponse> getActivityMap(@RequestParam Long activityMapId)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(activityMapService.getActivityMap(activityMapId));
     }

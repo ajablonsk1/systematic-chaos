@@ -1,6 +1,7 @@
 package com.example.api.service.activity.result.util;
 
 import com.example.api.error.exception.WrongAnswerTypeException;
+import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.question.Answer;
 import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
@@ -9,12 +10,49 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @Component
 public class PointsCalculator {
 
-    public double calculatePointsInClosedQuestions(List<Answer> answers) throws WrongAnswerTypeException {
+    public double calculateMaxAvailablePoints(GraphTaskResult result) {
+        return calculateMaxClosedPoints(result) + calculateMaxOpenedPoints(result);
+    }
+
+    public double calculateMaxOpenedPoints(GraphTaskResult result) {
+        List<Answer> answers = result.getAnswers()
+                .stream()
+                .filter(answer -> answer.getQuestion().getType() == QuestionType.OPENED)
+                .toList();
+        double points = 0;
+        for(Answer answer: answers) {
+            points += answer.getQuestion().getPoints();
+        }
+        return points;
+    }
+
+    public double calculateMaxClosedPoints(GraphTaskResult result) {
+        List<Answer> answers = result.getAnswers()
+                .stream()
+                .filter(answer -> answer.getQuestion().getType() != QuestionType.OPENED)
+                .toList();
+        double points = 0;
+        for(Answer answer: answers) {
+            points += answer.getQuestion().getPoints();
+        }
+        return points;
+    }
+
+    public double calculateAllPoints(GraphTaskResult result) throws WrongAnswerTypeException {
+        return calculatePointsForClosedQuestions(result) + calculatePointsForOpenedQuestions(result);
+    }
+
+    public double calculatePointsForClosedQuestions(GraphTaskResult result) throws WrongAnswerTypeException {
+        List<Answer> answers = result.getAnswers()
+                .stream()
+                .filter(answer -> answer.getQuestion().getType() != QuestionType.OPENED)
+                .toList();
         double points = 0.0;
         for(Answer answer: answers){
             Question question = answer.getQuestion();
@@ -55,7 +93,11 @@ public class PointsCalculator {
         return points;
     }
 
-    public double calculatePointsInOpenedQuestions(List<Answer> answers) throws WrongAnswerTypeException {
+    public double calculatePointsForOpenedQuestions(GraphTaskResult result) throws WrongAnswerTypeException {
+        List<Answer> answers = result.getAnswers()
+                .stream()
+                .filter(answer -> answer.getQuestion().getType() == QuestionType.OPENED)
+                .toList();
         double points = 0.0;
         for(Answer answer: answers){
             String openAnswer = answer.getOpenAnswer();
@@ -66,19 +108,13 @@ public class PointsCalculator {
             }
             String correctAnswer = answer.getQuestion().getAnswerForOpenedQuestion();
             if(correctAnswer != null) {
+                openAnswer = openAnswer.toLowerCase();
+                correctAnswer = correctAnswer.toLowerCase();
                 if(openAnswer.equals(correctAnswer)) {
                     points += answer.getQuestion().getPoints();
                 }
             }
         }
         return points;
-    }
-
-    public double calculateMaxAvailablePoints(List<Answer> answers) {
-        double result = 0;
-        for(Answer answer: answers) {
-            result += answer.getQuestion().getPoints();
-        }
-        return result;
     }
 }

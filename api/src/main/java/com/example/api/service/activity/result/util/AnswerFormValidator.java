@@ -1,8 +1,8 @@
 package com.example.api.service.activity.result.util;
 
+import com.example.api.dto.request.activity.result.AnswerForm;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
 import com.example.api.model.question.Answer;
-import com.example.api.service.activity.result.form.AnswerForm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
