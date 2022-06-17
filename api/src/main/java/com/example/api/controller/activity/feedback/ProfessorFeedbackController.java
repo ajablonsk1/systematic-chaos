@@ -1,11 +1,11 @@
 package com.example.api.controller.activity.feedback;
 
+import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
-import com.example.api.service.activity.feedback.form.SaveProfessorFeedbackForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

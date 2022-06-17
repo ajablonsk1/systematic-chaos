@@ -1,10 +1,10 @@
 package com.example.api.service.group;
 
+import com.example.api.dto.request.group.SaveGroupForm;
 import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
-import com.example.api.service.group.form.SaveGroupForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

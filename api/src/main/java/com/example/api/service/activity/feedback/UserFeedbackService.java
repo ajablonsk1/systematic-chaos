@@ -1,12 +1,12 @@
 package com.example.api.service.activity.feedback;
 
+import com.example.api.dto.request.activity.feedback.SaveUserFeedbackForm;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.UserFeedback;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.UserFeedbackRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.service.activity.feedback.form.SaveUserFeedbackForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,8 +1,8 @@
 package com.example.api.controller.group;
 
+import com.example.api.dto.request.group.SaveGroupForm;
 import com.example.api.model.group.Group;
 import com.example.api.service.group.GroupService;
-import com.example.api.service.group.form.SaveGroupForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

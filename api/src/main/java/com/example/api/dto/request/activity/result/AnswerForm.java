@@ -1,4 +1,4 @@
-package com.example.api.service.activity.result.form;
+package com.example.api.dto.request.activity.result;
 
 import com.example.api.model.question.Option;
 import io.swagger.v3.oas.annotations.media.Schema;

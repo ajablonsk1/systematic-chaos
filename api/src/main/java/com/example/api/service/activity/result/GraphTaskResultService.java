@@ -1,5 +1,9 @@
 package com.example.api.service.activity.result;
 
+import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
+import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
+import com.example.api.dto.request.activity.result.SetPointsForm;
+import com.example.api.dto.request.activity.result.SetTimeSpentForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongAnswerTypeException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
@@ -16,10 +20,6 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.service.activity.result.form.AddAnswerToGraphTaskForm;
-import com.example.api.service.activity.result.form.SaveGraphTaskResultForm;
-import com.example.api.service.activity.result.form.SetPointsForm;
-import com.example.api.service.activity.result.form.SetTimeSpentForm;
 import com.example.api.service.activity.result.util.AnswerFormValidator;
 import com.example.api.service.activity.result.util.PointsCalculator;
 import lombok.RequiredArgsConstructor;
@@ -92,11 +92,7 @@ public class GraphTaskResultService {
             log.error("Graph task result with given id {} does not exist", id);
             throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
-        List<Answer> answers = result.getAnswers()
-                .stream()
-                .filter(answer -> answer.getQuestion().getType() != QuestionType.OPENED)
-                .toList();
-        return pointsCalculator.calculatePointsInClosedQuestions(answers);
+        return pointsCalculator.calculatePointsForClosedQuestions(result);
     }
 
     public Double getPointsFromOpenedQuestions(Long id) throws WrongAnswerTypeException, EntityNotFoundException {
@@ -106,35 +102,19 @@ public class GraphTaskResultService {
             log.error("Graph task result with given id {} does not exist", id);
             throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
-        List<Answer> answers = result.getAnswers()
-                .stream()
-                .filter(answer -> answer.getQuestion().getType() == QuestionType.OPENED)
-                .toList();
-        return pointsCalculator.calculatePointsInOpenedQuestions(answers);
+        return pointsCalculator.calculatePointsForOpenedQuestions(result);
     }
 
-    public Double addPointsManually(SetPointsForm form) throws EntityNotFoundException {
-        Long id = form.getResultId();
-        log.info("Adding {} points to graph task result with id {}", form.getPoints(), id);
+    public Double getAndSetAllPoints(Long id) throws EntityNotFoundException, WrongAnswerTypeException {
+        log.info("Calculating and setting points from all questions for graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
         if(result == null) {
             log.error("Graph task result with given id {} does not exist", id);
             throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
-        result.setPointsReceived(result.getPointsReceived() + form.getPoints());
-        return result.getPointsReceived();
-    }
-
-    public Double setPointsManually(SetPointsForm form) throws EntityNotFoundException {
-        Long id = form.getResultId();
-        log.info("Setting {} points to graph task result with id {}", form.getPoints(), id);
-        GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
-        result.setPointsReceived(form.getPoints());
-        return result.getPointsReceived();
+        double allPoints = pointsCalculator.calculateAllPoints(result);
+        result.setPointsReceived(allPoints);
+        return allPoints;
     }
 
     public Double getMaxAvailablePoints(Long id) throws EntityNotFoundException {
@@ -144,7 +124,27 @@ public class GraphTaskResultService {
             log.error("Graph task result with given id {} does not exist", id);
             throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
-        return pointsCalculator.calculateMaxAvailablePoints(result.getAnswers());
+        return pointsCalculator.calculateMaxAvailablePoints(result);
+    }
+
+    public Double getMaxClosedPoints(Long id) throws EntityNotFoundException {
+        log.info("Calculating maximum closed points for graph task result with id {}", id);
+        GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
+        if(result == null) {
+            log.error("Graph task result with given id {} does not exist", id);
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
+        }
+        return pointsCalculator.calculateMaxClosedPoints(result);
+    }
+
+    public Double getMaxOpenedPoints(Long id) throws EntityNotFoundException {
+        log.info("Calculating maximum opened points for graph task result with id {}", id);
+        GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
+        if(result == null) {
+            log.error("Graph task result with given id {} does not exist", id);
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
+        }
+        return pointsCalculator.calculateMaxOpenedPoints(result);
     }
 
     public Answer addAnswerToGraphTaskResult(AddAnswerToGraphTaskForm form) throws EntityNotFoundException, WrongBodyParametersNumberException {

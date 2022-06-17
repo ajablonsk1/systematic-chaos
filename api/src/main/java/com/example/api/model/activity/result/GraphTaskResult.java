@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,9 +20,12 @@ public class GraphTaskResult extends TaskResult {
     @OneToMany
     private List<Answer> answers = new LinkedList<>();
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "graphTask_id")
     private GraphTask graphTask;
 
     private int timeSpent;
+
+    private boolean isAllEvaluated;
 }
 
