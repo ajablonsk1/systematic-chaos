@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 public class Option {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
     private boolean isCorrect;

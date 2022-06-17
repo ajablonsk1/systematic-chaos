@@ -1,6 +1,7 @@
 package com.example.api.model.activity.task;
 
 import com.example.api.model.map.Requirement;
+import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @MappedSuperclass
 public abstract class Activity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
@@ -25,4 +26,7 @@ public abstract class Activity {
 
     @OneToOne
     private Requirement requirement;
+
+    @OneToOne
+    private User professor;
 }

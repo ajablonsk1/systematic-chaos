@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name="\"group\"")
 public class Group {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 

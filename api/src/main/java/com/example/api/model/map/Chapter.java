@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 public class Chapter {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 

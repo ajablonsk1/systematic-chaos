@@ -1,5 +1,6 @@
 package com.example.api.config;
 
+import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
@@ -10,6 +11,7 @@ import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
+import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
@@ -44,6 +46,7 @@ public class DatabaseConfig {
     private final QuestionRepo questionRepo;
     private final AnswerRepo answerRepo;
     private final AccessDateRepo accessDateRepo;
+    private final FileTaskRepo fileTaskRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -132,6 +135,10 @@ public class DatabaseConfig {
             graphTask.setMaxPoints(30.0);
             graphTask.setMaxPoints100(60.0);
             graphTask.setTimeToSolve(12 * 60);
+
+            FileTask fileTask = new FileTask();
+            fileTaskRepo.save(fileTask);
+
 
             graphTaskService.saveGraphTask(graphTask);
 

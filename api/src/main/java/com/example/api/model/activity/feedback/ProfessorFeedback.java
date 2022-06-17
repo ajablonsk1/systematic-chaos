@@ -2,6 +2,7 @@ package com.example.api.model.activity.feedback;
 
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.question.Answer;
 import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,11 +23,6 @@ public class ProfessorFeedback extends Feedback{
     private User to;
 
     @OneToOne
-    @Nullable
-    private GraphTaskResult graphTaskResult;
-
-    @OneToOne
-    @Nullable
     private FileTaskResult fileTaskResult;
 
     private Double points;
