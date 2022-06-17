@@ -1,5 +1,5 @@
 import {
-    ACTIVITY_MAP,
+    ACTIVITY_MAP, COMBAT_TASK_GET_INFO, COMBAT_TASK_REMOVE_FILE, COMBAT_TASK_SEND_ANSWER,
     GRAPH_GET_TASK_ANSWER_ID,
     GRAPH_QUESTION,
     GRAPH_QUESTION_NEXT,
@@ -14,7 +14,7 @@ import {
     GRAPH_TASK_URL,
     USER_GROUP
 } from './urls';
-import {axiosApiGet, axiosApiPost} from "../utils/axios";
+import {axiosApiDelete, axiosApiGet, axiosApiPost} from "../utils/axios";
 import {parseJwt} from "../utils/Api";
 
 // todo: test extends UserService
@@ -43,8 +43,9 @@ class StudentService{
         return axiosApiGet(ACTIVITY_MAP, {activityMapId: mapId});
     }
 
-    setFileTaskAnswer(taskId, ){
 
+    setFileTaskAnswer(taskId){
+        return axiosApiPost();
     }
 
 
@@ -66,11 +67,20 @@ class StudentService{
         professorFeedback: string,
         scoredPoints: Number
     */
-    getCombatTask(taskId) {}
+
+    getCombatTask(taskId) {
+        return axiosApiGet(COMBAT_TASK_GET_INFO, {fileTaskId: taskId, studentEmail: this.getEmail()});
+    }
+
+    saveCombatTaskAnswer(taskId, openAnswer, fileName, fileString){
+        return axiosApiPost(COMBAT_TASK_SEND_ANSWER, {fileTaskId: taskId, openAnswer: openAnswer, fileName: fileName, fileString: fileString, studentEmail: this.getEmail()});
+    }
 
     saveCombatTaskFile(taskId, base64FileString) {}
 
-    removeCombatTaskFile(taskId, fileId) {}
+    removeCombatTaskFile(taskId, index) {
+        return axiosApiDelete(COMBAT_TASK_REMOVE_FILE, {fileTaskId: taskId, studentEmail: this.getEmail(), index: index});
+    }
 
     setTaskComplete(taskId) {}
 

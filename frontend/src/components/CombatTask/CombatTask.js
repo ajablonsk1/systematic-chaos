@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import { Content } from '../App/AppGeneralStyles';
 import Loader from '../Loader/Loader';
@@ -18,14 +18,27 @@ import FileService from './FileService';
 import { getCombatTask } from '../../storage/combatTask';
 import {RemarksCol, RemarksTextArea} from "../ActivityAssessmentDetails/ActivityAssesmentDetailsStyles";
 import {SendTaskButton} from "./CombatTaskStyles";
+import StudentService from "../../services/student.service";
 
 export default function CombatTask() {
     const location = useLocation();
-    const { activityId: taskId } = location.state;
-    const task = getCombatTask(taskId); // todo: endpoint needed
+    const { activityId: taskState } = location.state;
+    //const task = getCombatTask(taskId); // todo: endpoint needed
+    const [task, setTask] = useState();
+    const [taskId, setTaskId] = useState(taskState);
     const [fileString, setFileString] = useState();
     const [fileName, setFileName] = useState();
     const [answer,setAnswer] = useState('');
+    const [isSaved, setIsSaved] = useState(false);
+    console.log(taskId);
+
+    useEffect(() => {
+        StudentService.getCombatTask(taskId).then(response => {
+            console.log(response);
+            setTask(response);
+
+        }).catch(error => console.log(error))
+    }, [taskId, isSaved])
 
     const sendAnswer = () => {
         //use endpoint to save file task answer
@@ -34,8 +47,14 @@ export default function CombatTask() {
             file: fileString,
             fileName: fileName,
             answer: answer,
-            email: "mock@email.com"
+            email: StudentService.getEmail()
         })
+        setIsSaved(false);
+        StudentService.saveCombatTaskAnswer(taskId, answer, fileName, fileString).then(response => {
+            console.log(response);
+            setTaskId(response)
+            setIsSaved(true);
+        });
     }
 
     const handleAnswerChange = (event) => {
@@ -46,7 +65,7 @@ export default function CombatTask() {
     return (
         <Content>
             <InfoContainer fluid className="p-0">
-                {taskId === undefined ? (
+                {!task ? (
                     <Loader />
                 ) : (
                     <ActivityCol className="invisible-scroll">
@@ -75,7 +94,7 @@ export default function CombatTask() {
                                 <RemarksTextArea value={answer} onChange={handleAnswerChange} />
                             </RemarksCol>
 
-                            <FileService taskId={task.id} setFile={setFileString} setFileName={setFileName}/>
+                            <FileService task={task} setFile={setFileString} setFileName={setFileName} setIsSaved={setIsSaved}/>
                         </div>
                         <SendTaskButton disabled={!fileName && answer === ''} onClick={() => sendAnswer()}>Wyślij</SendTaskButton>
                     </ActivityCol>

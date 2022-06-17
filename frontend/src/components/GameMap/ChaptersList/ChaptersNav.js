@@ -15,7 +15,7 @@ function ChaptersNav(props) {
 
 
     useEffect(() => {
-        StudentService.getActivityMap(37).then(response => {console.log(response); setChapterMap(response);});
+        StudentService.getActivityMap(1).then(response => {console.log(response); setChapterMap(response);});
         // setChapterMap(getActivityMap(0));
     },[])
 

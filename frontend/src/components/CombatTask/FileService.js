@@ -9,12 +9,13 @@ import 'moment/locale/pl';
 import { getBase64 } from './fileConverter';
 import download from 'downloadjs';
 import { setCompleted } from '../../storage/activityMap';
+import StudentService from "../../services/student.service";
 
-export default function FileService({ taskId, setFile, setFileName }) {
+export default function FileService({ task, setFile, setFileName, setIsSaved }) {
     const fileInput = useRef(null);
     const [fileChosen, setFileChosen] = useState(null);
-    const loggedUserName = 'Jan Kowalski'; // TODO: delete
-    const [task, setTask] = useState(getCombatTask(taskId)); // todo: endpoint or props
+    // const loggedUserName = 'Jan Kowalski'; // TODO: delete
+    // const [task, setTask] = useState(getCombatTask(taskId)); // todo: endpoint or props
     const [isRemoving, startRemoving] = useTransition();
     const [isAdding, startAdding] = useTransition();
 
@@ -22,19 +23,22 @@ export default function FileService({ taskId, setFile, setFileName }) {
         startAdding(() => {
             setFile(fileChosen.content)
             // addFile(task.id, fileChosen); // todo: endpoint
-            setTask(getCombatTask(taskId));  //todo: remove and get from props or endpoint
+            // setTask(getCombatTask(taskId));  //todo: remove and get from props or endpoint
             fileInput.current.value = '';
             setFileChosen(null);
 
             // if user has saved a file, activity is complete
-            setCompleted(0, taskId); // todo: endpoint, post
+            // setCompleted(0, taskId); // todo: endpoint, post
         });
     };
 
     const remove = fileNumber => {
         startRemoving(() => {
-            removeFile(taskId, fileNumber);  // todo: use endpoint
-            setTask(getCombatTask(taskId));  // todo:props or endpoint once again
+            // removeFile(taskId, fileNumber);  // todo: use endpoint
+            // setTask(getCombatTask(taskId));  // todo:props or endpoint once again
+            console.log(task.fileTaskId);
+            setIsSaved(false);
+            StudentService.removeCombatTaskFile(task.fileTaskId, fileNumber).then(() => setIsSaved(true))
         });
     };
 
@@ -46,7 +50,7 @@ export default function FileService({ taskId, setFile, setFileName }) {
             date: moment(new Date()).calendar(),
             content: '',
             filename: filename,
-            author: loggedUserName,
+            // author: loggedUserName,
         };
         getBase64(event.target).then(data => {
             file.content = data;
@@ -54,28 +58,30 @@ export default function FileService({ taskId, setFile, setFileName }) {
         setFileChosen(file);
     };
 
-    const downloadFile = fileId => {
-        const file = getCombatTask(taskId).files[fileId]; // todo: eh, really ?
-        if (file.content) {
-            download(file.content, file.filename);
-        } else {
-            alert('Ten plik wygląda na uszkodzony. Nie możesz go pobrać.');
-        }
-    };
+    // const downloadFile = fileId => {
+    //     const file = getCombatTask(taskId).files[fileId];
+    //     if (file.content) {
+    //         download(file.content, file.filename);
+    //     } else {
+    //         alert('Ten plik wygląda na uszkodzony. Nie możesz go pobrać.');
+    //     }
+    // };
 
     return (
         <>
             <strong>Załączone pliki:</strong>
-            {task.files.length > 0 ? (
-                task.files.map((file, idx) => (
+            {(!task || task.files === null) ? (
+                <p>Brak dodanych plików</p>
+            ) : (
+                task.files?.map((file, idx) => (
                     <Row key={idx} className="mt-4">
-                        <Col>{file.date}</Col>
-                        <Col>{file.author}</Col>
-                        <Col>{file.filename}</Col>
+                        {/*<Col>{file.date}</Col>*/}
+                        {/*<Col>{file.author}</Col>*/}
+                        <Col>{file.name}</Col>
                         <Col>
                             <Button
                                 variant="danger"
-                                disabled={loggedUserName !== file.author}
+                                // disabled={loggedUserName !== file.author}
                                 onClick={() => remove(idx)}
                             >
                                 {isRemoving ? <Spinner /> : <FontAwesomeIcon icon={faTrash} />}
@@ -83,16 +89,15 @@ export default function FileService({ taskId, setFile, setFileName }) {
                             <Button
                                 variant="warning"
                                 className="ml-2"
-                                onClick={() => downloadFile(idx)}
+                                // onClick={() => downloadFile(idx)}
                             >
                                 <FontAwesomeIcon icon={faDownload} />
                             </Button>
                         </Col>
                     </Row>
                 ))
-            ) : (
-                <p>Brak dodanych plików</p>
             )}
+
             <SmallDivider />
             <strong>Dodaj pliki:</strong>
             <br />
