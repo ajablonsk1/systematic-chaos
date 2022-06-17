@@ -4,6 +4,7 @@ import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
+import com.example.api.model.map.ActivityMap;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
@@ -15,6 +16,7 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
+import com.example.api.repo.map.MapRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.OptionRepo;
 import com.example.api.repo.question.QuestionRepo;
@@ -47,6 +49,7 @@ public class DatabaseConfig {
     private final AnswerRepo answerRepo;
     private final AccessDateRepo accessDateRepo;
     private final FileTaskRepo fileTaskRepo;
+    private final MapRepo mapRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -136,10 +139,6 @@ public class DatabaseConfig {
             graphTask.setMaxPoints100(60.0);
             graphTask.setTimeToSolve(12 * 60);
 
-            FileTask fileTask = new FileTask();
-            fileTaskRepo.save(fileTask);
-
-
             graphTaskService.saveGraphTask(graphTask);
 
             /// group
@@ -173,6 +172,86 @@ public class DatabaseConfig {
             group3.setAccessDate(accessDate3);
             groupService.saveGroup(group3);
 
+            Option optionTwo = new Option(null, "hub z routerem", true, null);
+            Option optionTwo1 = new Option(null, "komputer z komputerem", false, null);
+            Option optionTwo2 = new Option(null, "switch z routerem", true, null);
+            Option optionTwo3 = new Option(null, "hub ze switchem", false, null);
+
+
+            Option optionTwo4 = new Option(null, "Tak", true, null);
+            Option optionTwo5 = new Option(null, "Nie", false, null);
+
+            Question startQuestionTwo = new Question();
+
+            Question questionTwo1 = new Question(null, QuestionType.MULTIPLE_CHOICE, "Które urządzenia można połączyć ze sobą skrętką “prostą”?", "Kable",
+                    Difficulty.EASY, List.of(option, option1, option2, option3), 10.0, new LinkedList<>(), null);
+            Question questionTwo2 = new Question(null, QuestionType.SINGLE_CHOICE, "Czy ciąg znaków 1001100101101010010110 to poprawnie zakodowany za pomocą kodu Manchester ciąg 10100111001?",
+                    "Manchester", Difficulty.MEDIUM, List.of(option4, option5), 20.0, new LinkedList<>(), null);
+            Question questionTwo3 = new Question(null, QuestionType.OPENED, "Jeśli zawiniesz kabel kawałkiem folii aluminiowej, jaki rodzaj skrętki Ci to przypomina?",
+                    "?", Difficulty.HARD, null, 30.0, new LinkedList<>(), "FTP");
+            Question questionTwo4 = new Question(null, QuestionType.OPENED, "Jaki rodzaj powszechnie używanego kabla byłby możliwy do użytku po użyciu jak skakanka? Dlaczego ten?",
+                    "Kable 2", Difficulty.MEDIUM, null, 20.0, new LinkedList<>(), null);
+            Question questionTwo5 = new Question(null, QuestionType.OPENED, "Zakoduj swoje imię i nazwisko za pomocą kodowania NRZI. ",
+                    "Kable 2", Difficulty.HARD, null, 30.0, new LinkedList<>(), null);
+
+            questionService.saveQuestion(startQuestionTwo);
+            questionService.saveQuestion(questionTwo1);
+            questionService.saveQuestion(questionTwo2);
+            questionService.saveQuestion(questionTwo3);
+            questionService.saveQuestion(questionTwo4);
+            questionService.saveQuestion(questionTwo5);
+
+            startQuestion.getNext().addAll(List.of(questionTwo1, questionTwo2, questionTwo3));
+            question1.getNext().addAll(List.of(questionTwo2, questionTwo4));
+            question3.getNext().addAll(List.of(questionTwo5));
+
+            questionService.saveQuestion(startQuestionTwo);
+            questionService.saveQuestion(questionTwo1);
+            questionService.saveQuestion(questionTwo2);
+            questionService.saveQuestion(questionTwo3);
+            questionService.saveQuestion(questionTwo4);
+            questionService.saveQuestion(questionTwo5);
+
+            optionRepo.saveAll(List.of(optionTwo, optionTwo1, optionTwo2, optionTwo3, optionTwo4, optionTwo5));
+
+            optionTwo.setQuestion(questionTwo1);
+            optionTwo1.setQuestion(questionTwo1);
+            optionTwo2.setQuestion(questionTwo1);
+            optionTwo3.setQuestion(questionTwo1);
+            optionTwo4.setQuestion(questionTwo2);
+            optionTwo5.setQuestion(questionTwo2);
+
+            optionRepo.saveAll(List.of(optionTwo, optionTwo1, optionTwo2, optionTwo3, optionTwo4, optionTwo5));
+
+            GraphTask graphTaskTwo = new GraphTask();
+            graphTaskTwo.setQuestions(List.of(startQuestionTwo, questionTwo1, questionTwo2, questionTwo3,  questionTwo4, questionTwo5));
+            graphTaskTwo.setName("Dżungla kabli II");
+            graphTaskTwo.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
+            graphTaskTwo.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
+            graphTaskTwo.setMaxPoints(30.0);
+            graphTaskTwo.setMaxPoints100(60.0);
+            graphTaskTwo.setTimeToSolve(12 * 60);
+            graphTaskTwo.setPosX(3);
+            graphTaskTwo.setPosY(4);
+
+            graphTaskService.saveGraphTask(graphTaskTwo);
+
+
+            FileTask fileTask = new FileTask();
+            fileTask.setPosX(3);
+            fileTask.setPosY(3);
+            fileTask.setName("Niszczator kabli");
+            fileTask.setDescription("Jak złamałbyś kabel światłowodowy? Czym?");
+
+            fileTaskRepo.save(fileTask);
+
+
+            ActivityMap activityMap1 = new ActivityMap();
+            activityMap1.setMapSizeX(8);
+            activityMap1.setMapSizeY(5);
+            activityMap1.setGraphTasks(List.of(graphTask, graphTaskTwo));
+            activityMap1.setFileTasks(List.of(fileTask));
+            mapRepo.save(activityMap1);
         };
     }
 }
