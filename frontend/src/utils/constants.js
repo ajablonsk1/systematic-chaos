@@ -90,7 +90,7 @@ export const getActivityImg = type => {
     switch (type) {
         case 'EXPEDITION':
             return ExpeditionImg;
-        case 'INFORMATION':
+        case 'INFO':
             return InformationImg;
         case 'SURVEY':
             return SurveyImg;
@@ -105,7 +105,7 @@ export const getActivityTypeName = type => {
     switch (type) {
         case 'EXPEDITION':
             return 'Ekspedycja';
-        case 'INFORMATION':
+        case 'INFO':
             return 'Wytyczne';
         case 'SURVEY':
             return 'Sondaż';
@@ -124,7 +124,7 @@ export const getActivityPath = type => {
             return PageRoutes.COMBAT_TASK;
         case 'SURVEY':
             return PageRoutes.SURVEY_TASK;
-        case 'INFORMATION':
+        case 'INFO':
             return PageRoutes.INFORMATION;
         default:
             return;

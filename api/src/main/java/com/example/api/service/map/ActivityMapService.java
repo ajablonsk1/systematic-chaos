@@ -38,7 +38,7 @@ public class ActivityMapService {
                 .toList();
         List<MapTask> infos = activityMap.getInfos()
                 .stream()
-                .map(info -> new MapTask(info.getId(), info.getPosX(), info.getPosY(), ActivityType.EXPEDITION))
+                .map(info -> new MapTask(info.getId(), info.getPosX(), info.getPosY(), ActivityType.INFO))
                 .toList();
         List<MapTask> allTasks = Stream.of(graphTasks, fileTasks, infos)
                 .flatMap(List::stream)

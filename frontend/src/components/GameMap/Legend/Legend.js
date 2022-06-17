@@ -28,7 +28,7 @@ function Legend(props) {
                 </LegendCol>
                 <LegendCol lg={3} md={6} xs={12} className="my-2 mb-md-2 mb-5">
                     <div>
-                        <img src={getActivityImg('INFORMATION')} alt="Wytyczne" />
+                        <img src={getActivityImg('INFO')} alt="Wytyczne" />
                         <p>Wytyczne</p>
                     </div>
                 </LegendCol>

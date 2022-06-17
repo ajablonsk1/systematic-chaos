@@ -5,6 +5,7 @@ import com.example.api.security.filter.AuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -31,7 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         security.authorizeRequests().anyRequest().permitAll();
         security.addFilter(new AuthenticationFilter(authenticationManager()));
         security.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+        //security.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+        CorsConfiguration corsConfig = new CorsConfiguration().applyPermitDefaultValues();
+        corsConfig.addAllowedMethod(HttpMethod.DELETE);
+        security.cors().configurationSource(request -> corsConfig);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.example.api.config;
 
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.activity.task.Info;
 import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
@@ -11,15 +12,18 @@ import com.example.api.model.question.Question;
 import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
+import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
+import com.example.api.repo.activity.task.InfoRepo;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.map.MapRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.OptionRepo;
 import com.example.api.repo.question.QuestionRepo;
+import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
 import com.example.api.service.activity.result.GraphTaskResultService;
@@ -50,6 +54,8 @@ public class DatabaseConfig {
     private final AccessDateRepo accessDateRepo;
     private final FileTaskRepo fileTaskRepo;
     private final MapRepo mapRepo;
+    private final UrlRepo urlRepo;
+    private final InfoRepo infoRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -138,6 +144,8 @@ public class DatabaseConfig {
             graphTask.setMaxPoints(30.0);
             graphTask.setMaxPoints100(60.0);
             graphTask.setTimeToSolve(12 * 60);
+            graphTask.setPosX(2);
+            graphTask.setPosY(1);
 
             graphTaskService.saveGraphTask(graphTask);
 
@@ -245,12 +253,29 @@ public class DatabaseConfig {
 
             fileTaskRepo.save(fileTask);
 
+            Info info1 = new Info();
+            info1.setPosX(7);
+            info1.setPosY(3);
+            info1.setName("Skrętki");
+            info1.setDescription("Przewody internetowe da się podzielić także pod względem ich ekranowania.");
+            Url url1 = new Url();
+            Url url2 = new Url();
+            url1.setUrl("https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg");
+            url2.setUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png");
+            urlRepo.save(url1);
+            urlRepo.save(url2);
+            info1.setImageUrls(List.of(url1, url2));
+            info1.setName("Skrętki");
+            info1.setExperiance(10);
+            info1.setProfessor(professor);
+            infoRepo.save(info1);
 
             ActivityMap activityMap1 = new ActivityMap();
             activityMap1.setMapSizeX(8);
             activityMap1.setMapSizeY(5);
             activityMap1.setGraphTasks(List.of(graphTask, graphTaskTwo));
             activityMap1.setFileTasks(List.of(fileTask));
+            activityMap1.setInfos(List.of(info1));
             mapRepo.save(activityMap1);
         };
     }

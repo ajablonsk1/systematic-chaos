@@ -8,10 +8,10 @@ import {
     GRAPH_TASK_GET_MAX_AVAILABLE_ALL,
     GRAPH_TASK_GET_MAX_AVAILABLE_CLOSED,
     GRAPH_TASK_GET_MAX_AVAILABLE_OPEN,
-    GRAPH_TASK_GET_MAX_POSSIBLE,
     GRAPH_TASK_RESULT_URL,
     GRAPH_TASK_SEND_ANSWER,
     GRAPH_TASK_URL,
+    INFORMATION_URL,
     USER_GROUP
 } from './urls';
 import {axiosApiDelete, axiosApiGet, axiosApiPost} from "../utils/axios";
@@ -168,6 +168,10 @@ class StudentService{
 
     getUserGroup() {
         return axiosApiGet(USER_GROUP, {email: this.getEmail()});
+    }
+
+    getInformation(infoId) {
+        return axiosApiGet(INFORMATION_URL, {infoId: infoId});
     }
 }
 
