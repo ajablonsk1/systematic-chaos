@@ -8,6 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProfessorFeedbackRepo extends JpaRepository<ProfessorFeedback, Long> {
-    ProfessorFeedback findProfessorFeedbackByGraphTaskResult(GraphTaskResult result);
     ProfessorFeedback findProfessorFeedbackByFileTaskResult(FileTaskResult result);
 }

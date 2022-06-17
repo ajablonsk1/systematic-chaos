@@ -60,7 +60,7 @@ public class GraphTaskResultController {
     @GetMapping("/points/available/opened")
     public ResponseEntity<Double> getMaxOpenedPoints(@RequestParam Long graphTaskResultId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.getMaxAvailablePoints(graphTaskResultId));
+        return ResponseEntity.ok().body(graphTaskResultService.getMaxOpenedPoints(graphTaskResultId));
     }
 
     @GetMapping("/points/available/closed")
@@ -72,7 +72,7 @@ public class GraphTaskResultController {
     @GetMapping("/points/available/all")
     public ResponseEntity<Double> getMaxAvailablePoints(@RequestParam Long graphTaskResultId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.getMaxOpenedPoints(graphTaskResultId));
+        return ResponseEntity.ok().body(graphTaskResultService.getMaxAvailablePoints(graphTaskResultId));
     }
 
     @PostMapping("/answer/add")

@@ -31,22 +31,12 @@ public class ProfessorFeedbackService {
         return professorFeedbackRepo.save(feedback);
     }
 
-    public ProfessorFeedback saveProfessorFeedback(SaveProfessorFeedbackForm form) throws WrongUserTypeException, WrongBodyParametersNumberException {
+    public ProfessorFeedback saveProfessorFeedback(SaveProfessorFeedbackForm form) throws WrongUserTypeException, EntityNotFoundException {
         log.info("Saving professor feedback to database");
         ProfessorFeedback professorFeedback =
                 feedbackValidator.validateAndSetProfessorFeedbackTaskForm(form);
         log.debug(professorFeedback.getContent());
         return professorFeedbackRepo.save(professorFeedback);
-    }
-
-    public ProfessorFeedback getProfessorFeedbackForGraphTask(Long id) throws EntityNotFoundException {
-        log.info("Fetching professor feedback for graph task result with id {}", id);
-        GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
-        return professorFeedbackRepo.findProfessorFeedbackByGraphTaskResult(result);
     }
 
     public ProfessorFeedback getProfessorFeedbackForFileTask(Long id) throws EntityNotFoundException {

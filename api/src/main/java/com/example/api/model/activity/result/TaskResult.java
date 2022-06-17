@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,11 +17,12 @@ import javax.persistence.*;
 public abstract class TaskResult {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
     private User user;
 
     private Double pointsReceived = 0.0;
+    private LocalDateTime sendTime;
 }

@@ -18,14 +18,8 @@ public class ProfessorFeedbackController {
 
     @PostMapping
     public ResponseEntity<ProfessorFeedback> saveProfessorFeedback(@RequestBody SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, WrongBodyParametersNumberException {
+            throws WrongUserTypeException, EntityNotFoundException {
         return ResponseEntity.ok().body(feedbackService.saveProfessorFeedback(form));
-    }
-
-    @GetMapping("/task/graph")
-    public ResponseEntity<ProfessorFeedback> getProfessorFeedbackForGraphTask(@RequestParam Long graphTaskId)
-            throws EntityNotFoundException {
-        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForGraphTask(graphTaskId));
     }
 
     @GetMapping("/task/file")
