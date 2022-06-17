@@ -1,6 +1,5 @@
-package com.example.api.model.activity.feedback;
+package com.example.api.model.util;
 
-import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,13 +11,13 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@MappedSuperclass
-public abstract class Feedback {
+@Entity
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String content;
+    private String name;
 
-    @ManyToOne
-    private User from;
+    @Lob
+    private String fileString;
 }

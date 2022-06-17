@@ -1,6 +1,7 @@
 package com.example.api.service.activity.feedback.util;
 
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
@@ -29,7 +30,7 @@ public class FeedbackValidator {
     private final UserRepo userRepo;
 
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
-            throws WrongBodyParametersNumberException, WrongUserTypeException {
+            throws WrongUserTypeException, EntityNotFoundException {
         ProfessorFeedback feedback = new ProfessorFeedback();
         String professorEmail = form.getProfessorEmail();
         User professor = userRepo.findUserByEmail(professorEmail);
@@ -40,34 +41,18 @@ public class FeedbackValidator {
         if(professor.getAccountType() != AccountType.PROFESSOR) {
             throw new WrongUserTypeException("Wrong user type!", AccountType.PROFESSOR);
         }
-        String studentEmail = form.getStudentEmail();
-        User student = userRepo.findUserByEmail(studentEmail);
-        if(student == null) {
-            log.error("User {} not found in database", studentEmail);
-            throw new UsernameNotFoundException("User" + studentEmail + " not found in database");
+        Long id = form.getFileTaskResultId();
+        FileTaskResult fileTaskResult = fileTaskResultRepo.findFileTaskResultById(id);
+        if(fileTaskResult == null) {
+            log.error("File task with id {} not found in database", id);
+            throw new EntityNotFoundException("File task with id" + id + " not found in database");
         }
-        if(student.getAccountType() != AccountType.STUDENT) {
-            throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
-        }
-        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(form.getGraphTaskResultId());
-        FileTaskResult fileTaskResult = fileTaskResultRepo.findFileTaskResultById(form.getFileTaskResultId());
-        if(graphTaskResult == null && fileTaskResult == null) {
-            log.error("Wrong number of SaveProfessorFeedbackForm parameters. One parameter should be provided.");
-            throw new WrongBodyParametersNumberException("Wrong number of SaveProfessorFeedbackForm parameters. One parameter should be provided.",
-                    List.of("graphTaskResultId", "fileTaskResultId"), 2);
-        } else if(graphTaskResult == null) {
-            feedback.setFileTaskResult(fileTaskResult);
-        } else if(fileTaskResult == null) {
-            feedback.setGraphTaskResult(graphTaskResult);
-        } else {
-            log.error("Wrong number of SaveProfessorFeedbackForm parameters. One parameter should be provided.");
-            throw new WrongBodyParametersNumberException("Wrong number of SaveProfessorFeedbackForm parameters. One parameter should be provided.",
-                    List.of("graphTaskResultId", "fileTaskResultId"), 2);
-        }
+        User student = fileTaskResult.getUser();
         feedback.setFrom(professor);
         feedback.setTo(student);
         feedback.setContent(form.getContent());
         feedback.setPoints(form.getPoints());
+        feedback.setFileTaskResult(fileTaskResult);
         return feedback;
     }
 }
