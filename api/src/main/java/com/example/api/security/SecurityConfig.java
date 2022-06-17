@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         security.authorizeRequests().anyRequest().permitAll();
         security.addFilter(new AuthenticationFilter(authenticationManager()));
         security.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-        security.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+
     }
 
     @Override

@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.FileNotFoundException;
+import java.util.LinkedList;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,16 @@ public class FileTaskResultService {
 
     public Long saveFileToFileTaskResult(SaveFileToFileTaskResultForm form) throws EntityNotFoundException, WrongUserTypeException {
         FileTaskResult result = getFileTaskResultByFileTaskAndUser(form.getFileTaskId(), form.getStudentEmail());
+        if(result == null){
+            result = new FileTaskResult();
+            result.setFiles(new LinkedList<File>());
+            result.setAnswer("");
+            result.setFileTask(fileTaskRepo.getById(form.getFileTaskId()));
+            result.setEvaluated(false);
+            result.setUser(userRepo.findUserByEmail(form.getStudentEmail()));
+            fileTaskResultRepo.save(result);
+        }
+
         if(form.getFileString() != null) {
             File file = new File(null, form.getFileName(), form.getFileString());
             fileRepo.save(file);
@@ -66,4 +78,5 @@ public class FileTaskResultService {
         }
         return fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
     }
+
 }

@@ -47,13 +47,22 @@ public class FileTaskService {
         }
         FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
         ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
+        if(result == null){
+            return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
+                    null, "");
+        }
 
         List<FileResponse> fileResponseList = result.getFiles()
                 .stream()
                 .map(file -> new FileResponse(file.getId(), file.getName()))
                 .toList();
+        if (feedback == null){
+            return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
+                    fileResponseList, "");
+        }
 
         return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
                 fileResponseList, feedback.getContent());
+
     }
 }
