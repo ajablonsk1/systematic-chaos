@@ -13,7 +13,8 @@ import StudentService from "../../services/student.service";
 
 export default function ExpeditionSummary() {
     const navigate = useNavigate();
-    const [maxPoints, setMaxPoints] = useState();
+    const [maxPointsOpen, setMaxPointsOpen] = useState();
+    const [maxPointsClosed, setMaxPointsClosed] = useState();
     const [scoredPoints, setScoredPoints] = useState();
     const [closedQuestionPoints, setClosedQuestionPoints] = useState();
     const location = useLocation();
@@ -25,13 +26,13 @@ export default function ExpeditionSummary() {
             navigate(PageRoutes.HOME);
         } else {
 
-            const promise1 = StudentService.getActivityMaxPoints(taskResultId).then(response => {console.log(response); setMaxPoints(response)});
+            const promise1 = StudentService.getActivityPointsMaxOpen(taskResultId).then(response => {console.log(response); setMaxPointsOpen(response)});
             // TODO: For now we get points from /all, later we will get it from getActivityScore() when it gets fixed
             //StudentService.getActivityScore()...
             const promise2 = StudentService.getActivityAllPoints(taskResultId).then(response => {console.log(response); setScoredPoints(response)});
             const promise3 = StudentService.getActivityPointsClosed(taskResultId).then(response => {console.log(response); setClosedQuestionPoints(response)});
-
-            Promise.allSettled([promise1,promise2,promise3]).then(() => {console.log("Wszystko zresolwowane"); setLoaded(true)});
+            const promise4 = StudentService.getActivityPointsMaxClosed(taskResultId).then(response => {console.log(response); setMaxPointsClosed(response)});
+            Promise.allSettled([promise1,promise2,promise3, promise4]).then(() => {console.log("Wszystko zresolwowane"); setLoaded(true)});
 
         }
     }, [expeditionId, navigate, taskResultId]);
@@ -60,20 +61,20 @@ export default function ExpeditionSummary() {
                         <p style={{ fontSize: 20 }}>
                             Liczba punktów razem:{' '}
                             <strong>
-                                {scoredPoints}/{maxPoints}
+                                {scoredPoints}/{maxPointsClosed + maxPointsOpen}
                             </strong>
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Punkty z pytań zamkniętych:{' '}
                             {/* there will be a closed all endpoint later*/}
                             <strong>
-                                {closedQuestionPoints} / {closedQuestionPoints}
+                                {closedQuestionPoints} / {maxPointsClosed}
                             </strong>
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Punkty z pytań otwartych:{' '}
                             {/* there will be a closed all endpoint later*/}
-                            <strong>{scoredPoints - closedQuestionPoints}/{maxPoints - closedQuestionPoints}</strong> (nieocenione)
+                            <strong>{scoredPoints - closedQuestionPoints}/{maxPointsOpen}</strong>
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.

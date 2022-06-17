@@ -5,7 +5,7 @@ import { Map } from '../GameMapStyles';
 import ActivityField from './ActivityField';
 
 function getActivity(map, x, y) {
-    return map.activities.find(activity => activity.posX === x && activity.posY === y) || null;
+    return map.tasks.find(activity => activity.posX === x && activity.posY === y) || null;
 }
 
 function createMap(map) {
@@ -22,7 +22,7 @@ function createMap(map) {
 
 export default function ChapterMap({ map }) {
     const rows = createMap(map);
-
+    console.log(map);
     return (
         <>
             {!rows ? (
@@ -33,7 +33,7 @@ export default function ChapterMap({ map }) {
                         <Row key={idx1} className="mx-auto">
                             {row.map((activity, idx2) => (
                                 <ActivityField
-                                    key={idx2}
+                                    key={idx2 + " " + idx1}
                                     activity={activity}
                                     posX={idx2}
                                     posY={idx1}

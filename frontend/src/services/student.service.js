@@ -1,9 +1,13 @@
 import {
+    ACTIVITY_MAP,
     GRAPH_GET_TASK_ANSWER_ID,
     GRAPH_QUESTION,
     GRAPH_QUESTION_NEXT,
     GRAPH_TASK_GET_ALL_POINTS,
     GRAPH_TASK_GET_CLOSED_POINTS,
+    GRAPH_TASK_GET_MAX_AVAILABLE_ALL,
+    GRAPH_TASK_GET_MAX_AVAILABLE_CLOSED,
+    GRAPH_TASK_GET_MAX_AVAILABLE_OPEN,
     GRAPH_TASK_GET_MAX_POSSIBLE,
     GRAPH_TASK_RESULT_URL,
     GRAPH_TASK_SEND_ANSWER,
@@ -35,6 +39,15 @@ class StudentService{
         return axiosApiPost(GRAPH_TASK_SEND_ANSWER, answer);
     }
 
+    getActivityMap(mapId) {
+        return axiosApiGet(ACTIVITY_MAP, {activityMapId: mapId});
+    }
+
+    setFileTaskAnswer(taskId, ){
+
+    }
+
+
     getActivitiesMap(chapterId) {}
 
     getStudentGroup() {}
@@ -62,7 +75,7 @@ class StudentService{
     setTaskComplete(taskId) {}
 
     getActivityMaxPoints(taskResultId) {
-        return axiosApiGet(GRAPH_TASK_GET_MAX_POSSIBLE,{graphTaskResultId: taskResultId});
+        return axiosApiGet(GRAPH_TASK_GET_MAX_AVAILABLE_ALL,{graphTaskResultId: taskResultId});
     }
 
     getActivityAllPoints(taskResultId) {
@@ -72,6 +85,16 @@ class StudentService{
     getActivityPointsClosed(taskResultId) {
         return axiosApiGet(GRAPH_TASK_GET_CLOSED_POINTS, {graphTaskResultId: taskResultId});
     }
+
+    getActivityPointsMaxClosed(taskResultId) {
+        return axiosApiGet(GRAPH_TASK_GET_MAX_AVAILABLE_CLOSED, {graphTaskResultId: taskResultId})
+    }
+
+    getActivityPointsMaxOpen(taskResultId) {
+        return axiosApiGet(GRAPH_TASK_GET_MAX_AVAILABLE_OPEN, {graphTaskResultId: taskResultId})
+    }
+
+
 
     getPointsFromClosedQuestions(expeditionId) {}
 

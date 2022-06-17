@@ -101,8 +101,8 @@ export default function ActivityContent(props) {
                 <ActivityCol className="invisible-scroll">
                     <HeaderCol>
                         <HeaderRow>
-                            <ActivityImg src={getActivityImg('expedition')}></ActivityImg>
-                            <ActivityType>{getActivityTypeName('expedition')}</ActivityType>
+                            <ActivityImg src={getActivityImg('EXPEDITION')}></ActivityImg>
+                            <ActivityType>{getActivityTypeName('EXPEDITION')}</ActivityType>
                             <ActivityName>{props.activity.name}</ActivityName>
                         </HeaderRow>
                         <FullDivider />

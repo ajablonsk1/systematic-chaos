@@ -10,7 +10,7 @@ import { getBase64 } from './fileConverter';
 import download from 'downloadjs';
 import { setCompleted } from '../../storage/activityMap';
 
-export default function FileService({ taskId }) {
+export default function FileService({ taskId, setFile, setFileName }) {
     const fileInput = useRef(null);
     const [fileChosen, setFileChosen] = useState(null);
     const loggedUserName = 'Jan Kowalski'; // TODO: delete
@@ -20,8 +20,9 @@ export default function FileService({ taskId }) {
 
     const saveFile = () => {
         startAdding(() => {
-            addFile(task.id, fileChosen); // todo: endpoint
-            setTask(getCombatTask(taskId));  //todo: remove and get from props or endpoint 
+            setFile(fileChosen.content)
+            // addFile(task.id, fileChosen); // todo: endpoint
+            setTask(getCombatTask(taskId));  //todo: remove and get from props or endpoint
             fileInput.current.value = '';
             setFileChosen(null);
 
@@ -33,12 +34,14 @@ export default function FileService({ taskId }) {
     const remove = fileNumber => {
         startRemoving(() => {
             removeFile(taskId, fileNumber);  // todo: use endpoint
-            setTask(getCombatTask(taskId));  // todo: wtf, props or endpoint once again
+            setTask(getCombatTask(taskId));  // todo:props or endpoint once again
         });
     };
 
     const chooseFile = event => {
         const filename = event.target.value.split(/(\\|\/)/g).pop();
+        setFileName(filename);
+
         const file = {
             date: moment(new Date()).calendar(),
             content: '',

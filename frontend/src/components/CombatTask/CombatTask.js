@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import { Content } from '../App/AppGeneralStyles';
 import Loader from '../Loader/Loader';
@@ -16,11 +16,32 @@ import {
 import { getActivityImg, getActivityTypeName } from '../../utils/constants';
 import FileService from './FileService';
 import { getCombatTask } from '../../storage/combatTask';
+import {RemarksCol, RemarksTextArea} from "../ActivityAssessmentDetails/ActivityAssesmentDetailsStyles";
+import {SendTaskButton} from "./CombatTaskStyles";
 
 export default function CombatTask() {
     const location = useLocation();
     const { activityId: taskId } = location.state;
     const task = getCombatTask(taskId); // todo: endpoint needed
+    const [fileString, setFileString] = useState();
+    const [fileName, setFileName] = useState();
+    const [answer,setAnswer] = useState('');
+
+    const sendAnswer = () => {
+        //use endpoint to save file task answer
+        console.log({
+            activityId: taskId,
+            file: fileString,
+            fileName: fileName,
+            answer: answer,
+            email: "mock@email.com"
+        })
+    }
+
+    const handleAnswerChange = (event) => {
+        setAnswer(event.target.value);
+        console.log(event.target.value);
+    }
 
     return (
         <Content>
@@ -31,8 +52,8 @@ export default function CombatTask() {
                     <ActivityCol className="invisible-scroll">
                         <HeaderCol>
                             <HeaderRow>
-                                <ActivityImg src={getActivityImg(task.type)}></ActivityImg>
-                                <ActivityType>{getActivityTypeName(task.type)}</ActivityType>
+                                <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
+                                <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
                                 <ActivityName>{task.name}</ActivityName>
                             </HeaderRow>
                             <FullDivider />
@@ -49,8 +70,14 @@ export default function CombatTask() {
                                 pobrać i sprawdzić {/*//TODO: info from endpoint*/}
                             </p>
                             <SmallDivider />
-                            <FileService taskId={task.id} />
+                            <RemarksCol>
+                                <h4>Odpowiedź:</h4>
+                                <RemarksTextArea value={answer} onChange={handleAnswerChange} />
+                            </RemarksCol>
+
+                            <FileService taskId={task.id} setFile={setFileString} setFileName={setFileName}/>
                         </div>
+                        <SendTaskButton disabled={!fileName && answer === ''} onClick={() => sendAnswer()}>Wyślij</SendTaskButton>
                     </ActivityCol>
                 )}
             </InfoContainer>

@@ -35,7 +35,7 @@ const ActivityCol = styled(Col)`
 
 
 // todo: wrong name, typo
-export default function AcrivityField({ activity, posX, posY }) {
+export default function ActivityField({ activity, posX, posY }) {
     const activityCol = useRef(null);
     const navigate = useNavigate();
 
@@ -55,7 +55,8 @@ export default function AcrivityField({ activity, posX, posY }) {
 
     // TODO, currently goes to the hard-coded expedition activity but it should be OK once we implement a 'real' activity getter in API
     const startActivity = () => {
-        navigate(`${getActivityPath(activity.activityType)}`, {
+        console.log(activity);
+        navigate(`${getActivityPath(activity.type)}`, {
             state: { activityId: activity.id },
         });
     };
@@ -77,7 +78,7 @@ export default function AcrivityField({ activity, posX, posY }) {
         <ActivityCol ref={activityCol}>
             {activity ? (
                 <img
-                    src={getActivityImg(activity.activityType)}
+                    src={getActivityImg(activity.type)}
                     alt="activityImg"
                     onClick={startActivity}
                 />

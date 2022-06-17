@@ -88,13 +88,13 @@ export const END_GRAPH_NODE_ID = -2;
 
 export const getActivityImg = type => {
     switch (type) {
-        case 'expedition':
+        case 'EXPEDITION':
             return ExpeditionImg;
-        case 'information':
+        case 'INFORMATION':
             return InformationImg;
-        case 'survey':
+        case 'SURVEY':
             return SurveyImg;
-        case 'task':
+        case 'TASK':
             return TaskImg;
         default:
             return;
@@ -103,13 +103,13 @@ export const getActivityImg = type => {
 
 export const getActivityTypeName = type => {
     switch (type) {
-        case 'expedition':
+        case 'EXPEDITION':
             return 'Ekspedycja';
-        case 'information':
+        case 'INFORMATION':
             return 'Wytyczne';
-        case 'survey':
+        case 'SURVEY':
             return 'Sondaż';
-        case 'task':
+        case 'TASK':
             return 'Zadanie bojowe';
         default:
             return;
@@ -118,13 +118,13 @@ export const getActivityTypeName = type => {
 
 export const getActivityPath = type => {
     switch (type) {
-        case 'expedition':
+        case 'EXPEDITION':
             return PageRoutes.ACTIVITY_INFO;
-        case 'task':
+        case 'TASK':
             return PageRoutes.COMBAT_TASK;
-        case 'survey':
+        case 'SURVEY':
             return PageRoutes.SURVEY_TASK;
-        case 'information':
+        case 'INFORMATION':
             return PageRoutes.INFORMATION;
         default:
             return;
