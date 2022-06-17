@@ -19,6 +19,6 @@ public abstract class Feedback {
     private Long id;
     private String content;
 
-    @OneToOne
+    @ManyToOne
     private User from;
 }

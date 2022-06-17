@@ -20,14 +20,16 @@ public class Answer {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "question_id")
     private Question question;
 
     @Nullable
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "option_id")
     private Option option;
 
     @Nullable
-    @OneToMany
+    @ManyToMany
     private List<Option> options;
 
     @Nullable
