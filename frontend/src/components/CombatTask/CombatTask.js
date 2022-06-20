@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useLocation } from 'react-router-dom';
 import { Content } from '../App/AppGeneralStyles';
 import Loader from '../Loader/Loader';
@@ -15,7 +15,6 @@ import {
 } from '../ActivityInfo/ActivityInfoStyles';
 import { getActivityImg, getActivityTypeName } from '../../utils/constants';
 import FileService from './FileService';
-import { getCombatTask } from '../../storage/combatTask';
 import {RemarksCol, RemarksTextArea} from "../ActivityAssessmentDetails/ActivityAssesmentDetailsStyles";
 import {SendTaskButton} from "./CombatTaskStyles";
 import StudentService from "../../services/student.service";
@@ -23,7 +22,6 @@ import StudentService from "../../services/student.service";
 export default function CombatTask() {
     const location = useLocation();
     const { activityId: taskState } = location.state;
-    //const task = getCombatTask(taskId); // todo: endpoint needed
     const [task, setTask] = useState();
     const [taskId, setTaskId] = useState(taskState);
     const [fileString, setFileString] = useState();

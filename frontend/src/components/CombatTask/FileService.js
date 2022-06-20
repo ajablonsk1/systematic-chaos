@@ -3,12 +3,10 @@ import { Button, Col, Row, Spinner } from 'react-bootstrap';
 import { SmallDivider } from '../ActivityInfo/ActivityInfoStyles';
 import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { addFile, getCombatTask, removeFile } from '../../storage/combatTask';
 import moment from 'moment';
 import 'moment/locale/pl';
 import { getBase64 } from './fileConverter';
 import download from 'downloadjs';
-import { setCompleted } from '../../storage/activityMap';
 import StudentService from "../../services/student.service";
 
 export default function FileService({ task, setFile, setFileName, setIsSaved }) {

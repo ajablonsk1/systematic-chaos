@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Tab } from 'react-bootstrap';
-import { getChapters } from '../../../utils/Api';
 import ChapterMap from '../Map/ChapterMap';
 import { TabColored } from './ChaptersNavStyle';
-import {getActivityMap} from '../../../storage/activityMap'
 import Loader from "../../Loader/Loader";
 import StudentService from "../../../services/student.service";
 

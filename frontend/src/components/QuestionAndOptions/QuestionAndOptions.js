@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ClosedQuestionPage from './ClosedQuestionPage/ClosedQuestionPage';
-import { getQuestion } from '../../utils/Api';
 import { PageRoutes } from '../../utils/constants';
 import Loader from '../Loader/Loader';
 import { ContentWithBackground } from './QuestionAndOptionsStyle';
@@ -23,7 +22,7 @@ function QuestionAndOptions(props) {
             StudentService.getQuestion(questionId).then(response => {console.log(response); setQuestion(response)});
             //setQuestion(getQuestion(+expeditionId, +questionId)); // todo: use endpoint
         }
-    }, [questionId, expeditionId, navigate]);
+    }, [questionId, expeditionId, navigate, taskResultId]);
 
     // complete the expedition and record user responses if the expedition has not been completed
     // before the timer runs out
