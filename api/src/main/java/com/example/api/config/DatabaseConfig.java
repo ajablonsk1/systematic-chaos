@@ -85,7 +85,7 @@ public class DatabaseConfig {
 
 
             User professor = new User();
-            professor.setEmail("bmaj@gmail.com");
+            professor.setEmail("prowadzacy@gmail.com");
             professor.setPassword("12345");
             professor.setAccountType(AccountType.PROFESSOR);
             userService.saveUser(professor);
@@ -160,9 +160,9 @@ public class DatabaseConfig {
             Question question3 = new Question(null, QuestionType.OPENED, "Jeśli zawiniesz kabel kawałkiem folii aluminiowej, jaki rodzaj skrętki Ci to przypomina?",
                     "?", Difficulty.HARD, null, 30.0, new LinkedList<>(), "FTP");
             Question question4 = new Question(null, QuestionType.OPENED, "Jaki rodzaj powszechnie używanego kabla byłby możliwy do użytku po użyciu jak skakanka? Dlaczego ten?",
-                    "Kable 2", Difficulty.MEDIUM, null, 20.0, new LinkedList<>(), null);
+                    "Kable 2", Difficulty.MEDIUM, null, 20.0, new LinkedList<>(), "skrętka");
             Question question5 = new Question(null, QuestionType.OPENED, "Zakoduj swoje imię i nazwisko za pomocą kodowania NRZI. ",
-                    "Kable 2", Difficulty.HARD, null, 30.0, new LinkedList<>(), null);
+                    "Kable 2", Difficulty.HARD, null, 30.0, new LinkedList<>(), "Jan Kowalski");
 
             questionService.saveQuestion(startQuestion);
             questionService.saveQuestion(question1);
@@ -239,9 +239,9 @@ public class DatabaseConfig {
             Question questionTwo3 = new Question(null, QuestionType.OPENED, "Jeśli zawiniesz kabel kawałkiem folii aluminiowej, jaki rodzaj skrętki Ci to przypomina?",
                     "?", Difficulty.HARD, null, 30.0, new LinkedList<>(), "FTP");
             Question questionTwo4 = new Question(null, QuestionType.OPENED, "Jaki rodzaj powszechnie używanego kabla byłby możliwy do użytku po użyciu jak skakanka? Dlaczego ten?",
-                    "Kable 2", Difficulty.MEDIUM, null, 20.0, new LinkedList<>(), null);
+                    "Kable 2", Difficulty.MEDIUM, null, 20.0, new LinkedList<>(), "skrętka");
             Question questionTwo5 = new Question(null, QuestionType.OPENED, "Zakoduj swoje imię i nazwisko za pomocą kodowania NRZI. ",
-                    "Kable 2", Difficulty.HARD, null, 30.0, new LinkedList<>(), null);
+                    "Kable 2", Difficulty.HARD, null, 30.0, new LinkedList<>(), "Jan Kowalski");
 
             questionService.saveQuestion(startQuestionTwo);
             questionService.saveQuestion(questionTwo1);
