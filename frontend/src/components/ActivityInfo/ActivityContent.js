@@ -59,7 +59,7 @@ export default function ActivityContent(props) {
 
             }
         }
-    }, [loadedScore, activityScore?.id, props.activity.requirement.accessDates]);
+    }, [loadedScore, activityScore?.id, props.activity.requirement]);
 
 
     const resetStorageAndStart = () => {
@@ -111,9 +111,9 @@ export default function ActivityContent(props) {
                     <div>
                         <p>{props.activity.description}</p>
                         <SmallDivider />
-                        {props.activity.requiredInfo && <>
+                        {props.activity.requiredKnowledge && <>
                             <p>Wymagana wiedza:</p>
-                            <p>{props.activity.requiredInfo}</p>
+                            <p>{props.activity.requiredKnowledge}</p>
                         </>
                         }
                         <Spacer />
@@ -123,14 +123,18 @@ export default function ActivityContent(props) {
                         <p>Liczba punktów licząca się jako 100% - {props.activity.maxPoints100}</p>
                         <Spacer />
 
-                        <p>
+                        {!props.activity.requirement ? (
+                            <p>Aktywność nie ma ustawionego limitu czasowego</p>
+                            ) :
+                        (<>
+                            <p>
                             Data dostępności aktywności - od{' '}
                             {startDate && (startDate.toLocaleDateString() + ' ' + startDate.toLocaleTimeString())} do{' '}
                             {endDate && (endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString())}
-                        </p>
+                            </p>
+                            <p>Pozostało {convertSecondsToStringInfo(endDate)}</p>
+                        </>)}
 
-                        {/* //TODO: get info from endpoint; compare with current time, decide on time/date format */}
-                        <p>Pozostało {convertSecondsToStringInfo(endDate)}</p>
                     </div>
 
                     <ButtonFooter>

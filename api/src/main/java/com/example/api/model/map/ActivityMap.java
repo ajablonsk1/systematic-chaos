@@ -3,6 +3,7 @@ package com.example.api.model.map;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Info;
+import com.example.api.model.activity.task.Survey;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,9 @@ public class ActivityMap {
 
     @OneToMany
     private List<Info> infos = new LinkedList<>();
+
+    @OneToMany
+    private List<Survey> surveys = new LinkedList<>();
 
     private Integer mapSizeX;
     private Integer mapSizeY;
