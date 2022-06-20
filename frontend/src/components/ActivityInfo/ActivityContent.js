@@ -24,9 +24,12 @@ export default function ActivityContent(props) {
     const navigate = useNavigate();
     const [activityScore, setActivityScore] = useState(undefined);
     const activityId = props.activityId;
-    const [activityGroup, setActivityGroup] = useState(undefined);
+    // const [activityGroup, setActivityGroup] = useState(undefined);
     const [loadedScore, setLoadedScore] = useState(false);
     const [pointsReceived, setPointsReceived] = useState(0);
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+
     useEffect(() => {
         // todo: possible bug
         StudentService.getActivityScore(activityId).then(response => {
@@ -39,26 +42,24 @@ export default function ActivityContent(props) {
 
     useEffect(() => {
         if (loadedScore){
-            StudentService.getUserGroup().then(response => {setActivityGroup(response)});
+            StudentService.getUserGroup().then(
+                response => {
+                    // setActivityGroup(response);
+                    return response;
+                }
+            )
+                .then((activityGroup) => {
+                    const givenTimeData = props.activity.requirement.accessDates.find(el => el.group.find(el => el.name === activityGroup.name));
+                    setStartDate(new Date(...givenTimeData.dateFrom));
+                    setEndDate(new Date(...givenTimeData.dateTo));
+                });
+            //
             if(activityScore.id){
                 StudentService.getActivityAllPoints(activityScore.id).then(response => {console.log(response); setPointsReceived(response)})
+
             }
         }
-    }, [loadedScore, activityScore?.id]);
-    //
-    // useEffect(() => {
-    //     // convertSecondsToStringInfo()
-    //     console.log("3");
-    // }, [activityGroup])
-
-    // console.log(activityScore);
-
-    // const points = localStorage.getItem('currentScore'); // todo: remove and get it from endpoint
-
-    //TODO: currently hardcoded for "all" group, we need to check which group the user is in later
-    // todo: get user group start and end date from endpoint
-    // const startDate = new Date(props.activity.accessDates.all.start);
-    // const endDate = new Date(props.activity.accessDates.all.end);
+    }, [loadedScore, activityScore?.id, props.activity.requirement.accessDates]);
 
 
     const resetStorageAndStart = () => {
@@ -66,8 +67,7 @@ export default function ActivityContent(props) {
         localStorage.setItem('startDate', new Date());
         localStorage.removeItem('userAnswers'); // todo: remove it, saving to db, not to localStorage
         localStorage.removeItem('userOpenAnswers'); // todo: remove it, saving to db, not to localStorage
-        // TODO: clean previous attempt on API
-        // for now below if branch is not used (until we find a way to clean previous attempts)
+
         if(activityScore.id){
             //clean previous answers
             navigate(`${PageRoutes.QUESTION_SELECTION}`, {
@@ -120,20 +120,17 @@ export default function ActivityContent(props) {
 
                         {loadedScore && <p>Obecna liczba punktów - {pointsReceived}</p>}
                         <p>Maksymalna liczba punktów do zdobycia - {props.activity.maxPoints}</p>
-                        {/* TODO: check if it works after the endpoint is here */}
                         <p>Liczba punktów licząca się jako 100% - {props.activity.maxPoints100}</p>
                         <Spacer />
 
-                        {/* //TODO: check which group the user is in and get either 'all' or the group the user belongs to*/}
-                        {/* //TODO: Also look into how we will store dates on the back, this is currently a placeholder */}
                         <p>
                             Data dostępności aktywności - od{' '}
-                            {/*{startDate.toLocaleDateString() + ' ' + startDate.toLocaleTimeString()} do{' '}*/}
-                            {/*{endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString()}*/}
+                            {startDate && (startDate.toLocaleDateString() + ' ' + startDate.toLocaleTimeString())} do{' '}
+                            {endDate && (endDate.toLocaleDateString() + ' ' + endDate.toLocaleTimeString())}
                         </p>
 
                         {/* //TODO: get info from endpoint; compare with current time, decide on time/date format */}
-                        <p>Pozostało 5 dni, 10 godzin, 23 minuty, 23 sekundy</p>
+                        <p>Pozostało {convertSecondsToStringInfo(endDate)}</p>
                     </div>
 
                     <ButtonFooter>

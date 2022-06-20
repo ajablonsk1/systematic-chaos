@@ -11,7 +11,7 @@ import {
     GRAPH_TASK_RESULT_URL,
     GRAPH_TASK_SEND_ANSWER,
     GRAPH_TASK_URL,
-    INFORMATION_URL,
+    INFORMATION_URL, SURVEY_TASK_GET_INFO,
     USER_GROUP
 } from './urls';
 import {axiosApiDelete, axiosApiGet, axiosApiPost} from "../utils/axios";
@@ -164,7 +164,9 @@ class StudentService{
         return axiosApiGet(GRAPH_QUESTION_NEXT, {questionId: parentQuestionId});
     }
 
-    getSurveyTask(taskId) {}
+    getSurveyTask(taskId) {
+        return axiosApiGet(SURVEY_TASK_GET_INFO, {surveyId: taskId});
+    }
 
     getUserGroup() {
         return axiosApiGet(USER_GROUP, {email: this.getEmail()});

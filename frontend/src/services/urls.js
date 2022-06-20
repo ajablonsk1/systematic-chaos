@@ -21,4 +21,4 @@ export const COMBAT_TASK_RESULT_FILE = COMBAT_TASK_GET_INFO + '/result/file';
 export const COMBAT_TASK_SEND_ANSWER = COMBAT_TASK_RESULT_FILE + '/add';
 export const COMBAT_TASK_REMOVE_FILE = COMBAT_TASK_RESULT_FILE + '/delete';
 export const INFORMATION_URL = BASE_URL + 'info';
-
+export const SURVEY_TASK_GET_INFO = BASE_URL + 'survey';

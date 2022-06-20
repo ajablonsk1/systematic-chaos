@@ -13,39 +13,45 @@ import { FIELD_REQUIRED, getActivityImg, getActivityTypeName } from '../../utils
 import { useLocation } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import { InfoContainer } from '../ActivityInfo/InfoContainer';
-import { getSurveyTask } from '../../storage/surveyTask';
 import { Formik } from 'formik';
 import { Row, Col, Spinner, Form, Container } from 'react-bootstrap';
 import { faThumbsDown, faThumbsUp, faFaceMeh } from '@fortawesome/free-solid-svg-icons';
 import { IconColumn } from './IconColumn';
 import { FormButton, FormikRange, FormikTextarea } from './SurveyTaskStyle';
+import {useEffect, useState} from "react";
+import StudentService from "../../services/student.service";
 
 export default function FeedbackTask() {
     const location = useLocation();
-    //also chapterID later
     const { activityId: taskId } = location.state;
-    //later with correct ids
-    const task = getSurveyTask(null, taskId); // todo: use endpoint
+    const [task, setTask] = useState();
+
+    useEffect(() => {
+        StudentService.getSurveyTask(taskId).then(response => {
+            console.log(response);
+            setTask(response);
+        });
+    }, [taskId])
+
+    // //later with correct ids
+    // const task = getSurveyTask(null, taskId); // todo: use endpoint
 
     return (
         <Content>
             <InfoContainer>
-                {taskId === undefined ? (
+                {!task ? (
                     <Loader />
                 ) : (
                     <ActivityCol className="invisible-scroll">
                         <HeaderCol>
                             <HeaderRow>
-                                <ActivityImg src={getActivityImg(task.type)}></ActivityImg>
-                                <ActivityType>{getActivityTypeName(task.type)}</ActivityType>
+                                <ActivityImg src={getActivityImg('SURVEY')}></ActivityImg>
+                                <ActivityType>{getActivityTypeName('SURVEY')}</ActivityType>
                                 <ActivityName>{task.name}</ActivityName>
                             </HeaderRow>
                             <FullDivider />
                             <div>
-                                <h5>
-                                    Podziel się opinią na temat rozdziału aby zdobyć dodatkowe
-                                    punkty.
-                                </h5>
+                                <h5>{task.description}</h5>
                                 <SmallDivider />
                                 <h5>Punkty do zdobycia: {task.points}</h5>
                                 <p>

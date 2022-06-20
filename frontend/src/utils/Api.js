@@ -108,7 +108,7 @@ export const getRemainingDate = (endDateString) => {
 
 export const convertSecondsToStringInfo = (endDate) => {
     const seconds = getRemainingDate(endDate);
-    const stringFormat = moment.utc(seconds * 1000).format('dd:mm:ss');
+    const stringFormat = moment.utc(seconds * 1000).format('DD:mm:ss');
     const splitString = stringFormat.split(':');
 
     return `${splitString[0]} dni, ${splitString[1]} min, ${splitString[2]} sek`
