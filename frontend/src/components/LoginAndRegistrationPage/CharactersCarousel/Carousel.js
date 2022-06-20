@@ -12,6 +12,8 @@ export default function Carousel() {
     return (
         <Col xs={6} className="p-0 d-none d-md-block">
             <CustomCarousel fade controls={false} autoPlay={true} interval={3000}>
+
+                {/*//TODO: WTF ! refactor needed */}
                 <CarouselItem>
                     <img src={gameMapExample} alt="First slide" />
                 </CarouselItem>

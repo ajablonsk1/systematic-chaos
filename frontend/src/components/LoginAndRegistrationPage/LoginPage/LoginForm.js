@@ -4,6 +4,7 @@ import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
 import { FormCol } from '../FormCol';
 import { login } from '../../../actions/auth';
 import { connect } from 'react-redux';
+import { FIELD_REQUIRED } from '../../../utils/constants';
 
 function LoginForm(props) {
     const { dispatch } = props;
@@ -16,8 +17,8 @@ function LoginForm(props) {
             }}
             validate={values => {
                 const errors = {};
-                if (!values.email) errors.email = 'Pole wymagane.';
-                if (!values.password) errors.password = 'Pole wymagane';
+                if (!values.email) errors.email = FIELD_REQUIRED;
+                if (!values.password) errors.password = FIELD_REQUIRED;
                 return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {

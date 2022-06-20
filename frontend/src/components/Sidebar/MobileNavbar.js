@@ -10,6 +10,7 @@ import { MobileNav } from './SidebarStyles';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 function MobileNavbar(props) {
+    // todo: for teacher bar is too many icons, fix it
     const link_titles = props.link_titles;
     const logOut = () => props.dispatch(logout());
 

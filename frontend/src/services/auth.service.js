@@ -1,13 +1,12 @@
 import axios from 'axios';
 import QueryString from 'qs';
 import { AccountType } from '../utils/userRole';
-
-const API_URL = 'http://localhost:8080/api/';
+import { BASE_URL } from './urls';
 
 class AuthService {
     login({ email, password }) {
         return axios
-            .post(API_URL + 'login', QueryString.stringify({ email: email, password: password }), {
+            .post(BASE_URL + 'login', QueryString.stringify({ email: email, password: password }), {
                 'Content-Type': 'application/x-www-form-urlencoded',
             })
             .then(response => {
@@ -38,7 +37,7 @@ class AuthService {
         }
 
         return axios
-            .post(API_URL + 'register', body, {
+            .post(BASE_URL + 'register', body, {
                 'Content-Type': 'application/x-www-form-urlencoded',
             })
             .catch(err => console.log(err));
@@ -46,7 +45,7 @@ class AuthService {
 
     refreshToken(refreshToken) {
         return axios
-            .get(API_URL + 'token/refresh', {
+            .get(BASE_URL + 'token/refresh', {
                 headers: { Authorization: 'Bearer ' + refreshToken },
             })
             .then(response => {

@@ -10,7 +10,7 @@ const combatTask = [
 ];
 
 export function getCombatTask(taskId) {
-    return combatTask.find(task => task.id === taskId);
+    return combatTask.find(task => task.id === 1);
 }
 
 export function addFile(taskId, file) {

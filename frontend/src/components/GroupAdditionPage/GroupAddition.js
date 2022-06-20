@@ -1,9 +1,14 @@
 import React from 'react';
-import { ActivityCol, ActivityType, FullDivider, HeaderCol, HeaderRow } from '../ActivityInfo/ActivityInfoStyles';
+import {
+    ActivityCol,
+    ActivityType,
+    FullDivider,
+    HeaderCol,
+    HeaderRow,
+} from '../ActivityInfo/ActivityInfoStyles';
 import { InfoContainer } from '../ActivityInfo/InfoContainer';
 import { Content } from '../App/AppGeneralStyles';
 import GroupAdditionForm from './GroupAdditionForm';
-
 
 export default function GroupAddition() {
     return (
@@ -11,8 +16,8 @@ export default function GroupAddition() {
             <InfoContainer>
                 <ActivityCol>
                     <HeaderCol>
-                    <HeaderRow>
-                        <ActivityType>Dodaj grupę</ActivityType>
+                        <HeaderRow>
+                            <ActivityType>Dodaj grupę</ActivityType>
                         </HeaderRow>
                         <FullDivider />
                     </HeaderCol>
@@ -20,5 +25,5 @@ export default function GroupAddition() {
                 </ActivityCol>
             </InfoContainer>
         </Content>
-    )
+    );
 }

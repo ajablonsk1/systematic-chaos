@@ -82,18 +82,19 @@ export const TeacherSidebarTitles = {
     [PageRoutes.GRADES]: ['Oceny', fa5],
 };
 
+export const FIELD_REQUIRED = 'Pole wymagane.';
 export const START_GRAPH_NODE_ID = -1;
 export const END_GRAPH_NODE_ID = -2;
 
 export const getActivityImg = type => {
     switch (type) {
-        case 'expedition':
+        case 'EXPEDITION':
             return ExpeditionImg;
-        case 'information':
+        case 'INFO':
             return InformationImg;
-        case 'survey':
+        case 'SURVEY':
             return SurveyImg;
-        case 'task':
+        case 'TASK':
             return TaskImg;
         default:
             return;
@@ -102,13 +103,13 @@ export const getActivityImg = type => {
 
 export const getActivityTypeName = type => {
     switch (type) {
-        case 'expedition':
+        case 'EXPEDITION':
             return 'Ekspedycja';
-        case 'information':
+        case 'INFO':
             return 'Wytyczne';
-        case 'survey':
+        case 'SURVEY':
             return 'Sondaż';
-        case 'task':
+        case 'TASK':
             return 'Zadanie bojowe';
         default:
             return;
@@ -117,13 +118,13 @@ export const getActivityTypeName = type => {
 
 export const getActivityPath = type => {
     switch (type) {
-        case 'expedition':
+        case 'EXPEDITION':
             return PageRoutes.ACTIVITY_INFO;
-        case 'task':
+        case 'TASK':
             return PageRoutes.COMBAT_TASK;
-        case 'survey':
+        case 'SURVEY':
             return PageRoutes.SURVEY_TASK;
-        case 'information':
+        case 'INFO':
             return PageRoutes.INFORMATION;
         default:
             return;
@@ -187,20 +188,19 @@ export const HeroDataset = {
     rogue: rogueImg,
 };
 
-export const percentagesToGrade = (percentages) => {
-    const FAILINNG_GRADE = 2.0;
+export const percentagesToGrade = percentages => {
+    const FAILING_GRADE = 2.0;
     const MIN_POSITIVE_GRADE = 3.0;
     const MIN_PERCENTAGE_FOR_POSITIVE_GRADE = 0.5;
     const PERCENTAGE_FOR_HIGHER_GRADE = 0.1;
     const HIGHER_GRADE_STEP = 0.5;
 
-    if (percentages < MIN_PERCENTAGE_FOR_POSITIVE_GRADE) return FAILINNG_GRADE;
+    if (percentages < MIN_PERCENTAGE_FOR_POSITIVE_GRADE) return FAILING_GRADE;
     else {
         return (
             MIN_POSITIVE_GRADE +
             Math.floor(
-                (percentages - MIN_PERCENTAGE_FOR_POSITIVE_GRADE) /
-                    PERCENTAGE_FOR_HIGHER_GRADE
+                (percentages - MIN_PERCENTAGE_FOR_POSITIVE_GRADE) / PERCENTAGE_FOR_HIGHER_GRADE
             ) *
                 HIGHER_GRADE_STEP
         );

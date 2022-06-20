@@ -37,7 +37,7 @@ export default function Grades() {
                 <Col>
                     <PercentageCircle
                         percentageValue={(100 * getAverageGrade()) / 5}
-                        points={getAverageGrade()}
+                        points={getAverageGrade()} // todo: move it to variable
                         maxPoints={5}
                     />
                 </Col>

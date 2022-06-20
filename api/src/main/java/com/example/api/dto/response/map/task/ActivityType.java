@@ -3,7 +3,8 @@ package com.example.api.dto.response.map.task;
 public enum ActivityType {
     EXPEDITION("EXPEDITION"),
     TASK("TASK"),
-    INFO("INFORMATION");
+    INFO("INFORMATION"),
+    SURVEY("SURVEY");
 
     private final String activityType;
 

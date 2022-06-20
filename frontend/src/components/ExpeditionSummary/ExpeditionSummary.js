@@ -5,34 +5,37 @@ import { ButtonRow } from '../QuestionAndOptions/QuestionAndOptionsStyle';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../utils/constants';
 import { finishExpedition, timer } from '../../utils/storageManager';
-import { getExpeditionPoints, getExpeditionPointsClosed } from '../../utils/Api';
+
 import Loader from '../Loader/Loader';
-import { getUserPoints } from '../../utils/pointsCalculator';
+
 import { Content } from '../App/AppGeneralStyles';
+import StudentService from "../../services/student.service";
 
 export default function ExpeditionSummary() {
     const navigate = useNavigate();
-    const [maxPoints, setMaxPoints] = useState();
+    const [maxPointsOpen, setMaxPointsOpen] = useState();
+    const [maxPointsClosed, setMaxPointsClosed] = useState();
     const [scoredPoints, setScoredPoints] = useState();
     const [closedQuestionPoints, setClosedQuestionPoints] = useState();
     const location = useLocation();
-    const { expeditionId, remainingTime } = location.state;
+    const { expeditionId, remainingTime, taskResultId } = location.state;
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
         if (expeditionId == null) {
             navigate(PageRoutes.HOME);
         } else {
-            setMaxPoints(getExpeditionPoints(expeditionId));
-            setScoredPoints(getUserPoints());
-            setClosedQuestionPoints(getExpeditionPointsClosed(expeditionId));
-            localStorage.setItem('currentScore', getUserPoints());
 
-            // Moved removing question answers from localStorage to onClick navigate to fix a bug
-            // Also starting the expedition clears answers
+            const promise1 = StudentService.getActivityPointsMaxOpen(taskResultId).then(response => {console.log(response); setMaxPointsOpen(response)});
+            // TODO: For now we get points from /all, later we will get it from getActivityScore() when it gets fixed
+            //StudentService.getActivityScore()...
+            const promise2 = StudentService.getActivityAllPoints(taskResultId).then(response => {console.log(response); setScoredPoints(response)});
+            const promise3 = StudentService.getActivityPointsClosed(taskResultId).then(response => {console.log(response); setClosedQuestionPoints(response)});
+            const promise4 = StudentService.getActivityPointsMaxClosed(taskResultId).then(response => {console.log(response); setMaxPointsClosed(response)});
+            Promise.allSettled([promise1,promise2,promise3, promise4]).then(() => {console.log("Wszystko zresolwowane"); setLoaded(true)});
 
-            //TODO: send user answers from open questions to the database (+ notification to the teacher)
         }
-    }, [expeditionId, navigate]);
+    }, [expeditionId, navigate, taskResultId]);
 
     const finishExpeditionAndGoHome = () => {
         finishExpedition(expeditionId);
@@ -44,7 +47,7 @@ export default function ExpeditionSummary() {
 
     return (
         <Content>
-            {maxPoints === undefined ? (
+            {!loaded ? (
                 <Loader />
             ) : (
                 <SummaryContainer>
@@ -58,18 +61,20 @@ export default function ExpeditionSummary() {
                         <p style={{ fontSize: 20 }}>
                             Liczba punktów razem:{' '}
                             <strong>
-                                {scoredPoints}/{maxPoints}
+                                {scoredPoints}/{maxPointsClosed + maxPointsOpen}
                             </strong>
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Punkty z pytań zamkniętych:{' '}
+                            {/* there will be a closed all endpoint later*/}
                             <strong>
-                                {scoredPoints} / {closedQuestionPoints}
+                                {closedQuestionPoints} / {maxPointsClosed}
                             </strong>
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Punkty z pytań otwartych:{' '}
-                            <strong>0/{maxPoints - closedQuestionPoints}</strong> (nieocenione)
+                            {/* there will be a closed all endpoint later*/}
+                            <strong>{scoredPoints - closedQuestionPoints}/{maxPointsOpen}</strong>
                         </p>
                         <p style={{ fontSize: 20 }}>
                             Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.

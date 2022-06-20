@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ErrorMessage, Formik, Field } from 'formik';
 import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
-import { HeroDescriptions, HeroImg, RegistrationLabelsAndTypes } from '../../../utils/constants';
+import { FIELD_REQUIRED, HeroDescriptions, HeroImg, RegistrationLabelsAndTypes } from '../../../utils/constants';
 import { Description, Info } from './RegistrationStyle';
 import { validateConfirmPassword, validateEmail, validatePassword } from './validators';
 import { register } from '../../../actions/auth';
@@ -31,7 +31,7 @@ function RegistrationForm(props) {
             initialValues={initialValues}
             validate={values => {
                 const errors = {};
-                if (!values.fullname) errors.fullname = 'Pole wymagane.';
+                if (!values.fullname) errors.fullname = FIELD_REQUIRED;
                 else if (values.fullname.split(' ').length < 2)
                     errors.fullname = 'Podaj imię i nazwisko, pamiętaj o spacji';
 
@@ -43,7 +43,7 @@ function RegistrationForm(props) {
                 );
 
                 if (props.isStudent) {
-                    if (!values.invitationCode) errors.invitationCode = 'Pole wymagane';
+                    if (!values.invitationCode) errors.invitationCode = FIELD_REQUIRED;
                 }
 
                 // without this, errors contains keys with empty string which should not be considered errors
@@ -81,6 +81,7 @@ function RegistrationForm(props) {
                                                     onChange={changeCharacter}
                                                     value={character}
                                                 >
+                                                    {/*//TODO: mapper and variable */}
                                                     <option id="warrior" value={HeroType.WARRIOR}>
                                                         Wojownik
                                                     </option>

@@ -3,7 +3,7 @@ import { getTableContent } from '../../../storage/groupsTable';
 import { TableContainer } from '../../PointsPage/Table/TableStyle';
 
 export default function GroupsTable() {
-    const tableContent = getTableContent();
+    const tableContent = getTableContent(); // todo: get from endpoint
 
     return (
         // marginBottom prevents last records coverage by add button

@@ -2,6 +2,8 @@ import { Content } from '../App/AppGeneralStyles';
 import { Col } from 'react-bootstrap';
 import ActivityListItem from './ActivityListItem';
 
+
+// todo: get from endpoint, remove
 const exampleActivities = {
     activites: [
         {
