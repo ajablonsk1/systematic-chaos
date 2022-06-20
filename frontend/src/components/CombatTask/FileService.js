@@ -58,14 +58,17 @@ export default function FileService({ task, setFile, setFileName, setIsSaved }) 
         setFileChosen(file);
     };
 
-    // const downloadFile = fileId => {
-    //     const file = getCombatTask(taskId).files[fileId];
-    //     if (file.content) {
-    //         download(file.content, file.filename);
-    //     } else {
-    //         alert('Ten plik wygląda na uszkodzony. Nie możesz go pobrać.');
-    //     }
-    // };
+    const downloadFile = fileId => {
+        const fileApiId = task.files[fileId].id;
+        StudentService.getCombatFile(fileApiId).then(file => {
+            if (file.fileString) {
+                download(file.fileString, file.name);
+            } else {
+                alert('Ten plik wygląda na uszkodzony. Nie możesz go pobrać.');
+            }
+        });
+
+    };
 
     return (
         <>
@@ -89,7 +92,7 @@ export default function FileService({ task, setFile, setFileName, setIsSaved }) 
                             <Button
                                 variant="warning"
                                 className="ml-2"
-                                // onClick={() => downloadFile(idx)}
+                                onClick={() => downloadFile(idx)}
                             >
                                 <FontAwesomeIcon icon={faDownload} />
                             </Button>

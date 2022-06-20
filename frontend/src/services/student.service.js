@@ -1,5 +1,5 @@
 import {
-    ACTIVITY_MAP, COMBAT_TASK_GET_INFO, COMBAT_TASK_REMOVE_FILE, COMBAT_TASK_SEND_ANSWER,
+    ACTIVITY_MAP, COMBAT_TASK_GET_FILE, COMBAT_TASK_GET_INFO, COMBAT_TASK_REMOVE_FILE, COMBAT_TASK_SEND_ANSWER,
     GRAPH_GET_TASK_ANSWER_ID,
     GRAPH_QUESTION,
     GRAPH_QUESTION_NEXT,
@@ -174,6 +174,10 @@ class StudentService{
 
     getInformation(infoId) {
         return axiosApiGet(INFORMATION_URL, {infoId: infoId});
+    }
+
+    getCombatFile(fileApiId) {
+        return axiosApiGet(COMBAT_TASK_GET_FILE, {fileId: fileApiId, studentEmail: this.getEmail()})
     }
 }
 
