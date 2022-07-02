@@ -1,4 +1,4 @@
-const activityMap = { // todo: endpoint
+const activityMap = { // todo: remove it
     activityMap: {
         activities: [
             {
@@ -74,18 +74,6 @@ const activityMap = { // todo: endpoint
     },
 };
 
-// todo: endpoint for all 
-export function getActivityMap(chapterId) {
-    return activityMap;
-}
-
-export function getActivity(chapterId, activityId) {
-    return activityMap.activityMap.activities.find(activity => activity.id === activityId);
-}
-
-export function setCompleted(chapterId, activityId) {
-    getActivity(chapterId, activityId).completed = true;
-}
 
 export function getActivityByPosition(chapterId, x, y) {
     return activityMap.activityMap.activities.find(
