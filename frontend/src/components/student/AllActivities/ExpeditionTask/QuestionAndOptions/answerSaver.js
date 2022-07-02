@@ -9,6 +9,8 @@ const getAnswerForm = (questionType, userAnswer) => {
             return {option: userAnswer[0]}
         case QuestionType.MULTIPLE_CHOICE:
             return {options: userAnswer}
+        default:
+            return;
     }
 }
 
