@@ -5,7 +5,6 @@ import { Content } from '../../../../App/AppGeneralStyles';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../../../../utils/constants';
 import Loader from '../../../../general/Loader/Loader';
-import StudentService from "../../../../../services/student.service";
 import ExpeditionService from "../../../../../services/expedition.service";
 
 // if only one element of id -1 or -2 then do not generate doors but go to score screen

@@ -1,5 +1,4 @@
 import "moment/locale/pl";
-import React from "react";
 import {GradesTableType} from "../../../utils/constants";
 import {GradesDefaultTable} from "./GradesDefaultTable";
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik } from 'formik';
-import { Container, Form, Row, Col, Button, Spinner } from 'react-bootstrap';
+import { Container, Form, Row, Col, Spinner } from 'react-bootstrap';
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol';
 import { useNavigate } from 'react-router-dom';
 import { FIELD_REQUIRED, PageRoutes } from '../../../utils/constants';

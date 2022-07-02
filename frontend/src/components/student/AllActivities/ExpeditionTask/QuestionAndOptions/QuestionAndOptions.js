@@ -5,7 +5,6 @@ import {PageRoutes, QuestionType} from '../../../../../utils/constants';
 import Loader from '../../../../general/Loader/Loader';
 import { ContentWithBackground } from './QuestionAndOptionsStyle';
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage';
-import StudentService from "../../../../../services/student.service";
 import ExpeditionService from "../../../../../services/expedition.service";
 
 function QuestionAndOptions(props) {

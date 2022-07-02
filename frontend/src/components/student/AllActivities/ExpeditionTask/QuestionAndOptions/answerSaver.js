@@ -12,7 +12,7 @@ const getAnswerForm = (questionType, userAnswer) => {
     }
 }
 
-export function answerSaver(userAnswer, questionType, resultId, questionId, expeditionId, navigate){
+export default function answerSaver(userAnswer, questionType, resultId, questionId, expeditionId, navigate){
     if (!userAnswer) return;
 
     let acceptWarning = null;
