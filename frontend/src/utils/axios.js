@@ -3,8 +3,6 @@ import authHeader from '../services/auth-header';
 
 const header = Object.assign(authHeader(), { 'Content-Type': 'application/x-www-form-urlencoded'});
 const headerWithParams = params => Object.assign(header, { params });
-const headerForFileGet = Object.assign(authHeader(), { 'Content-Type': 'application/json'});
-const headerForFileGetParams = params => Object.assign(headerForFileGet, { params });
 
 export function axiosApiPost(url, body) {
     return axios.post(url, body, header)
@@ -24,8 +22,3 @@ export function axiosApiDelete(url, params) {
         .catch(error => console.log(error));
 }
 
-export function axiosApiGetFile(url, params) {
-    return axios.get(url, headerForFileGetParams(params))
-        .then(response => response.data)
-        .catch(error => console.log(error));
-}

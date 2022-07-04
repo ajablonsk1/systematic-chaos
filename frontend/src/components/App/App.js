@@ -2,37 +2,37 @@ import { Col, Container, Row } from 'react-bootstrap';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import { PageRoutes, TeacherSidebarTitles, UserSidebarTitles } from '../../utils/constants';
-import ActivityInfo from '../ActivityInfo/ActivityInfo';
-import CanvasMap from '../CanvasMap/CanvasMap';
-import CombatTask from '../CombatTask/CombatTask';
-import GameMap from '../GameMap/GameMap';
-import Information from '../Information/Information';
-import LoginAndRegistration from '../LoginAndRegistrationPage/LoginAndRegistration';
-import NotFound from '../NotFoundPage/NotFound';
-import Points from '../PointsPage/Points';
-import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions';
-import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor';
-import MobileNavbar from '../Sidebar/MobileNavbar';
-import Sidebar from '../Sidebar/Sidebar';
+import ActivityInfo from '../student/AllActivities/ExpeditionTask/ActivityInfo/ActivityInfo';
+import CanvasMap from '../student/CanvasMapPage/CanvasMap';
+import CombatTask from '../student/AllActivities/CombatTask/CombatTask';
+import GameMap from '../student/GameMapPage/GameMap';
+import Information from '../student/AllActivities/InfoTask/Information';
+import LoginAndRegistration from '../general/LoginAndRegistrationPage/LoginAndRegistration';
+import NotFound from '../general/NotFoundPage/NotFound';
+import Points from '../student/PointsPage/Points';
+import QuestionAndOptions from '../student/AllActivities/ExpeditionTask/QuestionAndOptions/QuestionAndOptions';
+import QuestionSelectionDoor from '../student/AllActivities/ExpeditionTask/QuestionSelectionDoor/QuestionSelectionDoor';
+import MobileNavbar from '../general/Sidebar/MobileNavbar';
+import Sidebar from '../general/Sidebar/Sidebar';
 import './App.css';
 import { SidebarCol } from './AppGeneralStyles';
-import SurveyTask from '../SurveyTask/SurveyTask';
-import Groups from '../GroupsPage/Groups';
-import GroupAddition from '../GroupAdditionPage/GroupAddition';
-import GameCard from '../GameCard/GameCard';
-import PageGuard from '../PageGuard/PageGuard';
+import SurveyTask from '../student/AllActivities/SurveyTask/SurveyTask';
+import Groups from '../professor/GroupsPage/Groups';
+import GroupAddition from '../professor/GroupAdditionPage/GroupAddition';
+import GameCard from '../student/GameCardPage/GameCard';
+import PageGuard from '../general/PageGuard/PageGuard';
 import { Role } from '../../utils/userRole';
 import { connect } from 'react-redux';
 import AuthVerify from '../../common/auth-verify';
 import { ToastContainer } from 'react-toastify';
-import Grades from '../Grades/Grades';
+import Grades from '../student/GradesPage/Grades';
 
-import ActivityAssessmentList from '../ActivityAssessmentList/ActivityAssessmentList';
-import ActivityAssessmentDetails from '../ActivityAssessmentDetails/ActivityAssessmentDetails';
+import ActivityAssessmentList from '../professor/ActivityAssessmentList/ActivityAssessmentList';
+import ActivityAssessmentDetails from '../professor/ActivityAssessmentDetails/ActivityAssessmentDetails';
 
-import ExpeditionSummary from '../ExpeditionSummary/ExpeditionSummary';
+import ExpeditionSummary from '../student/AllActivities/ExpeditionTask/ExpeditionSummary/ExpeditionSummary';
 import { isStudent } from '../../utils/storageManager';
-import Timer from '../Timer/Timer';
+import Timer from '../student/AllActivities/ExpeditionTask/Timer/Timer';
 
 
 function App(props) {
@@ -195,16 +195,6 @@ function App(props) {
                                     element={
                                         <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
                                             <Grades />
-                                        </PageGuard>
-                                    }
-                                />
-
-                                {/* FOR TEST ONLY, DELETE LATER! */}
-                                <Route
-                                    path={`${PageRoutes.TEACHER_HOME}`}
-                                    element={
-                                        <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
-                                            <CanvasMap /> {/* whatever, testing only */}
                                         </PageGuard>
                                     }
                                 />

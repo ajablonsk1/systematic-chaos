@@ -84,17 +84,30 @@ export const TeacherSidebarTitles = {
 
 export const FIELD_REQUIRED = 'Pole wymagane.';
 export const START_GRAPH_NODE_ID = -1;
-export const END_GRAPH_NODE_ID = -2;
+
+
+export const Activity = {
+    EXPEDITION: 'EXPEDITION',
+    INFO: 'INFO',
+    SURVEY: 'SURVEY',
+    TASK: 'TASK'
+}
+
+export const QuestionType = {
+    SINGLE_CHOICE: 'SINGLE_CHOICE',
+    MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+    OPEN_QUESTION: 'OPENED'
+}
 
 export const getActivityImg = type => {
     switch (type) {
-        case 'EXPEDITION':
+        case Activity.EXPEDITION:
             return ExpeditionImg;
-        case 'INFO':
+        case Activity.INFO:
             return InformationImg;
-        case 'SURVEY':
+        case Activity.SURVEY:
             return SurveyImg;
-        case 'TASK':
+        case Activity.TASK:
             return TaskImg;
         default:
             return;
@@ -103,13 +116,13 @@ export const getActivityImg = type => {
 
 export const getActivityTypeName = type => {
     switch (type) {
-        case 'EXPEDITION':
+        case Activity.EXPEDITION:
             return 'Ekspedycja';
-        case 'INFO':
+        case Activity.INFO:
             return 'Wytyczne';
-        case 'SURVEY':
+        case Activity.SURVEY:
             return 'Sondaż';
-        case 'TASK':
+        case Activity.TASK:
             return 'Zadanie bojowe';
         default:
             return;
@@ -118,13 +131,13 @@ export const getActivityTypeName = type => {
 
 export const getActivityPath = type => {
     switch (type) {
-        case 'EXPEDITION':
+        case Activity.EXPEDITION:
             return PageRoutes.ACTIVITY_INFO;
-        case 'TASK':
+        case Activity.TASK:
             return PageRoutes.COMBAT_TASK;
-        case 'SURVEY':
+        case Activity.SURVEY:
             return PageRoutes.SURVEY_TASK;
-        case 'INFO':
+        case Activity.INFO:
             return PageRoutes.INFORMATION;
         default:
             return;
