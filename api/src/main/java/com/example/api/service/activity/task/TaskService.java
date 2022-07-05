@@ -1,17 +1,11 @@
 package com.example.api.service.activity.task;
 
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.dto.response.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.task.TaskToEvaluateResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
-import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.FileTask;
-import com.example.api.model.activity.task.GraphTask;
-import com.example.api.model.map.Requirement;
-import com.example.api.model.question.Answer;
-import com.example.api.model.question.Option;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
@@ -19,7 +13,6 @@ import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.user.UserRepo;
-import io.swagger.v3.oas.models.links.Link;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +22,6 @@ import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

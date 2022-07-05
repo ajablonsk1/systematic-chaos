@@ -1,11 +1,9 @@
 package com.example.api.controller.activity.task;
 
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.dto.response.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.task.TaskToEvaluateResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.task.GraphTask;
 import com.example.api.service.activity.task.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

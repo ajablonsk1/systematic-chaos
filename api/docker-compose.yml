@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  API:
+    image: 'systematic-chaos-api'
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - PostgreSQL
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/sc
+      - SPRING_DATASOURCE_USERNAME=sc
+      - SPRING_DATASOURCE_PASSWORD=sc
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
+
+  PostgreSQL:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=sc
+      - POSTGRES_USER=sc
+      - POSTGRES_DB=sc

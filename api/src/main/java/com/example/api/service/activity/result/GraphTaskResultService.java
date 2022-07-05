@@ -2,7 +2,6 @@ package com.example.api.service.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
 import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
-import com.example.api.dto.request.activity.result.SetPointsForm;
 import com.example.api.dto.request.activity.result.SetTimeSpentForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongAnswerTypeException;
@@ -12,7 +11,6 @@ import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Answer;
 import com.example.api.model.question.Question;
-import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
@@ -28,7 +26,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
