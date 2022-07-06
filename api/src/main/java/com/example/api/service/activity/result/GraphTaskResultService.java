@@ -18,7 +18,7 @@ import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.service.validator.AnswerFormValidator;
-import com.example.api.service.activity.result.util.PointsCalculator;
+import com.example.api.util.PointsCalculator;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
