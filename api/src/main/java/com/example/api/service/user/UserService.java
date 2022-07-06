@@ -57,8 +57,7 @@ public class UserService implements UserDetailsService {
             log.error("User {} already exist in database", email);
             throw new EntityAlreadyInDatabaseException("User " + email + " already exists in database");
         }
-        User user = new User(form.getEmail(), form.getFirstName(), form.getLastName(),
-                form.getAccountType());
+        User user = new User(form.getEmail(), form.getFirstName(), form.getLastName(), form.getAccountType());
         if(form.getAccountType() == AccountType.STUDENT){
             if(form.getHeroType() == null || form.getInvitationCode() == null) {
                 log.error("Request body for registering student requires 6 body parameters");
@@ -85,12 +84,12 @@ public class UserService implements UserDetailsService {
         return user.getId();
     }
 
-    public User getUser(String email) throws EntityNotFoundException {
+    public User getUser(String email) throws UsernameNotFoundException {
         log.info("Fetching user {}", email);
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);
-            throw new EntityNotFoundException("User" + email + " not found in database");
+            throw new UsernameNotFoundException("User" + email + " not found in database");
         }
         return userRepo.findUserByEmail(email);
     }
@@ -101,7 +100,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Group getUserGroup(String email) throws EntityNotFoundException {
-        log.info("Fetching all users");
+        log.info("Fetching group for user {}", email);
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);

@@ -2,7 +2,6 @@ package com.example.api.controller.map;
 
 import com.example.api.dto.response.map.ActivityMapResponse;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.model.map.ActivityMap;
 import com.example.api.service.map.ActivityMapService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

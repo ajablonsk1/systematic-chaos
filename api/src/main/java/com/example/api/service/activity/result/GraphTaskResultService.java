@@ -2,7 +2,6 @@ package com.example.api.service.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
 import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
-import com.example.api.dto.request.activity.result.SetPointsForm;
 import com.example.api.dto.request.activity.result.SetTimeSpentForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongAnswerTypeException;
@@ -12,23 +11,20 @@ import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Answer;
 import com.example.api.model.question.Question;
-import com.example.api.model.question.QuestionType;
-import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.service.activity.result.util.AnswerFormValidator;
+import com.example.api.service.validator.AnswerFormValidator;
 import com.example.api.service.activity.result.util.PointsCalculator;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,17 +38,12 @@ public class GraphTaskResultService {
     private final PointsCalculator pointsCalculator;
     private final AnswerFormValidator answerFormValidator;
     private final AnswerRepo answerRepo;
+    private final UserValidator userValidator;
 
-    public GraphTaskResult getGraphTaskResult(Long graphTaskResultId, String studentEmail)
+    public GraphTaskResult getGraphTaskResult(Long graphTaskResultId, String email)
             throws WrongUserTypeException, EntityNotFoundException {
-        User student = userRepo.findUserByEmail(studentEmail);
-        if(student == null) {
-            log.error("User {} not found in database", studentEmail);
-            throw new UsernameNotFoundException("User" + studentEmail + " not found in database");
-        }
-        if(student.getAccountType() != AccountType.STUDENT) {
-            throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
-        }
+        User student = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(student, email);
         GraphTask task = graphTaskRepo.findGraphTaskById(graphTaskResultId);
         if(task == null) {
             log.error("Graph task with given id {} does not exist", graphTaskResultId);

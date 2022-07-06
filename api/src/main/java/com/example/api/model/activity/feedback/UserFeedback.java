@@ -1,6 +1,5 @@
 package com.example.api.model.activity.feedback;
 
-import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.Survey;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

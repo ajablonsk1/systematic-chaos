@@ -1,4 +1,4 @@
-package com.example.api.service.activity.result.util;
+package com.example.api.service.validator;
 
 import com.example.api.dto.request.activity.result.AnswerForm;
 import com.example.api.error.exception.WrongBodyParametersNumberException;

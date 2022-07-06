@@ -10,6 +10,7 @@ import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.UserFeedbackRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,21 +26,17 @@ public class UserFeedbackService {
     private final UserFeedbackRepo userFeedbackRepo;
     private final UserRepo userRepo;
     private final SurveyRepo surveyRepo;
+    private final UserValidator userValidator;
 
     public UserFeedback saveUserFeedback(UserFeedback feedback) {
         return userFeedbackRepo.save(feedback);
     }
 
     public UserFeedback saveUserFeedback(SaveUserFeedbackForm form) throws WrongUserTypeException, EntityNotFoundException {
+        log.info("Saving user {} feedback for survey with id {}", form.getStudentEmail(), form.getSurveyId());
         String email = form.getStudentEmail();
         User student = userRepo.findUserByEmail(email);
-        if(student == null) {
-            log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
-        }
-        if(student.getAccountType() != AccountType.STUDENT) {
-            throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
-        }
+        userValidator.validateStudentAccount(student, email);
         UserFeedback feedback = new UserFeedback();
         feedback.setContent(form.getContent());
         feedback.setFrom(student);
