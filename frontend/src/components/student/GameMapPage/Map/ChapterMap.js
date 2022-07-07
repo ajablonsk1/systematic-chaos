@@ -31,6 +31,8 @@ export default function ChapterMap({ map }) {
                     activity={activity}
                     posX={idx2}
                     posY={idx1}
+                    mapSizeY={map.mapSizeY}
+                    mapSizeX={map.mapSizeX}
                 />
             ))}
         </Row>

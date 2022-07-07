@@ -9,8 +9,9 @@ export const GameContent = styled(Content)`
 `;
 
 export const Map = styled(Container)`
-    width: 70%;
-
+    display: flex;
+    flex-direction: column;
+  
     @media (max-width: 1000px) {
         width: 100%;
     }
