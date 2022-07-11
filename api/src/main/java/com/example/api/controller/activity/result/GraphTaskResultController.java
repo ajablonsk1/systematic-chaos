@@ -2,7 +2,6 @@ package com.example.api.controller.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
 import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
-import com.example.api.dto.request.activity.result.SetPointsForm;
 import com.example.api.dto.request.activity.result.SetTimeSpentForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongAnswerTypeException;

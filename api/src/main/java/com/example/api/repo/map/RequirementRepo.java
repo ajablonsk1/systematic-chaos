@@ -1,4 +1,4 @@
-package com.example.api.service.activity.requirement;
+package com.example.api.repo.map;
 
 import com.example.api.model.map.Requirement;
 import org.springframework.data.jpa.repository.JpaRepository;

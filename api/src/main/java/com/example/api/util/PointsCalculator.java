@@ -1,4 +1,4 @@
-package com.example.api.service.activity.result.util;
+package com.example.api.util;
 
 import com.example.api.error.exception.WrongAnswerTypeException;
 import com.example.api.model.activity.result.GraphTaskResult;
@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Locale;
 
 @Slf4j
 @Component
