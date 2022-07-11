@@ -5,16 +5,19 @@ import { getActivityImg, getActivityPath } from '../../../../utils/constants';
 import {ActivityCol} from "./ActivityFieldStyle";
 
 
-export default function ActivityField({ activity, posX, posY }) {
+export default function ActivityField({ activity, posX, posY, mapSizeX, mapSizeY }) {
     const activityCol = useRef(null);
     const navigate = useNavigate();
 
     useLayoutEffect(() => {
         function setHeight() {
             if (activityCol.current) {
+                const resizeScale = .7;
+                const possibleSize = Math.min(window.innerHeight, window.innerWidth) * resizeScale /
+                    Math.max(mapSizeY, mapSizeX);
                 activityCol.current.setAttribute(
                     'style',
-                    `height:${activityCol.current.offsetWidth}px`
+                    `height:${possibleSize}px; width: ${possibleSize}px`
                 );
             }
         }

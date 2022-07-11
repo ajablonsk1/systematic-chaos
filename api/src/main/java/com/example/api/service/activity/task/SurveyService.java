@@ -18,6 +18,7 @@ public class SurveyService {
     private final SurveyRepo surveyRepo;
 
     public SurveyInfoResponse getSurveyInfo(Long id) throws EntityNotFoundException {
+        log.info("Fetching survey info");
         Survey survey = surveyRepo.findSurveyById(id);
         if(survey == null) {
             log.error("Survey with id {} not found in database", id);

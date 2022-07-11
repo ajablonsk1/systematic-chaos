@@ -13,6 +13,7 @@ import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,19 +31,19 @@ public class FileTaskResultService {
     private final FileTaskRepo fileTaskRepo;
     private final UserRepo userRepo;
     private final FileRepo fileRepo;
+    private final UserValidator userValidator;
 
     public Long saveFileToFileTaskResult(SaveFileToFileTaskResultForm form) throws EntityNotFoundException, WrongUserTypeException {
+        log.info("Saving file to file task result with id {}", form.getFileTaskId());
         FileTaskResult result = getFileTaskResultByFileTaskAndUser(form.getFileTaskId(), form.getStudentEmail());
         if(result == null){
             result = new FileTaskResult();
-            result.setFiles(new LinkedList<File>());
             result.setAnswer("");
             result.setFileTask(fileTaskRepo.getById(form.getFileTaskId()));
             result.setEvaluated(false);
             result.setUser(userRepo.findUserByEmail(form.getStudentEmail()));
             fileTaskResultRepo.save(result);
         }
-
         if(form.getFileString() != null) {
             File file = new File(null, form.getFileName(), form.getFileString());
             fileRepo.save(file);
@@ -54,9 +55,10 @@ public class FileTaskResultService {
         return result.getId();
     }
 
-    public Long deleteFileFromFileTask(DeleteFileFromFileTaskForm form) throws EntityNotFoundException, WrongUserTypeException {
-        FileTaskResult result = getFileTaskResultByFileTaskAndUser(form.getFileTaskId(), form.getStudentEmail());
-        result.getFiles().remove(form.getIndex());
+    public Long deleteFileFromFileTask(Long fileTaskId, String email, int index) throws EntityNotFoundException, WrongUserTypeException {
+        log.info("Deleting file from file task result with id {}", fileTaskId);
+        FileTaskResult result = getFileTaskResultByFileTaskAndUser(fileTaskId, email);
+        result.getFiles().remove(index);
         return result.getId();
     }
 
@@ -67,14 +69,7 @@ public class FileTaskResultService {
             throw new EntityNotFoundException("File task with given id " + fileTaskId + " does not exist");
         }
         User student = userRepo.findUserByEmail(email);
-        if(student == null) {
-            log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
-        }
-        if(student.getAccountType() != AccountType.STUDENT) {
-            throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
-
-        }
+        userValidator.validateStudentAccount(student, email);
         return fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
     }
 

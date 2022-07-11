@@ -30,7 +30,7 @@ import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
-import com.example.api.service.activity.requirement.RequirementRepo;
+import com.example.api.repo.map.RequirementRepo;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.activity.task.GraphTaskService;
 import com.example.api.service.group.GroupService;

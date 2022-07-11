@@ -28,14 +28,13 @@ import java.util.Objects;
 @Slf4j
 @Transactional
 public class TaskService {
-    private final GraphTaskRepo graphTaskRepo;
     private final FileTaskRepo fileTaskRepo;
-    private final GraphTaskResultRepo graphTaskResultRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final UserRepo userRepo;
 
     public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate(String email)
             throws WrongUserTypeException, UsernameNotFoundException {
+        log.info("Fetching all activities that are needed to be evaluated for professor {}", email);
         User professor = userRepo.findUserByEmail(email);
         if (professor == null) {
             log.error("User {} not found in database", email);
@@ -62,6 +61,7 @@ public class TaskService {
     }
 
     public TaskToEvaluateResponse getFirstAnswerToEvaluate(Long id) throws EntityNotFoundException {
+        log.info("Fetching first activity that is needed to be evaluated for file task with id {}", id);
         FileTask task = fileTaskRepo.findFileTaskById(id);
         if(task == null) {
             log.error("File task with id {} not found in database", id);
@@ -72,11 +72,13 @@ public class TaskService {
                 .filter(result -> Objects.equals(result.getFileTask().getId(), task.getId()))
                 .filter(result -> !result.isEvaluated())
                 .toList();
-        FileTaskResult fileTaskResult = fileTaskResults.get(0);
-        long num = fileTaskResults.size();
-        if(fileTaskResult != null) {
-            return new TaskToEvaluateResponse(fileTaskResult.getId(), task.getName(), null, task.getDescription(),
-                    fileTaskResult.getAnswer(), fileTaskResult.getFiles(), task.getMaxPoints(), num-1);
+        if(fileTaskResults.size() > 0) {
+            FileTaskResult fileTaskResult = fileTaskResults.get(0);
+            long num = fileTaskResults.size();
+            if(fileTaskResult != null) {
+                return new TaskToEvaluateResponse(fileTaskResult.getId(), task.getName(), null, task.getDescription(),
+                        fileTaskResult.getAnswer(), fileTaskResult.getFiles(), task.getMaxPoints(), num-1);
+            }
         }
         return null;
     }

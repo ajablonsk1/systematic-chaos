@@ -21,6 +21,7 @@ public class GraphTaskService {
     }
 
     public GraphTask getGraphTaskById(Long id) throws EntityNotFoundException {
+        log.info("Fetching graph task with id {}", id);
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(id);
         if(graphTask == null) {
             log.error("Graph task with id {} not found in database", id);

@@ -8,7 +8,7 @@ import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
-import com.example.api.service.activity.feedback.util.FeedbackValidator;
+import com.example.api.service.validator.FeedbackValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,6 @@ import javax.transaction.Transactional;
 public class ProfessorFeedbackService {
     private final ProfessorFeedbackRepo professorFeedbackRepo;
     private final FeedbackValidator feedbackValidator;
-    private final GraphTaskResultRepo graphTaskResultRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
 
     public ProfessorFeedback saveProfessorFeedback(ProfessorFeedback feedback) {

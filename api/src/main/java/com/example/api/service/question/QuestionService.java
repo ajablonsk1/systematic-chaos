@@ -22,6 +22,7 @@ public class QuestionService {
     }
 
     public Question getQuestion(Long id) throws EntityNotFoundException {
+        log.info("Fetching question with id {}", id);
         Question question = questionRepo.findQuestionById(id);
         if(question == null) {
             log.error("Question with id {} not found in database", id);
@@ -31,6 +32,7 @@ public class QuestionService {
     }
 
     public List<Question> getNextQuestions(Long id) throws EntityNotFoundException {
+        log.info("Fetching next questions for question with id {}", id);
         Question question = questionRepo.findQuestionById(id);
         if(question == null) {
             log.error("Question with id {} not found in database", id);

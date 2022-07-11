@@ -20,6 +20,7 @@ public class InfoService {
     private final InfoRepo infoRepo;
 
     public InfoResponse getInfo(Long id) throws EntityNotFoundException {
+        log.info("Fetching info");
         Info info = infoRepo.findInfoById(id);
         if(info == null) {
             log.error("Info with id {} not found in database", id);

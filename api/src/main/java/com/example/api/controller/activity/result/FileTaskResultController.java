@@ -24,7 +24,6 @@ public class FileTaskResultController {
     @DeleteMapping("/file/delete")
     public ResponseEntity<Long> deleteFileFromFileTask(@RequestParam Long fileTaskId, @RequestParam String studentEmail, @RequestParam int index)
             throws EntityNotFoundException, WrongUserTypeException {
-        DeleteFileFromFileTaskForm form = new DeleteFileFromFileTaskForm(fileTaskId, studentEmail, index);
-        return ResponseEntity.ok().body(fileTaskResultService.deleteFileFromFileTask(form));
+        return ResponseEntity.ok().body(fileTaskResultService.deleteFileFromFileTask(fileTaskId, studentEmail, index));
     }
 }

@@ -22,6 +22,7 @@ public class ActivityMapService {
     private final MapRepo mapRepo;
 
     public ActivityMapResponse getActivityMap(Long id) throws EntityNotFoundException {
+        log.info("Fetching activity map with id {} as ActivityMapResponse", id);
         ActivityMap activityMap = mapRepo.findActivityMapById(id);
         if(activityMap == null) {
             log.error("ActivityMap with id {} not found in database", id);

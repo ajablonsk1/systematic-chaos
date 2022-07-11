@@ -1,4 +1,4 @@
-package com.example.api.service.activity.feedback.util;
+package com.example.api.service.validator;
 
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -22,7 +22,6 @@ import javax.transaction.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class FeedbackValidator {
-    private final GraphTaskResultRepo graphTaskResultRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final UserRepo userRepo;
 
