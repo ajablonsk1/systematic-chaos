@@ -166,7 +166,7 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.GROUPS}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+                                        <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
                                             <Groups />
                                         </PageGuard>
                                     }
@@ -175,7 +175,7 @@ function App(props) {
                                 <Route
                                     path={`${PageRoutes.GROUP_ADDITION}`}
                                     element={
-                                        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+                                        <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
                                             <GroupAddition />
                                         </PageGuard>
                                     }
