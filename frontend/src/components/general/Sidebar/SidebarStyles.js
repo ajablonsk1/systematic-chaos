@@ -1,47 +1,47 @@
-import styled from 'styled-components';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import styled from 'styled-components'
+import { Container, Nav, Navbar } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 export const SidebarEdit = styled(Navbar)`
-    background-color: var(--dark-blue);
-    position: sticky;
-    top: 0;
-    padding: 0;
-    height: 100vh;
-`;
+  background-color: var(--dark-blue);
+  position: sticky;
+  top: 0;
+  padding: 0;
+  height: 100vh;
+`
 
 export const NavBarTextContainer = styled(Container)`
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
 
-    & #logo:hover {
-        color: var(--font-color);
-    }
-`;
+  & #logo:hover {
+    color: var(--font-color);
+  }
+`
 
 export const NavEdit = styled(Nav)`
-    font-size: 1.5vw;
-    margin-top: 3vh;
-    padding: 10px;
-    width: 100%;
-`;
+  font-size: 1.5vw;
+  margin-top: 3vh;
+  padding: 10px;
+  width: 100%;
+`
 
 export const LogoDiv = styled(Link)`
-    color: var(--font-color);
-    font-size: 1.7vw;
-    margin-top: 10px;
-    text-align: center;
-`;
+  color: var(--font-color);
+  font-size: 1.7vw;
+  margin-top: 10px;
+  text-align: center;
+`
 
 export const MobileNav = styled.div`
-    background-color: var(--dark-blue);
-    width: 100%;
-    padding: 10px 0;
-    position: fixed;
-    top: 100%;
-    left: 0;
-    transform: translateY(-100%);
-    z-index: 3;
-`;
+  background-color: var(--dark-blue);
+  width: 100%;
+  padding: 10px 0;
+  position: fixed;
+  top: 100%;
+  left: 0;
+  transform: translateY(-100%);
+  z-index: 3;
+`
