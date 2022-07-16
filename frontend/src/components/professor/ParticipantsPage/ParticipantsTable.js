@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
-import { GameButton } from '../../student/GameCardPage/GameButton'
 import { TableContainer } from './ParticipantsStyles'
 import ChangeGroupModal from './ChangeGroupModal'
 import { Button } from 'react-bootstrap'
