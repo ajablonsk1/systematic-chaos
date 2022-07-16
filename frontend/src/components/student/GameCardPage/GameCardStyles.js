@@ -1,6 +1,6 @@
-import {Card, Row} from 'react-bootstrap';
-import styled from 'styled-components';
-import { Content } from '../../App/AppGeneralStyles';
+import { Card, Row } from 'react-bootstrap'
+import styled from 'styled-components'
+import { Content } from '../../App/AppGeneralStyles'
 
 export const GameCardContent = styled(Content)`
   display: flex;
@@ -8,13 +8,13 @@ export const GameCardContent = styled(Content)`
   align-content: center;
   height: 100%;
   max-width: 100%;
-`;
+`
 
 export const GameCardOptionPick = styled(Card)`
-    height: 100%;
-    background-color: var(--dark-blue);
-    color: var(--font-color);
-`;
+  height: 100%;
+  background-color: var(--dark-blue);
+  color: var(--font-color);
+`
 
 export const GameCardRankRow = styled(Row)`
   margin-left: auto;
@@ -24,5 +24,4 @@ export const GameCardRankRow = styled(Row)`
   width: 40%;
   border-radius: 5%;
   border: 1px solid var(--font-color);
-  
 `
