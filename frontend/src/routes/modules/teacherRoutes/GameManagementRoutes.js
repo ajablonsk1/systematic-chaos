@@ -22,7 +22,7 @@ export default function GameManagementRoutes() {
       <Route
         path={`${PageRoutes.Teacher.GameManagement.Groups.GROUPS}`}
         element={
-          <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <Groups />
           </PageGuard>
         }
@@ -31,7 +31,7 @@ export default function GameManagementRoutes() {
       <Route
         path={`${PageRoutes.Teacher.GameManagement.Groups.GROUP_ADDITION}`}
         element={
-          <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <GroupAddition />
           </PageGuard>
         }

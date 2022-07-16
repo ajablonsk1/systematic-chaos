@@ -11,7 +11,7 @@ export default function GameSummaryRoutes() {
       <Route
         path={`${PageRoutes.Teacher.GameSummary.GAME_SUMMARY}`}
         element={
-          <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <GameSummary />
           </PageGuard>
         }
