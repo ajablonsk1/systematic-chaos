@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
-import { GameButton } from '../../student/GameCardPage/GameButton'
 import { TableContainer } from './ParticipantsStyles'
+import ChangeGroupModal from './ChangeGroupModal'
+import { Button } from 'react-bootstrap'
 
 function ParticipantsTable(props) {
+  const [modalOpen, setModalOpen] = useState(false)
+  const [chosenStudent, setChosenStudent] = useState()
+
   const participants = props.data.participants
 
   return (
@@ -20,10 +24,18 @@ function ParticipantsTable(props) {
           {participants.length > 0 ? (
             participants.map((participant, index) => (
               <tr key={index + participant.groupName}>
-                <td className={'py-0'}>{participant.groupName}</td>
-                <td className={'py-0'}>{participant.name}</td>
-                <td className={'py-0'}>
-                  <GameButton text={'Zmień grupę'} customWidth={'auto'} />
+                <td className={'py-2'}>{participant.groupName}</td>
+                <td className={'py-2'}>{participant.name}</td>
+                <td className={'py-2 text-center'}>
+                  <Button
+                    style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
+                    onClick={() => {
+                      setChosenStudent(participant)
+                      setModalOpen(true)
+                    }}
+                  >
+                    Zmień grupę
+                  </Button>
                 </td>
               </tr>
             ))
@@ -32,6 +44,7 @@ function ParticipantsTable(props) {
           )}
         </tbody>
       </TableContainer>
+      <ChangeGroupModal show={modalOpen} setModalOpen={setModalOpen} data={chosenStudent} />
     </GameCardOptionPick>
   )
 }
