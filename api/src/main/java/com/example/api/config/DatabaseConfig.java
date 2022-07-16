@@ -107,12 +107,14 @@ public class DatabaseConfig {
 //            accessDateRepo.save(accessDate3);
 
             Group group1 = new Group();
+            group1.setId(1L);
             group1.setInvitationCode("1234");
             group1.setName("all");
 //            group1.setAccessDate(accessDate1);
             groupService.saveGroup(group1);
 
             Group group2 = new Group();
+            group2.setId(2L);
             group2.setInvitationCode("1234");
             group2.setName("pn-1440-A");
 //            group2.setAccessDate(accessDate2);
@@ -120,6 +122,7 @@ public class DatabaseConfig {
             groupService.saveGroup(group2);
 
             Group group3 = new Group();
+            group3.setId(3L);
             group3.setInvitationCode("1234");
             group3.setName("pn-1440-B");
 //            group3.setAccessDate(accessDate3);
