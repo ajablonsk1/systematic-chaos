@@ -5,10 +5,20 @@ import { Role } from '../../../utils/userRole'
 import Groups from '../../../components/professor/GroupsPage/Groups'
 import GroupAddition from '../../../components/professor/GroupAdditionPage/GroupAddition'
 import { PageRoutes } from '../../PageRoutes'
+import GameManagement from '../../../components/professor/GameManagement/GameManagement'
 
 export default function GameManagementRoutes() {
   return (
     <Routes>
+      <Route
+        path={PageRoutes.Teacher.GameManagement.GAME_MANAGEMENT}
+        element={
+          <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+            <GameManagement />
+          </PageGuard>
+        }
+      />
+
       <Route
         path={`${PageRoutes.Teacher.GameManagement.Groups.GROUPS}`}
         element={

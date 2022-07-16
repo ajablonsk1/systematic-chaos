@@ -3,7 +3,7 @@ import NotFound from '../../../components/general/NotFoundPage/NotFound'
 import { PageRoutes } from '../../PageRoutes'
 import PageGuard from '../../../components/general/PageGuard/PageGuard'
 import { Role } from '../../../utils/userRole'
-import GameSummary from '../../../components/student/GradesPage/GameSummary'
+import GameSummary from '../../../components/professor/GameSummary/GameSummary'
 
 export default function GameSummaryRoutes() {
   return (

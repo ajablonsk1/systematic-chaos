@@ -6,9 +6,9 @@ import {
   getUnmarkedActivities,
   getWeightedAverageGrade
 } from '../../../storage/gradesTable'
-import { FullDivider } from '../AllActivities/ExpeditionTask/ActivityInfo/ActivityInfoStyles'
+import { FullDivider } from '../../student/AllActivities/ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { Content } from '../../App/AppGeneralStyles'
-import PercentageCircle from '../PointsPage/ChartAndStats/PercentageCircle'
+import PercentageCircle from '../../student/PointsPage/ChartAndStats/PercentageCircle'
 import { GradesTable, UnmarkedActivitiesTable } from './GradesTables'
 
 // TODO: refactor needed

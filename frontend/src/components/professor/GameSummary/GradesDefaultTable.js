@@ -1,4 +1,4 @@
-import { TableContainer } from '../PointsPage/Table/TableStyle'
+import { TableContainer } from '../../student/PointsPage/Table/TableStyle'
 import React from 'react'
 import { GradesData, GradesTableContent, GradesTableHeaders } from './utils'
 
