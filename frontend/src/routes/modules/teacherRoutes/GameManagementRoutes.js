@@ -13,7 +13,7 @@ export default function GameManagementRoutes() {
       <Route
         path={PageRoutes.Teacher.GameManagement.GAME_MANAGEMENT}
         element={
-          <PageGuard role={Role.LOGGED_IS_AS_TEACHER}>
+          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <GameManagement />
           </PageGuard>
         }
