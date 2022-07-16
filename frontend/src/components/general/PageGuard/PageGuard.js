@@ -20,7 +20,7 @@ function PageGuard(props) {
       if ((role === Role.LOGGED_IN_AS_STUDENT || (role === Role.NOT_LOGGED_IN && isLoggedIn)) && !student) {
         navigate(generateFullPath(() => PageRoutes.Teacher.GameSummary.GAME_SUMMARY))
         window.location.reload(true) // without it, sidebar not reload after redirect
-      } else if ((role === Role.LOGGED_IS_AS_TEACHER || (role === Role.NOT_LOGGED_IN && isLoggedIn)) && student) {
+      } else if ((role === Role.LOGGED_IN_AS_TEACHER || (role === Role.NOT_LOGGED_IN && isLoggedIn)) && student) {
         navigate(generateFullPath(() => PageRoutes.Student.GameCard.GAME_CARD))
         window.location.reload(true) // without it, sidebar not reload after redirect
       }
