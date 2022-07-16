@@ -1,5 +1,5 @@
 import { Card, Col, Row } from 'react-bootstrap'
-import { GameCardButton } from './GameCardButton'
+import { GameButton } from './GameButton'
 import { GameCardContent, GameCardOptionPick, GameCardRankRow } from './GameCardStyles'
 import { GameCardShortTable } from './GameCardShortTable'
 import badgeExample from '../../../storage/resources/badges/new.png'
@@ -73,7 +73,7 @@ export default function GameCard() {
               <h2>Gratulacje!</h2>
               <h2>Jesteś w TOP 10%!</h2> {/*//TODO: calculate it! */}
             </Card.Body>
-            <GameCardButton
+            <GameButton
               text='Sprawdź cały ranking'
               route={generateFullPath(() => PageRoutes.Student.Ranking.RANKING)}
             />
@@ -85,7 +85,7 @@ export default function GameCard() {
               <h2 style={{ fontWeight: 'bolder' }}>Ostatnie odznaki:</h2>
               <GameCardBadgeList badges={badgeList.badges} />
             </Card.Body>
-            <GameCardButton
+            <GameButton
               text='Sprawdź wszystkie zdobyte odznaki'
               route={generateFullPath(() => PageRoutes.Student.BadgesAndAchievements.BADGES_ACHIEVEMENTS)}
             />
@@ -105,10 +105,7 @@ export default function GameCard() {
               </h5>
               <h5>471 pkt do kolejnej rangi</h5>
             </Card.Body>
-            <GameCardButton
-              text='Sprawdź swoje punkty'
-              route={generateFullPath(() => PageRoutes.Student.Points.POINTS)}
-            />
+            <GameButton text='Sprawdź swoje punkty' route={generateFullPath(() => PageRoutes.Student.Points.POINTS)} />
           </GameCardOptionPick>
         </Col>
         <Col xl={7} className='mb-md-2 mb-5'>
@@ -123,10 +120,7 @@ export default function GameCard() {
                 <GameCardShortTable recentActivities={recentActivities} />
               </div>
             </Card.Body>
-            <GameCardButton
-              text='Zobacz pełną listę'
-              route={generateFullPath(() => PageRoutes.Student.Points.POINTS)}
-            />
+            <GameButton text='Zobacz pełną listę' route={generateFullPath(() => PageRoutes.Student.Points.POINTS)} />
           </GameCardOptionPick>
         </Col>
       </Row>
