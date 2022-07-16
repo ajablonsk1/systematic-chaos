@@ -1,20 +1,11 @@
 import React from 'react'
 import { Formik } from 'formik'
-import { Col, Container, Form, Row, Spinner } from 'react-bootstrap'
+import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
-import { useNavigate } from 'react-router-dom'
 import { FIELD_REQUIRED } from '../../../utils/constants'
 import { addGroup, AddGroupResults } from '../../../storage/groupsTable'
-import { AddButton, CancelButton } from './GroupAdditionStyle'
-import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 
-export default function GroupAdditionForm() {
-  const navigate = useNavigate()
-
-  const backToGroupsPage = () => {
-    navigate(generateFullPath(() => PageRoutes.Teacher.GameManagement.Groups.GROUPS))
-  }
-
+export default function GroupAdditionForm(props) {
   return (
     // todo: think about general Form component that can be extended
     <Formik
@@ -32,7 +23,7 @@ export default function GroupAdditionForm() {
         const result = addGroup(values.name, values.code)
 
         if (result === AddGroupResults.SUCCESS) {
-          backToGroupsPage()
+          props.setModalOpen(false)
         } else {
           result.forEach((error) => {
             switch (error) {
@@ -64,12 +55,16 @@ export default function GroupAdditionForm() {
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>
-                <AddButton type='submit' disabled={isSubmitting}>
-                  {isSubmitting ? <Spinner as='span' animation='border' size='sm' role='status' /> : <span>Dodaj</span>}
-                </AddButton>
-                <CancelButton className='ml-3' onClick={backToGroupsPage}>
+                <Button variant={'danger'} className='mr-3' onClick={() => props.setModalOpen(false)}>
                   Anuluj
-                </CancelButton>
+                </Button>
+                <Button
+                  style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
+                  type='submit'
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? <Spinner as='span' animation='border' size='sm' role='status' /> : <span>Dodaj</span>}
+                </Button>
               </Col>
             </Row>
           </Container>

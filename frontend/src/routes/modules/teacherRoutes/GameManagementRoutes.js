@@ -3,7 +3,6 @@ import NotFound from '../../../components/general/NotFoundPage/NotFound'
 import PageGuard from '../../../components/general/PageGuard/PageGuard'
 import { Role } from '../../../utils/userRole'
 import Groups from '../../../components/professor/GroupsPage/Groups'
-import GroupAddition from '../../../components/professor/GroupAdditionPage/GroupAddition'
 import { PageRoutes } from '../../PageRoutes'
 import GameManagement from '../../../components/professor/GameManagement/GameManagement'
 
@@ -24,15 +23,6 @@ export default function GameManagementRoutes() {
         element={
           <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <Groups />
-          </PageGuard>
-        }
-      />
-
-      <Route
-        path={`${PageRoutes.Teacher.GameManagement.Groups.GROUP_ADDITION}`}
-        element={
-          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
-            <GroupAddition />
           </PageGuard>
         }
       />
