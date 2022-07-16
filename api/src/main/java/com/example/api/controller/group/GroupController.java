@@ -21,7 +21,7 @@ public class GroupController {
         return ResponseEntity.ok().body(groupService.saveGroup(form));
     }
 
-    @GetMapping("/invitationCodeList")
+    @GetMapping("/invitation-code/list")
     ResponseEntity<List<GroupCode>> getInvitationCodeList() {
         return ResponseEntity.ok().body(groupService.getInvitationCodeList());
     }
