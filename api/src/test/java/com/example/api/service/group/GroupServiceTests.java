@@ -42,6 +42,7 @@ public class GroupServiceTests {
         group2 = new Group();
         group1.setId(1L);
         group2.setId(2L);
+
         group1.setName("G1");
         group2.setName("G2");
         group1.setInvitationCode("Code1");
@@ -143,4 +144,5 @@ public class GroupServiceTests {
         Assertions.assertTrue(expectedUserList.contains(new BasicUser(user3)));
 
     }
+
 }

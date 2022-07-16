@@ -1,6 +1,3 @@
-class ProfessorService{
+class ProfessorService {}
 
-
-}
-
-export default new ProfessorService();
+export default new ProfessorService()

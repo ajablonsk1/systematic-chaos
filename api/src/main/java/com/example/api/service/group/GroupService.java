@@ -4,6 +4,7 @@ import com.example.api.dto.request.group.SaveGroupForm;
 import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.dto.response.group.GroupCode;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.repo.group.AccessDateRepo;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -95,4 +97,5 @@ public class GroupService {
                 .toList();
 
     }
+
 }
