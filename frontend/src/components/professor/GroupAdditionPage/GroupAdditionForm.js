@@ -3,9 +3,28 @@ import { Formik } from 'formik'
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { FIELD_REQUIRED } from '../../../utils/constants'
-import { addGroup, AddGroupResults } from '../../../storage/groupsTable'
+import { AddGroupResults } from '../../../storage/groupsTable'
+import GroupService from '../../../services/group.service'
 
 export default function GroupAdditionForm(props) {
+  const checkResponseResult = (setFieldError, response) => {
+    switch (response) {
+      case AddGroupResults.SUCCESS:
+        console.log('sukces!')
+        props.setModalOpen(false)
+        break
+      case AddGroupResults.NAME_TAKEN_ERROR:
+        setFieldError('name', 'Ta nazwa grupy jest już zajęta!')
+        break
+      case AddGroupResults.CODE_TAKEN_ERROR:
+        setFieldError('code', 'Ten kod jest już wykorzystywany!')
+        break
+      default:
+        console.log('nieoczekiwana odpowiedź: ' + response)
+        break
+    }
+  }
+
   return (
     // todo: think about general Form component that can be extended
     <Formik
@@ -20,24 +39,11 @@ export default function GroupAdditionForm(props) {
         return errors
       }}
       onSubmit={(values, { setSubmitting, setFieldError }) => {
-        const result = addGroup(values.name, values.code)
+        GroupService.addGroup(values.name, values.code).then((response) => {
+          console.log(response)
+          checkResponseResult(setFieldError, response)
+        })
 
-        if (result === AddGroupResults.SUCCESS) {
-          props.setModalOpen(false)
-        } else {
-          result.forEach((error) => {
-            switch (error) {
-              case AddGroupResults.NAME_TAKEN_ERROR:
-                setFieldError('name', error)
-                break
-              case AddGroupResults.CODE_TAKEN_ERROR:
-                setFieldError('code', error)
-                break
-              default:
-                break
-            }
-          })
-        }
         setSubmitting(false)
       }}
     >
