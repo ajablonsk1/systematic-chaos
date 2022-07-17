@@ -20,5 +20,5 @@ public class GraphTask extends Task {
     @OneToMany
     private List<Question> questions = new LinkedList<>();
     private Double maxPoints100;
-    private Integer timeToSolve;
+    private Long timeToSolveMillis;
 }

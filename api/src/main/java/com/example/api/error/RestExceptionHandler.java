@@ -67,6 +67,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionWithStatusCode(INTERNAL_SERVER_ERROR, ex);
     }
 
+    @ExceptionHandler(EntityRequiredAttributeNullException.class)
+    public ResponseEntity<Object> handleEntityRequiredAttributeNullException(EntityRequiredAttributeNullException ex) {
+        return handleExceptionWithStatusCode(NOT_FOUND, ex);
+    }
+
     private ResponseEntity<Object> handleExceptionWithStatusCode(HttpStatus httpStatus, Exception ex) {
         ApiError apiError = new ApiError(httpStatus);
         apiError.setMessage(ex.getMessage());

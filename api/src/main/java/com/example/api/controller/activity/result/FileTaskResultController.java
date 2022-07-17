@@ -1,6 +1,5 @@
 package com.example.api.controller.activity.result;
 
-import com.example.api.dto.request.activity.task.DeleteFileFromFileTaskForm;
 import com.example.api.dto.request.activity.task.SaveFileToFileTaskResultForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;

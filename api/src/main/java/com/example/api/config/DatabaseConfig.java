@@ -24,13 +24,13 @@ import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.map.MapRepo;
+import com.example.api.repo.map.RequirementRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.OptionRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
-import com.example.api.repo.map.RequirementRepo;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.activity.task.GraphTaskService;
 import com.example.api.service.group.GroupService;
@@ -212,7 +212,7 @@ public class DatabaseConfig {
             graphTask.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTask.setMaxPoints(30.0);
             graphTask.setMaxPoints100(60.0);
-            graphTask.setTimeToSolve(12 * 60);
+            graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTask.setRequirement(req);
             graphTask.setPosX(5);
             graphTask.setPosY(4);
@@ -279,7 +279,7 @@ public class DatabaseConfig {
             graphTaskTwo.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTaskTwo.setMaxPoints(30.0);
             graphTaskTwo.setMaxPoints100(60.0);
-            graphTaskTwo.setTimeToSolve(12 * 60);
+            graphTaskTwo.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTaskTwo.setPosX(2);
             graphTaskTwo.setPosY(2);
 

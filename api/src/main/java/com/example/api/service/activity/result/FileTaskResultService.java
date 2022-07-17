@@ -1,12 +1,10 @@
 package com.example.api.service.activity.result;
 
-import com.example.api.dto.request.activity.task.DeleteFileFromFileTaskForm;
 import com.example.api.dto.request.activity.task.SaveFileToFileTaskResultForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.task.FileTask;
-import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
@@ -16,11 +14,9 @@ import com.example.api.repo.util.FileRepo;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.LinkedList;
 
 @Service
 @RequiredArgsConstructor
