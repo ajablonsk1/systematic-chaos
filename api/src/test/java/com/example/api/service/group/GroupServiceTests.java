@@ -111,7 +111,7 @@ public class GroupServiceTests {
         User user2 = new User();
 
         group1.setUsers(List.of(user1, user2));
-        when(groupRepo.findById(any())).thenReturn(Optional.ofNullable(group1));
+        when(groupRepo.findById(group1.getId())).thenReturn(Optional.ofNullable(group1));
 
         // when
         List<BasicUser> expectedUserList = groupService.getGroupUserList(group1.getId());
