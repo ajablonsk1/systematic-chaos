@@ -1,23 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Row } from 'react-bootstrap'
 import { Content } from '../../App/AppGeneralStyles'
 import { AddButton, Title } from './GroupsStyle'
 import GroupsTable from './Table/GroupsTable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router-dom'
-import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
+import GroupAdditionModal from '../GroupAdditionPage/GroupAdditionModal'
 
 export default function Groups() {
-  const navigate = useNavigate()
-
-  const navigateToGroupAddition = () => {
-    navigate(generateFullPath(() => PageRoutes.Teacher.GameManagement.Groups.GROUP_ADDITION))
-  }
+  const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <Content>
-      <AddButton className='m-5' onClick={navigateToGroupAddition}>
+      <AddButton className='m-5' onClick={() => setModalOpen(true)}>
         <FontAwesomeIcon icon={faPlus} size='2x' />
       </AddButton>
       <Row className='m-3'>
@@ -26,6 +21,7 @@ export default function Groups() {
       <Row className='m-3'>
         <GroupsTable />
       </Row>
+      <GroupAdditionModal show={modalOpen} setModalOpen={setModalOpen} />
     </Content>
   )
 }
