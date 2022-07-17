@@ -73,6 +73,7 @@ public class GraphTaskResultService {
         GraphTaskResult graphTaskResult = new GraphTaskResult();
         graphTaskResult.setGraphTask(graphTask);
         graphTaskResult.setUser(user);
+        graphTaskResult.setStartTimeMillis(System.currentTimeMillis());
         return graphTaskResultRepo.save(graphTaskResult);
     }
 
