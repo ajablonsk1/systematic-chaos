@@ -122,27 +122,4 @@ public class GroupServiceTests {
         Assertions.assertTrue(expectedUserList.contains(new BasicUser(user2)));
 
     }
-
-    @Test
-    public void getUsersFromAllGroupsTest() throws EntityNotFoundException {
-        // given
-        User user1 = new User();
-        User user2 = new User();
-        User user3 = new User();
-
-        group1.setUsers(List.of(user1, user2));
-        group2.setUsers(List.of(user3));
-        when(groupRepo.findAll()).thenReturn(List.of(group1, group2));
-
-        // when
-        List<BasicUser> expectedUserList = groupService.getGroupUserList(-1L);
-
-        // then
-        Assertions.assertEquals(expectedUserList.size(), 3);
-        Assertions.assertTrue(expectedUserList.contains(new BasicUser(user1)));
-        Assertions.assertTrue(expectedUserList.contains(new BasicUser(user2)));
-        Assertions.assertTrue(expectedUserList.contains(new BasicUser(user3)));
-
-    }
-
 }
