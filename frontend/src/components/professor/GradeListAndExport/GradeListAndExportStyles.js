@@ -13,9 +13,6 @@ export const TabsContainer = styled(Tabs)`
 export const GradesTable = styled(Table)`
   background-color: var(--dark-blue);
   color: var(--font-color);
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
 `
 
 export const ExportButton = styled(Button)`
