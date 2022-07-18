@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AddAnswerToGraphTaskForm {
+public class SetStartTimeForm {
     @Schema(required = true) private Long resultId;
-    @Schema(required = true) private Long questionId;
-    @Schema(required = true) private AnswerForm answerForm;
+    @Schema(required = true) private Long startTimeMillis;
 }

@@ -2,11 +2,9 @@ package com.example.api.service.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
 import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
+import com.example.api.dto.request.activity.result.SetStartTimeForm;
 import com.example.api.dto.request.activity.result.SetTimeSpentForm;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.WrongAnswerTypeException;
-import com.example.api.error.exception.WrongBodyParametersNumberException;
-import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.error.exception.*;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Answer;
@@ -18,8 +16,9 @@ import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.service.validator.AnswerFormValidator;
-import com.example.api.util.PointsCalculator;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.util.PointsCalculator;
+import com.example.api.util.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,19 +34,20 @@ public class GraphTaskResultService {
     private final GraphTaskRepo graphTaskRepo;
     private final UserRepo userRepo;
     private final QuestionRepo questionRepo;
+    private final AnswerRepo answerRepo;
     private final PointsCalculator pointsCalculator;
     private final AnswerFormValidator answerFormValidator;
-    private final AnswerRepo answerRepo;
     private final UserValidator userValidator;
+    private final TimeCalculator timeCalculator;
 
-    public GraphTaskResult getGraphTaskResult(Long graphTaskResultId, String email)
+    public GraphTaskResult getGraphTaskResult(Long graphTaskId, String email)
             throws WrongUserTypeException, EntityNotFoundException {
         User student = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(student, email);
-        GraphTask task = graphTaskRepo.findGraphTaskById(graphTaskResultId);
+        GraphTask task = graphTaskRepo.findGraphTaskById(graphTaskId);
         if(task == null) {
-            log.error("Graph task with given id {} does not exist", graphTaskResultId);
-            throw new EntityNotFoundException("Graph task with given id " + graphTaskResultId + " does not exist");
+            log.error("Graph task with given id {} does not exist", graphTaskId);
+            throw new EntityNotFoundException("Graph task with given id " + graphTaskId + " does not exist");
         }
         return graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(task, student);
     }
@@ -73,6 +73,7 @@ public class GraphTaskResultService {
         GraphTaskResult graphTaskResult = new GraphTaskResult();
         graphTaskResult.setGraphTask(graphTask);
         graphTaskResult.setUser(user);
+        graphTaskResult.setStartTimeMillis(System.currentTimeMillis());
         return graphTaskResultRepo.save(graphTaskResult);
     }
 
@@ -138,20 +139,22 @@ public class GraphTaskResultService {
         return pointsCalculator.calculateMaxOpenedPoints(result);
     }
 
-    public Answer addAnswerToGraphTaskResult(AddAnswerToGraphTaskForm form) throws EntityNotFoundException, WrongBodyParametersNumberException {
+    public Long addAnswerToGraphTaskResult(AddAnswerToGraphTaskForm form) throws EntityNotFoundException,
+            WrongBodyParametersNumberException, EntityRequiredAttributeNullException {
         Long id = form.getResultId();
+        long timeRemaining = getTimeRemaining(id);
+        if(timeRemaining < 0) {
+            log.debug("Time for graph task result with id {} has ended", id);
+            return timeRemaining;
+        }
         log.info("Saving answer to database for task result with id {}", id);
         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(graphTaskResult == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id  does not exist");
-        }
         Answer answer = answerFormValidator.validateAndCreateAnswer(form.getAnswerForm());
         Question question = questionRepo.findQuestionById(form.getQuestionId());
         answer.setQuestion(question);
         answerRepo.save(answer);
         graphTaskResult.getAnswers().add(answer);
-        return answer;
+        return timeRemaining;
     }
 
     public Integer setTimeSpent(SetTimeSpentForm form) throws EntityNotFoundException {
@@ -163,7 +166,36 @@ public class GraphTaskResultService {
             throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
         int timeSpent = form.getTimeSpent();
-        result.setTimeSpent(timeSpent);
+        result.setTimeSpentSec(timeSpent);
         return timeSpent;
+    }
+
+    public Long setStartTime(SetStartTimeForm form) throws EntityNotFoundException {
+        Long id = form.getResultId();
+        log.info("Setting start time for graph task result with id {}", id);
+        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(id);
+        if(graphTaskResult == null) {
+            log.error("Graph task result with given id {} does not exist", id);
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
+        }
+        graphTaskResult.setStartTimeMillis(form.getStartTimeMillis());
+        return form.getStartTimeMillis();
+    }
+
+
+    public Long getTimeRemaining(Long resultId) throws EntityNotFoundException, EntityRequiredAttributeNullException {
+        log.info("Calculating time remaining for graph task result with id {}", resultId);
+        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
+        if(graphTaskResult == null) {
+            log.error("Graph task result with given id {} does not exist", resultId);
+            throw new EntityNotFoundException("Graph task result with given id " + resultId + " does not exist");
+        }
+        if(graphTaskResult.getStartTimeMillis() == null) {
+            log.error("Start time not set for graph task with id {}", resultId);
+            throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
+                    "graph task result with id " + resultId);
+        }
+        GraphTask graphTask = graphTaskResult.getGraphTask();
+        return timeCalculator.getTimeRemaining(graphTaskResult.getStartTimeMillis(), graphTask.getTimeToSolveMillis());
     }
 }

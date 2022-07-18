@@ -2,13 +2,10 @@ package com.example.api.controller.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
 import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
+import com.example.api.dto.request.activity.result.SetStartTimeForm;
 import com.example.api.dto.request.activity.result.SetTimeSpentForm;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.WrongAnswerTypeException;
-import com.example.api.error.exception.WrongBodyParametersNumberException;
-import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.error.exception.*;
 import com.example.api.model.activity.result.GraphTaskResult;
-import com.example.api.model.question.Answer;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -75,8 +72,8 @@ public class GraphTaskResultController {
     }
 
     @PostMapping("/answer/add")
-    public ResponseEntity<Answer> addAnswerToGraphTaskResult(@RequestBody AddAnswerToGraphTaskForm form)
-            throws EntityNotFoundException, WrongBodyParametersNumberException {
+    public ResponseEntity<Long> addAnswerToGraphTaskResult(@RequestBody AddAnswerToGraphTaskForm form)
+            throws EntityNotFoundException, WrongBodyParametersNumberException, EntityRequiredAttributeNullException {
         return ResponseEntity.ok().body(graphTaskResultService.addAnswerToGraphTaskResult(form));
     }
 
@@ -84,5 +81,17 @@ public class GraphTaskResultController {
     public ResponseEntity<Integer> addAnswerToGraphTaskResult(@RequestBody SetTimeSpentForm form)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskResultService.setTimeSpent(form));
+    }
+
+    @PostMapping("/time-start/set")
+    public ResponseEntity<Long> setStartTime(@RequestBody SetStartTimeForm form)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskResultService.setStartTime(form));
+    }
+
+    @GetMapping("/time-remaining")
+    public ResponseEntity<Long> getTimeRemaining(@RequestParam Long resultId)
+            throws EntityNotFoundException, EntityRequiredAttributeNullException {
+        return ResponseEntity.ok().body(graphTaskResultService.getTimeRemaining(resultId));
     }
 }

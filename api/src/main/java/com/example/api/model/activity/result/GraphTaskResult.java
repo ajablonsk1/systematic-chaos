@@ -27,6 +27,8 @@ public class GraphTaskResult extends TaskResult {
     @JoinColumn(name = "graphTask_id")
     private GraphTask graphTask;
 
-    private int timeSpent;
+    private int timeSpentSec;
+
+    private Long startTimeMillis;
 }
 
