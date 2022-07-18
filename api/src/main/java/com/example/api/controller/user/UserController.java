@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.api.dto.request.user.RegisterUserForm;
+import com.example.api.dto.response.user.BasicStudent;
 import com.example.api.error.exception.BadRequestHeadersException;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -85,4 +86,10 @@ public class UserController {
             throw new BadRequestHeadersException("Refresh token is missing or is invalid!");
         }
     }
+
+    @GetMapping("/students-with-group/all")
+    public ResponseEntity<List<BasicStudent>> getAllStudentsWithGroup() {
+        return ResponseEntity.ok().body(userService.getAllStudentsWithGroup());
+    }
+
 }

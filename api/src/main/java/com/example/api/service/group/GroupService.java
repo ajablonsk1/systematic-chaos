@@ -77,14 +77,6 @@ public class GroupService {
     }
 
     public List<BasicUser> getGroupUserList(Long id) throws EntityNotFoundException {
-        if (id < 0) {
-            log.info("Fetching users from all groups");
-            return groupRepo.findAll()
-                    .stream()
-                    .flatMap(group -> group.getUsers().stream())
-                    .map(BasicUser::new)
-                    .collect(Collectors.toList());
-        }
         log.info("Fetching users from group with id {}", id);
         Optional<Group> groupOptional = groupRepo.findById(id);
         if (groupOptional.isEmpty()) {
@@ -95,7 +87,7 @@ public class GroupService {
                 .stream()
                 .map(BasicUser::new)
                 .toList();
-
+        
     }
 
 }
