@@ -73,4 +73,12 @@ public class FileTaskResultService {
         return fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
     }
 
+    public File getFileById(Long fileId) throws EntityNotFoundException {
+        File file = fileRepo.findFileById(fileId);
+        if(file == null) {
+            log.error("File with given id {} does not exist", fileId);
+            throw new EntityNotFoundException("File with given id " + fileId + " does not exist");
+        }
+        return file;
+    }
 }
