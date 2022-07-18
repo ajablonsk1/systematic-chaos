@@ -58,9 +58,9 @@ let groups = [
 ]
 
 export const AddGroupResults = {
-  NAME_TAKEN_ERROR: 'Nazwa grupy jest zajęta',
-  CODE_TAKEN_ERROR: 'Kod grupy jest zajęty',
-  SUCCESS: 'Grupa została dodana'
+  NAME_TAKEN_ERROR: 'NAME_TAKEN',
+  CODE_TAKEN_ERROR: 'CODE_TAKEN',
+  SUCCESS: 'SUCCESS'
 }
 
 export function getTableContent() {

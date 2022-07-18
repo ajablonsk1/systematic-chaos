@@ -10,7 +10,6 @@ export default function GroupAdditionForm(props) {
   const checkResponseResult = (setFieldError, response) => {
     switch (response) {
       case AddGroupResults.SUCCESS:
-        console.log('sukces!')
         props.setModalOpen(false)
         break
       case AddGroupResults.NAME_TAKEN_ERROR:
@@ -20,7 +19,6 @@ export default function GroupAdditionForm(props) {
         setFieldError('code', 'Ten kod jest już wykorzystywany!')
         break
       default:
-        console.log('nieoczekiwana odpowiedź: ' + response)
         break
     }
   }
@@ -40,7 +38,6 @@ export default function GroupAdditionForm(props) {
       }}
       onSubmit={(values, { setSubmitting, setFieldError }) => {
         GroupService.addGroup(values.name, values.code).then((response) => {
-          console.log(response)
           checkResponseResult(setFieldError, response)
         })
 
