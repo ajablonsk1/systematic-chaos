@@ -20,7 +20,6 @@ export const GradesTable = styled(Table)`
 
 export const ExportButton = styled(Button)`
   background-color: var(--button-green);
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   display: flex;
 `

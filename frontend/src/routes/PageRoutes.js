@@ -78,7 +78,7 @@ export const PageRoutes = {
     },
     Grades: {
       MAIN_PATH: 'grades/*',
-      GRADES: 'grades'
+      GRADES: ''
     }
   }
 }
