@@ -1,14 +1,16 @@
-import { Tabs, Tab } from 'react-bootstrap'
-import { Content } from '../../App/AppGeneralStyles'
-import { Button } from 'react-bootstrap'
+import { Tab } from 'react-bootstrap'
+
 import UsersTable from './UsersTable'
 import { getAllParticipants, getGroups } from './mockData'
+import { GradesContent } from './GradeListAndExportStyles'
+import { TabsContainer } from './GradeListAndExportStyles'
+import { ExportButton } from './GradeListAndExportStyles'
 export default function GradeListAndExport() {
   const allUsers = getAllParticipants()
   const groups = getGroups()
   return (
-    <Content>
-      <Tabs>
+    <GradesContent>
+      <TabsContainer>
         <Tab eventKey={'all'} title={'Wszyscy'}>
           <UsersTable users={allUsers} />
         </Tab>
@@ -18,9 +20,9 @@ export default function GradeListAndExport() {
             <UsersTable users={group} />
           </Tab>
         ))}
-      </Tabs>
+      </TabsContainer>
       {/* <TableContainer></TableContainer> */}
-      <Button>Eksportuj oceny</Button>
-    </Content>
+      <ExportButton>Eksportuj oceny</ExportButton>
+    </GradesContent>
   )
 }

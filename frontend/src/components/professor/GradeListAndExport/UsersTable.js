@@ -1,15 +1,14 @@
 import { Table } from 'react-bootstrap'
+import { GradesTable } from './GradeListAndExportStyles'
 
 export default function UsersTable(props) {
   const users = props.users.participants
-  console.log(props)
-  console.log(users)
   return (
-    <Table striped bordered hover>
+    <GradesTable bordered>
       <thead>
         <th>Grupa</th>
         <th>Imię i nazwisko członka</th>
-        <th>Obecnie przewidywana ocena</th>
+        <th>Przewidywana ocena</th>
       </thead>
       <tbody>
         {users.length > 0 ? (
@@ -24,6 +23,6 @@ export default function UsersTable(props) {
           <p>Brak członków</p>
         )}
       </tbody>
-    </Table>
+    </GradesTable>
   )
 }
