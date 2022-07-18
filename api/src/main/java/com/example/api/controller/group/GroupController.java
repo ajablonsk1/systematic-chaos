@@ -2,6 +2,8 @@ package com.example.api.controller.group;
 
 import com.example.api.dto.request.group.SaveGroupForm;
 import com.example.api.dto.response.group.GroupCode;
+import com.example.api.dto.response.group.GroupResponse;
+import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.model.group.Group;
 import com.example.api.service.group.GroupService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping
-    public ResponseEntity<Group> saveGroup(@RequestBody SaveGroupForm form) {
+    public ResponseEntity<GroupResponse> saveGroup(@RequestBody SaveGroupForm form) {
         return ResponseEntity.ok().body(groupService.saveGroup(form));
     }
 

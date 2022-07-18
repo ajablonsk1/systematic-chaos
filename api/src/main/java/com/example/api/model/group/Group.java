@@ -25,8 +25,5 @@ public class Group {
     @OneToMany(mappedBy = "group")
     @JsonBackReference
     private List<User> users;
-
-    @ManyToOne
-    private AccessDate accessDate;
     private String invitationCode;
 }
