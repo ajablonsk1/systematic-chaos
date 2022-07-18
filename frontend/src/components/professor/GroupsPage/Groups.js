@@ -9,6 +9,7 @@ import GroupAdditionModal from '../GroupAdditionPage/GroupAdditionModal'
 
 export default function Groups() {
   const [modalOpen, setModalOpen] = useState(false)
+  const [refreshFunction, setRefreshFunction] = useState(() => {})
 
   return (
     <Content>
@@ -19,9 +20,9 @@ export default function Groups() {
         <Title>Grupy</Title>
       </Row>
       <Row className='m-3'>
-        <GroupsTable />
+        <GroupsTable setRefreshFunction={setRefreshFunction} />
       </Row>
-      <GroupAdditionModal show={modalOpen} setModalOpen={setModalOpen} />
+      <GroupAdditionModal show={modalOpen} setModalOpen={setModalOpen} refreshFunction={refreshFunction} />
     </Content>
   )
 }

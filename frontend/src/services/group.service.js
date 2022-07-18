@@ -1,5 +1,5 @@
-import { axiosApiPost } from '../utils/axios'
-import { ADD_GROUP } from './urls'
+import { axiosApiGet, axiosApiPost } from '../utils/axios'
+import { ADD_GROUP, GET_GROUPS } from './urls'
 
 class GroupService {
   addGroup(groupName, groupKey) {
@@ -7,6 +7,9 @@ class GroupService {
       name: groupName,
       invitationCode: groupKey
     })
+  }
+  getGroups() {
+    return axiosApiGet(GET_GROUPS)
   }
 }
 
