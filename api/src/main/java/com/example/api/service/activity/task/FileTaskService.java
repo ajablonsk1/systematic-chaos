@@ -31,7 +31,6 @@ public class FileTaskService {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final ProfessorFeedbackRepo professorFeedbackRepo;
     private final UserRepo userRepo;
-    private final FileRepo fileRepo;
     private final UserValidator userValidator;
 
     public FileTaskInfoResponse getFileTaskInfo(Long id, String email) throws EntityNotFoundException, WrongUserTypeException {
@@ -44,25 +43,22 @@ public class FileTaskService {
         userValidator.validateStudentAccount(student, email);
         FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
         if(result == null){
-            log.error("File task result for {} and file task with id {} does not exist", email, fileTask.getId());
-            throw new EntityNotFoundException("File task result for " + email +
-                    " and file task with id " + fileTask.getId() + " does not exist");
-        }
-        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
-        if (feedback == null){
-            log.error("Feedback for file task result with id {} does not exist", result.getId());
-            throw new EntityNotFoundException("Feedback for file task result with id " + result.getId() + " does not exist");
+            log.debug("File task result for {} and file task with id {} does not exist", email, fileTask.getId());
+            return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
+                    List.of(), null);
         }
         List<FileResponse> fileResponseList = result.getFiles()
                 .stream()
                 .map(file -> new FileResponse(file.getId(), file.getName()))
                 .toList();
+        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
+        if (feedback == null){
+            log.debug("Feedback for file task result with id {} does not exist", result.getId());
+            return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
+                    fileResponseList, null);
+        }
         return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
                 fileResponseList, feedback.getContent());
 
-    }
-
-    public File getFileById(Long fileId, String studentEmail) {
-        return fileRepo.findById(fileId).orElseThrow();
     }
 }
