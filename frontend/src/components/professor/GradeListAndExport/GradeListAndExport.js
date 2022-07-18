@@ -1,6 +1,6 @@
 import { Tab } from 'react-bootstrap'
 import UsersTable from './UsersTable'
-import { getAllParticipants, getGroups } from './mockData'
+import { getAllParticipants, getGroups } from '../ParticipantsPage/mockData'
 import { GradesContent } from './GradeListAndExportStyles'
 import { TabsContainer } from './GradeListAndExportStyles'
 import { ExportButton } from './GradeListAndExportStyles'
