@@ -10,6 +10,7 @@ export default function GroupAdditionForm(props) {
   const checkResponseResult = (setFieldError, response) => {
     switch (response) {
       case AddGroupResults.SUCCESS:
+        props.refreshFunction()
         props.setModalOpen(false)
         break
       case AddGroupResults.NAME_TAKEN_ERROR:
