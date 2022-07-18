@@ -1,4 +1,3 @@
-import { Table } from 'react-bootstrap'
 import { GradesTable } from './GradeListAndExportStyles'
 
 export default function UsersTable(props) {

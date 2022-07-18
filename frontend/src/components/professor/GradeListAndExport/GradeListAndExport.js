@@ -1,5 +1,4 @@
 import { Tab } from 'react-bootstrap'
-
 import UsersTable from './UsersTable'
 import { getAllParticipants, getGroups } from './mockData'
 import { GradesContent } from './GradeListAndExportStyles'
