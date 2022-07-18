@@ -5,9 +5,11 @@ export default function UsersTable(props) {
   return (
     <GradesTable bordered>
       <thead>
-        <th>Grupa</th>
-        <th>Imię i nazwisko członka</th>
-        <th>Przewidywana ocena</th>
+        <tr>
+          <th>Grupa</th>
+          <th>Imię i nazwisko członka</th>
+          <th>Przewidywana ocena</th>
+        </tr>
       </thead>
       <tbody>
         {users.length > 0 ? (
