@@ -1,6 +1,8 @@
 package com.example.api.controller.group;
 
 import com.example.api.dto.request.group.SaveGroupForm;
+import com.example.api.dto.response.user.BasicUser;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.dto.response.group.GroupCode;
 import com.example.api.dto.response.group.GroupResponse;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
@@ -26,5 +28,11 @@ public class GroupController {
     @GetMapping("/invitation-code/list")
     ResponseEntity<List<GroupCode>> getInvitationCodeList() {
         return ResponseEntity.ok().body(groupService.getInvitationCodeList());
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<BasicUser>> getGroupUserList(@RequestParam Long groupId)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(groupService.getGroupUserList(groupId));
     }
 }

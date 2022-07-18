@@ -1,6 +1,8 @@
 package com.example.api.service.group;
 
 import com.example.api.dto.request.group.SaveGroupForm;
+import com.example.api.dto.response.user.BasicUser;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.dto.response.group.GroupCode;
 import com.example.api.dto.response.group.GroupResponse;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
@@ -17,6 +19,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -81,4 +86,19 @@ public class GroupService {
                 .toList();
 
     }
+
+    public List<BasicUser> getGroupUserList(Long id) throws EntityNotFoundException {
+        log.info("Fetching users from group with id {}", id);
+        Optional<Group> groupOptional = groupRepo.findById(id);
+        if (groupOptional.isEmpty()) {
+            throw new EntityNotFoundException("Group with id " + id + " not found in database");
+        }
+        return groupOptional.get()
+                .getUsers()
+                .stream()
+                .map(BasicUser::new)
+                .toList();
+        
+    }
+
 }

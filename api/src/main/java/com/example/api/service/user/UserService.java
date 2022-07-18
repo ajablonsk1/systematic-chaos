@@ -1,6 +1,7 @@
 package com.example.api.service.user;
 
 import com.example.api.dto.request.user.RegisterUserForm;
+import com.example.api.dto.response.user.BasicStudent;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongBodyParametersNumberException;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -107,5 +109,13 @@ public class UserService implements UserDetailsService {
             throw new EntityNotFoundException("User" + email + " not found in database");
         }
         return user.getGroup();
+    }
+
+    public List<BasicStudent> getAllStudentsWithGroup() {
+        log.info("Fetching all students with group");
+        List<User> students = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT);
+        return students.stream()
+                .map(BasicStudent::new)
+                .collect(Collectors.toList());
     }
 }
