@@ -19,4 +19,13 @@ export const ExportButton = styled(Button)`
   background-color: var(--button-green);
   margin: 0 auto;
   display: flex;
+
+  &:disabled,
+  &:disabled:hover {
+    background-color: var(--button-green);
+  }
+
+  &:hover {
+    background-color: #157e7e;
+  }
 `

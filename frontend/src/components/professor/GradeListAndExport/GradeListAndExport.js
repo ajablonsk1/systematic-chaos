@@ -3,10 +3,11 @@ import UsersTable from './UsersTable'
 import { getAllParticipants, getGroups } from '../ParticipantsPage/mockData'
 import { GradesContent } from './GradeListAndExportStyles'
 import { TabsContainer } from './GradeListAndExportStyles'
-import { ExportButton } from './GradeListAndExportStyles'
+
 export default function GradeListAndExport() {
   const allUsers = getAllParticipants()
   const groups = getGroups()
+
   return (
     <GradesContent>
       <TabsContainer>
@@ -21,7 +22,6 @@ export default function GradeListAndExport() {
         ))}
       </TabsContainer>
       {/* <TableContainer></TableContainer> */}
-      <ExportButton>Eksportuj oceny</ExportButton>
     </GradesContent>
   )
 }
