@@ -72,8 +72,11 @@ export default function CombatTask() {
                 Zdobyte punkty: <strong>50 / 100</strong> {/*//TODO: info from endpoint*/}
               </p>
               <p>
-                <strong>Uwagi prowadzącego:</strong> <br /> Zabrakło mi kilku rzeczy, zaznaczyłem w pliku co mi się nie
-                podoba. Proszę sobie pobrać i sprawdzić {/*//TODO: info from endpoint*/}
+                {task.content && (
+                  <>
+                    <strong>Uwagi prowadzącego:</strong> <br /> {task.content}
+                  </>
+                )}
               </p>
               <SmallDivider />
               <RemarksCol>
