@@ -3,7 +3,7 @@ import { ErrorMessage, Field, Formik } from 'formik'
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FIELD_REQUIRED, HeroDescriptions, HeroImg, RegistrationLabelsAndTypes } from '../../../../utils/constants'
 import { Description, Info } from './RegistrationStyle'
-import { validateConfirmPassword, validateEmail, validatePassword } from './validators'
+import { validateConfirmPassword, validateEmail, validateIndex, validatePassword } from './validators'
 import { register } from '../../../../actions/auth'
 import { AccountType, HeroType } from '../../../../utils/userRole'
 import { connect } from 'react-redux'
@@ -12,12 +12,14 @@ function RegistrationForm(props) {
   const [character, setCharacter] = useState(HeroType.WARRIOR)
   const description = useRef(null)
   const initialValues = {
-    fullname: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
     passwordRepeat: ''
   }
   if (props.isStudent) {
+    initialValues.index = ''
     initialValues.invitationCode = ''
     initialValues.heroType = ''
   }
@@ -31,8 +33,8 @@ function RegistrationForm(props) {
       initialValues={initialValues}
       validate={(values) => {
         const errors = {}
-        if (!values.fullname) errors.fullname = FIELD_REQUIRED
-        else if (values.fullname.split(' ').length < 2) errors.fullname = 'Podaj imię i nazwisko, pamiętaj o spacji'
+        if (!values.firstName) errors.firstName = FIELD_REQUIRED
+        if (!values.lastName) errors.lastName = FIELD_REQUIRED
 
         errors.email = validateEmail(values.email)
         errors.password = validatePassword(values.password)
@@ -40,6 +42,7 @@ function RegistrationForm(props) {
 
         if (props.isStudent) {
           if (!values.invitationCode) errors.invitationCode = FIELD_REQUIRED
+          errors.index = validateIndex(values.index)
         }
 
         // without this, errors contains keys with empty string which should not be considered errors
@@ -52,8 +55,6 @@ function RegistrationForm(props) {
         return errors
       }}
       onSubmit={(values, { setSubmitting }) => {
-        values.firstName = values.fullname.split(' ').slice(0, -1).join(' ')
-        values.lastName = values.fullname.split(' ').slice(-1).join(' ')
         values.accountType = props.isStudent ? AccountType.STUDENT : AccountType.PROFESSOR
         values.heroType = props.isStudent ? character : null
         props.dispatch(register(values))
