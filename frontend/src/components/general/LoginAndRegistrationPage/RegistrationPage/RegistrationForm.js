@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { ErrorMessage, Field, Formik } from 'formik'
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FIELD_REQUIRED, HeroDescriptions, HeroImg, RegistrationLabelsAndTypes } from '../../../../utils/constants'
@@ -9,6 +9,8 @@ import { AccountType, HeroType } from '../../../../utils/userRole'
 import { connect } from 'react-redux'
 
 function RegistrationForm(props) {
+  const [errorMessage, setErrorMessage] = useState()
+  const [isFetching, setIsFetching] = useState(false)
   const [character, setCharacter] = useState(HeroType.WARRIOR)
   const description = useRef(null)
   const initialValues = {
@@ -27,6 +29,8 @@ function RegistrationForm(props) {
   const changeCharacter = (event) => {
     setCharacter(event.target.value)
   }
+
+  useEffect(() => setErrorMessage(props.message), [props.message])
 
   return (
     <Formik
@@ -55,9 +59,19 @@ function RegistrationForm(props) {
         return errors
       }}
       onSubmit={(values, { setSubmitting }) => {
+        setIsFetching(true)
         values.accountType = props.isStudent ? AccountType.STUDENT : AccountType.PROFESSOR
         values.heroType = props.isStudent ? character : null
-        props.dispatch(register(values))
+        const registerPromise = new Promise((resolve) => {
+          resolve(props.dispatch(register(values)))
+        })
+        registerPromise
+          .then(() => {
+            setIsFetching(false)
+          })
+          .catch(() => {
+            setIsFetching(false)
+          })
         setSubmitting(false)
       }}
     >
@@ -114,18 +128,24 @@ function RegistrationForm(props) {
                   </ErrorMessage>
                 </Col>
               ))}
+              {errorMessage && (
+                <p className={'text-center w-100'} style={{ color: 'red' }}>
+                  {errorMessage}
+                </p>
+              )}
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>
                 <Button
                   type='submit'
-                  disabled={isSubmitting}
+                  disabled={isFetching}
                   style={{
                     backgroundColor: 'var(--button-green)',
-                    borderColor: 'var(--button-green)'
+                    borderColor: 'var(--button-green)',
+                    width: '150px'
                   }}
                 >
-                  {isSubmitting ? (
+                  {isFetching ? (
                     <Spinner as='span' animation='border' size='sm' role='status' />
                   ) : (
                     <span>Załóż konto</span>
@@ -141,7 +161,8 @@ function RegistrationForm(props) {
 }
 
 function mapStateToProps(state) {
-  return {}
+  const { message } = state.message
+  return { message }
 }
 
 export default connect(mapStateToProps)(RegistrationForm)
