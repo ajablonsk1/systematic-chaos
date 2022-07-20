@@ -21,7 +21,6 @@ export default function GradeListAndExport() {
           </Tab>
         ))}
       </TabsContainer>
-      {/* <TableContainer></TableContainer> */}
     </GradesContent>
   )
 }
