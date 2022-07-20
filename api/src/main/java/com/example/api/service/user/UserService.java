@@ -9,8 +9,10 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.util.PolishMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,7 +57,7 @@ public class UserService implements UserDetailsService {
         User dbUser = userRepo.findUserByEmail(email);
         if(dbUser != null) {
             log.error("User {} already exist in database", email);
-            throw new EntityAlreadyInDatabaseException("User " + email + " already exists in database");
+            throw new EntityAlreadyInDatabaseException(PolishMessages.EMAIL_TAKEN);
         }
         User user = new User(form.getEmail(), form.getFirstName(), form.getLastName(), form.getAccountType());
         if(form.getAccountType() == AccountType.STUDENT){
@@ -72,6 +74,11 @@ public class UserService implements UserDetailsService {
             }
             user.setGroup(group);
             user.setHeroType(form.getHeroType());
+            Integer indexNumber = form.getIndexNumber();
+            if(indexNumber == null) {
+                log.error("User with index number {} already in database", indexNumber);
+                throw new EntityAlreadyInDatabaseException(PolishMessages.INDEX_TAKEN);
+            }
         } else {
             if(form.getHeroType() != null || form.getInvitationCode() != null){
                 log.error("Request body for registering professor requires 4 body parameters");
