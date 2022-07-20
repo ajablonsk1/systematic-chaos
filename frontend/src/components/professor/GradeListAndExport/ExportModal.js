@@ -8,7 +8,7 @@ function ExportModal(props) {
       <Card>
         <CardHeader className={'text-center'}>
           <Card.Title>Eksport ocen.</Card.Title>
-          <p>Czy na pewno chcesz rozpocząć eksport ocen dla wybranych studentów ?</p>
+          <p>Czy na pewno chcesz rozpocząć eksport ocen dla wybranych studentów?</p>
         </CardHeader>
         <Card.Footer className={'text-center'}>
           <Button variant={'danger'} onClick={() => props.setModalVisible(false)}>
