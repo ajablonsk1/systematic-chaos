@@ -4,13 +4,12 @@ import com.example.api.dto.request.group.SaveGroupForm;
 import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.dto.response.group.GroupCode;
-import com.example.api.dto.response.group.GroupResponse;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
+import com.example.api.util.PolishMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,24 +35,24 @@ public class GroupService {
         return groupRepo.save(group);
     }
 
-    public GroupResponse saveGroup(SaveGroupForm form) {
+    public Long saveGroup(SaveGroupForm form) throws EntityAlreadyInDatabaseException {
         log.info("Saving group to database with name {}", form.getName());
         List<Group> groups = groupRepo.findAll();
         boolean groupNameExists = groups.stream()
                 .anyMatch(group -> group.getName().equals(form.getName()));
         if(groupNameExists) {
-            log.warn("Group with given name {} already exists", form.getName());
-            return GroupResponse.NAME_TAKEN;
+            log.error("Group with given name {} already exists", form.getName());
+            throw new EntityAlreadyInDatabaseException(PolishMessages.GROUP_NAME_TAKEN);
         }
         boolean groupCodeExists = groups.stream()
                 .anyMatch(group -> group.getInvitationCode().equals(form.getInvitationCode()));
         if(groupCodeExists) {
-            log.warn("Group with given code {} already exists", form.getInvitationCode());
-            return GroupResponse.CODE_TAKEN;
+            log.error("Group with given code {} already exists", form.getInvitationCode());
+            throw new EntityAlreadyInDatabaseException(PolishMessages.GROUP_CODE_TAKEN);
         }
         Group group = new Group(null, form.getName(), new ArrayList<>(), form.getInvitationCode());
         groupRepo.save(group);
-        return GroupResponse.SUCCESS;
+        return group.getId();
     }
 
     public Group getGroupById(Long id) throws EntityNotFoundException {
