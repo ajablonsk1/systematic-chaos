@@ -6,6 +6,8 @@ class GroupService {
     return axiosApiPost(ADD_GROUP, {
       name: groupName,
       invitationCode: groupKey
+    }).catch((error) => {
+      throw error.message
     })
   }
   getGroups() {

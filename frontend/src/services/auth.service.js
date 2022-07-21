@@ -22,7 +22,7 @@ class AuthService {
     localStorage.removeItem('user')
   }
 
-  register({ firstName, lastName, email, password, invitationCode, accountType, heroType }) {
+  register({ firstName, lastName, email, password, invitationCode, accountType, heroType, indexNumber }) {
     const body = {
       firstName: firstName,
       lastName: lastName,
@@ -34,13 +34,16 @@ class AuthService {
     if (accountType === AccountType.STUDENT) {
       body.invitationCode = invitationCode
       body.heroType = heroType
+      body.indexNumber = indexNumber
     }
 
     return axios
       .post(BASE_URL + 'register', body, {
         'Content-Type': 'application/x-www-form-urlencoded'
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        throw err
+      })
   }
 
   refreshToken(refreshToken) {
