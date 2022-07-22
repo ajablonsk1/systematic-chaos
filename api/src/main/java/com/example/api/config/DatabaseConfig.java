@@ -1,5 +1,6 @@
 package com.example.api.config;
 
+import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Info;
@@ -74,6 +75,9 @@ public class DatabaseConfig {
             student.setEmail("student@gmail.com");
             student.setPassword("12345");
             student.setAccountType(AccountType.STUDENT);
+            student.setIndexNumber(123456);
+            student.setFirstName("Adrian");
+            student.setLastName("Jablonski");
 //            userService.saveUser(student);
 
 
@@ -81,6 +85,7 @@ public class DatabaseConfig {
             student1.setEmail("student1@gmail.com");
             student1.setPassword("12345");
             student1.setAccountType(AccountType.STUDENT);
+            student1.setIndexNumber(123457);
 //            userService.saveUser(student1);
 
 
@@ -331,6 +336,12 @@ public class DatabaseConfig {
             activityMap1.setInfos(List.of(info1));
             activityMap1.setSurveys(List.of(survey));
             mapRepo.save(activityMap1);
+
+            GraphTaskResult result = new GraphTaskResult();
+            result.setGraphTask(graphTask);
+            result.setUser(student);
+            result.setPointsReceived(10.0);
+            graphTaskResultService.saveGraphTaskResult(result);
         };
     }
 }

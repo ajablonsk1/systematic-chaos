@@ -10,10 +10,9 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.util.PolishMessages;
+import com.example.api.util.ExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -59,7 +58,7 @@ public class UserService implements UserDetailsService {
         User dbUser = userRepo.findUserByEmail(email);
         if(dbUser != null) {
             log.error("User {} already exist in database", email);
-            throw new EntityAlreadyInDatabaseException(PolishMessages.EMAIL_TAKEN);
+            throw new EntityAlreadyInDatabaseException(ExceptionMessage.EMAIL_TAKEN);
         }
         User user = new User(form.getEmail(), form.getFirstName(), form.getLastName(), form.getAccountType());
         if(form.getAccountType() == AccountType.STUDENT){
@@ -72,14 +71,14 @@ public class UserService implements UserDetailsService {
             Group group = groupRepo.findGroupByInvitationCode(code);
             if(group == null) {
                 log.error("Group with invitational code {} not found in database", code);
-                throw new EntityNotFoundException("Group with invitational code" + code + " not found in database");
+                throw new EntityNotFoundException(ExceptionMessage.GROUP_CODE_NOT_EXIST);
             }
             user.setGroup(group);
             user.setHeroType(form.getHeroType());
             Integer indexNumber = form.getIndexNumber();
             if(indexNumber == null) {
                 log.error("User with index number {} already in database", indexNumber);
-                throw new EntityAlreadyInDatabaseException(PolishMessages.INDEX_TAKEN);
+                throw new EntityAlreadyInDatabaseException(ExceptionMessage.INDEX_TAKEN);
             }
         } else {
             if(form.getHeroType() != null || form.getInvitationCode() != null){

@@ -12,7 +12,7 @@ public enum ActivityType {
         this.activityType = activityType;
     }
 
-    public String getMustFulfil() {
+    public String getActivityType() {
         return activityType;
     }
 }

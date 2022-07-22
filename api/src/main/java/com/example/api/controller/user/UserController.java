@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUser(@RequestParam String email) throws EntityNotFoundException {
+    public ResponseEntity<User> getUser(@RequestParam String email) {
         return ResponseEntity.ok().body(userService.getUser(email));
     }
 
@@ -61,8 +61,8 @@ public class UserController {
     }
 
     @GetMapping("/token/refresh")
-    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws EntityNotFoundException,
-            BadRequestHeadersException, IOException {
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response)
+            throws BadRequestHeadersException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String refreshToken = authorizationHeader.substring("Bearer ".length());
