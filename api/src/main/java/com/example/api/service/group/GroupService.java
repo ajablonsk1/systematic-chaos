@@ -9,10 +9,9 @@ import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.group.Group;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
-import com.example.api.util.PolishMessages;
+import com.example.api.util.ExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -42,13 +41,13 @@ public class GroupService {
                 .anyMatch(group -> group.getName().equals(form.getName()));
         if(groupNameExists) {
             log.error("Group with given name {} already exists", form.getName());
-            throw new EntityAlreadyInDatabaseException(PolishMessages.GROUP_NAME_TAKEN);
+            throw new EntityAlreadyInDatabaseException(ExceptionMessage.GROUP_NAME_TAKEN);
         }
         boolean groupCodeExists = groups.stream()
                 .anyMatch(group -> group.getInvitationCode().equals(form.getInvitationCode()));
         if(groupCodeExists) {
             log.error("Group with given code {} already exists", form.getInvitationCode());
-            throw new EntityAlreadyInDatabaseException(PolishMessages.GROUP_CODE_TAKEN);
+            throw new EntityAlreadyInDatabaseException(ExceptionMessage.GROUP_CODE_TAKEN);
         }
         Group group = new Group(null, form.getName(), new ArrayList<>(), form.getInvitationCode());
         groupRepo.save(group);
