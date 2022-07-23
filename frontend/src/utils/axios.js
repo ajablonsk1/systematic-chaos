@@ -8,19 +8,25 @@ export function axiosApiPost(url, body) {
   return axios
     .post(url, body, header)
     .then((response) => response.data)
-    .catch((error) => console.log(error))
+    .catch((error) => {
+      throw error.response.data
+    })
 }
 
 export function axiosApiGet(url, params) {
   return axios
     .get(url, headerWithParams(params))
     .then((response) => response.data)
-    .catch((error) => console.log(error))
+    .catch((error) => {
+      throw error.response.data
+    })
 }
 
 export function axiosApiDelete(url, params) {
   return axios
     .delete(url, headerWithParams(params))
     .then((response) => response.data)
-    .catch((error) => console.log(error))
+    .catch((error) => {
+      throw error.response.data
+    })
 }

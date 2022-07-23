@@ -15,19 +15,19 @@ export const register = (values) => (dispatch) => {
         dispatch(login(values))
 
         return Promise.resolve()
-      } else {
-        const msg = message('Registration fail')
-        dispatch({
-          type: SET_MESSAGE,
-          payload: msg
-        })
-        dispatch({
-          type: REGISTER_FAIL
-        })
-        return Promise.reject()
       }
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      const msg = message(err.response.data.message)
+      dispatch({
+        type: SET_MESSAGE,
+        payload: msg
+      })
+      dispatch({
+        type: REGISTER_FAIL
+      })
+      return Promise.reject()
+    })
 }
 
 export const login = (email, password) => (dispatch) => {

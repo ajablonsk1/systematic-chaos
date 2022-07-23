@@ -123,7 +123,9 @@ export const getActivityPath = (type) => {
 }
 
 export const RegistrationLabelsAndTypes = {
-  fullname: ['Imię i nazwisko', 'text'],
+  firstName: ['Imię', 'text'],
+  lastName: ['Nazwisko', 'text'],
+  index: ['Nr. indeksu', 'text'],
   email: ['Email', 'email'],
   invitationCode: ['Klucz dostępu', 'text'],
   heroType: ['Typ osobowości postaci', 'select'],

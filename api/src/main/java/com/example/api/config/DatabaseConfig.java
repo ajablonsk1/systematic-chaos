@@ -1,5 +1,7 @@
 package com.example.api.config;
 
+import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Info;
@@ -31,6 +33,7 @@ import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
+import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.activity.task.GraphTaskService;
 import com.example.api.service.group.GroupService;
@@ -68,7 +71,8 @@ public class DatabaseConfig {
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
                                                UserFeedbackService userFeedbackService, GraphTaskService graphTaskService,
                                                GraphTaskResultService graphTaskResultService, GroupService groupService,
-                                               ActivityMapService activityMapService, QuestionService questionService){
+                                               ActivityMapService activityMapService, QuestionService questionService,
+                                               FileTaskResultService fileTaskResultService){
         return args -> {
             User student = new User();
             student.setEmail("student@gmail.com");
@@ -294,6 +298,8 @@ public class DatabaseConfig {
             fileTask.setPosY(3);
             fileTask.setName("Niszczator kabli");
             fileTask.setDescription("Jak złamałbyś kabel światłowodowy? Czym?");
+            fileTask.setProfessor(professor);
+            fileTask.setSolveDateMillis(System.currentTimeMillis() + 1_000_000);
 
             fileTaskRepo.save(fileTask);
 
@@ -331,6 +337,19 @@ public class DatabaseConfig {
             activityMap1.setInfos(List.of(info1));
             activityMap1.setSurveys(List.of(survey));
             mapRepo.save(activityMap1);
+
+            GraphTaskResult result = new GraphTaskResult();
+            result.setGraphTask(graphTask);
+            result.setUser(student);
+            result.setPointsReceived(10.0);
+            graphTaskResultService.saveGraphTaskResult(result);
+
+            FileTaskResult fileResult = new FileTaskResult();
+            fileResult.setFileTask(fileTask);
+            fileResult.setUser(student1);
+            fileResult.setEvaluated(false);
+            fileResult.setSendDateMillis(System.currentTimeMillis());
+            fileTaskResultService.saveFileTaskResult(fileResult);
         };
     }
 }

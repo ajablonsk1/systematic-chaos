@@ -35,3 +35,12 @@ export const validateEmail = (email) => {
   }
   return error
 }
+
+// index number may include D in the last position for PhD students, not important for us (I hope so)
+export const validateIndex = (index) => {
+  const numbersRegex = /^[0-9]+$/
+  if (!index) return FIELD_REQUIRED
+  else if (index.length !== 6) return 'Nr indeksu musi się składać z sześciu cyfr.'
+  else if (!numbersRegex.test(index)) return 'Nr indeksu musi składać się z samych cyfr.'
+  return ''
+}

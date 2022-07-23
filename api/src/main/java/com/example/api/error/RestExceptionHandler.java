@@ -31,7 +31,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityAlreadyInDatabaseException.class)
     public ResponseEntity<Object> handleEntityAlreadyInDatabase(EntityAlreadyInDatabaseException ex) {
-        return handleExceptionWithStatusCode(BAD_REQUEST, ex);
+        return handleExceptionWithStatusCode(CONFLICT, ex);
     }
 
     @ExceptionHandler(WrongAnswerTypeException.class)

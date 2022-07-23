@@ -1,28 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik } from 'formik'
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { FIELD_REQUIRED } from '../../../utils/constants'
-import { AddGroupResults } from '../../../storage/groupsTable'
 import GroupService from '../../../services/group.service'
 
 export default function GroupAdditionForm(props) {
-  const checkResponseResult = (setFieldError, response) => {
-    switch (response) {
-      case AddGroupResults.SUCCESS:
-        props.refreshFunction()
-        props.setModalOpen(false)
-        break
-      case AddGroupResults.NAME_TAKEN_ERROR:
-        setFieldError('name', 'Ta nazwa grupy jest już zajęta!')
-        break
-      case AddGroupResults.CODE_TAKEN_ERROR:
-        setFieldError('code', 'Ten kod jest już wykorzystywany!')
-        break
-      default:
-        break
-    }
-  }
+  const [errorMessage, setErrorMessage] = useState()
 
   return (
     // todo: think about general Form component that can be extended
@@ -37,10 +21,15 @@ export default function GroupAdditionForm(props) {
         if (!values.code) errors.code = FIELD_REQUIRED
         return errors
       }}
-      onSubmit={(values, { setSubmitting, setFieldError }) => {
-        GroupService.addGroup(values.name, values.code).then((response) => {
-          checkResponseResult(setFieldError, response)
-        })
+      onSubmit={(values, { setSubmitting }) => {
+        GroupService.addGroup(values.name, values.code)
+          .then(() => {
+            props.refreshFunction()
+            props.setModalOpen(false)
+          })
+          .catch((error) => {
+            setErrorMessage(error)
+          })
 
         setSubmitting(false)
       }}
@@ -56,6 +45,11 @@ export default function GroupAdditionForm(props) {
             >
               {FormCol('Nazwa grupy', 'text', 'name')}
               {FormCol('Kod grupy', 'text', 'code')}
+              {errorMessage && (
+                <p className={'text-center w-100'} style={{ color: 'red' }}>
+                  {errorMessage}
+                </p>
+              )}
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>
