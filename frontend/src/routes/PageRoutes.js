@@ -62,9 +62,12 @@ export const PageRoutes = {
       MAIN_PATH: 'game-management/*',
       GAME_MANAGEMENT: '',
       Groups: {
-        MAIN_PATH: '*',
-        GROUPS: 'groups',
-        GROUP_ADDITION: 'groups/group-addition'
+        MAIN_PATH: '',
+        GROUPS: 'groups'
+      },
+      Chapters: {
+        MAIN_PATH: '',
+        CHAPTER: 'chapter'
       }
     },
     Participants: {
