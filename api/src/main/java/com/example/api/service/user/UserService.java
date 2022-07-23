@@ -126,7 +126,7 @@ public class UserService implements UserDetailsService {
         User user = userRepo.findUserById(studentId);
         if (user == null) {
             log.error("User with id {} not found in database", studentId);
-            throw new EntityNotFoundException("Student with id " + studentId + " not found in database");
+            throw new EntityNotFoundException("User with id " + studentId + " not found in database");
         }
 
         if (user.getAccountType() != AccountType.STUDENT) {
