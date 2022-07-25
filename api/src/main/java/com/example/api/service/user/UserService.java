@@ -1,10 +1,9 @@
 package com.example.api.service.user;
 
 import com.example.api.dto.request.user.RegisterUserForm;
+import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.response.user.BasicStudent;
-import com.example.api.error.exception.EntityAlreadyInDatabaseException;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.WrongBodyParametersNumberException;
+import com.example.api.error.exception.*;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
@@ -125,4 +124,49 @@ public class UserService implements UserDetailsService {
                 .map(BasicStudent::new)
                 .collect(Collectors.toList());
     }
+
+    public Group setStudentGroup(SetStudentGroupForm setStudentGroupForm)
+            throws EntityNotFoundException, WrongUserTypeException, StudentAlreadyAssignedToGroupException {
+        Long studentId = setStudentGroupForm.getStudentId();
+        Long newGroupId = setStudentGroupForm.getNewGroupId();
+        log.info("Setting group for student with id {}", studentId);
+        User user = userRepo.findUserById(studentId);
+        if (user == null) {
+            log.error("User with id {} not found in database", studentId);
+            throw new EntityNotFoundException("User with id " + studentId + " not found in database");
+        }
+
+        if (user.getAccountType() != AccountType.STUDENT) {
+            log.error("User with id {} is not a student", studentId);
+            throw new WrongUserTypeException("Wrong user type exception!", AccountType.STUDENT);
+        }
+
+        Group newGroup = groupRepo.findGroupById(newGroupId);
+        if (newGroup == null) {
+            log.error("Group with id {} not found in database", newGroupId);
+            throw new EntityNotFoundException("Group with id " + newGroupId + " not found in database");
+        }
+        Group previousGroup = user.getGroup();
+
+        if (previousGroup != null && previousGroup.getId() == newGroupId) {
+            log.error("Student try to set same group");
+            throw new StudentAlreadyAssignedToGroupException("Student is already assigned to group", user, user.getGroup());
+        }
+
+        if (previousGroup == null) {
+            log.warn("Student previous group doesn't exist");
+        }
+        else {
+            previousGroup.getUsers().remove(user);
+            groupRepo.save(previousGroup);
+        }
+
+        user.setGroup(newGroup);
+        newGroup.getUsers().add(user);
+        userRepo.save(user);
+        groupRepo.save(newGroup);
+
+        return newGroup;
+    }
+
 }
