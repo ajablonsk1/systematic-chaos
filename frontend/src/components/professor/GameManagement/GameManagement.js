@@ -5,10 +5,20 @@ import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
 import { GameButton } from '../../student/GameCardPage/GameButton'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ManagementCard from './ManagementCard'
+import { useNavigate } from 'react-router-dom'
+import { TableBodyRow } from './TableStyles'
 
 export default function GameManagement() {
   // TODO: use endpoint later
   const chaptersList = getChaptersList()
+
+  const navigate = useNavigate()
+
+  const goToChapterDetailsView = (chapterName, chapterId) => {
+    navigate(
+      generateFullPath(() => PageRoutes.Teacher.GameManagement.Chapters.CHAPTER) + `/${chapterName}/${chapterId}`
+    )
+  }
 
   return (
     <Content>
@@ -33,12 +43,12 @@ export default function GameManagement() {
                 </thead>
                 <tbody>
                   {chaptersList.map((chapter, index) => (
-                    <tr key={index}>
+                    <TableBodyRow key={index} onClick={() => goToChapterDetailsView(chapter.name, chapter.id)}>
                       <td>{chapter.name}</td>
                       <td className='text-center'>{chapter.noActivities}</td>
                       <td className='text-center'>{chapter.points}</td>
                       <td className='text-center'>{chapter.mapSize}</td>
-                    </tr>
+                    </TableBodyRow>
                   ))}
                 </tbody>
               </Table>
