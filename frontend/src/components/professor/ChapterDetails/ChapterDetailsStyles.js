@@ -43,17 +43,11 @@ export const ActivitiesCard = styled(ChapterCard)`
   overflow-y: auto;
   overflow-x: hidden;
 
-  .list-group-item {
-    background-color: #223762;
-    display: flex;
-    align-items: center;
-  }
-  .list-group:hover {
-    background-color: var(--dark-blue);
-    cursor: pointer;
+  .table {
+    color: var(--font-color);
 
-    & .list-group-item {
-      background-color: transparent;
+    & td {
+      border: 1px solid rgba(0, 0, 0, 0.125);
     }
   }
 `

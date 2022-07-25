@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getChapterDetails } from '../GameManagement/mockData'
 import { Content } from '../../App/AppGeneralStyles'
-import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
+import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Table } from 'react-bootstrap'
 import { getActivityImg, getActivityTypeName } from '../../../utils/constants'
 import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -104,19 +104,23 @@ function ChapterDetails() {
             <ActivitiesCard style={{ height: '96.5%' }} className={'mt-2'}>
               <Card.Header>Lista aktywności</Card.Header>
               <Card.Body className={'p-0'}>
-                {chapterDetails.activities.map((activity, index) => (
-                  <ListGroup horizontal className={'w-100'} key={index + activity.title}>
-                    <ListGroupItem className={'p-0 d-flex align-items-center'}>
-                      <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
-                    </ListGroupItem>
-                    <ListGroupItem className={'w-50'}>{getActivityTypeName(activity.type)}</ListGroupItem>
-                    <ListGroupItem className={'w-100'}>{activity.title}</ListGroupItem>
-                    <ListGroupItem className={'w-25'}>
-                      ({activity.posX}, {activity.posY})
-                    </ListGroupItem>
-                    <ListGroupItem className={'w-25'}>Pkt: {activity.points}</ListGroupItem>
-                  </ListGroup>
-                ))}
+                <Table>
+                  <tbody>
+                    {chapterDetails.activities.map((activity, index) => (
+                      <tr key={activity.title + index}>
+                        <td>
+                          <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
+                        </td>
+                        <td>{getActivityTypeName(activity.type)}</td>
+                        <td>{activity.title}</td>
+                        <td>
+                          ({activity.posX}, {activity.posY})
+                        </td>
+                        <td>Pkt: {activity.points}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
               </Card.Body>
             </ActivitiesCard>
           </Col>
