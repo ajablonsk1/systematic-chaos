@@ -1,4 +1,4 @@
-package com.example.api.service.user;
+package com.example.api.unit.service.user;
 
 import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -9,6 +9,7 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
