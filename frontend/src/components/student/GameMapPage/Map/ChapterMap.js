@@ -28,7 +28,7 @@ export default function ChapterMap({ map, marginNeeded, parentRef, mapClickable 
   const getParentSize = useCallback(() => {
     const emptySpaceX = 32 + rows[0].length * 2
     const emptySpaceY = 32 + rows.length * 2 + marginNeeded ? 32 : 0 // margin-x only
-    console.log(parentRef?.current?.offsetWidth, parentRef.current?.offsetHeight)
+
     if (parentRef?.current?.offsetWidth && parentRef.current?.offsetHeight) {
       return {
         x: parentRef?.current?.offsetWidth - emptySpaceX,
@@ -40,7 +40,6 @@ export default function ChapterMap({ map, marginNeeded, parentRef, mapClickable 
   useEffect(() => {
     function setHeight() {
       let { x, y } = getParentSize()
-      console.log(x, y)
       const possibleSize = Math.floor(Math.min(x / map.mapSizeX, y / map.mapSizeY))
       setSize(possibleSize ?? 0)
     }
