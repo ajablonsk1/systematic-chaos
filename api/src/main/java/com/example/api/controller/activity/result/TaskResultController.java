@@ -18,7 +18,7 @@ public class TaskResultController {
     private final TaskResultService resultService;
 
     @PostMapping("/csv")
-    public ResponseEntity<byte[]> saveGraphTaskResult(@RequestBody List<Long> ids) throws IOException {
+    public ResponseEntity<byte[]> getCSVFile(@RequestBody List<Long> ids) throws IOException {
         return ResponseEntity.ok().body(resultService.getCSVFile(ids));
     }
 }

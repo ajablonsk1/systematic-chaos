@@ -3,9 +3,7 @@ package com.example.api.util.csv;
 import com.example.api.model.user.User;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,6 @@ public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
 
     @Override
     public byte[] convertToByteArray(Map<User, List<CSVTaskResult>> data) throws IOException {
-        File file = new File("grades");
         List<List<String>> csv = new ArrayList<>();
         for (User user: data.keySet()) {
             List<CSVTaskResult> csvTaskResults = data.get(user);
@@ -33,12 +30,13 @@ public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
             row = Stream.of(userData, row).flatMap(List::stream).toList();
             csv.add(row);
         }
-        try (PrintWriter pw = new PrintWriter(file)){
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (PrintWriter pw = new PrintWriter(out)){
             csv.stream()
                     .map(this::convertToCSV)
                     .forEach(pw::println);
         }
-        return Files.readAllBytes(file.toPath());
+        return out.toByteArray();
     }
 
     private String convertToCSV(List<String> row) {
