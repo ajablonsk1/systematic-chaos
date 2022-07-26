@@ -3,13 +3,32 @@ import { ExportButton, GradesTable } from './GradeListAndExportStyles'
 import { Form } from 'react-bootstrap'
 import { debounce } from 'lodash/function'
 import ExportModal from './ExportModal'
+import GroupService from '../../../services/group.service'
 
 export default function UsersTable(props) {
-  const usersList = props.users.participants
+  const [usersList, setUsersList] = useState(undefined)
+
   const [usersToExportIds, setUsersToExportIds] = useState([])
-  const [users, setUsers] = useState(usersList)
+  const [users, setUsers] = useState([]) // used to filtering
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const [isModalVisible, setModalVisible] = useState(false)
+
+  useEffect(() => {
+    if (props.groupId && props.groupName) {
+      GroupService.getGroupStudents(props.groupId).then((response) => {
+        const responseWithGroupName = response?.map((student) => {
+          return { ...student, groupName: props.groupName }
+        })
+        setUsersList(responseWithGroupName)
+        setUsers(responseWithGroupName)
+      })
+    } else {
+      GroupService.getAllStudents().then((response) => {
+        setUsersList(response)
+        setUsers([...response])
+      })
+    }
+  }, [props])
 
   useEffect(() => {
     setButtonDisabled(usersToExportIds.length === 0)

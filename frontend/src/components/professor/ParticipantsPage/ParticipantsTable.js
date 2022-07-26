@@ -1,14 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
 import { TableContainer } from './ParticipantsStyles'
 import ChangeGroupModal from './ChangeGroupModal'
 import { Button } from 'react-bootstrap'
+import GroupService from '../../../services/group.service'
 
 function ParticipantsTable(props) {
   const [modalOpen, setModalOpen] = useState(false)
   const [chosenStudent, setChosenStudent] = useState()
+  const [studentsList, setStudentsList] = useState([])
 
-  const participants = props.data.participants
+  // "if (!modalOpen)" is here because this useEffect is triggered
+  // when we have finished group change process and closed this modal
+  useEffect(() => {
+    if (!modalOpen) {
+      if (!props.groupId || !props.groupName) {
+        GroupService.getAllStudents().then((response) => setStudentsList(response))
+      } else {
+        GroupService.getGroupStudents(props.groupId).then((response) => {
+          const responseWithGroupName = response?.map((student) => {
+            return { ...student, groupName: props.groupName }
+          })
+          setStudentsList(responseWithGroupName)
+        })
+      }
+    }
+  }, [props, modalOpen])
 
   return (
     <GameCardOptionPick>
@@ -21,16 +38,18 @@ function ParticipantsTable(props) {
           </tr>
         </thead>
         <tbody>
-          {participants.length > 0 ? (
-            participants.map((participant, index) => (
-              <tr key={index + participant.groupName}>
-                <td className={'py-2'}>{participant.groupName}</td>
-                <td className={'py-2'}>{participant.name}</td>
+          {studentsList.length > 0 ? (
+            studentsList.map((student, index) => (
+              <tr key={index + student.groupName}>
+                <td className={'py-2'}>{student.groupName}</td>
+                <td className={'py-2'}>
+                  {student.firstName} {student.lastName}
+                </td>
                 <td className={'py-2 text-center'}>
                   <Button
                     style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
                     onClick={() => {
-                      setChosenStudent(participant)
+                      setChosenStudent(student)
                       setModalOpen(true)
                     }}
                   >
@@ -40,11 +59,15 @@ function ParticipantsTable(props) {
               </tr>
             ))
           ) : (
-            <p>Brak członków</p>
+            <tr>
+              <td colSpan='100%' className={'text-center'}>
+                <p>Brak członków</p>
+              </td>
+            </tr>
           )}
         </tbody>
       </TableContainer>
-      <ChangeGroupModal show={modalOpen} setModalOpen={setModalOpen} data={chosenStudent} />
+      <ChangeGroupModal show={modalOpen} setModalOpen={setModalOpen} student={chosenStudent} />
     </GameCardOptionPick>
   )
 }
