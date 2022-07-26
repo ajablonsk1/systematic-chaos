@@ -17,6 +17,10 @@ import javax.transaction.Transactional;
 public class SurveyService {
     private final SurveyRepo surveyRepo;
 
+    public Survey saveSurvey(Survey survey){
+        return surveyRepo.save(survey);
+    }
+
     public SurveyInfoResponse getSurveyInfo(Long id) throws EntityNotFoundException {
         log.info("Fetching survey info");
         Survey survey = surveyRepo.findSurveyById(id);

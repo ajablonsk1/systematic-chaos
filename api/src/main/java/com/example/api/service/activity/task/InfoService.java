@@ -19,6 +19,10 @@ import java.util.List;
 public class InfoService {
     private final InfoRepo infoRepo;
 
+    public Info saveInfo(Info info){
+        return infoRepo.save(info);
+    }
+
     public InfoResponse getInfo(Long id) throws EntityNotFoundException {
         log.info("Fetching info");
         Info info = infoRepo.findInfoById(id);
