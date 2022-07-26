@@ -202,13 +202,13 @@ public class DatabaseConfig {
             List<User> students2 = List.of(student8, student9, student10, student11, student12, student13, student14, student15);
 
             Group group = new Group();
-            group.setInvitationCode("1234");
+            group.setInvitationCode("1111");
             group.setName("pn-1440-A");
             group.setUsers(students1);
             groupService.saveGroup(group);
 
             Group group1 = new Group();
-            group1.setInvitationCode("1234");
+            group1.setInvitationCode("2222");
             group1.setName("pn-1440-B");
             group.setUsers(students2);
             groupService.saveGroup(group1);
