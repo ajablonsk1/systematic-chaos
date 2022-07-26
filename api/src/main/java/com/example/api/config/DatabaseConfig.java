@@ -18,26 +18,27 @@ import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.Url;
-import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
-import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.InfoRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.group.AccessDateRepo;
-import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.map.MapRepo;
 import com.example.api.repo.map.RequirementRepo;
-import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.OptionRepo;
-import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
 import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.activity.result.GraphTaskResultService;
+import com.example.api.service.activity.task.FileTaskService;
 import com.example.api.service.activity.task.GraphTaskService;
+import com.example.api.service.activity.task.InfoService;
+import com.example.api.service.activity.task.SurveyService;
+import com.example.api.service.group.AccessDateService;
 import com.example.api.service.group.GroupService;
 import com.example.api.service.map.ActivityMapService;
+import com.example.api.service.map.RequirementService;
+import com.example.api.service.question.OptionService;
 import com.example.api.service.question.QuestionService;
 import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,113 +48,192 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 public class DatabaseConfig {
-    private final GraphTaskRepo graphTaskRepo;
-    private final GraphTaskResultRepo graphTaskResultRepo;
-    private final GroupRepo groupRepo;
-    private final OptionRepo optionRepo;
-    private final QuestionRepo questionRepo;
-    private final AnswerRepo answerRepo;
-    private final AccessDateRepo accessDateRepo;
-    private final FileTaskRepo fileTaskRepo;
-    private final MapRepo mapRepo;
-    private final InfoRepo infoRepo;
     private final UrlRepo urlRepo;
-    private final RequirementRepo requirementRepo;
-    private final SurveyRepo surveyRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
                                                UserFeedbackService userFeedbackService, GraphTaskService graphTaskService,
                                                GraphTaskResultService graphTaskResultService, GroupService groupService,
                                                ActivityMapService activityMapService, QuestionService questionService,
-                                               FileTaskResultService fileTaskResultService){
+                                               FileTaskResultService fileTaskResultService, OptionService optionService,
+                                               AccessDateService accessDateService, RequirementService requirementService,
+                                               FileTaskService fileTaskService, InfoService infoService,
+                                               SurveyService surveyService){
         return args -> {
-            User student = new User();
-            student.setEmail("student@gmail.com");
+
+
+            // USERS & GROUPS
+
+            User student = new User("jgorski@student.agh.edu.pl",
+                    "Jerzy",
+                    "Górski",
+                    AccountType.STUDENT);
             student.setPassword("12345");
-            student.setAccountType(AccountType.STUDENT);
-//            userService.saveUser(student);
+            student.setIndexNumber(123456);
 
-
-            User student1 = new User();
-            student1.setEmail("student1@gmail.com");
+            User student1 = new User("smazur@student.agh.edu.pl",
+                    "Szymon",
+                    "Mazur",
+                    AccountType.STUDENT);
             student1.setPassword("12345");
-            student1.setAccountType(AccountType.STUDENT);
-//            userService.saveUser(student1);
+            student1.setIndexNumber(123457);
 
+            User student2 = new User("murbanska@student.agh.edu.pl",
+                    "Matylda",
+                    "Urbańska",
+                    AccountType.STUDENT);
+            student2.setPassword("12345");
+            student2.setIndexNumber(123458);
 
-            User professor = new User();
-            professor.setEmail("prowadzacy@gmail.com");
+            User student3 = new User("pwasilewski@student.agh.edu.pl",
+                    "Patryk",
+                    "Wasilewski",
+                    AccountType.STUDENT);
+            student3.setPassword("12345");
+            student3.setIndexNumber(123459);
+
+            User student4 = new User("awojcik@student.agh.edu.pl",
+                    "Amelia",
+                    "Wójcik",
+                    AccountType.STUDENT);
+            student4.setPassword("12345");
+            student4.setIndexNumber(223456);
+
+            User student5 = new User("kkruk@student.agh.edu.pl",
+                    "Kornel",
+                    "Kruk",
+                    AccountType.STUDENT);
+            student5.setPassword("12345");
+            student5.setIndexNumber(323456);
+
+            User student6 = new User("mdabrowska@student.agh.edu.pl",
+                    "Maria",
+                    "Dąbrowska",
+                    AccountType.STUDENT);
+            student6.setPassword("12345");
+            student6.setIndexNumber(423456);
+
+            User student7 = new User("aczajkowski@student.agh.edu.pl",
+                    "Antoni",
+                    "Czajkowski",
+                    AccountType.STUDENT);
+            student7.setPassword("12345");
+            student7.setIndexNumber(523456);
+
+            User student8 = new User("mnowak@student.agh.edu.pl",
+                    "Magdalena",
+                    "Nowak",
+                    AccountType.STUDENT);
+            student8.setPassword("12345");
+            student8.setIndexNumber(623456);
+
+            User student9 = new User("jlewandowska@student.agh.edu.pl",
+                    "Julia",
+                    "Lewandowska",
+                    AccountType.STUDENT);
+            student9.setPassword("12345");
+            student9.setIndexNumber(723456);
+
+            User student10 = new User("mwojcik@student.agh.edu.pl",
+                    "Milena",
+                    "Wójcik",
+                    AccountType.STUDENT);
+            student10.setPassword("12345");
+            student10.setIndexNumber(823456);
+
+            User student11 = new User("kpaluch@student.agh.edu.pl",
+                    "Kacper",
+                    "Paluch",
+                    AccountType.STUDENT);
+            student11.setPassword("12345");
+            student11.setIndexNumber(923456);
+
+            User student12 = new User("fzalewski@student.agh.edu.pl",
+                    "Filip",
+                    "Zalewski",
+                    AccountType.STUDENT);
+            student12.setPassword("12345");
+            student12.setIndexNumber(133456);
+
+            User student13 = new User("jmichalak@student.agh.edu.pl",
+                    "Jan",
+                    "Michalak",
+                    AccountType.STUDENT);
+            student13.setPassword("12345");
+            student13.setIndexNumber(143456);
+
+            User student14 = new User("kostrowska@student.agh.edu.pl",
+                    "Karina",
+                    "Ostrowska",
+                    AccountType.STUDENT);
+            student14.setPassword("12345");
+            student14.setIndexNumber(153456);
+
+            User student15 = new User("dkowalska@student.agh.edu.pl",
+                    "Dominika",
+                    "Kowalska",
+                    AccountType.STUDENT);
+            student15.setPassword("12345");
+            student15.setIndexNumber(163456);
+
+            User professor = new User("bmaj@agh.edu.pl",
+                    "Bernard",
+                    "Maj",
+                    AccountType.PROFESSOR);
             professor.setPassword("12345");
-            professor.setAccountType(AccountType.PROFESSOR);
-            userService.saveUser(professor);
+            student.setIndexNumber(123456);
 
-            // IT IS NOT DONE PROPER WAY, BUT API MISS A LOT OF SERVICES AND FOR TESTING PURPOSES IT WILL BE OK
+            User professor1 = new User("szielinski@agh.edu.pl",
+                    "Sławomir",
+                    "Zieliński",
+                    AccountType.PROFESSOR);
+            professor1.setPassword("12345");
+            student.setIndexNumber(123456);
 
+            List<User> students1 = List.of(student, student1, student2, student3, student4, student5, student6, student7);
+            List<User> students2 = List.of(student8, student9, student10, student11, student12, student13, student14, student15);
 
-            /// group
-
-//            AccessDate accessDate1 = new AccessDate(null, LocalDateTime.parse("2020-04-23 18:25", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")),
-//                    LocalDateTime.parse("2020-04-30 18:25", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")));
-//            AccessDate accessDate2 = new AccessDate(null, LocalDateTime.parse("2020-04-23 18:25", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")),
-//                    LocalDateTime.parse("2020-04-30 18:25", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")));
-//            AccessDate accessDate3 = new AccessDate(null, LocalDateTime.parse("2020-03-10 18:25", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")),
-//                    LocalDateTime.parse("2020-04-17 18:25", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")));
-
-//            accessDateRepo.save(accessDate1);
-//            accessDateRepo.save(accessDate2);
-//            accessDateRepo.save(accessDate3);
+            Group group = new Group();
+            group.setInvitationCode("1111");
+            group.setName("pn-1440-A");
+            group.setUsers(students1);
+            groupService.saveGroup(group);
 
             Group group1 = new Group();
-            group1.setId(1L);
-            group1.setInvitationCode("1234");
-            group1.setName("all");
-//            group1.setAccessDate(accessDate1);
+            group1.setInvitationCode("2222");
+            group1.setName("pn-1440-B");
+            group.setUsers(students2);
             groupService.saveGroup(group1);
 
-            Group group2 = new Group();
-            group2.setId(2L);
-            group2.setInvitationCode("1234");
-            group2.setName("pn-1440-A");
-//            group2.setAccessDate(accessDate2);
-            group2.setUsers(List.of(student));
-            groupService.saveGroup(group2);
+            for (User user: students1) {
+                user.setGroup(group);
+                userService.saveUser(user);
+            }
+            for (User user: students2) {
+                user.setGroup(group1);
+                userService.saveUser(user);
+            }
 
-            Group group3 = new Group();
-            group3.setId(3L);
-            group3.setInvitationCode("1234");
-            group3.setName("pn-1440-B");
-//            group3.setAccessDate(accessDate3);
-            group3.setUsers(List.of(student1));
-            groupService.saveGroup(group3);
-
-//            User u1 = userService.getUser("student@gmail.com");
-//            User u2 = userService.getUser("student1@gmail.com");
-//            u1.setGroup(group2);
-//            u2.setGroup(group3);
-//            userService.saveUser(u1);
-//            userService.saveUser(u2);
-
-            student1.setGroup(group2);
-            student.setGroup(group3);
-            userService.saveUser(student);
-            userService.saveUser(student1);
+            professor.setGroup(group);
+            professor1.setGroup(group1);
+            userService.saveUser(professor);
+            userService.saveUser(professor1);
 
 
-            //graph tasks
-
+            // TASKS
 
             Option option = new Option(null, "hub z routerem", true, null);
             Option option1 = new Option(null, "komputer z komputerem", false, null);
             Option option2 = new Option(null, "switch z routerem", true, null);
             Option option3 = new Option(null, "hub ze switchem", false, null);
-
 
             Option option4 = new Option(null, "Tak", true, null);
             Option option5 = new Option(null, "Nie", false, null);
@@ -189,7 +269,7 @@ public class DatabaseConfig {
             questionService.saveQuestion(question4);
             questionService.saveQuestion(question5);
 
-            optionRepo.saveAll(List.of(option, option1, option2, option3, option4, option5));
+            optionService.saveAll(List.of(option, option1, option2, option3, option4, option5));
 
             option.setQuestion(question1);
             option1.setQuestion(question1);
@@ -198,19 +278,17 @@ public class DatabaseConfig {
             option4.setQuestion(question2);
             option5.setQuestion(question2);
 
-            optionRepo.saveAll(List.of(option, option1, option2, option3, option4, option5));
+            optionService.saveAll(List.of(option, option1, option2, option3, option4, option5));
 
-
-            AccessDate ac1 = new AccessDate(null, LocalDateTime.parse("2022-05-23 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), LocalDateTime.parse("2022-07-06 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), List.of(group2));
-            AccessDate ac2 = new AccessDate(null, LocalDateTime.parse("2022-05-23 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), LocalDateTime.parse("2022-07-08 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), List.of(group3));
-            accessDateRepo.save(ac1);
-            accessDateRepo.save(ac2);
-
+            AccessDate ac1 = new AccessDate(null, LocalDateTime.parse("2022-05-23 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), LocalDateTime.parse("2022-07-06 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), List.of(group1));
+            AccessDate ac2 = new AccessDate(null, LocalDateTime.parse("2022-05-23 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), LocalDateTime.parse("2022-07-08 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), List.of(group));
+            accessDateService.saveAccessDate(ac1);
+            accessDateService.saveAccessDate(ac2);
 
             Requirement req = new Requirement();
             req.setMustFulfil(MustFulfil.NONE);
             req.setAccessDates(List.of(ac1, ac2));
-            requirementRepo.save(req);
+            requirementService.saveRequirement(req);
 
             GraphTask graphTask = new GraphTask();
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
@@ -225,14 +303,10 @@ public class DatabaseConfig {
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
 
-
-
-
             Option optionTwo = new Option(null, "hub z routerem", true, null);
             Option optionTwo1 = new Option(null, "komputer z komputerem", false, null);
             Option optionTwo2 = new Option(null, "switch z routerem", true, null);
             Option optionTwo3 = new Option(null, "hub ze switchem", false, null);
-
 
             Option optionTwo4 = new Option(null, "Tak", true, null);
             Option optionTwo5 = new Option(null, "Nie", false, null);
@@ -268,7 +342,7 @@ public class DatabaseConfig {
             questionService.saveQuestion(questionTwo4);
             questionService.saveQuestion(questionTwo5);
 
-            optionRepo.saveAll(List.of(optionTwo, optionTwo1, optionTwo2, optionTwo3, optionTwo4, optionTwo5));
+            optionService.saveAll(List.of(optionTwo, optionTwo1, optionTwo2, optionTwo3, optionTwo4, optionTwo5));
 
             optionTwo.setQuestion(questionTwo1);
             optionTwo1.setQuestion(questionTwo1);
@@ -277,7 +351,7 @@ public class DatabaseConfig {
             optionTwo4.setQuestion(questionTwo2);
             optionTwo5.setQuestion(questionTwo2);
 
-            optionRepo.saveAll(List.of(optionTwo, optionTwo1, optionTwo2, optionTwo3, optionTwo4, optionTwo5));
+            optionService.saveAll(List.of(optionTwo, optionTwo1, optionTwo2, optionTwo3, optionTwo4, optionTwo5));
 
             GraphTask graphTaskTwo = new GraphTask();
             graphTaskTwo.setQuestions(List.of(startQuestionTwo, questionTwo1, questionTwo2, questionTwo3,  questionTwo4, questionTwo5));
@@ -292,17 +366,16 @@ public class DatabaseConfig {
 
             graphTaskService.saveGraphTask(graphTaskTwo);
 
-
             FileTask fileTask = new FileTask();
             fileTask.setPosX(3);
             fileTask.setPosY(3);
             fileTask.setName("Niszczator kabli");
             fileTask.setDescription("Jak złamałbyś kabel światłowodowy? Czym?");
             fileTask.setProfessor(professor);
+            fileTask.setMaxPoints(30.0);
             fileTask.setSolveDateMillis(System.currentTimeMillis() + 1_000_000);
 
-            fileTaskRepo.save(fileTask);
-
+            fileTaskService.saveFileTask(fileTask);
 
             Info info1 = new Info();
             info1.setPosX(3);
@@ -319,15 +392,14 @@ public class DatabaseConfig {
             info1.setName("Skrętki");
             info1.setExperiance(10);
             info1.setProfessor(professor);
-            infoRepo.save(info1);
+            infoService.saveInfo(info1);
 
             Survey survey = new Survey();
             survey.setName("Example map feedback");
             survey.setDescription("Pomóż nam polepszyć kurs dzieląc się swoją opinią!");
             survey.setPosX(7);
             survey.setPosY(3);
-            surveyRepo.save(survey);
-
+            surveyService.saveSurvey(survey);
 
             ActivityMap activityMap1 = new ActivityMap();
             activityMap1.setMapSizeX(8);
@@ -336,19 +408,37 @@ public class DatabaseConfig {
             activityMap1.setFileTasks(List.of(fileTask));
             activityMap1.setInfos(List.of(info1));
             activityMap1.setSurveys(List.of(survey));
-            mapRepo.save(activityMap1);
+            activityMapService.saveActivityMap(activityMap1);
 
-            GraphTaskResult result = new GraphTaskResult();
-            result.setGraphTask(graphTask);
-            result.setUser(student);
-            result.setPointsReceived(10.0);
-            graphTaskResultService.saveGraphTaskResult(result);
+            Calendar calendar = Calendar.getInstance();
+
+            GraphTaskResult result1 = new GraphTaskResult();
+            result1.setGraphTask(graphTask);
+            result1.setUser(student);
+            result1.setPointsReceived(10.0);
+            result1.setTimeSpentSec(60 * 10);
+            calendar.set(2022, Calendar.APRIL, 28);
+            result1.setStartTimeMillis(calendar.getTimeInMillis());
+            result1.setSendDateMillis(calendar.getTimeInMillis() + result1.getTimeSpentSec() / 1000);
+            graphTaskResultService.saveGraphTaskResult(result1);
+
+            GraphTaskResult result2 = new GraphTaskResult();
+            result2.setGraphTask(graphTaskTwo);
+            result2.setUser(student);
+            result2.setPointsReceived(10.0);
+            result2.setTimeSpentSec(60 * 10);
+            calendar.set(2022, Calendar.APRIL, 13);
+            result2.setStartTimeMillis(calendar.getTimeInMillis());
+            result2.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
+            graphTaskResultService.saveGraphTaskResult(result2);
 
             FileTaskResult fileResult = new FileTaskResult();
             fileResult.setFileTask(fileTask);
             fileResult.setUser(student1);
             fileResult.setEvaluated(false);
-            fileResult.setSendDateMillis(System.currentTimeMillis());
+            fileResult.setAnswer("Lorem ipsum");
+            calendar.set(2022, Calendar.JUNE, 11);
+            fileResult.setSendDateMillis(calendar.getTimeInMillis());
             fileTaskResultService.saveFileTaskResult(fileResult);
         };
     }

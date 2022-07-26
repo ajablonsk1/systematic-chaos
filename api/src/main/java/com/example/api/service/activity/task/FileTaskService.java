@@ -33,6 +33,10 @@ public class FileTaskService {
     private final UserRepo userRepo;
     private final UserValidator userValidator;
 
+    public FileTask saveFileTask(FileTask fileTask) {
+        return fileTaskRepo.save(fileTask);
+    }
+
     public FileTaskInfoResponse getFileTaskInfo(Long id, String email) throws EntityNotFoundException, WrongUserTypeException {
         FileTask fileTask = fileTaskRepo.findFileTaskById(id);
         if(fileTask == null) {
