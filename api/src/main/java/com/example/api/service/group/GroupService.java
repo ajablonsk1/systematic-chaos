@@ -7,6 +7,7 @@ import com.example.api.dto.response.group.GroupCode;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.group.Group;
+import com.example.api.model.user.AccountType;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.util.PolishMessages;
@@ -97,7 +98,37 @@ public class GroupService {
                 .stream()
                 .map(BasicUser::new)
                 .toList();
-        
+
+    }
+
+    public List<BasicUser> getGroupStudentList(Long id) throws EntityNotFoundException {
+        log.info("Fetching users from group with id {}", id);
+        Optional<Group> groupOptional = groupRepo.findById(id);
+        if (groupOptional.isEmpty()) {
+            throw new EntityNotFoundException("Group with id " + id + " not found in database");
+        }
+        return groupOptional.get()
+                .getUsers()
+                .stream()
+                .filter(user -> user.getAccountType() == AccountType.STUDENT)
+                .map(BasicUser::new)
+                .toList();
+
+    }
+
+    public List<BasicUser> getGroupProfessorList(Long id) throws EntityNotFoundException {
+        log.info("Fetching users from group with id {}", id);
+        Optional<Group> groupOptional = groupRepo.findById(id);
+        if (groupOptional.isEmpty()) {
+            throw new EntityNotFoundException("Group with id " + id + " not found in database");
+        }
+        return groupOptional.get()
+                .getUsers()
+                .stream()
+                .filter(user -> user.getAccountType() == AccountType.PROFESSOR)
+                .map(BasicUser::new)
+                .toList();
+
     }
 
 }
