@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Col } from 'react-bootstrap'
 
 export const ActivityCol = styled(Col)`
@@ -8,6 +8,8 @@ export const ActivityCol = styled(Col)`
   padding: 0;
   flex-basis: auto;
   flex-grow: 0;
+  width: ${(props) => props.$colSize + 'px'};
+  height: ${(props) => props.$colSize + 'px'};
 
   & img,
   & div {
@@ -16,8 +18,12 @@ export const ActivityCol = styled(Col)`
     border-radius: 5px;
   }
 
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.1);
-  }
+  ${(props) =>
+    props.$isClickable &&
+    css`
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+      }
+    `}
 `

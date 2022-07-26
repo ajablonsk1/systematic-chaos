@@ -1,4 +1,4 @@
-package com.example.api.service.group;
+package com.example.api.unit.service.group;
 
 import com.example.api.dto.request.group.SaveGroupForm;
 import com.example.api.dto.response.group.GroupCode;
@@ -8,6 +8,7 @@ import com.example.api.model.group.Group;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
+import com.example.api.service.group.GroupService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-
+// TODO: fix all tests
 @ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
 public class GroupServiceTests {

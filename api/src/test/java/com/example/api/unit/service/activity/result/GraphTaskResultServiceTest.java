@@ -1,4 +1,4 @@
-package com.example.api.service.activity.result;
+package com.example.api.unit.service.activity.result;
 
 import com.example.api.dto.request.activity.result.*;
 import com.example.api.error.exception.*;
@@ -13,6 +13,7 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.validator.AnswerFormValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.util.PointsCalculator;

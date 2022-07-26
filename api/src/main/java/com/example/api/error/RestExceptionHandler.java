@@ -72,6 +72,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionWithStatusCode(NOT_FOUND, ex);
     }
 
+    @ExceptionHandler(StudentAlreadyAssignedToGroupException.class)
+    public ResponseEntity<Object> handleStudentAlreadyAssignedToGroupException(StudentAlreadyAssignedToGroupException ex) {
+        return handleExceptionWithStatusCode(BAD_REQUEST, ex);
+    }
+
     private ResponseEntity<Object> handleExceptionWithStatusCode(HttpStatus httpStatus, Exception ex) {
         ApiError apiError = new ApiError(httpStatus);
         apiError.setMessage(ex.getMessage());

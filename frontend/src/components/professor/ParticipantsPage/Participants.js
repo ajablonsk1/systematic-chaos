@@ -1,27 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tab } from 'react-bootstrap'
-import { getAllParticipants, getGroups } from './mockData'
 import ParticipantsTable from './ParticipantsTable'
 import { ParticipantsContent, TabsContainer } from './ParticipantsStyles'
+import GroupService from '../../../services/group.service'
+import Loader from '../../general/Loader/Loader'
 
 function Participants() {
-  // TODO: get groups using endpoint
-  const groups = getGroups()
-  const allParticipants = getAllParticipants()
+  const [allGroups, setAllGroups] = useState(undefined)
+
+  useEffect(() => {
+    GroupService.getGroups().then((response) => setAllGroups(response))
+  }, [])
 
   return (
     <ParticipantsContent>
-      <TabsContainer defaultActiveKey={'all'}>
-        <Tab eventKey={'all'} title={'Wszyscy'}>
-          <ParticipantsTable data={allParticipants} />
-        </Tab>
-
-        {groups.map((group, index) => (
-          <Tab key={index + group.groupKey} title={group.groupName} eventKey={group.groupKey}>
-            <ParticipantsTable data={group} />
+      {!allGroups ? (
+        <Loader />
+      ) : (
+        <TabsContainer defaultActiveKey={'wszyscy'}>
+          <Tab eventKey={'wszyscy'} title={'Wszyscy'}>
+            <ParticipantsTable />
           </Tab>
-        ))}
-      </TabsContainer>
+
+          {allGroups.map((group, index) => (
+            <Tab key={index + group.name} title={group.name} eventKey={group.name}>
+              <ParticipantsTable groupId={group.id} groupName={group.name} />
+            </Tab>
+          ))}
+        </TabsContainer>
+      )}
     </ParticipantsContent>
   )
 }

@@ -29,13 +29,17 @@ public class FileTaskResultService {
     private final FileRepo fileRepo;
     private final UserValidator userValidator;
 
+    public FileTaskResult saveFileTaskResult(FileTaskResult result) {
+        return fileTaskResultRepo.save(result);
+    }
+
     public Long saveFileToFileTaskResult(SaveFileToFileTaskResultForm form) throws EntityNotFoundException, WrongUserTypeException {
         log.info("Saving file to file task result with id {}", form.getFileTaskId());
         FileTaskResult result = getFileTaskResultByFileTaskAndUser(form.getFileTaskId(), form.getStudentEmail());
         if(result == null){
             result = new FileTaskResult();
             result.setAnswer("");
-            result.setFileTask(fileTaskRepo.getById(form.getFileTaskId()));
+            result.setFileTask(fileTaskRepo.findFileTaskById(form.getFileTaskId()));
             result.setEvaluated(false);
             result.setUser(userRepo.findUserByEmail(form.getStudentEmail()));
             fileTaskResultRepo.save(result);

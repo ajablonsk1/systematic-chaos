@@ -1,32 +1,18 @@
-import React, { useLayoutEffect, useRef } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getActivityByPosition } from '../../../../storage/activityMap'
 import { getActivityImg, getActivityPath } from '../../../../utils/constants'
 import { ActivityCol } from './ActivityFieldStyle'
 
-export default function ActivityField({ activity, posX, posY, mapSizeX, mapSizeY }) {
-  const activityCol = useRef(null)
+export default function ActivityField({ activity, posX, posY, colClickable, colSize }) {
   const navigate = useNavigate()
-
-  useLayoutEffect(() => {
-    function setHeight() {
-      if (activityCol.current) {
-        const resizeScale = 0.7
-        const possibleSize =
-          (Math.min(window.innerHeight, window.innerWidth) * resizeScale) / Math.max(mapSizeY, mapSizeX)
-        activityCol.current.setAttribute('style', `height:${possibleSize}px; width: ${possibleSize}px`)
-      }
-    }
-
-    setHeight() // first time, on component mount
-    window.addEventListener('resize', setHeight) // always when window resize
-  })
 
   // TODO, currently goes to the hard-coded expedition activity but it should be OK once we implement a 'real' activity getter in API
   const startActivity = () => {
-    navigate(`${getActivityPath(activity.type)}`, {
-      state: { activityId: activity.id }
-    })
+    colClickable &&
+      navigate(`${getActivityPath(activity.type)}`, {
+        state: { activityId: activity.id }
+      })
   }
 
   const isCompletedActivityAround = () => {
@@ -43,7 +29,7 @@ export default function ActivityField({ activity, posX, posY, mapSizeX, mapSizeY
   }
 
   return (
-    <ActivityCol ref={activityCol}>
+    <ActivityCol $isClickable={colClickable} $colSize={colSize}>
       {activity ? (
         <img src={getActivityImg(activity.type)} alt='activityImg' onClick={startActivity} />
       ) : (

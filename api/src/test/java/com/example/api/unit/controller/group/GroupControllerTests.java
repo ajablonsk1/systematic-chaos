@@ -1,10 +1,11 @@
-package com.example.api.controller.group;
+package com.example.api.unit.controller.group;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.example.api.controller.group.GroupController;
 import com.example.api.model.group.Group;
 import com.example.api.service.group.GroupService;
 import com.fasterxml.jackson.databind.ObjectMapper;

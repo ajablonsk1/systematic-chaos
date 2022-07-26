@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,5 +23,5 @@ public abstract class TaskResult {
     private User user;
 
     private Double pointsReceived = 0.0;
-    private LocalDateTime sendTime;
+    private Long sendDateMillis;
 }

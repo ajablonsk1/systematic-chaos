@@ -5,11 +5,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.api.dto.request.user.RegisterUserForm;
+import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.response.user.BasicStudent;
-import com.example.api.error.exception.BadRequestHeadersException;
-import com.example.api.error.exception.EntityAlreadyInDatabaseException;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.WrongBodyParametersNumberException;
+import com.example.api.error.exception.*;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.User;
 import com.example.api.service.user.UserService;
@@ -90,6 +88,13 @@ public class UserController {
     @GetMapping("/students-with-group/all")
     public ResponseEntity<List<BasicStudent>> getAllStudentsWithGroup() {
         return ResponseEntity.ok().body(userService.getAllStudentsWithGroup());
+    }
+
+    @PostMapping("/user/group/set")
+    public ResponseEntity<Group> setUserGroup(
+            @RequestBody SetStudentGroupForm setStudentGroupForm)
+            throws EntityNotFoundException, WrongUserTypeException, StudentAlreadyAssignedToGroupException {
+        return ResponseEntity.ok().body(userService.setStudentGroup(setStudentGroupForm));
     }
 
 }
