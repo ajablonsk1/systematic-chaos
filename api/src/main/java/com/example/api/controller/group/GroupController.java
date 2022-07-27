@@ -1,10 +1,10 @@
 package com.example.api.controller.group;
 
 import com.example.api.dto.request.group.SaveGroupForm;
-import com.example.api.dto.response.user.BasicUser;
-import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.dto.response.group.GroupCode;
+import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.service.group.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
