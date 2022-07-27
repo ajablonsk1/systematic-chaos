@@ -28,32 +28,36 @@ export default function CombatTask() {
   const { activityId: taskState } = location.state
 
   const [task, setTask] = useState(undefined)
-  const [taskId, setTaskId] = useState(taskState)
   const [fileBlob, setFileBlob] = useState()
   const [fileName, setFileName] = useState()
   const [answer, setAnswer] = useState('')
-  const [isSaved, setIsSaved] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
+
+  const resetStates = () => {
+    setIsFetching(false)
+    setFileBlob(null)
+    setFileName(null)
+    setAnswer('')
+  }
 
   useEffect(() => {
-    console.log('biere z ' + taskId)
-    CombatTaskService.getCombatTask(taskId)
+    CombatTaskService.getCombatTask(taskState)
       .then((response) => {
         setTask(response)
       })
       .catch((error) => console.log(error))
-  }, [taskId, isSaved])
+  }, [isFetching, taskState])
 
   const sendAnswer = () => {
-    setIsSaved(false)
+    setIsFetching(true)
 
-    CombatTaskService.saveCombatTaskAnswer(taskId, answer, fileName, fileBlob)
-      .then((response) => {
-        setTaskId(response)
-        setIsSaved(true)
+    CombatTaskService.saveCombatTaskAnswer(taskState, answer, fileName, fileBlob)
+      .then(() => {
+        resetStates()
       })
       .catch((error) => {
         console.log(error)
-        setIsSaved(true)
+        resetStates()
       })
   }
 
@@ -97,12 +101,12 @@ export default function CombatTask() {
                 task={task}
                 setFile={setFileBlob}
                 setFileName={setFileName}
-                setIsSaved={setIsSaved}
-                isSaved={isSaved}
+                setIsFetching={setIsFetching}
+                isFetching={isFetching}
               />
             </div>
             <SendTaskButton disabled={!fileName && answer === ''} onClick={() => sendAnswer()}>
-              {isSaved ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
+              {isFetching ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
             </SendTaskButton>
           </ActivityCol>
         )}

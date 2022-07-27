@@ -1,45 +1,41 @@
-import React, { useEffect, useRef, useState, useTransition } from 'react'
+import React, { useEffect, useRef, useTransition } from 'react'
 import { Button, Col, Row, Spinner } from 'react-bootstrap'
 import { SmallDivider } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import download from 'downloadjs'
 import CombatTaskService from '../../../../services/combatTask.service'
-import { b64toBlob, getBase64 } from './fileConverter'
 
-export default function FileService({ task, setFile, setFileName, setIsSaved, isSaved }) {
+export default function FileService({ task, setFile, setFileName, setIsFetching, isFetching }) {
   const fileInput = useRef(null)
   const [isRemoving, startRemoving] = useTransition()
 
   useEffect(() => {
-    if (isSaved) fileInput.current.value = ''
-  }, [isSaved])
+    if (!isFetching) {
+      fileInput.current.value = ''
+    }
+  }, [isFetching])
 
   const saveFile = (event) => {
     const filename = event.target.value.split(/(\\|\/)/g).pop()
     setFileName(filename)
-    setFile('response')
-
-    // getBase64(event.target).then((response) => {
-    //   console.log(response)
-    //   // console.log(b64toBlob(response))
-    //   setFile(response)
-    // })
+    setFile(event.target.files[0])
   }
 
   const remove = (fileNumber) => {
     startRemoving(() => {
-      setIsSaved(false)
+      setIsFetching(true)
       // TODO: this endpoint needs refactoring - it should require only fileId
-      CombatTaskService.removeCombatTaskFile(task.fileTaskId, fileNumber).then(() => setIsSaved(true))
+      CombatTaskService.removeCombatTaskFile(task.fileTaskId, fileNumber).then(() => setIsFetching(false))
     })
   }
 
-  const downloadFile = (fileId) => {
-    const fileApiId = task.files[fileId].id
-    CombatTaskService.getCombatFile(fileApiId).then((file) => {
-      if (file?.fileString) {
-        download(file.fileString, file.name)
+  const downloadFile = (fileNumber) => {
+    const fileId = task.files[fileNumber].id
+    CombatTaskService.getCombatFile(fileId).then((file) => {
+      if (file?.file) {
+        console.log(file.file)
+        download(file.file, file.name)
       } else {
         alert('Ten plik wygląda na uszkodzony. Nie możesz go pobrać.')
       }
