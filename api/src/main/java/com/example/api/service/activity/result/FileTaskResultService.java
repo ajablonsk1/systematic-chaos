@@ -14,6 +14,7 @@ import com.example.api.repo.util.FileRepo;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -75,12 +76,12 @@ public class FileTaskResultService {
         return fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
     }
 
-    public File getFileById(Long fileId) throws EntityNotFoundException {
+    public ByteArrayResource getFileById(Long fileId) throws EntityNotFoundException {
         File file = fileRepo.findFileById(fileId);
         if(file == null) {
             log.error("File with given id {} does not exist", fileId);
             throw new EntityNotFoundException("File with given id " + fileId + " does not exist");
         }
-        return file;
+        return new ByteArrayResource(file.getFile());
     }
 }
