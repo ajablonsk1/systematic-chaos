@@ -153,7 +153,7 @@ public class FileTaskResultServiceTest {
                 fileTask.getId(),
                 user.getEmail(),
                 null,
-                "",
+                new byte[1024],
                 ""
         );
         given(fileTaskRepo.findFileTaskById(fileTask.getId())).willReturn(fileTask);

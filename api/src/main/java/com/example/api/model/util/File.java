@@ -20,5 +20,5 @@ public class File {
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String fileString;
+    private byte[] file;
 }
