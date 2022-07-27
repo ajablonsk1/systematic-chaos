@@ -4,6 +4,7 @@ import authHeader from '../services/auth-header'
 const header = Object.assign(authHeader(), { 'Content-Type': 'application/x-www-form-urlencoded' })
 const headerWithParams = (params) => Object.assign(header, { params })
 const multipartFileHeader = Object.assign(authHeader(), { 'Content-Type': 'multipart/form-data' })
+const fileHeaderWithParams = (params) => Object.assign(header, { responseType: 'blob', params })
 
 export function axiosApiPost(url, body) {
   return axios
@@ -45,5 +46,14 @@ export function axiosApiPostFile(url, body) {
     .then((response) => response.data)
     .catch((error) => {
       throw error.response.data
+    })
+}
+
+export function axiosApiDownloadFile(url, params) {
+  return axios
+    .get(url, fileHeaderWithParams(params))
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error
     })
 }

@@ -33,12 +33,8 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
   const downloadFile = (fileNumber) => {
     const fileId = task.files[fileNumber].id
     CombatTaskService.getCombatFile(fileId).then((file) => {
-      if (file?.file) {
-        console.log(file.file)
-        download(file.file, file.name)
-      } else {
-        alert('Ten plik wygląda na uszkodzony. Nie możesz go pobrać.')
-      }
+      console.log(file)
+      download(file, task.files[fileNumber].name)
     })
   }
 

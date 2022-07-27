@@ -1,11 +1,5 @@
-import { axiosApiDelete, axiosApiGet, axiosApiPost, axiosApiPostFile } from '../utils/axios'
-import {
-  COMBAT_TASK_GET_FILE,
-  COMBAT_TASK_GET_INFO,
-  COMBAT_TASK_REMOVE_FILE,
-  COMBAT_TASK_RESULT_FILE,
-  COMBAT_TASK_SEND_ANSWER
-} from './urls'
+import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiPostFile } from '../utils/axios'
+import { COMBAT_TASK_GET_INFO, COMBAT_TASK_REMOVE_FILE, COMBAT_TASK_RESULT_FILE, COMBAT_TASK_SEND_ANSWER } from './urls'
 import StudentService from './student.service'
 
 class CombatTaskService {
@@ -17,7 +11,7 @@ class CombatTaskService {
   }
 
   getCombatFile(fileApiId) {
-    return axiosApiGet(COMBAT_TASK_RESULT_FILE, {
+    return axiosApiDownloadFile(COMBAT_TASK_RESULT_FILE, {
       fileId: fileApiId
     })
   }
