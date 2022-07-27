@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class FileTaskResultService {
         return fileTaskResultRepo.save(result);
     }
 
-    public Long saveFileToFileTaskResult(SaveFileToFileTaskResultForm form) throws EntityNotFoundException, WrongUserTypeException {
+    public Long saveFileToFileTaskResult(SaveFileToFileTaskResultForm form) throws EntityNotFoundException, WrongUserTypeException, IOException {
         log.info("Saving file to file task result with id {}", form.getFileTaskId());
         FileTaskResult result = getFileTaskResultByFileTaskAndUser(form.getFileTaskId(), form.getStudentEmail());
         if(result == null){
@@ -44,7 +45,7 @@ public class FileTaskResultService {
             result.setUser(userRepo.findUserByEmail(form.getStudentEmail()));
         }
         if(form.getFile() != null) {
-            File file = new File(null, form.getFileName(), form.getFile());
+            File file = new File(null, form.getFileName(), form.getFile().getBytes());
             fileRepo.save(file);
             result.getFiles().add(file);
             fileTaskResultRepo.save(result);

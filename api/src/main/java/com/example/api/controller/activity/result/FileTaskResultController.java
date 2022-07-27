@@ -6,8 +6,11 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.util.File;
 import com.example.api.service.activity.result.FileTaskResultService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 public class FileTaskResultController {
     private final FileTaskResultService fileTaskResultService;
 
-    @PostMapping("/file/add")
-    public ResponseEntity<Long> saveFileToFileTaskResult(@RequestBody SaveFileToFileTaskResultForm form)
-            throws EntityNotFoundException, WrongUserTypeException {
+    @PostMapping(path="/file/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Long> saveFileToFileTaskResult(@ModelAttribute SaveFileToFileTaskResultForm form)
+            throws EntityNotFoundException, WrongUserTypeException, IOException {
         return ResponseEntity.ok().body(fileTaskResultService.saveFileToFileTaskResult(form));
     }
 
