@@ -30,3 +30,12 @@ export function axiosApiDelete(url, params) {
       throw error.response.data
     })
 }
+
+export function axiosApiPostFile(url, body) {
+  return axios
+    .post(url, body, Object.assign(header, { responseType: 'blob' }))
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error
+    })
+}
