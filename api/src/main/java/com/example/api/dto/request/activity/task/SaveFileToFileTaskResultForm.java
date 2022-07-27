@@ -10,6 +10,6 @@ public class SaveFileToFileTaskResultForm {
     @Schema(required = true) private Long fileTaskId;
     @Schema(required = true) private String studentEmail;
     @Schema(required = false) private String openAnswer;
-    @Schema(required = false) private String fileString;
+    @Schema(required = false) private byte[] file;
     @Schema(required = false) private String fileName;
 }

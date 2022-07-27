@@ -42,15 +42,16 @@ public class FileTaskResultService {
             result.setFileTask(fileTaskRepo.findFileTaskById(form.getFileTaskId()));
             result.setEvaluated(false);
             result.setUser(userRepo.findUserByEmail(form.getStudentEmail()));
-            fileTaskResultRepo.save(result);
         }
-        if(form.getFileString() != null) {
-            File file = new File(null, form.getFileName(), form.getFileString());
+        if(form.getFile() != null) {
+            File file = new File(null, form.getFileName(), form.getFile());
             fileRepo.save(file);
             result.getFiles().add(file);
+            fileTaskResultRepo.save(result);
         }
         if(form.getOpenAnswer() != null) {
             result.setAnswer(form.getOpenAnswer());
+            fileTaskResultRepo.save(result);
         }
         return result.getId();
     }
