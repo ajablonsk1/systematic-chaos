@@ -9,6 +9,7 @@ import com.example.api.util.csv.CSVConverter;
 import com.example.api.util.csv.CSVTaskResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class TaskResultService {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final CSVConverter csvConverter;
 
-    public byte[] getCSVFile(List<Long> ids) throws IOException {
+    public ByteArrayResource getCSVFile(List<Long> ids) throws IOException {
         log.info("Fetching csv files for students");
         List<User> students = userRepo.findAll()
                 .stream()
@@ -51,6 +52,6 @@ public class TaskResultService {
                     .toList();
             userToResultMap.put(student, csvTaskResults);
         });
-        return csvConverter.convertToByteArray(userToResultMap);
+        return new ByteArrayResource(csvConverter.convertToByteArray(userToResultMap));
     }
 }

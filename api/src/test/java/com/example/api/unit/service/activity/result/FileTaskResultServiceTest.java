@@ -19,6 +19,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,14 +52,12 @@ public class FileTaskResultServiceTest {
                 userValidator
         );
         fileTask = new FileTask();
-        fileTask.setId(2L);
         result = new FileTaskResult();
-        result.setId(1L);
         result.setFileTask(fileTask);
     }
 
     @Test
-    public void saveFileToFileTaskResultWhenFileIsNull() throws WrongUserTypeException, EntityNotFoundException {
+    public void saveFileToFileTaskResultWhenFileIsNull() throws WrongUserTypeException, EntityNotFoundException, IOException {
         //given
         User user = new User();
         user.setEmail("random@email.com");
@@ -63,7 +66,7 @@ public class FileTaskResultServiceTest {
                 fileTask.getId(),
                 user.getEmail(),
                 "",
-                null,
+                new MockMultipartFile("randomName", new byte[1024]),
                 null
         );
         given(fileTaskRepo.findFileTaskById(fileTask.getId())).willReturn(fileTask);
@@ -101,7 +104,7 @@ public class FileTaskResultServiceTest {
                 fileTask.getId(),
                 user.getEmail(),
                 "",
-                null,
+                new MockMultipartFile("randomName", new byte[1024]),
                 null
         );
 
@@ -113,7 +116,7 @@ public class FileTaskResultServiceTest {
     }
 
     @Test
-    public void saveFileToFileTaskResultWhenResultIsNull() throws WrongUserTypeException, EntityNotFoundException {
+    public void saveFileToFileTaskResultWhenResultIsNull() throws WrongUserTypeException, EntityNotFoundException, IOException {
         //given
         User user = new User();
         user.setEmail("random@email.com");
@@ -122,7 +125,7 @@ public class FileTaskResultServiceTest {
                 fileTask.getId(),
                 user.getEmail(),
                 "",
-                null,
+                new MockMultipartFile("randomName", new byte[1024]),
                 null
         );
         given(fileTaskRepo.findFileTaskById(fileTask.getId())).willReturn(fileTask);
@@ -144,7 +147,7 @@ public class FileTaskResultServiceTest {
     }
 
     @Test
-    public void saveFileToFileTaskResultWhenOpenAnswerIsNull() throws WrongUserTypeException, EntityNotFoundException {
+    public void saveFileToFileTaskResultWhenOpenAnswerIsNull() throws WrongUserTypeException, EntityNotFoundException, IOException {
         //given
         User user = new User();
         user.setEmail("random@email.com");
@@ -153,7 +156,7 @@ public class FileTaskResultServiceTest {
                 fileTask.getId(),
                 user.getEmail(),
                 null,
-                new byte[1024],
+                new MockMultipartFile("randomName", new byte[1024]),
                 ""
         );
         given(fileTaskRepo.findFileTaskById(fileTask.getId())).willReturn(fileTask);
@@ -219,7 +222,7 @@ public class FileTaskResultServiceTest {
     public void getFileById() throws EntityNotFoundException {
         //given
         File file = new File();
-        file.setId(1L);
+        file.setFile(new byte[1024]);
         given(fileRepo.findFileById(file.getId())).willReturn(file);
 
         //when
@@ -236,7 +239,6 @@ public class FileTaskResultServiceTest {
     public void getFileByIdThrowEntityNotFoundException() {
         //given
         File file = new File();
-        file.setId(1L);
 
         //when
         //then
