@@ -25,12 +25,13 @@ class CombatTaskService {
     })
   }
 
-  saveCombatTaskAnswer(taskId, openAnswer, fileName, fileString) {
+  saveCombatTaskAnswer(taskId, openAnswer, fileName, fileBlob) {
+    console.log(taskId, openAnswer, fileName, fileBlob)
     return axiosApiPost(COMBAT_TASK_SEND_ANSWER, {
       fileTaskId: taskId,
       openAnswer: openAnswer,
       fileName: fileName,
-      fileString: fileString,
+      file: fileBlob,
       studentEmail: StudentService.getEmail()
     }).catch((error) => {
       throw error

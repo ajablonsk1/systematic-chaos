@@ -35,13 +35,17 @@ export default function CombatTask() {
   const [isSaved, setIsSaved] = useState(false)
 
   useEffect(() => {
+    console.log('biere z ' + taskId)
     CombatTaskService.getCombatTask(taskId)
-      .then((response) => setTask(response))
+      .then((response) => {
+        setTask(response)
+      })
       .catch((error) => console.log(error))
   }, [taskId, isSaved])
 
   const sendAnswer = () => {
     setIsSaved(false)
+
     CombatTaskService.saveCombatTaskAnswer(taskId, answer, fileName, fileBlob)
       .then((response) => {
         setTaskId(response)

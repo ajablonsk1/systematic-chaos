@@ -5,7 +5,7 @@ import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import download from 'downloadjs'
 import CombatTaskService from '../../../../services/combatTask.service'
-import { getBase64 } from './fileConverter'
+import { b64toBlob, getBase64 } from './fileConverter'
 
 export default function FileService({ task, setFile, setFileName, setIsSaved, isSaved }) {
   const fileInput = useRef(null)
@@ -18,9 +18,13 @@ export default function FileService({ task, setFile, setFileName, setIsSaved, is
   const saveFile = (event) => {
     const filename = event.target.value.split(/(\\|\/)/g).pop()
     setFileName(filename)
-    setFile(event.target.files[0])
+    setFile('response')
 
-    getBase64(event.target).then((response) => console.log(response, typeof response))
+    // getBase64(event.target).then((response) => {
+    //   console.log(response)
+    //   // console.log(b64toBlob(response))
+    //   setFile(response)
+    // })
   }
 
   const remove = (fileNumber) => {
