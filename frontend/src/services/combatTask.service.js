@@ -32,6 +32,8 @@ class CombatTaskService {
       fileName: fileName,
       fileString: fileString,
       studentEmail: StudentService.getEmail()
+    }).catch((error) => {
+      throw error
     })
   }
 }

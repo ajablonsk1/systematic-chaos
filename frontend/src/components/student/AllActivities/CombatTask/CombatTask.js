@@ -21,14 +21,15 @@ import {
 } from '../../../professor/ActivityAssessmentDetails/ActivityAssesmentDetailsStyles'
 import { SendTaskButton } from './CombatTaskStyles'
 import CombatTaskService from '../../../../services/combatTask.service'
+import { Spinner } from 'react-bootstrap'
 
 export default function CombatTask() {
   const location = useLocation()
   const { activityId: taskState } = location.state
 
-  const [task, setTask] = useState()
+  const [task, setTask] = useState(undefined)
   const [taskId, setTaskId] = useState(taskState)
-  const [fileString, setFileString] = useState()
+  const [fileBlob, setFileBlob] = useState()
   const [fileName, setFileName] = useState()
   const [answer, setAnswer] = useState('')
   const [isSaved, setIsSaved] = useState(false)
@@ -40,12 +41,16 @@ export default function CombatTask() {
   }, [taskId, isSaved])
 
   const sendAnswer = () => {
-    //use endpoint to save file task answer
     setIsSaved(false)
-    CombatTaskService.saveCombatTaskAnswer(taskId, answer, fileName, fileString).then((response) => {
-      setTaskId(response)
-      setIsSaved(true)
-    })
+    CombatTaskService.saveCombatTaskAnswer(taskId, answer, fileName, fileBlob)
+      .then((response) => {
+        setTaskId(response)
+        setIsSaved(true)
+      })
+      .catch((error) => {
+        console.log(error)
+        setIsSaved(true)
+      })
   }
 
   const handleAnswerChange = (event) => setAnswer(event.target.value)
@@ -72,7 +77,7 @@ export default function CombatTask() {
                 Zdobyte punkty: <strong>50 / 100</strong> {/*//TODO: info from endpoint*/}
               </p>
               <p>
-                {task.content && (
+                {task?.content && (
                   <>
                     <strong>Uwagi prowadzącego:</strong> <br /> {task.content}
                   </>
@@ -84,10 +89,16 @@ export default function CombatTask() {
                 <RemarksTextArea value={answer} onChange={handleAnswerChange} />
               </RemarksCol>
 
-              <FileService task={task} setFile={setFileString} setFileName={setFileName} setIsSaved={setIsSaved} />
+              <FileService
+                task={task}
+                setFile={setFileBlob}
+                setFileName={setFileName}
+                setIsSaved={setIsSaved}
+                isSaved={isSaved}
+              />
             </div>
             <SendTaskButton disabled={!fileName && answer === ''} onClick={() => sendAnswer()}>
-              Wyślij
+              {isSaved ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
             </SendTaskButton>
           </ActivityCol>
         )}
