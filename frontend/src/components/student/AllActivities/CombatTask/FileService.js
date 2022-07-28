@@ -33,7 +33,6 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
   const downloadFile = (fileNumber) => {
     const fileId = task.files[fileNumber].id
     CombatTaskService.getCombatFile(fileId).then((file) => {
-      console.log(file)
       download(file, task.files[fileNumber].name)
     })
   }

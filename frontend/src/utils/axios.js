@@ -37,9 +37,14 @@ export function axiosApiSendFile(url, body) {
   const formData = new FormData()
   formData.append('fileTaskId', body.fileTaskId)
   formData.append('studentEmail', body.studentEmail)
-  formData.append('openAnswer', body.openAnswer)
-  formData.append('file', body.file)
-  formData.append('fileName', body.fileName)
+
+  if (body.openAnswer) {
+    formData.append('openAnswer', body.openAnswer)
+  }
+  if (body.file && body.fileName) {
+    formData.append('file', body.file)
+    formData.append('fileName', body.fileName)
+  }
 
   return axios
     .post(url, formData, multipartFileHeader)
