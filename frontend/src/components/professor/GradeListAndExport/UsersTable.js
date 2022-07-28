@@ -77,8 +77,11 @@ export default function UsersTable(props) {
                   <input type={'checkbox'} onChange={checkRow} value={user.id} checked={inputChecked(user.id)} />
                 </td>
                 <td className={'py-2'}>{user.groupName}</td>
-                <td className={'py-2'}>{user.name}</td>
-                <td className={'py-2'}>{user.grade}</td>
+                <td className={'py-2'}>
+                  {user.firstName} {user.lastName}
+                </td>
+                {/*TODO: we don't have this information*/}
+                <td className={'py-2'}>3.5</td>
               </tr>
             ))
           ) : (
@@ -95,7 +98,7 @@ export default function UsersTable(props) {
         Eksportuj oceny
       </ExportButton>
 
-      <ExportModal isModalVisible={isModalVisible} setModalVisible={setModalVisible} />
+      <ExportModal isModalVisible={isModalVisible} setModalVisible={setModalVisible} data={usersToExportIds} />
     </>
   )
 }
