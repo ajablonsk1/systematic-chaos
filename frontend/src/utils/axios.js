@@ -33,7 +33,7 @@ export function axiosApiDelete(url, params) {
     })
 }
 
-export function axiosApiPostFile(url, body) {
+export function axiosApiSendFile(url, body) {
   const formData = new FormData()
   formData.append('fileTaskId', body.fileTaskId)
   formData.append('studentEmail', body.studentEmail)
@@ -52,6 +52,15 @@ export function axiosApiPostFile(url, body) {
 export function axiosApiDownloadFile(url, params) {
   return axios
     .get(url, fileHeaderWithParams(params))
+    .then((response) => response.data)
+    .catch((error) => {
+      throw error
+    })
+}
+
+export function axiosApiGetFile(url, body) {
+  return axios
+    .post(url, body, Object.assign(header, { responseType: 'blob' }))
     .then((response) => response.data)
     .catch((error) => {
       throw error
