@@ -1,5 +1,5 @@
 import { parseJwt } from '../utils/Api'
-import { axiosApiPostFile } from '../utils/axios'
+import { axiosApiGetFile } from '../utils/axios'
 import { GET_CSV } from './urls'
 
 class ProfessorService {
@@ -12,7 +12,7 @@ class ProfessorService {
   }
 
   getCSVGradesFile(studentsId) {
-    return axiosApiPostFile(GET_CSV, studentsId).catch((err) => {
+    return axiosApiGetFile(GET_CSV, studentsId).catch((err) => {
       throw err
     })
   }
