@@ -38,7 +38,7 @@ public class UserService implements UserDetailsService {
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
+            throw new UsernameNotFoundException("User " + email + " not found in database");
         }
         log.info("User {} found in database", email);
         Collection<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getAccountType().getName()));
@@ -75,12 +75,13 @@ public class UserService implements UserDetailsService {
             user.setGroup(group);
             user.setHeroType(form.getHeroType());
             Integer indexNumber = form.getIndexNumber();
-            if(indexNumber == null) {
+
+            if(indexNumber == null || userRepo.existsUserByIndexNumber(indexNumber)) {
                 log.error("User with index number {} already in database", indexNumber);
                 throw new EntityAlreadyInDatabaseException(ExceptionMessage.INDEX_TAKEN);
             }
         } else {
-            if(form.getHeroType() != null || form.getInvitationCode() != null){
+            if(form.getHeroType() != null || form.getInvitationCode() != null || form.getIndexNumber() != null){
                 log.error("Request body for registering professor requires 4 body parameters");
                 throw new WrongBodyParametersNumberException("Request body for registering professor requires 4 body parameters",
                         List.of("firstName", "lastName", "email", "password"), 1);
@@ -111,7 +112,7 @@ public class UserService implements UserDetailsService {
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);
-            throw new EntityNotFoundException("User" + email + " not found in database");
+            throw new EntityNotFoundException("User " + email + " not found in database");
         }
         return user.getGroup();
     }

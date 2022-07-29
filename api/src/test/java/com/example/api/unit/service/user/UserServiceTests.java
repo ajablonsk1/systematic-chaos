@@ -1,41 +1,51 @@
 package com.example.api.unit.service.user;
 
+import com.example.api.dto.request.user.RegisterUserForm;
 import com.example.api.dto.request.user.SetStudentGroupForm;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.StudentAlreadyAssignedToGroupException;
-import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.dto.response.user.BasicStudent;
+import com.example.api.error.exception.*;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
+import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.service.user.UserService;
+import com.example.api.util.ExceptionMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class UserServiceTests {
     private UserService userService;
-    @Mock
-    private UserRepo userRepo;
-    @Mock
-    private GroupRepo groupRepo;
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private UserRepo userRepo;
+    @Mock private GroupRepo groupRepo;
+    @Mock private PasswordEncoder passwordEncoder;
+    @Captor private ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
+    @Captor private ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+    @Captor private ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+    @Captor private ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+    @Captor private ArgumentCaptor<Group> groupArgumentCaptor = ArgumentCaptor.forClass(Group.class);
+    @Captor private ArgumentCaptor<AccountType> accountTypeArgumentCaptor = ArgumentCaptor.forClass(AccountType.class);
 
     User user;
+    RegisterUserForm registerUserForm;
+    Group group;
 
     @BeforeEach
     public void init() {
@@ -45,6 +55,330 @@ public class UserServiceTests {
         user = new User();
         user.setId(1L);
         user.setEmail("user@gmail.com");
+        user.setPassword("password");
+
+        group = new Group();
+        group.setId(1L);
+        group.setName("group");
+        group.setInvitationCode("invitation-code");
+
+        registerUserForm = new RegisterUserForm();
+    }
+
+    @Test
+    public void loadUserByUsername() {
+        // given
+        user.setAccountType(AccountType.STUDENT);
+        given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
+
+        // when
+        userService.loadUserByUsername(user.getEmail());
+
+        // then
+        verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
+        String capturedEmail = stringArgumentCaptor.getValue();
+        assertThat(capturedEmail).isEqualTo(user.getEmail());
+    }
+
+    @Test
+    public void loadUserByUsernameThrowUsernameNotFoundException() {
+        // given
+        given(userRepo.findUserByEmail(user.getEmail())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.loadUserByUsername(user.getEmail()))
+                .isInstanceOf(UsernameNotFoundException.class)
+                .hasMessageContaining("User " + user.getEmail() + " not found in database");
+    }
+
+    @Test
+    public void saveUser() {
+        // given
+        String password = user.getPassword();
+        String encodedPassword = "encodedPassword";
+        given(userRepo.save(user)).willReturn(user);
+        given(passwordEncoder.encode(user.getPassword())).willReturn(encodedPassword);
+
+        // when
+        userService.saveUser(user);
+
+        // then
+        verify(userRepo).save(userArgumentCaptor.capture());
+        verify(passwordEncoder).encode(stringArgumentCaptor.capture());
+        User capturedUser = userArgumentCaptor.getValue();
+        String capturedPassword = stringArgumentCaptor.getValue();
+        assertThat(capturedUser).isEqualTo(user);
+        assertThat(capturedPassword).isEqualTo(password);
+        assertThat(user.getPassword()).isEqualTo(encodedPassword);
+    }
+
+    @Test
+    public void registerUserStudent() throws EntityAlreadyInDatabaseException, EntityNotFoundException, WrongBodyParametersNumberException {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setInvitationCode(group.getInvitationCode());
+        registerUserForm.setAccountType(AccountType.STUDENT);
+        registerUserForm.setHeroType(HeroType.PRIEST);
+        registerUserForm.setIndexNumber(99);
+        String encodedPassword = "encodedPassword";
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+        given(groupRepo.findGroupByInvitationCode(registerUserForm.getInvitationCode())).willReturn(group);
+        given(userRepo.existsUserByIndexNumber(registerUserForm.getIndexNumber())).willReturn(false);
+        given(passwordEncoder.encode(user.getPassword())).willReturn(encodedPassword);
+
+        // when
+        userService.registerUser(registerUserForm);
+
+        // then
+        verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
+        verify(groupRepo).findGroupByInvitationCode(stringArgumentCaptor.capture());
+        verify(userRepo).existsUserByIndexNumber(integerArgumentCaptor.capture());
+        verify(passwordEncoder).encode(stringArgumentCaptor.capture());
+        String capturedEmail = stringArgumentCaptor.getAllValues().get(0);
+        String capturedInvitationCode = stringArgumentCaptor.getAllValues().get(1);
+        Integer capturedIndexNumber = integerArgumentCaptor.getValue();
+        String capturedPassword = stringArgumentCaptor.getAllValues().get(2);
+        assertThat(capturedEmail).isEqualTo(registerUserForm.getEmail());
+        assertThat(capturedInvitationCode).isEqualTo(registerUserForm.getInvitationCode());
+        assertThat(capturedIndexNumber).isEqualTo(registerUserForm.getIndexNumber());
+        assertThat(capturedPassword).isEqualTo(registerUserForm.getPassword());
+    }
+
+    @Test
+    public void registerUserProfessor() throws EntityAlreadyInDatabaseException, EntityNotFoundException, WrongBodyParametersNumberException {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.PROFESSOR);
+        String encodedPassword = "encodedPassword";
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+        given(passwordEncoder.encode(user.getPassword())).willReturn(encodedPassword);
+
+        // when
+        userService.registerUser(registerUserForm);
+
+        // then
+        verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
+        verify(passwordEncoder).encode(stringArgumentCaptor.capture());
+        String capturedEmail = stringArgumentCaptor.getAllValues().get(0);
+        String capturedPassword = stringArgumentCaptor.getAllValues().get(1);
+        assertThat(capturedEmail).isEqualTo(registerUserForm.getEmail());
+        assertThat(capturedPassword).isEqualTo(registerUserForm.getPassword());
+    }
+
+    @Test
+    public void registerUserThrowEntityAlreadyInDatabaseException() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.PROFESSOR);
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(user);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(EntityAlreadyInDatabaseException.class)
+                .hasMessageContaining(ExceptionMessage.EMAIL_TAKEN);
+    }
+
+    @Test
+    public void registerUserStudentThrowWrongBodyParametersNumberExceptionWhenHeroTypeIsNull() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.STUDENT);
+        registerUserForm.setHeroType(null);
+        registerUserForm.setInvitationCode("invitation-code");
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(WrongBodyParametersNumberException.class)
+                .hasMessageContaining("Request body for registering student requires 6 body parameters",
+                        List.of("firstName", "lastName", "email", "password", "heroType", "invitationCode"), 1);
+    }
+
+    @Test
+    public void registerUserStudentThrowWrongBodyParametersNumberExceptionWhenInvitationCodeIsNull() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.STUDENT);
+        registerUserForm.setHeroType(HeroType.PRIEST);
+        registerUserForm.setInvitationCode(null);
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(WrongBodyParametersNumberException.class)
+                .hasMessageContaining("Request body for registering student requires 6 body parameters",
+                        List.of("firstName", "lastName", "email", "password", "heroType", "invitationCode"), 1);
+    }
+
+    @Test
+    public void registerUserStudentThrowEntityNotFoundExceptionWhenGroupCodeNotExist() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.STUDENT);
+        registerUserForm.setHeroType(HeroType.PRIEST);
+        registerUserForm.setInvitationCode(group.getInvitationCode());
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+        given(groupRepo.findGroupByInvitationCode(registerUserForm.getInvitationCode())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining(ExceptionMessage.GROUP_CODE_NOT_EXIST);
+    }
+
+    @Test
+    public void registerUserStudentThrowEntityAlreadyInDatabaseExceptionWhenIndexIsNull() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.STUDENT);
+        registerUserForm.setHeroType(HeroType.PRIEST);
+        registerUserForm.setInvitationCode(group.getInvitationCode());
+        registerUserForm.setIndexNumber(99);
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+        given(groupRepo.findGroupByInvitationCode(registerUserForm.getInvitationCode())).willReturn(group);
+        given(userRepo.existsUserByIndexNumber(registerUserForm.getIndexNumber())).willReturn(true);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(EntityAlreadyInDatabaseException.class)
+                .hasMessageContaining(ExceptionMessage.INDEX_TAKEN);
+    }
+
+    @Test
+    public void registerUserStudentThrowEntityAlreadyInDatabaseExceptionWhenIndexIsTaken() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.STUDENT);
+        registerUserForm.setHeroType(HeroType.PRIEST);
+        registerUserForm.setInvitationCode(group.getInvitationCode());
+        registerUserForm.setIndexNumber(99);
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+        given(groupRepo.findGroupByInvitationCode(registerUserForm.getInvitationCode())).willReturn(group);
+        given(userRepo.existsUserByIndexNumber(registerUserForm.getIndexNumber())).willReturn(true);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(EntityAlreadyInDatabaseException.class)
+                .hasMessageContaining(ExceptionMessage.INDEX_TAKEN);
+    }
+
+    @Test
+    public void registerUserProfessorThrowWrongBodyParametersNumberExceptionWhenHeroTypeIsNotNull() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.PROFESSOR);
+        registerUserForm.setHeroType(HeroType.PRIEST);
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(WrongBodyParametersNumberException.class)
+                .hasMessageContaining("Request body for registering professor requires 4 body parameters",
+                        List.of("firstName", "lastName", "email", "password"), 1);
+    }
+
+    @Test
+    public void registerUserProfessorThrowWrongBodyParametersNumberExceptionWhenInvitationCodeIsNotNull() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.PROFESSOR);
+        registerUserForm.setInvitationCode("invitation-code");
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(WrongBodyParametersNumberException.class)
+                .hasMessageContaining("Request body for registering professor requires 4 body parameters",
+                        List.of("firstName", "lastName", "email", "password"), 1);
+    }
+
+    @Test
+    public void registerUserProfessorThrowWrongBodyParametersNumberExceptionWhenIndexNumberIsNotNull() {
+        // given
+        registerUserForm.setEmail(user.getEmail());
+        registerUserForm.setAccountType(AccountType.PROFESSOR);
+        registerUserForm.setIndexNumber(99);
+        given(userRepo.findUserByEmail(registerUserForm.getEmail())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.registerUser(registerUserForm))
+                .isInstanceOf(WrongBodyParametersNumberException.class)
+                .hasMessageContaining("Request body for registering professor requires 4 body parameters",
+                        List.of("firstName", "lastName", "email", "password"), 1);
+    }
+
+    @Test
+    public void getUserGroup() throws EntityNotFoundException {
+        // given
+        user.setGroup(group);
+        given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
+
+        // when
+        Group userGroup = userService.getUserGroup(user.getEmail());
+
+        // then
+        verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
+        String capturedEmail = stringArgumentCaptor.getValue();
+        assertThat(capturedEmail).isEqualTo(user.getEmail());
+        assertThat(userGroup).isEqualTo(group);
+    }
+
+    @Test
+    public void getUserGroupThrowEntityNotFoundException() {
+        // given
+        given(userRepo.findUserByEmail(user.getEmail())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.getUserGroup(user.getEmail()))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("User " + user.getEmail() + " not found in database");
+    }
+
+    @Test
+    public void getAllStudentsWithGroup() {
+        // given
+        User secondUser = new User();
+        Group secondGroup = new Group();
+        user.setGroup(group);
+        secondUser.setGroup(secondGroup);
+        given(userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)).willReturn(List.of(user, secondUser));
+
+        // when
+        List<BasicStudent> studentsWithGroup = userService.getAllStudentsWithGroup();
+
+        // then
+        verify(userRepo).findAllByAccountTypeEquals(accountTypeArgumentCaptor.capture());
+        AccountType capturedAccountType = accountTypeArgumentCaptor.getValue();
+        assertThat(capturedAccountType).isEqualTo(AccountType.STUDENT);
+        assertThat(studentsWithGroup.contains(new BasicStudent(user))).isTrue();
+        assertThat(studentsWithGroup.contains(new BasicStudent(secondUser))).isTrue();
+        assertThat(studentsWithGroup.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void getAllStudentsWithGroupWhenIsEmpty() {
+        // given
+        given(userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)).willReturn(List.of());
+
+        // when
+        List<BasicStudent> studentsWithGroup = userService.getAllStudentsWithGroup();
+
+        // then
+        verify(userRepo).findAllByAccountTypeEquals(accountTypeArgumentCaptor.capture());
+        AccountType capturedAccountType = accountTypeArgumentCaptor.getValue();
+        assertThat(capturedAccountType).isEqualTo(AccountType.STUDENT);
+        assertThat(studentsWithGroup.size()).isEqualTo(0);
     }
 
     @Test
@@ -53,10 +387,8 @@ public class UserServiceTests {
         user.setAccountType(AccountType.STUDENT);;
         List<User> oldGroupUsers = new ArrayList<>();
         oldGroupUsers.add(user);
-        Group oldGroup = new Group();
-        oldGroup.setId(1L);
-        oldGroup.setUsers(oldGroupUsers);
-        user.setGroup(oldGroup);
+        group.setUsers(oldGroupUsers);
+        user.setGroup(group);
         Group newGroup = new Group();
         newGroup.setId(2L);
         newGroup.setUsers(new ArrayList<>());
@@ -64,26 +396,22 @@ public class UserServiceTests {
         setStudentGroupForm.setStudentId(user.getId());
         setStudentGroupForm.setNewGroupId(newGroup.getId());
         given(userRepo.findUserById(user.getId())).willReturn(user);
-        given(groupRepo.findGroupById(oldGroup.getId())).willReturn(oldGroup);
+        given(groupRepo.findGroupById(group.getId())).willReturn(group);
         given(groupRepo.findGroupById(newGroup.getId())).willReturn(newGroup);
 
         //when
         userService.setStudentGroup(setStudentGroupForm);
 
         // then
-        ArgumentCaptor<Long> userIdCaptor = ArgumentCaptor.forClass(Long.class);
-        ArgumentCaptor<Long> newGroupIdCaptor = ArgumentCaptor.forClass(Long.class);
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        ArgumentCaptor<Group> groupCaptor = ArgumentCaptor.forClass(Group.class);
-        verify(userRepo).findUserById(userIdCaptor.capture());
-        verify(groupRepo).findGroupById(newGroupIdCaptor.capture());
-        verify(userRepo).save(userCaptor.capture());
-        verify(groupRepo, times(2)).save(groupCaptor.capture());
-        Long capturedUserId = userIdCaptor.getValue();
-        Long capturedNewGroupId = newGroupIdCaptor.getValue();
-        User capturedUser = userCaptor.getValue();
-        Group capturedOldGroup = groupCaptor.getAllValues().get(0);
-        Group capturedNewGroup = groupCaptor.getAllValues().get(1);
+        verify(userRepo).findUserById(idArgumentCaptor.capture());
+        verify(groupRepo).findGroupById(idArgumentCaptor.capture());
+        verify(userRepo).save(userArgumentCaptor.capture());
+        verify(groupRepo, times(2)).save(groupArgumentCaptor.capture());
+        Long capturedUserId = idArgumentCaptor.getAllValues().get(0);
+        Long capturedNewGroupId = idArgumentCaptor.getAllValues().get(1);
+        User capturedUser = userArgumentCaptor.getValue();
+        Group capturedOldGroup = groupArgumentCaptor.getAllValues().get(0);
+        Group capturedNewGroup = groupArgumentCaptor.getAllValues().get(1);
         assertThat(capturedUserId).isEqualTo(user.getId());
         assertThat(capturedNewGroupId).isEqualTo(newGroup.getId());
         assertThat(capturedUser.getGroup()).isEqualTo(newGroup);
