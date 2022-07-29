@@ -13,6 +13,7 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.validator.AnswerFormValidator;
 import com.example.api.service.validator.UserValidator;
@@ -24,6 +25,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
 
 import java.util.Calendar;
 
@@ -44,6 +46,8 @@ public class GraphTaskResultServiceTest {
     @Mock private PointsCalculator pointsCalculator;
     @Mock private UserValidator userValidator;
     @Mock private TimeCalculator timeCalculator;
+    @Mock private AuthenticationService authService;
+    @Mock private Authentication authentication;
     GraphTaskResult result;
     GraphTask graphTask;
     @Captor ArgumentCaptor<User> userArgumentCaptor;
@@ -67,7 +71,8 @@ public class GraphTaskResultServiceTest {
                 pointsCalculator,
                 answerFormValidator,
                 userValidator,
-                timeCalculator
+                timeCalculator,
+                authService
         );
         graphTask = new GraphTask();
         graphTask.setId(2L);
@@ -82,11 +87,13 @@ public class GraphTaskResultServiceTest {
         User user = new User();
         user.setEmail("random@email.com");
         user.setAccountType(AccountType.STUDENT);
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
         given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
 
         // when
-        graphTaskResultService.getGraphTaskResult(graphTask.getId(), user.getEmail());
+        graphTaskResultService.getGraphTaskResult(graphTask.getId());
 
         // then
         verify(graphTaskResultRepo).findGraphTaskResultByGraphTaskAndUser(
@@ -104,11 +111,13 @@ public class GraphTaskResultServiceTest {
         User user = new User();
         user.setEmail("random@email.com");
         user.setAccountType(AccountType.STUDENT);
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
 
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResult(graphTask.getId(), user.getEmail()))
+        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
     }
@@ -132,16 +141,14 @@ public class GraphTaskResultServiceTest {
         // given
         User user = new User();
         user.setEmail("random@email.com");
-        SaveGraphTaskResultForm form = new SaveGraphTaskResultForm(
-                graphTask.getId(),
-                user.getEmail()
-        );
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
 
 
         // when
-        graphTaskResultService.saveGraphTaskResult(form);
+        graphTaskResultService.saveGraphTaskResult(graphTask.getId());
 
         // then
         verify(graphTaskRepo).findGraphTaskById(idArgumentCaptor.capture());
@@ -157,14 +164,11 @@ public class GraphTaskResultServiceTest {
         // given
         User user = new User();
         user.setEmail("random@email.com");
-        SaveGraphTaskResultForm form = new SaveGraphTaskResultForm(
-                graphTask.getId(),
-                user.getEmail()
-        );
-
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(form))
+        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
     }
@@ -174,15 +178,13 @@ public class GraphTaskResultServiceTest {
         // given
         User user = new User();
         user.setEmail("random@email.com");
-        SaveGraphTaskResultForm form = new SaveGraphTaskResultForm(
-                graphTask.getId(),
-                user.getEmail()
-        );
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
 
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(form))
+        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("User" + user.getEmail() + " not found in database");
     }

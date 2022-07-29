@@ -9,6 +9,7 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,13 +35,15 @@ public class UserServiceTests {
     private GroupRepo groupRepo;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private AuthenticationService authService;
 
     User user;
 
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserService(userRepo, groupRepo, passwordEncoder);
+        userService = new UserService(userRepo, groupRepo, authService, passwordEncoder);
 
         user = new User();
         user.setId(1L);

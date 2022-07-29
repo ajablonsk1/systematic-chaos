@@ -9,6 +9,7 @@ import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.UserFeedbackRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
 import com.example.api.service.validator.UserValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,6 +32,8 @@ public class UserFeedbackServiceTest {
     @Mock private UserRepo userRepo;
     @Mock private SurveyRepo surveyRepo;
     @Mock private UserValidator userValidator;
+    @Mock private AuthenticationService authService;
+    @Mock private Authentication authentication;
     @Captor private ArgumentCaptor<UserFeedback> userFeedbackArgumentCaptor;
     @Captor private ArgumentCaptor<Long> idArgumentCaptor;
     @Captor private ArgumentCaptor<String> stringArgumentCaptor;
@@ -41,7 +46,8 @@ public class UserFeedbackServiceTest {
                 userFeedbackRepo,
                 userRepo,
                 surveyRepo,
-                userValidator);
+                userValidator,
+                authService);
     }
 
     @Test
@@ -61,13 +67,16 @@ public class UserFeedbackServiceTest {
     @Test
     public void saveUserFeedbackForm() throws WrongUserTypeException, EntityNotFoundException {
         // given
-        SaveUserFeedbackForm form = new SaveUserFeedbackForm("random@email.com",
+        SaveUserFeedbackForm form = new SaveUserFeedbackForm(
                 "random content",
                 10,
                 1L);
         User user = new User();
         Survey survey = new Survey();
-        given(userRepo.findUserByEmail(form.getStudentEmail())).willReturn(user);
+        String email = "random@email.com";
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn(email);
+        given(userRepo.findUserByEmail(email)).willReturn(user);
         given(surveyRepo.findSurveyById(form.getSurveyId())).willReturn(survey);
 
         // when
@@ -78,17 +87,19 @@ public class UserFeedbackServiceTest {
         verify(surveyRepo).findSurveyById(idArgumentCaptor.capture());
         String capturedEmail = stringArgumentCaptor.getValue();
         Long capturedId = idArgumentCaptor.getValue();
-        assertThat(capturedEmail).isEqualTo(form.getStudentEmail());
+        assertThat(capturedEmail).isEqualTo(email);
         assertThat(capturedId).isEqualTo(form.getSurveyId());
     }
 
     @Test
     public void saveUserFeedbackFormThrowEntityNotFoundException() throws WrongUserTypeException, EntityNotFoundException {
         // given
-        SaveUserFeedbackForm form = new SaveUserFeedbackForm("random@email.com",
+        SaveUserFeedbackForm form = new SaveUserFeedbackForm(
                 "random content",
                 10,
                 1L);
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         // when
         // then
         assertThatThrownBy(() -> userFeedbackService.saveUserFeedback(form))

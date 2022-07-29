@@ -12,6 +12,7 @@ import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.validator.UserValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -39,6 +41,8 @@ public class FileTaskResultServiceTest {
     @Mock private UserRepo userRepo;
     @Mock private FileRepo fileRepo;
     @Mock private UserValidator userValidator;
+    @Mock private AuthenticationService authService;
+    @Mock private Authentication authentication;
     FileTaskResult result;
     FileTask fileTask;
     @Captor  ArgumentCaptor<Long> idArgumentCaptor;
@@ -55,7 +59,8 @@ public class FileTaskResultServiceTest {
                 fileTaskRepo,
                 userRepo,
                 fileRepo,
-                userValidator
+                userValidator,
+                authService
         );
         fileTask = new FileTask();
         result = new FileTaskResult();
@@ -81,11 +86,12 @@ public class FileTaskResultServiceTest {
         user.setAccountType(AccountType.STUDENT);
         SaveFileToFileTaskResultForm form = new SaveFileToFileTaskResultForm(
                 fileTask.getId(),
-                user.getEmail(),
                 "",
                 new MockMultipartFile("randomName", new byte[1024]),
                 null
         );
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(fileTaskRepo.findFileTaskById(fileTask.getId())).willReturn(fileTask);
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
         given(fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, user)).willReturn(result);
@@ -115,11 +121,12 @@ public class FileTaskResultServiceTest {
         user.setEmail("random@email.com");
         SaveFileToFileTaskResultForm form = new SaveFileToFileTaskResultForm(
                 fileTask.getId(),
-                user.getEmail(),
                 "",
                 new MockMultipartFile("randomName", new byte[1024]),
                 null
         );
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
 
         //when
         //then
@@ -136,11 +143,12 @@ public class FileTaskResultServiceTest {
         user.setAccountType(AccountType.STUDENT);
         SaveFileToFileTaskResultForm form = new SaveFileToFileTaskResultForm(
                 fileTask.getId(),
-                user.getEmail(),
                 "",
                 new MockMultipartFile("randomName", new byte[1024]),
                 null
         );
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(fileTaskRepo.findFileTaskById(fileTask.getId())).willReturn(fileTask);
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
         given(fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, user)).willReturn(null);
@@ -165,11 +173,12 @@ public class FileTaskResultServiceTest {
         user.setAccountType(AccountType.STUDENT);
         SaveFileToFileTaskResultForm form = new SaveFileToFileTaskResultForm(
                 fileTask.getId(),
-                user.getEmail(),
                 null,
                 new MockMultipartFile("randomName", new byte[1024]),
                 ""
         );
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(fileTaskRepo.findFileTaskById(fileTask.getId())).willReturn(fileTask);
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
         given(fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, user)).willReturn(result);
@@ -198,13 +207,15 @@ public class FileTaskResultServiceTest {
         User user = new User();
         user.setEmail("random@email.com");
         user.setAccountType(AccountType.STUDENT);
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(fileTaskRepo.findFileTaskById(fileTask.getId())).willReturn(fileTask);
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
         given(fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, user)).willReturn(result);
         result.getFiles().add(new File());
 
         //when
-        fileTaskResultService.deleteFileFromFileTask(fileTask.getId(), user.getEmail(), 0);
+        fileTaskResultService.deleteFileFromFileTask(fileTask.getId(), 0);
 
         //then
         verify(fileTaskRepo).findFileTaskById(idArgumentCaptor.capture());
