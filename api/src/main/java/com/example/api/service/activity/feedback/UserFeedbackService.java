@@ -9,6 +9,7 @@ import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.UserFeedbackRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +26,15 @@ public class UserFeedbackService {
     private final UserRepo userRepo;
     private final SurveyRepo surveyRepo;
     private final UserValidator userValidator;
+    private final AuthenticationService authService;
 
     public UserFeedback saveUserFeedback(UserFeedback feedback) {
         return userFeedbackRepo.save(feedback);
     }
 
     public UserFeedback saveUserFeedback(SaveUserFeedbackForm form) throws WrongUserTypeException, EntityNotFoundException {
-        log.info("Saving user {} feedback for survey with id {}", form.getStudentEmail(), form.getSurveyId());
-        String email = form.getStudentEmail();
+        String email = authService.getAuthentication().getName();
+        log.info("Saving user {} feedback for survey with id {}", email, form.getSurveyId());
         User student = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(student, email);
         UserFeedback feedback = new UserFeedback();

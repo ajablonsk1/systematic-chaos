@@ -14,6 +14,8 @@ import com.example.api.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,9 +50,14 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUser(email));
     }
 
+    @GetMapping("/user/current")
+    public ResponseEntity<User> getCurrentUser() {
+        return ResponseEntity.ok().body(userService.getCurrentUser());
+    }
+
     @GetMapping("/user/group")
-    public ResponseEntity<Group> getUserGroup(@RequestParam String email) throws EntityNotFoundException {
-        return ResponseEntity.ok().body(userService.getUserGroup(email));
+    public ResponseEntity<Group> getUserGroup() throws EntityNotFoundException {
+        return ResponseEntity.ok().body(userService.getUserGroup());
     }
 
     @GetMapping("/users")

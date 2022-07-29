@@ -1,7 +1,6 @@
 package com.example.api.controller.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
-import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
 import com.example.api.dto.request.activity.result.SetStartTimeForm;
 import com.example.api.dto.request.activity.result.SetTimeSpentForm;
 import com.example.api.error.exception.*;
@@ -18,21 +17,15 @@ public class GraphTaskResultController {
     private final GraphTaskResultService graphTaskResultService;
 
     @GetMapping
-    public ResponseEntity<GraphTaskResult> getGraphTaskResult(@RequestParam Long graphTaskId, @RequestParam String studentEmail)
+    public ResponseEntity<GraphTaskResult> getGraphTaskResult(@RequestParam Long graphTaskId)
             throws EntityNotFoundException, WrongUserTypeException {
-        return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResult(graphTaskId, studentEmail));
+        return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResult(graphTaskId));
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestBody SaveGraphTaskResultForm form)
+    @GetMapping("/save")
+    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestParam Long graphTaskId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form));
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<GraphTaskResult> addAnswerToResult(@RequestBody SaveGraphTaskResultForm form)
-            throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form));
+        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(graphTaskId));
     }
 
     @GetMapping("/points/closed")

@@ -21,9 +21,9 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("/evaluate/all")
-    ResponseEntity<List<ActivityToEvaluateResponse>> getAllActivitiesToEvaluate(@RequestParam String professorEmail)
+    ResponseEntity<List<ActivityToEvaluateResponse>> getAllActivitiesToEvaluate()
             throws WrongUserTypeException {
-        return ResponseEntity.ok().body(taskService.getAllActivitiesToEvaluate(professorEmail));
+        return ResponseEntity.ok().body(taskService.getAllActivitiesToEvaluate());
     }
 
     @GetMapping("/evaluate/first")

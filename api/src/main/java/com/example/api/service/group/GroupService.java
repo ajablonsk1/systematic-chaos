@@ -9,7 +9,7 @@ import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
-import com.example.api.util.ExceptionMessage;
+import com.example.api.error.exception.ExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

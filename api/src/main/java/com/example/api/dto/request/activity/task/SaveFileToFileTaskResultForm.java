@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class SaveFileToFileTaskResultForm {
     @Schema(required = true) private Long fileTaskId;
-    @Schema(required = true) private String studentEmail;
     @Schema(required = false) private String openAnswer;
     @Schema(required = false) private MultipartFile file;
     @Schema(required = false) private String fileName;

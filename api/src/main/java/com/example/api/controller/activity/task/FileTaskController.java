@@ -18,8 +18,8 @@ public class FileTaskController {
     private final FileTaskService fileTaskService;
 
     @GetMapping
-    ResponseEntity<FileTaskInfoResponse> getFileTaskById(@RequestParam Long fileTaskId, @RequestParam String studentEmail)
+    ResponseEntity<FileTaskInfoResponse> getFileTaskById(@RequestParam Long fileTaskId)
             throws EntityNotFoundException, WrongUserTypeException {
-        return ResponseEntity.ok().body(fileTaskService.getFileTaskInfo(fileTaskId, studentEmail));
+        return ResponseEntity.ok().body(fileTaskService.getFileTaskInfo(fileTaskId));
     }
 }
