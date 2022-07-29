@@ -15,7 +15,9 @@ class AuthService {
         }
         return response.data
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        throw err
+      })
   }
 
   logout() {
