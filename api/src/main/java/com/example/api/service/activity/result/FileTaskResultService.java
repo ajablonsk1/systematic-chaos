@@ -14,9 +14,11 @@ import com.example.api.repo.util.FileRepo;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class FileTaskResultService {
         return fileTaskResultRepo.save(result);
     }
 
-    public Long saveFileToFileTaskResult(SaveFileToFileTaskResultForm form) throws EntityNotFoundException, WrongUserTypeException {
+    public Long saveFileToFileTaskResult(SaveFileToFileTaskResultForm form) throws EntityNotFoundException, WrongUserTypeException, IOException {
         log.info("Saving file to file task result with id {}", form.getFileTaskId());
         FileTaskResult result = getFileTaskResultByFileTaskAndUser(form.getFileTaskId(), form.getStudentEmail());
         if(result == null){
@@ -42,15 +44,16 @@ public class FileTaskResultService {
             result.setFileTask(fileTaskRepo.findFileTaskById(form.getFileTaskId()));
             result.setEvaluated(false);
             result.setUser(userRepo.findUserByEmail(form.getStudentEmail()));
-            fileTaskResultRepo.save(result);
         }
-        if(form.getFileString() != null) {
-            File file = new File(null, form.getFileName(), form.getFileString());
+        if(form.getFile() != null) {
+            File file = new File(null, form.getFileName(), form.getFile().getBytes());
             fileRepo.save(file);
             result.getFiles().add(file);
+            fileTaskResultRepo.save(result);
         }
         if(form.getOpenAnswer() != null) {
             result.setAnswer(form.getOpenAnswer());
+            fileTaskResultRepo.save(result);
         }
         return result.getId();
     }
@@ -73,12 +76,12 @@ public class FileTaskResultService {
         return fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
     }
 
-    public File getFileById(Long fileId) throws EntityNotFoundException {
+    public ByteArrayResource getFileById(Long fileId) throws EntityNotFoundException {
         File file = fileRepo.findFileById(fileId);
         if(file == null) {
             log.error("File with given id {} does not exist", fileId);
             throw new EntityNotFoundException("File with given id " + fileId + " does not exist");
         }
-        return file;
+        return new ByteArrayResource(file.getFile());
     }
 }

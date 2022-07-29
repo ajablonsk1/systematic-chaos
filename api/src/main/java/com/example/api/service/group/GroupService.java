@@ -1,9 +1,8 @@
 package com.example.api.service.group;
 
 import com.example.api.dto.request.group.SaveGroupForm;
-import com.example.api.dto.response.user.BasicUser;
-import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.dto.response.group.GroupCode;
+import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.group.Group;
@@ -19,7 +18,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Service
