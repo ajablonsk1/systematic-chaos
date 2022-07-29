@@ -17,6 +17,7 @@ import com.example.api.service.validator.UserValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
@@ -40,6 +41,11 @@ public class FileTaskResultServiceTest {
     @Mock private UserValidator userValidator;
     FileTaskResult result;
     FileTask fileTask;
+    @Captor  ArgumentCaptor<Long> idArgumentCaptor;
+    @Captor ArgumentCaptor<String> stringArgumentCaptor;
+    @Captor ArgumentCaptor<User> userArgumentCaptor;
+    @Captor ArgumentCaptor<FileTask> fileTaskArgumentCaptor;
+    @Captor ArgumentCaptor<FileTaskResult> fileTaskResultArgumentCaptor;
 
     @BeforeEach
     public void init() {
@@ -54,6 +60,17 @@ public class FileTaskResultServiceTest {
         fileTask = new FileTask();
         result = new FileTaskResult();
         result.setFileTask(fileTask);
+    }
+
+    @Test
+    public void saveFileTaskResult() {
+        //given
+        //when
+        fileTaskResultService.saveFileTaskResult(result);
+        //then
+        verify(fileTaskResultRepo).save(fileTaskResultArgumentCaptor.capture());
+        FileTaskResult capturedResult = fileTaskResultArgumentCaptor.getValue();
+        assertThat(capturedResult).isEqualTo(result);
     }
 
     @Test
@@ -77,16 +94,12 @@ public class FileTaskResultServiceTest {
         fileTaskResultService.saveFileToFileTaskResult(form);
 
         //then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-        ArgumentCaptor<String> emailArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
-        ArgumentCaptor<FileTask> fileTaskArgumentCaptor = ArgumentCaptor.forClass(FileTask.class);
         verify(fileTaskRepo).findFileTaskById(idArgumentCaptor.capture());
-        verify(userRepo).findUserByEmail(emailArgumentCaptor.capture());
+        verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
         verify(fileTaskResultRepo).findFileTaskResultByFileTaskAndUser(fileTaskArgumentCaptor.capture(),
                 userArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
-        String capturedEmail = emailArgumentCaptor.getValue();
+        String capturedEmail = stringArgumentCaptor.getValue();
         User capturedUser = userArgumentCaptor.getValue();
         FileTask capturedFileTask = fileTaskArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(fileTask.getId());
@@ -136,12 +149,10 @@ public class FileTaskResultServiceTest {
         fileTaskResultService.saveFileToFileTaskResult(form);
 
         //then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-        ArgumentCaptor<String> emailArgumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(fileTaskRepo, times(2)).findFileTaskById(idArgumentCaptor.capture());
-        verify(userRepo, times(2)).findUserByEmail(emailArgumentCaptor.capture());
+        verify(userRepo, times(2)).findUserByEmail(stringArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
-        String capturedEmail = emailArgumentCaptor.getValue();
+        String capturedEmail = stringArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(fileTask.getId());
         assertThat(capturedEmail).isEqualTo(user.getEmail());
     }
@@ -167,16 +178,12 @@ public class FileTaskResultServiceTest {
         fileTaskResultService.saveFileToFileTaskResult(form);
 
         //then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-        ArgumentCaptor<String> emailArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
-        ArgumentCaptor<FileTask> fileTaskArgumentCaptor = ArgumentCaptor.forClass(FileTask.class);
         verify(fileTaskRepo).findFileTaskById(idArgumentCaptor.capture());
-        verify(userRepo).findUserByEmail(emailArgumentCaptor.capture());
+        verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
         verify(fileTaskResultRepo).findFileTaskResultByFileTaskAndUser(fileTaskArgumentCaptor.capture(),
                 userArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
-        String capturedEmail = emailArgumentCaptor.getValue();
+        String capturedEmail = stringArgumentCaptor.getValue();
         User capturedUser = userArgumentCaptor.getValue();
         FileTask capturedFileTask = fileTaskArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(fileTask.getId());
@@ -200,16 +207,12 @@ public class FileTaskResultServiceTest {
         fileTaskResultService.deleteFileFromFileTask(fileTask.getId(), user.getEmail(), 0);
 
         //then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-        ArgumentCaptor<String> emailArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
-        ArgumentCaptor<FileTask> fileTaskArgumentCaptor = ArgumentCaptor.forClass(FileTask.class);
         verify(fileTaskRepo).findFileTaskById(idArgumentCaptor.capture());
-        verify(userRepo).findUserByEmail(emailArgumentCaptor.capture());
+        verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
         verify(fileTaskResultRepo).findFileTaskResultByFileTaskAndUser(fileTaskArgumentCaptor.capture(),
                 userArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
-        String capturedEmail = emailArgumentCaptor.getValue();
+        String capturedEmail = stringArgumentCaptor.getValue();
         User capturedUser = userArgumentCaptor.getValue();
         FileTask capturedFileTask = fileTaskArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(fileTask.getId());
@@ -229,7 +232,6 @@ public class FileTaskResultServiceTest {
         fileTaskResultService.getFileById(file.getId());
 
         //then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(fileRepo).findFileById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(file.getId());

@@ -20,19 +20,19 @@ import com.example.api.util.PointsCalculator;
 import com.example.api.util.TimeCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import static org.assertj.core.api.Assertions.*;
+import java.util.Calendar;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
 public class GraphTaskResultServiceTest {
     private GraphTaskResultService graphTaskResultService;
     @Mock private GraphTaskResultRepo graphTaskResultRepo;
@@ -41,8 +41,19 @@ public class GraphTaskResultServiceTest {
     @Mock private QuestionRepo questionRepo;
     @Mock private AnswerRepo answerRepo;
     @Mock private AnswerFormValidator answerFormValidator;
+    @Mock private PointsCalculator pointsCalculator;
+    @Mock private UserValidator userValidator;
+    @Mock private TimeCalculator timeCalculator;
     GraphTaskResult result;
     GraphTask graphTask;
+    @Captor ArgumentCaptor<User> userArgumentCaptor;
+    @Captor ArgumentCaptor<GraphTask> graphTaskArgumentCaptor;
+    @Captor ArgumentCaptor<GraphTaskResult> resultArgumentCaptor;
+    @Captor ArgumentCaptor<Long> idArgumentCaptor;
+    @Captor ArgumentCaptor<String> emailArgumentCaptor;
+    @Captor ArgumentCaptor<Long> resultIdArgumentCaptor;
+    @Captor ArgumentCaptor<AnswerForm> answerFormArgumentCaptor;
+    @Captor ArgumentCaptor<Long> questionIdArgumentCaptor;
 
     @BeforeEach
     public void init() {
@@ -53,10 +64,10 @@ public class GraphTaskResultServiceTest {
                 userRepo,
                 questionRepo,
                 answerRepo,
-                new PointsCalculator(),
+                pointsCalculator,
                 answerFormValidator,
-                new UserValidator(),
-                new TimeCalculator()
+                userValidator,
+                timeCalculator
         );
         graphTask = new GraphTask();
         graphTask.setId(2L);
@@ -78,8 +89,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.getGraphTaskResult(graphTask.getId(), user.getEmail());
 
         // then
-        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
-        ArgumentCaptor<GraphTask> graphTaskArgumentCaptor = ArgumentCaptor.forClass(GraphTask.class);
         verify(graphTaskResultRepo).findGraphTaskResultByGraphTaskAndUser(
                 graphTaskArgumentCaptor.capture(), userArgumentCaptor.capture());
         User capturedUser = userArgumentCaptor.getValue();
@@ -87,32 +96,6 @@ public class GraphTaskResultServiceTest {
 
         assertThat(capturedUser).isEqualTo(user);
         assertThat(capturedGraphTask).isEqualTo(graphTask);
-    }
-
-    @Test
-    public void getGraphTaskResultThrowUsernameNotFound() {
-        // given
-        User user = new User();
-        user.setEmail("random@email.com");
-
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResult(graphTask.getId(), user.getEmail()))
-                .isInstanceOf(UsernameNotFoundException.class)
-                .hasMessageContaining("User" + user.getEmail() + " not found in database");
-    }
-
-    @Test
-    public void getGraphTaskResultThrowWrongUserTypeException() {
-        // given
-        User user = new User();
-        user.setEmail("random@email.com");
-
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResult(graphTask.getId(), user.getEmail()))
-                .isInstanceOf(UsernameNotFoundException.class)
-                .hasMessageContaining("User" + user.getEmail() + " not found in database");
     }
 
     @Test
@@ -139,7 +122,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.saveGraphTaskResult(result);
 
         // then
-        ArgumentCaptor<GraphTaskResult> resultArgumentCaptor = ArgumentCaptor.forClass(GraphTaskResult.class);
         verify(graphTaskResultRepo).save(resultArgumentCaptor.capture());
         GraphTaskResult capturedResult = resultArgumentCaptor.getValue();
         assertThat(capturedResult).isEqualTo(result);
@@ -162,8 +144,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.saveGraphTaskResult(form);
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-        ArgumentCaptor<String> emailArgumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(graphTaskRepo).findGraphTaskById(idArgumentCaptor.capture());
         verify(userRepo).findUserByEmail(emailArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
@@ -216,7 +196,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.getPointsFromClosedQuestions(result.getId());
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
@@ -240,7 +219,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.getPointsFromOpenedQuestions(result.getId());
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
@@ -265,7 +243,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.getAndSetAllPoints(result.getId());
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
@@ -290,7 +267,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.getMaxAvailablePoints(result.getId());
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
@@ -315,7 +291,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.getMaxClosedPoints(result.getId());
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
@@ -340,7 +315,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.getMaxOpenedPoints(result.getId());
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
@@ -379,9 +353,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.addAnswerToGraphTaskResult(form);
 
         // then
-        ArgumentCaptor<Long> resultIdArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-        ArgumentCaptor<AnswerForm> answerFormArgumentCaptor = ArgumentCaptor.forClass(AnswerForm.class);
-        ArgumentCaptor<Long> questionIdArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo, times(2)).findGraphTaskResultById(resultIdArgumentCaptor.capture());
         verify(answerFormValidator).validateAndCreateAnswer(answerFormArgumentCaptor.capture());
         verify(questionRepo).findQuestionById(questionIdArgumentCaptor.capture());
@@ -396,6 +367,9 @@ public class GraphTaskResultServiceTest {
     @Test
     public void addAnswerToGraphTaskResultTimeRemaining() throws WrongBodyParametersNumberException, EntityRequiredAttributeNullException, EntityNotFoundException, InterruptedException {
         // given
+        Answer answer = new Answer();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2022, Calendar.APRIL, 21);
         AnswerForm answerForm = new AnswerForm();
         answerForm.setOpenAnswer("random answer");
         AddAnswerToGraphTaskForm form = new AddAnswerToGraphTaskForm(
@@ -403,10 +377,12 @@ public class GraphTaskResultServiceTest {
                 1L,
                 answerForm
         );
-        result.setStartTimeMillis(System.currentTimeMillis());
-        graphTask.setTimeToSolveMillis(1L);
-        Thread.sleep(2L);
-        given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
+        result.setStartTimeMillis(calendar.getTimeInMillis());
+        graphTask.setTimeToSolveMillis(1_000L);
+        given(graphTaskResultRepo.findGraphTaskResultById(form.getResultId())).willReturn(result);
+        given(answerFormValidator.validateAndCreateAnswer(form.getAnswerForm())).willReturn(answer);
+        given(timeCalculator.getTimeRemaining(result.getStartTimeMillis(), graphTask.getTimeToSolveMillis()))
+                .willReturn(graphTask.getTimeToSolveMillis() - (System.currentTimeMillis() -result.getStartTimeMillis()));
 
         //when
         long timeRemaining = graphTaskResultService.addAnswerToGraphTaskResult(form);
@@ -442,7 +418,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.setTimeSpent(form);
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
@@ -470,7 +445,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.setStartTime(form);
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
@@ -499,7 +473,6 @@ public class GraphTaskResultServiceTest {
         graphTaskResultService.getTimeRemaining(result.getId());
 
         // then
-        ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
