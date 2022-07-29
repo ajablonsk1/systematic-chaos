@@ -1,5 +1,5 @@
-import { axiosApiDelete, axiosApiGet, axiosApiPost } from '../utils/axios'
-import { COMBAT_TASK_GET_FILE, COMBAT_TASK_GET_INFO, COMBAT_TASK_REMOVE_FILE, COMBAT_TASK_SEND_ANSWER } from './urls'
+import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiSendFile } from '../utils/axios'
+import { COMBAT_TASK_GET_INFO, COMBAT_TASK_REMOVE_FILE, COMBAT_TASK_RESULT_FILE, COMBAT_TASK_SEND_ANSWER } from './urls'
 import StudentService from './student.service'
 
 class CombatTaskService {
@@ -11,9 +11,8 @@ class CombatTaskService {
   }
 
   getCombatFile(fileApiId) {
-    return axiosApiGet(COMBAT_TASK_GET_FILE, {
-      fileId: fileApiId,
-      studentEmail: StudentService.getEmail()
+    return axiosApiDownloadFile(COMBAT_TASK_RESULT_FILE, {
+      fileId: fileApiId
     })
   }
 
@@ -25,13 +24,15 @@ class CombatTaskService {
     })
   }
 
-  saveCombatTaskAnswer(taskId, openAnswer, fileName, fileString) {
-    return axiosApiPost(COMBAT_TASK_SEND_ANSWER, {
+  saveCombatTaskAnswer(taskId, openAnswer, fileName, fileBlob) {
+    return axiosApiSendFile(COMBAT_TASK_SEND_ANSWER, {
       fileTaskId: taskId,
       openAnswer: openAnswer,
       fileName: fileName,
-      fileString: fileString,
+      file: fileBlob,
       studentEmail: StudentService.getEmail()
+    }).catch((error) => {
+      throw error
     })
   }
 }

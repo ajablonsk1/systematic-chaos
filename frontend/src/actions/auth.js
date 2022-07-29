@@ -43,7 +43,9 @@ export const login = (email, password) => (dispatch) => {
         return Promise.reject()
       }
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      throw err
+    })
 }
 
 export const logout = () => (dispatch) => {

@@ -21,31 +21,44 @@ import {
 } from '../../../professor/ActivityAssessmentDetails/ActivityAssesmentDetailsStyles'
 import { SendTaskButton } from './CombatTaskStyles'
 import CombatTaskService from '../../../../services/combatTask.service'
+import { Spinner } from 'react-bootstrap'
 
 export default function CombatTask() {
   const location = useLocation()
   const { activityId: taskState } = location.state
 
-  const [task, setTask] = useState()
-  const [taskId, setTaskId] = useState(taskState)
-  const [fileString, setFileString] = useState()
+  const [task, setTask] = useState(undefined)
+  const [fileBlob, setFileBlob] = useState()
   const [fileName, setFileName] = useState()
   const [answer, setAnswer] = useState('')
-  const [isSaved, setIsSaved] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
+
+  const resetStates = () => {
+    setIsFetching(false)
+    setFileBlob(null)
+    setFileName(null)
+    setAnswer('')
+  }
 
   useEffect(() => {
-    CombatTaskService.getCombatTask(taskId)
-      .then((response) => setTask(response))
+    CombatTaskService.getCombatTask(taskState)
+      .then((response) => {
+        setTask(response)
+      })
       .catch((error) => console.log(error))
-  }, [taskId, isSaved])
+  }, [isFetching, taskState])
 
   const sendAnswer = () => {
-    //use endpoint to save file task answer
-    setIsSaved(false)
-    CombatTaskService.saveCombatTaskAnswer(taskId, answer, fileName, fileString).then((response) => {
-      setTaskId(response)
-      setIsSaved(true)
-    })
+    setIsFetching(true)
+
+    CombatTaskService.saveCombatTaskAnswer(taskState, answer, fileName, fileBlob)
+      .then(() => {
+        resetStates()
+      })
+      .catch((error) => {
+        console.log(error)
+        resetStates()
+      })
   }
 
   const handleAnswerChange = (event) => setAnswer(event.target.value)
@@ -72,7 +85,7 @@ export default function CombatTask() {
                 Zdobyte punkty: <strong>50 / 100</strong> {/*//TODO: info from endpoint*/}
               </p>
               <p>
-                {task.content && (
+                {task?.content && (
                   <>
                     <strong>Uwagi prowadzącego:</strong> <br /> {task.content}
                   </>
@@ -84,10 +97,16 @@ export default function CombatTask() {
                 <RemarksTextArea value={answer} onChange={handleAnswerChange} />
               </RemarksCol>
 
-              <FileService task={task} setFile={setFileString} setFileName={setFileName} setIsSaved={setIsSaved} />
+              <FileService
+                task={task}
+                setFile={setFileBlob}
+                setFileName={setFileName}
+                setIsFetching={setIsFetching}
+                isFetching={isFetching}
+              />
             </div>
             <SendTaskButton disabled={!fileName && answer === ''} onClick={() => sendAnswer()}>
-              Wyślij
+              {isFetching ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
             </SendTaskButton>
           </ActivityCol>
         )}
