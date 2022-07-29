@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getChapterDetails } from '../GameManagement/mockData'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Table } from 'react-bootstrap'
-import { getActivityImg, getActivityTypeName } from '../../../utils/constants'
+import { ERROR_OCCURED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
 import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
@@ -17,7 +17,7 @@ function ChapterDetails() {
   const { id: chapterId } = useParams()
   const [openActivitiesDetailsList, setOpenActivitiesDetailsList] = useState(false)
   const [openConditionsList, setOpenConditionsList] = useState(false)
-  const [chapterMap, setChapterMap] = useState()
+  const [chapterMap, setChapterMap] = useState(undefined)
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false)
   const [isEditChapterModalOpen, setEditChapterModalOpen] = useState(false)
   const mapCardBody = useRef()
@@ -26,7 +26,9 @@ function ChapterDetails() {
 
   useEffect(() => {
     // todo: set mapId, now we always get first map
-    ActivityService.getActivityMap(1).then((response) => setChapterMap(response))
+    ActivityService.getActivityMap(1)
+      .then((response) => setChapterMap(response))
+      .catch(() => setChapterMap(null))
   }, [])
 
   return (
@@ -37,7 +39,11 @@ function ChapterDetails() {
             <MapCard className={'mt-2'}>
               <Card.Header>Mapa rozdziału</Card.Header>
               <Card.Body ref={mapCardBody}>
-                {chapterMap && <ChapterMap map={chapterMap} marginNeeded parentRef={mapCardBody} />}
+                {chapterMap ? (
+                  <ChapterMap map={chapterMap} marginNeeded parentRef={mapCardBody} />
+                ) : (
+                  chapterMap == null && <p className={'text-center h6 p-4'}>{ERROR_OCCURED}</p>
+                )}
               </Card.Body>
             </MapCard>
           </Col>

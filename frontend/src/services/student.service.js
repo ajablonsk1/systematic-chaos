@@ -12,7 +12,9 @@ class StudentService {
   }
 
   getUserGroup() {
-    return axiosApiGet(USER_GROUP, { email: this.getEmail() })
+    return axiosApiGet(USER_GROUP, { email: this.getEmail() }).catch((error) => {
+      throw error
+    })
   }
 }
 

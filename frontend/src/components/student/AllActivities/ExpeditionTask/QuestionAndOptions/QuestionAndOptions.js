@@ -9,7 +9,7 @@ import ExpeditionService from '../../../../../services/expedition.service'
 import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
 
 function QuestionAndOptions(props) {
-  const [question, setQuestion] = useState()
+  const [question, setQuestion] = useState('')
   const navigate = useNavigate()
   const location = useLocation()
   const { activityId: expeditionId, nodeId: questionId, taskResultId } = location.state
@@ -20,9 +20,9 @@ function QuestionAndOptions(props) {
     if (expeditionId == null || questionId == null || taskResultId == null) {
       navigate(generateFullPath(() => PageRoutes.Student.GameCard.GAME_CARD))
     } else {
-      ExpeditionService.getQuestion(questionId).then((response) => setQuestion(response))
-
-      //setQuestion(getQuestion(+expeditionId, +questionId)); // todo: use endpoint
+      ExpeditionService.getQuestion(questionId)
+        .then((response) => setQuestion(response ?? ''))
+        .catch(() => setQuestion('Wystąpił nieoczekiwany błąd.'))
     }
   }, [questionId, expeditionId, navigate, taskResultId])
 

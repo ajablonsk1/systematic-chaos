@@ -1,6 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { Col, Spinner } from 'react-bootstrap'
-import { Activity, getActivityImg, getActivityTypeName, START_GRAPH_NODE_ID } from '../../../../../utils/constants'
+import {
+  Activity,
+  ERROR_OCCURED,
+  getActivityImg,
+  getActivityTypeName,
+  START_GRAPH_NODE_ID
+} from '../../../../../utils/constants'
 import {
   ActivityCol,
   ActivityImg,
@@ -28,31 +34,43 @@ export default function ActivityContent(props) {
   const [loadedScore, setLoadedScore] = useState(false)
   const [activityScore, setActivityScore] = useState(undefined)
   const [pointsReceived, setPointsReceived] = useState(0)
-  const [startDate, setStartDate] = useState()
-  const [endDate, setEndDate] = useState()
+  const [startDate, setStartDate] = useState(undefined)
+  const [endDate, setEndDate] = useState(undefined)
+  const [errorMessage, setErrorMessage] = useState(undefined)
 
   useEffect(() => {
-    ExpeditionService.getExpeditionScore(activityId).then((response) => {
-      setActivityScore(response || 0)
-      setLoadedScore(true)
-    })
+    ExpeditionService.getExpeditionScore(activityId)
+      .then((response) => {
+        setActivityScore(response || 0)
+        setLoadedScore(true)
+      })
+      .catch(() => {
+        setErrorMessage(ERROR_OCCURED)
+      })
   }, [activityId, props])
 
   useEffect(() => {
     if (loadedScore) {
-      StudentService.getUserGroup().then((activityGroup) => {
-        const givenTimeData = props.activity.requirement?.accessDates.find((el) =>
-          el.group.find((el) => el.name === activityGroup.name)
-        )
+      StudentService.getUserGroup()
+        .then((activityGroup) => {
+          const givenTimeData = props.activity.requirement?.accessDates.find((el) =>
+            el.group.find((el) => el.name === activityGroup.name)
+          )
 
-        if (givenTimeData) {
-          setStartDate(new Date(...givenTimeData.dateFrom))
-          setEndDate(new Date(...givenTimeData.dateTo))
-        }
-      })
+          if (givenTimeData) {
+            setStartDate(new Date(...givenTimeData.dateFrom))
+            setEndDate(new Date(...givenTimeData.dateTo))
+          }
+        })
+        .catch(() => {
+          setStartDate(ERROR_OCCURED)
+          setEndDate(ERROR_OCCURED)
+        })
 
       if (activityScore?.id) {
-        ExpeditionService.getExpeditionAllPoints(activityScore.id).then((response) => setPointsReceived(response ?? 0))
+        ExpeditionService.getExpeditionAllPoints(activityScore.id)
+          .then((response) => setPointsReceived(response ?? 0))
+          .catch(() => setPointsReceived(0))
       }
     }
   }, [loadedScore, activityScore?.id, props.activity.requirement])
@@ -85,8 +103,10 @@ export default function ActivityContent(props) {
 
   return (
     <>
-      {!loadedScore ? (
+      {!loadedScore && !errorMessage ? (
         <Spinner animation={'border'} />
+      ) : errorMessage ? (
+        <p>{errorMessage}</p>
       ) : (
         <ActivityCol className='invisible-scroll'>
           <HeaderCol>
@@ -114,7 +134,12 @@ export default function ActivityContent(props) {
             <p>Liczba punktów licząca się jako 100% - {props.activity.maxPoints100}</p>
             <Spacer />
 
-            {!props.activity.requirement ? (
+            {startDate === ERROR_OCCURED ? (
+              <p>
+                Data dostępności aktywności: <br />
+                <strong>{ERROR_OCCURED}</strong>
+              </p>
+            ) : !props.activity.requirement ? (
               <p>Aktywność nie ma ustawionego limitu czasowego</p>
             ) : (
               <>

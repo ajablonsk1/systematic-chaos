@@ -4,6 +4,7 @@ import { TableContainer } from './ParticipantsStyles'
 import ChangeGroupModal from './ChangeGroupModal'
 import { Button } from 'react-bootstrap'
 import GroupService from '../../../services/group.service'
+import { ERROR_OCCURED } from '../../../utils/constants'
 
 function ParticipantsTable(props) {
   const [modalOpen, setModalOpen] = useState(false)
@@ -15,14 +16,22 @@ function ParticipantsTable(props) {
   useEffect(() => {
     if (!modalOpen) {
       if (!props.groupId || !props.groupName) {
-        GroupService.getAllStudents().then((response) => setStudentsList(response))
-      } else {
-        GroupService.getGroupStudents(props.groupId).then((response) => {
-          const responseWithGroupName = response?.map((student) => {
-            return { ...student, groupName: props.groupName }
+        GroupService.getAllStudents()
+          .then((response) => setStudentsList([...response]))
+          .catch(() => {
+            setStudentsList(null)
           })
-          setStudentsList(responseWithGroupName)
-        })
+      } else {
+        GroupService.getGroupStudents(props.groupId)
+          .then((response) => {
+            const responseWithGroupName = response?.map((student) => {
+              return { ...student, groupName: props.groupName }
+            })
+            setStudentsList(responseWithGroupName)
+          })
+          .catch(() => {
+            setStudentsList(null)
+          })
       }
     }
   }, [props, modalOpen])
@@ -38,7 +47,7 @@ function ParticipantsTable(props) {
           </tr>
         </thead>
         <tbody>
-          {studentsList.length > 0 ? (
+          {studentsList?.length > 0 ? (
             studentsList.map((student, index) => (
               <tr key={index + student.groupName}>
                 <td className={'py-2'}>{student.groupName}</td>
@@ -61,7 +70,7 @@ function ParticipantsTable(props) {
           ) : (
             <tr>
               <td colSpan='100%' className={'text-center'}>
-                <p>Brak członków</p>
+                <p>{studentsList == null ? ERROR_OCCURED : 'Brak członków'}</p>
               </td>
             </tr>
           )}

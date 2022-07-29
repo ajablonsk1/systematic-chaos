@@ -47,7 +47,7 @@ function generateDoor(question, navigate, expeditionId, noDoors, taskResultId) {
 
 function QuestionSelectionDoor(props) {
   const navigate = useNavigate()
-  const [questions, setQuestions] = useState()
+  const [questions, setQuestions] = useState(null)
   const location = useLocation()
   const { activityId: expeditionId, nodeId: parentId, taskResultId } = location.state
   const remainingTime = props.remainingTime
@@ -57,9 +57,9 @@ function QuestionSelectionDoor(props) {
     if (parentId == null || expeditionId == null || taskResultId == null) {
       navigate(generateFullPath(() => PageRoutes.General.HOME))
     } else {
-      ExpeditionService.getChildQuestions(parentId).then((response) => setQuestions(response))
-
-      //setQuestions(getParentQuestions(+parentId, +expeditionId));  // todo: use endpoint
+      ExpeditionService.getChildQuestions(parentId)
+        .then((response) => setQuestions(response))
+        .catch(() => setQuestions(null))
     }
   }, [parentId, expeditionId, navigate, taskResultId])
 

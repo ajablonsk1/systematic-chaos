@@ -4,17 +4,20 @@ import ParticipantsTable from './ParticipantsTable'
 import { ParticipantsContent, TabsContainer } from './ParticipantsStyles'
 import GroupService from '../../../services/group.service'
 import Loader from '../../general/Loader/Loader'
+import { ERROR_OCCURED } from '../../../utils/constants'
 
 function Participants() {
   const [allGroups, setAllGroups] = useState(undefined)
 
   useEffect(() => {
-    GroupService.getGroups().then((response) => setAllGroups(response))
+    GroupService.getGroups()
+      .then((response) => setAllGroups(response))
+      .catch(() => setAllGroups(null))
   }, [])
 
   return (
     <ParticipantsContent>
-      {!allGroups ? (
+      {allGroups === undefined ? (
         <Loader />
       ) : (
         <TabsContainer defaultActiveKey={'wszyscy'}>
@@ -22,11 +25,12 @@ function Participants() {
             <ParticipantsTable />
           </Tab>
 
-          {allGroups.map((group, index) => (
-            <Tab key={index + group.name} title={group.name} eventKey={group.name}>
-              <ParticipantsTable groupId={group.id} groupName={group.name} />
-            </Tab>
-          ))}
+          {allGroups &&
+            allGroups.map((group, index) => (
+              <Tab key={index + group.name} title={group.name} eventKey={group.name}>
+                <ParticipantsTable groupId={group.id} groupName={group.name} />
+              </Tab>
+            ))}
         </TabsContainer>
       )}
     </ParticipantsContent>
