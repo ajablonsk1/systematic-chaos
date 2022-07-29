@@ -4,7 +4,6 @@ import ParticipantsTable from './ParticipantsTable'
 import { ParticipantsContent, TabsContainer } from './ParticipantsStyles'
 import GroupService from '../../../services/group.service'
 import Loader from '../../general/Loader/Loader'
-import { ERROR_OCCURED } from '../../../utils/constants'
 
 function Participants() {
   const [allGroups, setAllGroups] = useState(undefined)
