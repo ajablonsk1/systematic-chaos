@@ -7,9 +7,9 @@ import combatTaskService from '../../../services/combatTask.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURED } from '../../../utils/constants'
 
-// note: currently the list assumes we only can only manually grade File Tasks - this is due to the way our DB currently works,
-// an ID is unique only in the task group. we might need to add task type differentation on the backend if we want to check
-// other types of activities in the future
+// note: currently the list assumes we can only manually grade File Tasks - this is due to the way our DB currently works,
+// an ID is unique only in the task group. we might need to add a field that lets us know which task type it is
+// on the backend if we want to check other types of activities in the future
 
 export default function ActivityAssessmentList() {
   const [activityList, setActivityList] = useState(undefined)
@@ -18,7 +18,7 @@ export default function ActivityAssessmentList() {
     ProfessorService.getTasksToEvaluateList()
       .then((activityList) => {
         Promise.allSettled(
-          activityList.map((activity) => {
+          activityList?.map((activity) => {
             return combatTaskService.getCombatTaskProfessor(activity.activityId).then((response) => {
               return {
                 activity: response,
@@ -28,15 +28,16 @@ export default function ActivityAssessmentList() {
           })
         ).then((response) => {
           setActivityList(
-            response.map((activity) => {
-              return {
-                activity: activity.value
-              }
-            })
+            response[0]?.status === 'rejected'
+              ? null
+              : response?.map((activity) => {
+                  return {
+                    activity: activity.value
+                  }
+                })
           )
         })
       })
-
       .catch(() => {
         setActivityList(null)
       })
@@ -49,7 +50,7 @@ export default function ActivityAssessmentList() {
         {activityList === undefined ? (
           <Loader />
         ) : activityList == null ? (
-          <p>{ERROR_OCCURED}</p>
+          <p className={'text-center text-danger h4'}>{ERROR_OCCURED}</p>
         ) : (
           activityList.map((activity) => {
             const listActivity = activity.activity.activity
