@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
 import GroupService from '../../../../services/group.service'
 import { TableContainer } from '../../../student/PointsPage/Table/TableStyle'
+import { ERROR_OCCURED } from '../../../../utils/constants'
 
 export default function GroupsTable(props) {
   const [tableContent, setTableContent] = useState(undefined)
 
   const updateTableContent = () => {
-    GroupService.getGroups().then((response) => {
-      setTableContent(response)
-    })
+    GroupService.getGroups()
+      .then((response) => {
+        setTableContent(response)
+      })
+      .catch(() => setTableContent(null))
   }
 
   useEffect(() => {
@@ -40,9 +43,17 @@ export default function GroupsTable(props) {
             <th>Kod</th>
           </tr>
         </thead>
-        <tbody>{tableContent && TableBody(tableContent)}</tbody>
+        <tbody>
+          {tableContent == null ? (
+            <tr>
+              <td colSpan={3}>{ERROR_OCCURED}</td>
+            </tr>
+          ) : (
+            TableBody(tableContent)
+          )}
+        </tbody>
       </TableContainer>
-      {!tableContent && <Spinner />}
+      {tableContent === undefined && <Spinner animation={'border'} />}
     </>
   )
 }

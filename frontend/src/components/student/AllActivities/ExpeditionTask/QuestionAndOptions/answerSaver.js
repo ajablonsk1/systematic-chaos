@@ -16,11 +16,9 @@ const getAnswerForm = (questionType, userAnswer) => {
 }
 
 export default function answerSaver(userAnswer, questionType, resultId, questionId, expeditionId, navigate) {
-  if (!userAnswer) return
-
   let acceptWarning = null
 
-  if (userAnswer.length === 0) {
+  if (!userAnswer || userAnswer.length === 0) {
     acceptWarning = window.confirm('Nie podałeś żadnej odpowiedzi. Czy na pewno chcesz przejść dalej?')
   }
 

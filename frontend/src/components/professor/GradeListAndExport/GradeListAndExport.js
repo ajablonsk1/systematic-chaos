@@ -10,7 +10,9 @@ export default function GradeListAndExport() {
   const [allGroups, setAllGroups] = useState(undefined)
 
   useEffect(() => {
-    GroupService.getGroups().then((response) => setAllGroups(response))
+    GroupService.getGroups()
+      .then((response) => setAllGroups(response))
+      .catch(() => setAllGroups(null))
   }, [])
 
   return (
@@ -20,15 +22,13 @@ export default function GradeListAndExport() {
           <UsersTable />
         </Tab>
 
-        {allGroups ? (
-          allGroups.map((group, index) => (
-            <Tab key={index + group.name} title={group.name} eventKey={group.name}>
-              <UsersTable groupId={group.id} groupName={group.name} />
-            </Tab>
-          ))
-        ) : (
-          <Loader />
-        )}
+        {allGroups
+          ? allGroups.map((group, index) => (
+              <Tab key={index + group.name} title={group.name} eventKey={group.name}>
+                <UsersTable groupId={group.id} groupName={group.name} />
+              </Tab>
+            ))
+          : allGroups === undefined && <Loader />}
       </TabsContainer>
     </GradesContent>
   )

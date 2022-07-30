@@ -13,7 +13,7 @@ import {
   HeaderRow,
   SmallDivider
 } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
-import { getActivityImg, getActivityTypeName } from '../../../../utils/constants'
+import { ERROR_OCCURED, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
 import FileService from './FileService'
 import {
   RemarksCol,
@@ -32,6 +32,7 @@ export default function CombatTask() {
   const [fileName, setFileName] = useState()
   const [answer, setAnswer] = useState('')
   const [isFetching, setIsFetching] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const resetStates = () => {
     setIsFetching(false)
@@ -45,7 +46,9 @@ export default function CombatTask() {
       .then((response) => {
         setTask(response)
       })
-      .catch((error) => console.log(error))
+      .catch(() => {
+        setErrorMessage(ERROR_OCCURED)
+      })
   }, [isFetching, taskState])
 
   const sendAnswer = () => {
@@ -56,18 +59,26 @@ export default function CombatTask() {
         resetStates()
       })
       .catch((error) => {
-        console.log(error)
-        resetStates()
+        // if there is an error from the 5XX group, the object can be added anyway, so we do resetState,
+        // and when an error from the 4XX group occurs, we do not clean to send again
+        if (error.response?.status < 400 || error.response?.status >= 500) {
+          resetStates()
+        }
+        setIsFetching(false)
       })
   }
 
-  const handleAnswerChange = (event) => setAnswer(event.target.value)
+  const handleAnswerChange = (event) => {
+    setAnswer(event.target.value)
+  }
 
   return (
     <Content>
       <InfoContainer fluid className='p-0'>
-        {!task ? (
+        {!task && errorMessage === '' ? (
           <Loader />
+        ) : errorMessage !== '' ? (
+          <p>{errorMessage}</p>
         ) : (
           <ActivityCol className='invisible-scroll'>
             <HeaderCol>

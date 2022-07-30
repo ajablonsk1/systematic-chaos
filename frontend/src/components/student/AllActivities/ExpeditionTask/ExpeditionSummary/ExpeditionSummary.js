@@ -13,10 +13,10 @@ import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
 
 export default function ExpeditionSummary() {
   const navigate = useNavigate()
-  const [maxPointsOpen, setMaxPointsOpen] = useState()
-  const [maxPointsClosed, setMaxPointsClosed] = useState()
-  const [scoredPoints, setScoredPoints] = useState()
-  const [closedQuestionPoints, setClosedQuestionPoints] = useState()
+  const [maxPointsOpen, setMaxPointsOpen] = useState(0)
+  const [maxPointsClosed, setMaxPointsClosed] = useState(0)
+  const [scoredPoints, setScoredPoints] = useState(0)
+  const [closedQuestionPoints, setClosedQuestionPoints] = useState(0)
   const location = useLocation()
   const { expeditionId, remainingTime, taskResultId } = location.state
   const [loaded, setLoaded] = useState(false)
@@ -25,23 +25,23 @@ export default function ExpeditionSummary() {
     if (expeditionId == null) {
       navigate(generateFullPath(() => PageRoutes.General.HOME))
     } else {
-      const promise1 = ExpeditionService.getExpeditionPointsMaxOpen(taskResultId).then((response) =>
-        setMaxPointsOpen(response)
-      )
+      const promise1 = ExpeditionService.getExpeditionPointsMaxOpen(taskResultId)
+        .then((response) => setMaxPointsOpen(response ?? 0))
+        .catch(() => setMaxPointsOpen(0))
 
       // TODO: For now we get points from /all, later we will get it from getActivityScore() when it gets fixed
       //StudentService.getActivityScore()...
-      const promise2 = ExpeditionService.getExpeditionAllPoints(taskResultId).then((response) =>
-        setScoredPoints(response)
-      )
+      const promise2 = ExpeditionService.getExpeditionAllPoints(taskResultId)
+        .then((response) => setScoredPoints(response ?? 0))
+        .catch(() => setScoredPoints(0))
 
-      const promise3 = ExpeditionService.getExpeditionPointsClosed(taskResultId).then((response) =>
-        setClosedQuestionPoints(response)
-      )
+      const promise3 = ExpeditionService.getExpeditionPointsClosed(taskResultId)
+        .then((response) => setClosedQuestionPoints(response ?? 0))
+        .catch(() => setClosedQuestionPoints(0))
 
-      const promise4 = ExpeditionService.getExpeditionPointsMaxClosed(taskResultId).then((response) =>
-        setMaxPointsClosed(response)
-      )
+      const promise4 = ExpeditionService.getExpeditionPointsMaxClosed(taskResultId)
+        .then((response) => setMaxPointsClosed(response ?? 0))
+        .catch(() => setMaxPointsClosed(0))
 
       Promise.allSettled([promise1, promise2, promise3, promise4]).then(() => setLoaded(true))
     }

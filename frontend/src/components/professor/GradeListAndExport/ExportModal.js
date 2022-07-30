@@ -7,7 +7,6 @@ import moment from 'moment'
 
 function ExportModal(props) {
   const [isFetching, setIsFetching] = useState(false)
-  const [error, setError] = useState()
 
   const startExporting = () => {
     setIsFetching(true)
@@ -18,8 +17,7 @@ function ExportModal(props) {
         props.setModalVisible(false)
         setIsFetching(false)
       })
-      .catch((error) => {
-        setError(error)
+      .catch(() => {
         setIsFetching(false)
       })
   }
@@ -34,8 +32,6 @@ function ExportModal(props) {
         <Card.Footer className={'text-center'}>
           {isFetching ? (
             <Spinner animation={'border'} />
-          ) : error ? (
-            <p className={'text-danger font-weight-bold'}>{error}</p>
           ) : (
             <>
               <Button variant={'danger'} onClick={() => props.setModalVisible(false)}>
