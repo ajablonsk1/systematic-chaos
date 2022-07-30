@@ -24,8 +24,6 @@ const ActivityListItemRow = styled(Row)`
 export default function ActivityListItem(props) {
   const navigate = useNavigate()
 
-  console.log(props)
-
   return (
     <ActivityListItemRow
       onClick={() => {

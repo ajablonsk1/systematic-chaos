@@ -18,7 +18,9 @@ class ProfessorService {
   }
 
   getTasksToEvaluateList() {
-    return axiosApiGet(GET_TASKS_TO_EVALUATE, { professorEmail: this.getEmail() })
+    return axiosApiGet(GET_TASKS_TO_EVALUATE, { professorEmail: this.getEmail() }).catch((error) => {
+      throw error
+    })
   }
 }
 

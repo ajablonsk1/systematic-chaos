@@ -12,6 +12,14 @@ class CombatTaskService {
     })
   }
 
+  //temporary fix to let us get fileTask info as a professor - "normal" one only lets students through
+  getCombatTaskProfessor(taskId) {
+    return axiosApiGet(COMBAT_TASK_GET_INFO, {
+      fileTaskId: taskId,
+      studentEmail: 'jgorski@student.agh.edu.pl'
+    })
+  }
+
   getCombatFile(fileApiId) {
     return axiosApiDownloadFile(COMBAT_TASK_RESULT_FILE, {
       fileId: fileApiId
