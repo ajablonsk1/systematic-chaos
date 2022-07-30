@@ -94,10 +94,12 @@ export default function ActivityContent(props) {
       // clean previous answers
       navigateTo(START_GRAPH_NODE_ID, activityScore.id)
     } else {
-      ExpeditionService.getTaskAnswerId(activityId).then((response) => {
-        // later get the first question on endpoint
-        navigateTo(props.activity.questions[0].id, response.id)
-      })
+      ExpeditionService.getTaskAnswerId(activityId)
+        .then((response) => {
+          // later get the first question on endpoint
+          navigateTo(props.activity.questions[0].id, response.id)
+        })
+        .catch(() => {})
     }
   }
 

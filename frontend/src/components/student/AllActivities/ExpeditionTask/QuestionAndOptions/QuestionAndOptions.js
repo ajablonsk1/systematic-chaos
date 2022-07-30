@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ClosedQuestionPage from './ClosedQuestionPage/ClosedQuestionPage'
-import { QuestionType } from '../../../../../utils/constants'
+import { ERROR_OCCURED, QuestionType } from '../../../../../utils/constants'
 import Loader from '../../../../general/Loader/Loader'
 import { ContentWithBackground } from './QuestionAndOptionsStyle'
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage'
@@ -9,7 +9,7 @@ import ExpeditionService from '../../../../../services/expedition.service'
 import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
 
 function QuestionAndOptions(props) {
-  const [question, setQuestion] = useState('')
+  const [question, setQuestion] = useState(undefined)
   const navigate = useNavigate()
   const location = useLocation()
   const { activityId: expeditionId, nodeId: questionId, taskResultId } = location.state
@@ -21,8 +21,8 @@ function QuestionAndOptions(props) {
       navigate(generateFullPath(() => PageRoutes.Student.GameCard.GAME_CARD))
     } else {
       ExpeditionService.getQuestion(questionId)
-        .then((response) => setQuestion(response ?? ''))
-        .catch(() => setQuestion('Wystąpił nieoczekiwany błąd.'))
+        .then((response) => setQuestion(response ?? null))
+        .catch(() => setQuestion(null))
     }
   }, [questionId, expeditionId, navigate, taskResultId])
 
@@ -46,6 +46,8 @@ function QuestionAndOptions(props) {
     <ContentWithBackground>
       {question === undefined ? (
         <Loader />
+      ) : question == null ? (
+        <p className={'text-center text-danger h3'}>{ERROR_OCCURED}</p>
       ) : (
         <>
           {question.type === QuestionType.OPEN_QUESTION ? (
