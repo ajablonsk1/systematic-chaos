@@ -18,11 +18,11 @@ export default function ActivityAssessmentList() {
     ProfessorService.getTasksToEvaluateList()
       .then((activityList) => {
         Promise.allSettled(
-          activityList.map((element) => {
-            return combatTaskService.getCombatTaskProfessor(element.activityId).then((response) => {
+          activityList.map((activity) => {
+            return combatTaskService.getCombatTaskProfessor(activity.activityId).then((response) => {
               return {
                 activity: response,
-                toGrade: element.toGrade
+                toGrade: activity.toGrade
               }
             })
           })
