@@ -48,8 +48,8 @@ function App(props) {
         </Row>
       </Container>
       <ToastContainer
-        position='bottom-right'
-        autoClose={2000}
+        position='top-right'
+        autoClose={4000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -57,6 +57,7 @@ function App(props) {
         pauseOnFocusLoss
         draggable
         pauseOnHover
+        theme={'colored'}
       />
     </>
   )

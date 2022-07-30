@@ -9,7 +9,13 @@ import {
   HeaderRow,
   SmallDivider
 } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
-import { Activity, FIELD_REQUIRED, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
+import {
+  Activity,
+  ERROR_OCCURED,
+  FIELD_REQUIRED,
+  getActivityImg,
+  getActivityTypeName
+} from '../../../../utils/constants'
 import { useLocation } from 'react-router-dom'
 import Loader from '../../../general/Loader/Loader'
 import { InfoContainer } from '../ExpeditionTask/ActivityInfo/InfoContainer'
@@ -24,12 +30,16 @@ import SurveyTaskService from '../../../../services/surveyTask.service'
 export default function FeedbackTask() {
   const location = useLocation()
   const { activityId: taskId } = location.state
-  const [task, setTask] = useState()
+  const [task, setTask] = useState(undefined)
 
   useEffect(() => {
-    SurveyTaskService.getSurveyTask(taskId).then((response) => {
-      setTask(response)
-    })
+    SurveyTaskService.getSurveyTask(taskId)
+      .then((response) => {
+        setTask(response)
+      })
+      .catch(() => {
+        setTask(ERROR_OCCURED)
+      })
   }, [taskId])
 
   return (
@@ -37,6 +47,8 @@ export default function FeedbackTask() {
       <InfoContainer>
         {!task ? (
           <Loader />
+        ) : task === ERROR_OCCURED ? (
+          <p>{ERROR_OCCURED}</p>
         ) : (
           <ActivityCol className='invisible-scroll'>
             <HeaderCol>

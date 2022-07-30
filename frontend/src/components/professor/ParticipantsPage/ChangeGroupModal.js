@@ -3,21 +3,23 @@ import { Button, Card, Form, Modal, ModalBody, ModalFooter, Spinner } from 'reac
 import CardHeader from 'react-bootstrap/CardHeader'
 import Loader from '../../general/Loader/Loader'
 import GroupService from '../../../services/group.service'
+import { ERROR_OCCURED } from '../../../utils/constants'
 
 function ChangeGroupModal(props) {
   const [student, setStudent] = useState()
   const [groups, setGroups] = useState([])
   const [newGroup, setNewGroup] = useState()
   const [isFetching, setIsFetching] = useState(false)
-  const [error, setError] = useState()
   const [successModalOpen, setSuccessModalOpen] = useState(false)
 
   useEffect(() => setStudent(props.student), [props.student])
   useEffect(() => {
-    GroupService.getGroups().then((response) => {
-      setGroups(response)
-      setNewGroup(response.find((group) => group.name === student?.groupName)) //defaultValue in select list
-    })
+    GroupService.getGroups()
+      .then((response) => {
+        setGroups([...response])
+        setNewGroup(response?.find((group) => group.name === student?.groupName)) //defaultValue in select list
+      })
+      .catch(() => setGroups(null))
   }, [student])
 
   const selectGroup = (event) => {
@@ -32,8 +34,7 @@ function ChangeGroupModal(props) {
         props.setModalOpen(false)
         setSuccessModalOpen(true)
       })
-      .catch((error) => {
-        setError(error)
+      .catch(() => {
         setIsFetching(false)
       })
   }
@@ -46,25 +47,30 @@ function ChangeGroupModal(props) {
             <Card.Title>Zmiana grupy</Card.Title>
             <p>Zmień grupę wybranego studenta wybierając jego nową grupę z poniższej listy</p>
           </CardHeader>
-          {!student || !groups ? (
+          {!student || groups === undefined ? (
             <Loader />
           ) : (
             <>
               <Card.Body>
-                <h6>
-                  Wybrany student: {student?.firstName} {student?.lastName}
-                </h6>
-                <Form>
-                  <span>Przypisz do grupy: </span>
-                  <select defaultValue={student?.groupName} onChange={selectGroup}>
-                    {groups.map((group) => (
-                      <option key={group.id} value={group.name}>
-                        {group.name}
-                      </option>
-                    ))}
-                  </select>
-                </Form>{' '}
-                {error && <div className={'mt-3 text-center text-danger w-100'}>{error}</div>}
+                {groups == null ? (
+                  <p className={'text-center text-danger h6'}>{ERROR_OCCURED}</p>
+                ) : (
+                  <>
+                    <h6>
+                      Wybrany student: {student?.firstName} {student?.lastName}
+                    </h6>
+                    <Form>
+                      <span>Przypisz do grupy: </span>
+                      <select defaultValue={student?.groupName} onChange={selectGroup}>
+                        {groups.map((group) => (
+                          <option key={group.id} value={group.name}>
+                            {group.name}
+                          </option>
+                        ))}
+                      </select>
+                    </Form>{' '}
+                  </>
+                )}
               </Card.Body>
               <Card.Footer className={'d-flex justify-content-center align-items-center'}>
                 <Button onClick={() => props.setModalOpen(false)} variant={'danger'}>

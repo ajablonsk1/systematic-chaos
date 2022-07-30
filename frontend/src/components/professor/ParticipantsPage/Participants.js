@@ -9,12 +9,14 @@ function Participants() {
   const [allGroups, setAllGroups] = useState(undefined)
 
   useEffect(() => {
-    GroupService.getGroups().then((response) => setAllGroups(response))
+    GroupService.getGroups()
+      .then((response) => setAllGroups(response))
+      .catch(() => setAllGroups(null))
   }, [])
 
   return (
     <ParticipantsContent>
-      {!allGroups ? (
+      {allGroups === undefined ? (
         <Loader />
       ) : (
         <TabsContainer defaultActiveKey={'wszyscy'}>
@@ -22,11 +24,12 @@ function Participants() {
             <ParticipantsTable />
           </Tab>
 
-          {allGroups.map((group, index) => (
-            <Tab key={index + group.name} title={group.name} eventKey={group.name}>
-              <ParticipantsTable groupId={group.id} groupName={group.name} />
-            </Tab>
-          ))}
+          {allGroups &&
+            allGroups.map((group, index) => (
+              <Tab key={index + group.name} title={group.name} eventKey={group.name}>
+                <ParticipantsTable groupId={group.id} groupName={group.name} />
+              </Tab>
+            ))}
         </TabsContainer>
       )}
     </ParticipantsContent>

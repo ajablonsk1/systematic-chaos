@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Activity, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
+import { Activity, ERROR_OCCURED, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
 import {
   ActivityCol,
   ActivityImg,
@@ -21,16 +21,20 @@ export default function Information() {
   const location = useLocation()
   const { activityId: informationId } = location.state
 
-  const [information, setInformation] = useState() // todo: endpoint
+  const [information, setInformation] = useState(undefined)
 
   useEffect(() => {
-    InfoTaskService.getInformation(informationId).then((response) => setInformation(response))
+    InfoTaskService.getInformation(informationId)
+      .then((response) => setInformation(response))
+      .catch(() => setInformation(null))
   }, [informationId])
 
   return (
     <>
-      {!information ? (
+      {information === undefined ? (
         <Loader />
+      ) : information == null ? (
+        <p className={'text-center text-danger h4'}>{ERROR_OCCURED}</p>
       ) : (
         <Content>
           <InfoContainer>

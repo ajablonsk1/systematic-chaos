@@ -1,5 +1,6 @@
 import axios from 'axios'
 import authHeader from '../services/auth-header'
+import { errorToast } from './errorToast'
 
 const header = Object.assign(authHeader(), { 'Content-Type': 'application/x-www-form-urlencoded' })
 const headerWithParams = (params) => Object.assign(header, { params })
@@ -11,7 +12,8 @@ export function axiosApiPost(url, body) {
     .post(url, body, header)
     .then((response) => response.data)
     .catch((error) => {
-      throw error.response.data
+      errorToast(error?.response?.data?.message)
+      throw error
     })
 }
 
@@ -20,7 +22,8 @@ export function axiosApiGet(url, params) {
     .get(url, headerWithParams(params))
     .then((response) => response.data)
     .catch((error) => {
-      throw error.response.data
+      errorToast(error?.response?.data?.message)
+      throw error
     })
 }
 
@@ -29,7 +32,8 @@ export function axiosApiDelete(url, params) {
     .delete(url, headerWithParams(params))
     .then((response) => response.data)
     .catch((error) => {
-      throw error.response.data
+      errorToast(error?.response?.data?.message)
+      throw error
     })
 }
 
@@ -50,7 +54,8 @@ export function axiosApiSendFile(url, body) {
     .post(url, formData, multipartFileHeader)
     .then((response) => response.data)
     .catch((error) => {
-      throw error.response.data
+      errorToast(error?.response?.data?.message)
+      throw error
     })
 }
 
@@ -59,6 +64,7 @@ export function axiosApiDownloadFile(url, params) {
     .get(url, fileHeaderWithParams(params))
     .then((response) => response.data)
     .catch((error) => {
+      errorToast(error?.response?.data?.message)
       throw error
     })
 }
@@ -68,6 +74,7 @@ export function axiosApiGetFile(url, body) {
     .post(url, body, Object.assign(header, { responseType: 'blob' }))
     .then((response) => response.data)
     .catch((error) => {
+      errorToast(error?.response?.data?.message)
       throw error
     })
 }

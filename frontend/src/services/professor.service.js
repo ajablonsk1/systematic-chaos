@@ -12,8 +12,8 @@ class ProfessorService {
   }
 
   getCSVGradesFile(studentsId) {
-    return axiosApiGetFile(GET_CSV, studentsId).catch((err) => {
-      throw err
+    return axiosApiGetFile(GET_CSV, studentsId).catch((error) => {
+      throw error
     })
   }
 
