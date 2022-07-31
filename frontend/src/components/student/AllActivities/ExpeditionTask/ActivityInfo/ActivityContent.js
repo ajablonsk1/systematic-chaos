@@ -76,6 +76,7 @@ export default function ActivityContent(props) {
   }, [loadedScore, activityScore?.id, props.activity.requirement])
 
   const resetStorageAndStart = () => {
+    // TODO: delete it
     localStorage.setItem('startDate', new Date())
 
     const navigateTo = (nodeId, taskResultId) =>
@@ -94,10 +95,15 @@ export default function ActivityContent(props) {
       // clean previous answers
       navigateTo(START_GRAPH_NODE_ID, activityScore.id)
     } else {
+      // returns resultId value, very important
       ExpeditionService.getTaskAnswerId(activityId)
         .then((response) => {
-          // later get the first question on endpoint
-          navigateTo(props.activity.questions[0].id, response.id)
+          // set startTime in milliseconds
+          ExpeditionService.setStartTime(response.id, Date.now()).then(() => {
+            console.log('time git')
+            // later get the first question on endpoint
+            navigateTo(props.activity.questions[0].id, response.id)
+          })
         })
         .catch(() => {})
     }

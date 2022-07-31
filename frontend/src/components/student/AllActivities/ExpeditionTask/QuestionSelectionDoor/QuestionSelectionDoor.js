@@ -15,7 +15,7 @@ import { ERROR_OCCURED } from '../../../../../utils/constants'
 
 function generateDoor(question, navigate, expeditionId, noDoors, taskResultId) {
   return (
-    <DoorColumn key={question.id} xl={12 / noDoors} md={12}>
+    <DoorColumn key={question.id + Date.now()} xl={12 / noDoors} md={12}>
       <Row className='mx-auto'>
         <h3>{question.difficulty?.toUpperCase()}</h3>
       </Row>
@@ -52,7 +52,6 @@ function QuestionSelectionDoor(props) {
   const location = useLocation()
   const { activityId: expeditionId, nodeId: parentId, taskResultId } = location.state
   const remainingTime = props.remainingTime
-  // todo: same situation - use props or location only
 
   useEffect(() => {
     if (parentId == null || expeditionId == null || taskResultId == null) {
@@ -87,9 +86,7 @@ function QuestionSelectionDoor(props) {
         <p className={'text-center text-danger h3 p-5'}>{ERROR_OCCURED}</p>
       ) : (
         <Row className='m-0'>
-          {questions.map((question, key) =>
-            generateDoor(question, navigate, expeditionId, questions.length, taskResultId)
-          )}
+          {questions.map((question) => generateDoor(question, navigate, expeditionId, questions.length, taskResultId))}
         </Row>
       )}
     </Content>

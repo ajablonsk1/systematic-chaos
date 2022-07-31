@@ -10,7 +10,8 @@ import {
   GRAPH_TASK_GET_MAX_AVAILABLE_OPEN,
   GRAPH_TASK_RESULT_URL,
   GRAPH_TASK_SEND_ANSWER,
-  GRAPH_TASK_URL
+  GRAPH_TASK_URL,
+  SET_START_TIME
 } from './urls'
 import StudentService from './student.service'
 
@@ -95,6 +96,15 @@ class ExpeditionService {
   getExpeditionPointsMaxOpen(taskResultId) {
     return axiosApiGet(GRAPH_TASK_GET_MAX_AVAILABLE_OPEN, {
       graphTaskResultId: taskResultId
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  setStartTime(resultId, timeMs) {
+    return axiosApiPost(SET_START_TIME, {
+      resultId: resultId,
+      startTimeMillis: timeMs
     }).catch((error) => {
       throw error
     })

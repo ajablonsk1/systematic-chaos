@@ -14,7 +14,6 @@ function QuestionAndOptions(props) {
   const location = useLocation()
   const { activityId: expeditionId, nodeId: questionId, taskResultId } = location.state
   const remainingTime = props.remainingTime
-  // todo: why we use props and location ? use first or second option
 
   useEffect(() => {
     if (expeditionId == null || questionId == null || taskResultId == null) {
