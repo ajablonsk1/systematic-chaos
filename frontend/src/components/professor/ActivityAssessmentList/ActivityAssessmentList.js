@@ -3,7 +3,6 @@ import { Content } from '../../App/AppGeneralStyles'
 import { Col } from 'react-bootstrap'
 import ActivityListItem from './ActivityListItem'
 import ProfessorService from '../../../services/professor.service'
-import combatTaskService from '../../../services/combatTask.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURED } from '../../../utils/constants'
 
@@ -19,7 +18,8 @@ export default function ActivityAssessmentList() {
       .then((activityList) => {
         Promise.allSettled(
           activityList?.map((activity) => {
-            return combatTaskService.getCombatTaskProfessor(activity.activityId).then((response) => {
+            return ProfessorService.getFirstTaskToEvaluate(activity.activityId).then((response) => {
+              console.log(response)
               return {
                 activity: response,
                 toGrade: activity.toGrade
@@ -55,7 +55,7 @@ export default function ActivityAssessmentList() {
           activityList.map((activity) => {
             const listActivity = activity.activity.activity
             const toGrade = activity.activity.toGrade
-            return <ActivityListItem key={listActivity.name} activity={listActivity} toGrade={toGrade} />
+            return <ActivityListItem key={listActivity.activityName} activity={listActivity} toGrade={toGrade} />
           })
         )}
       </Col>

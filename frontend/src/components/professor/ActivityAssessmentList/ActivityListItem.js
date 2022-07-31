@@ -36,7 +36,7 @@ export default function ActivityListItem(props) {
       }}
     >
       <ActivityImg src={getActivityImg(Activity.TASK)}></ActivityImg>
-      <div>{`${getActivityTypeName(Activity.TASK)} - ${props.activity.name}`}</div>
+      <div>{`${getActivityTypeName(Activity.TASK)} - ${props.activity.activityName}`}</div>
       <div style={{ marginLeft: 'auto' }}>{props.toGrade + ' do sprawdzenia'}</div>
     </ActivityListItemRow>
   )
