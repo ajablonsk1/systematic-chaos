@@ -287,8 +287,8 @@ public class DatabaseConfig {
             graphTask.setName("Dżungla kabli");
             graphTask.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
             graphTask.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
-            graphTask.setMaxPoints(30.0);
-            graphTask.setMaxPoints100(60.0);
+            graphTask.setMaxPoints(60.0);
+            graphTask.setMaxPoints100(30.0);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTask.setRequirement(req);
             graphTask.setPosX(5);
@@ -350,8 +350,8 @@ public class DatabaseConfig {
             graphTaskTwo.setName("Dżungla kabli II");
             graphTaskTwo.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
             graphTaskTwo.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
-            graphTaskTwo.setMaxPoints(30.0);
-            graphTaskTwo.setMaxPoints100(60.0);
+            graphTaskTwo.setMaxPoints(60.0);
+            graphTaskTwo.setMaxPoints100(30.0);
             graphTaskTwo.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTaskTwo.setPosX(2);
             graphTaskTwo.setPosY(2);
