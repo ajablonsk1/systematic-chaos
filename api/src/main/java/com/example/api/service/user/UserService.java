@@ -97,9 +97,9 @@ public class UserService implements UserDetailsService {
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
+            throw new UsernameNotFoundException("User " + email + " not found in database");
         }
-        return userRepo.findUserByEmail(email);
+        return user;
     }
 
     public List<User> getUsers() {

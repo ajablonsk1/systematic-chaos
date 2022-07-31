@@ -316,6 +316,63 @@ public class UserServiceTests {
     }
 
     @Test
+    public void getUser() {
+        // given
+        given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
+
+        // when
+        User returnedUser = userService.getUser(user.getEmail());
+
+        // then
+        verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
+        String capturedEmail = stringArgumentCaptor.getValue();
+        assertThat(capturedEmail).isEqualTo(user.getEmail());
+        assertThat(returnedUser).isEqualTo(user);
+    }
+
+    @Test
+    public void getUserThrowUsernameNotFoundException() {
+        // given
+        given(userRepo.findUserByEmail(user.getEmail())).willReturn(null);
+
+        // when
+        // then
+        assertThatThrownBy(() -> userService.getUser(user.getEmail()))
+                .isInstanceOf(UsernameNotFoundException.class)
+                .hasMessageContaining("User " + user.getEmail() + " not found in database");
+    }
+
+    @Test
+    public void getUsers() {
+        // given
+        User secondUser = new User();
+        secondUser.setId(2L);
+        given(userRepo.findAll()).willReturn(List.of(user, secondUser));
+
+        // when
+        List<User> returnedUsers = userService.getUsers();
+
+        // then
+        verify(userRepo).findAll();
+        assertThat(returnedUsers.size()).isEqualTo(2);
+        assertThat(returnedUsers.contains(user)).isTrue();
+        assertThat(returnedUsers.contains(secondUser)).isTrue();
+    }
+
+    @Test
+    public void getUsersWhenIsEmpty() {
+        // given
+        given(userRepo.findAll()).willReturn(List.of());
+
+        // when
+        List<User> returnedUsers = userService.getUsers();
+
+        // then
+        verify(userRepo).findAll();
+        assertThat(returnedUsers.size()).isEqualTo(0);
+    }
+
+    @Test
     public void getUserGroup() throws EntityNotFoundException {
         // given
         user.setGroup(group);
