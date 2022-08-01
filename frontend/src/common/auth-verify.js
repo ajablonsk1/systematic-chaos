@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import authService from '../services/auth.service'
 import { parseJwt } from '../utils/Api'
 import { connect } from 'react-redux'
 import { logout } from '../actions/auth'
+import { refreshSessionToast } from '../utils/toasts'
 
 function AuthVerify(props) {
   const navigate = useNavigate()
@@ -14,8 +14,11 @@ function AuthVerify(props) {
       props.dispatch(logout(navigate))
     } else if (props.user) {
       const decodedJwt = parseJwt(props.user.access_token)
+
       if (decodedJwt.exp * 1000 < Date.now()) {
-        authService.refreshToken(props.user.refresh_token).catch(() => props.dispatch(logout(navigate)))
+        props.dispatch(logout(navigate))
+      } else if (decodedJwt.exp * 1000 < Date.now() + 15 * 60 * 1000) {
+        refreshSessionToast(props.user, props.dispatch, navigate)
       }
     }
   }, [navigate, props, pathname])
