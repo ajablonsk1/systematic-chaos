@@ -345,7 +345,7 @@ public class GraphTaskResultServiceTest {
         Answer answer = new Answer();
         Question question = new Question();
         question.setId(1L);
-        result.setStartTimeMillis(System.currentTimeMillis());
+        result.setStartDateMillis(System.currentTimeMillis());
         graphTask.setTimeToSolveMillis(1_000_000L);
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
         given(answerFormValidator.validateAndCreateAnswer(form.getAnswerForm())).willReturn(answer);
@@ -379,12 +379,12 @@ public class GraphTaskResultServiceTest {
                 1L,
                 answerForm
         );
-        result.setStartTimeMillis(calendar.getTimeInMillis());
+        result.setStartDateMillis(calendar.getTimeInMillis());
         graphTask.setTimeToSolveMillis(1_000L);
         given(graphTaskResultRepo.findGraphTaskResultById(form.getResultId())).willReturn(result);
         given(answerFormValidator.validateAndCreateAnswer(form.getAnswerForm())).willReturn(answer);
-        given(timeCalculator.getTimeRemaining(result.getStartTimeMillis(), graphTask.getTimeToSolveMillis()))
-                .willReturn(graphTask.getTimeToSolveMillis() - (System.currentTimeMillis() -result.getStartTimeMillis()));
+        given(timeCalculator.getTimeRemaining(result.getStartDateMillis(), graphTask.getTimeToSolveMillis()))
+                .willReturn(graphTask.getTimeToSolveMillis() - (System.currentTimeMillis() -result.getStartDateMillis()));
 
         //when
         long timeRemaining = graphTaskResultService.addAnswerToGraphTaskResult(form);
@@ -440,11 +440,11 @@ public class GraphTaskResultServiceTest {
     @Test
     public void setTimeStart() throws EntityNotFoundException {
         // given
-        SetStartTimeForm form = new SetStartTimeForm(result.getId(), 120L);
+        SetStartDateMillisForm form = new SetStartDateMillisForm(result.getId(), 120L);
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
 
         //when
-        graphTaskResultService.setStartTime(form);
+        graphTaskResultService.setStartDateMillis(form);
 
         // then
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
@@ -455,11 +455,11 @@ public class GraphTaskResultServiceTest {
     @Test
     public void setStartTimeThrowEntityNotFoundException() {
         // given
-        SetStartTimeForm form = new SetStartTimeForm(result.getId(), 120L);
+        SetStartDateMillisForm form = new SetStartDateMillisForm(result.getId(), 120L);
 
         //when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.setStartTime(form))
+        assertThatThrownBy(() -> graphTaskResultService.setStartDateMillis(form))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
     }
@@ -468,7 +468,7 @@ public class GraphTaskResultServiceTest {
     public void getTimeRemaining() throws EntityNotFoundException, EntityRequiredAttributeNullException {
         // given
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
-        result.setStartTimeMillis(System.currentTimeMillis());
+        result.setStartDateMillis(System.currentTimeMillis());
         graphTask.setTimeToSolveMillis(1_000_000L);
 
         //when

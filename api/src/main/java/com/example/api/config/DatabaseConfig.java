@@ -410,7 +410,7 @@ public class DatabaseConfig {
             result1.setPointsReceived(10.0);
             result1.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 28);
-            result1.setStartTimeMillis(calendar.getTimeInMillis());
+            result1.setStartDateMillis(calendar.getTimeInMillis());
             result1.setSendDateMillis(calendar.getTimeInMillis() + result1.getTimeSpentSec() / 1000);
             graphTaskResultService.saveGraphTaskResult(result1);
 
@@ -420,7 +420,7 @@ public class DatabaseConfig {
             result2.setPointsReceived(10.0);
             result2.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 13);
-            result2.setStartTimeMillis(calendar.getTimeInMillis());
+            result2.setStartDateMillis(calendar.getTimeInMillis());
             result2.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
             graphTaskResultService.saveGraphTaskResult(result2);
 
