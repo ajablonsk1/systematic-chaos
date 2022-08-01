@@ -1,19 +1,45 @@
 import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import authService from '../services/auth.service'
 import { parseJwt } from '../utils/Api'
+import { connect } from 'react-redux'
+import { logout } from '../actions/auth'
 
-export default function AuthVerify(props) {
+function AuthVerify(props) {
+  const navigate = useNavigate()
   let pathname = window.location.pathname
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'))
-    if (user) {
-      const decodedJwt = parseJwt(user.access_token)
+    if (props.user && !JSON.parse(localStorage.getItem('user'))) {
+      props.dispatch(logout(navigate))
+    } else if (props.user) {
+      const decodedJwt = parseJwt(props.user.access_token)
       if (decodedJwt.exp * 1000 < Date.now()) {
-        authService.refreshToken(user.refresh_token)
+        authService.refreshToken(props.user.refresh_token).catch(() => props.dispatch(logout(navigate)))
       }
     }
-  }, [pathname])
+  }, [navigate, props, pathname])
+
+  // when one tab is logged out, log out all tabs with application
+  useEffect(() => {
+    const handleInvalidUser = (event) => {
+      if (event.key === 'user' && event.oldValue && !event.newValue) {
+        props.dispatch(logout(navigate))
+      }
+    }
+
+    window.addEventListener('storage', (event) => handleInvalidUser(event))
+    return () => window.removeEventListener('storage', (event) => handleInvalidUser(event))
+  })
 
   return <div />
 }
+
+function mapStateToProps(state) {
+  const { isLoggedIn, user } = state.auth
+  return {
+    isLoggedIn,
+    user
+  }
+}
+export default connect(mapStateToProps)(AuthVerify)
