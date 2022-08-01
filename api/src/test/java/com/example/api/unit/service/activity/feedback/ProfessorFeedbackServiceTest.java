@@ -7,6 +7,8 @@ import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
+import com.example.api.repo.activity.task.FileTaskRepo;
+import com.example.api.repo.user.UserRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.validator.FeedbackValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,16 +18,21 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+// TODO: update and complete tests
 public class ProfessorFeedbackServiceTest {
     private ProfessorFeedbackService professorFeedbackService;
     @Mock private ProfessorFeedbackRepo professorFeedbackRepo;
     @Mock private FeedbackValidator feedbackValidator;
     @Mock private FileTaskResultRepo fileTaskResultRepo;
+    @Mock private FileTaskRepo fileTaskRepo;
+    @Mock private UserRepo userRepo;
     @Captor private ArgumentCaptor<ProfessorFeedback> professorFeedbackArgumentCaptor;
     @Captor private ArgumentCaptor<SaveProfessorFeedbackForm> formArgumentCaptor;
     @Captor private ArgumentCaptor<Long> idArgumentCaptor;
@@ -38,7 +45,9 @@ public class ProfessorFeedbackServiceTest {
         professorFeedbackService = new ProfessorFeedbackService(
                 professorFeedbackRepo,
                 feedbackValidator,
-                fileTaskResultRepo);
+                fileTaskResultRepo,
+                fileTaskRepo,
+                userRepo);
     }
 
     @Test
@@ -56,12 +65,13 @@ public class ProfessorFeedbackServiceTest {
     }
 
     @Test
-    public void saveProfessorFeedbackForm() throws WrongUserTypeException, EntityNotFoundException {
+    public void saveProfessorFeedbackForm() throws WrongUserTypeException, EntityNotFoundException, IOException {
         //given
-        SaveProfessorFeedbackForm form = new SaveProfessorFeedbackForm("random@email.com",
-                "random content",
-                10.0,
-                2L);
+        SaveProfessorFeedbackForm form = new SaveProfessorFeedbackForm();
+        form.setProfessorEmail("random@email.com");
+        form.setContent("random content");
+        form.setPoints(10.0);
+        form.setFileTaskResultId(2L);
         ProfessorFeedback feedback = new ProfessorFeedback();
         given(feedbackValidator.validateAndSetProfessorFeedbackTaskForm(form)).willReturn(feedback);
 
@@ -85,7 +95,7 @@ public class ProfessorFeedbackServiceTest {
         given(fileTaskResultRepo.findFileTaskResultById(id)).willReturn(result);
 
         //when
-        professorFeedbackService.getProfessorFeedbackForFileTask(id);
+        professorFeedbackService.getProfessorFeedbackForFileTaskResult(id);
 
         //then
         verify(fileTaskResultRepo).findFileTaskResultById(idArgumentCaptor.capture());
@@ -103,8 +113,8 @@ public class ProfessorFeedbackServiceTest {
 
         //when
         //then
-        assertThatThrownBy(() -> professorFeedbackService.getProfessorFeedbackForFileTask(id))
+        assertThatThrownBy(() -> professorFeedbackService.getProfessorFeedbackForFileTaskResult(id))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + id + " does not exist");
+                .hasMessageContaining("File task result with given id " + id + " does not exist");
     }
 }

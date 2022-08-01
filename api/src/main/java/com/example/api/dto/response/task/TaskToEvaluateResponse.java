@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskToEvaluateResponse {
+    private String userEmail;
     private Long fileTaskId;
     private String activityName;
     private Boolean isLate;

@@ -36,31 +36,43 @@ public class FileTaskService {
     }
 
     public FileTaskInfoResponse getFileTaskInfo(Long id, String email) throws EntityNotFoundException, WrongUserTypeException {
+        FileTaskInfoResponse result = new FileTaskInfoResponse();
         FileTask fileTask = fileTaskRepo.findFileTaskById(id);
         if(fileTask == null) {
             log.error("File task with id {} not found in database", id);
             throw new EntityNotFoundException("File task with id" + id + " not found in database");
         }
+        result.setFileTaskId(fileTask.getId());
+        result.setName(fileTask.getName());
+        result.setDescription(fileTask.getDescription());
+
         User student = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(student, email);
-        FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
-        if(result == null){
+        FileTaskResult fileTaskResult = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
+        if(fileTaskResult == null){
             log.debug("File task result for {} and file task with id {} does not exist", email, fileTask.getId());
-            return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
-                    List.of(), null);
+            return result;
         }
-        List<FileResponse> fileResponseList = result.getFiles()
+        List<FileResponse> fileResponseList = fileTaskResult.getFiles()
                 .stream()
                 .map(file -> new FileResponse(file.getId(), file.getName()))
                 .toList();
-        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
+        result.setTaskFiles(fileResponseList);
+
+        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
         if (feedback == null){
-            log.debug("Feedback for file task result with id {} does not exist", result.getId());
-            return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
-                    fileResponseList, null);
+            log.debug("Feedback for file task result with id {} does not exist", fileTaskResult.getId());
+            return result;
         }
-        return new FileTaskInfoResponse(fileTask.getId(), fileTask.getName(), fileTask.getDescription(),
-                fileResponseList, feedback.getContent());
+        result.setPoints(feedback.getPoints());
+        result.setRemarks(feedback.getContent());
+        List<FileResponse> feedbackFiles = feedback.getFeedbackFiles()
+                .stream()
+                .map(file -> new FileResponse(file.getId(), file.getName()))
+                .toList();
+        result.setFeedbackFiles(feedbackFiles);
+
+        return result;
 
     }
 }

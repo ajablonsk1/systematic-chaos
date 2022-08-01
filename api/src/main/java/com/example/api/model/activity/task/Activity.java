@@ -22,7 +22,7 @@ public abstract class Activity {
     private String description;
     private Integer posX;
     private Integer posY;
-    private Integer experiance;
+    private Integer experience;
 
     @OneToOne
     private Requirement requirement;

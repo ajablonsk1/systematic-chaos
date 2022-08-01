@@ -7,26 +7,36 @@ import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
+import com.example.api.model.util.File;
+import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.repo.util.FileRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 
 @Component
 @Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class FeedbackValidator {
+    private final ProfessorFeedbackRepo professorFeedbackRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final UserRepo userRepo;
+    private final FileRepo fileRepo;
 
+    /**
+     * Function creates professor feedback for fileTaskResult. If feedback already exists its attributes
+     * are set according to non-nullable parameters of given form. Content and points are overwritten
+     * but files are added to list
+    */
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException {
-        ProfessorFeedback feedback = new ProfessorFeedback();
+            throws WrongUserTypeException, EntityNotFoundException, IOException {
         String professorEmail = form.getProfessorEmail();
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
@@ -42,12 +52,31 @@ public class FeedbackValidator {
             log.error("File task with id {} not found in database", id);
             throw new EntityNotFoundException("File task with id" + id + " not found in database");
         }
-        User student = fileTaskResult.getUser();
-        feedback.setFrom(professor);
-        feedback.setTo(student);
-        feedback.setContent(form.getContent());
-        feedback.setPoints(form.getPoints());
-        feedback.setFileTaskResult(fileTaskResult);
-        return feedback;
+        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
+
+        if(feedback == null) {
+            feedback = new ProfessorFeedback();
+            feedback.setFrom(professor);
+            feedback.setFileTaskResult(fileTaskResult);
+
+        }
+        if(form.getContent() != null) {
+            feedback.setContent(form.getContent());
+        }
+
+        if(form.getPoints() != null) {
+            feedback.setPoints(form.getPoints());
+            fileTaskResult.setPointsReceived(form.getPoints());
+            fileTaskResultRepo.save(fileTaskResult);
+        }
+
+        if(form.getFile() != null) {
+            File file = new File(null, form.getFileName(), form.getFile().getBytes());
+            fileRepo.save(file);
+            feedback.getFeedbackFiles().add(file);
+        }
+
+        fileTaskResult.setEvaluated(true);
+        return professorFeedbackRepo.save(feedback);
     }
 }

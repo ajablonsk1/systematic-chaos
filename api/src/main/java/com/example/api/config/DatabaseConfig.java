@@ -382,7 +382,7 @@ public class DatabaseConfig {
             urlRepo.save(url2);
             info1.setImageUrls(List.of(url1, url2));
             info1.setName("Skrętki");
-            info1.setExperiance(10);
+            info1.setExperience(10);
             info1.setProfessor(professor);
             infoService.saveInfo(info1);
 

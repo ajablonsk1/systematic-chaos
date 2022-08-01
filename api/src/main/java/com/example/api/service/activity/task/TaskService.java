@@ -74,7 +74,7 @@ public class TaskService {
             FileTaskResult result = fileTaskResults.get(0);
             long num = fileTaskResults.size();
             boolean isLate = result.getSendDateMillis() - result.getFileTask().getSolveDateMillis() > 0;
-            return new TaskToEvaluateResponse(result.getId(), task.getName(), isLate, task.getDescription(),
+            return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), task.getName(), isLate, task.getDescription(),
                     result.getAnswer(), result.getFiles(), task.getMaxPoints(), num-1);
         }
         return null;
