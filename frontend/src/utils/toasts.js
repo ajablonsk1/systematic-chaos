@@ -4,7 +4,7 @@ import authService from '../services/auth.service'
 import { logout } from '../actions/auth'
 import { Button } from 'react-bootstrap'
 
-export const toasts = (errorMsg) => toast.error(errorMsg ?? 'Coś poszło nie tak.')
+export const errorToast = (errorMsg) => toast.error(errorMsg ?? 'Coś poszło nie tak.')
 
 const refreshSession = (user, dispatch, navigate) => {
   authService.refreshToken(user.refresh_token).catch(() => dispatch(logout(navigate)))
