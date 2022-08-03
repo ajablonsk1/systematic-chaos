@@ -3,6 +3,7 @@ package com.example.api.controller.activity.task;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.service.activity.task.GraphTaskService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/task/graph")
+@SecurityRequirement(name = "JWT_AUTH")
 public class GraphTaskController {
     private final GraphTaskService graphTaskService;
 
