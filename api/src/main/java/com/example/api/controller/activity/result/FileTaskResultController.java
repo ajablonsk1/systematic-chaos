@@ -4,6 +4,7 @@ import com.example.api.dto.request.activity.task.SaveFileToFileTaskResultForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.result.FileTaskResultService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/task/file/result")
+@SecurityRequirement(name = "JWT_AUTH")
 public class FileTaskResultController {
     private final FileTaskResultService fileTaskResultService;
 

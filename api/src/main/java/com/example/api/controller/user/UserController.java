@@ -12,6 +12,7 @@ import com.example.api.model.group.Group;
 import com.example.api.model.user.User;
 import com.example.api.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,23 +30,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "JWT_AUTH")
 public class UserController {
     private final UserService userService;
-
-    @PostMapping("/user")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        return ResponseEntity.ok().body(userService.saveUser(user));
-    }
 
     @PostMapping("/register")
     public ResponseEntity<Long> saveUser(@RequestBody RegisterUserForm form)
             throws EntityNotFoundException, EntityAlreadyInDatabaseException, WrongBodyParametersNumberException {
         return ResponseEntity.ok().body(userService.registerUser(form));
-    }
-
-    @GetMapping("/user")
-    public ResponseEntity<User> getUser(@RequestParam String email) {
-        return ResponseEntity.ok().body(userService.getUser(email));
     }
 
     @GetMapping("/user/current")
@@ -56,11 +48,6 @@ public class UserController {
     @GetMapping("/user/group")
     public ResponseEntity<Group> getUserGroup() throws EntityNotFoundException {
         return ResponseEntity.ok().body(userService.getUserGroup());
-    }
-
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok().body(userService.getUsers());
     }
 
     @GetMapping("/token/refresh")
@@ -76,7 +63,7 @@ public class UserController {
             User user = userService.getUser(email);
             String accessToken = JWT.create()
                     .withSubject(user.getEmail())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 20 * 60 * 1000))
                     .withIssuer(request.getRequestURI())
                     .withClaim("roles", List.of(user.getAccountType().getName()))
                     .sign(algorithm);

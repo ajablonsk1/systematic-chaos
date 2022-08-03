@@ -6,6 +6,7 @@ import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
 import com.example.api.error.exception.*;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.service.activity.result.GraphTaskResultService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/task/graph/result")
+@SecurityRequirement(name = "JWT_AUTH")
 public class GraphTaskResultController {
     private final GraphTaskResultService graphTaskResultService;
 

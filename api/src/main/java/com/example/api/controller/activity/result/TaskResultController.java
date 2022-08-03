@@ -1,6 +1,7 @@
 package com.example.api.controller.activity.result;
 
 import com.example.api.service.activity.result.TaskResultService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/task/result")
+@SecurityRequirement(name = "JWT_AUTH")
 public class TaskResultController {
     private final TaskResultService resultService;
 
