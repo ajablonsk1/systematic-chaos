@@ -1,4 +1,3 @@
-import { Navigate } from 'react-router-dom'
 import AuthService from '../services/auth.service'
 import { LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT, REGISTER_FAIL, REGISTER_SUCCESS, SET_MESSAGE } from './types'
 import { generateFullPath, PageRoutes } from '../routes/PageRoutes'
@@ -48,8 +47,8 @@ export const login = (email, password) => (dispatch) => {
     })
 }
 
-export const logout = () => (dispatch) => {
+export const logout = (navigate) => (dispatch) => {
   AuthService.logout()
   dispatch({ type: LOGOUT })
-  Navigate(generateFullPath(() => PageRoutes.General.HOME))
+  navigate(generateFullPath(() => PageRoutes.General.HOME))
 }

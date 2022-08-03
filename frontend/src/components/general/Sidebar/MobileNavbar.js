@@ -1,18 +1,20 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Nav } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { logout } from '../../../actions/auth'
 import { buildNavLinkMobile, NavLinkStylesMobile } from './navBuilder'
 import { MobileNav } from './SidebarStyles'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 
 function MobileNavbar(props) {
+  const navigate = useNavigate()
+
   // todo: for teacher bar is too many icons, fix it
   const link_titles = props.link_titles
-  const logOut = () => props.dispatch(logout())
+  const logOut = () => props.dispatch(logout(navigate))
 
   return (
     <MobileNav>
