@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik } from 'formik'
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FormCol } from '../FormCol'
 import { login } from '../../../../actions/auth'
 import { connect } from 'react-redux'
-import { FIELD_REQUIRED } from '../../../../utils/constants'
+import { FIELD_REQUIRED, NOT_LOGGED_IN_ERROR } from '../../../../utils/constants'
 
 function LoginForm(props) {
   const { dispatch } = props
+  const [isFetching, setIsFetching] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   return (
     <Formik
@@ -22,7 +24,19 @@ function LoginForm(props) {
         return errors
       }}
       onSubmit={(values, { setSubmitting }) => {
-        dispatch(login(values)) // that should be enough
+        const registerPromise = new Promise((resolve) => {
+          resolve(dispatch(login(values)))
+        })
+        registerPromise
+          .then(() => {
+            setIsFetching(false)
+            setErrorMessage('')
+          })
+          .catch(() => {
+            setIsFetching(false)
+            setErrorMessage(NOT_LOGGED_IN_ERROR)
+          })
+
         setSubmitting(false)
       }}
     >
@@ -43,14 +57,11 @@ function LoginForm(props) {
                     borderColor: 'var(--button-green)'
                   }}
                 >
-                  {isSubmitting ? (
-                    <Spinner as='span' animation='border' size='sm' role='status' />
-                  ) : (
-                    <span>Zaloguj</span>
-                  )}
+                  {isFetching ? <Spinner as='span' animation='border' size='sm' role='status' /> : <span>Zaloguj</span>}
                 </Button>
               </Col>
             </Row>
+            {errorMessage && <p className={'text-center text-danger mt-2'}>{errorMessage}</p>}
           </Container>
         </Form>
       )}

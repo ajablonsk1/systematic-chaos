@@ -4,6 +4,7 @@ import { Form } from 'react-bootstrap'
 import { debounce } from 'lodash/function'
 import ExportModal from './ExportModal'
 import GroupService from '../../../services/group.service'
+import { ERROR_OCCURED } from '../../../utils/constants'
 
 export default function UsersTable(props) {
   const [usersList, setUsersList] = useState(undefined)
@@ -15,18 +16,28 @@ export default function UsersTable(props) {
 
   useEffect(() => {
     if (props.groupId && props.groupName) {
-      GroupService.getGroupStudents(props.groupId).then((response) => {
-        const responseWithGroupName = response?.map((student) => {
-          return { ...student, groupName: props.groupName }
+      GroupService.getGroupStudents(props.groupId)
+        .then((response) => {
+          const responseWithGroupName = response?.map((student) => {
+            return { ...student, groupName: props.groupName }
+          })
+          setUsersList(responseWithGroupName)
+          setUsers(responseWithGroupName)
         })
-        setUsersList(responseWithGroupName)
-        setUsers(responseWithGroupName)
-      })
+        .catch(() => {
+          setUsers(null)
+          setUsersList(null)
+        })
     } else {
-      GroupService.getAllStudents().then((response) => {
-        setUsersList(response)
-        setUsers([...response])
-      })
+      GroupService.getAllStudents()
+        .then((response) => {
+          setUsersList(response)
+          setUsers([...response])
+        })
+        .catch(() => {
+          setUsers(null)
+          setUsersList(null)
+        })
     }
   }, [props])
 
@@ -36,7 +47,7 @@ export default function UsersTable(props) {
 
   const inputChecked = (userId) => usersToExportIds.includes(userId)
   const headerInputChecked = (event) => event.target && event.target.checked
-  const usersId = users.map((user) => user.id)
+  const usersId = users?.map((user) => user.id)
 
   const checkAllRows = (event) => setUsersToExportIds(headerInputChecked(event) ? [...usersId] : [])
 
@@ -49,7 +60,7 @@ export default function UsersTable(props) {
 
   const filterList = debounce((query) => {
     if (!query) return setUsers([...usersList])
-    setUsers(usersList.filter((user) => user.name.toLowerCase().includes(query?.toLowerCase())))
+    setUsers(usersList?.filter((user) => user.name.toLowerCase().includes(query?.toLowerCase())))
   }, 300)
 
   return (
@@ -70,7 +81,7 @@ export default function UsersTable(props) {
           </tr>
         </thead>
         <tbody>
-          {users.length > 0 ? (
+          {users?.length > 0 ? (
             users.map((user, index) => (
               <tr key={index + user.groupName}>
                 <td>
@@ -87,7 +98,7 @@ export default function UsersTable(props) {
           ) : (
             <tr>
               <td colSpan='100%' className={'text-center'}>
-                <p>Brak członków</p>
+                <p>{users == null ? ERROR_OCCURED : 'Brak członków'}</p>
               </td>
             </tr>
           )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Formik } from 'formik'
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
@@ -6,8 +6,6 @@ import { FIELD_REQUIRED } from '../../../utils/constants'
 import GroupService from '../../../services/group.service'
 
 export default function GroupAdditionForm(props) {
-  const [errorMessage, setErrorMessage] = useState()
-
   return (
     // todo: think about general Form component that can be extended
     <Formik
@@ -22,14 +20,10 @@ export default function GroupAdditionForm(props) {
         return errors
       }}
       onSubmit={(values, { setSubmitting }) => {
-        GroupService.addGroup(values.name, values.code)
-          .then(() => {
-            props.refreshFunction()
-            props.setModalOpen(false)
-          })
-          .catch((error) => {
-            setErrorMessage(error)
-          })
+        GroupService.addGroup(values.name, values.code).then(() => {
+          props.refreshFunction()
+          props.setModalOpen(false)
+        })
 
         setSubmitting(false)
       }}
@@ -45,11 +39,6 @@ export default function GroupAdditionForm(props) {
             >
               {FormCol('Nazwa grupy', 'text', 'name')}
               {FormCol('Kod grupy', 'text', 'code')}
-              {errorMessage && (
-                <p className={'text-center w-100'} style={{ color: 'red' }}>
-                  {errorMessage}
-                </p>
-              )}
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>

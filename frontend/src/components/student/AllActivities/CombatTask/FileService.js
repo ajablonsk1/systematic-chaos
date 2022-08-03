@@ -26,7 +26,9 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
     startRemoving(() => {
       setIsFetching(true)
       // TODO: this endpoint needs refactoring - it should require only fileId
-      CombatTaskService.removeCombatTaskFile(task.fileTaskId, fileNumber).then(() => setIsFetching(false))
+      CombatTaskService.removeCombatTaskFile(task.fileTaskId, fileNumber)
+        .then(() => setIsFetching(false))
+        .catch(() => setIsFetching(false))
     })
   }
 

@@ -7,19 +7,25 @@ class GroupService {
       name: groupName,
       invitationCode: groupKey
     }).catch((error) => {
-      throw error.message
+      throw error
     })
   }
   getGroups() {
-    return axiosApiGet(GET_GROUPS)
+    return axiosApiGet(GET_GROUPS).catch((error) => {
+      throw error
+    })
   }
 
   getAllStudents() {
-    return axiosApiGet(GET_ALL_STUDENTS)
+    return axiosApiGet(GET_ALL_STUDENTS).catch((error) => {
+      throw error
+    })
   }
 
   getGroupStudents(groupId) {
-    return axiosApiGet(GET_GROUP_STUDENTS, { groupId: groupId })
+    return axiosApiGet(GET_GROUP_STUDENTS, { groupId: groupId }).catch((error) => {
+      throw error
+    })
   }
 
   changeStudentGroup(studentId, newGroupId) {
@@ -27,7 +33,7 @@ class GroupService {
       studentId: studentId,
       newGroupId: newGroupId
     }).catch((error) => {
-      throw error.message
+      throw error
     })
   }
 }

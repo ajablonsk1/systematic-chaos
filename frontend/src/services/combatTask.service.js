@@ -7,13 +7,15 @@ class CombatTaskService {
     return axiosApiGet(COMBAT_TASK_GET_INFO, {
       fileTaskId: taskId,
       studentEmail: StudentService.getEmail()
+    }).catch((error) => {
+      throw error
     })
   }
 
   getCombatFile(fileApiId) {
     return axiosApiDownloadFile(COMBAT_TASK_RESULT_FILE, {
       fileId: fileApiId
-    })
+    }).catch(() => {})
   }
 
   removeCombatTaskFile(taskId, index) {
@@ -21,6 +23,8 @@ class CombatTaskService {
       fileTaskId: taskId,
       studentEmail: StudentService.getEmail(),
       index: index
+    }).catch((error) => {
+      throw error
     })
   }
 
