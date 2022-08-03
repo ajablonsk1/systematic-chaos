@@ -48,9 +48,14 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUser(email));
     }
 
+    @GetMapping("/user/current")
+    public ResponseEntity<User> getCurrentUser() {
+        return ResponseEntity.ok().body(userService.getCurrentUser());
+    }
+
     @GetMapping("/user/group")
-    public ResponseEntity<Group> getUserGroup(@RequestParam String email) throws EntityNotFoundException {
-        return ResponseEntity.ok().body(userService.getUserGroup(email));
+    public ResponseEntity<Group> getUserGroup() throws EntityNotFoundException {
+        return ResponseEntity.ok().body(userService.getUserGroup());
     }
 
     @GetMapping("/users")

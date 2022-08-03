@@ -10,6 +10,7 @@ import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.user.UserService;
 import com.example.api.util.ExceptionMessage;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,11 @@ import static org.mockito.Mockito.verify;
 
 public class UserServiceTests {
     private UserService userService;
+    
+    @Mock private UserRepo userRepo;
+    @Mock private GroupRepo groupRepo;
+    @Mock private PasswordEncoder passwordEncoder;
+    @Mock private AuthenticationService authService;
     @Mock private UserRepo userRepo;
     @Mock private GroupRepo groupRepo;
     @Mock private PasswordEncoder passwordEncoder;
@@ -48,7 +54,7 @@ public class UserServiceTests {
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserService(userRepo, groupRepo, passwordEncoder);
+        userService = new UserService(userRepo, groupRepo, authService, passwordEncoder);
 
         user = new User();
         user.setId(1L);

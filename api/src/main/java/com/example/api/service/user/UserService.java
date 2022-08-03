@@ -9,7 +9,7 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.util.ExceptionMessage;
+import com.example.api.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final GroupRepo groupRepo;
+    private final AuthenticationService authService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -102,12 +103,18 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
+    public User getCurrentUser() throws UsernameNotFoundException {
+        String email = authService.getAuthentication().getName();
+        return getUser(email);
+    }
+
     public List<User> getUsers() {
         log.info("Fetching all users");
         return userRepo.findAll();
     }
 
-    public Group getUserGroup(String email) throws EntityNotFoundException {
+    public Group getUserGroup() throws EntityNotFoundException {
+        String email = authService.getAuthentication().getName();
         log.info("Fetching group for user {}", email);
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
@@ -168,5 +175,4 @@ public class UserService implements UserDetailsService {
 
         return newGroup;
     }
-
 }

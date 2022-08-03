@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SetTimeSpentForm {
+public class SetStartDateMillisForm {
     @Schema(required = true) private Long resultId;
-    @Schema(required = true) private int timeSpent;
+    @Schema(required = true) private Long startDateMillis;
 }

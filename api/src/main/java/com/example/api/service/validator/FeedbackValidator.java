@@ -9,6 +9,7 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,12 +23,13 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class FeedbackValidator {
     private final FileTaskResultRepo fileTaskResultRepo;
+    private final AuthenticationService authService;
     private final UserRepo userRepo;
 
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
             throws WrongUserTypeException, EntityNotFoundException {
         ProfessorFeedback feedback = new ProfessorFeedback();
-        String professorEmail = form.getProfessorEmail();
+        String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
             log.error("User {} not found in database", professorEmail);

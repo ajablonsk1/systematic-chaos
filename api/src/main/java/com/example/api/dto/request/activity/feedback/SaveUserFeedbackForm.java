@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaveUserFeedbackForm {
-    @Schema(required = true) private String studentEmail;
     @Schema(required = true) private String content;
     @Schema(required = true) private Integer rate;
     @Schema(required = true) private Long surveyId;

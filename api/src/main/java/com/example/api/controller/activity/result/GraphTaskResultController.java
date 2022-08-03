@@ -1,9 +1,8 @@
 package com.example.api.controller.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
-import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
-import com.example.api.dto.request.activity.result.SetStartTimeForm;
-import com.example.api.dto.request.activity.result.SetTimeSpentForm;
+import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
+import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
 import com.example.api.error.exception.*;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.service.activity.result.GraphTaskResultService;
@@ -18,21 +17,15 @@ public class GraphTaskResultController {
     private final GraphTaskResultService graphTaskResultService;
 
     @GetMapping
-    public ResponseEntity<GraphTaskResult> getGraphTaskResult(@RequestParam Long graphTaskId, @RequestParam String studentEmail)
+    public ResponseEntity<GraphTaskResult> getGraphTaskResult(@RequestParam Long graphTaskId)
             throws EntityNotFoundException, WrongUserTypeException {
-        return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResult(graphTaskId, studentEmail));
+        return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResult(graphTaskId));
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestBody SaveGraphTaskResultForm form)
+    @GetMapping("/save")
+    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestParam Long graphTaskId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form));
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<GraphTaskResult> addAnswerToResult(@RequestBody SaveGraphTaskResultForm form)
-            throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form));
+        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(graphTaskId));
     }
 
     @GetMapping("/points/closed")
@@ -77,21 +70,20 @@ public class GraphTaskResultController {
         return ResponseEntity.ok().body(graphTaskResultService.addAnswerToGraphTaskResult(form));
     }
 
-    @PostMapping("/time/set")
-    public ResponseEntity<Integer> addAnswerToGraphTaskResult(@RequestBody SetTimeSpentForm form)
+    @PostMapping("/start-date/set")
+    public ResponseEntity<Long> setStartDateMillis(@RequestBody SetStartDateMillisForm form)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.setTimeSpent(form));
-    }
-
-    @PostMapping("/time-start/set")
-    public ResponseEntity<Long> setStartTime(@RequestBody SetStartTimeForm form)
-            throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.setStartTime(form));
+        return ResponseEntity.ok().body(graphTaskResultService.setStartDateMillis(form));
     }
 
     @GetMapping("/time-remaining")
     public ResponseEntity<Long> getTimeRemaining(@RequestParam Long resultId)
             throws EntityNotFoundException, EntityRequiredAttributeNullException {
         return ResponseEntity.ok().body(graphTaskResultService.getTimeRemaining(resultId));
+    }
+
+    @PostMapping("/send-date/set")
+    public ResponseEntity<Long> setSendDateMillis(@RequestBody SetSendDateMillisForm form) throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskResultService.setSendDateMillis(form));
     }
 }

@@ -13,17 +13,19 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.validator.AnswerFormValidator;
 import com.example.api.service.validator.UserValidator;
-import com.example.api.util.PointsCalculator;
-import com.example.api.util.TimeCalculator;
+import com.example.api.util.calculator.PointsCalculator;
+import com.example.api.util.calculator.TimeCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
 
 import java.util.Calendar;
 
@@ -44,6 +46,8 @@ public class GraphTaskResultServiceTest {
     @Mock private PointsCalculator pointsCalculator;
     @Mock private UserValidator userValidator;
     @Mock private TimeCalculator timeCalculator;
+    @Mock private AuthenticationService authService;
+    @Mock private Authentication authentication;
     GraphTaskResult result;
     GraphTask graphTask;
     @Captor ArgumentCaptor<User> userArgumentCaptor;
@@ -67,7 +71,8 @@ public class GraphTaskResultServiceTest {
                 pointsCalculator,
                 answerFormValidator,
                 userValidator,
-                timeCalculator
+                timeCalculator,
+                authService
         );
         graphTask = new GraphTask();
         graphTask.setId(2L);
@@ -82,11 +87,13 @@ public class GraphTaskResultServiceTest {
         User user = new User();
         user.setEmail("random@email.com");
         user.setAccountType(AccountType.STUDENT);
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
         given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
 
         // when
-        graphTaskResultService.getGraphTaskResult(graphTask.getId(), user.getEmail());
+        graphTaskResultService.getGraphTaskResult(graphTask.getId());
 
         // then
         verify(graphTaskResultRepo).findGraphTaskResultByGraphTaskAndUser(
@@ -104,11 +111,13 @@ public class GraphTaskResultServiceTest {
         User user = new User();
         user.setEmail("random@email.com");
         user.setAccountType(AccountType.STUDENT);
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
 
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResult(graphTask.getId(), user.getEmail()))
+        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
     }
@@ -132,16 +141,14 @@ public class GraphTaskResultServiceTest {
         // given
         User user = new User();
         user.setEmail("random@email.com");
-        SaveGraphTaskResultForm form = new SaveGraphTaskResultForm(
-                graphTask.getId(),
-                user.getEmail()
-        );
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
 
 
         // when
-        graphTaskResultService.saveGraphTaskResult(form);
+        graphTaskResultService.saveGraphTaskResult(graphTask.getId());
 
         // then
         verify(graphTaskRepo).findGraphTaskById(idArgumentCaptor.capture());
@@ -157,14 +164,11 @@ public class GraphTaskResultServiceTest {
         // given
         User user = new User();
         user.setEmail("random@email.com");
-        SaveGraphTaskResultForm form = new SaveGraphTaskResultForm(
-                graphTask.getId(),
-                user.getEmail()
-        );
-
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(form))
+        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
     }
@@ -174,15 +178,13 @@ public class GraphTaskResultServiceTest {
         // given
         User user = new User();
         user.setEmail("random@email.com");
-        SaveGraphTaskResultForm form = new SaveGraphTaskResultForm(
-                graphTask.getId(),
-                user.getEmail()
-        );
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn("random@email.com");
         given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
 
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(form))
+        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("User" + user.getEmail() + " not found in database");
     }
@@ -343,7 +345,7 @@ public class GraphTaskResultServiceTest {
         Answer answer = new Answer();
         Question question = new Question();
         question.setId(1L);
-        result.setStartTimeMillis(System.currentTimeMillis());
+        result.setStartDateMillis(System.currentTimeMillis());
         graphTask.setTimeToSolveMillis(1_000_000L);
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
         given(answerFormValidator.validateAndCreateAnswer(form.getAnswerForm())).willReturn(answer);
@@ -377,12 +379,12 @@ public class GraphTaskResultServiceTest {
                 1L,
                 answerForm
         );
-        result.setStartTimeMillis(calendar.getTimeInMillis());
+        result.setStartDateMillis(calendar.getTimeInMillis());
         graphTask.setTimeToSolveMillis(1_000L);
         given(graphTaskResultRepo.findGraphTaskResultById(form.getResultId())).willReturn(result);
         given(answerFormValidator.validateAndCreateAnswer(form.getAnswerForm())).willReturn(answer);
-        given(timeCalculator.getTimeRemaining(result.getStartTimeMillis(), graphTask.getTimeToSolveMillis()))
-                .willReturn(graphTask.getTimeToSolveMillis() - (System.currentTimeMillis() -result.getStartTimeMillis()));
+        given(timeCalculator.getTimeRemaining(result.getStartDateMillis(), graphTask.getTimeToSolveMillis()))
+                .willReturn(graphTask.getTimeToSolveMillis() - (System.currentTimeMillis() -result.getStartDateMillis()));
 
         //when
         long timeRemaining = graphTaskResultService.addAnswerToGraphTaskResult(form);
@@ -409,13 +411,13 @@ public class GraphTaskResultServiceTest {
     }
 
     @Test
-    public void setTimeSpent() throws EntityNotFoundException {
+    public void setSendDateMillis() throws EntityNotFoundException {
         // given
-        SetTimeSpentForm form = new SetTimeSpentForm(result.getId(), 120);
+        SetSendDateMillisForm form = new SetSendDateMillisForm(result.getId(), 120L);
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
 
         //when
-        graphTaskResultService.setTimeSpent(form);
+        graphTaskResultService.setSendDateMillis(form);
 
         // then
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
@@ -426,11 +428,11 @@ public class GraphTaskResultServiceTest {
     @Test
     public void setTimeSpentThrowEntityNotFoundException() {
         // given
-        SetTimeSpentForm form = new SetTimeSpentForm(result.getId(), 120);
+        SetSendDateMillisForm form = new SetSendDateMillisForm(result.getId(), 120L);
 
         //when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.setTimeSpent(form))
+        assertThatThrownBy(() -> graphTaskResultService.setSendDateMillis(form))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
     }
@@ -438,11 +440,11 @@ public class GraphTaskResultServiceTest {
     @Test
     public void setTimeStart() throws EntityNotFoundException {
         // given
-        SetStartTimeForm form = new SetStartTimeForm(result.getId(), 120L);
+        SetStartDateMillisForm form = new SetStartDateMillisForm(result.getId(), 120L);
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
 
         //when
-        graphTaskResultService.setStartTime(form);
+        graphTaskResultService.setStartDateMillis(form);
 
         // then
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
@@ -453,11 +455,11 @@ public class GraphTaskResultServiceTest {
     @Test
     public void setStartTimeThrowEntityNotFoundException() {
         // given
-        SetStartTimeForm form = new SetStartTimeForm(result.getId(), 120L);
+        SetStartDateMillisForm form = new SetStartDateMillisForm(result.getId(), 120L);
 
         //when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.setStartTime(form))
+        assertThatThrownBy(() -> graphTaskResultService.setStartDateMillis(form))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
     }
@@ -466,7 +468,7 @@ public class GraphTaskResultServiceTest {
     public void getTimeRemaining() throws EntityNotFoundException, EntityRequiredAttributeNullException {
         // given
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
-        result.setStartTimeMillis(System.currentTimeMillis());
+        result.setStartDateMillis(System.currentTimeMillis());
         graphTask.setTimeToSolveMillis(1_000_000L);
 
         //when
