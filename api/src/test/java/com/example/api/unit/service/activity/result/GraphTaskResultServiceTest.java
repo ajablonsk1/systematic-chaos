@@ -411,13 +411,13 @@ public class GraphTaskResultServiceTest {
     }
 
     @Test
-    public void setTimeSpent() throws EntityNotFoundException {
+    public void setSendDateMillis() throws EntityNotFoundException {
         // given
-        SetTimeSpentForm form = new SetTimeSpentForm(result.getId(), 120);
+        SetSendDateMillisForm form = new SetSendDateMillisForm(result.getId(), 120L);
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
 
         //when
-        graphTaskResultService.setTimeSpent(form);
+        graphTaskResultService.setSendDateMillis(form);
 
         // then
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
@@ -428,11 +428,11 @@ public class GraphTaskResultServiceTest {
     @Test
     public void setTimeSpentThrowEntityNotFoundException() {
         // given
-        SetTimeSpentForm form = new SetTimeSpentForm(result.getId(), 120);
+        SetSendDateMillisForm form = new SetSendDateMillisForm(result.getId(), 120L);
 
         //when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.setTimeSpent(form))
+        assertThatThrownBy(() -> graphTaskResultService.setSendDateMillis(form))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
     }

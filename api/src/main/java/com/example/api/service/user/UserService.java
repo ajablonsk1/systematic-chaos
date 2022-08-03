@@ -9,7 +9,6 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
