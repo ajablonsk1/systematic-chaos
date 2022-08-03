@@ -12,13 +12,13 @@ import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.user.UserService;
-import com.example.api.util.ExceptionMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -37,9 +37,7 @@ public class UserServiceTests {
     @Mock private GroupRepo groupRepo;
     @Mock private PasswordEncoder passwordEncoder;
     @Mock private AuthenticationService authService;
-    @Mock private UserRepo userRepo;
-    @Mock private GroupRepo groupRepo;
-    @Mock private PasswordEncoder passwordEncoder;
+    @Mock private Authentication authentication;
     @Captor private ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
     @Captor private ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
     @Captor private ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
@@ -383,9 +381,11 @@ public class UserServiceTests {
         // given
         user.setGroup(group);
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn(user.getEmail());
 
         // when
-        Group userGroup = userService.getUserGroup(user.getEmail());
+        Group userGroup = userService.getUserGroup();
 
         // then
         verify(userRepo).findUserByEmail(stringArgumentCaptor.capture());
@@ -398,10 +398,12 @@ public class UserServiceTests {
     public void getUserGroupThrowEntityNotFoundException() {
         // given
         given(userRepo.findUserByEmail(user.getEmail())).willReturn(null);
+        given(authService.getAuthentication()).willReturn(authentication);
+        given(authentication.getName()).willReturn(user.getEmail());
 
         // when
         // then
-        assertThatThrownBy(() -> userService.getUserGroup(user.getEmail()))
+        assertThatThrownBy(() -> userService.getUserGroup())
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("User " + user.getEmail() + " not found in database");
     }

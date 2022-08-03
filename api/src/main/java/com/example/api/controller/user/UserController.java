@@ -76,7 +76,7 @@ public class UserController {
             User user = userService.getUser(email);
             String accessToken = JWT.create()
                     .withSubject(user.getEmail())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 20 * 60 * 1000))
                     .withIssuer(request.getRequestURI())
                     .withClaim("roles", List.of(user.getAccountType().getName()))
                     .sign(algorithm);
