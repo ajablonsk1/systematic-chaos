@@ -38,7 +38,7 @@ public class FeedbackValidator {
      * but files are added to list
     */
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException {
+            throws WrongUserTypeException, EntityNotFoundException, IOException {
         String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
