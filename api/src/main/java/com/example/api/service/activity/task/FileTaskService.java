@@ -12,6 +12,7 @@ import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,12 +31,14 @@ public class FileTaskService {
     private final ProfessorFeedbackRepo professorFeedbackRepo;
     private final UserRepo userRepo;
     private final UserValidator userValidator;
+    private final AuthenticationService authService;
 
     public FileTask saveFileTask(FileTask fileTask) {
         return fileTaskRepo.save(fileTask);
     }
 
-    public FileTaskInfoResponse getFileTaskInfo(Long id, String email) throws EntityNotFoundException, WrongUserTypeException {
+    public FileTaskInfoResponse getFileTaskInfo(Long id) throws EntityNotFoundException, WrongUserTypeException {
+        String email = authService.getAuthentication().getName();
         FileTaskInfoResponse result = new FileTaskInfoResponse();
         FileTask fileTask = fileTaskRepo.findFileTaskById(id);
         if(fileTask == null) {

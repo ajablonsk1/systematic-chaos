@@ -11,6 +11,7 @@ import com.example.api.model.util.File;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.repo.util.FileRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import java.io.IOException;
 public class FeedbackValidator {
     private final ProfessorFeedbackRepo professorFeedbackRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
+    private final AuthenticationService authService;
     private final UserRepo userRepo;
     private final FileRepo fileRepo;
 
@@ -36,8 +38,8 @@ public class FeedbackValidator {
      * but files are added to list
     */
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException, IOException {
-        String professorEmail = form.getProfessorEmail();
+            throws WrongUserTypeException, EntityNotFoundException {
+        String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
             log.error("User {} not found in database", professorEmail);

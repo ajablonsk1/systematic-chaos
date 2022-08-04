@@ -6,6 +6,7 @@ import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/feedback/professor")
+@SecurityRequirement(name = "JWT_AUTH")
 public class ProfessorFeedbackController {
     private final ProfessorFeedbackService feedbackService;
 

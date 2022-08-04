@@ -4,6 +4,7 @@ import { getActivityImg, getActivityTypeName } from '../../../utils/constants'
 import { ActivityImg } from '../../student/AllActivities/ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { useNavigate } from 'react-router-dom'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
+import { Activity } from '../../../utils/constants'
 
 // todo: move it to styles file
 const ActivityListItemRow = styled(Row)`
@@ -34,9 +35,9 @@ export default function ActivityListItem(props) {
         )
       }}
     >
-      <ActivityImg src={getActivityImg(props.activity.type)}></ActivityImg>
-      <div>{`[${props.activity.source}] ${getActivityTypeName(props.activity.type)} - ${props.activity.name}`}</div>
-      <div style={{ marginLeft: 'auto' }}>{props.activity.remaining + ' do sprawdzenia'}</div>
+      <ActivityImg src={getActivityImg(Activity.TASK)}></ActivityImg>
+      <div>{`${getActivityTypeName(Activity.TASK)} - ${props.activity.activityName}`}</div>
+      <div style={{ marginLeft: 'auto' }}>{props.toGrade + ' do sprawdzenia'}</div>
     </ActivityListItemRow>
   )
 }

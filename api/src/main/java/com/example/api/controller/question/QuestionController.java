@@ -3,6 +3,7 @@ package com.example.api.controller.question;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.question.Question;
 import com.example.api.service.question.QuestionService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/question")
+@SecurityRequirement(name = "JWT_AUTH")
 public class QuestionController {
     private final QuestionService questionService;
 

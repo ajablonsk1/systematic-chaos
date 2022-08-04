@@ -1,4 +1,4 @@
-package com.example.api.util;
+package com.example.api.util.calculator;
 import org.springframework.stereotype.Component;
 
 @Component

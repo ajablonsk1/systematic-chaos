@@ -68,7 +68,6 @@ public class ProfessorFeedbackServiceTest {
     public void saveProfessorFeedbackForm() throws WrongUserTypeException, EntityNotFoundException, IOException {
         //given
         SaveProfessorFeedbackForm form = new SaveProfessorFeedbackForm();
-        form.setProfessorEmail("random@email.com");
         form.setContent("random content");
         form.setPoints(10.0);
         form.setFileTaskResultId(2L);

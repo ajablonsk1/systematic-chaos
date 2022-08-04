@@ -9,7 +9,7 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.util.ExceptionMessage;
+import com.example.api.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final GroupRepo groupRepo;
+    private final AuthenticationService authService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -38,7 +39,7 @@ public class UserService implements UserDetailsService {
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
+            throw new UsernameNotFoundException("User " + email + " not found in database");
         }
         log.info("User {} found in database", email);
         Collection<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getAccountType().getName()));
@@ -75,12 +76,13 @@ public class UserService implements UserDetailsService {
             user.setGroup(group);
             user.setHeroType(form.getHeroType());
             Integer indexNumber = form.getIndexNumber();
-            if(indexNumber == null) {
+
+            if(indexNumber == null || userRepo.existsUserByIndexNumber(indexNumber)) {
                 log.error("User with index number {} already in database", indexNumber);
                 throw new EntityAlreadyInDatabaseException(ExceptionMessage.INDEX_TAKEN);
             }
         } else {
-            if(form.getHeroType() != null || form.getInvitationCode() != null){
+            if(form.getHeroType() != null || form.getInvitationCode() != null || form.getIndexNumber() != null){
                 log.error("Request body for registering professor requires 4 body parameters");
                 throw new WrongBodyParametersNumberException("Request body for registering professor requires 4 body parameters",
                         List.of("firstName", "lastName", "email", "password"), 1);
@@ -96,9 +98,14 @@ public class UserService implements UserDetailsService {
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
+            throw new UsernameNotFoundException("User " + email + " not found in database");
         }
-        return userRepo.findUserByEmail(email);
+        return user;
+    }
+
+    public User getCurrentUser() throws UsernameNotFoundException {
+        String email = authService.getAuthentication().getName();
+        return getUser(email);
     }
 
     public List<User> getUsers() {
@@ -106,12 +113,13 @@ public class UserService implements UserDetailsService {
         return userRepo.findAll();
     }
 
-    public Group getUserGroup(String email) throws EntityNotFoundException {
+    public Group getUserGroup() throws EntityNotFoundException {
+        String email = authService.getAuthentication().getName();
         log.info("Fetching group for user {}", email);
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);
-            throw new EntityNotFoundException("User" + email + " not found in database");
+            throw new EntityNotFoundException("User " + email + " not found in database");
         }
         return user.getGroup();
     }
@@ -167,5 +175,4 @@ public class UserService implements UserDetailsService {
 
         return newGroup;
     }
-
 }

@@ -11,5 +11,6 @@ import java.util.List;
 public interface UserRepo extends JpaRepository<User, Long> {
     User findUserByEmail(String email);
     User findUserById(Long id);
+    Boolean existsUserByIndexNumber(Integer indexNumber);
     List<User> findAllByAccountTypeEquals(AccountType accountType);
 }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import authHeader from '../services/auth-header'
-import { errorToast } from './errorToast'
+import { errorToast } from './toasts'
 
 const header = Object.assign(authHeader(), { 'Content-Type': 'application/x-www-form-urlencoded' })
 const headerWithParams = (params) => Object.assign(header, { params })

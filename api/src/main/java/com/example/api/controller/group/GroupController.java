@@ -6,6 +6,7 @@ import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.service.group.GroupService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/group")
+@SecurityRequirement(name = "JWT_AUTH")
 public class GroupController {
     private final GroupService groupService;
 
