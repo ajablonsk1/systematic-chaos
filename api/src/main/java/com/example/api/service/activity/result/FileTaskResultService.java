@@ -11,6 +11,7 @@ import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class FileTaskResultService {
     private final UserRepo userRepo;
     private final FileRepo fileRepo;
     private final UserValidator userValidator;
+    private final AuthenticationService authService;
 
     public FileTaskResult saveFileTaskResult(FileTaskResult result) {
         return fileTaskResultRepo.save(result);
@@ -37,13 +39,14 @@ public class FileTaskResultService {
 
     public Long saveFileToFileTaskResult(SaveFileToFileTaskResultForm form) throws EntityNotFoundException, WrongUserTypeException, IOException {
         log.info("Saving file to file task result with id {}", form.getFileTaskId());
-        FileTaskResult result = getFileTaskResultByFileTaskAndUser(form.getFileTaskId(), form.getStudentEmail());
+        String email = authService.getAuthentication().getName();
+        FileTaskResult result = getFileTaskResultByFileTaskAndUser(form.getFileTaskId(), email);
         if(result == null){
             result = new FileTaskResult();
             result.setAnswer("");
             result.setFileTask(fileTaskRepo.findFileTaskById(form.getFileTaskId()));
             result.setEvaluated(false);
-            result.setUser(userRepo.findUserByEmail(form.getStudentEmail()));
+            result.setUser(userRepo.findUserByEmail(email));
         }
         if(form.getFile() != null) {
             File file = new File(null, form.getFileName(), form.getFile().getBytes());
@@ -58,8 +61,9 @@ public class FileTaskResultService {
         return result.getId();
     }
 
-    public Long deleteFileFromFileTask(Long fileTaskId, String email, int index) throws EntityNotFoundException, WrongUserTypeException {
+    public Long deleteFileFromFileTask(Long fileTaskId, int index) throws EntityNotFoundException, WrongUserTypeException {
         log.info("Deleting file from file task result with id {}", fileTaskId);
+        String email = authService.getAuthentication().getName();
         FileTaskResult result = getFileTaskResultByFileTaskAndUser(fileTaskId, email);
         result.getFiles().remove(index);
         return result.getId();

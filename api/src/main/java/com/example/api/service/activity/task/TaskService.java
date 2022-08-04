@@ -11,6 +11,7 @@ import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,9 +30,11 @@ public class TaskService {
     private final FileTaskRepo fileTaskRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final UserRepo userRepo;
+    private final AuthenticationService authService;
 
-    public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate(String email)
+    public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate()
             throws WrongUserTypeException, UsernameNotFoundException {
+        String email = authService.getAuthentication().getName();
         log.info("Fetching all activities that are needed to be evaluated for professor {}", email);
         User professor = userRepo.findUserByEmail(email);
         if (professor == null) {

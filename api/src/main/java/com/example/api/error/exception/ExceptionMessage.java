@@ -1,4 +1,4 @@
-package com.example.api.util;
+package com.example.api.error.exception;
 
 public class ExceptionMessage {
     public static final String EMAIL_TAKEN = "Podany adres email jest zajęty";

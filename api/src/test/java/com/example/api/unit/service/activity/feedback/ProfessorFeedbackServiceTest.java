@@ -58,7 +58,7 @@ public class ProfessorFeedbackServiceTest {
     @Test
     public void saveProfessorFeedbackForm() throws WrongUserTypeException, EntityNotFoundException {
         //given
-        SaveProfessorFeedbackForm form = new SaveProfessorFeedbackForm("random@email.com",
+        SaveProfessorFeedbackForm form = new SaveProfessorFeedbackForm(
                 "random content",
                 10.0,
                 2L);

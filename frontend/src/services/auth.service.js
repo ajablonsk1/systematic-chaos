@@ -57,7 +57,7 @@ class AuthService {
         localStorage.setItem('user', JSON.stringify(response.data))
       })
       .catch((err) => {
-        this.logout()
+        throw err
       })
   }
 }

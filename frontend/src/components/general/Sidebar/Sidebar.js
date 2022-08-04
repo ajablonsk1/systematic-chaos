@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { faFire } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Nav } from 'react-bootstrap'
@@ -6,12 +7,12 @@ import { buildNavLink, NavLinkStyles } from './navBuilder'
 import { LogoDiv, NavBarTextContainer, NavEdit, SidebarEdit } from './SidebarStyles'
 import { connect } from 'react-redux'
 import { logout } from '../../../actions/auth'
-import { Link } from 'react-router-dom'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 
 function Sidebar(props) {
+  const navigate = useNavigate()
   const link_titles = props.link_titles
-  const logOut = () => props.dispatch(logout())
+  const logOut = () => props.dispatch(logout(navigate))
 
   return (
     <SidebarEdit variant='dark'>

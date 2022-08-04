@@ -3,7 +3,7 @@ package com.example.api.service.activity.task;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.repo.activity.task.GraphTaskRepo;
-import com.example.api.util.TimeCalculator;
+import com.example.api.util.calculator.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

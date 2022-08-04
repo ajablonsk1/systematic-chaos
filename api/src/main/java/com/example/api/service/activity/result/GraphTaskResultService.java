@@ -1,9 +1,8 @@
 package com.example.api.service.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
-import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
-import com.example.api.dto.request.activity.result.SetStartTimeForm;
-import com.example.api.dto.request.activity.result.SetTimeSpentForm;
+import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
+import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
 import com.example.api.error.exception.*;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.GraphTask;
@@ -15,10 +14,11 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.AnswerFormValidator;
 import com.example.api.service.validator.UserValidator;
-import com.example.api.util.PointsCalculator;
-import com.example.api.util.TimeCalculator;
+import com.example.api.util.calculator.PointsCalculator;
+import com.example.api.util.calculator.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,9 +39,11 @@ public class GraphTaskResultService {
     private final AnswerFormValidator answerFormValidator;
     private final UserValidator userValidator;
     private final TimeCalculator timeCalculator;
+    private final AuthenticationService authService;
 
-    public GraphTaskResult getGraphTaskResult(Long graphTaskId, String email)
+    public GraphTaskResult getGraphTaskResult(Long graphTaskId)
             throws WrongUserTypeException, EntityNotFoundException {
+        String email = authService.getAuthentication().getName();
         User student = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(student, email);
         GraphTask task = graphTaskRepo.findGraphTaskById(graphTaskId);
@@ -56,15 +58,14 @@ public class GraphTaskResultService {
         return graphTaskResultRepo.save(result);
     }
 
-    public GraphTaskResult saveGraphTaskResult(SaveGraphTaskResultForm form) throws EntityNotFoundException {
+    public GraphTaskResult saveGraphTaskResult(Long id) throws EntityNotFoundException {
         log.info("Saving graph task result");
-        Long id = form.getGraphTaskId();
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(id);
         if(graphTask == null) {
             log.error("Graph task with given id {} does not exist", id);
             throw new EntityNotFoundException("Graph task with given id " + id + " does not exist");
         }
-        String email = form.getUserEmail();
+        String email = authService.getAuthentication().getName();
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
             log.error("User {} not found in database", email);
@@ -73,7 +74,7 @@ public class GraphTaskResultService {
         GraphTaskResult graphTaskResult = new GraphTaskResult();
         graphTaskResult.setGraphTask(graphTask);
         graphTaskResult.setUser(user);
-        graphTaskResult.setStartTimeMillis(System.currentTimeMillis());
+        graphTaskResult.setStartDateMillis(System.currentTimeMillis());
         return graphTaskResultRepo.save(graphTaskResult);
     }
 
@@ -157,20 +158,7 @@ public class GraphTaskResultService {
         return timeRemaining;
     }
 
-    public Integer setTimeSpent(SetTimeSpentForm form) throws EntityNotFoundException {
-        Long id = form.getResultId();
-        log.info("Setting time spent for graph task result with id {}", id);
-        GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
-        int timeSpent = form.getTimeSpent();
-        result.setTimeSpentSec(timeSpent);
-        return timeSpent;
-    }
-
-    public Long setStartTime(SetStartTimeForm form) throws EntityNotFoundException {
+    public Long setStartDateMillis(SetStartDateMillisForm form) throws EntityNotFoundException {
         Long id = form.getResultId();
         log.info("Setting start time for graph task result with id {}", id);
         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(id);
@@ -178,8 +166,8 @@ public class GraphTaskResultService {
             log.error("Graph task result with given id {} does not exist", id);
             throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
         }
-        graphTaskResult.setStartTimeMillis(form.getStartTimeMillis());
-        return form.getStartTimeMillis();
+        graphTaskResult.setStartDateMillis(form.getStartDateMillis());
+        return form.getStartDateMillis();
     }
 
 
@@ -190,12 +178,24 @@ public class GraphTaskResultService {
             log.error("Graph task result with given id {} does not exist", resultId);
             throw new EntityNotFoundException("Graph task result with given id " + resultId + " does not exist");
         }
-        if(graphTaskResult.getStartTimeMillis() == null) {
+        if(graphTaskResult.getStartDateMillis() == null) {
             log.error("Start time not set for graph task with id {}", resultId);
             throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
                     "graph task result with id " + resultId);
         }
         GraphTask graphTask = graphTaskResult.getGraphTask();
-        return timeCalculator.getTimeRemaining(graphTaskResult.getStartTimeMillis(), graphTask.getTimeToSolveMillis());
+        return timeCalculator.getTimeRemaining(graphTaskResult.getStartDateMillis(), graphTask.getTimeToSolveMillis());
+    }
+
+    public Long setSendDateMillis(SetSendDateMillisForm form) throws EntityNotFoundException {
+        Long resultId = form.getResultId();
+        log.info("Setting sendDateMillis for graph task result with id {}", resultId);
+        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
+        if(graphTaskResult == null) {
+            log.error("Graph task result with given id {} does not exist", resultId);
+            throw new EntityNotFoundException("Graph task result with given id " + resultId + " does not exist");
+        }
+        graphTaskResult.setSendDateMillis(form.getSendDateMillis());
+        return resultId;
     }
 }

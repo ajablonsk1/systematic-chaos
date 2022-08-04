@@ -29,10 +29,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity security) throws Exception {
         security.csrf().disable();
         security.sessionManagement().sessionCreationPolicy(STATELESS);
-        security.authorizeRequests().anyRequest().permitAll();
+        security.authorizeHttpRequests(authorize -> authorize
+                .antMatchers("/login", "/register").permitAll()
+                .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                .anyRequest().authenticated());
         security.addFilter(new AuthenticationFilter(authenticationManager()));
         security.addFilterBefore(new AuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-        //security.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
         CorsConfiguration corsConfig = new CorsConfiguration().applyPermitDefaultValues();
         corsConfig.addAllowedMethod(HttpMethod.DELETE);
         security.cors().configurationSource(request -> corsConfig);

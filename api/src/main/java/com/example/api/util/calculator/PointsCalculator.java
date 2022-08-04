@@ -1,4 +1,4 @@
-package com.example.api.util;
+package com.example.api.util.calculator;
 
 import com.example.api.error.exception.WrongAnswerTypeException;
 import com.example.api.model.activity.result.GraphTaskResult;
