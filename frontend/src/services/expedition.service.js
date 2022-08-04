@@ -12,7 +12,6 @@ import {
   GRAPH_TASK_SEND_ANSWER,
   GRAPH_TASK_URL
 } from './urls'
-import StudentService from './student.service'
 
 class ExpeditionService {
   // returns all info about activity

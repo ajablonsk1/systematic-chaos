@@ -26,8 +26,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
-    private final static long ACCESS_TOKEN_EXPIRE_TIME = 1200000;
-    private final static long REFRESH_TOKEN_EXPIRE_TIME = 10800000;
+    private final static long ACCESS_TOKEN_EXPIRE_TIME = 60000 * 60 * 2;
+    private final static long REFRESH_TOKEN_EXPIRE_TIME = 60000 * 60 * 5;
 
     public AuthenticationFilter(AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
