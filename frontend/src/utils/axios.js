@@ -1,15 +1,10 @@
 import axios from 'axios'
-import authHeader from '../services/auth-header'
 import { errorToast } from './toasts'
-
-const header = Object.assign(authHeader(), { 'Content-Type': 'application/x-www-form-urlencoded' })
-const headerWithParams = (params) => Object.assign(header, { params })
-const multipartFileHeader = Object.assign(authHeader(), { 'Content-Type': 'multipart/form-data' })
-const fileHeaderWithParams = (params) => Object.assign(header, { responseType: 'blob', params })
+import { validHeader, multipartFileHeader, fileHeaderWithParams } from './axios_headers'
 
 export function axiosApiPost(url, body) {
   return axios
-    .post(url, body, header)
+    .post(url, body, validHeader({}))
     .then((response) => response.data)
     .catch((error) => {
       errorToast(error?.response?.data?.message)
@@ -19,7 +14,7 @@ export function axiosApiPost(url, body) {
 
 export function axiosApiGet(url, params) {
   return axios
-    .get(url, headerWithParams(params))
+    .get(url, validHeader(params))
     .then((response) => response.data)
     .catch((error) => {
       errorToast(error?.response?.data?.message)
@@ -29,7 +24,7 @@ export function axiosApiGet(url, params) {
 
 export function axiosApiDelete(url, params) {
   return axios
-    .delete(url, headerWithParams(params))
+    .delete(url, validHeader(params))
     .then((response) => response.data)
     .catch((error) => {
       errorToast(error?.response?.data?.message)
@@ -51,7 +46,7 @@ export function axiosApiSendFile(url, body) {
   }
 
   return axios
-    .post(url, formData, multipartFileHeader)
+    .post(url, formData, multipartFileHeader({}))
     .then((response) => response.data)
     .catch((error) => {
       errorToast(error?.response?.data?.message)
@@ -71,7 +66,7 @@ export function axiosApiDownloadFile(url, params) {
 
 export function axiosApiGetFile(url, body) {
   return axios
-    .post(url, body, Object.assign(header, { responseType: 'blob' }))
+    .post(url, body, fileHeaderWithParams({}))
     .then((response) => response.data)
     .catch((error) => {
       errorToast(error?.response?.data?.message)
