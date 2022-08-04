@@ -24,8 +24,7 @@ class ExpeditionService {
 
   getExpeditionScore(activityId) {
     return axiosApiGet(GRAPH_TASK_RESULT_URL, {
-      graphTaskId: activityId,
-      studentEmail: StudentService.getEmail()
+      graphTaskId: activityId
     }).catch((error) => {
       throw error
     })
@@ -39,8 +38,7 @@ class ExpeditionService {
 
   getTaskAnswerId(activityId) {
     return axiosApiPost(GRAPH_GET_TASK_ANSWER_ID, {
-      graphTaskId: activityId,
-      userEmail: StudentService.getEmail()
+      graphTaskId: activityId
     }).catch(() => {})
   }
 

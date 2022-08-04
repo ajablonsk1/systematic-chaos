@@ -5,8 +5,7 @@ import StudentService from './student.service'
 class CombatTaskService {
   getCombatTask(taskId) {
     return axiosApiGet(COMBAT_TASK_GET_INFO, {
-      fileTaskId: taskId,
-      studentEmail: StudentService.getEmail()
+      fileTaskId: taskId
     }).catch((error) => {
       throw error
     })
@@ -21,7 +20,6 @@ class CombatTaskService {
   removeCombatTaskFile(taskId, index) {
     return axiosApiDelete(COMBAT_TASK_REMOVE_FILE, {
       fileTaskId: taskId,
-      studentEmail: StudentService.getEmail(),
       index: index
     }).catch((error) => {
       throw error
@@ -33,8 +31,7 @@ class CombatTaskService {
       fileTaskId: taskId,
       openAnswer: openAnswer,
       fileName: fileName,
-      file: fileBlob,
-      studentEmail: StudentService.getEmail()
+      file: fileBlob
     }).catch((error) => {
       throw error
     })
