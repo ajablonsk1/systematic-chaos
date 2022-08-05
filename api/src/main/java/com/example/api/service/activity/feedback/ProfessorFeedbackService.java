@@ -2,7 +2,10 @@ package com.example.api.service.activity.feedback;
 
 import com.example.api.dto.request.activity.feedback.DeleteFileFromProfessorFeedback;
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
+import com.example.api.dto.response.task.feedback.ProfessorFeedbackInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingProfessorFeedbackAttributeException;
+import com.example.api.error.exception.WrongPointsNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
@@ -32,29 +35,30 @@ public class ProfessorFeedbackService {
     private final FileTaskRepo fileTaskRepo;
     private final UserRepo userRepo;
 
-    public ProfessorFeedback saveProfessorFeedback(ProfessorFeedback feedback) {
-        return professorFeedbackRepo.save(feedback);
+    public ProfessorFeedbackInfoResponse saveProfessorFeedback(ProfessorFeedback feedback) throws MissingProfessorFeedbackAttributeException, EntityNotFoundException {
+        return new ProfessorFeedbackInfoResponse(professorFeedbackRepo.save(feedback));
     }
 
-    public ProfessorFeedback saveProfessorFeedback(SaveProfessorFeedbackForm form) throws WrongUserTypeException, EntityNotFoundException, IOException {
+    public ProfessorFeedbackInfoResponse saveProfessorFeedback(SaveProfessorFeedbackForm form) throws WrongUserTypeException, EntityNotFoundException, IOException, MissingProfessorFeedbackAttributeException, WrongPointsNumberException {
         log.info("Saving professor feedback to database");
         ProfessorFeedback professorFeedback =
                 feedbackValidator.validateAndSetProfessorFeedbackTaskForm(form);
         log.debug(professorFeedback.getContent());
-        return professorFeedbackRepo.save(professorFeedback);
+
+        return new ProfessorFeedbackInfoResponse(professorFeedbackRepo.save(professorFeedback));
     }
 
-    public ProfessorFeedback getProfessorFeedbackForFileTaskResult(Long id) throws EntityNotFoundException {
+    public ProfessorFeedbackInfoResponse getProfessorFeedbackForFileTaskResult(Long id) throws EntityNotFoundException, MissingProfessorFeedbackAttributeException {
         log.info("Fetching professor feedback for file task result with id {}", id);
         FileTaskResult result = fileTaskResultRepo.findFileTaskResultById(id);
         if(result == null) {
             log.error("File task result with given id {} does not exist", id);
             throw new EntityNotFoundException("File task result with given id " + id + " does not exist");
         }
-        return professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
+        return new ProfessorFeedbackInfoResponse(professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result));
     }
 
-    public ProfessorFeedback getProfessorFeedbackForFileTaskAndStudent(Long fileTaskId, String studentEmail) throws EntityNotFoundException {
+    public ProfessorFeedbackInfoResponse getProfessorFeedbackForFileTaskAndStudent(Long fileTaskId, String studentEmail) throws EntityNotFoundException, MissingProfessorFeedbackAttributeException {
         log.info("Fetching professor feedback for file task with id {} and student {}", fileTaskId, studentEmail);
         FileTask fileTask = fileTaskRepo.findFileTaskById(fileTaskId);
         if(fileTask == null) {
@@ -72,13 +76,14 @@ public class ProfessorFeedbackService {
             throw new EntityNotFoundException("File task result for task with id " + fileTaskId +
                     " and student " + studentEmail + " does not exist");
         }
-        return professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
+        return new ProfessorFeedbackInfoResponse(professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result));
     }
 
-    public ProfessorFeedback deleteFileFromProfessorFeedback(DeleteFileFromProfessorFeedback form) throws EntityNotFoundException {
+    public Long deleteFileFromProfessorFeedback(DeleteFileFromProfessorFeedback form) throws EntityNotFoundException, MissingProfessorFeedbackAttributeException {
         log.info("Deleting file from professor feedback for file task with id {} and student {}", form.getFileTaskId(), form.getStudentEmail());
 
-        ProfessorFeedback feedback = getProfessorFeedbackForFileTaskAndStudent(form.getFileTaskId(), form.getStudentEmail());
+        ProfessorFeedbackInfoResponse feedbackInfo = getProfessorFeedbackForFileTaskAndStudent(form.getFileTaskId(), form.getStudentEmail());
+        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackById(feedbackInfo.getFeedbackId());
         if(feedback == null) {
             log.error("Feedback for FileTaskResult with given id {} does not exist", form.getFileTaskId());
             throw new EntityNotFoundException("Feedback for FileTaskResult with given id " + form.getFileTaskId()  + " does not exist");
@@ -93,6 +98,7 @@ public class ProfessorFeedbackService {
         }
 
         feedback.getFeedbackFiles().remove(form.getIndex());
-        return professorFeedbackRepo.save(feedback);
+        professorFeedbackRepo.save(feedback);
+        return feedback.getId();
     }
 }

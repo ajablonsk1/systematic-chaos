@@ -2,6 +2,8 @@ package com.example.api.service.validator;
 
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingProfessorFeedbackAttributeException;
+import com.example.api.error.exception.WrongPointsNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
@@ -38,7 +40,7 @@ public class FeedbackValidator {
      * but files are added to list
     */
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException, IOException {
+            throws WrongUserTypeException, EntityNotFoundException, IOException, WrongPointsNumberException {
         String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
@@ -56,17 +58,20 @@ public class FeedbackValidator {
         }
         ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
 
-        if(feedback == null) {
+        if (feedback == null) {
             feedback = new ProfessorFeedback();
             feedback.setFrom(professor);
             feedback.setFileTaskResult(fileTaskResult);
 
         }
-        if(form.getContent() != null) {
+        if (form.getContent() != null) {
             feedback.setContent(form.getContent());
         }
 
         if(form.getPoints() != null) {
+            if (form.getPoints() < 0 || form.getPoints() > fileTaskResult.getFileTask().getMaxPoints()) {
+                throw new WrongPointsNumberException("Wrong points number", form.getPoints(), fileTaskResult.getFileTask().getMaxPoints());
+            }
             feedback.setPoints(form.getPoints());
             fileTaskResult.setPointsReceived(form.getPoints());
             fileTaskResultRepo.save(fileTaskResult);
