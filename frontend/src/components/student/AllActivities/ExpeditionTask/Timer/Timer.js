@@ -5,7 +5,7 @@ import { TimerContainer } from './TimerStyle'
 
 export default function Timer(props) {
   const location = useLocation()
-  const { activityId } = location.state
+  const { activityId, timeToSolveMillis } = location.state
   const navigate = useNavigate()
   const [remainingTimeInSeconds, setRemainingTimeInSeconds] = useState(getRemainingTime(activityId))
   const [remainingTime, setRemainingTime] = useState(timer(remainingTimeInSeconds))

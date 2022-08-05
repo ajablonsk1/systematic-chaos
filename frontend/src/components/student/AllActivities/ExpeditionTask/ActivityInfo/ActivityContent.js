@@ -76,9 +76,6 @@ export default function ActivityContent(props) {
   }, [loadedScore, activityScore?.id, props.activity.requirement])
 
   const resetStorageAndStart = () => {
-    // TODO: delete it
-    localStorage.setItem('startDate', new Date())
-
     const navigateTo = (nodeId, taskResultId) =>
       navigate(
         generateFullPath(() => PageRoutes.Student.GameMap.Expedition.QUESTION_SELECTION),
@@ -86,7 +83,8 @@ export default function ActivityContent(props) {
           state: {
             activityId: activityId,
             nodeId: nodeId,
-            taskResultId: taskResultId
+            taskResultId: taskResultId,
+            timeToSolveMillis: props.activity.timeToSolveMillis
           }
         }
       )
@@ -99,11 +97,12 @@ export default function ActivityContent(props) {
       ExpeditionService.getTaskAnswerId(activityId)
         .then((response) => {
           // set startTime in milliseconds
-          ExpeditionService.setStartTime(response.id, Date.now()).then(() => {
-            console.log('time git')
-            // later get the first question on endpoint
-            navigateTo(props.activity.questions[0].id, response.id)
-          })
+          ExpeditionService.setStartTime(response.id, Date.now())
+            .then(() => {
+              // later get the first question on endpoint
+              navigateTo(props.activity.questions[0].id, response.id)
+            })
+            .catch(() => {})
         })
         .catch(() => {})
     }
