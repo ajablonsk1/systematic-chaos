@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { errorToast } from './toasts'
-import { validHeader, multipartFileHeader, fileHeaderWithParams } from './axios_headers'
+import { validHeader, multipartFileHeader, fileHeaderWithParams } from './axiosHeaders'
 
 export function axiosApiPost(url, body) {
   return axios
