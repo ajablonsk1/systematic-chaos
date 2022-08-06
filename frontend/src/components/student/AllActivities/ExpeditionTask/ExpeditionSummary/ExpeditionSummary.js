@@ -3,13 +3,13 @@ import { Row } from 'react-bootstrap'
 import { SummaryContainer } from './ExpeditionSummaryStyle'
 import { ButtonRow } from '../QuestionAndOptions/QuestionAndOptionsStyle'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { finishExpedition, timer } from '../../../../../utils/storageManager'
 
 import Loader from '../../../../general/Loader/Loader'
 
 import { Content } from '../../../../App/AppGeneralStyles'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
+import { getTimer } from '../../../../../utils/storageManager'
 
 export default function ExpeditionSummary() {
   const navigate = useNavigate()
@@ -48,12 +48,11 @@ export default function ExpeditionSummary() {
   }, [expeditionId, navigate, taskResultId])
 
   const finishExpeditionAndGoHome = () => {
-    finishExpedition(expeditionId)
     navigate(generateFullPath(() => PageRoutes.Student.GameMap.GAME_MAP))
   }
 
   const showRemainingTime = () =>
-    remainingTime > 60 ? timer(remainingTime).replace(':', 'min ') + 's' : remainingTime + 's'
+    remainingTime > 60 ? getTimer(remainingTime).replace(':', 'min ') + 's' : remainingTime + 's'
 
   return (
     <Content>

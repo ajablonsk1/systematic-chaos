@@ -1,11 +1,5 @@
-import expedition from '../storage/exampleExpeditionData.json'
 import moment from 'moment'
 import 'moment/locale/pl'
-
-export function getExpedition(expeditionId) {
-  // TODO: get expedition using expeditionId from expeditions list
-  return expedition
-}
 
 export const parseJwt = (token) => {
   try {

@@ -29,17 +29,21 @@ function QuestionAndOptions(props) {
   // before the timer runs out
   useEffect(() => {
     if (remainingTime === 0) {
-      navigate(
-        generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
-        {
-          state: {
-            expeditionId: expeditionId,
-            remainingTime: remainingTime
-          }
-        }
-      )
+      ExpeditionService.setSendTime(taskResultId, 0)
+        .then(() => {
+          navigate(
+            generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
+            {
+              state: {
+                expeditionId: expeditionId,
+                remainingTime: remainingTime
+              }
+            }
+          )
+        })
+        .catch(() => {})
     }
-  }, [expeditionId, navigate, remainingTime])
+  }, [expeditionId, navigate, remainingTime, taskResultId])
 
   return (
     <ContentWithBackground>

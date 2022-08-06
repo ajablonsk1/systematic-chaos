@@ -65,16 +65,20 @@ function QuestionSelectionDoor(props) {
 
   useEffect(() => {
     if (remainingTime === 0 || questions?.length === 0) {
-      navigate(
-        generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
-        {
-          state: {
-            expeditionId: expeditionId,
-            remainingTime: remainingTime,
-            taskResultId: taskResultId
-          }
-        }
-      )
+      ExpeditionService.setSendTime(taskResultId, remainingTime * 1000)
+        .then(() => {
+          navigate(
+            generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
+            {
+              state: {
+                expeditionId: expeditionId,
+                remainingTime: remainingTime,
+                taskResultId: taskResultId
+              }
+            }
+          )
+        })
+        .catch(() => {})
     }
   }, [questions, expeditionId, navigate, remainingTime, taskResultId])
 
