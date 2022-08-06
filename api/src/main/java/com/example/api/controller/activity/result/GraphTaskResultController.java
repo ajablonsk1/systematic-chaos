@@ -1,6 +1,7 @@
 package com.example.api.controller.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
+import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
 import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
 import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
 import com.example.api.error.exception.*;
@@ -24,10 +25,10 @@ public class GraphTaskResultController {
         return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResult(graphTaskId));
     }
 
-    @GetMapping("/save")
-    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestParam Long graphTaskId)
+    @PostMapping("/save")
+    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestBody SaveGraphTaskResultForm form)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(graphTaskId));
+        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form.getGraphTaskId()));
     }
 
     @GetMapping("/points/closed")

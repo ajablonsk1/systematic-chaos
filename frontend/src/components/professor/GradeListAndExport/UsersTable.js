@@ -59,8 +59,13 @@ export default function UsersTable(props) {
   }
 
   const filterList = debounce((query) => {
+    console.log(users)
     if (!query) return setUsers([...usersList])
-    setUsers(usersList?.filter((user) => user.name.toLowerCase().includes(query?.toLowerCase())))
+    setUsers(
+      usersList?.filter((user) =>
+        (user.firstName.toLowerCase() + user.lastName.toLowerCase()).includes(query?.toLowerCase())
+      )
+    )
   }, 300)
 
   return (
