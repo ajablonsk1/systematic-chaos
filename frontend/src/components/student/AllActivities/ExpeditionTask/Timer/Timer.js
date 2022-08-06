@@ -17,13 +17,11 @@ export default function Timer(props) {
   useEffect(() => {
     ExpeditionService.getRemainingTime(taskResultId)
       .then((response) => {
-        const timeInSeconds = +response / 1000
+        const timeInSeconds = parseInt(+response / 1000)
         setRemainingTime(timeInSeconds)
         setIsRemainingTimeLoaded(true)
       })
-      .catch(() => {
-        setRemainingTime(null)
-      })
+      .catch(() => setRemainingTime(null))
   }, [taskResultId, timeToSolveMillis])
 
   useEffect(() => {

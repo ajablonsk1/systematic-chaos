@@ -29,14 +29,15 @@ function QuestionAndOptions(props) {
   // before the timer runs out
   useEffect(() => {
     if (remainingTime === 0) {
-      ExpeditionService.setSendTime(taskResultId, 0)
+      ExpeditionService.setSendTime(taskResultId, Date.now())
         .then(() => {
           navigate(
             generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
             {
               state: {
                 expeditionId: expeditionId,
-                remainingTime: remainingTime
+                remainingTime: remainingTime,
+                taskResultId: taskResultId
               }
             }
           )

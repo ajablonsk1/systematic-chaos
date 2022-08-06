@@ -48,7 +48,7 @@ function generateDoor(question, navigate, expeditionId, noDoors, taskResultId) {
 
 function QuestionSelectionDoor(props) {
   const navigate = useNavigate()
-  const [questions, setQuestions] = useState(null)
+  const [questions, setQuestions] = useState(undefined)
   const location = useLocation()
   const { activityId: expeditionId, nodeId: parentId, taskResultId } = location.state
   const remainingTime = props.remainingTime
@@ -65,7 +65,7 @@ function QuestionSelectionDoor(props) {
 
   useEffect(() => {
     if (remainingTime === 0 || questions?.length === 0) {
-      ExpeditionService.setSendTime(taskResultId, remainingTime * 1000)
+      ExpeditionService.setSendTime(taskResultId, Date.now())
         .then(() => {
           navigate(
             generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),

@@ -97,10 +97,10 @@ export default function ActivityContent(props) {
       ExpeditionService.getTaskAnswerId(activityId)
         .then((response) => {
           // set startTime in milliseconds
-          ExpeditionService.setStartTime(response.id, Date.now())
+          ExpeditionService.setStartTime(response?.id, Date.now())
             .then(() => {
               // later get the first question on endpoint
-              navigateTo(props.activity.questions[0].id, response.id)
+              navigateTo(props.activity.questions[0].id, response?.id)
             })
             .catch(() => {})
         })
