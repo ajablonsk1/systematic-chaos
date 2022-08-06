@@ -17,8 +17,7 @@ export const multipartFileHeader = (params) => ({
 
 export const fileHeaderWithParams = (params) => ({
   headers: {
-    ...authHeader(),
-    'Content-Type': 'application/x-www-form-urlencoded'
+    ...authHeader()
   },
   responseType: 'blob',
   params: params
