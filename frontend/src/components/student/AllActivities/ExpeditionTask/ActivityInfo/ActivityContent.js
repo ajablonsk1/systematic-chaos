@@ -58,8 +58,8 @@ export default function ActivityContent(props) {
           )
 
           if (givenTimeData) {
-            setStartDate(new Date(...givenTimeData.dateFrom))
-            setEndDate(new Date(...givenTimeData.dateTo))
+            setStartDate(new Date(givenTimeData.dateFrom))
+            setEndDate(new Date(givenTimeData.dateTo))
           }
         })
         .catch(() => {
