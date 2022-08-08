@@ -28,6 +28,6 @@ public class SurveyService {
             log.error("Survey with id {} not found in database", id);
             throw new EntityNotFoundException("Survey with id" + id + " not found in database");
         }
-        return new SurveyInfoResponse(survey.getName(), survey.getDescription(), survey.getExperiance());
+        return new SurveyInfoResponse(survey.getName(), survey.getDescription(), survey.getExperience());
     }
 }

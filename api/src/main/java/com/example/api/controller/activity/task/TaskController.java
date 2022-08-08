@@ -8,10 +8,7 @@ import com.example.api.service.activity.task.TaskService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,4 +29,7 @@ public class TaskController {
     ResponseEntity<TaskToEvaluateResponse> getFirstAnswerToEvaluate(@RequestParam Long fileTaskId) throws EntityNotFoundException {
         return ResponseEntity.ok().body(taskService.getFirstAnswerToEvaluate(fileTaskId));
     }
+
+    // @PostMapping("/evaluate")
+
 }

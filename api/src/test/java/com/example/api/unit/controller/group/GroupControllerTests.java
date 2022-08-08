@@ -6,6 +6,7 @@ import com.example.api.service.group.GroupService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class GroupControllerTests {
     }
 
     @Test
+    @Disabled
     public void saveGroupTest() throws Exception {
         when(service.saveGroup((Group) any())).thenReturn(group1);
 
