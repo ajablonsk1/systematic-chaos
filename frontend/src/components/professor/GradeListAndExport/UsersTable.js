@@ -59,7 +59,6 @@ export default function UsersTable(props) {
   }
 
   const filterList = debounce((query) => {
-    console.log(users)
     if (!query) return setUsers([...usersList])
     setUsers(
       usersList?.filter((user) =>

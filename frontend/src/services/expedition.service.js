@@ -1,5 +1,6 @@
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
 import {
+  GET_REMAINING_TIME,
   GRAPH_GET_TASK_ANSWER_ID,
   GRAPH_QUESTION,
   GRAPH_QUESTION_NEXT,
@@ -10,7 +11,9 @@ import {
   GRAPH_TASK_GET_MAX_AVAILABLE_OPEN,
   GRAPH_TASK_RESULT_URL,
   GRAPH_TASK_SEND_ANSWER,
-  GRAPH_TASK_URL
+  GRAPH_TASK_URL,
+  SEND_EXPEDITION_FINISHED_TIME,
+  SET_START_TIME
 } from './urls'
 
 class ExpeditionService {
@@ -92,6 +95,32 @@ class ExpeditionService {
   getExpeditionPointsMaxOpen(taskResultId) {
     return axiosApiGet(GRAPH_TASK_GET_MAX_AVAILABLE_OPEN, {
       graphTaskResultId: taskResultId
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  setStartTime(resultId, timeMs) {
+    return axiosApiPost(SET_START_TIME, {
+      resultId: resultId,
+      startDateMillis: timeMs
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getRemainingTime(resultId) {
+    return axiosApiGet(GET_REMAINING_TIME, {
+      resultId: resultId
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  setSendTime(resultId, sendDateMillis) {
+    return axiosApiPost(SEND_EXPEDITION_FINISHED_TIME, {
+      resultId: resultId,
+      sendDateMillis: sendDateMillis
     }).catch((error) => {
       throw error
     })

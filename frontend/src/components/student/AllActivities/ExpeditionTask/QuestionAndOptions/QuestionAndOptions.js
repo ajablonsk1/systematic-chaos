@@ -14,7 +14,6 @@ function QuestionAndOptions(props) {
   const location = useLocation()
   const { activityId: expeditionId, nodeId: questionId, taskResultId } = location.state
   const remainingTime = props.remainingTime
-  // todo: why we use props and location ? use first or second option
 
   useEffect(() => {
     if (expeditionId == null || questionId == null || taskResultId == null) {
@@ -30,17 +29,22 @@ function QuestionAndOptions(props) {
   // before the timer runs out
   useEffect(() => {
     if (remainingTime === 0) {
-      navigate(
-        generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
-        {
-          state: {
-            expeditionId: expeditionId,
-            remainingTime: remainingTime
-          }
-        }
-      )
+      ExpeditionService.setSendTime(taskResultId, Date.now())
+        .then(() => {
+          navigate(
+            generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
+            {
+              state: {
+                expeditionId: expeditionId,
+                remainingTime: remainingTime,
+                taskResultId: taskResultId
+              }
+            }
+          )
+        })
+        .catch(() => {})
     }
-  }, [expeditionId, navigate, remainingTime])
+  }, [expeditionId, navigate, remainingTime, taskResultId])
 
   return (
     <ContentWithBackground>

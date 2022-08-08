@@ -15,7 +15,7 @@ import { ERROR_OCCURED } from '../../../../../utils/constants'
 
 function generateDoor(question, navigate, expeditionId, noDoors, taskResultId) {
   return (
-    <DoorColumn key={question.id} xl={12 / noDoors} md={12}>
+    <DoorColumn key={question.id + Date.now()} xl={12 / noDoors} md={12}>
       <Row className='mx-auto'>
         <h3>{question.difficulty?.toUpperCase()}</h3>
       </Row>
@@ -48,11 +48,10 @@ function generateDoor(question, navigate, expeditionId, noDoors, taskResultId) {
 
 function QuestionSelectionDoor(props) {
   const navigate = useNavigate()
-  const [questions, setQuestions] = useState(null)
+  const [questions, setQuestions] = useState(undefined)
   const location = useLocation()
   const { activityId: expeditionId, nodeId: parentId, taskResultId } = location.state
   const remainingTime = props.remainingTime
-  // todo: same situation - use props or location only
 
   useEffect(() => {
     if (parentId == null || expeditionId == null || taskResultId == null) {
@@ -66,16 +65,20 @@ function QuestionSelectionDoor(props) {
 
   useEffect(() => {
     if (remainingTime === 0 || questions?.length === 0) {
-      navigate(
-        generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
-        {
-          state: {
-            expeditionId: expeditionId,
-            remainingTime: remainingTime,
-            taskResultId: taskResultId
-          }
-        }
-      )
+      ExpeditionService.setSendTime(taskResultId, Date.now())
+        .then(() => {
+          navigate(
+            generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
+            {
+              state: {
+                expeditionId: expeditionId,
+                remainingTime: remainingTime,
+                taskResultId: taskResultId
+              }
+            }
+          )
+        })
+        .catch(() => {})
     }
   }, [questions, expeditionId, navigate, remainingTime, taskResultId])
 
@@ -87,9 +90,7 @@ function QuestionSelectionDoor(props) {
         <p className={'text-center text-danger h3 p-5'}>{ERROR_OCCURED}</p>
       ) : (
         <Row className='m-0'>
-          {questions.map((question, key) =>
-            generateDoor(question, navigate, expeditionId, questions.length, taskResultId)
-          )}
+          {questions.map((question) => generateDoor(question, navigate, expeditionId, questions.length, taskResultId))}
         </Row>
       )}
     </Content>
