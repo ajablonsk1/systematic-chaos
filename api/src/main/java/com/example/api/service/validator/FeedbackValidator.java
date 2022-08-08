@@ -2,14 +2,12 @@ package com.example.api.service.validator;
 
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.MissingProfessorFeedbackAttributeException;
 import com.example.api.error.exception.WrongPointsNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
-import com.example.api.model.util.File;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
@@ -45,7 +43,7 @@ public class FeedbackValidator {
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
             log.error("User {} not found in database", professorEmail);
-            throw new UsernameNotFoundException("User" + professorEmail + " not found in database");
+            throw new UsernameNotFoundException("User " + professorEmail + " not found in database");
         }
         if(professor.getAccountType() != AccountType.PROFESSOR) {
             throw new WrongUserTypeException("Wrong user type!", AccountType.PROFESSOR);
@@ -53,8 +51,8 @@ public class FeedbackValidator {
         Long id = form.getFileTaskResultId();
         FileTaskResult fileTaskResult = fileTaskResultRepo.findFileTaskResultById(id);
         if(fileTaskResult == null) {
-            log.error("File task with id {} not found in database", id);
-            throw new EntityNotFoundException("File task with id" + id + " not found in database");
+            log.error("File task result with id {} not found in database", id);
+            throw new EntityNotFoundException("File task result with id " + id + " not found in database");
         }
         ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
 
@@ -77,13 +75,8 @@ public class FeedbackValidator {
             fileTaskResultRepo.save(fileTaskResult);
         }
 
-        if(form.getFile() != null) {
-            File file = new File(null, form.getFileName(), form.getFile().getBytes());
-            fileRepo.save(file);
-            feedback.getFeedbackFiles().add(file);
-        }
-
         fileTaskResult.setEvaluated(true);
+        fileTaskResultRepo.save(fileTaskResult);
         return professorFeedbackRepo.save(feedback);
     }
 }

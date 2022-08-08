@@ -1,15 +1,13 @@
 package com.example.api.controller.activity.feedback;
 
-import com.example.api.dto.request.activity.feedback.DeleteFileFromProfessorFeedback;
+import com.example.api.dto.request.activity.feedback.DeleteFileFromProfessorFeedbackForm;
+import com.example.api.dto.request.activity.feedback.SaveFileToProfessorFeedbackForm;
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
-import com.example.api.dto.response.task.FileTaskInfoResponse;
 import com.example.api.dto.response.task.feedback.ProfessorFeedbackInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.MissingProfessorFeedbackAttributeException;
+import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongPointsNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.feedback.Feedback;
-import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
 import java.io.IOException;
 
 @RestController
@@ -27,35 +24,45 @@ import java.io.IOException;
 public class ProfessorFeedbackController {
     private final ProfessorFeedbackService feedbackService;
 
-    @PostMapping(path="", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<ProfessorFeedbackInfoResponse> saveProfessorFeedback(@ModelAttribute SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException, IOException, MissingProfessorFeedbackAttributeException, WrongPointsNumberException {
+    @PostMapping(path="")
+    public ResponseEntity<ProfessorFeedbackInfoResponse> saveProfessorFeedback(
+            @RequestParam Long fileTaskResultId,
+            @RequestParam(required = false) String content,
+            @RequestParam(required = false) Double points)
+            throws WrongUserTypeException, EntityNotFoundException, IOException, MissingAttributeException, WrongPointsNumberException {
+        SaveProfessorFeedbackForm form = new SaveProfessorFeedbackForm(fileTaskResultId, content, points);
         return ResponseEntity.ok().body(feedbackService.saveProfessorFeedback(form));
     }
 
-    @GetMapping(path="/get/by-file-task-result-id", params = "fileTaskResultId")
+    @GetMapping("/get/by-file-task-result-id")
     public ResponseEntity<ProfessorFeedbackInfoResponse> getProfessorFeedbackForFileTaskResult(@RequestParam Long fileTaskResultId)
-            throws EntityNotFoundException, MissingProfessorFeedbackAttributeException {
-        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForFileTaskResult(fileTaskResultId));
+            throws EntityNotFoundException, MissingAttributeException {
+        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackInfoForFileTaskResult(fileTaskResultId));
     }
 
-    @GetMapping(path="/get", params = {"fileTaskId", "studentEmail"})
+    @GetMapping("/get")
     public ResponseEntity<ProfessorFeedbackInfoResponse> getProfessorFeedbackForFileTaskAndStudent(
             @RequestParam Long fileTaskId,
             @RequestParam String studentEmail
     )
-            throws EntityNotFoundException, MissingProfessorFeedbackAttributeException {
-        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackForFileTaskAndStudent(fileTaskId, studentEmail));
+            throws EntityNotFoundException, MissingAttributeException {
+        return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackInfoForFileTaskAndStudent(fileTaskId, studentEmail));
     }
 
-    @DeleteMapping("file/delete")
+    @PostMapping(path="/file/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Long> saveFileToProfessorFeedback(@ModelAttribute SaveFileToProfessorFeedbackForm form)
+            throws EntityNotFoundException, MissingAttributeException, IOException {
+        return ResponseEntity.ok().body(feedbackService.saveFileToProfessorFeedback(form));
+    }
+
+    @DeleteMapping("/file/delete")
     public ResponseEntity<Long> deleteFileFromProfessorFeedback(
             @RequestParam Long fileTaskId,
             @RequestParam String studentEmail,
             @RequestParam int index
     )
-            throws EntityNotFoundException, MissingProfessorFeedbackAttributeException {
-        DeleteFileFromProfessorFeedback form = new DeleteFileFromProfessorFeedback(fileTaskId, studentEmail, index);
+            throws EntityNotFoundException, MissingAttributeException {
+        DeleteFileFromProfessorFeedbackForm form = new DeleteFileFromProfessorFeedbackForm(fileTaskId, studentEmail, index);
         return ResponseEntity.ok().body(feedbackService.deleteFileFromProfessorFeedback(form));
     }
 }

@@ -425,6 +425,7 @@ public class DatabaseConfig {
             graphTaskResultService.saveGraphTaskResult(result2);
 
             FileTaskResult fileResult = new FileTaskResult();
+            fileResult.setId(1L);
             fileResult.setFileTask(fileTask);
             fileResult.setUser(student1);
             fileResult.setEvaluated(false);

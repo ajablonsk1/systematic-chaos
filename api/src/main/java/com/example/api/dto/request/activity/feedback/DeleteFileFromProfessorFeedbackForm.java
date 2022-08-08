@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteFileFromProfessorFeedback {
+public class DeleteFileFromProfessorFeedbackForm {
     @Schema(required = true) private Long fileTaskId;
     @Schema(required = true) private String studentEmail;
     @Schema(required = true) private int index;

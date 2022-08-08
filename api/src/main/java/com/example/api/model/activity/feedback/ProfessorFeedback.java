@@ -1,8 +1,5 @@
 package com.example.api.model.activity.feedback;
 
-import com.example.api.dto.response.task.feedback.ProfessorFeedbackInfoResponse;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.MissingProfessorFeedbackAttributeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.util.File;
 import lombok.AllArgsConstructor;
@@ -29,8 +26,4 @@ public class ProfessorFeedback extends Feedback{
     private List<File> feedbackFiles = new LinkedList<>();
 
     private Double points;
-
-    public ProfessorFeedbackInfoResponse toInfoResponse() throws MissingProfessorFeedbackAttributeException, EntityNotFoundException {
-        return new ProfessorFeedbackInfoResponse(this);
-    }
 }
