@@ -7,8 +7,12 @@ import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ManagementCard from './ManagementCard'
 import { useNavigate } from 'react-router-dom'
 import { TableBodyRow } from './TableStyles'
+import GameLoader from './GameLoader/GameLoader'
+import { useState } from 'react'
 
 export default function GameManagement() {
+  const [showConfigModal, setShowConfigModal] = useState(false)
+
   // TODO: use endpoint later
   const chaptersList = getChaptersList()
 
@@ -27,7 +31,7 @@ export default function GameManagement() {
         Tutaj możesz dostosować wygląd, fabułę i sposób działania rozgrywki zgodnie ze swoimi potrzebami.
       </p>
       <Container>
-        <Row className={'py-2'}>
+        <Row>
           <Col>
             <GameCardOptionPick>
               <h5 className='text-center pt-2'>Rozdziały</h5>
@@ -57,27 +61,35 @@ export default function GameManagement() {
           </Col>
         </Row>
         <Row className={'py-2 text-center'}>
-          <Col>
+          <Col md={4} className={'py-2'}>
             <ManagementCard
               header={'Grupy'}
               description={'Sprawdź listę grup zajęciowych i ich kody dostępu.'}
               routePath={generateFullPath(() => PageRoutes.Teacher.GameManagement.Groups.GROUPS)}
             />
           </Col>
-          <Col>
+          <Col md={4} className={'py-2'}>
             <ManagementCard
               header={'Rangi i odznaki'}
               description={'Personalizuj nazwy odznak i sposób ich przyznawania.'}
             />
           </Col>
-          <Col>
+          <Col md={4} className={'py-2'}>
             <ManagementCard
               header={'Temat gry'}
               description={'Dopasuj temat fabuły i wygląd całej gry oraz całego systemu.'}
             />
           </Col>
+          <Col md={4} className={'py-2'}>
+            <ManagementCard
+              header={'Wczytaj stan gry'}
+              description={'Wyczyść cały stan bazy danych i wczytaj stan od nowa.'}
+              callback={() => setShowConfigModal(true)}
+            />
+          </Col>
         </Row>
       </Container>
+      <GameLoader showModal={showConfigModal} setShowModal={setShowConfigModal} />
     </Content>
   )
 }
