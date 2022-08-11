@@ -1,13 +1,14 @@
 import React from 'react'
 import { Table } from 'react-bootstrap'
 import { getHeroName } from '../../../utils/constants'
-import { TableBodyRow } from '../../professor/GameManagement/TableStyles'
-import { TableContainer } from './RankingStyle'
+import { TableContainer, TableRow } from './RankingStyle'
 
 function Ranking(props) {
+  const rowColor = (index) => (props.studentId && index === props.studentId ? 'var(--button-green)' : '#223762')
+
   return (
     <TableContainer>
-      <Table className={'my-0'} style={{ color: 'var(--font-color)' }}>
+      <Table className={'my-0'}>
         <thead>
           <tr>
             <th>Nazwa gracza</th>
@@ -19,12 +20,12 @@ function Ranking(props) {
         <tbody>
           {props.rankingList.length > 0 ? (
             props.rankingList.map((student, index) => (
-              <TableBodyRow key={index + Date.now}>
+              <TableRow key={index + Date.now} $backgroundColor={rowColor(index)}>
                 <td>{student.firstName + ' ' + student.lastName}</td>
                 <td>{student.groupName}</td>
                 <td>{getHeroName(student.heroType)}</td>
                 <td>{student.points}</td>
-              </TableBodyRow>
+              </TableRow>
             ))
           ) : (
             <tr>
