@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Overlay, Spinner, Tooltip } from 'react-bootstrap'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Overlay, Spinner } from 'react-bootstrap'
 import JSONInput from 'react-json-editor-ajrm'
 import locale from 'react-json-editor-ajrm/locale/en'
 import { getConfigJson } from './mockData'
 import { debounce } from 'lodash/function'
+import { CustomTooltip } from './GameLoaderStyle'
 
 function GameLoader(props) {
   const jsonConfig = getConfigJson()
@@ -43,15 +44,15 @@ function GameLoader(props) {
     if (showTooltip) {
       debounceHideTooltip()
     }
-  }, [showTooltip])
+  }, [debounceHideTooltip, showTooltip])
 
   return (
     <>
-      <Overlay target={sendButtonRef.current} show={showTooltip} placement='right'>
-        <Tooltip>
+      <Overlay target={sendButtonRef.current} show={showTooltip} placement='bottom'>
+        <CustomTooltip>
           Niemożliwe jest zapisanie ponieważ nie dokonano żadnych zmian lub zmiany nadal się zapisują. Spróbuj ponownie
           za chwilę
-        </Tooltip>
+        </CustomTooltip>
       </Overlay>
 
       <Modal show={props.showModal} onHide={() => props.setShowModal(false)} size={'lg'}>
