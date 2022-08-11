@@ -62,7 +62,7 @@ export default function UsersTable(props) {
     if (!query) return setUsers([...usersList])
     setUsers(
       usersList?.filter((user) =>
-        (user.firstName.toLowerCase() + user.lastName.toLowerCase()).includes(query?.toLowerCase())
+        (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).includes(query?.toLowerCase())
       )
     )
   }, 300)

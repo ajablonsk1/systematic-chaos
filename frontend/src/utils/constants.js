@@ -36,6 +36,7 @@ import warrior15 from '../storage/resources/warrior/14.png'
 import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
 import { generateFullPath, PageRoutes } from '../routes/PageRoutes'
+import { HeroType } from './userRole'
 
 export const UserSidebarTitles = {
   [generateFullPath(() => PageRoutes.Student.GameCard.GAME_CARD)]: ['Karta gry', faHouse],
@@ -203,4 +204,19 @@ export const percentagesToGrade = (percentages) => {
 export const GradesTableType = {
   GRADES_TABLE: 0,
   UNMARKED_ACTIVITIES_TABLE: 1
+}
+
+export const getHeroName = (heroName) => {
+  switch (heroName) {
+    case HeroType.PRIEST:
+      return 'Kapłan'
+    case HeroType.ROGUE:
+      return 'Łotrzyk'
+    case HeroType.WARRIOR:
+      return 'Wojownik'
+    case HeroType.WIZARD:
+      return 'Czarodziej'
+    default:
+      return
+  }
 }
