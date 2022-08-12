@@ -57,18 +57,19 @@ function GameLoader(props) {
 
       <Modal show={props.showModal} onHide={() => props.setShowModal(false)} size={'lg'}>
         <ModalHeader>
-          <h4 className={'text-center w-100'}>Wczytaj stan gry</h4>
+          <h4 className={'text-center w-100'}>Wczytaj konfigurację gry</h4>
         </ModalHeader>
         <ModalBody>
           <JSONInput
             id='a_unique_id'
             placeholder={jsonConfig}
+            confirmGood
             locale={locale}
             height='550px'
             width={'100%'}
             style={{ body: { fontSize: '15px' } }}
-            onKeyPressUpdate={false}
             onBlur={editJsonObject}
+            onChange={editJsonObject}
           />
         </ModalBody>
         <ModalFooter className={'d-flex justify-content-center'}>

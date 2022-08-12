@@ -82,7 +82,7 @@ export default function GameManagement() {
           </Col>
           <Col md={4} className={'py-2'}>
             <ManagementCard
-              header={'Wczytaj stan gry'}
+              header={'Wczytaj konfigurację gry'}
               description={'Wyczyść cały stan bazy danych i wczytaj stan od nowa.'}
               callback={() => setShowConfigModal(true)}
             />
