@@ -52,3 +52,7 @@ const ranking = [
 export const getRanking = () => {
   return ranking
 }
+
+export const myPosition = () => {
+  return 2
+}
