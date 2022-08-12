@@ -23,7 +23,7 @@ export const GameButton = (props) => {
     <Card.Footer style={{ paddingTop: '10px' }}>
       <Button
         onClick={() => {
-          // TODO: it would be better to use a callback function
+          if (props.callback) props.callback()
           if (props.route) navigate(props.route)
         }}
         style={buttonStyle}
