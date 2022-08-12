@@ -10,7 +10,8 @@ function Ranking(props) {
       <Table className={'my-0'} style={{ color: 'var(--font-color)' }}>
         <thead>
           <tr>
-            <th>Nazwa gracza</th>
+            <th>Pozycja</th>
+            <th>Gracz</th>
             <th>Grupa zajęciowa</th>
             <th>Typ bohatera</th>
             <th>Punkty</th>
@@ -19,7 +20,8 @@ function Ranking(props) {
         <tbody>
           {props.rankingList.length > 0 ? (
             props.rankingList.map((student, index) => (
-              <TableBodyRow key={index + Date.now}>
+              <TableBodyRow key={index + Date.now()}>
+                <td>{index + 1}</td>
                 <td>{student.firstName + ' ' + student.lastName}</td>
                 <td>{student.groupName}</td>
                 <td>{getHeroName(student.heroType)}</td>
