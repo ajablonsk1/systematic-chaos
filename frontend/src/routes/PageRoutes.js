@@ -55,7 +55,7 @@ export const PageRoutes = {
       GAME_SUMMARY: ''
     },
     Ranking: {
-      MAIN_PATH: 'ranking/*',
+      MAIN_PATH: 'students-ranking/*',
       RANKING: ''
     },
     GameManagement: {
