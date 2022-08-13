@@ -71,7 +71,7 @@ export const TableRow = styled.tr`
     min-width: 60px;
   }
 
-  & td:last-child svg:hover {
+  & td svg:hover {
     cursor: pointer;
   }
 `
