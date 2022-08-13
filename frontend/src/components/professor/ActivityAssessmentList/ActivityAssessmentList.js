@@ -17,7 +17,7 @@ export default function ActivityAssessmentList() {
     ProfessorService.getTasksToEvaluateList()
       .then((activityList) => {
         Promise.allSettled(
-          activityList?.map((activity) => {
+          (activityList?.filter((activity) => activity.toGrade !== 0)).map((activity) => {
             return ProfessorService.getFirstTaskToEvaluate(activity.activityId).then((response) => {
               return {
                 activity: response,
