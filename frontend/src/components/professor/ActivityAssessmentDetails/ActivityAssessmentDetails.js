@@ -27,14 +27,15 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import professorService from '../../../services/professor.service'
 import { Activity } from '../../../utils/constants'
+import Loader from '../../general/Loader/Loader'
 
 export default function ActivityAssessmentDetails() {
-  // todo: remove it I think
+
   // const navigate = useNavigate();
   const location = useLocation();
   const [activityResponseInfo, setActivityResponseInfo] = useState(undefined)
+  const [remarks, setRemarks] = useState('')
 
-  // we will get data based on the id
   const { activityId } = location.state;
   
   useEffect(() => {
@@ -43,9 +44,13 @@ export default function ActivityAssessmentDetails() {
     )
   }, [activityId])
 
+  const sendFeedbackAndGetNext = () => {
+    
+  }
+
   return (
     <Content>
-      <ContentCol>
+      {activityResponseInfo ? (<ContentCol>
         <ActivityTitle>
           <h4>
             {getActivityTypeName(Activity.TASK) + ' - ' + activityResponseInfo.activityName}
@@ -83,7 +88,7 @@ export default function ActivityAssessmentDetails() {
 
         <RemarksCol>
           <h4>Uwagi:</h4>
-          <RemarksTextArea />
+          <RemarksTextArea onChange={(newText) => {setRemarks(newText); console.log(newText)}}/>
         </RemarksCol>
 
         <PointsRow>
@@ -94,9 +99,9 @@ export default function ActivityAssessmentDetails() {
           </Row>
         </PointsRow>
 
-        <AcceptButton>Zaakceptuj i przejdź do kolejnej odpowiedzi</AcceptButton>
+        <AcceptButton onClick={() => {console.log("elo")}}>Zaakceptuj i przejdź do kolejnej odpowiedzi</AcceptButton>
         <RemainingCount>Pozostało {activityResponseInfo.remaining} odpowiedzi do sprawdzenia</RemainingCount>
-      </ContentCol>
+      </ContentCol>) : (<Loader/>)}
     </Content>
   )
 }
