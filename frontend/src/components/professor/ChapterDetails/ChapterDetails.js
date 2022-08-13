@@ -14,6 +14,7 @@ import DeletionModal from './DeletionModal'
 import EditChapterModal from './EditChapterModal'
 import JSONEditor from '../../general/jsonEditor/JSONEditor'
 import { getConfigJson } from '../GameManagement/GameLoader/mockData'
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -23,10 +24,9 @@ function ChapterDetails() {
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false)
   const [isEditChapterModalOpen, setEditChapterModalOpen] = useState(false)
   const mapCardBody = useRef()
-  const [editActivityData, setEditActivityData] = useState(null)
+  const [chosenActivityData, setChosenActivityData] = useState(null)
   const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
-  // const [editedActivityId, setEditedActivityId] = useState(null)
-
+  const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
   const chapterDetails = getChapterDetails(+chapterId)
 
   useEffect(() => {
@@ -38,13 +38,22 @@ function ChapterDetails() {
 
   const startActivityEdition = (activity) => {
     // TODO: depending on the type of activity, we will use a different endpoint
-    setEditActivityData({
-      activityId: activity,
+    setChosenActivityData({
+      activityId: activity.id,
       activityType: getActivityTypeName(activity.type),
       activityName: activity.title,
       jsonConfig: getConfigJson() // TODO: endpoint response
     })
     setIsEditActivityModalOpen(true)
+  }
+
+  const deleteActivity = (activity) => {
+    setChosenActivityData({
+      activityId: activity.id,
+      activityType: getActivityTypeName(activity.type),
+      activityName: activity.title
+    })
+    setIsDeleteActivityModalOpen(true)
   }
 
   return (
@@ -129,7 +138,7 @@ function ChapterDetails() {
                 <Table>
                   <tbody>
                     {chapterDetails.activities.map((activity, index) => (
-                      <TableRow key={activity.title + index} onClick={() => startActivityEdition(activity)}>
+                      <TableRow key={activity.title + index}>
                         <td>
                           <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
                         </td>
@@ -139,6 +148,12 @@ function ChapterDetails() {
                           ({activity.posX}, {activity.posY})
                         </td>
                         <td>Pkt: {activity.points}</td>
+                        <td>
+                          <FontAwesomeIcon icon={faPenToSquare} onClick={() => startActivityEdition(activity)} />
+                        </td>
+                        <td>
+                          <FontAwesomeIcon icon={faTrash} onClick={() => deleteActivity(activity)} />
+                        </td>
                       </TableRow>
                     ))}
                   </tbody>
@@ -161,23 +176,40 @@ function ChapterDetails() {
       <DeletionModal
         showModal={isDeletionModalOpen}
         setModalOpen={setDeletionModalOpen}
-        chapterTitle={chapterDetails.name}
+        modalTitle={'Usunięcie rozdziału'}
+        modalBody={
+          <>
+            Czy na pewno chcesz usunąć rozdział: <br />
+            <strong>{chapterDetails.name}</strong>?
+          </>
+        }
       />
-
       <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
 
       <JSONEditor
         setShowModal={setIsEditActivityModalOpen}
         showModal={isEditActivityModalOpen}
-        modalHeader={`Edycja aktywności: ${editActivityData?.activityName}`}
-        jsonConfig={editActivityData?.jsonConfig}
+        modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
+        jsonConfig={chosenActivityData?.jsonConfig}
         submitButtonText={'Zapisz zmiany'}
         successModalHeader={'Edycja zakończona pomyślnie'}
         successModalBody={
           <p>
-            Twoje zmiany wprowadzone dla aktywności typu: <strong>{editActivityData?.activityType}</strong>
-            <br /> o nazwie: <strong>{editActivityData?.activityName}</strong> zakończyła się pomyślnie.
+            Twoje zmiany wprowadzone dla aktywności typu: <strong>{chosenActivityData?.activityType}</strong>
+            <br /> o nazwie: <strong>{chosenActivityData?.activityName}</strong> zakończyła się pomyślnie.
           </p>
+        }
+      />
+
+      <DeletionModal
+        showModal={isDeleteActivityModalOpen}
+        setModalOpen={setIsDeleteActivityModalOpen}
+        modalTitle={'Usunięcie aktywności'}
+        modalBody={
+          <>
+            Czy na pewno chcesz usunąć aktywność typu: <strong>{chosenActivityData?.activityType}</strong>
+            <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
+          </>
         }
       />
     </Content>

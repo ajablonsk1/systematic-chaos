@@ -3,15 +3,12 @@ import { Button, Card, Modal } from 'react-bootstrap'
 
 function DeletionModal(props) {
   return (
-    <Modal show={props.showModal}>
+    <Modal show={props.showModal} onHide={() => props.setModalOpen(false)}>
       <Card>
         <Card.Header>
-          <Card.Title>Usunięcie rozdziału</Card.Title>
+          <Card.Title>{props.modalTitle}</Card.Title>
         </Card.Header>
-        <Card.Body>
-          Czy na pewno chcesz usunąć rozdział: <br />
-          <strong>{props.chapterTitle}</strong>?
-        </Card.Body>
+        <Card.Body>{props.modalBody}</Card.Body>
         <Card.Footer className={'text-center'}>
           <Button className={'mr-1'} variant={'secondary'} onClick={() => props.setModalOpen(false)}>
             Anuluj
