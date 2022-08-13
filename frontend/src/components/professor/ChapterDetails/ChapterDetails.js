@@ -4,7 +4,7 @@ import { getChapterDetails } from '../GameManagement/mockData'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Table } from 'react-bootstrap'
 import { ERROR_OCCURED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
-import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard } from './ChapterDetailsStyles'
+import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
@@ -12,6 +12,8 @@ import ActivityService from '../../../services/activity.service'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
 import EditChapterModal from './EditChapterModal'
+import JSONEditor from '../../general/jsonEditor/JSONEditor'
+import { getConfigJson } from '../GameManagement/GameLoader/mockData'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -21,6 +23,9 @@ function ChapterDetails() {
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false)
   const [isEditChapterModalOpen, setEditChapterModalOpen] = useState(false)
   const mapCardBody = useRef()
+  const [editActivityData, setEditActivityData] = useState(null)
+  const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
+  // const [editedActivityId, setEditedActivityId] = useState(null)
 
   const chapterDetails = getChapterDetails(+chapterId)
 
@@ -30,6 +35,17 @@ function ChapterDetails() {
       .then((response) => setChapterMap(response))
       .catch(() => setChapterMap(null))
   }, [])
+
+  const startActivityEdition = (activity) => {
+    // TODO: depending on the type of activity, we will use a different endpoint
+    setEditActivityData({
+      activityId: activity,
+      activityType: getActivityTypeName(activity.type),
+      activityName: activity.title,
+      jsonConfig: getConfigJson() // TODO: endpoint response
+    })
+    setIsEditActivityModalOpen(true)
+  }
 
   return (
     <Content>
@@ -113,7 +129,7 @@ function ChapterDetails() {
                 <Table>
                   <tbody>
                     {chapterDetails.activities.map((activity, index) => (
-                      <tr key={activity.title + index}>
+                      <TableRow key={activity.title + index} onClick={() => startActivityEdition(activity)}>
                         <td>
                           <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
                         </td>
@@ -123,7 +139,7 @@ function ChapterDetails() {
                           ({activity.posX}, {activity.posY})
                         </td>
                         <td>Pkt: {activity.points}</td>
-                      </tr>
+                      </TableRow>
                     ))}
                   </tbody>
                 </Table>
@@ -147,7 +163,23 @@ function ChapterDetails() {
         setModalOpen={setDeletionModalOpen}
         chapterTitle={chapterDetails.name}
       />
+
       <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
+
+      <JSONEditor
+        setShowModal={setIsEditActivityModalOpen}
+        showModal={isEditActivityModalOpen}
+        modalHeader={`Edycja aktywności: ${editActivityData?.activityName}`}
+        jsonConfig={editActivityData?.jsonConfig}
+        submitButtonText={'Zapisz zmiany'}
+        successModalHeader={'Edycja zakończona pomyślnie'}
+        successModalBody={
+          <p>
+            Twoje zmiany wprowadzone dla aktywności typu: <strong>{editActivityData?.activityType}</strong>
+            <br /> o nazwie: <strong>{editActivityData?.activityName}</strong> zakończyła się pomyślnie.
+          </p>
+        }
+      />
     </Content>
   )
 }

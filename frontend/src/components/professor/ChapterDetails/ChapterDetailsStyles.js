@@ -61,3 +61,10 @@ export const ButtonsCol = styled(Col)`
   position: relative;
   bottom: 1.5rem;
 `
+
+export const TableRow = styled.tr`
+  &:hover {
+    background-color: var(--dark-blue);
+    cursor: pointer;
+  }
+`
