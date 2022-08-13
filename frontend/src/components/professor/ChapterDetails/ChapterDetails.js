@@ -27,7 +27,6 @@ function ChapterDetails() {
   const [chosenActivityData, setChosenActivityData] = useState(null)
   const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
   const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
-
   const chapterDetails = getChapterDetails(+chapterId)
 
   useEffect(() => {
@@ -183,7 +182,6 @@ function ChapterDetails() {
           </>
         }
       />
-
       <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
 
       <JSONEditor
