@@ -4,7 +4,7 @@ import { Content } from '../../App/AppGeneralStyles'
 import PercentageCircle from './ChartAndStats/PercentageCircle'
 import LastPointsTable from './Tables/LastPointsTable'
 import { TabsContainer } from './PointsPageStyle'
-import GratisPointsTable from './Tables/GratisPointsTable'
+import BonusPointsTable from './Tables/BonusPointsTable'
 
 export default function Points() {
   const points = 529
@@ -39,8 +39,8 @@ export default function Points() {
           <Tab className={'w-100'} eventKey='last-points' title='Ostatnio zdobyte punkty'>
             <LastPointsTable />
           </Tab>
-          <Tab eventKey={'gratis-points'} title={'Punkty dodatkowe'}>
-            <GratisPointsTable />
+          <Tab eventKey={'bonus-points'} title={'Punkty dodatkowe'}>
+            <BonusPointsTable />
           </Tab>
         </TabsContainer>
       </Row>

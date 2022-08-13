@@ -4,7 +4,7 @@ import { FIELD_REQUIRED, POSITIVE_NUMBER } from '../../../utils/constants'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { Formik } from 'formik'
 
-function GratisPointsModal(props) {
+function BonusPointsModal(props) {
   return (
     <Modal show={props.show} onHide={() => props.setModalOpen(false)} size={'lg'}>
       <ModalHeader>
@@ -61,4 +61,4 @@ function GratisPointsModal(props) {
   )
 }
 
-export default GratisPointsModal
+export default BonusPointsModal

@@ -63,7 +63,7 @@ const table = [
   }
 ]
 
-const gratisPoints = [
+const bonusPoints = [
   {
     date: '10.03.2022',
     points: 20,
@@ -112,6 +112,6 @@ export function getTableContent() {
   return table
 }
 
-export function getGratisPoints() {
-  return gratisPoints
+export function getBonusPoints() {
+  return bonusPoints
 }

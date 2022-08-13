@@ -1,9 +1,9 @@
 import React from 'react'
-import { getGratisPoints } from '../../../../storage/pointsTable'
+import { getBonusPoints } from '../../../../storage/pointsTable'
 import { TableContainer } from './TableStyle'
 
-function GratisPointsTable() {
-  const gratisPoints = getGratisPoints()
+function BonusPointsTable() {
+  const bonusPoints = getBonusPoints()
 
   const tableHeaders = ['Data', 'Liczba punktów', 'Opis', 'Osoba przyznająca'].map((title, index) => (
     <th key={index} className='w-25'>
@@ -17,7 +17,7 @@ function GratisPointsTable() {
         <tr className='w-100'>{tableHeaders}</tr>
       </thead>
       <tbody>
-        {gratisPoints.map((row, idx) => (
+        {bonusPoints.map((row, idx) => (
           <tr className='w-100' key={idx}>
             <td className='w-25'>{row.date}</td>
             <td className='w-25'>{row.points}</td>
@@ -30,4 +30,4 @@ function GratisPointsTable() {
   )
 }
 
-export default GratisPointsTable
+export default BonusPointsTable

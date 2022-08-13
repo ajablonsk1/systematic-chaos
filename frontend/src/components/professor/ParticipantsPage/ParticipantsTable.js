@@ -5,11 +5,11 @@ import ChangeGroupModal from './ChangeGroupModal'
 import { Button } from 'react-bootstrap'
 import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import GratisPointsModal from './GratisPointsModal'
+import BonusPointsModal from './BonusPointsModal'
 
 function ParticipantsTable(props) {
   const [changeGroupModalOpen, setChangeGroupModalOpen] = useState(false)
-  const [gratisPointsModalOpen, setGratisPointsModalOpen] = useState(false)
+  const [bonusPointsModalOpen, setBonusPointsModalOpen] = useState(false)
   const [chosenStudent, setChosenStudent] = useState()
   const [studentsList, setStudentsList] = useState([])
 
@@ -69,7 +69,7 @@ function ParticipantsTable(props) {
                   <Button
                     className={'ml-2'}
                     style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
-                    onClick={() => setGratisPointsModalOpen(true)}
+                    onClick={() => setBonusPointsModalOpen(true)}
                   >
                     Przyznaj punkty
                   </Button>
@@ -86,7 +86,7 @@ function ParticipantsTable(props) {
         </tbody>
       </TableContainer>
       <ChangeGroupModal show={changeGroupModalOpen} setModalOpen={setChangeGroupModalOpen} student={chosenStudent} />
-      <GratisPointsModal show={gratisPointsModalOpen} setModalOpen={setGratisPointsModalOpen} />
+      <BonusPointsModal show={bonusPointsModalOpen} setModalOpen={setBonusPointsModalOpen} />
     </GameCardOptionPick>
   )
 }
