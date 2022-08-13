@@ -23,14 +23,13 @@ const ActivityListItemRow = styled(Row)`
 
 export default function ActivityListItem(props) {
   const navigate = useNavigate()
-
   return (
     <ActivityListItemRow
       onClick={() => {
         navigate(
           generateFullPath(() => PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT),
           {
-            state: { activityId: props.activity.activityId }
+            state: { activityId: props.activity.fileTaskId }
           }
         )
       }}
