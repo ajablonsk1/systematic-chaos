@@ -150,6 +150,8 @@ function ChapterDetails() {
                         <td>Pkt: {activity.points}</td>
                         <td>
                           <FontAwesomeIcon icon={faPenToSquare} onClick={() => startActivityEdition(activity)} />
+                        </td>
+                        <td>
                           <FontAwesomeIcon icon={faTrash} onClick={() => deleteActivity(activity)} />
                         </td>
                       </TableRow>
