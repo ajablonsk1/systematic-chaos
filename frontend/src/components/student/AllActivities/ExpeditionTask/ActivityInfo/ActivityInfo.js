@@ -5,7 +5,7 @@ import { Content } from '../../../../App/AppGeneralStyles'
 import ActivityContent from './ActivityContent'
 import Loader from '../../../../general/Loader/Loader'
 import ExpeditionService from '../../../../../services/expedition.service'
-import { ERROR_OCCURED } from '../../../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../../../utils/constants'
 
 export default function ActivityInfo() {
   const location = useLocation()
@@ -19,7 +19,7 @@ export default function ActivityInfo() {
         setActivity(response)
       })
       .catch(() => {
-        setErrorMessage(ERROR_OCCURED)
+        setErrorMessage(ERROR_OCCURRED)
       })
   }, [activityId])
 

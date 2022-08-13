@@ -4,7 +4,7 @@ import { Col } from 'react-bootstrap'
 import ActivityListItem from './ActivityListItem'
 import ProfessorService from '../../../services/professor.service'
 import Loader from '../../general/Loader/Loader'
-import { ERROR_OCCURED } from '../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 // note: currently the list assumes we can only manually grade File Tasks - this is due to the way our DB currently works,
 // an ID is unique only in the task group. we might need to add a field that lets us know which task type it is
@@ -49,7 +49,7 @@ export default function ActivityAssessmentList() {
         {activityList === undefined ? (
           <Loader />
         ) : activityList == null ? (
-          <p className={'text-center text-danger h4'}>{ERROR_OCCURED}</p>
+          <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
         ) : (
           activityList.map((activity) => {
             const listActivity = activity.activity.activity
