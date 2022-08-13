@@ -11,7 +11,7 @@ const ChapterCard = styled(Card)`
   }
 
   .card-body {
-    background-color: #223762;
+    background-color: var(--light-blue);
   }
 `
 
@@ -27,7 +27,7 @@ export const SummaryCard = styled(ChapterCard)`
   overflow-x: hidden;
 
   .list-group-item {
-    background-color: #223762;
+    background-color: var(--light-blue);
   }
 
   #activities,
