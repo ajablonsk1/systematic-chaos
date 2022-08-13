@@ -1,6 +1,6 @@
 import { parseJwt } from '../utils/Api'
-import { axiosApiGet, axiosApiGetFile } from '../utils/axios'
-import { GET_CSV, GET_TASKS_TO_EVALUATE, GET_FIRST_TASK_TO_EVALUATE } from './urls'
+import { axiosApiGet, axiosApiGetFile, axiosApiPostParams } from '../utils/axios'
+import { GET_CSV, GET_TASKS_TO_EVALUATE, GET_FIRST_TASK_TO_EVALUATE, PROF_FEEDBACK } from './urls'
 
 class ProfessorService {
   getUser() {
@@ -27,6 +27,10 @@ class ProfessorService {
     return axiosApiGet(GET_FIRST_TASK_TO_EVALUATE, { fileTaskId: taskId }).catch((error) => {
       throw error
     })
+  }
+
+  sendTaskEvaluation(taskId, remarks, points) {
+    return axiosApiPostParams(PROF_FEEDBACK, {fileTaskResultId: taskId, content: remarks, points: points })
   }
 }
 

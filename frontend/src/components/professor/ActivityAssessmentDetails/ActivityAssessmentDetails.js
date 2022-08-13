@@ -24,29 +24,43 @@ import { getActivityTypeName } from '../../../utils/constants'
 //https://www.flaticon.com/free-icon/user-picture_21104
 import userPicture from '../../../utils/resources/user-picture.png'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import professorService from '../../../services/professor.service'
+import { useNavigate, useLocation } from 'react-router-dom'
+import ProfessorService from '../../../services/professor.service'
 import { Activity } from '../../../utils/constants'
 import Loader from '../../general/Loader/Loader'
+import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 
 export default function ActivityAssessmentDetails() {
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const { activityId } = location.state;
 
   const [activityResponseInfo, setActivityResponseInfo] = useState(undefined)
   const [remarks, setRemarks] = useState('')
   const [givenPoints, setGivenPoints] = useState(0)
-
+  
   useEffect(() => {
-    professorService.getFirstTaskToEvaluate(activityId).then(
-      (activityResponseInfo) => {setActivityResponseInfo(activityResponseInfo)}
+    ProfessorService.getFirstTaskToEvaluate(activityId).then(
+      (activityResponseInfo) => {setActivityResponseInfo(activityResponseInfo); console.log(activityResponseInfo)}
     )
   }, [activityId])
 
-  const sendFeedbackAndGetNext = () => {
-    
+  const sendFeedbackAndGetNextIfAble = () => {
+    console.log(activityId, remarks, givenPoints)
+    ProfessorService.sendTaskEvaluation(activityResponseInfo.fileTaskResponseId, remarks, givenPoints).then((response) => {
+      console.log(response)
+      if(activityResponseInfo.remaining > 0) {
+        setRemarks('');
+        setGivenPoints(0);
+        ProfessorService.getFirstTaskToEvaluate(activityId).then(
+          (activityResponseInfo) => {setActivityResponseInfo(activityResponseInfo); console.log(activityResponseInfo)}
+        )
+      }
+      else {
+        navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment))
+      }
+    });
   }
 
   return (
@@ -100,7 +114,7 @@ export default function ActivityAssessmentDetails() {
           </Row>
         </PointsRow>
 
-        <AcceptButton onClick={() => {console.log("elo")}} disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}>Zaakceptuj i przejdź do kolejnej odpowiedzi</AcceptButton>
+        <AcceptButton onClick={sendFeedbackAndGetNextIfAble} disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}>Zaakceptuj i przejdź do kolejnej odpowiedzi</AcceptButton>
         <RemainingCount>Pozostało {activityResponseInfo.remaining} odpowiedzi do sprawdzenia</RemainingCount>
       </ContentCol>) : (<Loader/>)}
     </Content>

@@ -76,10 +76,14 @@ public class TaskService {
         if(fileTaskResults.size() > 0) {
             FileTaskResult result = fileTaskResults.get(0);
             long num = fileTaskResults.size();
-            boolean isLate = result.getSendDateMillis() - result.getFileTask().getSolveDateMillis() > 0;
+            boolean isLate = false;
+            //TODO: investigate further
+            if(result.getSendDateMillis() != null){
+                isLate = result.getSendDateMillis() - result.getFileTask().getSolveDateMillis() > 0;
+            }
             return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), result.getUser().getFirstName(),
                     result.getUser().getLastName(), task.getName(), isLate, task.getDescription(),
-                    result.getAnswer(), result.getFiles(), task.getMaxPoints(), num-1);
+                    result.getAnswer(), result.getFiles(), task.getMaxPoints(), id, num-1);
         }
         return null;
     }

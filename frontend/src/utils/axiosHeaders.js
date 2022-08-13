@@ -10,7 +10,6 @@ export const validHeader = (params) => ({
 export const multipartFileHeader = (params) => ({
   headers: {
     ...authHeader(),
-    'Content-Type': 'multipart/form-data'
   },
   params: params
 })

@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TaskToEvaluateResponse {
     private String userEmail;
-    private Long fileTaskId;
+    private Long fileTaskResponseId;
     private String firstName;
     private String lastName;
     private String activityName;
@@ -21,5 +21,6 @@ public class TaskToEvaluateResponse {
     private String userAnswer;
     private List<File> file;
     private Double maxPoints;
+    private Long fileTaskId;
     private Long remaining;
 }
