@@ -33,19 +33,19 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
   }
 
   const downloadFile = (fileNumber) => {
-    const fileId = task.files[fileNumber].id
+    const fileId = task.taskFiles[fileNumber].id
     CombatTaskService.getCombatFile(fileId).then((file) => {
-      download(file, task.files[fileNumber].name)
+      download(file, task.taskFiles[fileNumber].name)
     })
   }
 
   return (
     <>
       <strong>Załączone pliki:</strong>
-      {!task || task.files?.length === 0 ? (
+      {!task || task.taskFiles?.length === 0 ? (
         <p>Brak dodanych plików</p>
       ) : (
-        task.files?.map((file, idx) => (
+        task.taskFiles?.map((file, idx) => (
           <Row key={idx} className='mt-4'>
             {/*<Col>{file.date}</Col>*/}
             {/*<Col>{file.author}</Col>*/}

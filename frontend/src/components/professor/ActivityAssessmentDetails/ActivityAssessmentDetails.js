@@ -47,9 +47,7 @@ export default function ActivityAssessmentDetails() {
   }, [activityId])
 
   const sendFeedbackAndGetNextIfAble = () => {
-    console.log(activityId, remarks, givenPoints)
     ProfessorService.sendTaskEvaluation(activityResponseInfo.fileTaskResponseId, remarks, givenPoints).then((response) => {
-      console.log(response)
       if(activityResponseInfo.remaining > 0) {
         setRemarks('');
         setGivenPoints(0);

@@ -91,23 +91,36 @@ export default function CombatTask() {
             </HeaderCol>
             <div>
               <h5>{task.description}</h5>
+              {
+                task.points && <>
+                  <SmallDivider />
+                  <p>
+                    Zdobyte punkty: <strong>{task.points}</strong>{' '}
+                    {/*//TODO: check if we shouldn't have maxPoints here*/}
+                  </p>
+                  {task.remarks && (
+                    <>
+                      <p>Uwagi od prowadzącego:</p>
+                      <p>{task.remarks}</p>
+                    </>
+                  )}
+                  <p>
+                    {task?.content && (
+                      <>
+                        <strong>Uwagi prowadzącego:</strong> <br /> {task.content}
+                      </>
+                    )}
+                  </p>
+                  
+                </>
+              }
               <SmallDivider />
-              <p>
-                Zdobyte punkty: <strong>50 / 100</strong> {/*//TODO: info from endpoint*/}
-              </p>
-              <p>
-                {task?.content && (
-                  <>
-                    <strong>Uwagi prowadzącego:</strong> <br /> {task.content}
-                  </>
-                )}
-              </p>
-              <SmallDivider />
-              <RemarksCol>
-                <h4>Odpowiedź:</h4>
-                <RemarksTextArea value={answer} onChange={handleAnswerChange} />
-              </RemarksCol>
-
+              {task.points === null && (
+                <RemarksCol>
+                  <h4>Odpowiedź:</h4>
+                  <RemarksTextArea value={answer} onChange={handleAnswerChange} />
+                </RemarksCol>
+              )}
               <FileService
                 task={task}
                 setFile={setFileBlob}
