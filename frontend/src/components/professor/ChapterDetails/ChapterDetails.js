@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getChapterDetails } from '../GameManagement/mockData'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Table } from 'react-bootstrap'
-import { ERROR_OCCURED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
+import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
 import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
@@ -68,7 +68,7 @@ function ChapterDetails() {
                 {chapterMap ? (
                   <ChapterMap map={chapterMap} marginNeeded parentRef={mapCardBody} />
                 ) : (
-                  chapterMap == null && <p className={'text-center h6 p-4'}>{ERROR_OCCURED}</p>
+                  chapterMap == null && <p className={'text-center h6 p-4'}>{ERROR_OCCURRED}</p>
                 )}
               </Card.Body>
             </MapCard>

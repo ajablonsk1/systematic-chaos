@@ -5,7 +5,7 @@ import { TabColored } from './ChaptersNavStyle'
 import Loader from '../../../general/Loader/Loader'
 import ActivityService from '../../../../services/activity.service'
 import { uniqBy } from 'lodash'
-import { ERROR_OCCURED } from '../../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../../utils/constants'
 
 function ChaptersNav() {
   const [chaptersMap, setChaptersMap] = useState([])
@@ -27,7 +27,7 @@ function ChaptersNav() {
   return chaptersMap === undefined ? (
     <Loader />
   ) : chaptersMap == null ? (
-    <p className={'text-center text-danger h3'}>{ERROR_OCCURED}</p>
+    <p className={'text-center text-danger h3'}>{ERROR_OCCURRED}</p>
   ) : (
     <TabColored defaultActiveKey={'Example map'} id='chaptersNav' className='mb-3 justify-content-center'>
       {chaptersMap?.map((chapter, index) => (

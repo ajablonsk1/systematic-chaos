@@ -4,7 +4,7 @@ import { Form } from 'react-bootstrap'
 import { debounce } from 'lodash/function'
 import ExportModal from './ExportModal'
 import GroupService from '../../../services/group.service'
-import { ERROR_OCCURED } from '../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 export default function UsersTable(props) {
   const [usersList, setUsersList] = useState(undefined)
@@ -102,7 +102,7 @@ export default function UsersTable(props) {
           ) : (
             <tr>
               <td colSpan='100%' className={'text-center'}>
-                <p>{users == null ? ERROR_OCCURED : 'Brak członków'}</p>
+                <p>{users == null ? ERROR_OCCURRED : 'Brak członków'}</p>
               </td>
             </tr>
           )}
