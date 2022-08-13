@@ -1,8 +1,10 @@
 import React from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Col, Row, Tab } from 'react-bootstrap'
 import { Content } from '../../App/AppGeneralStyles'
 import PercentageCircle from './ChartAndStats/PercentageCircle'
-import PointsTable from './Table/PointsTable'
+import LastPointsTable from './Tables/LastPointsTable'
+import { TabsContainer } from './PointsPageStyle'
+import GratisPointsTable from './Tables/GratisPointsTable'
 
 export default function Points() {
   const points = 529
@@ -28,8 +30,19 @@ export default function Points() {
         </Col>
       </Row>
       <Row className='m-3'>
-        <h2 className='mx-auto'>Ostatnio zdobyte punkty</h2>
-        <PointsTable />
+        <TabsContainer
+          className={'w-100'}
+          defaultActiveKey='last-points'
+          id='points-tabs'
+          style={{ padding: '50px 0 20px 0' }}
+        >
+          <Tab className={'w-100'} eventKey='last-points' title='Ostatnio zdobyte punkty'>
+            <LastPointsTable />
+          </Tab>
+          <Tab eventKey={'gratis-points'} title={'Punkty dodatkowe'}>
+            <GratisPointsTable />
+          </Tab>
+        </TabsContainer>
       </Row>
     </Content>
   )

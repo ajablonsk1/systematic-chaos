@@ -3,7 +3,7 @@ import { getTableContent } from '../../../../storage/pointsTable'
 import { getActivityTypeName } from '../../../../utils/constants'
 import { TableContainer } from './TableStyle'
 
-export default function PointsTable() {
+export default function LastPointsTable() {
   const tableContent = getTableContent()
 
   const tableHeaders = ['Data', 'Liczba punktów', 'Typ aktywności', 'Nazwa aktywności'].map((title, index) => (
