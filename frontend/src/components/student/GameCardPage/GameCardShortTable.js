@@ -1,4 +1,4 @@
-import { TableContainer } from '../PointsPage/Table/TableStyle'
+import { TableContainer } from '../PointsPage/Tables/TableStyle'
 
 export const GameCardShortTable = (props) => {
   const TableBody = props.recentActivities.activities.map((activity) => {
