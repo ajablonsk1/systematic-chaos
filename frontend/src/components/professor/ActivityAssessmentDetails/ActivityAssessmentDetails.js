@@ -33,11 +33,12 @@ export default function ActivityAssessmentDetails() {
 
   // const navigate = useNavigate();
   const location = useLocation();
+  const { activityId } = location.state;
+
   const [activityResponseInfo, setActivityResponseInfo] = useState(undefined)
   const [remarks, setRemarks] = useState('')
+  const [givenPoints, setGivenPoints] = useState(0)
 
-  const { activityId } = location.state;
-  
   useEffect(() => {
     professorService.getFirstTaskToEvaluate(activityId).then(
       (activityResponseInfo) => {setActivityResponseInfo(activityResponseInfo)}
@@ -88,18 +89,18 @@ export default function ActivityAssessmentDetails() {
 
         <RemarksCol>
           <h4>Uwagi:</h4>
-          <RemarksTextArea onChange={(newText) => {setRemarks(newText); console.log(newText)}}/>
+          <RemarksTextArea onChange={(newText) => {setRemarks(newText.target.value); console.log(newText.target.value)}}/>
         </RemarksCol>
 
         <PointsRow>
           <p style={{ top: '50%', position: 'relative', margin: '0' }}>Punkty: </p>
           <Row style={{ display: 'flex' }}>
-            <PointsInput type='number' min={0} max={20}></PointsInput>
+            <PointsInput type='number' min={0} max={activityResponseInfo.maxPoints} onChange={(newPointsNum) => {setGivenPoints(newPointsNum.target.value); console.log(newPointsNum.target.value)}}></PointsInput>
             <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
           </Row>
         </PointsRow>
 
-        <AcceptButton onClick={() => {console.log("elo")}}>Zaakceptuj i przejdź do kolejnej odpowiedzi</AcceptButton>
+        <AcceptButton onClick={() => {console.log("elo")}} disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}>Zaakceptuj i przejdź do kolejnej odpowiedzi</AcceptButton>
         <RemainingCount>Pozostało {activityResponseInfo.remaining} odpowiedzi do sprawdzenia</RemainingCount>
       </ContentCol>) : (<Loader/>)}
     </Content>
