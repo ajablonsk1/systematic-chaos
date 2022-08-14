@@ -1,0 +1,23 @@
+package com.example.api.dto.response.ranking;
+
+import com.example.api.model.user.HeroType;
+import com.example.api.model.user.User;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+public class RankingEntry {
+    @Schema(required = true) private String firstName;
+    @Schema(required = true) private String lastName;
+    @Schema(required = true) private String groupName;
+    @Schema(required = true) private HeroType heroType;
+    @Schema(required = true) private Double points;
+
+    public RankingEntry(User user) {
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.groupName = user.getGroup().getName();
+    }
+}
