@@ -1,6 +1,6 @@
 package com.example.api.controller.activity.task;
 
-import com.example.api.dto.response.task.InfoResponse;
+import com.example.api.dto.response.activity.task.InfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.service.activity.task.InfoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

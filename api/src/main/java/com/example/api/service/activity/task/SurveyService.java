@@ -1,6 +1,6 @@
 package com.example.api.service.activity.task;
 
-import com.example.api.dto.response.task.SurveyInfoResponse;
+import com.example.api.dto.response.activity.task.SurveyInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.activity.task.Survey;
 import com.example.api.repo.activity.task.SurveyRepo;

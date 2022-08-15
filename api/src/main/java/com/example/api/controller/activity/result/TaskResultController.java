@@ -1,7 +1,7 @@
 package com.example.api.controller.activity.result;
 
-import com.example.api.dto.response.user.UserPointsStatistics;
-import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.result.TaskResultService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class TaskResultController {
     }
 
     @GetMapping("/points/statistics")
-    public ResponseEntity<List<UserPointsStatistics>> getUserPointsStatistics() throws EntityNotFoundException {
+    public ResponseEntity<List<TaskPointsStatisticsResponse>> getUserPointsStatistics() throws WrongUserTypeException {
         return ResponseEntity.ok().body(resultService.getUserPointsStatistics());
     }
 }
