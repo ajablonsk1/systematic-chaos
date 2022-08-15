@@ -1,8 +1,8 @@
-package com.example.api.controller.ranking;
+package com.example.api.controller.activity.result.ranking;
 
-import com.example.api.dto.response.ranking.RankingEntry;
+import com.example.api.dto.response.ranking.RankingResponse;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.service.ranking.RankingService;
+import com.example.api.service.activity.result.ranking.RankingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,19 +21,19 @@ public class RankingController {
     private final RankingService rankingService;
 
     @GetMapping
-    public ResponseEntity<List<RankingEntry>> getRanking()
+    public ResponseEntity<List<RankingResponse>> getRanking()
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(rankingService.getRanking());
     }
 
     @GetMapping("/group")
-    public ResponseEntity<List<RankingEntry>> getRankingForGroup(@RequestParam String groupName)
+    public ResponseEntity<List<RankingResponse>> getRankingForGroup(@RequestParam String groupName)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(rankingService.getRankingForGroup(groupName));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<RankingEntry>> getSearchedRanking(@RequestParam String search)
+    public ResponseEntity<List<RankingResponse>> getSearchedRanking(@RequestParam String search)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(rankingService.getSearchedRanking(search));
     }

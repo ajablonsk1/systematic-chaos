@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RankingEntry {
+public class RankingResponse {
     @Schema(required = true) private String firstName;
     @Schema(required = true) private String lastName;
     @Schema(required = true) private String groupName;
     @Schema(required = true) private HeroType heroType;
     @Schema(required = true) private Double points;
 
-    public RankingEntry(User user) {
+    public RankingResponse(User user) {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.groupName = user.getGroup().getName();

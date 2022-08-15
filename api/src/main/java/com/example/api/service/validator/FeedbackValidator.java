@@ -12,7 +12,6 @@ import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.repo.util.FileRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,7 +29,6 @@ public class FeedbackValidator {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final AuthenticationService authService;
     private final UserRepo userRepo;
-    private final FileRepo fileRepo;
 
     /**
      * Function creates professor feedback for fileTaskResult. If feedback already exists its attributes
