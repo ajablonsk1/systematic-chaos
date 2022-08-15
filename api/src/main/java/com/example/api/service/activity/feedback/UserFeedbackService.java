@@ -10,6 +10,7 @@ import com.example.api.repo.activity.feedback.UserFeedbackRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class UserFeedbackService {
     private final SurveyRepo surveyRepo;
     private final UserValidator userValidator;
     private final AuthenticationService authService;
+    private final ActivityValidator activityValidator;
 
     public UserFeedback saveUserFeedback(UserFeedback feedback) {
         return userFeedbackRepo.save(feedback);
@@ -43,10 +45,7 @@ public class UserFeedbackService {
         feedback.setRate(form.getRate());
         Long id = form.getSurveyId();
         Survey survey = surveyRepo.findSurveyById(id);
-        if(survey == null) {
-            log.error("Survey with id {} not found in database", id);
-            throw new EntityNotFoundException("Survey with id" + id + " not found in database");
-        }
+        activityValidator.validateActivityIsNotNull(survey, id);
         feedback.setSurvey(survey);
         return userFeedbackRepo.save(feedback);
     }

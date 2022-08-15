@@ -13,6 +13,8 @@ import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.ActivityValidator;
+import com.example.api.service.validator.FeedbackValidator;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,8 @@ public class FileTaskService {
     private final UserRepo userRepo;
     private final UserValidator userValidator;
     private final AuthenticationService authService;
+    private final ActivityValidator activityValidator;
+    private final FeedbackValidator feedbackValidator;
 
     public FileTask saveFileTask(FileTask fileTask) {
         return fileTaskRepo.save(fileTask);
@@ -41,10 +45,7 @@ public class FileTaskService {
         String email = authService.getAuthentication().getName();
         FileTaskInfoResponse result = new FileTaskInfoResponse();
         FileTask fileTask = fileTaskRepo.findFileTaskById(id);
-        if(fileTask == null) {
-            log.error("File task with id {} not found in database", id);
-            throw new EntityNotFoundException("File task with id" + id + " not found in database");
-        }
+        activityValidator.validateActivityIsNotNull(fileTask, id);
         result.setFileTaskId(fileTask.getId());
         result.setName(fileTask.getName());
         result.setDescription(fileTask.getDescription());
@@ -63,10 +64,7 @@ public class FileTaskService {
         result.setTaskFiles(fileResponseList);
 
         ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
-        if (feedback == null){
-            log.debug("Feedback for file task result with id {} does not exist", fileTaskResult.getId());
-            return result;
-        }
+        feedbackValidator.validateFeedbackIsNotNull(feedback, fileTaskResult);
         result.setPoints(feedback.getPoints());
         result.setRemarks(feedback.getContent());
         List<FileResponse> feedbackFiles = feedback.getFeedbackFiles()

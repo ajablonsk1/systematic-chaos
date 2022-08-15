@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Slf4j
 @Component
-public class AnswerFormValidator {
+public class ResultValidator {
 
     public Answer validateAndCreateAnswer(AnswerForm form) throws WrongBodyParametersNumberException {
         List<Object> answerParamList = new ArrayList<>();

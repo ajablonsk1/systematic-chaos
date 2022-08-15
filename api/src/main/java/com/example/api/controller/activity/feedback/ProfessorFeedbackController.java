@@ -45,7 +45,7 @@ public class ProfessorFeedbackController {
             @RequestParam Long fileTaskId,
             @RequestParam String studentEmail
     )
-            throws EntityNotFoundException, MissingAttributeException {
+            throws EntityNotFoundException, MissingAttributeException, WrongUserTypeException {
         return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackInfoForFileTaskAndStudent(fileTaskId, studentEmail));
     }
 
@@ -61,7 +61,7 @@ public class ProfessorFeedbackController {
             @RequestParam String studentEmail,
             @RequestParam int index
     )
-            throws EntityNotFoundException, MissingAttributeException {
+            throws EntityNotFoundException, WrongUserTypeException {
         DeleteFileFromProfessorFeedbackForm form = new DeleteFileFromProfessorFeedbackForm(fileTaskId, studentEmail, index);
         return ResponseEntity.ok().body(feedbackService.deleteFileFromProfessorFeedback(form));
     }

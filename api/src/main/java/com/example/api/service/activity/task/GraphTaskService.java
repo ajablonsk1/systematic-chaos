@@ -3,6 +3,7 @@ package com.example.api.service.activity.task;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.repo.activity.task.GraphTaskRepo;
+import com.example.api.service.validator.ActivityValidator;
 import com.example.api.util.calculator.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class GraphTaskService {
     private final GraphTaskRepo graphTaskRepo;
-    private final TimeCalculator timeCalculator;
+    private final ActivityValidator activityValidator;
 
     public GraphTask saveGraphTask(GraphTask graphTask) {
         return graphTaskRepo.save(graphTask);
@@ -25,10 +26,7 @@ public class GraphTaskService {
     public GraphTask getGraphTaskById(Long id) throws EntityNotFoundException {
         log.info("Fetching graph task with id {}", id);
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(id);
-        if(graphTask == null) {
-            log.error("Graph task with id {} not found in database", id);
-            throw new EntityNotFoundException("Graph task with id" + id + " not found in database");
-        }
+        activityValidator.validateActivityIsNotNull(graphTask, id);
         return graphTaskRepo.findGraphTaskById(id);
     }
 }

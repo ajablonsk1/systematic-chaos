@@ -15,7 +15,8 @@ import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.validator.AnswerFormValidator;
+import com.example.api.service.validator.ActivityValidator;
+import com.example.api.service.validator.ResultValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.util.calculator.PointsCalculator;
 import com.example.api.util.calculator.TimeCalculator;
@@ -36,22 +37,20 @@ public class GraphTaskResultService {
     private final QuestionRepo questionRepo;
     private final AnswerRepo answerRepo;
     private final PointsCalculator pointsCalculator;
-    private final AnswerFormValidator answerFormValidator;
+    private final ResultValidator answerFormValidator;
     private final UserValidator userValidator;
     private final TimeCalculator timeCalculator;
     private final AuthenticationService authService;
+    private final ActivityValidator activityValidator;
 
     public GraphTaskResult getGraphTaskResult(Long graphTaskId)
             throws WrongUserTypeException, EntityNotFoundException {
         String email = authService.getAuthentication().getName();
         User student = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(student, email);
-        GraphTask task = graphTaskRepo.findGraphTaskById(graphTaskId);
-        if(task == null) {
-            log.error("Graph task with given id {} does not exist", graphTaskId);
-            throw new EntityNotFoundException("Graph task with given id " + graphTaskId + " does not exist");
-        }
-        return graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(task, student);
+        GraphTask graphTask = graphTaskRepo.findGraphTaskById(graphTaskId);
+        activityValidator.validateActivityIsNotNull(graphTask, graphTaskId);
+        return graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
     }
 
     public GraphTaskResult saveGraphTaskResult(GraphTaskResult result) {
@@ -61,10 +60,7 @@ public class GraphTaskResultService {
     public GraphTaskResult saveGraphTaskResult(Long id) throws EntityNotFoundException {
         log.info("Saving graph task result");
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(id);
-        if(graphTask == null) {
-            log.error("Graph task with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task with given id " + id + " does not exist");
-        }
+        activityValidator.validateActivityIsNotNull(graphTask, id);
         String email = authService.getAuthentication().getName();
         User user = userRepo.findUserByEmail(email);
         if(user == null) {
