@@ -8,12 +8,19 @@ import com.example.api.model.activity.feedback.Feedback;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.activity.task.Survey;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
+import com.example.api.repo.activity.task.FileTaskRepo;
+import com.example.api.repo.activity.task.GraphTaskRepo;
+import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.UserValidator;
@@ -34,8 +41,11 @@ import java.util.stream.Stream;
 public class TaskResultService {
     private final UserRepo userRepo;
     private final GraphTaskResultRepo graphTaskResultRepo;
+    private final GraphTaskRepo graphTaskRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
+    private final FileTaskRepo fileTaskRepo;
     private final SurveyResultRepo surveyResultRepo;
+    private final SurveyRepo surveyRepo;
     private final CSVConverter csvConverter;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
@@ -55,17 +65,22 @@ public class TaskResultService {
             List<CSVTaskResult> csvTaskResults = new LinkedList<>();
             forms.forEach(form -> {
                 switch (form.getType()){
-                    case EXPEDITION -> csvTaskResults.add(new CSVTaskResult(graphTaskResultRepo.findGraphTaskResultById(form.getId())));
-                    case TASK -> {
-                        FileTaskResult result = fileTaskResultRepo.findFileTaskResultById(form.getId());
-                        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
-                        if (feedback == null) {
-                            csvTaskResults.add(new CSVTaskResult(result, "-"));
-                        } else {
-                            csvTaskResults.add(new CSVTaskResult(result, feedback.getContent()));
-                        }
+                    case EXPEDITION -> {
+                        GraphTask graphTask = graphTaskRepo.findGraphTaskById(form.getId());
+                        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
+                        csvTaskResults.add(new CSVTaskResult(graphTaskResult));
                     }
-                    case SURVEY -> csvTaskResults.add(new CSVTaskResult(surveyResultRepo.findSurveyResultById(form.getId())));
+                    case TASK -> {
+                        FileTask fileTask = fileTaskRepo.findFileTaskById(form.getId());
+                        FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
+                        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
+                        csvTaskResults.add(new CSVTaskResult(result, feedback));
+                    }
+                    case SURVEY -> {
+                        Survey survey = surveyRepo.findSurveyById(form.getId());
+                        SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
+                        csvTaskResults.add(new CSVTaskResult(surveyResult));
+                    }
                 }
             });
             userToResultMap.put(student, csvTaskResults);
