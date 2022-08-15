@@ -1,4 +1,4 @@
-import { GET_POINTS_STATISTICS, USER_GROUP } from './urls'
+import { GET_BONUS_POINTS, GET_POINTS_STATISTICS, USER_GROUP } from './urls'
 import { axiosApiGet } from '../utils/axios'
 import { parseJwt } from '../utils/Api'
 
@@ -19,6 +19,12 @@ class StudentService {
 
   getPointsStats() {
     return axiosApiGet(GET_POINTS_STATISTICS).catch((error) => {
+      throw error
+    })
+  }
+
+  getBonusPointsList() {
+    return axiosApiGet(GET_BONUS_POINTS).catch((error) => {
       throw error
     })
   }
