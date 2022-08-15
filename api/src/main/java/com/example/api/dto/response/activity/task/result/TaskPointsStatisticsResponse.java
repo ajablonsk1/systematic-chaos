@@ -16,23 +16,25 @@ public class TaskPointsStatisticsResponse {
     private String activityName;
 
     public TaskPointsStatisticsResponse(GraphTaskResult result) {
-        this.dateMillis = result.getSendDateMillis();
-        this.pointsReceived = result.getPointsReceived();
+        setDateAndPoints(result.getSendDateMillis(), result.getPointsReceived());
         this.activityType = ActivityType.EXPEDITION;
         this.activityName = result.getGraphTask().getName();
     }
 
     public TaskPointsStatisticsResponse(FileTaskResult result) {
-        this.dateMillis = result.getSendDateMillis();
-        this.pointsReceived = result.getPointsReceived();
+        setDateAndPoints(result.getSendDateMillis(), result.getPointsReceived());
         this.activityType = ActivityType.TASK;
         this.activityName = result.getFileTask().getName();
     }
 
     public TaskPointsStatisticsResponse(SurveyResult result) {
-        this.dateMillis = result.getSendDateMillis();
-        this.pointsReceived = result.getPointsReceived();
+        setDateAndPoints(result.getSendDateMillis(), result.getPointsReceived());
         this.activityType = ActivityType.SURVEY;
         this.activityName = result.getSurvey().getName();
+    }
+
+    private void setDateAndPoints(Long dateMillis, Double pointsReceived) {
+        this.dateMillis = dateMillis;
+        this.pointsReceived = pointsReceived;
     }
 }

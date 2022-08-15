@@ -31,23 +31,14 @@ public class AdditionalPointsService {
         User user = userRepo.findUserById(form.getStudentId());
         userValidator.validateStudentAccount(user, form.getStudentId());
         String professorEmail = authService.getAuthentication().getName();
-        AdditionalPoints additionalPoints;
+        AdditionalPoints additionalPoints = new AdditionalPoints(null,
+                user,
+                form.getPoints(),
+                form.getDateInMillis(),
+                professorEmail,
+                "");;
         if (form.getDescription() != null) {
-            log.debug("Description is not null");
-            additionalPoints = new AdditionalPoints(null,
-                    user,
-                    form.getPoints(),
-                    form.getDateInMillis(),
-                    professorEmail,
-                    form.getDescription());
-        } else {
-            log.debug("Description is null");
-            additionalPoints = new AdditionalPoints(null,
-                    user,
-                    form.getPoints(),
-                    form.getDateInMillis(),
-                    professorEmail,
-                    "");
+            additionalPoints.setDescription(form.getDescription());
         }
         additionalPointsRepo.save(additionalPoints);
     }
