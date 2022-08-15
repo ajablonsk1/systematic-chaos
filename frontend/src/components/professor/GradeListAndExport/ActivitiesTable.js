@@ -6,16 +6,32 @@ import { getActivityTypeName } from '../../../utils/constants'
 function ActivitiesTable(props) {
   const activitiesList = getActivitiesList()
 
+  const getActivityType = (activityId) => {
+    return activitiesList.find((activity) => activity.id === activityId)?.activityType
+  }
+
   const headerInputChecked = (event) => event.target && event.target.checked
-  const inputChecked = (activityId) => props.activitiesToExportIds.includes(activityId)
+  const inputChecked = (activityId) => {
+    return props.activitiesToExportIds.some(({ activityId: id }) => activityId === id)
+  }
   const checkAllRows = (event) =>
-    props.setActivitiesToExportIds(headerInputChecked(event) ? [...activitiesList.map((activity) => activity.id)] : [])
+    props.setActivitiesToExportIds(
+      headerInputChecked(event)
+        ? [
+            ...activitiesList.map((activity) => ({
+              activityId: activity.id,
+              activityType: activity.activityType
+            }))
+          ]
+        : []
+    )
 
   const checkRow = (event) => {
     const activityId = +event.target.value
+    const activityType = getActivityType(activityId)
     inputChecked(activityId)
-      ? props.setActivitiesToExportIds((prevState) => prevState.filter((id) => id !== activityId))
-      : props.setActivitiesToExportIds((prevState) => [...prevState, activityId])
+      ? props.setActivitiesToExportIds((prevState) => prevState.filter(({ activityId: id }) => id !== activityId))
+      : props.setActivitiesToExportIds((prevState) => [...prevState, { activityId, activityType }])
   }
 
   return (
