@@ -1,4 +1,4 @@
-import { USER_GROUP } from './urls'
+import { GET_POINTS_STATISTICS, USER_GROUP } from './urls'
 import { axiosApiGet } from '../utils/axios'
 import { parseJwt } from '../utils/Api'
 
@@ -13,6 +13,12 @@ class StudentService {
 
   getUserGroup() {
     return axiosApiGet(USER_GROUP).catch((error) => {
+      throw error
+    })
+  }
+
+  getPointsStats() {
+    return axiosApiGet(GET_POINTS_STATISTICS).catch((error) => {
       throw error
     })
   }
