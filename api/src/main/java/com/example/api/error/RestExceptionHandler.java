@@ -1,6 +1,5 @@
 package com.example.api.error;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.api.error.exception.*;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
