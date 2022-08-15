@@ -416,7 +416,7 @@ public class DatabaseConfig {
 
             GraphTaskResult result2 = new GraphTaskResult();
             result2.setGraphTask(graphTaskTwo);
-            result2.setUser(student);
+            result2.setUser(student1);
             result2.setPointsReceived(10.0);
             result2.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 13);
@@ -427,7 +427,7 @@ public class DatabaseConfig {
             FileTaskResult fileResult = new FileTaskResult();
             fileResult.setId(1L);
             fileResult.setFileTask(fileTask);
-            fileResult.setUser(student1);
+            fileResult.setUser(student);
             fileResult.setEvaluated(false);
             fileResult.setAnswer("Lorem ipsum");
             calendar.set(2022, Calendar.JUNE, 11);

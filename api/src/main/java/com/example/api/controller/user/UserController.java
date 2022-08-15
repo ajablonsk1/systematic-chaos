@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.api.dto.request.user.RegisterUserForm;
 import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.response.user.BasicStudent;
+import com.example.api.dto.response.user.UserPointsStatistics;
 import com.example.api.error.exception.*;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.User;
@@ -88,5 +89,4 @@ public class UserController {
             throws EntityNotFoundException, WrongUserTypeException, StudentAlreadyAssignedToGroupException {
         return ResponseEntity.ok().body(userService.setStudentGroup(setStudentGroupForm));
     }
-
 }
