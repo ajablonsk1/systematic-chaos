@@ -16,7 +16,7 @@ public class AdditionalPointsController {
     private final AdditionalPointsService additionalPointsService;
 
     @PostMapping("/add")
-    public ResponseEntity<?> getAdditionalPoints(@RequestBody AddAdditionalPointsForm form) throws WrongUserTypeException {
+    public ResponseEntity<?> addAdditionalPoints(@RequestBody AddAdditionalPointsForm form) throws WrongUserTypeException {
         additionalPointsService.saveAdditionalPoints(form);
         return ResponseEntity.ok().body(null);
     }
