@@ -8,6 +8,8 @@ import com.example.api.model.group.Group;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
+import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.group.GroupService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +26,9 @@ import static org.mockito.Mockito.when;
 // TODO: fix all tests
 public class GroupServiceTests {
     @Mock private GroupRepo groupRepo;
+    @Mock private UserRepo userRepo;
     @Mock private AccessDateRepo accessDateRepo;
+    @Mock private AuthenticationService authService;
 
     private GroupService groupService;
     private Group group1;
@@ -33,7 +37,7 @@ public class GroupServiceTests {
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-        groupService = new GroupService(groupRepo, accessDateRepo);
+        groupService = new GroupService(groupRepo, userRepo, accessDateRepo, authService);
         group1 = new Group();
         group2 = new Group();
         group1.setId(1L);

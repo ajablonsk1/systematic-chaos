@@ -214,10 +214,12 @@ public class DatabaseConfig {
                 userService.saveUser(user);
             }
 
-            professor.setGroup(group);
-            professor1.setGroup(group1);
             userService.saveUser(professor);
             userService.saveUser(professor1);
+            group.setOwner(professor);
+            group1.setOwner(professor1);
+            groupService.saveGroup(group);
+            groupService.saveGroup(group1);
 
 
             // TASKS

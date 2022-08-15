@@ -22,6 +22,9 @@ public class Group {
     private Long id;
     private String name;
 
+    @ManyToOne
+    private User owner;
+
     @OneToMany(mappedBy = "group")
     @JsonBackReference
     private List<User> users;
