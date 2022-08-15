@@ -4,6 +4,7 @@ import { Card } from 'react-bootstrap'
 export const CustomCard = styled(Card)`
   color: var(--font-color);
   height: 97%;
+  border-radius: 10px;
 
   & h5 {
     margin: 0;
