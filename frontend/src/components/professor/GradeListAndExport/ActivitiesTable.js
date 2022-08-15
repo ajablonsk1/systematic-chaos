@@ -1,6 +1,7 @@
 import React from 'react'
 import { getActivitiesList } from './mockData'
 import { Table } from 'react-bootstrap'
+import { getActivityTypeName } from '../../../utils/constants'
 
 function ActivitiesTable(props) {
   const activitiesList = getActivitiesList()
@@ -25,6 +26,7 @@ function ActivitiesTable(props) {
             <input type={'checkbox'} onChange={checkAllRows} />
           </th>
           <th>Nazwa aktywności</th>
+          <th>Typ aktywności</th>
           <th>Nazwa rozdziału</th>
         </tr>
       </thead>
@@ -35,6 +37,7 @@ function ActivitiesTable(props) {
               <input type={'checkbox'} onChange={checkRow} value={activity.id} checked={inputChecked(activity.id)} />
             </td>
             <td>{activity.activityName}</td>
+            <td>{getActivityTypeName(activity.activityType)}</td>
             <td>{activity.chapterName}</td>
           </tr>
         ))}
