@@ -3,7 +3,7 @@ package com.example.api.controller.activity.feedback;
 import com.example.api.dto.request.activity.feedback.DeleteFileFromProfessorFeedbackForm;
 import com.example.api.dto.request.activity.feedback.SaveFileToProfessorFeedbackForm;
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
-import com.example.api.dto.response.task.feedback.ProfessorFeedbackInfoResponse;
+import com.example.api.dto.response.activity.feedback.ProfessorFeedbackInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongPointsNumberException;

@@ -1,4 +1,4 @@
-package com.example.api.dto.response.user;
+package com.example.api.dto.response.activity.task.result;
 
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.activity.result.FileTaskResult;
@@ -9,28 +9,28 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserPointsStatistics {
-    private Long dateInMillis;
+public class TaskPointsStatisticsResponse {
+    private Long dateMillis;
     private Double pointsReceived;
     private ActivityType activityType;
     private String activityName;
 
-    public UserPointsStatistics(GraphTaskResult result) {
-        this.dateInMillis = result.getSendDateMillis();
+    public TaskPointsStatisticsResponse(GraphTaskResult result) {
+        this.dateMillis = result.getSendDateMillis();
         this.pointsReceived = result.getPointsReceived();
         this.activityType = ActivityType.EXPEDITION;
         this.activityName = result.getGraphTask().getName();
     }
 
-    public UserPointsStatistics(FileTaskResult result) {
-        this.dateInMillis = result.getSendDateMillis();
+    public TaskPointsStatisticsResponse(FileTaskResult result) {
+        this.dateMillis = result.getSendDateMillis();
         this.pointsReceived = result.getPointsReceived();
         this.activityType = ActivityType.TASK;
         this.activityName = result.getFileTask().getName();
     }
 
-    public UserPointsStatistics(SurveyResult result) {
-        this.dateInMillis = result.getSendDateMillis();
+    public TaskPointsStatisticsResponse(SurveyResult result) {
+        this.dateMillis = result.getSendDateMillis();
         this.pointsReceived = result.getPointsReceived();
         this.activityType = ActivityType.SURVEY;
         this.activityName = result.getSurvey().getName();

@@ -20,4 +20,14 @@ public class UserValidator {
             throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
         }
     }
+
+    public void validateStudentAccount(User student, Long id) throws UsernameNotFoundException, WrongUserTypeException {
+        if(student == null) {
+            log.error("User with id {} not found in database", id);
+            throw new UsernameNotFoundException("User" + id + " not found in database");
+        }
+        if(student.getAccountType() != AccountType.STUDENT) {
+            throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
+        }
+    }
 }

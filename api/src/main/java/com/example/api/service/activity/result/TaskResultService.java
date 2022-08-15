@@ -1,10 +1,7 @@
 package com.example.api.service.activity.result;
 
-import com.example.api.dto.response.user.UserPointsStatistics;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.model.activity.result.FileTaskResult;
-import com.example.api.model.activity.result.GraphTaskResult;
-import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
@@ -12,6 +9,7 @@ import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.UserValidator;
 import com.example.api.util.csv.CSVConverter;
 import com.example.api.util.csv.CSVTaskResult;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -34,6 +31,7 @@ public class TaskResultService {
     private final SurveyResultRepo surveyResultRepo;
     private final CSVConverter csvConverter;
     private final AuthenticationService authService;
+    private final UserValidator userValidator;
 
     public ByteArrayResource getCSVFile(List<Long> ids) throws IOException {
         log.info("Fetching csv files for students");
@@ -62,28 +60,25 @@ public class TaskResultService {
         return new ByteArrayResource(csvConverter.convertToByteArray(userToResultMap));
     }
 
-    public List<UserPointsStatistics> getUserPointsStatistics() throws EntityNotFoundException {
+    public List<TaskPointsStatisticsResponse> getUserPointsStatistics() throws WrongUserTypeException {
         String email = authService.getAuthentication().getName();
         User user = userRepo.findUserByEmail(email);
-        if(user == null) {
-            log.error("User {} not found in database", email);
-            throw new EntityNotFoundException("User " + email + " not found in database");
-        }
-        List<UserPointsStatistics> graphTaskStatistics = graphTaskResultRepo.findAllByUser(user)
+        userValidator.validateStudentAccount(user, email);
+        List<TaskPointsStatisticsResponse> graphTaskStatistics = graphTaskResultRepo.findAllByUser(user)
                 .stream()
-                .map(UserPointsStatistics::new)
+                .map(TaskPointsStatisticsResponse::new)
                 .toList();
-        List<UserPointsStatistics> fileTaskResults = fileTaskResultRepo.findAllByUser(user)
+        List<TaskPointsStatisticsResponse> fileTaskResults = fileTaskResultRepo.findAllByUser(user)
                 .stream()
-                .map(UserPointsStatistics::new)
+                .map(TaskPointsStatisticsResponse::new)
                 .toList();;
-        List<UserPointsStatistics> surveyResults = surveyResultRepo.findAllByUser(user)
+        List<TaskPointsStatisticsResponse> surveyResults = surveyResultRepo.findAllByUser(user)
                 .stream()
-                .map(UserPointsStatistics::new)
+                .map(TaskPointsStatisticsResponse::new)
                 .toList();
         return Stream.of(graphTaskStatistics, fileTaskResults, surveyResults)
                 .flatMap(Collection::stream)
-                .sorted(((o1, o2) -> Long.compare(o2.getDateInMillis(), o1.getDateInMillis())))
+                .sorted(((o1, o2) -> Long.compare(o2.getDateMillis(), o1.getDateMillis())))
                 .toList();
     }
 }

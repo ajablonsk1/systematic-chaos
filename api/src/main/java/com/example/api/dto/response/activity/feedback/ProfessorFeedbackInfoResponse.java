@@ -1,6 +1,6 @@
-package com.example.api.dto.response.task.feedback;
+package com.example.api.dto.response.activity.feedback;
 
-import com.example.api.dto.response.task.util.FileResponse;
+import com.example.api.dto.response.activity.task.util.FileResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

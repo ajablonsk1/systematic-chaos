@@ -1,7 +1,7 @@
 package com.example.api.service.activity.task;
 
-import com.example.api.dto.response.task.ActivityToEvaluateResponse;
-import com.example.api.dto.response.task.TaskToEvaluateResponse;
+import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
+import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
