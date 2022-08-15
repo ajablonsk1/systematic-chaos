@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
+import { GameCardOptionPick } from '../GameCardStyles'
 
 export const TableContainer = styled(GameCardOptionPick)`
   position: relative;
