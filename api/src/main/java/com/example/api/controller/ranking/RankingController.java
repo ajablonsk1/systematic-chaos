@@ -31,4 +31,10 @@ public class RankingController {
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(rankingService.getRankingForGroup(groupName));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<RankingEntry>> getSearchedRanking(@RequestParam String search)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(rankingService.getSearchedRanking(search));
+    }
 }

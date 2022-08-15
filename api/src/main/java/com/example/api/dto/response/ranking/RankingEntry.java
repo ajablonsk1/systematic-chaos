@@ -19,5 +19,6 @@ public class RankingEntry {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.groupName = user.getGroup().getName();
+        this.heroType = user.getHeroType();
     }
 }

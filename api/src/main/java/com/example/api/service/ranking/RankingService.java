@@ -47,37 +47,56 @@ public class RankingService {
                 .collect(Collectors.toList());
     }
 
+    public List<RankingEntry> getSearchedRanking(String search) {
+        String searchLower = search.toLowerCase();
+        return userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
+                .stream()
+                .filter(student ->
+                                student.getFirstName().toLowerCase().contains(searchLower) ||
+                                student.getLastName().toLowerCase().contains(searchLower) ||
+                                student.getHeroType().toString().toLowerCase().contains(searchLower) ||
+                                student.getGroup().getName().toLowerCase().contains(searchLower))
+                .map(this::studentToRankingEntry)
+                .sorted(Comparator.comparingDouble(RankingEntry::getPoints).reversed())
+                .collect(Collectors.toList());
+    }
+
     private RankingEntry studentToRankingEntry(User student) {
         RankingEntry rankingEntry = new RankingEntry(student);
         rankingEntry.setPoints(getStudentPoints(student));
         return rankingEntry;
     }
 
-    private Double getStudentPoints(User student) {
-        Double graphTaskPoints = graphTaskResultRepo.findAllByUser(student)
+    private Double getGraphTaskPoints(User student) {
+        return graphTaskResultRepo.findAllByUser(student)
                 .stream()
                 .mapToDouble(task -> {
                     try {
                         return graphTaskResultService.getAndSetAllPoints(task.getId());
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.info("GraphTaskResult with id {} not checked yet", task.getId());
                     }
                     return 0.0;
                 })
                 .sum();
+    }
 
-
-        Double fileTaskPoints = fileTaskResultRepo.findAllByUser(student)
+    private Double getFileTaskPoints(User student) {
+        return fileTaskResultRepo.findAllByUser(student)
                 .stream()
                 .mapToDouble(task -> {
                     try {
                         return professorFeedbackService.getProfessorFeedbackForFileTaskResult(task.getId()).getPoints();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.info("FileTaskResult with id {} not checked yet", task.getId());
                     }
                     return 0.0;
                 }).sum();
+    }
 
+    private Double getStudentPoints(User student) {
+        Double graphTaskPoints = getGraphTaskPoints(student);
+        Double fileTaskPoints = getFileTaskPoints(student);
         return DoubleStream.of(graphTaskPoints, fileTaskPoints).sum();
     }
 
