@@ -2,6 +2,7 @@ package com.example.api.service.activity.task;
 
 import com.example.api.dto.response.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.task.TaskToEvaluateResponse;
+import com.example.api.dto.response.task.util.FileResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
@@ -21,6 +22,7 @@ import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -81,9 +83,12 @@ public class TaskService {
             if(result.getSendDateMillis() != null){
                 isLate = result.getSendDateMillis() - result.getFileTask().getSolveDateMillis() > 0;
             }
+
+            List<FileResponse> filesResponse = result.getFiles().stream().map(FileResponse::new).toList();
+
             return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), result.getUser().getFirstName(),
                     result.getUser().getLastName(), task.getName(), isLate, task.getDescription(),
-                    result.getAnswer(), result.getFiles(), task.getMaxPoints(), id, num-1);
+                    result.getAnswer(), filesResponse, task.getMaxPoints(), id, num-1);
         }
         return null;
     }

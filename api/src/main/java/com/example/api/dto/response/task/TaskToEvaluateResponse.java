@@ -1,6 +1,6 @@
 package com.example.api.dto.response.task;
 
-import com.example.api.model.util.File;
+import com.example.api.dto.response.task.util.FileResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +19,7 @@ public class TaskToEvaluateResponse {
     private Boolean isLate;
     private String activityDetails;
     private String userAnswer;
-    private List<File> file;
+    private List<FileResponse> file;
     private Double maxPoints;
     private Long fileTaskId;
     private Long remaining;
