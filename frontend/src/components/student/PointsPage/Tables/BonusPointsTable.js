@@ -47,7 +47,7 @@ function BonusPointsTable() {
             <tr className='w-100' key={idx}>
               <td className='w-25'>{moment(row.dateMillis).format('DD.MM.YYYY, HH:mm')}</td>
               <td className='w-25'>{row.points}</td>
-              <td className='w-25'>{row.description}</td>
+              <td className='w-25'>{!row.description || row.description === '' ? '-' : row.description}</td>
               <td className='w-25'>{row.professor}</td>
             </tr>
           ))
