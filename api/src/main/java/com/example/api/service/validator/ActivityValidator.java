@@ -1,6 +1,8 @@
 package com.example.api.service.validator;
 
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.EntityRequiredAttributeNullException;
+import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
@@ -39,6 +41,18 @@ public class ActivityValidator {
         if(file == null) {
             log.error("File with id {} not found in database", id);
             throw new EntityNotFoundException("File with id" + id + " not found in database");
+        }
+    }
+
+    public void validateGraphTaskResultExistsAndHasStartDate(GraphTaskResult result, Long id) throws EntityNotFoundException, EntityRequiredAttributeNullException {
+        if(result == null) {
+            log.error("Graph task result with given id {} does not exist", id);
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
+        }
+        if(result.getStartDateMillis() == null) {
+            log.error("Start time not set for graph task with id {}", id);
+            throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
+                    "graph task result with id " + id);
         }
     }
 }

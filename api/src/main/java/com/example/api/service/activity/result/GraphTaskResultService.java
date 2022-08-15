@@ -57,16 +57,13 @@ public class GraphTaskResultService {
         return graphTaskResultRepo.save(result);
     }
 
-    public GraphTaskResult saveGraphTaskResult(Long id) throws EntityNotFoundException {
+    public GraphTaskResult saveGraphTaskResult(Long id) throws EntityNotFoundException, WrongUserTypeException {
         log.info("Saving graph task result");
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(id);
         activityValidator.validateActivityIsNotNull(graphTask, id);
         String email = authService.getAuthentication().getName();
         User user = userRepo.findUserByEmail(email);
-        if(user == null) {
-            log.error("User {} not found in database", email);
-            throw new EntityNotFoundException("User" + email + " not found in database");
-        }
+        userValidator.validateStudentAccount(user, email);
         GraphTaskResult graphTaskResult = new GraphTaskResult();
         graphTaskResult.setGraphTask(graphTask);
         graphTaskResult.setUser(user);
@@ -77,30 +74,21 @@ public class GraphTaskResultService {
     public Double getPointsFromClosedQuestions(Long id) throws WrongAnswerTypeException, EntityNotFoundException {
         log.info("Calculating points from closed questions for graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(result, id);
         return pointsCalculator.calculatePointsForClosedQuestions(result);
     }
 
     public Double getPointsFromOpenedQuestions(Long id) throws WrongAnswerTypeException, EntityNotFoundException {
         log.info("Calculating points from opened questions for graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(result, id);
         return pointsCalculator.calculatePointsForOpenedQuestions(result);
     }
 
     public Double getAndSetAllPoints(Long id) throws EntityNotFoundException, WrongAnswerTypeException {
         log.info("Calculating and setting points from all questions for graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(result, id);
         double allPoints = pointsCalculator.calculateAllPoints(result);
         result.setPointsReceived(allPoints);
         return allPoints;
@@ -109,30 +97,21 @@ public class GraphTaskResultService {
     public Double getMaxAvailablePoints(Long id) throws EntityNotFoundException {
         log.info("Calculating maximum available points for graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(result, id);
         return pointsCalculator.calculateMaxAvailablePoints(result);
     }
 
     public Double getMaxClosedPoints(Long id) throws EntityNotFoundException {
         log.info("Calculating maximum closed points for graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(result, id);
         return pointsCalculator.calculateMaxClosedPoints(result);
     }
 
     public Double getMaxOpenedPoints(Long id) throws EntityNotFoundException {
         log.info("Calculating maximum opened points for graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(result == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(result, id);
         return pointsCalculator.calculateMaxOpenedPoints(result);
     }
 
@@ -158,10 +137,7 @@ public class GraphTaskResultService {
         Long id = form.getResultId();
         log.info("Setting start time for graph task result with id {}", id);
         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(id);
-        if(graphTaskResult == null) {
-            log.error("Graph task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(graphTaskResult, id);
         graphTaskResult.setStartDateMillis(form.getStartDateMillis());
         return form.getStartDateMillis();
     }
@@ -170,15 +146,7 @@ public class GraphTaskResultService {
     public Long getTimeRemaining(Long resultId) throws EntityNotFoundException, EntityRequiredAttributeNullException {
         log.info("Calculating time remaining for graph task result with id {}", resultId);
         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
-        if(graphTaskResult == null) {
-            log.error("Graph task result with given id {} does not exist", resultId);
-            throw new EntityNotFoundException("Graph task result with given id " + resultId + " does not exist");
-        }
-        if(graphTaskResult.getStartDateMillis() == null) {
-            log.error("Start time not set for graph task with id {}", resultId);
-            throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
-                    "graph task result with id " + resultId);
-        }
+        activityValidator.validateGraphTaskResultExistsAndHasStartDate(graphTaskResult, resultId);
         GraphTask graphTask = graphTaskResult.getGraphTask();
         return timeCalculator.getTimeRemaining(graphTaskResult.getStartDateMillis(), graphTask.getTimeToSolveMillis());
     }
@@ -187,10 +155,7 @@ public class GraphTaskResultService {
         Long resultId = form.getResultId();
         log.info("Setting sendDateMillis for graph task result with id {}", resultId);
         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
-        if(graphTaskResult == null) {
-            log.error("Graph task result with given id {} does not exist", resultId);
-            throw new EntityNotFoundException("Graph task result with given id " + resultId + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(graphTaskResult, resultId);
         graphTaskResult.setSendDateMillis(form.getSendDateMillis());
         return resultId;
     }

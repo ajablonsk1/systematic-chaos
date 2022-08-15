@@ -51,7 +51,7 @@ public class ProfessorFeedbackController {
 
     @PostMapping(path="/file/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Long> saveFileToProfessorFeedback(@ModelAttribute SaveFileToProfessorFeedbackForm form)
-            throws EntityNotFoundException, MissingAttributeException, IOException {
+            throws EntityNotFoundException, MissingAttributeException, IOException, WrongUserTypeException {
         return ResponseEntity.ok().body(feedbackService.saveFileToProfessorFeedback(form));
     }
 
