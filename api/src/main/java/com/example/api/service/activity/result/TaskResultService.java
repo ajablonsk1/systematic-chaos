@@ -1,9 +1,16 @@
 package com.example.api.service.activity.result;
 
+import com.example.api.dto.request.activity.result.ActivityTypeWithIdForm;
+import com.example.api.dto.request.activity.task.GetCSVForm;
 import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
 import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.model.activity.feedback.Feedback;
+import com.example.api.model.activity.feedback.ProfessorFeedback;
+import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
+import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
@@ -32,29 +39,35 @@ public class TaskResultService {
     private final CSVConverter csvConverter;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
+    private final ProfessorFeedbackRepo professorFeedbackRepo;
 
-    public ByteArrayResource getCSVFile(List<Long> ids) throws IOException {
+    public ByteArrayResource getCSVFile(GetCSVForm csvForm) throws IOException {
         log.info("Fetching csv files for students");
+        List<Long> studentIds = csvForm.getStudentIds();
+        List<ActivityTypeWithIdForm> forms = csvForm.getForms();
         List<User> students = userRepo.findAll()
                 .stream()
-                .filter(user -> ids.contains(user.getId()))
+                .filter(user -> studentIds.contains(user.getId()))
                 .filter(user -> user.getAccountType() == AccountType.STUDENT)
                 .toList();
         Map<User, List<CSVTaskResult>> userToResultMap = new HashMap<>();
         students.forEach(student -> {
-            List<CSVTaskResult> graphTaskResults = graphTaskResultRepo.findAll()
-                    .stream()
-                    .filter(result -> Objects.equals(result.getUser().getId(), student.getId()))
-                    .map(CSVTaskResult::new)
-                    .toList();
-            List<CSVTaskResult> fileTaskResults = fileTaskResultRepo.findAll()
-                    .stream()
-                    .filter(result -> Objects.equals(result.getUser().getId(), student.getId()))
-                    .map(CSVTaskResult::new)
-                    .toList();
-            List<CSVTaskResult> csvTaskResults = Stream.of(graphTaskResults, fileTaskResults)
-                    .flatMap(List::stream)
-                    .toList();
+            List<CSVTaskResult> csvTaskResults = new LinkedList<>();
+            forms.forEach(form -> {
+                switch (form.getType()){
+                    case EXPEDITION -> csvTaskResults.add(new CSVTaskResult(graphTaskResultRepo.findGraphTaskResultById(form.getId())));
+                    case TASK -> {
+                        FileTaskResult result = fileTaskResultRepo.findFileTaskResultById(form.getId());
+                        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
+                        if (feedback == null) {
+                            csvTaskResults.add(new CSVTaskResult(result, "-"));
+                        } else {
+                            csvTaskResults.add(new CSVTaskResult(result, feedback.getContent()));
+                        }
+                    }
+                    case SURVEY -> csvTaskResults.add(new CSVTaskResult(surveyResultRepo.findSurveyResultById(form.getId())));
+                }
+            });
             userToResultMap.put(student, csvTaskResults);
         });
         return new ByteArrayResource(csvConverter.convertToByteArray(userToResultMap));

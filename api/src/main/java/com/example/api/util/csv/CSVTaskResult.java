@@ -1,8 +1,10 @@
 package com.example.api.util.csv;
 
 import com.example.api.dto.response.map.task.ActivityType;
+import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,28 +13,25 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class CSVTaskResult {
-    private String name;
-    private ActivityType type;
-    private Double grade;
     private Double points;
+    private String info;
 
     public CSVTaskResult(GraphTaskResult result) {
-        PointsToGradeMapper mapper = new PointsToGradeMapper();
-        this.name = result.getGraphTask().getName();
-        this.type = ActivityType.EXPEDITION;
         this.points = result.getPointsReceived();
-        this.grade = mapper.getGrade(points, result.getGraphTask().getMaxPoints());
+        this.info = "-";
     }
 
-    public CSVTaskResult(FileTaskResult result) {
-        PointsToGradeMapper mapper = new PointsToGradeMapper();
-        this.name = result.getFileTask().getName();
-        this.type = ActivityType.EXPEDITION;
+    public CSVTaskResult(FileTaskResult result, String content) {
         this.points = result.getPointsReceived();
-        this.grade = mapper.getGrade(points, result.getFileTask().getMaxPoints());
+        this.info = content;
+    }
+
+    public CSVTaskResult(SurveyResult result) {
+        this.points = result.getPointsReceived();
+        this.info = "-";
     }
 
     public List<String> toStringList() {
-        return List.of(name, type.getActivityType(), grade.toString(), points.toString());
+        return List.of(points.toString(), info);
     }
 }

@@ -14,6 +14,8 @@ import java.util.stream.Stream;
 
 @Component
 public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
+    private final static String institution = "Akademia Górniczo-Hutnicza";
+    private final static String department = "Wydział Informatyki, Elektroniki i Telekomunikacji";
 
     @Override
     public byte[] convertToByteArray(Map<User, List<CSVTaskResult>> data) throws IOException {
@@ -23,6 +25,8 @@ public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
             List<String> userData = List.of(user.getFirstName(),
                     user.getLastName(),
                     user.getIndexNumber().toString(),
+                    institution,
+                    department,
                     user.getEmail());
             List<String> row = csvTaskResults.stream()
                     .map(CSVTaskResult::toStringList)
