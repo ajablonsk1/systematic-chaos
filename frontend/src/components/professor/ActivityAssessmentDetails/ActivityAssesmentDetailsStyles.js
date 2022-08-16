@@ -62,6 +62,8 @@ export const AnswerCol = styled(Col)`
   color: var(--font-color);
   text-align: center;
   margin-bottom: 10px;
+  max-height: 280px;
+  overflow-y: scroll;
 `
 
 export const RemarksCol = styled(Col)`
