@@ -22,6 +22,7 @@ import {
 import { SendTaskButton } from './CombatTaskStyles'
 import CombatTaskService from '../../../../services/combatTask.service'
 import { Spinner } from 'react-bootstrap'
+import FeedbackFileService from './FeedbackFileService'
 
 export default function CombatTask() {
   const location = useLocation()
@@ -127,6 +128,7 @@ export default function CombatTask() {
                 setIsFetching={setIsFetching}
                 isFetching={isFetching}
               />
+              {task.feedbackFiles && <FeedbackFileService feedbackFiles={task.feedbackFiles} />}
             </div>
             <SendTaskButton
               disabled={(!fileName && answer === '') || task.remarks !== null}
