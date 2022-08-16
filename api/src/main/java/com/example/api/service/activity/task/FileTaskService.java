@@ -56,6 +56,7 @@ public class FileTaskService {
             log.debug("File task result for {} and file task with id {} does not exist", email, fileTask.getId());
             return result;
         }
+        result.setAnswer(fileTaskResult.getAnswer());
         List<FileResponse> fileResponseList = fileTaskResult.getFiles()
                 .stream()
                 .map(file -> new FileResponse(file.getId(), file.getName()))
@@ -69,11 +70,7 @@ public class FileTaskService {
         }
         result.setPoints(feedback.getPoints());
         result.setRemarks(feedback.getContent());
-        List<FileResponse> feedbackFiles = feedback.getFeedbackFiles()
-                .stream()
-                .map(file -> new FileResponse(file.getId(), file.getName()))
-                .toList();
-        result.setFeedbackFiles(feedbackFiles);
+        result.setFeedbackFile(new FileResponse(feedback.getFeedbackFile()));
 
         return result;
 

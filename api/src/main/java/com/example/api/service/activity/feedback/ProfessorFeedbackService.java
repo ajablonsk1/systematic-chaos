@@ -1,7 +1,6 @@
 package com.example.api.service.activity.feedback;
 
-import com.example.api.dto.request.activity.feedback.DeleteFileFromProfessorFeedbackForm;
-import com.example.api.dto.request.activity.feedback.SaveFileToProfessorFeedbackForm;
+
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
 import com.example.api.dto.response.task.feedback.ProfessorFeedbackInfoResponse;
 import com.example.api.dto.response.task.util.FileResponse;
@@ -13,12 +12,10 @@ import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.user.User;
-import com.example.api.model.util.File;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.repo.util.FileRepo;
 import com.example.api.service.validator.FeedbackValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +36,6 @@ public class ProfessorFeedbackService {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final FileTaskRepo fileTaskRepo;
     private final UserRepo userRepo;
-    private final FileRepo fileRepo;
 
     public ProfessorFeedbackInfoResponse saveProfessorFeedback(ProfessorFeedback feedback) throws MissingAttributeException, EntityNotFoundException {
         return createInfoResponseFromProfessorFeedback(professorFeedbackRepo.save(feedback));
@@ -94,42 +90,6 @@ public class ProfessorFeedbackService {
         return createInfoResponseFromProfessorFeedback(getProfessorFeedbackForFileTaskAndStudent(fileTaskId, studentEmail));
     }
 
-    public Long deleteFileFromProfessorFeedback(DeleteFileFromProfessorFeedbackForm form) throws EntityNotFoundException, MissingAttributeException {
-        log.info("Deleting file from professor feedback for file task with id {} and student {}", form.getFileTaskId(), form.getStudentEmail());
-
-        ProfessorFeedback feedback = getProfessorFeedbackForFileTaskAndStudent(form.getFileTaskId(), form.getStudentEmail());
-        if(feedback == null) {
-            log.error("Feedback for FileTaskResult with given id {} does not exist", form.getFileTaskId());
-            throw new EntityNotFoundException("Feedback for FileTaskResult with given id " + form.getFileTaskId()  + " does not exist");
-        }
-
-        if(feedback.getFeedbackFiles().size() <= form.getIndex()) {
-            log.error("Wrong index {} for deleting file from ProfessorFeedback for FileTask with id {} and student {}",
-                    form.getIndex(), form.getFileTaskId(), form.getStudentEmail());
-            throw new EntityNotFoundException("Wrong index " + form.getIndex()  +
-                    " for deleting file from ProfessorFeedback for FileTask with id " + form.getFileTaskId() +
-                    " and student " + form.getStudentEmail());
-        }
-
-        feedback.getFeedbackFiles().remove(form.getIndex());
-        professorFeedbackRepo.save(feedback);
-        return feedback.getId();
-    }
-
-    public Long saveFileToProfessorFeedback(SaveFileToProfessorFeedbackForm form) throws EntityNotFoundException, MissingAttributeException, IOException {
-        log.info("Adding file to professor feedback for file task with id {} and student {}", form.getFileTaskId(), form.getStudentEmail());
-
-        ProfessorFeedback feedback = getProfessorFeedbackForFileTaskAndStudent(form.getFileTaskId(), form.getStudentEmail());
-        if(feedback == null) {
-            log.error("Feedback for FileTaskResult with given id {} does not exist", form.getFileTaskId());
-            throw new EntityNotFoundException("Feedback for FileTaskResult with given id " + form.getFileTaskId()  + " does not exist");
-        }
-        File file = new File(null, form.getFileName(), form.getFile().getBytes());
-        fileRepo.save(file);
-        feedback.getFeedbackFiles().add(file);
-        return feedback.getId();
-    }
-
     private ProfessorFeedbackInfoResponse createInfoResponseFromProfessorFeedback(
             ProfessorFeedback professorFeedback) throws MissingAttributeException, EntityNotFoundException {
         if (professorFeedback == null) {
@@ -159,16 +119,14 @@ public class ProfessorFeedbackService {
         infoResponse.setFileTaskId(fileTask.getId());
         infoResponse.setTaskName(fileTask.getName());
         infoResponse.setDescription(fileTask.getDescription());
+        infoResponse.setAnswer(fileTaskResult.getAnswer());
         infoResponse.setTaskFiles(fileTaskResult.getFiles()
                 .stream()
                 .map(FileResponse::new)
                 .collect(Collectors.toList()));
         infoResponse.setPoints(fileTaskResult.getPointsReceived());
         infoResponse.setRemarks(professorFeedback.getContent());
-        infoResponse.setFeedbackFiles(professorFeedback.getFeedbackFiles()
-                .stream()
-                .map(FileResponse::new)
-                .collect(Collectors.toList()));
+        infoResponse.setFeedbackFile(new FileResponse(professorFeedback.getFeedbackFile()));
         return infoResponse;
     }
 }
