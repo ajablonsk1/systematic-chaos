@@ -22,6 +22,6 @@ public abstract class TaskResult {
     @OneToOne
     private User user;
 
-    private Double pointsReceived = 0.0;
+    private Double pointsReceived;
     private Long sendDateMillis;
 }

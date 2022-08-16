@@ -1,10 +1,8 @@
-package com.example.api.dto.response.task.util;
+package com.example.api.dto.response.activity.task.util;
 
 import com.example.api.model.util.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor

@@ -1,5 +1,5 @@
-import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
-import { GameButton } from '../../student/GameCardPage/GameButton'
+import { GameCardOptionPick } from '../../general/GameCardStyles'
+import { GameButton } from './GameButton'
 
 export default function ManagementCard(props) {
   return (
