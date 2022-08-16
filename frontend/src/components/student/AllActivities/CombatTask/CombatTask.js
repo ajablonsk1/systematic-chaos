@@ -91,8 +91,8 @@ export default function CombatTask() {
             </HeaderCol>
             <div>
               <h5>{task.description}</h5>
-              {
-                task.points && <>
+              {task.points && (
+                <>
                   <SmallDivider />
                   <p>
                     Zdobyte punkty: <strong>{task.points}</strong>{' '}
@@ -111,9 +111,8 @@ export default function CombatTask() {
                       </>
                     )}
                   </p>
-                  
                 </>
-              }
+              )}
               <SmallDivider />
               {task.points === null && (
                 <RemarksCol>
@@ -129,7 +128,10 @@ export default function CombatTask() {
                 isFetching={isFetching}
               />
             </div>
-            <SendTaskButton disabled={!fileName && answer === ''} onClick={() => sendAnswer()}>
+            <SendTaskButton
+              disabled={(!fileName && answer === '') || task.remarks !== null}
+              onClick={() => sendAnswer()}
+            >
               {isFetching ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
             </SendTaskButton>
           </ActivityCol>

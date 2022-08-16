@@ -24,7 +24,7 @@ import {
 import { getActivityTypeName } from '../../../utils/constants'
 //https://www.flaticon.com/free-icon/user-picture_21104
 import userPicture from '../../../utils/resources/user-picture.png'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ProfessorService from '../../../services/professor.service'
 import { Activity } from '../../../utils/constants'
@@ -41,6 +41,27 @@ export default function ActivityAssessmentDetails() {
   const [activityResponseInfo, setActivityResponseInfo] = useState(undefined)
   const [remarks, setRemarks] = useState('')
   const [givenPoints, setGivenPoints] = useState(0)
+  const [fileBlob, setFileBlob] = useState()
+  const [fileName, setFileName] = useState()
+
+  const resetStates = () => {
+    setRemarks('')
+    setGivenPoints(0)
+    setFileBlob(undefined)
+    setFileName(undefined)
+  }
+
+  const handleAfterSendingFeedback = () => {
+    if (activityResponseInfo.remaining > 0) {
+      resetStates()
+      ProfessorService.getFirstTaskToEvaluate(activityId).then((activityResponseInfo) => {
+        setActivityResponseInfo(activityResponseInfo)
+        console.log(activityResponseInfo)
+      })
+    } else {
+      navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment))
+    }
+  }
 
   useEffect(() => {
     ProfessorService.getFirstTaskToEvaluate(activityId).then((activityResponseInfo) => {
@@ -52,16 +73,15 @@ export default function ActivityAssessmentDetails() {
   const sendFeedbackAndGetNextIfAble = () => {
     ProfessorService.sendTaskEvaluation(activityResponseInfo.fileTaskResponseId, remarks, givenPoints).then(
       (response) => {
-        if (activityResponseInfo.remaining > 0) {
-          setRemarks('')
-          setGivenPoints(0)
-          ProfessorService.getFirstTaskToEvaluate(activityId).then((activityResponseInfo) => {
-            setActivityResponseInfo(activityResponseInfo)
-            console.log(activityResponseInfo)
-          })
-        } else {
-          navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment))
+        if (fileBlob) {
+          ProfessorService.addAFileToTask(
+            activityResponseInfo.fileTaskId,
+            activityResponseInfo.userEmail,
+            fileBlob,
+            fileName
+          ).then(() => handleAfterSendingFeedback())
         }
+        handleAfterSendingFeedback()
       }
     )
   }
@@ -119,7 +139,7 @@ export default function ActivityAssessmentDetails() {
           </RemarksCol>
 
           <ActivityAssesmentProfessorFileCol>
-            <ActivityAssessmentProfessorFileService />
+            <ActivityAssessmentProfessorFileService setFile={setFileBlob} setFileName={setFileName} />
           </ActivityAssesmentProfessorFileCol>
 
           <PointsRow>
