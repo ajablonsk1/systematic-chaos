@@ -100,7 +100,9 @@ export default function ActivityAssessmentDetails() {
             <AnswerCol>
               <h4>Odpowiedź</h4>
               <AnswerContent>{activityResponseInfo.userAnswer}</AnswerContent>
-              <ActivityAssessmentFileService activityResponseInfo={activityResponseInfo} />
+              <div>
+                <ActivityAssessmentFileService activityResponseInfo={activityResponseInfo} />
+              </div>
             </AnswerCol>
           </AnswerRow>
 

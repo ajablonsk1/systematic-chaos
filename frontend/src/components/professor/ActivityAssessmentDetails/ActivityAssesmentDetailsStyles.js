@@ -60,6 +60,8 @@ export const AnswerContent = styled.p`
 export const AnswerCol = styled(Col)`
   margin-top: 20px;
   color: var(--font-color);
+  text-align: center;
+  margin-bottom: 10px;
 `
 
 export const RemarksCol = styled(Col)`
@@ -124,4 +126,10 @@ export const RemainingCount = styled.p`
   text-align: center;
   position: relative;
   margin: 20px 0 5px 65%;
+`
+
+export const ActivityAssessmentFileRow = styled(Row)`
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
 `

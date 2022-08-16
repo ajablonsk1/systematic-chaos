@@ -1,8 +1,9 @@
-import { Row, Col, Button } from 'react-bootstrap'
+import { Col, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
 import download from 'downloadjs'
 import CombatTaskService from '../../../services/combatTask.service'
+import { ActivityAssessmentFileRow } from './ActivityAssesmentDetailsStyles'
 
 export default function ActivityAssessmentFileService({ activityResponseInfo }) {
   const downloadFile = (fileNumber) => {
@@ -19,14 +20,14 @@ export default function ActivityAssessmentFileService({ activityResponseInfo }) 
         <p>Brak dodanych plików</p>
       ) : (
         activityResponseInfo.file?.map((file, idx) => (
-          <Row key={idx} className='mt-4'>
+          <ActivityAssessmentFileRow key={idx} className='mt-4'>
             <Col>{file.name}</Col>
             <Col>
               <Button variant='warning' className='ml-2' onClick={() => downloadFile(idx)}>
                 <FontAwesomeIcon icon={faDownload} />
               </Button>
             </Col>
-          </Row>
+          </ActivityAssessmentFileRow>
         ))
       )}
     </>
