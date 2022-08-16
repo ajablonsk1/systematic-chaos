@@ -18,7 +18,8 @@ import {
   RemarksTextArea,
   TopInfo,
   TopInfoCard,
-  UserInfo
+  UserInfo,
+  ActivityAssesmentProfessorFileCol
 } from './ActivityAssesmentDetailsStyles'
 import { getActivityTypeName } from '../../../utils/constants'
 //https://www.flaticon.com/free-icon/user-picture_21104
@@ -29,7 +30,8 @@ import ProfessorService from '../../../services/professor.service'
 import { Activity } from '../../../utils/constants'
 import Loader from '../../general/Loader/Loader'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
-import ActivityAssessmentFileService from './ActivityAssessmentFileService'
+import ActivityAssessmentStudentFileService from './ActivityAssessmentStudentFileService'
+import { ActivityAssessmentProfessorFileService } from './ActivityAssessmentProfessorFileService'
 
 export default function ActivityAssessmentDetails() {
   const navigate = useNavigate()
@@ -76,7 +78,7 @@ export default function ActivityAssessmentDetails() {
               <h4 style={{ textAlign: 'center' }}>Informacje o użytkowniku</h4>
               <FullDivider />
               <Row styles={{ justifyContent: 'center' }}>
-                <img src={userPicture} alt='profile avatar' style={{ paddingLeft: '20px' }}></img>
+                <img src={userPicture} alt='profile avatar' style={{ paddingLeft: '20px', height: '100px' }}></img>
                 <UserInfo>
                   <h5 styles={{ width: '100%' }}>
                     {activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName}
@@ -101,7 +103,7 @@ export default function ActivityAssessmentDetails() {
               <h4>Odpowiedź</h4>
               <AnswerContent>{activityResponseInfo.userAnswer}</AnswerContent>
               <div>
-                <ActivityAssessmentFileService activityResponseInfo={activityResponseInfo} />
+                <ActivityAssessmentStudentFileService activityResponseInfo={activityResponseInfo} />
               </div>
             </AnswerCol>
           </AnswerRow>
@@ -115,6 +117,10 @@ export default function ActivityAssessmentDetails() {
               }}
             />
           </RemarksCol>
+
+          <ActivityAssesmentProfessorFileCol>
+            <ActivityAssessmentProfessorFileService />
+          </ActivityAssesmentProfessorFileCol>
 
           <PointsRow>
             <p style={{ top: '50%', position: 'relative', margin: '0' }}>Punkty: </p>

@@ -21,6 +21,7 @@ export const TopInfo = styled(Row)`
   max-width: 1500px;
   margin: 0 auto;
   color: var(--font-color);
+  /* height: 200px; */
 `
 
 export const TopInfoCard = styled.div`
@@ -32,6 +33,7 @@ export const TopInfoCard = styled.div`
   @media (max-width: 1800px) {
     width: 1500px;
   }
+  height: 180px;
 `
 
 export const UserInfo = styled.div`
@@ -39,6 +41,7 @@ export const UserInfo = styled.div`
   justify-content: space-between;
   flex-flow: column;
   padding-left: 10px;
+  height: 100px;
 `
 
 export const ActivityInfo = styled.p`
@@ -47,7 +50,7 @@ export const ActivityInfo = styled.p`
 
 export const AnswerRow = styled(Row)`
   width: 100%;
-  min-height: 300px;
+  min-height: 200px;
   max-height: 500px;
   background-color: var(--dark-blue);
   margin: 10px auto 0 auto;
@@ -62,13 +65,13 @@ export const AnswerCol = styled(Col)`
   color: var(--font-color);
   text-align: center;
   margin-bottom: 10px;
-  max-height: 280px;
+  max-height: 220px;
   overflow-y: scroll;
 `
 
 export const RemarksCol = styled(Col)`
   width: 100%;
-  min-height: 150px;
+  min-height: 140px;
   max-height: 300px;
   background-color: var(--dark-blue);
   margin: 10px auto 0 auto;
@@ -130,8 +133,21 @@ export const RemainingCount = styled.p`
   margin: 20px 0 5px 65%;
 `
 
-export const ActivityAssessmentFileRow = styled(Row)`
+export const ActivityAssessmentStudentFileRow = styled(Row)`
   margin-left: auto;
   margin-right: auto;
   width: 80%;
+`
+
+export const ActivityAssesmentProfessorFileCol = styled(Col)`
+  background-color: var(--dark-blue);
+  color: var(--font-color);
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  width: 80%;
+  display: flex;
+  flex-flow: column;
+  text-align: center;
+  padding: 20px;
 `
