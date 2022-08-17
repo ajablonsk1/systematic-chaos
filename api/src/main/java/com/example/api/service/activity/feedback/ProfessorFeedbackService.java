@@ -12,6 +12,7 @@ import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.user.User;
+import com.example.api.model.util.File;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
@@ -126,7 +127,11 @@ public class ProfessorFeedbackService {
                 .collect(Collectors.toList()));
         infoResponse.setPoints(fileTaskResult.getPointsReceived());
         infoResponse.setRemarks(professorFeedback.getContent());
-        infoResponse.setFeedbackFile(new FileResponse(professorFeedback.getFeedbackFile()));
+        File feedbackFile = professorFeedback.getFeedbackFile();
+
+        if (feedbackFile != null) {
+            infoResponse.setFeedbackFile(new FileResponse(professorFeedback.getFeedbackFile()));
+        }
         return infoResponse;
     }
 }
