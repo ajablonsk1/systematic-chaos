@@ -17,6 +17,7 @@ import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
 import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
+import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.Url;
 import com.example.api.repo.map.ChapterRepo;
@@ -73,6 +74,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student.setPassword("12345");
             student.setIndexNumber(123456);
+            student.setHeroType(HeroType.PRIEST);
 
             User student1 = new User("smazur@student.agh.edu.pl",
                     "Szymon",
@@ -80,6 +82,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student1.setPassword("12345");
             student1.setIndexNumber(123457);
+            student1.setHeroType(HeroType.PRIEST);
 
             User student2 = new User("murbanska@student.agh.edu.pl",
                     "Matylda",
@@ -87,6 +90,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student2.setPassword("12345");
             student2.setIndexNumber(123458);
+            student2.setHeroType(HeroType.PRIEST);
 
             User student3 = new User("pwasilewski@student.agh.edu.pl",
                     "Patryk",
@@ -94,6 +98,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student3.setPassword("12345");
             student3.setIndexNumber(123459);
+            student3.setHeroType(HeroType.PRIEST);
 
             User student4 = new User("awojcik@student.agh.edu.pl",
                     "Amelia",
@@ -101,6 +106,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student4.setPassword("12345");
             student4.setIndexNumber(223456);
+            student4.setHeroType(HeroType.WARRIOR);
 
             User student5 = new User("kkruk@student.agh.edu.pl",
                     "Kornel",
@@ -108,6 +114,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student5.setPassword("12345");
             student5.setIndexNumber(323456);
+            student5.setHeroType(HeroType.WARRIOR);
 
             User student6 = new User("mdabrowska@student.agh.edu.pl",
                     "Maria",
@@ -115,6 +122,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student6.setPassword("12345");
             student6.setIndexNumber(423456);
+            student6.setHeroType(HeroType.WARRIOR);
 
             User student7 = new User("aczajkowski@student.agh.edu.pl",
                     "Antoni",
@@ -122,6 +130,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student7.setPassword("12345");
             student7.setIndexNumber(523456);
+            student7.setHeroType(HeroType.WIZARD);
 
             User student8 = new User("mnowak@student.agh.edu.pl",
                     "Magdalena",
@@ -129,6 +138,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student8.setPassword("12345");
             student8.setIndexNumber(623456);
+            student8.setHeroType(HeroType.WIZARD);
 
             User student9 = new User("jlewandowska@student.agh.edu.pl",
                     "Julia",
@@ -136,6 +146,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student9.setPassword("12345");
             student9.setIndexNumber(723456);
+            student9.setHeroType(HeroType.WIZARD);
 
             User student10 = new User("mwojcik@student.agh.edu.pl",
                     "Milena",
@@ -143,6 +154,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student10.setPassword("12345");
             student10.setIndexNumber(823456);
+            student10.setHeroType(HeroType.WIZARD);
 
             User student11 = new User("kpaluch@student.agh.edu.pl",
                     "Kacper",
@@ -150,6 +162,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student11.setPassword("12345");
             student11.setIndexNumber(923456);
+            student11.setHeroType(HeroType.WIZARD);
 
             User student12 = new User("fzalewski@student.agh.edu.pl",
                     "Filip",
@@ -157,6 +170,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student12.setPassword("12345");
             student12.setIndexNumber(133456);
+            student12.setHeroType(HeroType.WIZARD);
 
             User student13 = new User("jmichalak@student.agh.edu.pl",
                     "Jan",
@@ -164,6 +178,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student13.setPassword("12345");
             student13.setIndexNumber(143456);
+            student13.setHeroType(HeroType.WIZARD);
 
             User student14 = new User("kostrowska@student.agh.edu.pl",
                     "Karina",
@@ -171,6 +186,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student14.setPassword("12345");
             student14.setIndexNumber(153456);
+            student14.setHeroType(HeroType.ROGUE);
 
             User student15 = new User("dkowalska@student.agh.edu.pl",
                     "Dominika",
@@ -178,12 +194,14 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student15.setPassword("12345");
             student15.setIndexNumber(163456);
+            student15.setHeroType(HeroType.ROGUE);
 
             User professor = new User("bmaj@agh.edu.pl",
                     "Bernard",
                     "Maj",
                     AccountType.PROFESSOR);
             professor.setPassword("12345");
+            professor.setHeroType(HeroType.PRIEST);
             student.setIndexNumber(123456);
 
             User professor1 = new User("szielinski@agh.edu.pl",
@@ -191,6 +209,7 @@ public class DatabaseConfig {
                     "Zieliński",
                     AccountType.PROFESSOR);
             professor1.setPassword("12345");
+            professor1.setHeroType(HeroType.PRIEST);
             student.setIndexNumber(123456);
 
             List<User> students1 = List.of(student, student1, student2, student3, student4, student5, student6, student7);

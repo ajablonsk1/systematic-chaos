@@ -30,7 +30,6 @@ public class FeedbackValidator {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final AuthenticationService authService;
     private final UserRepo userRepo;
-    private final FileRepo fileRepo;
 
     /**
      * Function creates professor feedback for fileTaskResult. If feedback already exists its attributes
