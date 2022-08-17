@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { GameCardOptionPick } from '../GameCardStyles'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export const TableContainer = styled(GameCardOptionPick)`
   position: relative;
@@ -25,5 +26,11 @@ export const TableRow = styled.tr`
   &:hover {
     cursor: default;
     background-color: var(--dark-blue);
+  }
+`
+
+export const CustomIcon = styled(FontAwesomeIcon)`
+  &:hover {
+    cursor: pointer;
   }
 `
