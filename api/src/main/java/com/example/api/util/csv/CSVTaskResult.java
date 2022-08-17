@@ -1,11 +1,7 @@
 package com.example.api.util.csv;
 
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.activity.feedback.Feedback;
-import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
-import com.example.api.model.activity.result.GraphTaskResult;
-import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.result.TaskResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -12,6 +12,7 @@ import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;
+import com.example.api.model.activity.task.Task;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
@@ -34,6 +35,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
+
+import static com.example.api.dto.response.map.task.ActivityType.EXPEDITION;
 
 @Service
 @RequiredArgsConstructor
@@ -61,23 +64,28 @@ public class TaskResultService {
                 .filter(user -> user.getAccountType() == AccountType.STUDENT)
                 .toList();
         Map<User, List<CSVTaskResult>> userToResultMap = new HashMap<>();
+        List<String> firstRow = new LinkedList<>(List.of("Imię", "Nazwisko", "NumerID", "Instytucja", "Wydział", "E-mail"));
+        Map<Long, GraphTask> formToGraphTaskMap = new HashMap<>();
+        Map<Long, FileTask> formToFileTaskMap = new HashMap<>();
+        Map<Long, Survey> formToSurveyMap = new HashMap<>();
+        fillFirstRowAndAddTasksToMap(forms, formToGraphTaskMap, formToFileTaskMap, formToSurveyMap, firstRow);
         students.forEach(student -> {
             List<CSVTaskResult> csvTaskResults = new LinkedList<>();
             forms.forEach(form -> {
                 switch (form.getType()){
                     case EXPEDITION -> {
-                        GraphTask graphTask = graphTaskRepo.findGraphTaskById(form.getId());
+                        GraphTask graphTask = formToGraphTaskMap.get(form.getId());
                         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
                         csvTaskResults.add(new CSVTaskResult(graphTaskResult));
                     }
                     case TASK -> {
-                        FileTask fileTask = fileTaskRepo.findFileTaskById(form.getId());
-                        FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
-                        ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
-                        csvTaskResults.add(new CSVTaskResult(result, feedback));
+                        FileTask fileTask = formToFileTaskMap.get(form.getId());
+                        FileTaskResult fileTaskResult = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
+                        Feedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
+                        csvTaskResults.add(new CSVTaskResult(fileTaskResult, feedback));
                     }
                     case SURVEY -> {
-                        Survey survey = surveyRepo.findSurveyById(form.getId());
+                        Survey survey = formToSurveyMap.get(form.getId());
                         SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
                         csvTaskResults.add(new CSVTaskResult(surveyResult));
                     }
@@ -85,7 +93,7 @@ public class TaskResultService {
             });
             userToResultMap.put(student, csvTaskResults);
         });
-        return new ByteArrayResource(csvConverter.convertToByteArray(userToResultMap));
+        return new ByteArrayResource(csvConverter.convertToByteArray(userToResultMap, firstRow));
     }
 
     public List<TaskPointsStatisticsResponse> getUserPointsStatistics() throws WrongUserTypeException {
@@ -109,4 +117,31 @@ public class TaskResultService {
                 .sorted(((o1, o2) -> Long.compare(o2.getDateMillis(), o1.getDateMillis())))
                 .toList();
     }
+
+    private void fillFirstRowAndAddTasksToMap(List<ActivityTypeWithIdForm> forms,
+                                              Map<Long, GraphTask> formToGraphTaskMap,
+                                              Map<Long, FileTask> formToFileTaskMap,
+                                              Map<Long, Survey> formToSurveyMap,
+                                              List<String> firstRow) {
+        forms.forEach(form -> {
+            switch (form.getType()){
+                case EXPEDITION -> {
+                    GraphTask graphTask = graphTaskRepo.findGraphTaskById(form.getId());
+                    firstRow.addAll(List.of("Zadanie:" + graphTask.getName() + " (Punkty)", "Zadanie:" + graphTask.getName() + " (Informacja zwrotna)"));
+                    formToGraphTaskMap.put(graphTask.getId(), graphTask);
+                }
+                case TASK -> {
+                    FileTask fileTask = fileTaskRepo.findFileTaskById(form.getId());
+                    firstRow.addAll(List.of("Zadanie:" + fileTask.getName() + " (Punkty)", "Zadanie:" + fileTask.getName() + " (Informacja zwrotna)"));
+                    formToFileTaskMap.put(fileTask.getId(), fileTask);
+                }
+                case SURVEY -> {
+                    Survey survey = surveyRepo.findSurveyById(form.getId());
+                    firstRow.addAll(List.of("Zadanie:" + survey.getName() + " (Punkty)", "Zadanie:" + survey.getName() + " (Informacja zwrotna)"));
+                    formToSurveyMap.put(survey.getId(), survey);
+                }
+            }
+        });
+    }
+
 }

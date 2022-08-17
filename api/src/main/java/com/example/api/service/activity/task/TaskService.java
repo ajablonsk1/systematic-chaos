@@ -1,14 +1,12 @@
 package com.example.api.service.activity.task;
 
+import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
-import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.result.AdditionalPoints;
 import com.example.api.model.activity.result.FileTaskResult;
-import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
