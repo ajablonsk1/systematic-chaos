@@ -1,7 +1,7 @@
 package com.example.api.service.activity.task;
 
-import com.example.api.dto.response.task.FileTaskInfoResponse;
-import com.example.api.dto.response.task.util.FileResponse;
+import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
+import com.example.api.dto.response.activity.task.util.FileResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.ProfessorFeedback;

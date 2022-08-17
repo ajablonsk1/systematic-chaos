@@ -1,4 +1,4 @@
-package com.example.api.dto.response.task;
+package com.example.api.dto.response.activity.task;
 
 import com.example.api.model.util.File;
 import lombok.AllArgsConstructor;

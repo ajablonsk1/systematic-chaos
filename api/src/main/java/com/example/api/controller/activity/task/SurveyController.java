@@ -1,6 +1,6 @@
 package com.example.api.controller.activity.task;
 
-import com.example.api.dto.response.task.SurveyInfoResponse;
+import com.example.api.dto.response.activity.task.SurveyInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.service.activity.task.SurveyService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

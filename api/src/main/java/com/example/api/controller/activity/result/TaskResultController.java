@@ -1,7 +1,8 @@
 package com.example.api.controller.activity.result;
 
-import com.example.api.dto.response.user.UserPointsStatistics;
-import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.dto.request.activity.task.GetCSVForm;
+import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.result.TaskResultService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,12 @@ public class TaskResultController {
     private final TaskResultService resultService;
 
     @PostMapping("/csv")
-    public ResponseEntity<ByteArrayResource> getCSVFile(@RequestBody List<Long> ids) throws IOException {
-        return ResponseEntity.ok().body(resultService.getCSVFile(ids));
+    public ResponseEntity<ByteArrayResource> getCSVFile(@RequestBody GetCSVForm form) throws IOException {
+        return ResponseEntity.ok().body(resultService.getCSVFile(form));
     }
 
     @GetMapping("/points/statistics")
-    public ResponseEntity<List<UserPointsStatistics>> getUserPointsStatistics() throws EntityNotFoundException {
+    public ResponseEntity<List<TaskPointsStatisticsResponse>> getUserPointsStatistics() throws WrongUserTypeException {
         return ResponseEntity.ok().body(resultService.getUserPointsStatistics());
     }
 }
