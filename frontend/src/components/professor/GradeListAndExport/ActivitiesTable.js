@@ -1,37 +1,47 @@
-import React from 'react'
-import { getActivitiesList } from './mockData'
-import { Table } from 'react-bootstrap'
-import { getActivityTypeName } from '../../../utils/constants'
+import React, { useEffect, useState } from 'react'
+import { Spinner, Table } from 'react-bootstrap'
+import { ERROR_OCCURRED, getActivityTypeName } from '../../../utils/constants'
+import ActivityService from '../../../services/activity.service'
 
 function ActivitiesTable(props) {
-  const activitiesList = getActivitiesList()
+  const [activitiesList, setActivitiesList] = useState(undefined)
 
-  const getActivityType = (activityId) => {
-    return activitiesList.find((activity) => activity.id === activityId)?.activityType
-  }
+  useEffect(() => {
+    ActivityService.getActivitiesList()
+      .then((response) => {
+        setActivitiesList(response)
+      })
+      .catch(() => {
+        setActivitiesList(null)
+      })
+  }, [])
 
   const headerInputChecked = (event) => event.target && event.target.checked
-  const inputChecked = (activityId) => {
-    return props.activitiesToExportIds.some(({ activityId: id }) => activityId === id)
-  }
+
   const checkAllRows = (event) =>
     props.setActivitiesToExportIds(
       headerInputChecked(event)
         ? [
-            ...activitiesList.map((activity) => ({
-              activityId: activity.id,
-              activityType: activity.activityType
+            ...activitiesList?.map((activity) => ({
+              id: activity.id,
+              type: activity.type
             }))
           ]
         : []
     )
 
+  const inputChecked = (activityId, activityType) => {
+    return props.activitiesToExportIds.some(({ id, type }) => activityId === id && type === activityType)
+  }
+
   const checkRow = (event) => {
-    const activityId = +event.target.value
-    const activityType = getActivityType(activityId)
-    inputChecked(activityId)
-      ? props.setActivitiesToExportIds((prevState) => prevState.filter(({ activityId: id }) => id !== activityId))
-      : props.setActivitiesToExportIds((prevState) => [...prevState, { activityId, activityType }])
+    const [activityId, activityType] = event.target.value.split(',')
+
+    inputChecked(+activityId, activityType)
+      ? props.setActivitiesToExportIds((prevState) =>
+          prevState.filter(({ id, type }) => !(id === +activityId && activityType === type))
+        )
+      : props.setActivitiesToExportIds((prevState) => [...prevState, { id: +activityId, type: activityType }])
   }
 
   return (
@@ -47,16 +57,35 @@ function ActivitiesTable(props) {
         </tr>
       </thead>
       <tbody>
-        {activitiesList.map((activity, index) => (
-          <tr key={index + Date.now()}>
-            <td>
-              <input type={'checkbox'} onChange={checkRow} value={activity.id} checked={inputChecked(activity.id)} />
+        {activitiesList === undefined ? (
+          <tr>
+            <td colSpan='100%' className={'text-center'}>
+              <Spinner animation={'border'} />
             </td>
-            <td>{activity.activityName}</td>
-            <td>{getActivityTypeName(activity.activityType)}</td>
-            <td>{activity.chapterName}</td>
           </tr>
-        ))}
+        ) : activitiesList == null || activitiesList.length === 0 ? (
+          <tr>
+            <td colSpan='100%' className={'text-center'}>
+              <p>{activitiesList == null ? ERROR_OCCURRED : 'Brak aktywności'}</p>
+            </td>
+          </tr>
+        ) : (
+          activitiesList.map((activity, index) => (
+            <tr key={index + Date.now()}>
+              <td>
+                <input
+                  type={'checkbox'}
+                  onChange={checkRow}
+                  value={activity.id + ',' + activity.type}
+                  checked={inputChecked(activity.id, activity.type)}
+                />
+              </td>
+              <td>{activity.name}</td>
+              <td>{getActivityTypeName(activity.type)}</td>
+              <td>{activity.chapterName}</td>
+            </tr>
+          ))
+        )}
       </tbody>
     </Table>
   )
