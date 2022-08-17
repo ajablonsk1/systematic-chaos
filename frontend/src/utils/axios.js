@@ -74,6 +74,24 @@ export function axiosApiSendFile(url, body) {
     })
 }
 
+export function axiosApiSendProfessorFeedback(url, body) {
+  const formData = new FormData()
+  formData.append('fileTaskResultId', body.fileTaskResultId)
+  formData.append('content', body.content)
+  formData.append('points', body.points)
+  if (body.file && body.fileName) {
+    formData.append('file', body.file)
+    formData.append('fileName', body.fileName)
+  }
+  return axios
+    .post(url, formData, multipartFileHeader({}))
+    .then((response) => response.data)
+    .catch((error) => {
+      errorToast(error?.response?.data?.message)
+      throw error
+    })
+}
+
 export function axiosApiDownloadFile(url, params) {
   return axios
     .get(url, fileHeaderWithParams(params))

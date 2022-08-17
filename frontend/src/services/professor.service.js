@@ -1,12 +1,6 @@
 import { parseJwt } from '../utils/Api'
-import { axiosApiGet, axiosApiGetFile, axiosApiSendFile, axiosApiPostParams } from '../utils/axios'
-import {
-  GET_CSV,
-  GET_TASKS_TO_EVALUATE,
-  GET_FIRST_TASK_TO_EVALUATE,
-  PROF_FEEDBACK,
-  PROF_FEEDBACK_ADD_FILE
-} from './urls'
+import { axiosApiGet, axiosApiGetFile, axiosApiSendProfessorFeedback } from '../utils/axios'
+import { GET_CSV, GET_TASKS_TO_EVALUATE, GET_FIRST_TASK_TO_EVALUATE, PROF_FEEDBACK } from './urls'
 
 class ProfessorService {
   getUser() {
@@ -35,16 +29,14 @@ class ProfessorService {
     })
   }
 
-  sendTaskEvaluation(taskId, remarks, points) {
-    return axiosApiPostParams(PROF_FEEDBACK, { fileTaskResultId: taskId, content: remarks, points: points }).catch(
-      (error) => {
-        throw error
-      }
-    )
-  }
-
-  addAFileToTask(fileTaskId, studentEmail, file, fileName) {
-    return axiosApiSendFile(PROF_FEEDBACK_ADD_FILE, { fileTaskId, studentEmail, file, fileName }).catch((error) => {
+  sendTaskEvaluation(taskId, remarks, points, file, fileName) {
+    return axiosApiSendProfessorFeedback(PROF_FEEDBACK, {
+      fileTaskResultId: taskId,
+      content: remarks,
+      points: points,
+      file,
+      fileName
+    }).catch((error) => {
       throw error
     })
   }

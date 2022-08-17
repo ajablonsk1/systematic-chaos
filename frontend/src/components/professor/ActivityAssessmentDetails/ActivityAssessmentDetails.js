@@ -24,7 +24,7 @@ import {
 import { getActivityTypeName } from '../../../utils/constants'
 //https://www.flaticon.com/free-icon/user-picture_21104
 import userPicture from '../../../utils/resources/user-picture.png'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ProfessorService from '../../../services/professor.service'
 import { Activity } from '../../../utils/constants'
@@ -71,19 +71,15 @@ export default function ActivityAssessmentDetails() {
   }, [activityId])
 
   const sendFeedbackAndGetNextIfAble = () => {
-    ProfessorService.sendTaskEvaluation(activityResponseInfo.fileTaskResponseId, remarks, givenPoints).then(
-      (response) => {
-        if (fileBlob) {
-          ProfessorService.addAFileToTask(
-            activityResponseInfo.fileTaskId,
-            activityResponseInfo.userEmail,
-            fileBlob,
-            fileName
-          ).then(() => handleAfterSendingFeedback())
-        }
-        handleAfterSendingFeedback()
-      }
-    )
+    ProfessorService.sendTaskEvaluation(
+      activityResponseInfo.fileTaskResponseId,
+      remarks,
+      givenPoints,
+      fileBlob,
+      fileName
+    ).then(() => {
+      handleAfterSendingFeedback()
+    })
   }
 
   return (
