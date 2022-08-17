@@ -6,6 +6,7 @@ import com.example.api.model.activity.result.TaskResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -15,19 +16,14 @@ public class CSVTaskResult {
     private String info;
 
     public CSVTaskResult(TaskResult result) {
-        if (result == null) {
-            this.points = null;
-            this.info = null;
-        } else {
-            this.points = result.getPointsReceived();
-            this.info = "-";
-        }
+        this.info = "-";
+        this.points = result == null ? null : result.getPointsReceived();
     }
 
     public CSVTaskResult(FileTaskResult result, Feedback feedback) {
         if (feedback == null) {
             this.points = null;
-            this.info = null;
+            this.info = "-";
         } else {
             this.points = result.getPointsReceived();
             this.info = feedback.getContent();
@@ -35,6 +31,6 @@ public class CSVTaskResult {
     }
 
     public List<String> toStringList() {
-        return List.of(points.toString(), info);
+        return points == null ? List.of("-", info) : List.of(points.toString(), info);
     }
 }
