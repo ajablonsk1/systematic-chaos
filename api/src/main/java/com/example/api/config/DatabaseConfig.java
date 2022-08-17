@@ -9,6 +9,7 @@ import com.example.api.model.activity.task.Survey;
 import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
+import com.example.api.model.map.Chapter;
 import com.example.api.model.map.MustFulfil;
 import com.example.api.model.map.Requirement;
 import com.example.api.model.question.Difficulty;
@@ -18,6 +19,7 @@ import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.Url;
+import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
@@ -49,6 +51,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DatabaseConfig {
     private final UrlRepo urlRepo;
+    private final ChapterRepo chapterRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -433,6 +436,12 @@ public class DatabaseConfig {
             calendar.set(2022, Calendar.JUNE, 11);
             fileResult.setSendDateMillis(calendar.getTimeInMillis());
             fileTaskResultService.saveFileTaskResult(fileResult);
+
+            Chapter chapter = new Chapter();
+            chapter.setName("Rozdział 1");
+            chapter.setActivityMap(activityMap1);
+
+            chapterRepo.save(chapter);
         };
     }
 }
