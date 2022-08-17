@@ -100,7 +100,7 @@ public class TaskService {
         List<List<ActivitiesResponse>> activitiesResponses = new LinkedList<>();
         chapters.forEach(chapter -> {
             ActivityMap activityMap = chapter.getActivityMap();
-            List<ActivitiesResponse> graphTasks = activityMap.getFileTasks()
+            List<ActivitiesResponse> graphTasks = activityMap.getGraphTasks()
                     .stream()
                     .map(graphTask -> new ActivitiesResponse(graphTask.getId(), graphTask.getName(), chapter.getName(), ActivityType.EXPEDITION))
                     .toList();
@@ -108,7 +108,7 @@ public class TaskService {
                     .stream()
                     .map(fileTask -> new ActivitiesResponse(fileTask.getId(), fileTask.getName(), chapter.getName(), ActivityType.TASK))
                     .toList();
-            List<ActivitiesResponse> surveys = activityMap.getFileTasks()
+            List<ActivitiesResponse> surveys = activityMap.getSurveys()
                     .stream()
                     .map(survey -> new ActivitiesResponse(survey.getId(), survey.getName(), chapter.getName(), ActivityType.SURVEY))
                     .toList();
