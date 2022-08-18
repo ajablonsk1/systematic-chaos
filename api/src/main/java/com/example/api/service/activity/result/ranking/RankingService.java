@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.DoubleStream;
 
 @Service
@@ -66,9 +67,8 @@ public class RankingService {
     }
 
     private void addPositionToRankingList(List<RankingResponse> rankingResponses){
-        for (int i = 0; i < rankingResponses.size(); i++){
-            rankingResponses.get(i).setPosition(i + 1);
-        }
+        AtomicInteger position = new AtomicInteger(1);
+        rankingResponses.forEach(item -> item.setPosition(position.getAndIncrement()));
     }
 
     private RankingResponse studentToRankingEntry(User student) {
