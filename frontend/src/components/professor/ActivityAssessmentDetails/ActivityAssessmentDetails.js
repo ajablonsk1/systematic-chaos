@@ -58,7 +58,7 @@ export default function ActivityAssessmentDetails() {
         setActivityResponseInfo(activityResponseInfo)
       })
     } else {
-      navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment))
+      navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT_LIST))
     }
   }
 
