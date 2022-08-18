@@ -1,13 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import Ranking from '../../general/Ranking/Ranking'
 import { debounce } from 'lodash/function'
 import { Form } from 'react-bootstrap'
-import { getRanking } from '../../general/Ranking/mockData'
+import RankingService from '../../../services/ranking.service'
 
 function StudentsRanking() {
-  const ranking = getRanking()
-  const [filteredList, setFilteredList] = useState([...ranking])
+  const [ranking, setRanking] = useState(undefined)
+  const [filteredList, setFilteredList] = useState([])
+
+  useEffect(() => {
+    RankingService.getRankingList()
+      .then((response) => {
+        setRanking(response)
+        setFilteredList(response)
+      })
+      .catch(() => {
+        setRanking(null)
+      })
+  }, [])
 
   const filterList = debounce((query) => {
     if (!query) return setFilteredList([...ranking])
