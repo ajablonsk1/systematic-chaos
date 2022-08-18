@@ -31,7 +31,7 @@ function StudentsRanking() {
 
   return (
     <Content>
-      <Form.Group className={'my-3 mx-4'}>
+      <Form.Group className={'py-3 px-4'}>
         <Form.Control type={'text'} placeholder={'Wyszukaj studenta...'} onChange={(e) => filterList(e.target.value)} />
       </Form.Group>
       <Ranking rankingList={filteredList} />
