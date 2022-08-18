@@ -14,6 +14,7 @@ public class RankingResponse {
     @Schema(required = true) private String groupName;
     @Schema(required = true) private HeroType heroType;
     @Schema(required = true) private Double points;
+    @Schema(required = true) private Integer position;
 
     public RankingResponse(User user) {
         this.firstName = user.getFirstName();
