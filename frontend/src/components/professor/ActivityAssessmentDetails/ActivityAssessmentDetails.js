@@ -56,7 +56,6 @@ export default function ActivityAssessmentDetails() {
       resetStates()
       ProfessorService.getFirstTaskToEvaluate(activityId).then((activityResponseInfo) => {
         setActivityResponseInfo(activityResponseInfo)
-        console.log(activityResponseInfo)
       })
     } else {
       navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment))
@@ -66,7 +65,6 @@ export default function ActivityAssessmentDetails() {
   useEffect(() => {
     ProfessorService.getFirstTaskToEvaluate(activityId).then((activityResponseInfo) => {
       setActivityResponseInfo(activityResponseInfo)
-      console.log(activityResponseInfo)
     })
   }, [activityId])
 
@@ -129,7 +127,6 @@ export default function ActivityAssessmentDetails() {
             <RemarksTextArea
               onChange={(newText) => {
                 setRemarks(newText.target.value)
-                console.log(newText.target.value)
               }}
             />
           </RemarksCol>
@@ -147,7 +144,6 @@ export default function ActivityAssessmentDetails() {
                 max={activityResponseInfo.maxPoints}
                 onChange={(newPointsNum) => {
                   setGivenPoints(newPointsNum.target.value)
-                  console.log(newPointsNum.target.value)
                 }}
               ></PointsInput>
               <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>

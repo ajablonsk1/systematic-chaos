@@ -12,7 +12,6 @@ export default function ActivityAssessmentStudentFileService({ activityResponseI
       download(file, activityResponseInfo.file[fileNumber].name)
     })
   }
-  console.log(activityResponseInfo)
   return (
     <>
       <strong>Załączone pliki:</strong>
