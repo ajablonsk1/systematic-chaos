@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 @Service
@@ -27,34 +26,49 @@ public class RankingService {
     private final FileTaskResultRepo fileTaskResultRepo;
 
     public List<RankingResponse> getRanking() {
-        return userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
+        List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .map(this::studentToRankingEntry)
                 .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
-                .collect(Collectors.toList());
+                .toList();
+
+        addPositionToRankingList(rankingList);
+        return rankingList;
     }
 
     public List<RankingResponse> getRankingForGroup(String groupName) {
-        return userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
+        List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .filter(student -> Objects.equals(student.getGroup().getName(), groupName))
                 .map(this::studentToRankingEntry)
                 .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
-                .collect(Collectors.toList());
+                .toList();
+
+        addPositionToRankingList(rankingList);
+        return rankingList;
     }
 
     public List<RankingResponse> getSearchedRanking(String search) {
         String searchLower = search.toLowerCase();
-        return userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
+        List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .filter(student ->
-                                student.getFirstName().toLowerCase().contains(searchLower) ||
+                        student.getFirstName().toLowerCase().contains(searchLower) ||
                                 student.getLastName().toLowerCase().contains(searchLower) ||
                                 student.getHeroType().toString().toLowerCase().contains(searchLower) ||
                                 student.getGroup().getName().toLowerCase().contains(searchLower))
                 .map(this::studentToRankingEntry)
                 .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
-                .collect(Collectors.toList());
+                .toList();
+
+        addPositionToRankingList(rankingList);
+        return rankingList;
+    }
+
+    private void addPositionToRankingList(List<RankingResponse> rankingResponses){
+        for (int i = 0; i < rankingResponses.size(); i++){
+            rankingResponses.get(i).setPosition(i + 1);
+        }
     }
 
     private RankingResponse studentToRankingEntry(User student) {
