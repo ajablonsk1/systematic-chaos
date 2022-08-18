@@ -1,6 +1,6 @@
 import React from 'react'
-import { Table } from 'react-bootstrap'
-import { getHeroName } from '../../../utils/constants'
+import { Spinner, Table } from 'react-bootstrap'
+import { ERROR_OCCURRED, getHeroName } from '../../../utils/constants'
 import { TableContainer, TableRow } from './RankingStyle'
 
 function Ranking(props) {
@@ -20,7 +20,19 @@ function Ranking(props) {
           </tr>
         </thead>
         <tbody>
-          {props.rankingList.length > 0 ? (
+          {props.rankingList === undefined ? (
+            <tr>
+              <td colSpan='100%' className={'text-center'}>
+                <Spinner animation={'border'} />
+              </td>
+            </tr>
+          ) : props.rankingList == null || props.rankingList.length === 0 ? (
+            <tr>
+              <td colSpan='100%' className={'text-center'}>
+                <p>{props.rankingList == null ? ERROR_OCCURRED : 'Brak studentów do wyświetlenia'}</p>
+              </td>
+            </tr>
+          ) : (
             props.rankingList.map((student, index) => (
               <TableRow key={index + Date.now()} $backgroundColor={rowColor(index)}>
                 <td>{index + 1}</td>
@@ -30,12 +42,6 @@ function Ranking(props) {
                 <td>{student.points}</td>
               </TableRow>
             ))
-          ) : (
-            <tr>
-              <td colSpan='100%' className={'text-center'}>
-                <p>Brak studentów do wyświetlenia</p>
-              </td>
-            </tr>
           )}
         </tbody>
       </Table>
