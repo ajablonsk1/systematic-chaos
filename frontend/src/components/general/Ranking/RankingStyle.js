@@ -5,9 +5,20 @@ export const TableContainer = styled(GameCardOptionPick)`
   position: relative;
   top: 20px;
   margin: 0 25px;
+  max-height: 80vh;
+  overflow: auto;
 
   table {
     color: var(--font-color);
+
+    text-align: left;
+    position: relative;
+    border-collapse: collapse;
+
+    thead {
+      position: sticky;
+      top: 0; /* Don't forget this, required for the stickiness */
+    }
 
     th {
       background-color: var(--dark-blue);

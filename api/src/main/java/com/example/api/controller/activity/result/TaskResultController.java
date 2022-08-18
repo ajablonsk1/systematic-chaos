@@ -24,7 +24,7 @@ public class TaskResultController {
     public ResponseEntity<ByteArrayResource> getCSVFile(@RequestBody GetCSVForm form) throws IOException {
         return ResponseEntity.ok().body(resultService.getCSVFile(form));
     }
-    
+
     @GetMapping("/points/statistics")
     public ResponseEntity<List<TaskPointsStatisticsResponse>> getUserPointsStatistics() throws WrongUserTypeException {
         return ResponseEntity.ok().body(resultService.getUserPointsStatistics());

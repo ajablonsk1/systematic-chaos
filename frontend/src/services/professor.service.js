@@ -11,8 +11,8 @@ class ProfessorService {
     return parseJwt(this.getUser().access_token).sub
   }
 
-  getCSVGradesFile(studentsId) {
-    return axiosApiGetFile(GET_CSV, studentsId).catch((error) => {
+  getCSVGradesFile(studentsId, activitiesId) {
+    return axiosApiGetFile(GET_CSV, { studentIds: studentsId, forms: activitiesId }).catch((error) => {
       throw error
     })
   }
