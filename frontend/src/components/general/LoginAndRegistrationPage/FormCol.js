@@ -30,6 +30,8 @@ export const FormCol = (name, type, colName, size = 12, additionalOptions) => {
             </div>
           ))}
         </div>
+      ) : type === 'textarea' ? (
+        <Field className='form-control' as={'textarea'} type={'text'} name={colName} />
       ) : (
         <Field
           className='form-control'

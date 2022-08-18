@@ -3,7 +3,7 @@ import { Button, Card, Form, Modal, ModalBody, ModalFooter, Spinner } from 'reac
 import CardHeader from 'react-bootstrap/CardHeader'
 import Loader from '../../general/Loader/Loader'
 import GroupService from '../../../services/group.service'
-import { ERROR_OCCURED } from '../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 function ChangeGroupModal(props) {
   const [student, setStudent] = useState()
@@ -53,7 +53,7 @@ function ChangeGroupModal(props) {
             <>
               <Card.Body>
                 {groups == null ? (
-                  <p className={'text-center text-danger h6'}>{ERROR_OCCURED}</p>
+                  <p className={'text-center text-danger h6'}>{ERROR_OCCURRED}</p>
                 ) : (
                   <>
                     <h6>

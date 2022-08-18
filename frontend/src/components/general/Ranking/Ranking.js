@@ -4,7 +4,8 @@ import { getHeroName } from '../../../utils/constants'
 import { TableContainer, TableRow } from './RankingStyle'
 
 function Ranking(props) {
-  const rowColor = (index) => (props.studentId && index === props.studentId ? 'var(--button-green)' : '#223762')
+  const rowColor = (index) =>
+    props.studentId && index === props.studentId ? 'var(--button-green)' : 'var(--light-blue)'
 
   return (
     <TableContainer>

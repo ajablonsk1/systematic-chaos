@@ -1,16 +1,21 @@
 package com.example.api.service.activity.task;
 
-import com.example.api.dto.response.task.ActivityToEvaluateResponse;
-import com.example.api.dto.response.task.TaskToEvaluateResponse;
-import com.example.api.dto.response.task.util.FileResponse;
+import com.example.api.dto.response.activity.task.ActivitiesResponse;
+import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
+import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
+import com.example.api.dto.response.activity.task.util.FileResponse;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.map.ActivityMap;
+import com.example.api.model.map.Chapter;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
+import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +24,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +38,7 @@ public class TaskService {
     private final FileTaskRepo fileTaskRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final UserRepo userRepo;
+    private final ChapterRepo chapterRepo;
     private final AuthenticationService authService;
 
     public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate()
@@ -91,5 +98,33 @@ public class TaskService {
                     result.getAnswer(), filesResponse, task.getMaxPoints(), id, num-1);
         }
         return null;
+    }
+
+    public List<ActivitiesResponse> getAllActivities() {
+        log.info("Fetching all activities");
+        List<Chapter> chapters = chapterRepo.findAll();
+        List<List<ActivitiesResponse>> activitiesResponses = new LinkedList<>();
+        chapters.forEach(chapter -> {
+            ActivityMap activityMap = chapter.getActivityMap();
+            List<ActivitiesResponse> graphTasks = activityMap.getGraphTasks()
+                    .stream()
+                    .map(graphTask -> new ActivitiesResponse(graphTask.getId(), graphTask.getName(), chapter.getName(), ActivityType.EXPEDITION))
+                    .toList();
+            List<ActivitiesResponse> fileTasks = activityMap.getFileTasks()
+                    .stream()
+                    .map(fileTask -> new ActivitiesResponse(fileTask.getId(), fileTask.getName(), chapter.getName(), ActivityType.TASK))
+                    .toList();
+            List<ActivitiesResponse> surveys = activityMap.getSurveys()
+                    .stream()
+                    .map(survey -> new ActivitiesResponse(survey.getId(), survey.getName(), chapter.getName(), ActivityType.SURVEY))
+                    .toList();
+            List<ActivitiesResponse> responses = Stream.of(graphTasks, fileTasks, surveys)
+                    .flatMap(Collection::stream)
+                    .toList();
+            activitiesResponses.add(responses);
+        });
+        return activitiesResponses.stream()
+                .flatMap(Collection::stream)
+                .toList();
     }
 }

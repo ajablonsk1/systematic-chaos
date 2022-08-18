@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
+import { GameCardOptionPick } from '../../general/GameCardStyles'
 import { TableContainer } from './ParticipantsStyles'
 import ChangeGroupModal from './ChangeGroupModal'
 import { Button } from 'react-bootstrap'
 import GroupService from '../../../services/group.service'
-import { ERROR_OCCURED } from '../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../utils/constants'
+import BonusPointsModal from './BonusPointsModal'
 
 function ParticipantsTable(props) {
-  const [modalOpen, setModalOpen] = useState(false)
+  const [changeGroupModalOpen, setChangeGroupModalOpen] = useState(false)
+  const [bonusPointsModalOpen, setBonusPointsModalOpen] = useState(false)
   const [chosenStudent, setChosenStudent] = useState()
   const [studentsList, setStudentsList] = useState([])
 
   // "if (!modalOpen)" is here because this useEffect is triggered
   // when we have finished group change process and closed this modal
   useEffect(() => {
-    if (!modalOpen) {
+    if (!changeGroupModalOpen) {
       if (!props.groupId || !props.groupName) {
         GroupService.getAllStudents()
           .then((response) => setStudentsList([...response]))
@@ -34,7 +36,7 @@ function ParticipantsTable(props) {
           })
       }
     }
-  }, [props, modalOpen])
+  }, [props, changeGroupModalOpen])
 
   return (
     <GameCardOptionPick>
@@ -54,15 +56,25 @@ function ParticipantsTable(props) {
                 <td className={'py-2'}>
                   {student.firstName} {student.lastName}
                 </td>
-                <td className={'py-2 text-center'}>
+                <td className={'py-2 text-center d-flex justify-content-center align-items-center'}>
                   <Button
                     style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
                     onClick={() => {
                       setChosenStudent(student)
-                      setModalOpen(true)
+                      setChangeGroupModalOpen(true)
                     }}
                   >
                     Zmień grupę
+                  </Button>
+                  <Button
+                    className={'ml-2'}
+                    style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
+                    onClick={() => {
+                      setChosenStudent(student)
+                      setBonusPointsModalOpen(true)
+                    }}
+                  >
+                    Przyznaj punkty
                   </Button>
                 </td>
               </tr>
@@ -70,13 +82,18 @@ function ParticipantsTable(props) {
           ) : (
             <tr>
               <td colSpan='100%' className={'text-center'}>
-                <p>{studentsList == null ? ERROR_OCCURED : 'Brak członków'}</p>
+                <p>{studentsList == null ? ERROR_OCCURRED : 'Brak członków'}</p>
               </td>
             </tr>
           )}
         </tbody>
       </TableContainer>
-      <ChangeGroupModal show={modalOpen} setModalOpen={setModalOpen} student={chosenStudent} />
+      <ChangeGroupModal show={changeGroupModalOpen} setModalOpen={setChangeGroupModalOpen} student={chosenStudent} />
+      <BonusPointsModal
+        show={bonusPointsModalOpen}
+        setModalOpen={setBonusPointsModalOpen}
+        studentId={chosenStudent?.id}
+      />
     </GameCardOptionPick>
   )
 }

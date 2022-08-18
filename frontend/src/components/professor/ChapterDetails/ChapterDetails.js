@@ -3,8 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import { getChapterDetails } from '../GameManagement/mockData'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Table } from 'react-bootstrap'
-import { ERROR_OCCURED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
-import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard } from './ChapterDetailsStyles'
+import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
+import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
@@ -12,6 +12,9 @@ import ActivityService from '../../../services/activity.service'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
 import EditChapterModal from './EditChapterModal'
+import JSONEditor from '../../general/jsonEditor/JSONEditor'
+import { getConfigJson } from '../GameManagement/GameLoader/mockData'
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -21,6 +24,9 @@ function ChapterDetails() {
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false)
   const [isEditChapterModalOpen, setEditChapterModalOpen] = useState(false)
   const mapCardBody = useRef()
+  const [chosenActivityData, setChosenActivityData] = useState(null)
+  const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
+  const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
 
   const chapterDetails = getChapterDetails(+chapterId)
 
@@ -30,6 +36,26 @@ function ChapterDetails() {
       .then((response) => setChapterMap(response))
       .catch(() => setChapterMap(null))
   }, [])
+
+  const startActivityEdition = (activity) => {
+    // TODO: depending on the type of activity, we will use a different endpoint
+    setChosenActivityData({
+      activityId: activity.id,
+      activityType: getActivityTypeName(activity.type),
+      activityName: activity.title,
+      jsonConfig: getConfigJson() // TODO: endpoint response
+    })
+    setIsEditActivityModalOpen(true)
+  }
+
+  const deleteActivity = (activity) => {
+    setChosenActivityData({
+      activityId: activity.id,
+      activityType: getActivityTypeName(activity.type),
+      activityName: activity.title
+    })
+    setIsDeleteActivityModalOpen(true)
+  }
 
   return (
     <Content>
@@ -42,7 +68,7 @@ function ChapterDetails() {
                 {chapterMap ? (
                   <ChapterMap map={chapterMap} marginNeeded parentRef={mapCardBody} />
                 ) : (
-                  chapterMap == null && <p className={'text-center h6 p-4'}>{ERROR_OCCURED}</p>
+                  chapterMap == null && <p className={'text-center h6 p-4'}>{ERROR_OCCURRED}</p>
                 )}
               </Card.Body>
             </MapCard>
@@ -113,7 +139,7 @@ function ChapterDetails() {
                 <Table>
                   <tbody>
                     {chapterDetails.activities.map((activity, index) => (
-                      <tr key={activity.title + index}>
+                      <TableRow key={activity.title + index}>
                         <td>
                           <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
                         </td>
@@ -123,7 +149,13 @@ function ChapterDetails() {
                           ({activity.posX}, {activity.posY})
                         </td>
                         <td>Pkt: {activity.points}</td>
-                      </tr>
+                        <td>
+                          <FontAwesomeIcon icon={faPenToSquare} onClick={() => startActivityEdition(activity)} />
+                        </td>
+                        <td>
+                          <FontAwesomeIcon icon={faTrash} onClick={() => deleteActivity(activity)} />
+                        </td>
+                      </TableRow>
                     ))}
                   </tbody>
                 </Table>
@@ -145,9 +177,43 @@ function ChapterDetails() {
       <DeletionModal
         showModal={isDeletionModalOpen}
         setModalOpen={setDeletionModalOpen}
-        chapterTitle={chapterDetails.name}
+        modalTitle={'Usunięcie rozdziału'}
+        modalBody={
+          <>
+            Czy na pewno chcesz usunąć rozdział: <br />
+            <strong>{chapterDetails.name}</strong>?
+          </>
+        }
       />
+
       <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
+
+      <JSONEditor
+        setShowModal={setIsEditActivityModalOpen}
+        showModal={isEditActivityModalOpen}
+        modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
+        jsonConfig={chosenActivityData?.jsonConfig}
+        submitButtonText={'Zapisz zmiany'}
+        successModalHeader={'Edycja zakończona pomyślnie'}
+        successModalBody={
+          <p>
+            Twoje zmiany wprowadzone dla aktywności typu: <strong>{chosenActivityData?.activityType}</strong>
+            <br /> o nazwie: <strong>{chosenActivityData?.activityName}</strong> zakończyła się pomyślnie.
+          </p>
+        }
+      />
+
+      <DeletionModal
+        showModal={isDeleteActivityModalOpen}
+        setModalOpen={setIsDeleteActivityModalOpen}
+        modalTitle={'Usunięcie aktywności'}
+        modalBody={
+          <>
+            Czy na pewno chcesz usunąć aktywność typu: <strong>{chosenActivityData?.activityType}</strong>
+            <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
+          </>
+        }
+      />
     </Content>
   )
 }

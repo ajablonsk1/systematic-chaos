@@ -11,7 +11,7 @@ const ChapterCard = styled(Card)`
   }
 
   .card-body {
-    background-color: #223762;
+    background-color: var(--light-blue);
   }
 `
 
@@ -27,7 +27,7 @@ export const SummaryCard = styled(ChapterCard)`
   overflow-x: hidden;
 
   .list-group-item {
-    background-color: #223762;
+    background-color: var(--light-blue);
   }
 
   #activities,
@@ -60,4 +60,18 @@ export const ButtonsCol = styled(Col)`
 
   position: relative;
   bottom: 1.5rem;
+`
+
+export const TableRow = styled.tr`
+  &:hover {
+    background-color: var(--dark-blue);
+  }
+
+  & td:nth-child(4) {
+    min-width: 60px;
+  }
+
+  & td svg:hover {
+    cursor: pointer;
+  }
 `

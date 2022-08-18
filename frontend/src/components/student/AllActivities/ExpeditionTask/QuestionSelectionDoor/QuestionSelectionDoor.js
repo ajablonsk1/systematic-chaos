@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Loader from '../../../../general/Loader/Loader'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
-import { ERROR_OCCURED } from '../../../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../../../utils/constants'
 
 // if only one element of id -1 or -2 then do not generate doors but go to score screen
 // will be done in routing after answering a question, so that we never get only the start or only the end node here
@@ -87,7 +87,7 @@ function QuestionSelectionDoor(props) {
       {questions === undefined ? (
         <Loader />
       ) : questions == null ? (
-        <p className={'text-center text-danger h3 p-5'}>{ERROR_OCCURED}</p>
+        <p className={'text-center text-danger h3 p-5'}>{ERROR_OCCURRED}</p>
       ) : (
         <Row className='m-0'>
           {questions.map((question) => generateDoor(question, navigate, expeditionId, questions.length, taskResultId))}

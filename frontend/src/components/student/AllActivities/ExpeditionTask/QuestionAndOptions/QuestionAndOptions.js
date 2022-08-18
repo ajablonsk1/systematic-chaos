@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ClosedQuestionPage from './ClosedQuestionPage/ClosedQuestionPage'
-import { ERROR_OCCURED, QuestionType } from '../../../../../utils/constants'
+import { ERROR_OCCURRED, QuestionType } from '../../../../../utils/constants'
 import Loader from '../../../../general/Loader/Loader'
 import { ContentWithBackground } from './QuestionAndOptionsStyle'
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage'
@@ -51,7 +51,7 @@ function QuestionAndOptions(props) {
       {question === undefined ? (
         <Loader />
       ) : question == null ? (
-        <p className={'text-center text-danger h3'}>{ERROR_OCCURED}</p>
+        <p className={'text-center text-danger h3'}>{ERROR_OCCURRED}</p>
       ) : (
         <>
           {question.type === QuestionType.OPEN_QUESTION ? (

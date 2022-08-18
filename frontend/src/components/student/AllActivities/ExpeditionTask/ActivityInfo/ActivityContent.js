@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { Col, Spinner } from 'react-bootstrap'
 import {
   Activity,
-  ERROR_OCCURED,
+  ERROR_OCCURRED,
   getActivityImg,
   getActivityTypeName,
   START_GRAPH_NODE_ID
@@ -45,7 +45,7 @@ export default function ActivityContent(props) {
         setLoadedScore(true)
       })
       .catch(() => {
-        setErrorMessage(ERROR_OCCURED)
+        setErrorMessage(ERROR_OCCURRED)
       })
   }, [activityId, props])
 
@@ -63,8 +63,8 @@ export default function ActivityContent(props) {
           }
         })
         .catch(() => {
-          setStartDate(ERROR_OCCURED)
-          setEndDate(ERROR_OCCURED)
+          setStartDate(ERROR_OCCURRED)
+          setEndDate(ERROR_OCCURRED)
         })
 
       if (activityScore?.id) {
@@ -141,10 +141,10 @@ export default function ActivityContent(props) {
             <p>Liczba punktów licząca się jako 100% - {props.activity.maxPoints100}</p>
             <Spacer />
 
-            {startDate === ERROR_OCCURED ? (
+            {startDate === ERROR_OCCURRED ? (
               <p>
                 Data dostępności aktywności: <br />
-                <strong>{ERROR_OCCURED}</strong>
+                <strong>{ERROR_OCCURRED}</strong>
               </p>
             ) : !props.activity.requirement ? (
               <p>Aktywność nie ma ustawionego limitu czasowego</p>

@@ -13,7 +13,7 @@ import {
   HeaderRow,
   SmallDivider
 } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
-import { ERROR_OCCURED, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
+import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
 import FileService from './FileService'
 import {
   RemarksCol,
@@ -48,7 +48,7 @@ export default function CombatTask() {
         setTask(response)
       })
       .catch(() => {
-        setErrorMessage(ERROR_OCCURED)
+        setErrorMessage(ERROR_OCCURRED)
       })
   }, [isFetching, taskState])
 

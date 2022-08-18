@@ -1,6 +1,6 @@
 package com.example.api.controller.activity.task;
 
-import com.example.api.dto.response.task.FileTaskInfoResponse;
+import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.task.FileTaskService;

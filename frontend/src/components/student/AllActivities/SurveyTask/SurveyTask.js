@@ -11,7 +11,7 @@ import {
 } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import {
   Activity,
-  ERROR_OCCURED,
+  ERROR_OCCURRED,
   FIELD_REQUIRED,
   getActivityImg,
   getActivityTypeName
@@ -38,7 +38,7 @@ export default function FeedbackTask() {
         setTask(response)
       })
       .catch(() => {
-        setTask(ERROR_OCCURED)
+        setTask(ERROR_OCCURRED)
       })
   }, [taskId])
 
@@ -47,8 +47,8 @@ export default function FeedbackTask() {
       <InfoContainer>
         {!task ? (
           <Loader />
-        ) : task === ERROR_OCCURED ? (
-          <p>{ERROR_OCCURED}</p>
+        ) : task === ERROR_OCCURRED ? (
+          <p>{ERROR_OCCURRED}</p>
         ) : (
           <ActivityCol className='invisible-scroll'>
             <HeaderCol>

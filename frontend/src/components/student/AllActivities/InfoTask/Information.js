@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Activity, ERROR_OCCURED, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
+import { Activity, ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
 import {
   ActivityCol,
   ActivityImg,
@@ -34,7 +34,7 @@ export default function Information() {
       {information === undefined ? (
         <Loader />
       ) : information == null ? (
-        <p className={'text-center text-danger h4'}>{ERROR_OCCURED}</p>
+        <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
       ) : (
         <Content>
           <InfoContainer>
