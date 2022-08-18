@@ -2,6 +2,8 @@ package com.example.api.controller.activity.result.ranking;
 
 import com.example.api.dto.response.ranking.RankingResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.result.ranking.RankingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -36,5 +38,17 @@ public class RankingController {
     public ResponseEntity<List<RankingResponse>> getSearchedRanking(@RequestParam String search)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(rankingService.getSearchedRanking(search));
+    }
+
+    @GetMapping("/position")
+    public ResponseEntity<Integer> getRankingPosition()
+            throws WrongUserTypeException {
+        return ResponseEntity.ok().body(rankingService.getRankingPosition());
+    }
+
+    @GetMapping("/group/position")
+    public ResponseEntity<Integer> getGroupRankingPosition()
+            throws WrongUserTypeException, MissingAttributeException {
+        return ResponseEntity.ok().body(rankingService.getGroupRankingPosition());
     }
 }
