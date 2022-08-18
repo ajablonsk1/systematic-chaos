@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Table } from 'react-bootstrap'
-import { getHeroName } from '../../../utils/constants'
+import { Spinner, Table } from 'react-bootstrap'
+import {  ERROR_OCCURRED, getHeroName } from '../../../utils/constants'
 import { CustomIcon, TableContainer, TableRow } from './RankingStyle'
 import { getSortIcon, nextSortingOrder, sortArray } from './sortHelper'
 
@@ -63,23 +63,29 @@ function Ranking(props) {
       <Table className={'my-0'}>
         <thead>{tableHeaders}</thead>
         <tbody>
-          {ranking.length > 0 ? (
-            ranking.map((student, index) => (
-              <TableRow key={index + Date.now()} $backgroundColor={rowColor(student.id)}>
-                <td>{index + 1}</td>
-                <td>{student.firstName + ' ' + student.lastName}</td>
-                <td>{student.groupName}</td>
-                <td>{getHeroName(student.heroType)}</td>
-                <td>{student.points}</td>
-              </TableRow>
-            ))
-          ) : (
-            <tr>
-              <td colSpan='100%' className={'text-center'}>
-                <p>Brak studentów do wyświetlenia</p>
-              </td>
-            </tr>
-          )}
+        {ranking === undefined ? (
+          <tr>
+            <td colSpan='100%' className={'text-center'}>
+              <Spinner animation={'border'} />
+            </td>
+          </tr>
+        ) : ranking == null || ranking.length === 0 ? (
+          <tr>
+            <td colSpan='100%' className={'text-center'}>
+              <p>{ranking == null ? ERROR_OCCURRED : 'Brak studentów do wyświetlenia'}</p>
+            </td>
+          </tr>
+        ) : (
+          ranking.map((student, index) => (
+            <TableRow key={index + Date.now()} $backgroundColor={rowColor(index)}>
+              <td>{index + 1}</td>
+              <td>{student.firstName + ' ' + student.lastName}</td>
+              <td>{student.groupName}</td>
+              <td>{getHeroName(student.heroType)}</td>
+              <td>{student.points}</td>
+            </TableRow>
+          ))
+        )}
         </tbody>
       </Table>
     </TableContainer>

@@ -37,7 +37,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
     private Integer level;
-    private Integer experiance;
+    private Integer experience;
 
     @Enumerated(EnumType.STRING)
     private HeroType heroType;
