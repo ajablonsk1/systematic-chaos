@@ -7,7 +7,7 @@ import RankingService from '../../../services/ranking.service'
 
 function StudentsRanking() {
   const [ranking, setRanking] = useState(undefined)
-  const [filteredList, setFilteredList] = useState([])
+  const [filteredList, setFilteredList] = useState(undefined)
 
   useEffect(() => {
     RankingService.getRankingList()
@@ -17,6 +17,7 @@ function StudentsRanking() {
       })
       .catch(() => {
         setRanking(null)
+        setFilteredList(null)
       })
   }, [])
 
