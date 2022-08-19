@@ -54,18 +54,26 @@ export default function ActivityAssessmentDetails() {
   const handleAfterSendingFeedback = () => {
     if (activityResponseInfo?.remaining) {
       resetStates()
-      ProfessorService.getFirstTaskToEvaluate(activityId).then((activityResponseInfo) => {
-        setActivityResponseInfo(activityResponseInfo)
-      })
+      ProfessorService.getFirstTaskToEvaluate(activityId)
+        .then((activityResponseInfo) => {
+          setActivityResponseInfo(activityResponseInfo)
+        })
+        .catch(() => {
+          setActivityResponseInfo(null)
+        })
     } else {
       navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT_LIST))
     }
   }
 
   useEffect(() => {
-    ProfessorService.getFirstTaskToEvaluate(activityId).then((activityResponseInfo) => {
-      setActivityResponseInfo(activityResponseInfo)
-    })
+    ProfessorService.getFirstTaskToEvaluate(activityId)
+      .then((activityResponseInfo) => {
+        setActivityResponseInfo(activityResponseInfo)
+      })
+      .catch(() => {
+        setActivityResponseInfo(null)
+      })
   }, [activityId])
 
   const sendFeedbackAndGetNextIfAble = () => {
@@ -75,9 +83,11 @@ export default function ActivityAssessmentDetails() {
       givenPoints,
       fileBlob,
       fileName
-    ).then(() => {
-      handleAfterSendingFeedback()
-    })
+    )
+      .then(() => {
+        handleAfterSendingFeedback()
+      })
+      .catch(() => {})
   }
 
   return (
@@ -89,23 +99,23 @@ export default function ActivityAssessmentDetails() {
           </ActivityTitle>
           <TopInfo>
             <TopInfoCard>
-              <h4 style={{ textAlign: 'center' }}>Informacje o użytkowniku</h4>
+              <h4 className={'text-center'}>Informacje o użytkowniku</h4>
               <FullDivider />
-              <Row styles={{ justifyContent: 'center' }}>
+              <Row>
                 <img src={userPicture} alt='profile avatar' style={{ paddingLeft: '20px', height: '100px' }}></img>
                 <UserInfo>
-                  <h5 styles={{ width: '100%' }}>
-                    {activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName}
-                  </h5>
+                  <h5>{activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName}</h5>
 
-                  {/*//TODO: we can do it better, I'm almost sure*/}
-                  {!activityResponseInfo.isLate && <h5 styles={{ width: '100%' }}>zadanie oddane w terminie</h5>}
-                  {activityResponseInfo.isLate && <h5 styles={{ width: '100%' }}>zadanie oddane ze spóźnieniem</h5>}
+                  {activityResponseInfo.isLate ? (
+                    <h5 className={'w-100'}>zadanie oddane ze spóźnieniem</h5>
+                  ) : (
+                    <h5 className={'w-100'}>zadanie oddane w terminie</h5>
+                  )}
                 </UserInfo>
               </Row>
             </TopInfoCard>
             <TopInfoCard>
-              <h4 style={{ textAlign: 'center' }}>Informacje o aktywności</h4>
+              <h4 className={'text-center'}>Informacje o aktywności</h4>
               <FullDivider />
               <p style={{ marginBottom: '1px' }}>Treść:</p>
               <ActivityInfo>{activityResponseInfo.activityDetails}</ActivityInfo>
@@ -137,7 +147,7 @@ export default function ActivityAssessmentDetails() {
 
           <PointsRow>
             <p style={{ top: '50%', position: 'relative', margin: '0' }}>Punkty: </p>
-            <Row style={{ display: 'flex' }}>
+            <Row className={'d-flex'}>
               <PointsInput
                 type='number'
                 min={0}
