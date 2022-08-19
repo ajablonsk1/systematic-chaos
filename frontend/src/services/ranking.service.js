@@ -9,8 +9,7 @@ class RankingService {
   }
 
   getStudentGroupRankingList() {
-    // TODO: remove it when backend will be ready
-    return axiosApiGet(GET_STUDENT_GROUP_RANKING, { groupName: 'pn-1440-B' }).catch((error) => {
+    return axiosApiGet(GET_STUDENT_GROUP_RANKING).catch((error) => {
       throw error
     })
   }
