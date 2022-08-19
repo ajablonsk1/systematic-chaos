@@ -429,7 +429,7 @@ public class DatabaseConfig {
             GraphTaskResult result1 = new GraphTaskResult();
             result1.setGraphTask(graphTask);
             result1.setUser(student);
-            result1.setPointsReceived(10.0);
+            result1.setPointsReceived(12.0);
             result1.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 28);
             result1.setStartDateMillis(calendar.getTimeInMillis());
@@ -445,6 +445,16 @@ public class DatabaseConfig {
             result2.setStartDateMillis(calendar.getTimeInMillis());
             result2.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
             graphTaskResultService.saveGraphTaskResult(result2);
+
+            GraphTaskResult result3 = new GraphTaskResult();
+            result3.setGraphTask(graphTaskTwo);
+            result3.setUser(student8);
+            result3.setPointsReceived(11.0);
+            result3.setTimeSpentSec(60 * 10);
+            calendar.set(2022, Calendar.APRIL, 14);
+            result3.setStartDateMillis(calendar.getTimeInMillis());
+            result3.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
+            graphTaskResultService.saveGraphTaskResult(result3);
 
             FileTaskResult fileResult = new FileTaskResult();
             fileResult.setId(1L);

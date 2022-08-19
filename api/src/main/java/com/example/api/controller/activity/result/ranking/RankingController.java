@@ -23,8 +23,7 @@ public class RankingController {
     private final RankingService rankingService;
 
     @GetMapping
-    public ResponseEntity<List<RankingResponse>> getRanking()
-            throws EntityNotFoundException {
+    public ResponseEntity<List<RankingResponse>> getRanking() {
         return ResponseEntity.ok().body(rankingService.getRanking());
     }
 
@@ -35,8 +34,7 @@ public class RankingController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<RankingResponse>> getSearchedRanking(@RequestParam String search)
-            throws EntityNotFoundException {
+    public ResponseEntity<List<RankingResponse>> getSearchedRanking(@RequestParam String search) {
         return ResponseEntity.ok().body(rankingService.getSearchedRanking(search));
     }
 
@@ -48,7 +46,7 @@ public class RankingController {
 
     @GetMapping("/group/position")
     public ResponseEntity<Integer> getGroupRankingPosition()
-            throws WrongUserTypeException, MissingAttributeException {
+            throws WrongUserTypeException, MissingAttributeException, EntityNotFoundException {
         return ResponseEntity.ok().body(rankingService.getGroupRankingPosition());
     }
 }
