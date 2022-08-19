@@ -1,11 +1,13 @@
 package com.example.api.service.activity.result.ranking;
 
 import com.example.api.dto.response.ranking.RankingResponse;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class RankingService {
     private final GraphTaskResultRepo graphTaskResultRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
 
+    private final UserService userService;
+
     public List<RankingResponse> getRanking() {
         List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
@@ -37,7 +41,8 @@ public class RankingService {
         return rankingList;
     }
 
-    public List<RankingResponse> getRankingForGroup(String groupName) {
+    public List<RankingResponse> getRankingForLoggedStudentGroup() throws EntityNotFoundException {
+        String groupName = userService.getUserGroup().getName();
         List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .filter(student -> Objects.equals(student.getGroup().getName(), groupName))
