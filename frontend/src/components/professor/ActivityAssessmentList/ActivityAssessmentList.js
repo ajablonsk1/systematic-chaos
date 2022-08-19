@@ -61,7 +61,7 @@ export default function ActivityAssessmentList() {
         ) : (
           <>
             <div className={'text-center'}>
-              <img className={'mx-auto'} src={HeroImg.warrior} />
+              <img className={'mx-auto'} src={HeroImg.warrior} alt='no activities to grade decorator' />
             </div>
             <p className={'text-center'}>Brak aktywności do sprawdzenia!</p>
           </>
