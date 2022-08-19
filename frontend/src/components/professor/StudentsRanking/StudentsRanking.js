@@ -10,7 +10,7 @@ function StudentsRanking() {
   const [filteredList, setFilteredList] = useState(undefined)
 
   useEffect(() => {
-    RankingService.getRankingList()
+    RankingService.getGlobalRankingList()
       .then((response) => {
         setRanking(response)
         setFilteredList(response)
