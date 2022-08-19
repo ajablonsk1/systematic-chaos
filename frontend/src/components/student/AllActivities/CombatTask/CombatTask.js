@@ -96,22 +96,15 @@ export default function CombatTask() {
                 <>
                   <SmallDivider />
                   <p>
-                    Zdobyte punkty: <strong>{task.points}</strong>{' '}
-                    {/*//TODO: check if we shouldn't have maxPoints here*/}
+                    Zdobyte punkty: <strong>{task.points}</strong>
                   </p>
                   {task.remarks && (
                     <>
                       <p>Uwagi od prowadzącego:</p>
                       <p>{task.remarks}</p>
+                      {task.feedbackFile && <FeedbackFileService feedbackFile={task.feedbackFile} />}
                     </>
                   )}
-                  <p>
-                    {task?.content && (
-                      <>
-                        <strong>Uwagi prowadzącego:</strong> <br /> {task.content}
-                      </>
-                    )}
-                  </p>
                 </>
               )}
               <SmallDivider />
@@ -128,7 +121,6 @@ export default function CombatTask() {
                 setIsFetching={setIsFetching}
                 isFetching={isFetching}
               />
-              {task.feedbackFiles && <FeedbackFileService feedbackFiles={task.feedbackFiles} />}
             </div>
             <SendTaskButton
               disabled={(!fileName && answer === '') || task.remarks !== null}

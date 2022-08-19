@@ -41,7 +41,7 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
 
   return (
     <>
-      <strong>Załączone pliki:</strong>
+      <strong>Załączone pliki studenta:</strong>
       {!task || task.taskFiles?.length === 0 ? (
         <p>Brak dodanych plików</p>
       ) : (

@@ -4,30 +4,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
 import CombatTaskService from '../../../../services/combatTask.service'
 
-export default function FeedbackFileService({ feedbackFiles }) {
+export default function FeedbackFileService({ feedbackFile }) {
   const downloadFile = () => {
-    const fileId = feedbackFiles[0].id
+    const fileId = feedbackFile.id
     CombatTaskService.getCombatFile(fileId).then((file) => {
-      download(file, feedbackFiles[0].name)
+      download(file, feedbackFile.name)
     })
   }
 
   return (
     <>
       <strong>Załączony plik prowadzącego:</strong>
-      {!feedbackFiles || feedbackFiles.length === 0 ? (
+      {!feedbackFile ? (
         <p>Brak pliku</p>
       ) : (
-        feedbackFiles?.map((file, idx) => (
-          <Row key={idx} className='mt-4'>
-            <Col>{file.name}</Col>
-            <Col>
-              <Button variant='warning' className='ml-2' onClick={() => downloadFile()}>
-                <FontAwesomeIcon icon={faDownload} />
-              </Button>
-            </Col>
-          </Row>
-        ))
+        <Row className='mt-4'>
+          <Col>{feedbackFile.name}</Col>
+          <Col>
+            <Button variant='warning' className='ml-2' onClick={() => downloadFile()}>
+              <FontAwesomeIcon icon={faDownload} />
+            </Button>
+          </Col>
+        </Row>
       )}
     </>
   )
