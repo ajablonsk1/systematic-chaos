@@ -70,9 +70,9 @@ public class FileTaskService {
         }
         result.setPoints(feedback.getPoints());
         result.setRemarks(feedback.getContent());
-        result.setFeedbackFile(new FileResponse(feedback.getFeedbackFile()));
-
+        if (feedback.getFeedbackFile() != null) {
+            result.setFeedbackFile(new FileResponse(feedback.getFeedbackFile()));
+        }
         return result;
-
     }
 }
