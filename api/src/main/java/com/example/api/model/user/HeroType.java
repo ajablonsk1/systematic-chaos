@@ -15,4 +15,14 @@ public enum HeroType {
     public String getType() {
         return type;
     }
+
+    public String getPolishTypeName() {
+        return switch (this.type) {
+            case "WARRIOR" -> "WOJOWNIK";
+            case "WIZARD" -> "CZARODZIEJ";
+            case "PRIEST" -> "KAPŁAN";
+            case "ROGUE" -> "ŁOTRZYK";
+            default -> "";
+        };
+    }
 }

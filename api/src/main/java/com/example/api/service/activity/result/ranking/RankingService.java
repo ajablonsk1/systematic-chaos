@@ -61,7 +61,7 @@ public class RankingService {
                 .filter(student ->
                         student.getFirstName().toLowerCase().contains(searchLower) ||
                                 student.getLastName().toLowerCase().contains(searchLower) ||
-                                student.getHeroType().toString().toLowerCase().contains(searchLower) ||
+                                student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                                 student.getGroup().getName().toLowerCase().contains(searchLower))
                 .map(this::studentToRankingEntry)
                 .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
