@@ -3,6 +3,7 @@ package com.example.api.service.activity.result.ranking;
 import com.example.api.dto.response.ranking.RankingResponse;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
@@ -11,6 +12,7 @@ import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.GroupValidator;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +22,7 @@ import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.DoubleStream;
 
 @Service
@@ -34,37 +36,52 @@ public class RankingService {
     private final AuthenticationService authService;
     private final UserValidator userValidator;
     private final GroupValidator groupValidator;
-
+    private final UserService userService;
 
     public List<RankingResponse> getRanking() {
-        return userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
+        List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .map(this::studentToRankingEntry)
                 .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
-                .collect(Collectors.toList());
+                .toList();
+
+        addPositionToRankingList(rankingList);
+        return rankingList;
     }
 
-    public List<RankingResponse> getRankingForGroup(String groupName) {
-        return userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
+    public List<RankingResponse> getRankingForLoggedStudentGroup() throws EntityNotFoundException {
+        String groupName = userService.getUserGroup().getName();
+        List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .filter(student -> Objects.equals(student.getGroup().getName(), groupName))
                 .map(this::studentToRankingEntry)
                 .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
-                .collect(Collectors.toList());
+                .toList();
+
+        addPositionToRankingList(rankingList);
+        return rankingList;
     }
 
     public List<RankingResponse> getSearchedRanking(String search) {
         String searchLower = search.toLowerCase();
-        return userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
+        List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .filter(student ->
-                                student.getFirstName().toLowerCase().contains(searchLower) ||
+                        student.getFirstName().toLowerCase().contains(searchLower) ||
                                 student.getLastName().toLowerCase().contains(searchLower) ||
-                                student.getHeroType().toString().toLowerCase().contains(searchLower) ||
+                                student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                                 student.getGroup().getName().toLowerCase().contains(searchLower))
                 .map(this::studentToRankingEntry)
                 .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
-                .collect(Collectors.toList());
+                .toList();
+
+        addPositionToRankingList(rankingList);
+        return rankingList;
+    }
+
+    private void addPositionToRankingList(List<RankingResponse> rankingResponses){
+        AtomicInteger position = new AtomicInteger(1);
+        rankingResponses.forEach(item -> item.setPosition(position.getAndIncrement()));
     }
 
     public Integer getRankingPosition() throws WrongUserTypeException, UsernameNotFoundException {

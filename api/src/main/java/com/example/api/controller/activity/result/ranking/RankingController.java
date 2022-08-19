@@ -29,9 +29,9 @@ public class RankingController {
     }
 
     @GetMapping("/group")
-    public ResponseEntity<List<RankingResponse>> getRankingForGroup(@RequestParam String groupName)
+    public ResponseEntity<List<RankingResponse>> getRankingForGroup()
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(rankingService.getRankingForGroup(groupName));
+        return ResponseEntity.ok().body(rankingService.getRankingForLoggedStudentGroup());
     }
 
     @GetMapping("/search")
