@@ -21,7 +21,6 @@ export const TopInfo = styled(Row)`
   max-width: 1500px;
   margin: 0 auto;
   color: var(--font-color);
-  /* height: 200px; */
 `
 
 export const TopInfoCard = styled.div`
@@ -29,11 +28,11 @@ export const TopInfoCard = styled.div`
   width: 740px;
   margin-top: 5px;
   padding: 10px;
+  height: 180px;
   //tak, wiem - ale to chyba najprostszy sposób na zrobienie tego, przy czym nie jest absolutnym koszmarem
   @media (max-width: 1800px) {
     width: 1500px;
   }
-  height: 180px;
 `
 
 export const UserInfo = styled.div`
@@ -66,7 +65,7 @@ export const AnswerCol = styled(Col)`
   text-align: center;
   margin-bottom: 10px;
   max-height: 220px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 export const RemarksCol = styled(Col)`
@@ -134,20 +133,17 @@ export const RemainingCount = styled.p`
 `
 
 export const ActivityAssessmentStudentFileRow = styled(Row)`
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
   width: 80%;
 `
 
 export const ActivityAssesmentProfessorFileCol = styled(Col)`
   background-color: var(--dark-blue);
   color: var(--font-color);
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10px;
+  margin: 10px auto auto auto;
   width: 80%;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   text-align: center;
   padding: 20px;
 `

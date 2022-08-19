@@ -52,7 +52,7 @@ export default function ActivityAssessmentDetails() {
   }
 
   const handleAfterSendingFeedback = () => {
-    if (activityResponseInfo.remaining > 0) {
+    if (activityResponseInfo?.remaining) {
       resetStates()
       ProfessorService.getFirstTaskToEvaluate(activityId).then((activityResponseInfo) => {
         setActivityResponseInfo(activityResponseInfo)

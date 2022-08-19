@@ -446,15 +446,15 @@ public class DatabaseConfig {
             result2.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
             graphTaskResultService.saveGraphTaskResult(result2);
 
-             FileTaskResult fileResult = new FileTaskResult();
-             fileResult.setId(1L);
-             fileResult.setFileTask(fileTask);
-             fileResult.setUser(student);
-             fileResult.setEvaluated(false);
-             fileResult.setAnswer("Lorem ipsum");
-             calendar.set(2022, Calendar.JUNE, 11);
-             fileResult.setSendDateMillis(calendar.getTimeInMillis());
-             fileTaskResultService.saveFileTaskResult(fileResult);
+            FileTaskResult fileResult = new FileTaskResult();
+            fileResult.setId(1L);
+            fileResult.setFileTask(fileTask);
+            fileResult.setUser(student);
+            fileResult.setEvaluated(false);
+            fileResult.setAnswer("Lorem ipsum");
+            calendar.set(2022, Calendar.JUNE, 11);
+            fileResult.setSendDateMillis(calendar.getTimeInMillis());
+            fileTaskResultService.saveFileTaskResult(fileResult);
 
             Chapter chapter = new Chapter();
             chapter.setName("Rozdział 1");
