@@ -8,6 +8,7 @@ import com.example.api.service.activity.result.ranking.RankingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +47,7 @@ public class RankingController {
 
     @GetMapping("/group/position")
     public ResponseEntity<Integer> getGroupRankingPosition()
-            throws WrongUserTypeException, MissingAttributeException, EntityNotFoundException {
+            throws WrongUserTypeException, MissingAttributeException, UsernameNotFoundException, EntityNotFoundException {
         return ResponseEntity.ok().body(rankingService.getGroupRankingPosition());
     }
 }
