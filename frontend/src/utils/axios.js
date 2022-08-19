@@ -12,26 +12,6 @@ export function axiosApiPost(url, body) {
     })
 }
 
-export function axiosApiPostFeedbackFile(url, body) {
-  return axios
-    .post(url, body, validHeader({}))
-    .then((response) => response.data)
-    .catch((error) => {
-      errorToast(error?.response?.data?.message)
-      throw error
-    })
-}
-
-export function axiosApiPostParams(url, params) {
-  return axios
-    .post(url, null, validHeader({ ...params }))
-    .then((response) => response.data)
-    .catch((error) => {
-      errorToast(error?.response?.data?.message)
-      throw error
-    })
-}
-
 export function axiosApiGet(url, params) {
   return axios
     .get(url, validHeader(params))

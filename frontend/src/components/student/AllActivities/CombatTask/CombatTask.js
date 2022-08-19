@@ -126,7 +126,13 @@ export default function CombatTask() {
               disabled={(!fileName && answer === '') || task.remarks !== null}
               onClick={() => sendAnswer()}
             >
-              {isFetching ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
+              {isFetching ? (
+                <Spinner animation={'border'} />
+              ) : task.remarks === null ? (
+                <span>Wyślij</span>
+              ) : (
+                <span>Aktywność została oceniona</span>
+              )}
             </SendTaskButton>
           </ActivityCol>
         )}
