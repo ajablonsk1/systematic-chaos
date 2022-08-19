@@ -6,7 +6,7 @@ export const TableContainer = styled(GameCardOptionPick)`
   position: relative;
   top: 20px;
   margin: 0 25px;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow: auto;
 
   table {

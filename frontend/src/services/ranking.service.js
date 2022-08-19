@@ -1,9 +1,15 @@
 import { axiosApiGet } from '../utils/axios'
-import { GET_RANKING } from './urls'
+import { GET_RANKING, GET_STUDENT_GROUP_RANKING } from './urls'
 
 class RankingService {
-  getRankingList() {
+  getGlobalRankingList() {
     return axiosApiGet(GET_RANKING).catch((error) => {
+      throw error
+    })
+  }
+
+  getStudentGroupRankingList() {
+    return axiosApiGet(GET_STUDENT_GROUP_RANKING).catch((error) => {
       throw error
     })
   }
