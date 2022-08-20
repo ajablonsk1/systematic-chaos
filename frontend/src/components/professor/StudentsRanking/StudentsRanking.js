@@ -4,11 +4,20 @@ import Ranking from '../../general/Ranking/Ranking'
 import { debounce } from 'lodash/function'
 import { Form } from 'react-bootstrap'
 import RankingService from '../../../services/ranking.service'
+import StudentPointsModal from './StudentPointsModal'
 
 function StudentsRanking() {
   const [ranking, setRanking] = useState(undefined)
   const [filteredList, setFilteredList] = useState(undefined)
   const [filterQuery, setFilterQuery] = useState(undefined)
+  const [isStudentPointsModalOpen, setIsStudentPointsModalOpen] = useState(false)
+  const [chosenStudentEmail, setChosenStudentEmail] = useState(null)
+
+  useEffect(() => {
+    if (chosenStudentEmail) {
+      setIsStudentPointsModalOpen(true)
+    }
+  }, [chosenStudentEmail])
 
   useEffect(() => {
     RankingService.getGlobalRankingList()
@@ -49,7 +58,12 @@ function StudentsRanking() {
           onChange={(e) => filterList(e.target.value)}
         />
       </Form.Group>
-      <Ranking rankingList={filteredList} />
+      <Ranking rankingList={filteredList} setChosenStudentEmail={setChosenStudentEmail} />
+      <StudentPointsModal
+        show={isStudentPointsModalOpen}
+        setModalOpen={setIsStudentPointsModalOpen}
+        studentEmail={chosenStudentEmail}
+      />
     </Content>
   )
 }

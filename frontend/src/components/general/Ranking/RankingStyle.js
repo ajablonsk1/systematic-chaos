@@ -38,6 +38,10 @@ export const TableRow = styled.tr`
     cursor: default;
     background-color: var(--dark-blue);
   }
+
+  td > svg {
+    cursor: pointer;
+  }
 `
 
 export const CustomIcon = styled(FontAwesomeIcon)`
