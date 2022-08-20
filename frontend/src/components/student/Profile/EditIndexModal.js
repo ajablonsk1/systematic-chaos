@@ -41,6 +41,9 @@ function EditIndexModal(props) {
         {!!validatorMessage && <p className={'text-danger text-center py-2 my-0'}>{validatorMessage}</p>}
       </ModalBody>
       <ModalFooter>
+        <Button variant={'danger'} onClick={() => props.setModalOpen(false)}>
+          Anuluj
+        </Button>
         <Button variant={'success'} onClick={onIndexSubmit} disabled={validatorMessage !== ''}>
           {isFetching ? <Spinner animation={'border'} /> : <span>Zapisz</span>}
         </Button>
