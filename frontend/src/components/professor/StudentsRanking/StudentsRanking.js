@@ -11,13 +11,13 @@ function StudentsRanking() {
   const [filteredList, setFilteredList] = useState(undefined)
   const [filterQuery, setFilterQuery] = useState(undefined)
   const [isStudentPointsModalOpen, setIsStudentPointsModalOpen] = useState(false)
-  const [chosenStudentId, setChosenStudentId] = useState(null)
+  const [chosenStudentEmail, setChosenStudentEmail] = useState(null)
 
   useEffect(() => {
-    if (chosenStudentId) {
+    if (chosenStudentEmail) {
       setIsStudentPointsModalOpen(true)
     }
-  }, [chosenStudentId])
+  }, [chosenStudentEmail])
 
   useEffect(() => {
     RankingService.getGlobalRankingList()
@@ -58,11 +58,11 @@ function StudentsRanking() {
           onChange={(e) => filterList(e.target.value)}
         />
       </Form.Group>
-      <Ranking rankingList={filteredList} setChosenStudentId={setChosenStudentId} />
+      <Ranking rankingList={filteredList} setChosenStudentEmail={setChosenStudentEmail} />
       <StudentPointsModal
         show={isStudentPointsModalOpen}
         setModalOpen={setIsStudentPointsModalOpen}
-        chosenStudentId={chosenStudentId}
+        studentEmail={chosenStudentEmail}
       />
     </Content>
   )
