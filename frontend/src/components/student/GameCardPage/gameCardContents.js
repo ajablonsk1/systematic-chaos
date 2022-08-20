@@ -106,7 +106,7 @@ export const HeroStatsContent = () => {
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
       <Col md={6} className={'h-100'}>
-        <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg.warrior} alt={'Your hero'} />
+        <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg.WARRIOR} alt={'Your hero'} />
       </Col>
       <Col md={6}>
         <p>Punkty doświadczenia: {stats.experiencePoints}</p>
