@@ -19,7 +19,7 @@ function Ranking(props) {
   const [sortingOrders, setSortingOrders] = useState(headersWithSortedInfo.map(() => 'DESC'))
 
   const rowColor = (index) =>
-    props.studentId && index === props.studentId ? 'var(--button-green)' : 'var(--light-blue)'
+    props.studentPosition && index === props.studentPosition ? 'var(--button-green)' : 'var(--light-blue)'
 
   useEffect(() => {
     setRanking(props.rankingList)
@@ -83,7 +83,7 @@ function Ranking(props) {
             </tr>
           ) : (
             ranking.map((student, index) => (
-              <TableRow key={index + Date.now()} $backgroundColor={rowColor(index)}>
+              <TableRow key={index + Date.now()} $backgroundColor={rowColor(index + 1)}>
                 <td>{student.position}</td>
                 <td>{student.firstName + ' ' + student.lastName}</td>
                 <td>{student.groupName}</td>
