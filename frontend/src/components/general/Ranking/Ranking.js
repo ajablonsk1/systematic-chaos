@@ -3,6 +3,8 @@ import { Spinner, Table } from 'react-bootstrap'
 import { ERROR_OCCURRED, getHeroName } from '../../../utils/constants'
 import { CustomIcon, TableContainer, TableRow } from './RankingStyle'
 import { getSortIcon, nextSortingOrder, sortArray } from './sortHelper'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfo } from '@fortawesome/free-solid-svg-icons'
 
 const headersWithSortedInfo = [
   { headerName: 'Pozycja', sortedVar1: 'position' },
@@ -57,6 +59,7 @@ function Ranking(props) {
             />
           </th>
         ))}
+        <th />
       </tr>
     )
   }, [sortBy, sortingOrders])
@@ -86,6 +89,11 @@ function Ranking(props) {
                 <td>{student.groupName}</td>
                 <td>{getHeroName(student.heroType)}</td>
                 <td>{student.points}</td>
+                {!!props.setChosenStudentId && (
+                  <td>
+                    <FontAwesomeIcon icon={faInfo} onClick={() => props.setChosenStudentId(student.id)} />
+                  </td>
+                )}
               </TableRow>
             ))
           )}

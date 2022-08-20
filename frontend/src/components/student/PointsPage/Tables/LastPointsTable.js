@@ -5,18 +5,22 @@ import StudentService from '../../../../services/student.service'
 import { Spinner } from 'react-bootstrap'
 import moment from 'moment'
 
-export default function LastPointsTable() {
+export default function LastPointsTable(props) {
   const [pointsData, setPointsData] = useState(undefined)
 
   useEffect(() => {
-    StudentService.getPointsStats()
-      .then((response) => {
-        setPointsData(response)
-      })
-      .catch(() => {
-        setPointsData(null)
-      })
-  }, [])
+    if (!props.pointsList) {
+      StudentService.getPointsStats()
+        .then((response) => {
+          setPointsData(response)
+        })
+        .catch(() => {
+          setPointsData(null)
+        })
+    } else {
+      setPointsData(props.pointsList)
+    }
+  }, [props.pointsList])
 
   const tableHeaders = ['Data', 'Liczba punktów', 'Typ aktywności', 'Nazwa aktywności'].map((title, index) => (
     <th key={index} className='w-25'>
