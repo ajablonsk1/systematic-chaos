@@ -36,7 +36,7 @@ public class AdditionalPointsService {
                 form.getPoints(),
                 form.getDateInMillis(),
                 professorEmail,
-                "");;
+                "");
         if (form.getDescription() != null) {
             additionalPoints.setDescription(form.getDescription());
         }
@@ -45,6 +45,10 @@ public class AdditionalPointsService {
 
     public List<AdditionalPointsResponse> getAdditionalPoints() {
         String email = authService.getAuthentication().getName();
+        return getAdditionalPoints(email);
+    }
+
+    public List<AdditionalPointsResponse> getAdditionalPoints(String email) {
         User user = userRepo.findUserByEmail(email);
         log.info("Fetching additional points for user {}", email);
         List<AdditionalPoints> additionalPoints = additionalPointsRepo.findAllByUser(user);

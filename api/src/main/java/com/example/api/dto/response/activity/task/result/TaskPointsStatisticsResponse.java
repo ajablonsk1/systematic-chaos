@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class TaskPointsStatisticsResponse {
+public class TaskPointsStatisticsResponse implements PointsResponse {
     private Long dateMillis;
     private Double pointsReceived;
     private ActivityType activityType;
@@ -36,5 +36,10 @@ public class TaskPointsStatisticsResponse {
     private void setDateAndPoints(Long dateMillis, Double pointsReceived) {
         this.dateMillis = dateMillis;
         this.pointsReceived = pointsReceived;
+    }
+
+    @Override
+    public Double getPoints() {
+        return this.getPointsReceived();
     }
 }
