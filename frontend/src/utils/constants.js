@@ -8,7 +8,8 @@ import {
   faListCheck,
   faRankingStar,
   faStar,
-  faUsers
+  faUsers,
+  faUser
 } from '@fortawesome/free-solid-svg-icons'
 import priestImg from '../storage/resources/pope.png'
 import rogueImg from '../storage/resources/rogue.png'
@@ -47,7 +48,8 @@ export const UserSidebarTitles = {
     'Odznaki i osiągnięcia',
     faCertificate
   ],
-  [generateFullPath(() => PageRoutes.General.CANVAS)]: ['Świat gry', faChessBoard]
+  [generateFullPath(() => PageRoutes.General.CANVAS)]: ['Świat gry', faChessBoard],
+  [generateFullPath(() => PageRoutes.Student.Profile.PROFILE)]: ['Profil', faUser]
 }
 
 export const TeacherSidebarTitles = {
@@ -155,10 +157,10 @@ export const HeroDescriptions = {
 }
 
 export const HeroImg = {
-  warrior: warriorImg,
-  wizard: wizardImg,
-  priest: priestImg,
-  rogue: rogueImg
+  WARRIOR: warriorImg,
+  WIZARD: wizardImg,
+  PRIEST: priestImg,
+  ROGUE: rogueImg
 }
 
 export const HeroDataset = {

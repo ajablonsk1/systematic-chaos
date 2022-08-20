@@ -16,6 +16,7 @@ import ActivityAssessmentRoutes from './modules/teacherRoutes/ActivityAssessment
 import GradesRoutes from './modules/teacherRoutes/GradesRoutes'
 import TeacherRankingRoutes from './modules/teacherRoutes/RankingRoutes'
 import CanvasMap from '../components/student/CanvasMapPage/CanvasMap'
+import ProfileRoutes from './modules/studentRoutes/ProfileRoutes'
 
 export default function AppRoutes() {
   return (
@@ -49,6 +50,8 @@ export default function AppRoutes() {
       <Route path={PageRoutes.Student.Ranking.MAIN_PATH} element={<StudentRankingRoutes />} />
 
       <Route path={PageRoutes.Student.BadgesAndAchievements.MAIN_PATH} element={<BadgesAndAchievementsRoutes />} />
+
+      <Route path={PageRoutes.Student.Profile.MAIN_PATH} element={<ProfileRoutes />} />
 
       <Route path={PageRoutes.Teacher.GameSummary.MAIN_PATH} element={<GameSummaryRoutes />} />
 

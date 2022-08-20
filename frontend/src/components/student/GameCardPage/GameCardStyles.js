@@ -3,7 +3,7 @@ import { Card } from 'react-bootstrap'
 
 export const CustomCard = styled(Card)`
   color: var(--font-color);
-  height: 97%;
+  height: ${(props) => props.$customHeight ?? '100%'};
   border-radius: 10px;
 
   & h5 {
@@ -21,6 +21,16 @@ export const CustomCard = styled(Card)`
 
     & p {
       font-size: 18px;
+    }
+
+    & table {
+      color: var(--font-color);
+      border: 1px solid var(--dark-blue);
+
+      & th,
+      & td {
+        border: 1px solid var(--dark-blue);
+      }
     }
   }
 `
