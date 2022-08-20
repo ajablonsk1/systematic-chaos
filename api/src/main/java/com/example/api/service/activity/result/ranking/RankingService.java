@@ -1,15 +1,21 @@
 package com.example.api.service.activity.result.ranking;
 
 import com.example.api.dto.response.ranking.RankingResponse;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.GroupValidator;
+import com.example.api.service.validator.UserValidator;
 import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,7 +33,9 @@ public class RankingService {
     private final UserRepo userRepo;
     private final GraphTaskResultRepo graphTaskResultRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
-
+    private final AuthenticationService authService;
+    private final UserValidator userValidator;
+    private final GroupValidator groupValidator;
     private final UserService userService;
 
     public List<RankingResponse> getRanking() {
@@ -74,6 +82,31 @@ public class RankingService {
     private void addPositionToRankingList(List<RankingResponse> rankingResponses){
         AtomicInteger position = new AtomicInteger(1);
         rankingResponses.forEach(item -> item.setPosition(position.getAndIncrement()));
+    }
+
+    public Integer getRankingPosition() throws WrongUserTypeException, UsernameNotFoundException {
+        String email = authService.getAuthentication().getName();
+        User student = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(student, email);
+        return getPositionFromRanking(getRanking(), email);
+    }
+
+    public Integer getGroupRankingPosition() throws WrongUserTypeException, MissingAttributeException, UsernameNotFoundException, EntityNotFoundException {
+        String email = authService.getAuthentication().getName();
+        User student = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(student, email);
+        groupValidator.validateUserGroupIsNotNull(student);
+
+        return getPositionFromRanking(getRankingForLoggedStudentGroup(), email);
+    }
+
+    private Integer getPositionFromRanking(List<RankingResponse> ranking, String email) throws UsernameNotFoundException {
+        return ranking
+                .stream()
+                .filter(rankingResponse -> rankingResponse.getEmail().equals(email))
+                .findAny()
+                .map(RankingResponse::getPosition)
+                .orElseThrow(() -> new UsernameNotFoundException("User" + email + " not found in database"));
     }
 
     private RankingResponse studentToRankingEntry(User student) {

@@ -74,8 +74,6 @@ public class FileTaskService {
                 .map(file -> new FileResponse(file.getId(), file.getName()))
                 .toList();
         result.setFeedbackFiles(feedbackFiles);
-
         return result;
-
     }
 }
