@@ -120,6 +120,7 @@ export default function CombatTask() {
                 setFileName={setFileName}
                 setIsFetching={setIsFetching}
                 isFetching={isFetching}
+                isRevieved={!!task.remarks}
               />
             </div>
             <SendTaskButton

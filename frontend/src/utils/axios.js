@@ -34,35 +34,12 @@ export function axiosApiDelete(url, params) {
 
 export function axiosApiSendFile(url, body) {
   const formData = new FormData()
-  formData.append('fileTaskId', body.fileTaskId)
-  formData.append('studentEmail', body.studentEmail)
+  Object.keys(body).forEach((key) => {
+    if (body[key]) {
+      formData.append(key, body[key])
+    }
+  })
 
-  if (body.openAnswer) {
-    formData.append('openAnswer', body.openAnswer)
-  }
-  if (body.file && body.fileName) {
-    formData.append('file', body.file)
-    formData.append('fileName', body.fileName)
-  }
-
-  return axios
-    .post(url, formData, multipartFileHeader({}))
-    .then((response) => response.data)
-    .catch((error) => {
-      errorToast(error?.response?.data?.message)
-      throw error
-    })
-}
-
-export function axiosApiSendProfessorFeedback(url, body) {
-  const formData = new FormData()
-  formData.append('fileTaskResultId', body.fileTaskResultId)
-  formData.append('content', body.content)
-  formData.append('points', body.points)
-  if (body.file && body.fileName) {
-    formData.append('file', body.file)
-    formData.append('fileName', body.fileName)
-  }
   return axios
     .post(url, formData, multipartFileHeader({}))
     .then((response) => response.data)

@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import download from 'downloadjs'
 import CombatTaskService from '../../../../services/combatTask.service'
 
-export default function FileService({ task, setFile, setFileName, setIsFetching, isFetching }) {
+export default function FileService({ task, setFile, setFileName, setIsFetching, isFetching, isRevieved }) {
   const fileInput = useRef(null)
   const [isRemoving, startRemoving] = useTransition()
 
@@ -49,7 +49,7 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
           <Row key={idx} className='mt-4'>
             <Col>{file.name}</Col>
             <Col>
-              <Button variant='danger' onClick={() => remove(idx)}>
+              <Button variant='danger' disabled={isRevieved} onClick={() => remove(idx)}>
                 {isRemoving ? <Spinner animation={'border'} /> : <FontAwesomeIcon icon={faTrash} />}
               </Button>
               <Button variant='warning' className='ml-2' onClick={() => downloadFile(idx)}>

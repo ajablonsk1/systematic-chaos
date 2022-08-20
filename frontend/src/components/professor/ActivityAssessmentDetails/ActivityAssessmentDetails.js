@@ -124,8 +124,7 @@ export default function ActivityAssessmentDetails() {
             <TopInfoCard>
               <h4 className={'text-center'}>Informacje o aktywności</h4>
               <FullDivider />
-              <p style={{ marginBottom: '1px' }}>Treść:</p>
-              <ActivityInfo>{activityResponseInfo.activityDetails}</ActivityInfo>
+              <ActivityInfo>{'Treść: ' + activityResponseInfo.activityDetails}</ActivityInfo>
               <p style={{ textAlign: 'center' }}>Punkty: {activityResponseInfo.maxPoints}</p>
             </TopInfoCard>
           </TopInfo>

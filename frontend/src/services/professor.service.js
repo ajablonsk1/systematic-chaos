@@ -1,5 +1,5 @@
 import { parseJwt } from '../utils/Api'
-import { axiosApiGet, axiosApiGetFile, axiosApiSendProfessorFeedback, axiosApiPost } from '../utils/axios'
+import { axiosApiGet, axiosApiGetFile, axiosApiPost, axiosApiSendFile } from '../utils/axios'
 import { GET_CSV, GET_TASKS_TO_EVALUATE, GET_FIRST_TASK_TO_EVALUATE, PROF_FEEDBACK, ADD_BONUS_POINTS } from './urls'
 
 class ProfessorService {
@@ -30,7 +30,7 @@ class ProfessorService {
   }
 
   sendTaskEvaluation(taskId, remarks, points, file, fileName) {
-    return axiosApiSendProfessorFeedback(PROF_FEEDBACK, {
+    return axiosApiSendFile(PROF_FEEDBACK, {
       fileTaskResultId: taskId,
       content: remarks,
       points: points,

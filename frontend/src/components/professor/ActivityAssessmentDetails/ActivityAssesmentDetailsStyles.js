@@ -44,7 +44,16 @@ export const UserInfo = styled.div`
 `
 
 export const ActivityInfo = styled.p`
+  max-height: 60px;
   overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+  }
+  /* Optional: show position indicator in red */
+  ::-webkit-scrollbar-thumb {
+    background: #ff0000;
+  }
 `
 
 export const AnswerRow = styled(Row)`
