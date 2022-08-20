@@ -15,10 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,5 +87,11 @@ public class UserController {
             @RequestBody SetStudentGroupForm setStudentGroupForm)
             throws EntityNotFoundException, WrongUserTypeException, StudentAlreadyAssignedToGroupException {
         return ResponseEntity.ok().body(userService.setStudentGroup(setStudentGroupForm));
+    }
+
+    @PostMapping("/user/index/set")
+    public ResponseEntity<Integer> setUserIndex(@RequestParam Integer newIndexNumber)
+            throws WrongUserTypeException, EntityAlreadyInDatabaseException {
+        return ResponseEntity.ok().body(userService.setIndexNumber(newIndexNumber));
     }
 }
