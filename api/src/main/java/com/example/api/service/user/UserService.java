@@ -10,6 +10,7 @@ import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,6 +34,7 @@ public class UserService implements UserDetailsService {
     private final GroupRepo groupRepo;
     private final AuthenticationService authService;
     private final PasswordEncoder passwordEncoder;
+    private final UserValidator userValidator;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -174,5 +176,25 @@ public class UserService implements UserDetailsService {
         groupRepo.save(newGroup);
 
         return newGroup;
+    }
+
+    public Integer setIndexNumber(Integer newIndexNumber) throws WrongUserTypeException, EntityAlreadyInDatabaseException {
+        String email = authService.getAuthentication().getName();
+        log.info("Setting index number {} for user with email {}", newIndexNumber, email);
+        User student = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(student, email);
+
+        if (student.getIndexNumber().equals(newIndexNumber)) {
+            log.info("Student with email {} set again index number to {}", email, newIndexNumber);
+            return student.getIndexNumber();
+        }
+
+        if (userRepo.existsUserByIndexNumber(newIndexNumber)) {
+            log.error("Cannot set index number student with email {} to {} because it is taken", email, newIndexNumber);
+            throw new EntityAlreadyInDatabaseException("Cannot set index number for user with email " + email + " to " + newIndexNumber + " because is taken");
+        }
+        student.setIndexNumber(newIndexNumber);
+        userRepo.save(student);
+        return student.getIndexNumber();
     }
 }
