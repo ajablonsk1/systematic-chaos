@@ -92,7 +92,7 @@ export default function CombatTask() {
             </HeaderCol>
             <div>
               <h5>{task.description}</h5>
-              {task.points && (
+              {task.points !== null && (
                 <>
                   <SmallDivider />
                   <p>

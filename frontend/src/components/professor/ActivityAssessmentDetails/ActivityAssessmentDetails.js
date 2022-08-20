@@ -24,7 +24,7 @@ import {
 import { getActivityTypeName } from '../../../utils/constants'
 //https://www.flaticon.com/free-icon/user-picture_21104
 import userPicture from '../../../utils/resources/user-picture.png'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ProfessorService from '../../../services/professor.service'
 import { Activity } from '../../../utils/constants'
@@ -38,6 +38,10 @@ export default function ActivityAssessmentDetails() {
   const location = useLocation()
   const { activityId } = location.state
 
+  const textRef = useRef(null)
+  const fileRef = useRef(null)
+  const pointRef = useRef(null)
+
   const [activityResponseInfo, setActivityResponseInfo] = useState(undefined)
   const [remarks, setRemarks] = useState('')
   const [givenPoints, setGivenPoints] = useState(0)
@@ -49,6 +53,9 @@ export default function ActivityAssessmentDetails() {
     setGivenPoints(0)
     setFileBlob(undefined)
     setFileName(undefined)
+    textRef.current.value = ''
+    fileRef.current.value = ''
+    pointRef.current.value = ''
   }
 
   const handleAfterSendingFeedback = () => {
@@ -138,11 +145,12 @@ export default function ActivityAssessmentDetails() {
               onChange={(newText) => {
                 setRemarks(newText.target.value)
               }}
+              ref={textRef}
             />
           </RemarksCol>
 
           <ActivityAssesmentProfessorFileCol>
-            <ActivityAssessmentProfessorFileService setFile={setFileBlob} setFileName={setFileName} />
+            <ActivityAssessmentProfessorFileService setFile={setFileBlob} setFileName={setFileName} fileRef={fileRef} />
           </ActivityAssesmentProfessorFileCol>
 
           <PointsRow>
@@ -155,6 +163,7 @@ export default function ActivityAssessmentDetails() {
                 onChange={(newPointsNum) => {
                   setGivenPoints(newPointsNum.target.value)
                 }}
+                ref={pointRef}
               ></PointsInput>
               <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
             </Row>

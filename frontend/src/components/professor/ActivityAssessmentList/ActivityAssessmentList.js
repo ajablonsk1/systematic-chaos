@@ -43,29 +43,59 @@ export default function ActivityAssessmentList() {
         setActivityList(null)
       })
   }, [])
-  console.log(activityList)
+
+  if (activityList === undefined) {
+    return (
+      <Content>
+        <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
+        <Col style={{ paddingTop: '50px' }}>
+          <Loader />
+        </Col>
+      </Content>
+    )
+  }
+  if (activityList === null) {
+    return (
+      <Content>
+        <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
+        <Col style={{ paddingTop: '50px' }}>
+          <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
+        </Col>
+      </Content>
+    )
+  }
+
+  if (activityList.length > 0 && activityList.filter((activity) => activity.toGrade > 0)) {
+    return (
+      <Content>
+        <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
+        <Col style={{ paddingTop: '50px' }}>
+          {activityList.map((activity) => {
+            const listActivity = activity.activity.activity
+            const toGrade = activity.activity.toGrade
+            return (
+              <>
+                <ActivityListItem key={listActivity.activityName} activity={listActivity} toGrade={toGrade} />
+              </>
+            )
+          })}
+        </Col>
+      </Content>
+    )
+  }
+
   return (
     <Content>
       <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
       <Col style={{ paddingTop: '50px' }}>
-        {activityList === undefined ? (
-          <Loader />
-        ) : activityList == null ? (
-          <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
-        ) : !activityList.filter((activity) => activity.activity.toGrade > 0) ? (
-          activityList.map((activity) => {
-            const listActivity = activity.activity.activity
-            const toGrade = activity.activity.toGrade
-            return <ActivityListItem key={listActivity.activityName} activity={listActivity} toGrade={toGrade} />
-          })
-        ) : (
+        {
           <>
             <div className={'text-center'}>
               <img className={'mx-auto'} src={HeroImg.warrior} alt='no activities to grade decorator' />
             </div>
             <p className={'text-center'}>Brak aktywności do sprawdzenia!</p>
           </>
-        )}
+        }
       </Col>
     </Content>
   )

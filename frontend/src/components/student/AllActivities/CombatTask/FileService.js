@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useTransition } from 'react'
+import React, { useEffect, useTransition, useRef } from 'react'
 import { Button, Col, Row, Spinner } from 'react-bootstrap'
 import { SmallDivider } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -47,15 +47,9 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
       ) : (
         task.taskFiles?.map((file, idx) => (
           <Row key={idx} className='mt-4'>
-            {/*<Col>{file.date}</Col>*/}
-            {/*<Col>{file.author}</Col>*/}
             <Col>{file.name}</Col>
             <Col>
-              <Button
-                variant='danger'
-                // disabled={loggedUserName !== file.author}
-                onClick={() => remove(idx)}
-              >
+              <Button variant='danger' onClick={() => remove(idx)}>
                 {isRemoving ? <Spinner animation={'border'} /> : <FontAwesomeIcon icon={faTrash} />}
               </Button>
               <Button variant='warning' className='ml-2' onClick={() => downloadFile(idx)}>

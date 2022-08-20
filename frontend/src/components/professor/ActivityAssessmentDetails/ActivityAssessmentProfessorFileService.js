@@ -1,8 +1,4 @@
-import { useRef } from 'react'
-
-export function ActivityAssessmentProfessorFileService({ setFile, setFileName }) {
-  const fileRef = useRef(null)
-
+export function ActivityAssessmentProfessorFileService({ setFile, setFileName, fileRef }) {
   const saveFile = (event) => {
     const filename = event.target.value.split(/(\\|\/)/g).pop()
     setFileName(filename)
