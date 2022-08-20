@@ -4,9 +4,11 @@ import { Col, Row, Spinner, Table } from 'react-bootstrap'
 import { ERROR_OCCURRED, getHeroName, HeroImg } from '../../../utils/constants'
 import StudentService from '../../../services/student.service'
 import ProfileCard from './ProfileCard'
+import EditIndexModal from './EditIndexModal'
 
 function Profile() {
   const [userData, setUserData] = useState(undefined)
+  const [isEditIndexModalOpen, setIsEditIndexModalOpen] = useState(false)
 
   useEffect(() => {
     StudentService.getUserData()
@@ -92,6 +94,7 @@ function Profile() {
               </p>
             }
             showButton
+            buttonCallback={() => setIsEditIndexModalOpen(true)}
           />
         </Col>
         <Col md={4}>
@@ -111,6 +114,7 @@ function Profile() {
           />
         </Col>
       </Row>
+      <EditIndexModal show={isEditIndexModalOpen} setModalOpen={setIsEditIndexModalOpen} />
     </Content>
   )
 }

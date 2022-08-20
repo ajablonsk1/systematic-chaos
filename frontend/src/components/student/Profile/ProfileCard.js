@@ -12,7 +12,9 @@ function ProfileCard(props) {
       <Card.Body className={'d-flex align-items-center justify-content-center flex-column'}>
         <>{props.body}</>
         {props.showButton && (
-          <Button variant={props.customButton ?? 'warning'}>{props.buttonText ?? <span>Przejdź</span>}</Button>
+          <Button variant={props.customButton ?? 'warning'} onClick={props.buttonCallback}>
+            {props.buttonText ?? <span>Przejdź</span>}
+          </Button>
         )}
       </Card.Body>
     </CustomCard>
