@@ -5,7 +5,7 @@ import { CustomCard } from './GameCardStyles'
 
 function GameCard(props) {
   return (
-    <CustomCard>
+    <CustomCard $customHeight={'97%'}>
       <CardHeader>
         <h5>{props.headerText}</h5>
       </CardHeader>
