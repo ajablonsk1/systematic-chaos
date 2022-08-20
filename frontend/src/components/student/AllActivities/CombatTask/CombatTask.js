@@ -23,6 +23,7 @@ import { SendTaskButton } from './CombatTaskStyles'
 import CombatTaskService from '../../../../services/combatTask.service'
 import { Spinner } from 'react-bootstrap'
 import FeedbackFileService from './FeedbackFileService'
+import { debounce } from 'lodash'
 
 export default function CombatTask() {
   const location = useLocation()
@@ -69,9 +70,9 @@ export default function CombatTask() {
       })
   }
 
-  const handleAnswerChange = (event) => {
+  const handleAnswerChange = debounce((event) => {
     setAnswer(event.target.value)
-  }
+  }, 200)
 
   return (
     <Content>

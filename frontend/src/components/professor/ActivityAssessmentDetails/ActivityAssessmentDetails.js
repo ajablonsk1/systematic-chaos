@@ -32,6 +32,7 @@ import Loader from '../../general/Loader/Loader'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ActivityAssessmentStudentFileService from './ActivityAssessmentStudentFileService'
 import { ActivityAssessmentProfessorFileService } from './ActivityAssessmentProfessorFileService'
+import { debounce } from 'lodash'
 
 export default function ActivityAssessmentDetails() {
   const navigate = useNavigate()
@@ -47,6 +48,14 @@ export default function ActivityAssessmentDetails() {
   const [givenPoints, setGivenPoints] = useState(0)
   const [fileBlob, setFileBlob] = useState()
   const [fileName, setFileName] = useState()
+
+  const debounceSetGivenPoints = debounce((newPointsNum) => {
+    setGivenPoints(newPointsNum.target.value)
+  }, 200)
+
+  const debounceSetText = debounce((newText) => {
+    setRemarks(newText.target.value)
+  }, 400)
 
   const resetStates = () => {
     setRemarks('')
@@ -140,12 +149,7 @@ export default function ActivityAssessmentDetails() {
 
           <RemarksCol>
             <h4>Uwagi:</h4>
-            <RemarksTextArea
-              onChange={(newText) => {
-                setRemarks(newText.target.value)
-              }}
-              ref={textRef}
-            />
+            <RemarksTextArea onChange={debounceSetText} ref={textRef} />
           </RemarksCol>
 
           <ActivityAssesmentProfessorFileCol>
@@ -159,9 +163,7 @@ export default function ActivityAssessmentDetails() {
                 type='number'
                 min={0}
                 max={activityResponseInfo.maxPoints}
-                onChange={(newPointsNum) => {
-                  setGivenPoints(newPointsNum.target.value)
-                }}
+                onChange={debounceSetGivenPoints}
                 ref={pointRef}
               ></PointsInput>
               <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
