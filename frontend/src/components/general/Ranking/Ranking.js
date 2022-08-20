@@ -59,10 +59,10 @@ function Ranking(props) {
             />
           </th>
         ))}
-        <th />
+        {!!props.setChosenStudentId && <th />}
       </tr>
     )
-  }, [sortBy, sortingOrders])
+  }, [sortBy, sortingOrders, props])
 
   return (
     <TableContainer>

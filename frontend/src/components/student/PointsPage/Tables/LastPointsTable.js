@@ -1,27 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ERROR_OCCURRED, getActivityTypeName } from '../../../../utils/constants'
 import { TableContainer } from './TableStyle'
-import StudentService from '../../../../services/student.service'
 import { Spinner } from 'react-bootstrap'
 import moment from 'moment'
 
 export default function LastPointsTable(props) {
-  const [pointsData, setPointsData] = useState(undefined)
-
-  useEffect(() => {
-    if (!props.pointsList) {
-      StudentService.getPointsStats()
-        .then((response) => {
-          setPointsData(response)
-        })
-        .catch(() => {
-          setPointsData(null)
-        })
-    } else {
-      setPointsData(props.pointsList)
-    }
-  }, [props.pointsList])
-
   const tableHeaders = ['Data', 'Liczba punktów', 'Typ aktywności', 'Nazwa aktywności'].map((title, index) => (
     <th key={index} className='w-25'>
       {title}
@@ -34,20 +17,20 @@ export default function LastPointsTable(props) {
         <tr className='w-100'>{tableHeaders}</tr>
       </thead>
       <tbody>
-        {pointsData === undefined ? (
+        {props.pointsList === undefined ? (
           <tr>
             <td colSpan='100%'>
               <Spinner animation={'border'} />
             </td>
           </tr>
-        ) : pointsData == null || pointsData.length === 0 ? (
+        ) : props.pointsList == null || props.pointsList.length === 0 ? (
           <tr>
             <td colSpan='100%'>
-              <p className={'text-center h6 text-warning'}>{pointsData ? 'Brak punktów' : ERROR_OCCURRED}</p>
+              <p className={'text-center h6 text-warning'}>{props.pointsList ? 'Brak punktów' : ERROR_OCCURRED}</p>
             </td>
           </tr>
         ) : (
-          pointsData.map((row, idx) => (
+          props.pointsList.map((row, idx) => (
             <tr className='w-100' key={idx}>
               <td className='w-25'>{moment(row.dateInMillis).format('DD.MM.YYYY, HH:mm')}</td>
               <td className='w-25'>{row.pointsReceived ?? 'Nieocenione'}</td>
