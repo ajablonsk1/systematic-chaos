@@ -98,6 +98,10 @@ public class TaskResultService {
 
     public List<TaskPointsStatisticsResponse> getUserPointsStatistics() throws WrongUserTypeException {
         String email = authService.getAuthentication().getName();
+        return getUserPointsStatistics(email);
+    }
+
+    public List<TaskPointsStatisticsResponse> getUserPointsStatistics(String email) throws WrongUserTypeException {
         User user = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(user, email);
         List<TaskPointsStatisticsResponse> graphTaskStatistics = graphTaskResultRepo.findAllByUser(user)
