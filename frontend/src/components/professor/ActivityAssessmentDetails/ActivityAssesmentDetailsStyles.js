@@ -50,10 +50,6 @@ export const ActivityInfo = styled.p`
     width: 0; /* Remove scrollbar space */
     background: transparent; /* Optional: just make scrollbar invisible */
   }
-  /* Optional: show position indicator in red */
-  ::-webkit-scrollbar-thumb {
-    background: #ff0000;
-  }
 `
 
 export const AnswerRow = styled(Row)`
@@ -69,10 +65,9 @@ export const AnswerContent = styled.p`
 `
 
 export const AnswerCol = styled(Col)`
-  margin-top: 20px;
   color: var(--font-color);
   text-align: center;
-  margin-bottom: 10px;
+  margin: 20px auto 10px;
   max-height: 220px;
   overflow-y: auto;
 `
@@ -119,6 +114,11 @@ export const AcceptButton = styled(Button)`
   margin-top: 15px;
   background-color: var(--button-green);
   border-color: var(--button-green);
+  :disabled {
+    background-color: var(--button-green);
+    border-color: var(--button-green);
+    opacity: 0.6;
+  }
 `
 
 export const RemarksTextArea = styled.textarea`

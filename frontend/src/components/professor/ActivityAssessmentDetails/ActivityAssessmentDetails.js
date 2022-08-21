@@ -24,7 +24,7 @@ import {
 import { getActivityTypeName } from '../../../utils/constants'
 //https://www.flaticon.com/free-icon/user-picture_21104
 import userPicture from '../../../utils/resources/user-picture.png'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ProfessorService from '../../../services/professor.service'
 import { Activity } from '../../../utils/constants'
@@ -49,13 +49,21 @@ export default function ActivityAssessmentDetails() {
   const [fileBlob, setFileBlob] = useState()
   const [fileName, setFileName] = useState()
 
-  const debounceSetGivenPoints = debounce((newPointsNum) => {
-    setGivenPoints(newPointsNum.target.value)
-  }, 200)
+  const debounceSetGivenPoints = useMemo(
+    () =>
+      debounce((newPointsNum) => {
+        setGivenPoints(newPointsNum.target.value)
+      }, 200),
+    []
+  )
 
-  const debounceSetText = debounce((newText) => {
-    setRemarks(newText.target.value)
-  }, 400)
+  const debounceSetText = useMemo(
+    () =>
+      debounce((newText) => {
+        setRemarks(newText.target.value)
+      }, 400),
+    []
+  )
 
   const resetStates = () => {
     setRemarks('')
@@ -134,7 +142,7 @@ export default function ActivityAssessmentDetails() {
               <h4 className={'text-center'}>Informacje o aktywności</h4>
               <FullDivider />
               <ActivityInfo>{'Treść: ' + activityResponseInfo.activityDetails}</ActivityInfo>
-              <p style={{ textAlign: 'center' }}>Punkty: {activityResponseInfo.maxPoints}</p>
+              <p className='text-center'>Punkty: {activityResponseInfo.maxPoints}</p>
             </TopInfoCard>
           </TopInfo>
           <AnswerRow>
@@ -157,7 +165,7 @@ export default function ActivityAssessmentDetails() {
           </ActivityAssesmentProfessorFileCol>
 
           <PointsRow>
-            <p style={{ top: '50%', position: 'relative', margin: '0' }}>Punkty: </p>
+            <p className='position-relative m-0 top-50'>Punkty: </p>
             <Row className={'d-flex'}>
               <PointsInput
                 type='number'

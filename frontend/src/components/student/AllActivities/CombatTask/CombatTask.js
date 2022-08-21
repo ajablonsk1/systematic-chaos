@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Content } from '../../../App/AppGeneralStyles'
 import Loader from '../../../general/Loader/Loader'
@@ -70,9 +70,13 @@ export default function CombatTask() {
       })
   }
 
-  const handleAnswerChange = debounce((event) => {
-    setAnswer(event.target.value)
-  }, 200)
+  const handleAnswerChange = useMemo(
+    () =>
+      debounce((event) => {
+        setAnswer(event.target.value)
+      }, 200),
+    []
+  )
 
   return (
     <Content>
@@ -99,20 +103,20 @@ export default function CombatTask() {
                   <p>
                     Zdobyte punkty: <strong>{task.points}</strong>
                   </p>
-                  {task.remarks && (
-                    <>
-                      <p>Uwagi od prowadzącego:</p>
-                      <p>{task.remarks}</p>
-                      {task.feedbackFile && <FeedbackFileService feedbackFile={task.feedbackFile} />}
-                    </>
-                  )}
+                  <p>Uwagi od prowadzącego:</p>
+                  {task.remarks ? <p>{task.remarks}</p> : <p>Brak uwag</p>}
+                  {task.feedbackFile && <FeedbackFileService feedbackFile={task.feedbackFile} />}
                 </>
               )}
               <SmallDivider />
-              {task.points === null && (
+              {task.points == null && (
                 <RemarksCol>
                   <h4>Odpowiedź:</h4>
-                  <RemarksTextArea value={answer} onChange={handleAnswerChange} />
+                  <RemarksTextArea
+                    onChange={(e) => {
+                      handleAnswerChange(e)
+                    }}
+                  />
                 </RemarksCol>
               )}
               <FileService
@@ -121,16 +125,13 @@ export default function CombatTask() {
                 setFileName={setFileName}
                 setIsFetching={setIsFetching}
                 isFetching={isFetching}
-                isRevieved={!!task.remarks}
+                isRevieved={task.points != null}
               />
             </div>
-            <SendTaskButton
-              disabled={(!fileName && answer === '') || task.remarks !== null}
-              onClick={() => sendAnswer()}
-            >
+            <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
               {isFetching ? (
                 <Spinner animation={'border'} />
-              ) : task.remarks === null ? (
+              ) : task.points == null ? (
                 <span>Wyślij</span>
               ) : (
                 <span>Aktywność została oceniona</span>

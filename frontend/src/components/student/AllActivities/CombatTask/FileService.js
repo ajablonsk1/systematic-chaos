@@ -11,7 +11,7 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
   const [isRemoving, startRemoving] = useTransition()
 
   useEffect(() => {
-    if (!isFetching) {
+    if (!isFetching && fileInput.current) {
       fileInput.current.value = ''
     }
   }, [isFetching])
@@ -59,11 +59,14 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
           </Row>
         ))
       )}
-
-      <SmallDivider />
-      <strong>Dodaj pliki:</strong>
-      <br />
-      <input ref={fileInput} type='file' className='mb-5 mt-3' onChange={saveFile} />
+      {!isRevieved && (
+        <>
+          <SmallDivider />
+          <strong>Dodaj pliki:</strong>
+          <br />
+          <input ref={fileInput} type='file' className='mb-5 mt-3' onChange={saveFile} />
+        </>
+      )}
     </>
   )
 }

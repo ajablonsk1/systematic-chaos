@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { Col } from 'react-bootstrap'
 import ActivityListItem from './ActivityListItem'
 import ProfessorService from '../../../services/professor.service'
 import Loader from '../../general/Loader/Loader'
-import { ERROR_OCCURRED, HeroImg } from '../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 // note: currently the list assumes we can only manually grade File Tasks - this is due to the way our DB currently works,
 // an ID is unique only in the task group. we might need to add a field that lets us know which task type it is
@@ -44,59 +44,27 @@ export default function ActivityAssessmentList() {
       })
   }, [])
 
-  if (activityList === undefined) {
-    return (
-      <Content>
-        <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
-        <Col style={{ paddingTop: '50px' }}>
-          <Loader />
-        </Col>
-      </Content>
-    )
-  }
-  if (activityList === null) {
-    return (
-      <Content>
-        <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
-        <Col style={{ paddingTop: '50px' }}>
-          <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
-        </Col>
-      </Content>
-    )
-  }
-
-  if (activityList.length > 0 && activityList.filter((activity) => activity.toGrade > 0)) {
-    return (
-      <Content>
-        <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
-        <Col style={{ paddingTop: '50px' }}>
-          {activityList.map((activity) => {
-            const listActivity = activity.activity.activity
-            const toGrade = activity.activity.toGrade
-            return (
-              <>
-                <ActivityListItem key={listActivity.activityName} activity={listActivity} toGrade={toGrade} />
-              </>
-            )
-          })}
-        </Col>
-      </Content>
-    )
-  }
+  const colContent = useMemo(() => {
+    if (activityList === undefined) {
+      return <Loader />
+    }
+    if (activityList === null) {
+      return <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
+    }
+    if (activityList.length > 0 && activityList.filter((activity) => activity.toGrade > 0)) {
+      return activityList.map((activity) => {
+        const listActivity = activity.activity.activity
+        const toGrade = activity.activity.toGrade
+        return <ActivityListItem key={listActivity.activityName} activity={listActivity} toGrade={toGrade} />
+      })
+    }
+    return <p className={'text-center'}>Brak aktywności do sprawdzenia!</p>
+  }, [activityList])
 
   return (
     <Content>
       <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
-      <Col style={{ paddingTop: '50px' }}>
-        {
-          <>
-            <div className={'text-center'}>
-              <img className={'mx-auto'} src={HeroImg.warrior} alt='no activities to grade decorator' />
-            </div>
-            <p className={'text-center'}>Brak aktywności do sprawdzenia!</p>
-          </>
-        }
-      </Col>
+      <Col style={{ paddingTop: '50px' }}>{colContent}</Col>
     </Content>
   )
 }

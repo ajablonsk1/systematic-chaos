@@ -21,7 +21,7 @@ export default function FeedbackFileService({ feedbackFile }) {
         <Row className='mt-4'>
           <Col>{feedbackFile.name}</Col>
           <Col>
-            <Button variant='warning' className='ml-2' onClick={() => downloadFile()}>
+            <Button variant='warning' className='ml-2' onClick={downloadFile}>
               <FontAwesomeIcon icon={faDownload} />
             </Button>
           </Col>
