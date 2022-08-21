@@ -13,7 +13,6 @@ import {
 import { validateIndex } from '../../general/LoginAndRegistrationPage/RegistrationPage/validators'
 import { debounce } from 'lodash/function'
 import StudentService from '../../../services/student.service'
-import { type } from '@testing-library/user-event/dist/type'
 
 function EditIndexModal(props) {
   const [validatorMessage, setValidatorMessage] = useState(null)
@@ -29,13 +28,14 @@ function EditIndexModal(props) {
   const onIndexSubmit = () => {
     setIsFetching(true)
     StudentService.setIndexNumber(+newIndexNumber)
-      .then(() => {
+      .then((response) => {
+        props.setIndexNumber(response)
         props.setModalOpen(false)
         setIsFetching(false)
       })
       .catch((error) => {
         setIsFetching(false)
-        setErrorMessage(error.message)
+        setErrorMessage(error.response.data.message)
       })
   }
 

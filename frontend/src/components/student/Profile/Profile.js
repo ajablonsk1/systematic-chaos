@@ -9,11 +9,13 @@ import EditIndexModal from './EditIndexModal'
 function Profile() {
   const [userData, setUserData] = useState(undefined)
   const [isEditIndexModalOpen, setIsEditIndexModalOpen] = useState(false)
+  const [indexNumber, setIndexNumber] = useState(undefined)
 
   useEffect(() => {
     StudentService.getUserData()
       .then((response) => {
         setUserData(response)
+        setIndexNumber(response.indexNumber)
       })
       .catch(() => {
         setUserData(null)
@@ -32,7 +34,7 @@ function Profile() {
       { text: 'Imię', value: userData.firstName },
       { text: 'Nazwisko', value: userData.lastName },
       { text: 'Email', value: userData.email },
-      { text: 'Numer indeksu', value: userData.indexNumber },
+      { text: 'Numer indeksu', value: indexNumber },
       { text: 'Grupa zajęciowa', value: userData.group.name },
       { text: 'Typ bohatera', value: getHeroName(userData.heroType) }
     ]
@@ -50,7 +52,7 @@ function Profile() {
         </tbody>
       </Table>
     )
-  }, [userData])
+  }, [userData, indexNumber])
 
   const heroInfoCard = useMemo(() => {
     const cardBody =
@@ -114,7 +116,11 @@ function Profile() {
           />
         </Col>
       </Row>
-      <EditIndexModal show={isEditIndexModalOpen} setModalOpen={setIsEditIndexModalOpen} />
+      <EditIndexModal
+        show={isEditIndexModalOpen}
+        setModalOpen={setIsEditIndexModalOpen}
+        setIndexNumber={setIndexNumber}
+      />
     </Content>
   )
 }
