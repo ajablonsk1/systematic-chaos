@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Content } from '../../../App/AppGeneralStyles'
 import Loader from '../../../general/Loader/Loader'
@@ -36,11 +36,14 @@ export default function CombatTask() {
   const [isFetching, setIsFetching] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
+  const textAreaRef = useRef(null)
+
   const resetStates = () => {
     setIsFetching(false)
     setFileBlob(null)
     setFileName(null)
     setAnswer('')
+    textAreaRef.current.value = ''
   }
 
   useEffect(() => {
@@ -104,7 +107,7 @@ export default function CombatTask() {
                     Zdobyte punkty: <strong>{task.points}</strong>
                   </p>
                   <p>Uwagi od prowadzącego:</p>
-                  {task.remarks ? <p>{task.remarks}</p> : <p>Brak uwag</p>}
+                  <p>{task.remarks ?? 'Brak uwag'}</p>
                   {task.feedbackFile && <FeedbackFileService feedbackFile={task.feedbackFile} />}
                 </>
               )}
@@ -113,6 +116,7 @@ export default function CombatTask() {
                 <RemarksCol>
                   <h4>Odpowiedź:</h4>
                   <RemarksTextArea
+                    ref={textAreaRef}
                     onChange={(e) => {
                       handleAnswerChange(e)
                     }}
