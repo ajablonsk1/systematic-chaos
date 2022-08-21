@@ -6,6 +6,7 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
+import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
@@ -33,10 +34,12 @@ public class RankingService {
     private final UserRepo userRepo;
     private final GraphTaskResultRepo graphTaskResultRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
+    private final AdditionalPointsRepo additionalPointsRepo;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
     private final GroupValidator groupValidator;
     private final UserService userService;
+
 
     public List<RankingResponse> getRanking() {
         List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
@@ -142,10 +145,23 @@ public class RankingService {
                 }).sum();
     }
 
+    private Double getAdditionalPoints(User student) {
+        return additionalPointsRepo.findAllByUser(student)
+                .stream()
+                .mapToDouble(points -> {
+                    try {
+                        return points.getPointsReceived();
+                    } catch (Exception e) {
+                        log.info("AdditionalPoints with id {} has no points assigned", points.getId());
+                    }
+                    return 0.0;
+                }).sum();
+    }
+
     private Double getStudentPoints(User student) {
         Double graphTaskPoints = getGraphTaskPoints(student);
         Double fileTaskPoints = getFileTaskPoints(student);
-        return DoubleStream.of(graphTaskPoints, fileTaskPoints).sum();
+        Double additionalPoints = getAdditionalPoints(student);
+        return DoubleStream.of(graphTaskPoints, fileTaskPoints, additionalPoints).sum();
     }
-
 }
