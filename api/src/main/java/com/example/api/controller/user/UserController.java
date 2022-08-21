@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.api.dto.request.user.RegisterUserForm;
 import com.example.api.dto.request.user.SetStudentGroupForm;
+import com.example.api.dto.request.user.SetStudentIndexForm;
 import com.example.api.dto.response.user.BasicStudent;
 import com.example.api.error.exception.*;
 import com.example.api.model.group.Group;
@@ -90,8 +91,8 @@ public class UserController {
     }
 
     @PostMapping("/user/index/set")
-    public ResponseEntity<Integer> setUserIndex(@RequestParam Integer newIndexNumber)
+    public ResponseEntity<Integer> setUserIndex(@RequestBody SetStudentIndexForm setStudentIndexForm)
             throws WrongUserTypeException, EntityAlreadyInDatabaseException {
-        return ResponseEntity.ok().body(userService.setIndexNumber(newIndexNumber));
+        return ResponseEntity.ok().body(userService.setIndexNumber(setStudentIndexForm));
     }
 }
