@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class UserValidator {
+    public void validateUser(User user, String email) throws UsernameNotFoundException, WrongUserTypeException {
+        if(user == null) {
+            log.error("User {} not found in database", email);
+            throw new UsernameNotFoundException("User " + email + " not found in database");
+        }
+    }
 
     public void validateStudentAccount(User student, String email) throws UsernameNotFoundException, WrongUserTypeException {
-        if(student == null) {
-            log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
-        }
+        validateUser(student, email);
         if(student.getAccountType() != AccountType.STUDENT) {
             throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
         }
@@ -28,6 +31,13 @@ public class UserValidator {
         }
         if(student.getAccountType() != AccountType.STUDENT) {
             throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
+        }
+    }
+
+    public void validateProfessorAccount(User professor, String email) throws UsernameNotFoundException, WrongUserTypeException {
+        validateUser(professor, email);
+        if(professor.getAccountType() != AccountType.PROFESSOR) {
+            throw new WrongUserTypeException("Wrong user type!", AccountType.PROFESSOR);
         }
     }
 }

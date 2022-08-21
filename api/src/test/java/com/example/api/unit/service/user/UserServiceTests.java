@@ -12,6 +12,7 @@ import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.user.UserService;
+import com.example.api.service.validator.UserValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -38,6 +39,7 @@ public class UserServiceTests {
     @Mock private PasswordEncoder passwordEncoder;
     @Mock private AuthenticationService authService;
     @Mock private Authentication authentication;
+    @Mock private UserValidator userValidator;
     @Captor private ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
     @Captor private ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
     @Captor private ArgumentCaptor<Long> idArgumentCaptor = ArgumentCaptor.forClass(Long.class);
@@ -52,7 +54,7 @@ public class UserServiceTests {
     @BeforeEach
     public void init() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserService(userRepo, groupRepo, authService, passwordEncoder);
+        userService = new UserService(userRepo, groupRepo, authService, passwordEncoder, userValidator);
 
         user = new User();
         user.setId(1L);

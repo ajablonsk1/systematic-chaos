@@ -24,6 +24,14 @@ export default function GameManagement() {
     )
   }
 
+  const downloadBackupFile = () => {
+    // TODO: use endpoint and download.js
+  }
+
+  const downloadLogsFile = () => {
+    // TODO: use endpoint and download.js
+  }
+
   return (
     <Content>
       <h4 className='text-center pt-3'>Witaj w panelu zarządzania grą!</h4>
@@ -85,6 +93,20 @@ export default function GameManagement() {
               header={'Wczytaj konfigurację gry'}
               description={'Wyczyść cały stan bazy danych i wczytaj stan od nowa.'}
               callback={() => setShowConfigModal(true)}
+            />
+          </Col>
+          <Col md={4} className={'py-2'}>
+            <ManagementCard
+              header={'Kopia zapasowa'}
+              description={'Pobierz kopię zapasową bazy danych, żeby móc wczytać konfigurację z tego pliku.'}
+              callback={downloadBackupFile}
+            />
+          </Col>
+          <Col md={4} className={'py-2'}>
+            <ManagementCard
+              header={'Lista logów serwera'}
+              description={'Pobierz listę logów z serwera zbieranych od początku istnienia aplikacji.'}
+              callback={downloadLogsFile}
             />
           </Col>
         </Row>

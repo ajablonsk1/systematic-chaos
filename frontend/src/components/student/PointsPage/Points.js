@@ -1,15 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Row, Tab } from 'react-bootstrap'
 import { Content } from '../../App/AppGeneralStyles'
 import PercentageCircle from './ChartAndStats/PercentageCircle'
 import LastPointsTable from './Tables/LastPointsTable'
 import { TabsContainer } from './PointsPageStyle'
 import BonusPointsTable from './Tables/BonusPointsTable'
+import StudentService from '../../../services/student.service'
 
 export default function Points() {
+  const [pointsData, setPointsData] = useState(undefined)
+
   const points = 529
   const maxPoints = 1000
   const percentageValue = Math.round(100 * (points / maxPoints))
+
+  useEffect(() => {
+    StudentService.getPointsStats()
+      .then((response) => {
+        setPointsData(response)
+      })
+      .catch(() => {
+        setPointsData(null)
+      })
+  }, [])
 
   return (
     <Content>
@@ -37,7 +50,7 @@ export default function Points() {
           style={{ padding: '50px 0 20px 0' }}
         >
           <Tab className={'w-100'} eventKey='last-points' title='Ostatnio zdobyte punkty'>
-            <LastPointsTable />
+            <LastPointsTable pointsList={pointsData} />
           </Tab>
           <Tab eventKey={'bonus-points'} title={'Punkty dodatkowe'}>
             <BonusPointsTable />

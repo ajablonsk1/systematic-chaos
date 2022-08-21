@@ -1,4 +1,4 @@
-import { GET_BONUS_POINTS, GET_POINTS_STATISTICS, USER_GROUP } from './urls'
+import { GET_BONUS_POINTS, GET_POINTS_STATISTICS, USER_DATA, USER_GROUP } from './urls'
 import { axiosApiGet } from '../utils/axios'
 import { parseJwt } from '../utils/Api'
 
@@ -9,6 +9,12 @@ class StudentService {
 
   getEmail() {
     return parseJwt(this.getUser().access_token).sub
+  }
+
+  getUserData() {
+    return axiosApiGet(USER_DATA).catch((error) => {
+      throw error
+    })
   }
 
   getUserGroup() {
