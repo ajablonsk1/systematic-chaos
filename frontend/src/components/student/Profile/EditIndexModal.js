@@ -12,20 +12,31 @@ import {
 } from 'react-bootstrap'
 import { validateIndex } from '../../general/LoginAndRegistrationPage/RegistrationPage/validators'
 import { debounce } from 'lodash/function'
+import StudentService from '../../../services/student.service'
+import { type } from '@testing-library/user-event/dist/type'
 
 function EditIndexModal(props) {
   const [validatorMessage, setValidatorMessage] = useState(null)
   const [isFetching, setIsFetching] = useState(false)
+  const [newIndexNumber, setNewIndexNumber] = useState(null)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const debounceValidation = debounce((event) => {
     setValidatorMessage(validateIndex(event.target.value))
+    setNewIndexNumber(event.target.value)
   }, 300)
 
   const onIndexSubmit = () => {
     setIsFetching(true)
-    // TODO: use endpoint here
-    setIsFetching(false)
-    props.setModalOpen(false)
+    StudentService.setIndexNumber(+newIndexNumber)
+      .then(() => {
+        props.setModalOpen(false)
+        setIsFetching(false)
+      })
+      .catch((error) => {
+        setIsFetching(false)
+        setErrorMessage(error.message)
+      })
   }
 
   return (
@@ -48,6 +59,7 @@ function EditIndexModal(props) {
           {isFetching ? <Spinner animation={'border'} /> : <span>Zapisz</span>}
         </Button>
       </ModalFooter>
+      {errorMessage && <p className={'text-center text-danger'}>{errorMessage}</p>}
     </Modal>
   )
 }
