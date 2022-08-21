@@ -36,11 +36,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
+import javax.transaction.Transactional;
+
 import static com.example.api.dto.response.map.task.ActivityType.EXPEDITION;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class TaskResultService {
     private final UserRepo userRepo;
     private final GraphTaskResultRepo graphTaskResultRepo;

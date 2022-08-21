@@ -10,6 +10,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.LinkedList;
@@ -23,8 +24,10 @@ import java.util.List;
 public class FileTaskResult extends TaskResult {
     @OneToMany
     private List<File> files = new LinkedList<>();
+    
 
     @Nullable
+    @Lob
     private String answer;
 
     @ManyToOne

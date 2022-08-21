@@ -14,8 +14,9 @@ public class FileTaskInfoResponse {
     private Long fileTaskId;
     private String name;
     private String description;
+    private String answer;
     private List<FileResponse> taskFiles;
     private Double points;
     private String remarks;
-    private List<FileResponse> feedbackFiles;
+    private FileResponse feedbackFile;
 }

@@ -18,92 +18,177 @@ import {
   RemarksTextArea,
   TopInfo,
   TopInfoCard,
-  UserInfo
+  UserInfo,
+  ActivityAssesmentProfessorFileCol
 } from './ActivityAssesmentDetailsStyles'
 import { getActivityTypeName } from '../../../utils/constants'
 //https://www.flaticon.com/free-icon/user-picture_21104
 import userPicture from '../../../utils/resources/user-picture.png'
-
-//example result of GET - returns the first non-reviewed answer for activity of given Id
-// todo: remove it and use endpoint
-const exampleActivityToGrade = {
-  //answerId is an example of the answer identifier - we need to have a way to save points to a given answer somehow, not sure how it works (or will work) on back
-  answerId: 1,
-  activityType: 'task',
-  activityName: 'SuperSystem I',
-  userName: 'Jan Kowalski',
-  isLate: false,
-  activityDetails:
-    'Narysuj przykład sieci składającej się z 3 routerów, 5 komputerów, 4 switchy wraz z wypisanym rodzajem użytych kabli na każdym połączeniu.',
-  userAnswer:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ullamcorper finibus magna, a pellentesque eros consequat id. Donec vitae tristique purus, quis rutrum felis. Nam ultricies, risus at pharetra fermentum, mi sem blandit lacus, eget vulputate est orci sit amet dui. Aliquam est nunc, faucibus eget congue eu, lobortis non tortor. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean sodales sollicitudin ex, id viverra tellus dictum non. Etiam consectetur magna nec tortor sodales, ac dignissim eros aliquam. Integer sagittis mattis sapien. Curabitur blandit imperdiet suscipit. Phasellus placerat libero sed tristique pulvinar. Vivamus bibendum augue urna, accumsan interdum risus venenatis quis.',
-  activityPoints: 30,
-  remaining: 29
-}
+import { useEffect, useRef, useState, useMemo } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import ProfessorService from '../../../services/professor.service'
+import { Activity } from '../../../utils/constants'
+import Loader from '../../general/Loader/Loader'
+import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
+import ActivityAssessmentStudentFileService from './ActivityAssessmentStudentFileService'
+import { ActivityAssessmentProfessorFileService } from './ActivityAssessmentProfessorFileService'
+import { debounce } from 'lodash'
 
 export default function ActivityAssessmentDetails() {
-  // todo: remove it I think
-  //const navigate = useNavigate();
-  //const location = useLocation();
-  //console.log(location);
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { activityId } = location.state
 
-  //we will get data based on the id
-  //const { activityId } = location.state;
+  const textRef = useRef(null)
+  const fileRef = useRef(null)
+  const pointRef = useRef(null)
+
+  const [activityResponseInfo, setActivityResponseInfo] = useState(undefined)
+  const [remarks, setRemarks] = useState('')
+  const [givenPoints, setGivenPoints] = useState(0)
+  const [fileBlob, setFileBlob] = useState()
+  const [fileName, setFileName] = useState()
+
+  const debounceSetGivenPoints = useMemo(
+    () =>
+      debounce((newPointsNum) => {
+        setGivenPoints(newPointsNum.target.value)
+      }, 200),
+    []
+  )
+
+  const debounceSetText = useMemo(
+    () =>
+      debounce((newText) => {
+        setRemarks(newText.target.value)
+      }, 400),
+    []
+  )
+
+  const resetStates = () => {
+    setRemarks('')
+    setGivenPoints(0)
+    setFileBlob(undefined)
+    setFileName(undefined)
+    textRef.current.value = ''
+    fileRef.current.value = ''
+    pointRef.current.value = ''
+  }
+
+  const handleAfterSendingFeedback = () => {
+    if (activityResponseInfo?.remaining) {
+      resetStates()
+      ProfessorService.getFirstTaskToEvaluate(activityId)
+        .then((activityResponseInfo) => {
+          setActivityResponseInfo(activityResponseInfo)
+        })
+        .catch(() => {
+          setActivityResponseInfo(null)
+        })
+    } else {
+      navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT_LIST))
+    }
+  }
+
+  useEffect(() => {
+    ProfessorService.getFirstTaskToEvaluate(activityId)
+      .then((activityResponseInfo) => {
+        setActivityResponseInfo(activityResponseInfo)
+      })
+      .catch(() => {
+        setActivityResponseInfo(null)
+      })
+  }, [activityId])
+
+  const sendFeedbackAndGetNextIfAble = () => {
+    ProfessorService.sendTaskEvaluation(
+      activityResponseInfo.fileTaskResponseId,
+      remarks,
+      givenPoints,
+      fileBlob,
+      fileName
+    )
+      .then(() => {
+        handleAfterSendingFeedback()
+      })
+      .catch(() => {})
+  }
 
   return (
     <Content>
-      <ContentCol>
-        <ActivityTitle>
-          <h4>
-            {getActivityTypeName(exampleActivityToGrade.activityType) + ' - ' + exampleActivityToGrade.activityName}
-          </h4>
-        </ActivityTitle>
-        <TopInfo>
-          <TopInfoCard>
-            <h4 style={{ textAlign: 'center' }}>Informacje o użytkowniku</h4>
-            <FullDivider />
-            <Row styles={{ justifyContent: 'center' }}>
-              <img src={userPicture} alt='profile avatar' style={{ paddingLeft: '20px' }}></img>
-              <UserInfo>
-                <h5 styles={{ width: '100%' }}>{exampleActivityToGrade.userName}</h5>
+      {activityResponseInfo ? (
+        <ContentCol>
+          <ActivityTitle>
+            <h4>{getActivityTypeName(Activity.TASK) + ' - ' + activityResponseInfo.activityName}</h4>
+          </ActivityTitle>
+          <TopInfo>
+            <TopInfoCard>
+              <h4 className={'text-center'}>Informacje o użytkowniku</h4>
+              <FullDivider />
+              <Row>
+                <img src={userPicture} alt='profile avatar' style={{ paddingLeft: '20px', height: '100px' }}></img>
+                <UserInfo>
+                  <h5>{activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName}</h5>
 
-                {/*//TODO: we can do it better, I'm almost sure*/}
-                {!exampleActivityToGrade.isLate && <h5 styles={{ width: '100%' }}>zadanie oddane w terminie</h5>}
-                {exampleActivityToGrade.isLate && <h5 styles={{ width: '100%' }}>zadanie oddane ze spóźnieniem</h5>}
-              </UserInfo>
+                  {activityResponseInfo.isLate ? (
+                    <h5 className={'w-100'}>zadanie oddane ze spóźnieniem</h5>
+                  ) : (
+                    <h5 className={'w-100'}>zadanie oddane w terminie</h5>
+                  )}
+                </UserInfo>
+              </Row>
+            </TopInfoCard>
+            <TopInfoCard>
+              <h4 className={'text-center'}>Informacje o aktywności</h4>
+              <FullDivider />
+              <ActivityInfo>{'Treść: ' + activityResponseInfo.activityDetails}</ActivityInfo>
+              <p className='text-center'>Punkty: {activityResponseInfo.maxPoints}</p>
+            </TopInfoCard>
+          </TopInfo>
+          <AnswerRow>
+            <AnswerCol>
+              <h4>Odpowiedź</h4>
+              <AnswerContent>{activityResponseInfo.userAnswer}</AnswerContent>
+              <div>
+                <ActivityAssessmentStudentFileService activityResponseInfo={activityResponseInfo} />
+              </div>
+            </AnswerCol>
+          </AnswerRow>
+
+          <RemarksCol>
+            <h4>Uwagi:</h4>
+            <RemarksTextArea onChange={debounceSetText} ref={textRef} />
+          </RemarksCol>
+
+          <ActivityAssesmentProfessorFileCol>
+            <ActivityAssessmentProfessorFileService setFile={setFileBlob} setFileName={setFileName} fileRef={fileRef} />
+          </ActivityAssesmentProfessorFileCol>
+
+          <PointsRow>
+            <p className='position-relative m-0 top-50'>Punkty: </p>
+            <Row className={'d-flex'}>
+              <PointsInput
+                type='number'
+                min={0}
+                max={activityResponseInfo.maxPoints}
+                onChange={debounceSetGivenPoints}
+                ref={pointRef}
+              ></PointsInput>
+              <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
             </Row>
-          </TopInfoCard>
-          <TopInfoCard>
-            <h4 style={{ textAlign: 'center' }}>Informacje o aktywności</h4>
-            <FullDivider />
-            <p style={{ marginBottom: '1px' }}>Treść:</p>
-            <ActivityInfo>{exampleActivityToGrade.activityDetails}</ActivityInfo>
-            <p style={{ textAlign: 'center' }}>Punkty: {exampleActivityToGrade.activityPoints}</p>
-          </TopInfoCard>
-        </TopInfo>
-        <AnswerRow>
-          <AnswerCol>
-            <h4>Odpowiedź</h4>
-            <AnswerContent>{exampleActivityToGrade.userAnswer}</AnswerContent>
-          </AnswerCol>
-        </AnswerRow>
+          </PointsRow>
 
-        <RemarksCol>
-          <h4>Uwagi:</h4>
-          <RemarksTextArea />
-        </RemarksCol>
-
-        <PointsRow>
-          <p style={{ top: '50%', position: 'relative', margin: '0' }}>Punkty: </p>
-          <Row style={{ display: 'flex' }}>
-            <PointsInput type='number' min={0} max={20}></PointsInput>
-            <PointsMax>/ {exampleActivityToGrade.activityPoints}</PointsMax>
-          </Row>
-        </PointsRow>
-
-        <AcceptButton>Zaakceptuj i przejdź do kolejnej odpowiedzi</AcceptButton>
-        <RemainingCount>Pozostało {exampleActivityToGrade.remaining} odpowiedzi do sprawdzenia</RemainingCount>
-      </ContentCol>
+          <AcceptButton
+            onClick={sendFeedbackAndGetNextIfAble}
+            disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}
+          >
+            Zaakceptuj i przejdź do kolejnej odpowiedzi
+          </AcceptButton>
+          <RemainingCount>Pozostało {activityResponseInfo.remaining} odpowiedzi do sprawdzenia</RemainingCount>
+        </ContentCol>
+      ) : (
+        <Loader />
+      )}
     </Content>
   )
 }

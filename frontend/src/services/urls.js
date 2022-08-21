@@ -38,6 +38,7 @@ export const SEND_EXPEDITION_FINISHED_TIME = GRAPH_TASK_RESULT_URL + '/send-date
 export const GET_POINTS_STATISTICS = BASE_URL + 'task/result/points/statistics'
 export const GET_BONUS_POINTS = BASE_URL + 'additional/points'
 export const ADD_BONUS_POINTS = GET_BONUS_POINTS + '/add'
+export const PROF_FEEDBACK_ADD_FILE = PROF_FEEDBACK + '/file/add'
 export const GET_ACTIVITIES_LIST = BASE_URL + 'task/activities'
 export const GET_RANKING = BASE_URL + 'ranking'
 export const GET_STUDENT_GROUP_RANKING = GET_RANKING + '/group'

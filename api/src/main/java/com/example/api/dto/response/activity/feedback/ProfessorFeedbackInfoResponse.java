@@ -21,9 +21,10 @@ public class ProfessorFeedbackInfoResponse {
     private Long fileTaskId;
     private String taskName;
     private String description;
+    private String answer;
     private List<FileResponse> taskFiles;
     private Double points;
     private String remarks;
-    private List<FileResponse> feedbackFiles;
+    private FileResponse feedbackFile;
 }
 

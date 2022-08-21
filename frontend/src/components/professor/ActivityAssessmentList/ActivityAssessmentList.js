@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { Col } from 'react-bootstrap'
 import ActivityListItem from './ActivityListItem'
@@ -17,14 +17,16 @@ export default function ActivityAssessmentList() {
     ProfessorService.getTasksToEvaluateList()
       .then((activityList) => {
         Promise.allSettled(
-          activityList?.map((activity) => {
-            return ProfessorService.getFirstTaskToEvaluate(activity.activityId).then((response) => {
-              return {
-                activity: response,
-                toGrade: activity.toGrade
-              }
+          activityList
+            ?.filter((activity) => activity.toGrade !== 0)
+            .map((activity) => {
+              return ProfessorService.getFirstTaskToEvaluate(activity.activityId).then((response) => {
+                return {
+                  activity: response,
+                  toGrade: activity.toGrade
+                }
+              })
             })
-          })
         ).then((response) => {
           setActivityList(
             response[0]?.status === 'rejected'
@@ -42,22 +44,27 @@ export default function ActivityAssessmentList() {
       })
   }, [])
 
+  const colContent = useMemo(() => {
+    if (activityList === undefined) {
+      return <Loader />
+    }
+    if (activityList === null) {
+      return <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
+    }
+    if (activityList.length > 0 && activityList.filter((activity) => activity.toGrade > 0)) {
+      return activityList.map((activity) => {
+        const listActivity = activity.activity.activity
+        const toGrade = activity.activity.toGrade
+        return <ActivityListItem key={listActivity.activityName} activity={listActivity} toGrade={toGrade} />
+      })
+    }
+    return <p className={'text-center'}>Brak aktywności do sprawdzenia!</p>
+  }, [activityList])
+
   return (
     <Content>
       <h1 style={{ marginLeft: '20px', paddingTop: '20px' }}>Aktywności do sprawdzenia</h1>
-      <Col style={{ paddingTop: '50px' }}>
-        {activityList === undefined ? (
-          <Loader />
-        ) : activityList == null ? (
-          <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
-        ) : (
-          activityList.map((activity) => {
-            const listActivity = activity.activity.activity
-            const toGrade = activity.activity.toGrade
-            return <ActivityListItem key={listActivity.activityName} activity={listActivity} toGrade={toGrade} />
-          })
-        )}
-      </Col>
+      <Col style={{ paddingTop: '50px' }}>{colContent}</Col>
     </Content>
   )
 }

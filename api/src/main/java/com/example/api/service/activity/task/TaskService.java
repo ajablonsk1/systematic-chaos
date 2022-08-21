@@ -3,6 +3,7 @@ package com.example.api.service.activity.task;
 import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
+import com.example.api.dto.response.activity.task.util.FileResponse;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -84,10 +85,17 @@ public class TaskService {
         if(fileTaskResults.size() > 0) {
             FileTaskResult result = fileTaskResults.get(0);
             long num = fileTaskResults.size();
-            boolean isLate = result.getSendDateMillis() - result.getFileTask().getSolveDateMillis() > 0;
+            boolean isLate = false;
+            //TODO: investigate further
+            if(result.getSendDateMillis() != null){
+                isLate = result.getSendDateMillis() - result.getFileTask().getSolveDateMillis() > 0;
+            }
+
+            List<FileResponse> filesResponse = result.getFiles().stream().map(FileResponse::new).toList();
+
             return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), result.getUser().getFirstName(),
                     result.getUser().getLastName(), task.getName(), isLate, task.getDescription(),
-                    result.getAnswer(), result.getFiles(), task.getMaxPoints(), num-1);
+                    result.getAnswer(), filesResponse, task.getMaxPoints(), id, num-1);
         }
         return null;
     }

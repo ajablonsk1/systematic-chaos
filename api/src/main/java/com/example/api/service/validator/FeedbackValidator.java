@@ -8,6 +8,7 @@ import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
+import com.example.api.model.util.File;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
@@ -30,6 +31,7 @@ public class FeedbackValidator {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final AuthenticationService authService;
     private final UserRepo userRepo;
+    private final FileRepo fileRepo;
 
     /**
      * Function creates professor feedback for fileTaskResult. If feedback already exists its attributes
@@ -72,6 +74,13 @@ public class FeedbackValidator {
             feedback.setPoints(form.getPoints());
             fileTaskResult.setPointsReceived(form.getPoints());
             fileTaskResultRepo.save(fileTaskResult);
+        }
+
+        // Feedback file can be set only once
+        if(feedback.getFeedbackFile() == null && form.getFile() != null) {
+            File file = new File(null, form.getFileName(), form.getFile().getBytes());
+            fileRepo.save(file);
+            feedback.setFeedbackFile(file);
         }
 
         fileTaskResult.setEvaluated(true);
