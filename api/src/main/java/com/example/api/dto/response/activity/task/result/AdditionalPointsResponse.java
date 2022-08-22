@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AdditionalPointsResponse implements PointsResponse {
+public class AdditionalPointsResponse {
     private Long dateMillis;
     private String professor;
     private Double points;

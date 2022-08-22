@@ -1,12 +1,10 @@
 package com.example.api.service.activity.result;
 
+import com.example.api.dto.response.activity.task.result.AdditionalPointsListResponse;
 import com.example.api.dto.response.activity.task.result.AdditionalPointsResponse;
-import com.example.api.dto.response.activity.task.result.PointsResponse;
 import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.result.AdditionalPoints;
 import com.example.api.model.user.User;
-import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.UserValidator;
@@ -40,8 +38,12 @@ public class AllPointsService {
         log.info("Fetching student all points {} for professor {}", studentEmail, professorEmail);
         List<TaskPointsStatisticsResponse> taskPoints = taskResultService.getUserPointsStatistics(studentEmail);
         List<AdditionalPointsResponse> additionalPoints = additionalPointsService.getAdditionalPoints(studentEmail);
+        List<AdditionalPointsListResponse> additionalPointsList = additionalPoints
+                .stream()
+                .map(AdditionalPointsListResponse::new)
+                .toList();
 
-        return Stream.of(taskPoints, additionalPoints)
+        return Stream.of(taskPoints, additionalPointsList)
                 .flatMap(Collection::stream)
                 .sorted(((o1, o2) -> Long.compare(o2.getDateMillis(), o1.getDateMillis())))
                 .toList();
