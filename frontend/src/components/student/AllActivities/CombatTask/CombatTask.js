@@ -21,9 +21,10 @@ import {
 } from '../../../professor/ActivityAssessmentDetails/ActivityAssesmentDetailsStyles'
 import { SendTaskButton } from './CombatTaskStyles'
 import CombatTaskService from '../../../../services/combatTask.service'
-import { Spinner } from 'react-bootstrap'
+import { Spinner, Row, Col } from 'react-bootstrap'
 import FeedbackFileService from './FeedbackFileService'
 import { debounce } from 'lodash'
+import GameCard from '../../GameCardPage/GameCard'
 
 export default function CombatTask() {
   const location = useLocation()
@@ -81,69 +82,118 @@ export default function CombatTask() {
     []
   )
 
+  const activityDetails = () => {
+    return (
+      <InfoContainer fluid className='p-0'>
+        <HeaderCol>
+          <HeaderRow>
+            <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
+            <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
+            <ActivityName>{task.name}</ActivityName>
+          </HeaderRow>
+          <FullDivider />
+          <Row>
+            <div>
+              <h5 className='row justify-content-center'>{task.description}</h5>
+            </div>
+          </Row>
+        </HeaderCol>
+      </InfoContainer>
+    )
+  }
+
+  const content = (
+    <InfoContainer fluid className='p-0'>
+      {!task && errorMessage === '' ? (
+        <Loader />
+      ) : errorMessage !== '' ? (
+        <p>{errorMessage}</p>
+      ) : (
+        <ActivityCol className='invisible-scroll'>
+          <HeaderCol>
+            <HeaderRow>
+              <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
+              <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
+              <ActivityName>{task.name}</ActivityName>
+            </HeaderRow>
+            <FullDivider />
+          </HeaderCol>
+          <div>
+            <h5>{task.description}</h5>
+            {task.points !== null && (
+              <>
+                <SmallDivider />
+                <p>
+                  Zdobyte punkty: <strong>{task.points}</strong>
+                </p>
+                <p>Uwagi od prowadzącego:</p>
+                <p>{task.remarks ?? 'Brak uwag'}</p>
+                {task.feedbackFile && <FeedbackFileService feedbackFile={task.feedbackFile} />}
+              </>
+            )}
+            <SmallDivider />
+            {task.points == null && (
+              <RemarksCol>
+                <h4>Odpowiedź:</h4>
+                <RemarksTextArea
+                  ref={textAreaRef}
+                  onChange={(e) => {
+                    handleAnswerChange(e)
+                  }}
+                />
+              </RemarksCol>
+            )}
+            <FileService
+              task={task}
+              setFile={setFileBlob}
+              setFileName={setFileName}
+              setIsFetching={setIsFetching}
+              isFetching={isFetching}
+              isRevieved={task.points != null}
+            />
+          </div>
+          <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
+            {isFetching ? (
+              <Spinner animation={'border'} />
+            ) : task.points == null ? (
+              <span>Wyślij</span>
+            ) : (
+              <span>Aktywność została oceniona</span>
+            )}
+          </SendTaskButton>
+        </ActivityCol>
+      )}
+    </InfoContainer>
+  )
+
   return (
     <Content>
-      <InfoContainer fluid className='p-0'>
-        {!task && errorMessage === '' ? (
-          <Loader />
-        ) : errorMessage !== '' ? (
-          <p>{errorMessage}</p>
-        ) : (
-          <ActivityCol className='invisible-scroll'>
-            <HeaderCol>
-              <HeaderRow>
-                <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
-                <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
-                <ActivityName>{task.name}</ActivityName>
-              </HeaderRow>
-              <FullDivider />
-            </HeaderCol>
-            <div>
-              <h5>{task.description}</h5>
-              {task.points !== null && (
-                <>
-                  <SmallDivider />
-                  <p>
-                    Zdobyte punkty: <strong>{task.points}</strong>
-                  </p>
-                  <p>Uwagi od prowadzącego:</p>
-                  <p>{task.remarks ?? 'Brak uwag'}</p>
-                  {task.feedbackFile && <FeedbackFileService feedbackFile={task.feedbackFile} />}
-                </>
-              )}
-              <SmallDivider />
-              {task.points == null && (
-                <RemarksCol>
-                  <h4>Odpowiedź:</h4>
-                  <RemarksTextArea
-                    ref={textAreaRef}
-                    onChange={(e) => {
-                      handleAnswerChange(e)
-                    }}
-                  />
-                </RemarksCol>
-              )}
-              <FileService
-                task={task}
-                setFile={setFileBlob}
-                setFileName={setFileName}
-                setIsFetching={setIsFetching}
-                isFetching={isFetching}
-                isRevieved={task.points != null}
-              />
-            </div>
-            <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
-              {isFetching ? (
-                <Spinner animation={'border'} />
-              ) : task.points == null ? (
-                <span>Wyślij</span>
-              ) : (
-                <span>Aktywność została oceniona</span>
-              )}
-            </SendTaskButton>
-          </ActivityCol>
-        )}
-      </InfoContainer>
+      {!task && errorMessage === '' ? (
+        <Loader />
+      ) : errorMessage !== '' ? (
+        <p>{errorMessage}</p>
+      ) : (
+        <Content>
+          <Row className='m-0 pt-4' style={{ height: '50vh' }}>
+            <Col>
+              <GameCard headerText='Informacje o aktywności' content={activityDetails()} className={'h-100'} />
+            </Col>
+
+            <Col>
+              <GameCard className={'h-100'} content={content} />
+            </Col>
+          </Row>
+
+          <Row className='m-0 pt-4' style={{ height: '50vh' }}>
+            <Col>
+              <GameCard className={'h-100'} content={content} />
+            </Col>
+            <Col>
+              <GameCard className={'h-100'} />
+            </Col>
+          </Row>
+        </Content>
+      )}
     </Content>
   )
 }
