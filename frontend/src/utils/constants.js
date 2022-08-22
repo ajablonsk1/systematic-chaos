@@ -45,7 +45,7 @@ export const UserSidebarTitles = {
   [generateFullPath(() => PageRoutes.Student.Points.POINTS)]: ['Punkty', faStar],
   [generateFullPath(() => PageRoutes.Student.Ranking.RANKING)]: ['Ranking', faRankingStar],
   [generateFullPath(() => PageRoutes.Student.BadgesAndAchievements.BADGES_ACHIEVEMENTS)]: [
-    'Odznaki i osiągnięcia',
+    'Rangi i odznaki',
     faCertificate
   ],
   [generateFullPath(() => PageRoutes.General.CANVAS)]: ['Świat gry', faChessBoard],
@@ -74,7 +74,8 @@ export const Activity = {
   EXPEDITION: 'EXPEDITION',
   INFO: 'INFO',
   SURVEY: 'SURVEY',
-  TASK: 'TASK'
+  TASK: 'TASK',
+  ADDITIONAL_POINTS: 'ADDITIONAL'
 }
 
 export const QuestionType = {
@@ -108,6 +109,8 @@ export const getActivityTypeName = (type) => {
       return 'Sondaż'
     case Activity.TASK:
       return 'Zadanie bojowe'
+    case Activity.ADDITIONAL_POINTS:
+      return 'Bonus'
     default:
       return
   }
