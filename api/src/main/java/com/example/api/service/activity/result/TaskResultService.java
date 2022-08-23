@@ -108,6 +108,7 @@ public class TaskResultService {
                 .toList();
         List<TaskPointsStatisticsResponse> fileTaskResults = fileTaskResultRepo.findAllByUser(user)
                 .stream()
+                .filter(FileTaskResult::isEvaluated)
                 .map(TaskPointsStatisticsResponse::new)
                 .toList();;
         List<TaskPointsStatisticsResponse> surveyResults = surveyResultRepo.findAllByUser(user)
