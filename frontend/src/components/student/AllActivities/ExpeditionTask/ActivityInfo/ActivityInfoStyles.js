@@ -60,6 +60,7 @@ export const ActivityCol = styled(Col)`
 
 export const HeaderRow = styled(Row)`
   background-color: var(--dark-blue);
+  color: var(--font-color);
 `
 
 export const HeaderCol = styled(Col)`

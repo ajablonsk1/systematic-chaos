@@ -128,7 +128,7 @@ export const RemarksTextArea = styled.textarea`
   margin: 0 auto;
   color: var(--font-color);
   border: 1px solid var(--font-color);
-  background-color: var(--dark-blue);
+  background-color: var(--light-blue);
 `
 
 export const RemainingCount = styled.p`
