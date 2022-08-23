@@ -25,6 +25,8 @@ import { Spinner, Row, Col } from 'react-bootstrap'
 import FeedbackFileService from './FeedbackFileService'
 import { debounce } from 'lodash'
 import GameCard from '../../GameCardPage/GameCard'
+import { faHourglass } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function CombatTask() {
   const location = useLocation()
@@ -254,14 +256,9 @@ export default function CombatTask() {
                 </SendTaskButton>
               </Col>
             </Col>
-            <Col md={6}>
-              <h4>Odpowiedź:</h4>
-              <RemarksTextArea
-                ref={textAreaRef}
-                onChange={(e) => {
-                  handleAnswerChange(e)
-                }}
-              />
+            <Col md={6} className={'text-center p-4 my-auto'}>
+              <FontAwesomeIcon className={'m-2'} icon={faHourglass} size='5x' spin />
+              <h2 className={'m-2'}>Odpowiedź została przesłana, oczekiwanie na sprawdzenie przez prowadzącego</h2>
             </Col>
           </Row>
         </Col>
