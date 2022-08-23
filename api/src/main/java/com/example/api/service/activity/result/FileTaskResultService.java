@@ -12,6 +12,7 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class FileTaskResultService {
     private final FileRepo fileRepo;
     private final UserValidator userValidator;
     private final AuthenticationService authService;
+    private final ActivityValidator activityValidator;
 
     public FileTaskResult saveFileTaskResult(FileTaskResult result) {
         return fileTaskResultRepo.save(result);
@@ -71,10 +73,7 @@ public class FileTaskResultService {
 
     private FileTaskResult getFileTaskResultByFileTaskAndUser(Long fileTaskId, String email) throws EntityNotFoundException, WrongUserTypeException {
         FileTask fileTask = fileTaskRepo.findFileTaskById(fileTaskId);
-        if(fileTask == null) {
-            log.error("File task with given id {} does not exist", fileTaskId);
-            throw new EntityNotFoundException("File task with given id " + fileTaskId + " does not exist");
-        }
+        activityValidator.validateActivityIsNotNull(fileTask, fileTaskId);
         User student = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(student, email);
         return fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
@@ -82,10 +81,7 @@ public class FileTaskResultService {
 
     public ByteArrayResource getFileById(Long fileId) throws EntityNotFoundException {
         File file = fileRepo.findFileById(fileId);
-        if(file == null) {
-            log.error("File with given id {} does not exist", fileId);
-            throw new EntityNotFoundException("File with given id " + fileId + " does not exist");
-        }
+        activityValidator.validateFileIsNotNull(file, fileId);
         return new ByteArrayResource(file.getFile());
     }
 }

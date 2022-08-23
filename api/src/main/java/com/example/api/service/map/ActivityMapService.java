@@ -6,6 +6,7 @@ import com.example.api.dto.response.map.task.MapTask;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.repo.map.MapRepo;
+import com.example.api.service.validator.MapValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 @Transactional
 public class ActivityMapService {
     private final MapRepo mapRepo;
+    private final MapValidator mapValidator;
 
     public ActivityMap saveActivityMap(ActivityMap activityMap){
         return mapRepo.save(activityMap);
@@ -28,10 +30,7 @@ public class ActivityMapService {
     public ActivityMapResponse getActivityMap(Long id) throws EntityNotFoundException {
         log.info("Fetching activity map with id {} as ActivityMapResponse", id);
         ActivityMap activityMap = mapRepo.findActivityMapById(id);
-        if(activityMap == null) {
-            log.error("ActivityMap with id {} not found in database", id);
-            throw new EntityNotFoundException("ActivityMap with id" + id + " not found in database");
-        }
+        mapValidator.validateActivityMapIsNotNull(activityMap, id);
         List<MapTask> graphTasks = activityMap.getGraphTasks()
                 .stream()
                 .map(graphTask -> new MapTask(graphTask.getId(), graphTask.getPosX(), graphTask.getPosY(), ActivityType.EXPEDITION))

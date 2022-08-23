@@ -8,8 +8,8 @@ import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
-import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
+import com.example.api.service.validator.GroupValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -26,7 +25,7 @@ import java.util.Optional;
 @Transactional
 public class GroupService {
     private final GroupRepo groupRepo;
-    private final AccessDateRepo accessDateRepo;
+    private final GroupValidator groupValidator;
 
     public Group saveGroup(Group group) {
         log.info("Saving group to database with name {}", group.getName());
@@ -36,18 +35,7 @@ public class GroupService {
     public Long saveGroup(SaveGroupForm form) throws EntityAlreadyInDatabaseException {
         log.info("Saving group to database with name {}", form.getName());
         List<Group> groups = groupRepo.findAll();
-        boolean groupNameExists = groups.stream()
-                .anyMatch(group -> group.getName().equals(form.getName()));
-        if(groupNameExists) {
-            log.error("Group with given name {} already exists", form.getName());
-            throw new EntityAlreadyInDatabaseException(ExceptionMessage.GROUP_NAME_TAKEN);
-        }
-        boolean groupCodeExists = groups.stream()
-                .anyMatch(group -> group.getInvitationCode().equals(form.getInvitationCode()));
-        if(groupCodeExists) {
-            log.error("Group with given code {} already exists", form.getInvitationCode());
-            throw new EntityAlreadyInDatabaseException(ExceptionMessage.GROUP_CODE_TAKEN);
-        }
+        groupValidator.validateGroup(groups, form);
         Group group = new Group(null, form.getName(), new ArrayList<>(), form.getInvitationCode());
         groupRepo.save(group);
         return group.getId();
@@ -56,20 +44,14 @@ public class GroupService {
     public Group getGroupById(Long id) throws EntityNotFoundException {
         log.info("Fetching group with id {}", id);
         Group group = groupRepo.findGroupById(id);
-        if (group == null) {
-            log.error("Group with id {} not found in database", id);
-            throw new EntityNotFoundException("Group with id" + id + " not found in database");
-        }
+        groupValidator.validateGroupIsNotNull(group, id);
         return group;
     }
 
     public Group getGroupByInvitationCode(String code) throws EntityNotFoundException {
         log.info("Fetching group with code {}", code);
         Group group = groupRepo.findGroupByInvitationCode(code);
-        if (group == null) {
-            log.error("Group with id {} not found in database", code);
-            throw new EntityNotFoundException("Group with code" + code + " not found in database");
-        }
+        groupValidator.validateGroupIsNotNull(group, code);
         return group;
     }
 
@@ -86,12 +68,9 @@ public class GroupService {
 
     public List<BasicUser> getGroupUserList(Long id) throws EntityNotFoundException {
         log.info("Fetching users from group with id {}", id);
-        Optional<Group> groupOptional = groupRepo.findById(id);
-        if (groupOptional.isEmpty()) {
-            throw new EntityNotFoundException("Group with id " + id + " not found in database");
-        }
-        return groupOptional.get()
-                .getUsers()
+        Group group = groupRepo.findGroupById(id);
+        groupValidator.validateGroupIsNotNull(group, id);
+        return group.getUsers()
                 .stream()
                 .map(BasicUser::new)
                 .toList();
@@ -100,12 +79,9 @@ public class GroupService {
 
     public List<BasicUser> getGroupStudentList(Long id) throws EntityNotFoundException {
         log.info("Fetching users from group with id {}", id);
-        Optional<Group> groupOptional = groupRepo.findById(id);
-        if (groupOptional.isEmpty()) {
-            throw new EntityNotFoundException("Group with id " + id + " not found in database");
-        }
-        return groupOptional.get()
-                .getUsers()
+        Group group = groupRepo.findGroupById(id);
+        groupValidator.validateGroupIsNotNull(group, id);
+        return group.getUsers()
                 .stream()
                 .filter(user -> user.getAccountType() == AccountType.STUDENT)
                 .map(BasicUser::new)
@@ -115,17 +91,13 @@ public class GroupService {
 
     public List<BasicUser> getGroupProfessorList(Long id) throws EntityNotFoundException {
         log.info("Fetching users from group with id {}", id);
-        Optional<Group> groupOptional = groupRepo.findById(id);
-        if (groupOptional.isEmpty()) {
-            throw new EntityNotFoundException("Group with id " + id + " not found in database");
-        }
-        return groupOptional.get()
-                .getUsers()
+        Group group = groupRepo.findGroupById(id);
+        groupValidator.validateGroupIsNotNull(group, id);
+        return group.getUsers()
                 .stream()
                 .filter(user -> user.getAccountType() == AccountType.PROFESSOR)
                 .map(BasicUser::new)
                 .toList();
-
     }
 
 }

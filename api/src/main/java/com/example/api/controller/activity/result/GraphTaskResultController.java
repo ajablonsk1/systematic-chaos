@@ -27,7 +27,7 @@ public class GraphTaskResultController {
 
     @PostMapping("/save")
     public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestBody SaveGraphTaskResultForm form)
-            throws EntityNotFoundException {
+            throws EntityNotFoundException, WrongUserTypeException {
         return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form.getGraphTaskId()));
     }
 

@@ -17,7 +17,9 @@ import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.FeedbackValidator;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,12 +39,16 @@ public class ProfessorFeedbackService {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final FileTaskRepo fileTaskRepo;
     private final UserRepo userRepo;
+    private final ActivityValidator activityValidator;
+    private final UserValidator userValidator;
 
-    public ProfessorFeedbackInfoResponse saveProfessorFeedback(ProfessorFeedback feedback) throws MissingAttributeException, EntityNotFoundException {
+    public ProfessorFeedbackInfoResponse saveProfessorFeedback(ProfessorFeedback feedback)
+            throws MissingAttributeException, EntityNotFoundException {
         return createInfoResponseFromProfessorFeedback(professorFeedbackRepo.save(feedback));
     }
 
-    public ProfessorFeedbackInfoResponse saveProfessorFeedback(SaveProfessorFeedbackForm form) throws WrongUserTypeException, EntityNotFoundException, IOException, MissingAttributeException, WrongPointsNumberException {
+    public ProfessorFeedbackInfoResponse saveProfessorFeedback(SaveProfessorFeedbackForm form)
+            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException, WrongPointsNumberException {
         log.info("Saving professor feedback to database");
         ProfessorFeedback professorFeedback =
                 feedbackValidator.validateAndSetProfessorFeedbackTaskForm(form);
@@ -51,67 +57,65 @@ public class ProfessorFeedbackService {
         return createInfoResponseFromProfessorFeedback(professorFeedbackRepo.save(professorFeedback));
     }
 
-    public ProfessorFeedback getProfessorFeedbackForFileTaskResult(Long id) throws EntityNotFoundException, MissingAttributeException {
+    public ProfessorFeedback getProfessorFeedbackForFileTaskResult(Long id)
+            throws EntityNotFoundException {
         log.info("Fetching professor feedback for file task result with id {}", id);
         FileTaskResult result = fileTaskResultRepo.findFileTaskResultById(id);
-        if(result == null) {
-            log.error("File task result with given id {} does not exist", id);
-            throw new EntityNotFoundException("File task result with given id " + id + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(result, id);
         return professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
     }
 
-    public ProfessorFeedbackInfoResponse getProfessorFeedbackInfoForFileTaskResult(Long id) throws EntityNotFoundException, MissingAttributeException {
+    public ProfessorFeedbackInfoResponse getProfessorFeedbackInfoForFileTaskResult(Long id)
+            throws EntityNotFoundException, MissingAttributeException {
         return createInfoResponseFromProfessorFeedback(getProfessorFeedbackForFileTaskResult(id));
 
     }
 
-    public ProfessorFeedback getProfessorFeedbackForFileTaskAndStudent(Long fileTaskId, String studentEmail) throws EntityNotFoundException, MissingAttributeException {
+    public ProfessorFeedback getProfessorFeedbackForFileTaskAndStudent(Long fileTaskId, String studentEmail)
+            throws EntityNotFoundException, WrongUserTypeException {
         log.info("Fetching professor feedback for file task with id {} and student {}", fileTaskId, studentEmail);
         FileTask fileTask = fileTaskRepo.findFileTaskById(fileTaskId);
-        if(fileTask == null) {
-            log.error("File task with given id {} does not exist", fileTaskId);
-            throw new EntityNotFoundException("File task with given id " + fileTaskId + " does not exist");
-        }
+        activityValidator.validateActivityIsNotNull(fileTask, fileTaskId);
         User student = userRepo.findUserByEmail(studentEmail);
-        if(student == null) {
-            log.error("Student with given email {} does not exist", fileTaskId);
-            throw new UsernameNotFoundException("Student with given email " + studentEmail + "does not exist");
-        }
+        userValidator.validateStudentAccount(student, studentEmail);
         FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
-        if(result == null) {
-            log.error("File task result for task with id {} and student {} does not exist", fileTask, studentEmail);
-            throw new EntityNotFoundException("File task result for task with id " + fileTaskId +
-                    " and student " + studentEmail + " does not exist");
-        }
+        activityValidator.validateTaskResultIsNotNull(result, student, fileTask);
         return professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(result);
     }
 
-    public ProfessorFeedbackInfoResponse getProfessorFeedbackInfoForFileTaskAndStudent(Long fileTaskId, String studentEmail) throws EntityNotFoundException, MissingAttributeException  {
+    public ProfessorFeedbackInfoResponse getProfessorFeedbackInfoForFileTaskAndStudent(Long fileTaskId, String studentEmail)
+            throws EntityNotFoundException, MissingAttributeException, WrongUserTypeException {
         return createInfoResponseFromProfessorFeedback(getProfessorFeedbackForFileTaskAndStudent(fileTaskId, studentEmail));
+    }
+
+    public Long deleteFileFromProfessorFeedback(DeleteFileFromProfessorFeedbackForm form)
+            throws EntityNotFoundException, WrongUserTypeException {
+        log.info("Deleting file from professor feedback for file task with id {} and student {}", form.getFileTaskId(), form.getStudentEmail());
+
+        ProfessorFeedback feedback = getProfessorFeedbackForFileTaskAndStudent(form.getFileTaskId(), form.getStudentEmail());
+        feedbackValidator.validateFeedback(feedback, form.getFileTaskId(), form.getStudentEmail(), form);
+        feedback.getFeedbackFiles().remove(form.getIndex());
+        professorFeedbackRepo.save(feedback);
+        return feedback.getId();
+    }
+
+    public Long saveFileToProfessorFeedback(SaveFileToProfessorFeedbackForm form) throws EntityNotFoundException, MissingAttributeException, IOException, WrongUserTypeException {
+        log.info("Adding file to professor feedback for file task with id {} and student {}", form.getFileTaskId(), form.getStudentEmail());
+
+        ProfessorFeedback feedback = getProfessorFeedbackForFileTaskAndStudent(form.getFileTaskId(), form.getStudentEmail());
+        feedbackValidator.validateFeedbackIsNotNull(feedback, form.getFileTaskId(), form.getStudentEmail());
+        File file = new File(null, form.getFileName(), form.getFile().getBytes());
+        fileRepo.save(file);
+        feedback.getFeedbackFiles().add(file);
+        return feedback.getId();
     }
 
     private ProfessorFeedbackInfoResponse createInfoResponseFromProfessorFeedback(
             ProfessorFeedback professorFeedback) throws MissingAttributeException, EntityNotFoundException {
-        if (professorFeedback == null) {
-            String msg = "Professor feedback doesn't exist";
-            throw new EntityNotFoundException(msg);
-        }
         FileTaskResult fileTaskResult = professorFeedback.getFileTaskResult();
-        if (fileTaskResult == null) {
-            String msg = "Professor feedback with id " + professorFeedback.getId() + " is missing fileTaskResult attribute";
-            throw new MissingAttributeException(msg);
-        }
         User student = professorFeedback.getFileTaskResult().getUser();
-        if (student == null) {
-            String msg = "Professor feedback with id " + professorFeedback.getId() + " is missing student attribute";
-            throw new MissingAttributeException(msg);
-        }
         FileTask fileTask = professorFeedback.getFileTaskResult().getFileTask();
-        if (fileTask == null) {
-            String msg = "Professor feedback with id " + professorFeedback.getId() + " is missing fileTask attribute";
-            throw new MissingAttributeException(msg);
-        }
+        feedbackValidator.validateFeedbackForInfoResponse(professorFeedback, fileTaskResult, student, fileTask);
 
         ProfessorFeedbackInfoResponse infoResponse = new ProfessorFeedbackInfoResponse();
         infoResponse.setFeedbackId(professorFeedback.getId());

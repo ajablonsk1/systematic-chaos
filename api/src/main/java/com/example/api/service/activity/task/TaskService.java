@@ -18,6 +18,8 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.ActivityValidator;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -40,20 +42,15 @@ public class TaskService {
     private final UserRepo userRepo;
     private final ChapterRepo chapterRepo;
     private final AuthenticationService authService;
+    private final UserValidator userValidator;
+    private final ActivityValidator taskValidator;
 
     public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate()
             throws WrongUserTypeException, UsernameNotFoundException {
         String email = authService.getAuthentication().getName();
         log.info("Fetching all activities that are needed to be evaluated for professor {}", email);
         User professor = userRepo.findUserByEmail(email);
-        if (professor == null) {
-            log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
-        }
-        if (professor.getAccountType() != AccountType.PROFESSOR) {
-            log.error("Wrong user type exception!");
-            throw new WrongUserTypeException("Wrong user type exception!", AccountType.PROFESSOR);
-        }
+        userValidator.validateProfessorAccount(professor, email);
         List<ActivityToEvaluateResponse> response = new LinkedList<>();
         List<FileTask> fileTasks = fileTaskRepo.findAll()
                 .stream()
@@ -73,10 +70,7 @@ public class TaskService {
     public TaskToEvaluateResponse getFirstAnswerToEvaluate(Long id) throws EntityNotFoundException {
         log.info("Fetching first activity that is needed to be evaluated for file task with id {}", id);
         FileTask task = fileTaskRepo.findFileTaskById(id);
-        if(task == null) {
-            log.error("File task with id {} not found in database", id);
-            throw new EntityNotFoundException("File task with id" + id + " not found in database");
-        }
+        taskValidator.validateActivityIsNotNull(task, id);
         List<FileTaskResult> fileTaskResults = fileTaskResultRepo.findAll()
                 .stream()
                 .filter(result -> Objects.equals(result.getFileTask().getId(), task.getId()))

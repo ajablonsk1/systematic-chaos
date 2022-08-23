@@ -39,7 +39,7 @@ public class ProfessorFeedbackController {
             @RequestParam Long fileTaskId,
             @RequestParam String studentEmail
     )
-            throws EntityNotFoundException, MissingAttributeException {
+            throws EntityNotFoundException, MissingAttributeException, WrongUserTypeException {
         return ResponseEntity.ok().body(feedbackService.getProfessorFeedbackInfoForFileTaskAndStudent(fileTaskId, studentEmail));
     }
 }
