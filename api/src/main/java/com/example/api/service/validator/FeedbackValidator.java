@@ -107,10 +107,7 @@ public class FeedbackValidator {
     }
 
     public void validateFeedback(ProfessorFeedback feedback, Long id, String email, DeleteFileFromProfessorFeedbackForm form) throws EntityNotFoundException {
-        if(feedback == null) {
-            log.error("Feedback for file task with id {} and user {} not found in database", id, email);
-            throw new EntityNotFoundException("Feedback for file task with id " + id + " and user " + email + " not found in database");
-        }
+        validateFeedbackIsNotNull(feedback, id, email);
         if(feedback.getFeedbackFiles().size() <= form.getIndex()) {
             log.error("Wrong index {} for deleting file from ProfessorFeedback for FileTask with id {} and student {}",
                     form.getIndex(), form.getFileTaskId(), form.getStudentEmail());

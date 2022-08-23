@@ -30,14 +30,15 @@ public class UserValidator {
         }
     }
 
-    public void validateStudentAccount(User student, String email) throws UsernameNotFoundException, WrongUserTypeException {
-        if(student == null) {
-            log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
-        }
-        if(student.getAccountType() != AccountType.STUDENT) {
+    public void validateUserAccountType(User user, AccountType type) throws WrongUserTypeException {
+        if(user.getAccountType() != type) {
             throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
         }
+    }
+
+    public void validateStudentAccount(User student, String email) throws UsernameNotFoundException, WrongUserTypeException {
+        validateUserIsNotNull(student, email);
+        validateUserAccountType(student, AccountType.STUDENT);
     }
 
     public void validateStudentAccount(User student, Long id) throws UsernameNotFoundException, WrongUserTypeException {
@@ -45,19 +46,12 @@ public class UserValidator {
             log.error("User with id {} not found in database", id);
             throw new UsernameNotFoundException("User with id" + id + " not found in database");
         }
-        if(student.getAccountType() != AccountType.STUDENT) {
-            throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
-        }
+        validateUserAccountType(student, AccountType.STUDENT);
     }
 
     public void validateProfessorAccount(User professor, String email) throws UsernameNotFoundException, WrongUserTypeException {
-        if(professor == null) {
-            log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
-        }
-        if(professor.getAccountType() != AccountType.PROFESSOR) {
-            throw new WrongUserTypeException("Wrong user type!", AccountType.PROFESSOR);
-        }
+        validateUserIsNotNull(professor, email);
+        validateUserAccountType(professor, AccountType.PROFESSOR);
     }
 
     public void validateAndSetUserGroup(Group newGroup, Group previousGroup, Long newGroupId, User user) throws EntityNotFoundException, StudentAlreadyAssignedToGroupException {
