@@ -65,7 +65,10 @@ public class FileTaskService {
         result.setTaskFiles(fileResponseList);
 
         ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
-        feedbackValidator.validateFeedbackIsNotNull(feedback, fileTaskResult);
+        if (feedback == null) {
+            log.debug("Feedback for file task result with id {} does not exist", fileTaskResult.getId());
+            return result;
+        }
         result.setPoints(feedback.getPoints());
         result.setRemarks(feedback.getContent());
         if (feedback.getFeedbackFile() != null) {
