@@ -74,7 +74,8 @@ export const Activity = {
   EXPEDITION: 'EXPEDITION',
   INFO: 'INFO',
   SURVEY: 'SURVEY',
-  TASK: 'TASK'
+  TASK: 'TASK',
+  ADDITIONAL: 'ADDITIONAL'
 }
 
 export const QuestionType = {
@@ -108,6 +109,8 @@ export const getActivityTypeName = (type) => {
       return 'Sondaż'
     case Activity.TASK:
       return 'Zadanie bojowe'
+    case Activity.ADDITIONAL:
+      return 'Bonus'
     default:
       return
   }

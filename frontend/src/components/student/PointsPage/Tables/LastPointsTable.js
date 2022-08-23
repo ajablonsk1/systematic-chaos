@@ -5,7 +5,7 @@ import { Spinner } from 'react-bootstrap'
 import moment from 'moment'
 
 export default function LastPointsTable(props) {
-  const tableHeaders = ['Data', 'Liczba punktów', 'Typ aktywności', 'Nazwa aktywności'].map((title, index) => (
+  const tableHeaders = ['Data', 'Liczba punktów', 'Typ aktywności', 'Nazwa/opis aktywności'].map((title, index) => (
     <th key={index} className='w-25'>
       {title}
     </th>
