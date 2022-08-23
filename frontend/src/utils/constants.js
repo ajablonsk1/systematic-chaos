@@ -75,7 +75,7 @@ export const Activity = {
   INFO: 'INFO',
   SURVEY: 'SURVEY',
   TASK: 'TASK',
-  ADDITIONAL_POINTS: 'ADDITIONAL'
+  ADDITIONAL: 'ADDITIONAL'
 }
 
 export const QuestionType = {
@@ -109,7 +109,7 @@ export const getActivityTypeName = (type) => {
       return 'Sondaż'
     case Activity.TASK:
       return 'Zadanie bojowe'
-    case Activity.ADDITIONAL_POINTS:
+    case Activity.ADDITIONAL:
       return 'Bonus'
     default:
       return

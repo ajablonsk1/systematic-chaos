@@ -1,5 +1,6 @@
 package com.example.api.config;
 
+import com.example.api.model.activity.result.AdditionalPoints;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.FileTask;
@@ -20,10 +21,12 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.Url;
+import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
+import com.example.api.service.activity.result.AdditionalPointsService;
 import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.activity.task.FileTaskService;
@@ -53,6 +56,7 @@ import java.util.List;
 public class DatabaseConfig {
     private final UrlRepo urlRepo;
     private final ChapterRepo chapterRepo;
+    private final AdditionalPointsRepo additionalPointsRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -471,6 +475,16 @@ public class DatabaseConfig {
             chapter.setActivityMap(activityMap1);
 
             chapterRepo.save(chapter);
+
+            AdditionalPoints additionalPoints = new AdditionalPoints();
+            additionalPoints.setId(1L);
+            additionalPoints.setUser(student);
+            additionalPoints.setPointsReceived(100D);
+            additionalPoints.setProfessorEmail(professor.getEmail());
+            additionalPoints.setDescription("Good job");
+            calendar.set(2022, Calendar.JUNE, 15);
+            additionalPoints.setSendDateMillis(calendar.getTimeInMillis());
+            additionalPointsRepo.save(additionalPoints);
         };
     }
 }

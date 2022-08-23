@@ -15,7 +15,7 @@ import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.GraphTaskResultService;
-import com.example.api.service.validator.AnswerFormValidator;
+import com.example.api.service.validator.ResultValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.util.calculator.PointsCalculator;
 import com.example.api.util.calculator.TimeCalculator;
@@ -42,7 +42,7 @@ public class GraphTaskResultServiceTest {
     @Mock private UserRepo userRepo;
     @Mock private QuestionRepo questionRepo;
     @Mock private AnswerRepo answerRepo;
-    @Mock private AnswerFormValidator answerFormValidator;
+    @Mock private ResultValidator answerFormValidator;
     @Mock private PointsCalculator pointsCalculator;
     @Mock private UserValidator userValidator;
     @Mock private TimeCalculator timeCalculator;
