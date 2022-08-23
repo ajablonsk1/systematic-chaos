@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Content } from '../../../App/AppGeneralStyles'
 import Loader from '../../../general/Loader/Loader'
@@ -22,6 +22,8 @@ import {
 import { SendTaskButton } from './CombatTaskStyles'
 import CombatTaskService from '../../../../services/combatTask.service'
 import { Spinner } from 'react-bootstrap'
+import FeedbackFileService from './FeedbackFileService'
+import { debounce } from 'lodash'
 
 export default function CombatTask() {
   const location = useLocation()
@@ -34,11 +36,14 @@ export default function CombatTask() {
   const [isFetching, setIsFetching] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
+  const textAreaRef = useRef(null)
+
   const resetStates = () => {
     setIsFetching(false)
     setFileBlob(null)
     setFileName(null)
     setAnswer('')
+    textAreaRef.current.value = ''
   }
 
   useEffect(() => {
@@ -68,9 +73,13 @@ export default function CombatTask() {
       })
   }
 
-  const handleAnswerChange = (event) => {
-    setAnswer(event.target.value)
-  }
+  const handleAnswerChange = useMemo(
+    () =>
+      debounce((event) => {
+        setAnswer(event.target.value)
+      }, 200),
+    []
+  )
 
   return (
     <Content>
@@ -91,33 +100,46 @@ export default function CombatTask() {
             </HeaderCol>
             <div>
               <h5>{task.description}</h5>
+              {task.points !== null && (
+                <>
+                  <SmallDivider />
+                  <p>
+                    Zdobyte punkty: <strong>{task.points}</strong>
+                  </p>
+                  <p>Uwagi od prowadzącego:</p>
+                  <p>{task.remarks ?? 'Brak uwag'}</p>
+                  {task.feedbackFile && <FeedbackFileService feedbackFile={task.feedbackFile} />}
+                </>
+              )}
               <SmallDivider />
-              <p>
-                Zdobyte punkty: <strong>50 / 100</strong> {/*//TODO: info from endpoint*/}
-              </p>
-              <p>
-                {task?.content && (
-                  <>
-                    <strong>Uwagi prowadzącego:</strong> <br /> {task.content}
-                  </>
-                )}
-              </p>
-              <SmallDivider />
-              <RemarksCol>
-                <h4>Odpowiedź:</h4>
-                <RemarksTextArea value={answer} onChange={handleAnswerChange} />
-              </RemarksCol>
-
+              {task.points == null && (
+                <RemarksCol>
+                  <h4>Odpowiedź:</h4>
+                  <RemarksTextArea
+                    ref={textAreaRef}
+                    onChange={(e) => {
+                      handleAnswerChange(e)
+                    }}
+                  />
+                </RemarksCol>
+              )}
               <FileService
                 task={task}
                 setFile={setFileBlob}
                 setFileName={setFileName}
                 setIsFetching={setIsFetching}
                 isFetching={isFetching}
+                isRevieved={task.points != null}
               />
             </div>
-            <SendTaskButton disabled={!fileName && answer === ''} onClick={() => sendAnswer()}>
-              {isFetching ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
+            <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
+              {isFetching ? (
+                <Spinner animation={'border'} />
+              ) : task.points == null ? (
+                <span>Wyślij</span>
+              ) : (
+                <span>Aktywność została oceniona</span>
+              )}
             </SendTaskButton>
           </ActivityCol>
         )}

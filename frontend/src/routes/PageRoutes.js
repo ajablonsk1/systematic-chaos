@@ -45,6 +45,10 @@ export const PageRoutes = {
     BadgesAndAchievements: {
       MAIN_PATH: 'badges-achievements/*',
       BADGES_ACHIEVEMENTS: ''
+    },
+    Profile: {
+      MAIN_PATH: 'profile/*',
+      PROFILE: ''
     }
   },
 

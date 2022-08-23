@@ -9,25 +9,24 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class TaskPointsStatisticsResponse {
-    private Long dateMillis;
-    private Double pointsReceived;
-    private ActivityType activityType;
-    private String activityName;
+public class TaskPointsStatisticsResponse extends PointsResponse {
 
     public TaskPointsStatisticsResponse(GraphTaskResult result) {
+        super();
         setDateAndPoints(result.getSendDateMillis(), result.getPointsReceived());
         this.activityType = ActivityType.EXPEDITION;
         this.activityName = result.getGraphTask().getName();
     }
 
     public TaskPointsStatisticsResponse(FileTaskResult result) {
+        super();
         setDateAndPoints(result.getSendDateMillis(), result.getPointsReceived());
         this.activityType = ActivityType.TASK;
         this.activityName = result.getFileTask().getName();
     }
 
     public TaskPointsStatisticsResponse(SurveyResult result) {
+        super();
         setDateAndPoints(result.getSendDateMillis(), result.getPointsReceived());
         this.activityType = ActivityType.SURVEY;
         this.activityName = result.getSurvey().getName();

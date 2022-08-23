@@ -1,29 +1,69 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import Ranking from '../../general/Ranking/Ranking'
 import { debounce } from 'lodash/function'
 import { Form } from 'react-bootstrap'
-import { getRanking } from '../../general/Ranking/mockData'
+import RankingService from '../../../services/ranking.service'
+import StudentPointsModal from './StudentPointsModal'
 
 function StudentsRanking() {
-  const ranking = getRanking()
-  const [filteredList, setFilteredList] = useState([...ranking])
+  const [ranking, setRanking] = useState(undefined)
+  const [filteredList, setFilteredList] = useState(undefined)
+  const [filterQuery, setFilterQuery] = useState(undefined)
+  const [isStudentPointsModalOpen, setIsStudentPointsModalOpen] = useState(false)
+  const [chosenStudentEmail, setChosenStudentEmail] = useState(null)
+
+  useEffect(() => {
+    if (chosenStudentEmail) {
+      setIsStudentPointsModalOpen(true)
+    }
+  }, [chosenStudentEmail])
+
+  useEffect(() => {
+    RankingService.getGlobalRankingList()
+      .then((response) => {
+        setRanking(response)
+        setFilteredList(response)
+      })
+      .catch(() => {
+        setRanking(null)
+        setFilteredList(null)
+      })
+  }, [])
+
+  useEffect(() => {
+    if (filterQuery) {
+      RankingService.getFilteredRanking(filterQuery)
+        .then((response) => {
+          setFilteredList(response)
+        })
+        .catch(() => {
+          setFilteredList(null)
+        })
+    } else {
+      setFilteredList(ranking)
+    }
+  }, [filterQuery, ranking])
 
   const filterList = debounce((query) => {
-    if (!query) return setFilteredList([...ranking])
-    setFilteredList(
-      ranking?.filter((student) =>
-        (student.firstName.toLowerCase() + ' ' + student.lastName.toLowerCase()).includes(query?.toLowerCase())
-      )
-    )
+    setFilterQuery(query)
   }, 300)
 
   return (
     <Content>
-      <Form.Group className={'my-3 mx-4'}>
-        <Form.Control type={'text'} placeholder={'Wyszukaj studenta...'} onChange={(e) => filterList(e.target.value)} />
+      <Form.Group className={'py-3 px-4'}>
+        <Form.Control
+          type={'text'}
+          placeholder={'Wyszukaj po grupie lub studencie lub typie bohatera...'}
+          onChange={(e) => filterList(e.target.value)}
+        />
       </Form.Group>
-      <Ranking rankingList={filteredList} />
+      <Ranking rankingList={filteredList} setChosenStudentEmail={setChosenStudentEmail} />
+      <StudentPointsModal
+        show={isStudentPointsModalOpen}
+        setModalOpen={setIsStudentPointsModalOpen}
+        studentEmail={chosenStudentEmail}
+      />
     </Content>
   )
 }

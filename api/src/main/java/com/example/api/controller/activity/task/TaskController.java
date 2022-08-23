@@ -1,5 +1,6 @@
 package com.example.api.controller.activity.task;
 
+import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -33,6 +34,8 @@ public class TaskController {
         return ResponseEntity.ok().body(taskService.getFirstAnswerToEvaluate(fileTaskId));
     }
 
-    // @PostMapping("/evaluate")
-
+    @GetMapping("/activities")
+    ResponseEntity<List<ActivitiesResponse>> getAllActivities() {
+        return ResponseEntity.ok().body(taskService.getAllActivities());
+    }
 }

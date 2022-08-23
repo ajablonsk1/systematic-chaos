@@ -5,10 +5,13 @@ import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.model.group.Group;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.model.user.User;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
@@ -40,6 +43,13 @@ public class GroupValidator {
         if(groupCodeExists) {
             log.error("Group with given code {} already exists", form.getInvitationCode());
             throw new EntityAlreadyInDatabaseException(ExceptionMessage.GROUP_CODE_TAKEN);
+        }
+    }
+    
+    public void validateUserGroupIsNotNull(User user) throws MissingAttributeException {
+        if (user.getGroup() == null) {
+            log.error("User with email {} does not have a group", user.getEmail());
+            throw new MissingAttributeException("Usere with email " + user.getEmail() + " does not have a group");
         }
     }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useTransition } from 'react'
+import React, { useEffect, useTransition, useRef } from 'react'
 import { Button, Col, Row, Spinner } from 'react-bootstrap'
 import { SmallDivider } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
@@ -6,12 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import download from 'downloadjs'
 import CombatTaskService from '../../../../services/combatTask.service'
 
-export default function FileService({ task, setFile, setFileName, setIsFetching, isFetching }) {
+export default function FileService({ task, setFile, setFileName, setIsFetching, isFetching, isRevieved }) {
   const fileInput = useRef(null)
   const [isRemoving, startRemoving] = useTransition()
 
   useEffect(() => {
-    if (!isFetching) {
+    if (!isFetching && fileInput.current) {
       fileInput.current.value = ''
     }
   }, [isFetching])
@@ -33,29 +33,23 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
   }
 
   const downloadFile = (fileNumber) => {
-    const fileId = task.files[fileNumber].id
+    const fileId = task.taskFiles[fileNumber].id
     CombatTaskService.getCombatFile(fileId).then((file) => {
-      download(file, task.files[fileNumber].name)
+      download(file, task.taskFiles[fileNumber].name)
     })
   }
 
   return (
     <>
-      <strong>Załączone pliki:</strong>
-      {!task || task.files?.length === 0 ? (
+      <strong>Załączone pliki studenta:</strong>
+      {!task || task.taskFiles?.length === 0 ? (
         <p>Brak dodanych plików</p>
       ) : (
-        task.files?.map((file, idx) => (
+        task.taskFiles?.map((file, idx) => (
           <Row key={idx} className='mt-4'>
-            {/*<Col>{file.date}</Col>*/}
-            {/*<Col>{file.author}</Col>*/}
             <Col>{file.name}</Col>
             <Col>
-              <Button
-                variant='danger'
-                // disabled={loggedUserName !== file.author}
-                onClick={() => remove(idx)}
-              >
+              <Button variant='danger' disabled={isRevieved} onClick={() => remove(idx)}>
                 {isRemoving ? <Spinner animation={'border'} /> : <FontAwesomeIcon icon={faTrash} />}
               </Button>
               <Button variant='warning' className='ml-2' onClick={() => downloadFile(idx)}>
@@ -65,11 +59,14 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
           </Row>
         ))
       )}
-
-      <SmallDivider />
-      <strong>Dodaj pliki:</strong>
-      <br />
-      <input ref={fileInput} type='file' className='mb-5 mt-3' onChange={saveFile} />
+      {!isRevieved && (
+        <>
+          <SmallDivider />
+          <strong>Dodaj pliki:</strong>
+          <br />
+          <input ref={fileInput} type='file' className='mb-5 mt-3' onChange={saveFile} />
+        </>
+      )}
     </>
   )
 }

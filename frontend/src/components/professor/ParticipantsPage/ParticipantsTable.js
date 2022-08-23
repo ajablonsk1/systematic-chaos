@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
+import { GameCardOptionPick } from '../../general/GameCardStyles'
 import { TableContainer } from './ParticipantsStyles'
 import ChangeGroupModal from './ChangeGroupModal'
 import { Button } from 'react-bootstrap'
@@ -69,7 +69,10 @@ function ParticipantsTable(props) {
                   <Button
                     className={'ml-2'}
                     style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
-                    onClick={() => setBonusPointsModalOpen(true)}
+                    onClick={() => {
+                      setChosenStudent(student)
+                      setBonusPointsModalOpen(true)
+                    }}
                   >
                     Przyznaj punkty
                   </Button>
@@ -86,7 +89,11 @@ function ParticipantsTable(props) {
         </tbody>
       </TableContainer>
       <ChangeGroupModal show={changeGroupModalOpen} setModalOpen={setChangeGroupModalOpen} student={chosenStudent} />
-      <BonusPointsModal show={bonusPointsModalOpen} setModalOpen={setBonusPointsModalOpen} />
+      <BonusPointsModal
+        show={bonusPointsModalOpen}
+        setModalOpen={setBonusPointsModalOpen}
+        studentId={chosenStudent?.id}
+      />
     </GameCardOptionPick>
   )
 }

@@ -4,7 +4,8 @@ public enum ActivityType {
     EXPEDITION("EXPEDITION"),
     TASK("TASK"),
     INFO("INFORMATION"),
-    SURVEY("SURVEY");
+    SURVEY("SURVEY"),
+    ADDITIONAL("ADDITIONAL");
 
     private final String activityType;
 

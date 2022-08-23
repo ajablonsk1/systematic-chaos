@@ -26,10 +26,10 @@ public class UserValidator {
     public void validateUserIsNotNull(User user, String email) throws UsernameNotFoundException {
         if(user == null) {
             log.error("User {} not found in database", email);
-            throw new UsernameNotFoundException("User" + email + " not found in database");
+            throw new UsernameNotFoundException("User " + email + " not found in database");
         }
     }
-
+    
     public void validateUserAccountType(User user, AccountType type) throws WrongUserTypeException {
         if(user.getAccountType() != type) {
             throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
@@ -107,6 +107,13 @@ public class UserValidator {
                 throw new WrongBodyParametersNumberException("Request body for registering professor requires 4 body parameters",
                         List.of("firstName", "lastName", "email", "password"), 1);
             }
+        }
+    }
+
+    public void validateProfessorAccount(User professor, String email) throws UsernameNotFoundException, WrongUserTypeException {
+        validateUser(professor, email);
+        if(professor.getAccountType() != AccountType.PROFESSOR) {
+            throw new WrongUserTypeException("Wrong user type!", AccountType.PROFESSOR);
         }
     }
 }

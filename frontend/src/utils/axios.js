@@ -34,16 +34,11 @@ export function axiosApiDelete(url, params) {
 
 export function axiosApiSendFile(url, body) {
   const formData = new FormData()
-  formData.append('fileTaskId', body.fileTaskId)
-  formData.append('studentEmail', body.studentEmail)
-
-  if (body.openAnswer) {
-    formData.append('openAnswer', body.openAnswer)
-  }
-  if (body.file && body.fileName) {
-    formData.append('file', body.file)
-    formData.append('fileName', body.fileName)
-  }
+  Object.keys(body).forEach((key) => {
+    if (body[key]) {
+      formData.append(key, body[key])
+    }
+  })
 
   return axios
     .post(url, formData, multipartFileHeader({}))

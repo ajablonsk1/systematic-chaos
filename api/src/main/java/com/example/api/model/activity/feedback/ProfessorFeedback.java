@@ -22,8 +22,8 @@ public class ProfessorFeedback extends Feedback{
     @OneToOne
     private FileTaskResult fileTaskResult;
 
-    @OneToMany
-    private List<File> feedbackFiles = new LinkedList<>();
+    @OneToOne
+    private File feedbackFile;
 
     private Double points;
 }

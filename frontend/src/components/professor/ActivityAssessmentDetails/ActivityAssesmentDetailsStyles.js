@@ -28,6 +28,7 @@ export const TopInfoCard = styled.div`
   width: 740px;
   margin-top: 5px;
   padding: 10px;
+  height: 180px;
   //tak, wiem - ale to chyba najprostszy sposób na zrobienie tego, przy czym nie jest absolutnym koszmarem
   @media (max-width: 1800px) {
     width: 1500px;
@@ -39,15 +40,21 @@ export const UserInfo = styled.div`
   justify-content: space-between;
   flex-flow: column;
   padding-left: 10px;
+  height: 100px;
 `
 
 export const ActivityInfo = styled.p`
+  max-height: 60px;
   overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 0; /* Remove scrollbar space */
+    background: transparent; /* Optional: just make scrollbar invisible */
+  }
 `
 
 export const AnswerRow = styled(Row)`
   width: 100%;
-  min-height: 300px;
+  min-height: 200px;
   max-height: 500px;
   background-color: var(--dark-blue);
   margin: 10px auto 0 auto;
@@ -58,13 +65,16 @@ export const AnswerContent = styled.p`
 `
 
 export const AnswerCol = styled(Col)`
-  margin-top: 20px;
   color: var(--font-color);
+  text-align: center;
+  margin: 20px auto 10px;
+  max-height: 220px;
+  overflow-y: auto;
 `
 
 export const RemarksCol = styled(Col)`
   width: 100%;
-  min-height: 150px;
+  min-height: 140px;
   max-height: 300px;
   background-color: var(--dark-blue);
   margin: 10px auto 0 auto;
@@ -104,6 +114,11 @@ export const AcceptButton = styled(Button)`
   margin-top: 15px;
   background-color: var(--button-green);
   border-color: var(--button-green);
+  :disabled {
+    background-color: var(--button-green);
+    border-color: var(--button-green);
+    opacity: 0.6;
+  }
 `
 
 export const RemarksTextArea = styled.textarea`
@@ -124,4 +139,20 @@ export const RemainingCount = styled.p`
   text-align: center;
   position: relative;
   margin: 20px 0 5px 65%;
+`
+
+export const ActivityAssessmentStudentFileRow = styled(Row)`
+  margin: 0 auto;
+  width: 80%;
+`
+
+export const ActivityAssesmentProfessorFileCol = styled(Col)`
+  background-color: var(--dark-blue);
+  color: var(--font-color);
+  margin: 10px auto auto auto;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
 `

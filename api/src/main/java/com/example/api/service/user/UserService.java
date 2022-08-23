@@ -2,6 +2,7 @@ package com.example.api.service.user;
 
 import com.example.api.dto.request.user.RegisterUserForm;
 import com.example.api.dto.request.user.SetStudentGroupForm;
+import com.example.api.dto.request.user.SetStudentIndexForm;
 import com.example.api.dto.response.user.BasicStudent;
 import com.example.api.error.exception.*;
 import com.example.api.model.group.Group;
@@ -107,5 +108,25 @@ public class UserService implements UserDetailsService {
         Group previousGroup = user.getGroup();
         userValidator.validateAndSetUserGroup(newGroup, previousGroup, newGroupId, user);
         return newGroup;
+    }
+
+    public Integer setIndexNumber(SetStudentIndexForm setStudentIndexForm) throws WrongUserTypeException, EntityAlreadyInDatabaseException {
+        String email = authService.getAuthentication().getName();
+        log.info("Setting index number {} for user with email {}", setStudentIndexForm.getNewIndexNumber(), email);
+        User student = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(student, email);
+
+        if (student.getIndexNumber().equals(setStudentIndexForm.getNewIndexNumber())) {
+            log.info("Student with email {} set again index number to {}", email, setStudentIndexForm.getNewIndexNumber());
+            return student.getIndexNumber();
+        }
+
+        if (userRepo.existsUserByIndexNumber(setStudentIndexForm.getNewIndexNumber())) {
+            log.error("Cannot set index number student with email {} to {} because it is taken", email, setStudentIndexForm.getNewIndexNumber());
+            throw new EntityAlreadyInDatabaseException("Cannot set index number for user with email " + email + " to " + setStudentIndexForm.getNewIndexNumber() + " because is taken");
+        }
+        student.setIndexNumber(setStudentIndexForm.getNewIndexNumber());
+        userRepo.save(student);
+        return student.getIndexNumber();
     }
 }

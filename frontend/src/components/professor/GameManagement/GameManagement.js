@@ -1,8 +1,8 @@
 import { Content } from '../../App/AppGeneralStyles'
 import { Col, Container, Row, Table } from 'react-bootstrap'
 import { getChaptersList } from './mockData'
-import { GameCardOptionPick } from '../../student/GameCardPage/GameCardStyles'
-import { GameButton } from '../../student/GameCardPage/GameButton'
+import { GameCardOptionPick } from '../../general/GameCardStyles'
+import { GameButton } from './GameButton'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ManagementCard from './ManagementCard'
 import { useNavigate } from 'react-router-dom'
@@ -22,6 +22,14 @@ export default function GameManagement() {
     navigate(
       generateFullPath(() => PageRoutes.Teacher.GameManagement.Chapters.CHAPTER) + `/${chapterName}/${chapterId}`
     )
+  }
+
+  const downloadBackupFile = () => {
+    // TODO: use endpoint and download.js
+  }
+
+  const downloadLogsFile = () => {
+    // TODO: use endpoint and download.js
   }
 
   return (
@@ -85,6 +93,20 @@ export default function GameManagement() {
               header={'Wczytaj konfigurację gry'}
               description={'Wyczyść cały stan bazy danych i wczytaj stan od nowa.'}
               callback={() => setShowConfigModal(true)}
+            />
+          </Col>
+          <Col md={4} className={'py-2'}>
+            <ManagementCard
+              header={'Kopia zapasowa'}
+              description={'Pobierz kopię zapasową bazy danych, żeby móc wczytać konfigurację z tego pliku.'}
+              callback={downloadBackupFile}
+            />
+          </Col>
+          <Col md={4} className={'py-2'}>
+            <ManagementCard
+              header={'Lista logów serwera'}
+              description={'Pobierz listę logów z serwera zbieranych od początku istnienia aplikacji.'}
+              callback={downloadLogsFile}
             />
           </Col>
         </Row>

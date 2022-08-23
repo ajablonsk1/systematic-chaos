@@ -11,7 +11,6 @@ import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.repo.util.FileRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.validator.FeedbackValidator;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +36,6 @@ public class ProfessorFeedbackServiceTest {
     @Mock private FileTaskResultRepo fileTaskResultRepo;
     @Mock private FileTaskRepo fileTaskRepo;
     @Mock private UserRepo userRepo;
-    @Mock private FileRepo fileRepo;
     @Captor private ArgumentCaptor<ProfessorFeedback> professorFeedbackArgumentCaptor;
     @Captor private ArgumentCaptor<SaveProfessorFeedbackForm> formArgumentCaptor;
     @Captor private ArgumentCaptor<Long> idArgumentCaptor;
@@ -52,8 +50,7 @@ public class ProfessorFeedbackServiceTest {
                 feedbackValidator,
                 fileTaskResultRepo,
                 fileTaskRepo,
-                userRepo,
-                fileRepo);
+                userRepo);
     }
 
     @Test

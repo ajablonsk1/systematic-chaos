@@ -1,7 +1,6 @@
 package com.example.api.service.activity.feedback;
 
-import com.example.api.dto.request.activity.feedback.DeleteFileFromProfessorFeedbackForm;
-import com.example.api.dto.request.activity.feedback.SaveFileToProfessorFeedbackForm;
+
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
 import com.example.api.dto.response.activity.feedback.ProfessorFeedbackInfoResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
@@ -18,7 +17,6 @@ import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.repo.util.FileRepo;
 import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.FeedbackValidator;
 import com.example.api.service.validator.UserValidator;
@@ -41,7 +39,6 @@ public class ProfessorFeedbackService {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final FileTaskRepo fileTaskRepo;
     private final UserRepo userRepo;
-    private final FileRepo fileRepo;
     private final ActivityValidator activityValidator;
     private final UserValidator userValidator;
 
@@ -127,16 +124,18 @@ public class ProfessorFeedbackService {
         infoResponse.setFileTaskId(fileTask.getId());
         infoResponse.setTaskName(fileTask.getName());
         infoResponse.setDescription(fileTask.getDescription());
+        infoResponse.setAnswer(fileTaskResult.getAnswer());
         infoResponse.setTaskFiles(fileTaskResult.getFiles()
                 .stream()
                 .map(FileResponse::new)
                 .collect(Collectors.toList()));
         infoResponse.setPoints(fileTaskResult.getPointsReceived());
         infoResponse.setRemarks(professorFeedback.getContent());
-        infoResponse.setFeedbackFiles(professorFeedback.getFeedbackFiles()
-                .stream()
-                .map(FileResponse::new)
-                .collect(Collectors.toList()));
+        File feedbackFile = professorFeedback.getFeedbackFile();
+
+        if (feedbackFile != null) {
+            infoResponse.setFeedbackFile(new FileResponse(professorFeedback.getFeedbackFile()));
+        }
         return infoResponse;
     }
 }

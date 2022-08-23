@@ -1,6 +1,13 @@
 import { parseJwt } from '../utils/Api'
-import { axiosApiGet, axiosApiGetFile } from '../utils/axios'
-import { GET_CSV, GET_TASKS_TO_EVALUATE, GET_FIRST_TASK_TO_EVALUATE } from './urls'
+import { axiosApiGet, axiosApiGetFile, axiosApiPost, axiosApiSendFile } from '../utils/axios'
+import {
+  GET_CSV,
+  GET_TASKS_TO_EVALUATE,
+  GET_FIRST_TASK_TO_EVALUATE,
+  PROF_FEEDBACK,
+  ADD_BONUS_POINTS,
+  GET_STUDENT_POINTS
+} from './urls'
 
 class ProfessorService {
   getUser() {
@@ -11,8 +18,8 @@ class ProfessorService {
     return parseJwt(this.getUser().access_token).sub
   }
 
-  getCSVGradesFile(studentsId) {
-    return axiosApiGetFile(GET_CSV, studentsId).catch((error) => {
+  getCSVGradesFile(studentsId, activitiesId) {
+    return axiosApiGetFile(GET_CSV, { studentIds: studentsId, forms: activitiesId }).catch((error) => {
       throw error
     })
   }
@@ -25,6 +32,35 @@ class ProfessorService {
 
   getFirstTaskToEvaluate(taskId) {
     return axiosApiGet(GET_FIRST_TASK_TO_EVALUATE, { fileTaskId: taskId }).catch((error) => {
+      throw error
+    })
+  }
+
+  sendTaskEvaluation(taskId, remarks, points, file, fileName) {
+    return axiosApiSendFile(PROF_FEEDBACK, {
+      fileTaskResultId: taskId,
+      content: remarks,
+      points: points,
+      file,
+      fileName
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  sendBonusPoints(studentId, points, description, dateInMillis) {
+    return axiosApiPost(ADD_BONUS_POINTS, {
+      studentId,
+      points,
+      description,
+      dateInMillis
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getStudentPointsList(studentEmail) {
+    return axiosApiGet(GET_STUDENT_POINTS, { studentEmail: studentEmail }).catch((error) => {
       throw error
     })
   }
