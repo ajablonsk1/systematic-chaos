@@ -19,7 +19,7 @@ function StudentPointsModal(props) {
   }, [props])
 
   return (
-    <Modal show={props.show} onHide={() => props.setModalOpen(false)} size={'lg'}>
+    <Modal show={props.show} onHide={() => props.setModalOpen(false)} size={'xl'}>
       <ModalHeader>
         <h4>Tabela punktów studenta</h4>
       </ModalHeader>
