@@ -22,9 +22,9 @@ function BadgesPage() {
 
   const additionalContent = useCallback(
     (rankIndex, rankMaxPoints) => {
-      const percentageBarWidth = 200
+      const PERCENTAGE_BAR_WIDTH = 200
 
-      const getGreenBarWidth = ((studentPoints / rankMaxPoints) * percentageBarWidth).toFixed(0)
+      const getGreenBarWidth = ((studentPoints / rankMaxPoints) * PERCENTAGE_BAR_WIDTH).toFixed(0)
 
       const getPercentageValue = Math.floor((studentPoints * 100) / rankMaxPoints)
 
@@ -34,7 +34,7 @@ function BadgesPage() {
 
       if (rankIndex === 1) {
         return (
-          <PercentageBar $greenBarWidth={getGreenBarWidth} $grayBarWidth={percentageBarWidth}>
+          <PercentageBar $greenBarWidth={getGreenBarWidth} $grayBarWidth={PERCENTAGE_BAR_WIDTH}>
             <strong>{getPercentageValue}%</strong>
           </PercentageBar>
         )
