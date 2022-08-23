@@ -224,7 +224,7 @@ export default function CombatTask() {
           <Row style={{ height: '2vh' }}></Row>
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '50vh' }}>
             {/* delegate to another component later */}
-            <Col md={6}>
+            <Col md={6} style={{ height: '100%', overflowY: 'auto' }}>
               <h4>Odpowiedź:</h4>
               <RemarksTextArea
                 ref={textAreaRef}
@@ -232,7 +232,7 @@ export default function CombatTask() {
                   handleAnswerChange(e)
                 }}
               />
-              <Col className={'w-100 text-center'}>
+              <Col className={'text-center'}>
                 <FileService
                   task={task}
                   setFile={setFileBlob}
