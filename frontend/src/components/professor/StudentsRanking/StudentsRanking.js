@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import Ranking from '../../general/Ranking/Ranking'
 import { debounce } from 'lodash/function'
@@ -13,11 +13,10 @@ function StudentsRanking() {
   const [isStudentPointsModalOpen, setIsStudentPointsModalOpen] = useState(false)
   const [chosenStudentEmail, setChosenStudentEmail] = useState(null)
 
-  useEffect(() => {
-    if (chosenStudentEmail) {
-      setIsStudentPointsModalOpen(true)
-    }
-  }, [chosenStudentEmail])
+  const onInfoIconClick = useCallback((chosenEmail) => {
+    setIsStudentPointsModalOpen(true)
+    setChosenStudentEmail(chosenEmail)
+  }, [])
 
   useEffect(() => {
     RankingService.getGlobalRankingList()
@@ -58,7 +57,7 @@ function StudentsRanking() {
           onChange={(e) => filterList(e.target.value)}
         />
       </Form.Group>
-      <Ranking rankingList={filteredList} setChosenStudentEmail={setChosenStudentEmail} />
+      <Ranking rankingList={filteredList} iconCallback={onInfoIconClick} />
       <StudentPointsModal
         show={isStudentPointsModalOpen}
         setModalOpen={setIsStudentPointsModalOpen}
