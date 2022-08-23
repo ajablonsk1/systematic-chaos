@@ -59,7 +59,7 @@ function Ranking(props) {
             />
           </th>
         ))}
-        {!!props.setChosenStudentEmail && <th />}
+        {!!props.iconCallback && <th />}
       </tr>
     )
   }, [sortBy, sortingOrders, props])
@@ -89,9 +89,9 @@ function Ranking(props) {
                 <td>{student.groupName}</td>
                 <td>{getHeroName(student.heroType)}</td>
                 <td>{student.points}</td>
-                {!!props.setChosenStudentEmail && (
+                {!!props.iconCallback && (
                   <td>
-                    <FontAwesomeIcon icon={faInfo} onClick={() => props.setChosenStudentEmail(student.email)} />
+                    <FontAwesomeIcon icon={faInfo} onClick={() => props.iconCallback(student.email)} />
                   </td>
                 )}
               </TableRow>
