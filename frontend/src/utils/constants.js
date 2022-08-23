@@ -45,7 +45,7 @@ export const UserSidebarTitles = {
   [generateFullPath(() => PageRoutes.Student.Points.POINTS)]: ['Punkty', faStar],
   [generateFullPath(() => PageRoutes.Student.Ranking.RANKING)]: ['Ranking', faRankingStar],
   [generateFullPath(() => PageRoutes.Student.BadgesAndAchievements.BADGES_ACHIEVEMENTS)]: [
-    'Odznaki i osiągnięcia',
+    'Rangi i odznaki',
     faCertificate
   ],
   [generateFullPath(() => PageRoutes.General.CANVAS)]: ['Świat gry', faChessBoard],
