@@ -1,9 +1,9 @@
 package com.example.api.service.activity.result.ranking;
 
 import com.example.api.dto.response.ranking.RankingResponse;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
@@ -11,9 +11,9 @@ import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.user.UserService;
 import com.example.api.service.validator.GroupValidator;
 import com.example.api.service.validator.UserValidator;
-import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

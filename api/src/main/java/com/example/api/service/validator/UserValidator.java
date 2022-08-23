@@ -109,11 +109,4 @@ public class UserValidator {
             }
         }
     }
-
-    public void validateProfessorAccount(User professor, String email) throws UsernameNotFoundException, WrongUserTypeException {
-        validateUser(professor, email);
-        if(professor.getAccountType() != AccountType.PROFESSOR) {
-            throw new WrongUserTypeException("Wrong user type!", AccountType.PROFESSOR);
-        }
-    }
 }

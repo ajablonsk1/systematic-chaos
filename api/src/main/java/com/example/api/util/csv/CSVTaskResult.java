@@ -6,7 +6,6 @@ import com.example.api.model.activity.result.TaskResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Data
