@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { Col, Row } from 'react-bootstrap'
-import { HorizontalPointsLine, Tooltip } from './BadgesStyle'
+import { HorizontalPointsLine, PercentageBar, Tooltip } from './BadgesStyle'
 import { getBadgesInfo, getBadgesList, getLastUnlockedBadge, getRankInfo, getStudentPoints } from './mockData'
 import ContentCard from './ContentCard'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 
 function BadgesPage() {
   const studentRankInfo = getRankInfo()
@@ -17,6 +19,31 @@ function BadgesPage() {
       return -1
     } else return 1
   }
+
+  const additionalContent = useCallback(
+    (rankIndex, rankMaxPoints) => {
+      const percentageBarWidth = 200
+
+      const getGreenBarWidth = ((studentPoints / rankMaxPoints) * percentageBarWidth).toFixed(0)
+
+      const getPercentageValue = Math.floor((studentPoints * 100) / rankMaxPoints)
+
+      if (rankIndex === 0) {
+        return <FontAwesomeIcon icon={faCircleCheck} />
+      }
+
+      if (rankIndex === 1) {
+        return (
+          <PercentageBar $greenBarWidth={getGreenBarWidth} $grayBarWidth={percentageBarWidth}>
+            <strong>{getPercentageValue}%</strong>
+          </PercentageBar>
+        )
+      }
+
+      return <></>
+    },
+    [studentPoints]
+  )
 
   return (
     <Content>
@@ -50,6 +77,7 @@ function BadgesPage() {
                         <strong>{rankInfo.name}</strong>
                       </p>
                       <img width={100} src={rankInfo.imgSrc} alt={'rank-profile'} />
+                      {additionalContent(index, rankInfo.maxPoints)}
                       <div className={'right-arrow'} />
                     </div>
                   </div>

@@ -28,6 +28,18 @@ export const HorizontalPointsLine = styled.div`
     text-align: center;
     position: relative;
 
+    &:first-child .rankInfo {
+      svg {
+        color: green;
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 20px;
+      }
+    }
+
     &:nth-child(2) {
       .rankInfo {
         .left-arrow,
@@ -122,5 +134,34 @@ export const Tooltip = styled.div`
       border-style: solid;
       border-color: black transparent transparent transparent;
     }
+  }
+`
+
+export const PercentageBar = styled.div`
+  height: fit-content;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 10px);
+
+  &::after,
+  &::before {
+    content: '';
+    display: block;
+    height: 10px;
+    border-radius: 50px;
+  }
+  &::after {
+    width: ${(props) => props.$greenBarWidth + 'px'};
+    background-color: darkgreen;
+    top: 0;
+    position: absolute;
+  }
+
+  &::before {
+    position: relative;
+    width: ${(props) => props.$grayBarWidth + 'px'};
+    right: 50%;
+    transform: translateX(50%);
+    background-color: lightgray;
   }
 `
