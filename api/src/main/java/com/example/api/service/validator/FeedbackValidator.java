@@ -1,6 +1,5 @@
 package com.example.api.service.validator;
 
-import com.example.api.dto.request.activity.feedback.DeleteFileFromProfessorFeedbackForm;
 import com.example.api.dto.request.activity.feedback.SaveProfessorFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
@@ -8,9 +7,7 @@ import com.example.api.error.exception.WrongPointsNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.Feedback;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
-import com.example.api.model.activity.feedback.UserFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
-import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
@@ -36,6 +33,7 @@ public class FeedbackValidator {
     private final ProfessorFeedbackRepo professorFeedbackRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final AuthenticationService authService;
+    private final FileRepo fileRepo;
     private final UserRepo userRepo;
 
     /**
@@ -44,7 +42,7 @@ public class FeedbackValidator {
      * but files are added to list
     */
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException, WrongPointsNumberException {
+            throws WrongUserTypeException, EntityNotFoundException, WrongPointsNumberException, IOException {
         String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
@@ -111,17 +109,6 @@ public class FeedbackValidator {
         if(feedback == null) {
             log.error("Feedback for file task with id {} and user {} not found in database", id, email);
             throw new EntityNotFoundException("Feedback for file task with id " + id + " and user " + email + " not found in database");
-        }
-    }
-
-    public void validateFeedback(ProfessorFeedback feedback, Long id, String email, DeleteFileFromProfessorFeedbackForm form) throws EntityNotFoundException {
-        validateFeedbackIsNotNull(feedback, id, email);
-        if(feedback.getFeedbackFiles().size() <= form.getIndex()) {
-            log.error("Wrong index {} for deleting file from ProfessorFeedback for FileTask with id {} and student {}",
-                    form.getIndex(), form.getFileTaskId(), form.getStudentEmail());
-            throw new EntityNotFoundException("Wrong index " + form.getIndex()  +
-                    " for deleting file from ProfessorFeedback for FileTask with id " + form.getFileTaskId() +
-                    " and student " + form.getStudentEmail());
         }
     }
 

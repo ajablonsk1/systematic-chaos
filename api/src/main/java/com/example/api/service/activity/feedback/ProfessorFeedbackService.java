@@ -22,7 +22,6 @@ import com.example.api.service.validator.FeedbackValidator;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -48,7 +47,7 @@ public class ProfessorFeedbackService {
     }
 
     public ProfessorFeedbackInfoResponse saveProfessorFeedback(SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException, WrongPointsNumberException {
+            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException, WrongPointsNumberException, IOException {
         log.info("Saving professor feedback to database");
         ProfessorFeedback professorFeedback =
                 feedbackValidator.validateAndSetProfessorFeedbackTaskForm(form);
@@ -86,28 +85,6 @@ public class ProfessorFeedbackService {
     public ProfessorFeedbackInfoResponse getProfessorFeedbackInfoForFileTaskAndStudent(Long fileTaskId, String studentEmail)
             throws EntityNotFoundException, MissingAttributeException, WrongUserTypeException {
         return createInfoResponseFromProfessorFeedback(getProfessorFeedbackForFileTaskAndStudent(fileTaskId, studentEmail));
-    }
-
-    public Long deleteFileFromProfessorFeedback(DeleteFileFromProfessorFeedbackForm form)
-            throws EntityNotFoundException, WrongUserTypeException {
-        log.info("Deleting file from professor feedback for file task with id {} and student {}", form.getFileTaskId(), form.getStudentEmail());
-
-        ProfessorFeedback feedback = getProfessorFeedbackForFileTaskAndStudent(form.getFileTaskId(), form.getStudentEmail());
-        feedbackValidator.validateFeedback(feedback, form.getFileTaskId(), form.getStudentEmail(), form);
-        feedback.getFeedbackFiles().remove(form.getIndex());
-        professorFeedbackRepo.save(feedback);
-        return feedback.getId();
-    }
-
-    public Long saveFileToProfessorFeedback(SaveFileToProfessorFeedbackForm form) throws EntityNotFoundException, MissingAttributeException, IOException, WrongUserTypeException {
-        log.info("Adding file to professor feedback for file task with id {} and student {}", form.getFileTaskId(), form.getStudentEmail());
-
-        ProfessorFeedback feedback = getProfessorFeedbackForFileTaskAndStudent(form.getFileTaskId(), form.getStudentEmail());
-        feedbackValidator.validateFeedbackIsNotNull(feedback, form.getFileTaskId(), form.getStudentEmail());
-        File file = new File(null, form.getFileName(), form.getFile().getBytes());
-        fileRepo.save(file);
-        feedback.getFeedbackFiles().add(file);
-        return feedback.getId();
     }
 
     private ProfessorFeedbackInfoResponse createInfoResponseFromProfessorFeedback(

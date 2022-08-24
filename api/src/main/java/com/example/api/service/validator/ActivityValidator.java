@@ -40,7 +40,7 @@ public class ActivityValidator {
     public void validateFileIsNotNull(File file, Long id) throws EntityNotFoundException {
         if(file == null) {
             log.error("File with id {} not found in database", id);
-            throw new EntityNotFoundException("File with id" + id + " not found in database");
+            throw new EntityNotFoundException("File with id " + id + " not found in database");
         }
     }
 

@@ -5,14 +5,12 @@ import com.example.api.dto.request.activity.task.GetCSVForm;
 import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.Feedback;
-import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;
-import com.example.api.model.activity.task.Task;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
@@ -32,13 +30,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
-
-import javax.transaction.Transactional;
-
-import static com.example.api.dto.response.map.task.ActivityType.EXPEDITION;
 
 @Service
 @RequiredArgsConstructor
@@ -113,6 +108,7 @@ public class TaskResultService {
                 .toList();
         List<TaskPointsStatisticsResponse> fileTaskResults = fileTaskResultRepo.findAllByUser(user)
                 .stream()
+                .filter(FileTaskResult::isEvaluated)
                 .map(TaskPointsStatisticsResponse::new)
                 .toList();;
         List<TaskPointsStatisticsResponse> surveyResults = surveyResultRepo.findAllByUser(user)

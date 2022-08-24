@@ -5,7 +5,6 @@ import com.example.api.dto.response.group.GroupCode;
 import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.repo.group.GroupRepo;

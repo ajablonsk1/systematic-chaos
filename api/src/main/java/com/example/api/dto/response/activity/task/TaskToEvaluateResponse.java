@@ -1,13 +1,12 @@
 package com.example.api.dto.response.activity.task;
 
 
+import com.example.api.dto.response.activity.task.util.FileResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-
-import com.example.api.dto.response.activity.task.util.FileResponse;
 
 @Data
 @AllArgsConstructor

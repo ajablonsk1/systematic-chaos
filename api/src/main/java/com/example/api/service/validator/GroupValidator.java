@@ -4,14 +4,13 @@ import com.example.api.dto.request.group.SaveGroupForm;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.ExceptionMessage;
-import com.example.api.model.group.Group;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.model.group.Group;
 import com.example.api.model.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Slf4j

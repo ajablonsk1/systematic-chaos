@@ -11,7 +11,6 @@ import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
-import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;

@@ -47,6 +47,7 @@ public class FileTaskResultService {
             result = new FileTaskResult();
             result.setAnswer("");
             result.setFileTask(fileTaskRepo.findFileTaskById(form.getFileTaskId()));
+            result.setSendDateMillis(System.currentTimeMillis());
             result.setEvaluated(false);
             result.setUser(userRepo.findUserByEmail(email));
         }
