@@ -199,6 +199,46 @@ export default function CombatTask() {
 
   //add overflows where needed
 
+  const AnswerField = () => (
+    <Col md={6} style={{ height: '100%', overflowY: 'auto' }}>
+      <h4>Odpowiedź:</h4>
+      <RemarksTextArea
+        ref={textAreaRef}
+        onChange={(e) => {
+          handleAnswerChange(e)
+        }}
+      />
+      <Col className={'text-center'}>
+        <FileService
+          task={task}
+          setFile={setFileBlob}
+          setFileName={setFileName}
+          setIsFetching={setIsFetching}
+          isFetching={isFetching}
+          isRevieved={task.points != null}
+        />
+      </Col>
+      <Col className={'w-100 text-center'}>
+        <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
+          {isFetching ? (
+            <Spinner animation={'border'} />
+          ) : task.points == null ? (
+            <span>Wyślij</span>
+          ) : (
+            <span>Aktywność została oceniona</span>
+          )}
+        </SendTaskButton>
+      </Col>
+    </Col>
+  )
+
+  const FeedbackField = () => (
+    <Col md={6} className={'text-center p-4 my-auto'}>
+      <FontAwesomeIcon className={'m-2'} icon={faHourglass} size='5x' spin />
+      <h2 className={'m-2'}>Odpowiedź została przesłana, oczekiwanie na sprawdzenie przez prowadzącego</h2>
+    </Col>
+  )
+
   const content = () => {
     return !task && errorMessage === '' ? (
       <Loader />
@@ -226,40 +266,8 @@ export default function CombatTask() {
           <Row style={{ height: '2vh' }}></Row>
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '50vh' }}>
             {/* delegate to another component later */}
-            <Col md={6} style={{ height: '100%', overflowY: 'auto' }}>
-              <h4>Odpowiedź:</h4>
-              <RemarksTextArea
-                ref={textAreaRef}
-                onChange={(e) => {
-                  handleAnswerChange(e)
-                }}
-              />
-              <Col className={'text-center'}>
-                <FileService
-                  task={task}
-                  setFile={setFileBlob}
-                  setFileName={setFileName}
-                  setIsFetching={setIsFetching}
-                  isFetching={isFetching}
-                  isRevieved={task.points != null}
-                />
-              </Col>
-              <Col className={'w-100 text-center'}>
-                <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
-                  {isFetching ? (
-                    <Spinner animation={'border'} />
-                  ) : task.points == null ? (
-                    <span>Wyślij</span>
-                  ) : (
-                    <span>Aktywność została oceniona</span>
-                  )}
-                </SendTaskButton>
-              </Col>
-            </Col>
-            <Col md={6} className={'text-center p-4 my-auto'}>
-              <FontAwesomeIcon className={'m-2'} icon={faHourglass} size='5x' spin />
-              <h2 className={'m-2'}>Odpowiedź została przesłana, oczekiwanie na sprawdzenie przez prowadzącego</h2>
-            </Col>
+            <AnswerField />
+            <FeedbackField />
           </Row>
         </Col>
         <Col style={{ height: '3vh' }} />
