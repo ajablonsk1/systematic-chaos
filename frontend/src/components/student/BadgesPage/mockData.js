@@ -1,4 +1,4 @@
-import prevRankImg from './images/education.png'
+import prevRankImg from './images/warrior1.png'
 import actualRankImg from './images/swordsman.png'
 import nextRankImg from './images/knight.png'
 import helmetBadge from './images/helmet.png'
