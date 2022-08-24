@@ -3,8 +3,14 @@ package com.example.api.service.activity.result;
 import com.example.api.dto.response.activity.task.result.AdditionalPointsListResponse;
 import com.example.api.dto.response.activity.task.result.AdditionalPointsResponse;
 import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
+import com.example.api.dto.response.activity.task.result.TotalPointsResponse;
 import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.user.User;
+import com.example.api.repo.activity.result.AdditionalPointsRepo;
+import com.example.api.repo.activity.result.FileTaskResultRepo;
+import com.example.api.repo.activity.result.GraphTaskResultRepo;
+import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.UserValidator;
@@ -15,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 @Service
@@ -27,6 +34,10 @@ public class AllPointsService {
     private final UserValidator userValidator;
     private final TaskResultService taskResultService;
     private final AdditionalPointsService additionalPointsService;
+    private final GraphTaskResultRepo graphTaskResultRepo;
+    private final FileTaskResultRepo fileTaskResultRepo;
+    private final SurveyResultRepo surveyResultRepo;
+    private final AdditionalPointsRepo additionalPointsRepo;
 
     public List<?> getAllPointsList(String studentEmail) throws WrongUserTypeException {
         String professorEmail = authService.getAuthentication().getName();
@@ -47,5 +58,40 @@ public class AllPointsService {
                 .flatMap(Collection::stream)
                 .sorted(((o1, o2) -> Long.compare(o2.getDateMillis(), o1.getDateMillis())))
                 .toList();
+    }
+
+    public TotalPointsResponse getAllPointsTotal() throws WrongUserTypeException {
+        String studentEmail = authService.getAuthentication().getName();
+        User student = userRepo.findUserByEmail(studentEmail);
+        userValidator.validateStudentAccount(student, studentEmail);
+
+        log.info("Fetching student all points total {}", studentEmail);
+        AtomicReference<Double> totalPointsReceived = new AtomicReference<>(0D);
+        AtomicReference<Double> totalPointsToReceive = new AtomicReference<>(0D);
+        graphTaskResultRepo.findAllByUser(student)
+                .forEach(graphTaskResult -> {
+                    totalPointsReceived.updateAndGet(v -> v + graphTaskResult.getPointsReceived());
+                    totalPointsToReceive.updateAndGet(v -> v + graphTaskResult.getGraphTask().getMaxPoints100());
+                });
+        fileTaskResultRepo.findAllByUser(student)
+                .stream()
+                .filter(FileTaskResult::isEvaluated)
+                .forEach(fileTaskResult -> {
+                    totalPointsReceived.updateAndGet(v -> v + fileTaskResult.getPointsReceived());
+                    totalPointsToReceive.updateAndGet(v -> v + fileTaskResult.getFileTask().getMaxPoints());
+                });
+        surveyResultRepo.findAllByUser(student)
+                .stream()
+                .forEach(surveyTaskResult -> {
+                    totalPointsReceived.updateAndGet(v -> v + surveyTaskResult.getPointsReceived());
+                    totalPointsToReceive.updateAndGet(v -> v + surveyTaskResult.getPointsReceived());
+                });
+        additionalPointsRepo.findAllByUser(student)
+                .stream()
+                .forEach(additionalPoints -> {
+                    totalPointsReceived.updateAndGet(v -> v + additionalPoints.getPointsReceived());
+                    totalPointsToReceive.updateAndGet(v -> v + additionalPoints.getPointsReceived());
+                });
+        return new TotalPointsResponse(totalPointsReceived.get(), totalPointsToReceive.get());
     }
 }
