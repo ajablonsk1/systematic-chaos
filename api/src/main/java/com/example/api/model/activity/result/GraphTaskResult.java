@@ -30,5 +30,9 @@ public class GraphTaskResult extends TaskResult {
     private int timeSpentSec;
 
     private Long startDateMillis;
+
+    public Double getPointsReceived100() {
+        return super.getPointsReceived() * (graphTask.getMaxPoints100() / graphTask.getMaxPoints());
+    }
 }
 
