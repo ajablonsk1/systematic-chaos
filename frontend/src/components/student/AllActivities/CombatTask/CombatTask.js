@@ -199,6 +199,25 @@ export default function CombatTask() {
 
   //add overflows where needed
 
+  const Header = () => (
+    <>
+      <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
+      <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
+      <ActivityName>{task.name}</ActivityName>
+    </>
+  )
+
+  const VerticalSpacer = () => <Row style={{ height: '2vh' }}></Row>
+
+  const HorizontalSpacer = () => <Col style={{ height: '3vh' }} />
+
+  const ActivityDetails = () => (
+    <Col>
+      <h2>Treść:</h2>
+      <p>{task.description}</p>
+    </Col>
+  )
+
   const AnswerField = () => (
     <Col md={6} style={{ height: '100%', overflowY: 'auto' }}>
       <h4>Odpowiedź:</h4>
@@ -246,31 +265,25 @@ export default function CombatTask() {
       <p>{errorMessage}</p>
     ) : (
       <>
-        <Col style={{ height: '3vh' }} />
+        <HorizontalSpacer />
         <Col
           className='m-0 pt-4 mx-auto'
           style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
         >
           <HeaderRow className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '8vh' }}>
-            <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
-            <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
-            <ActivityName>{task.name}</ActivityName>
+            <Header />
           </HeaderRow>
-          <Row style={{ height: '2vh' }}></Row>
+          <VerticalSpacer />
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '25vh' }}>
-            <Col>
-              <h2>Treść:</h2>
-              <p>{task.description}</p>
-            </Col>
+            <ActivityDetails />
           </Row>
-          <Row style={{ height: '2vh' }}></Row>
+          <VerticalSpacer />
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '50vh' }}>
-            {/* delegate to another component later */}
             <AnswerField />
             <FeedbackField />
           </Row>
         </Col>
-        <Col style={{ height: '3vh' }} />
+        <HorizontalSpacer />
       </>
     )
   }
