@@ -38,6 +38,7 @@ export default function CombatTask() {
   const [answer, setAnswer] = useState('')
   const [isFetching, setIsFetching] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [hasSentNow, setHasSentNow] = useState(false)
 
   const textAreaRef = useRef(null)
 
@@ -46,6 +47,7 @@ export default function CombatTask() {
     setFileBlob(null)
     setFileName(null)
     setAnswer('')
+    setHasSentNow(true)
     textAreaRef.current.value = ''
   }
 
@@ -76,13 +78,11 @@ export default function CombatTask() {
       })
   }
 
-  const handleAnswerChange = useMemo(
-    () =>
-      debounce((event) => {
-        setAnswer(event.target.value)
-      }, 200),
-    []
-  )
+  //useMemo stopped working - why?
+  const handleAnswerChange = () =>
+    debounce((event) => {
+      setAnswer(event.target.value)
+    }, 200)
 
   const activityDetails = () => {
     return (
@@ -218,38 +218,59 @@ export default function CombatTask() {
     </Col>
   )
 
-  const AnswerField = () => (
-    <Col md={6} style={{ height: '100%', overflowY: 'auto' }}>
-      <h4>Odpowiedź:</h4>
-      <RemarksTextArea
-        ref={textAreaRef}
-        onChange={(e) => {
-          handleAnswerChange(e)
-        }}
-      />
-      <Col className={'text-center'}>
-        <FileService
-          task={task}
-          setFile={setFileBlob}
-          setFileName={setFileName}
-          setIsFetching={setIsFetching}
-          isFetching={isFetching}
-          isRevieved={task.points != null}
+  const AnswerField = ({
+    task,
+    setFileBlob,
+    setFileName,
+    setIsFetching,
+    isFetching,
+    textAreaRef,
+    handleAnswerChange,
+    sendAnswer
+  }) => {
+    const MD_WHEN_TASK_NOT_SENT = 12
+    const MD_WHEN_TASK_SENT = 6
+
+    //we need this to handle changes without refetch on sending answer... though that might be a better way
+
+    console.log('rerender')
+    console.log(task.answer)
+    return (
+      <Col
+        md={task.answer || hasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
+        style={{ height: '100%', overflowY: 'auto' }}
+      >
+        <h4>Odpowiedź:</h4>
+        <RemarksTextArea
+          ref={textAreaRef}
+          onChange={(e) => {
+            handleAnswerChange(e)
+          }}
         />
+        <Col className={'text-center'}>
+          <FileService
+            task={task}
+            setFile={setFileBlob}
+            setFileName={setFileName}
+            setIsFetching={setIsFetching}
+            isFetching={isFetching}
+            isRevieved={task.points != null}
+          />
+        </Col>
+        <Col className={'w-100 text-center'}>
+          <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
+            {isFetching ? (
+              <Spinner animation={'border'} />
+            ) : task.points == null ? (
+              <span>Wyślij</span>
+            ) : (
+              <span>Aktywność została oceniona</span>
+            )}
+          </SendTaskButton>
+        </Col>
       </Col>
-      <Col className={'w-100 text-center'}>
-        <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
-          {isFetching ? (
-            <Spinner animation={'border'} />
-          ) : task.points == null ? (
-            <span>Wyślij</span>
-          ) : (
-            <span>Aktywność została oceniona</span>
-          )}
-        </SendTaskButton>
-      </Col>
-    </Col>
-  )
+    )
+  }
 
   const FeedbackField = () => (
     <Col md={6} className={'text-center p-4 my-auto'}>
@@ -279,8 +300,16 @@ export default function CombatTask() {
           </Row>
           <VerticalSpacer />
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '50vh' }}>
-            <AnswerField />
-            <FeedbackField />
+            <AnswerField
+              task={task}
+              setFileBlob={setFileBlob}
+              setFileName={setFileName}
+              setIsFetching={setIsFetching}
+              textAreaRef={textAreaRef}
+              handleAnswerChange={handleAnswerChange}
+              sendAnswer={sendAnswer}
+            />
+            {/* <FeedbackField /> */}
           </Row>
         </Col>
         <HorizontalSpacer />
