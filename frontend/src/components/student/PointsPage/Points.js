@@ -49,18 +49,23 @@ export default function Points() {
           )}
         </Col>
         <Col className='p-0 justify-content-center d-flex flex-column'>
-          <h5>
-            {totalPointsData === undefined ? (
-              <Spinner animation={'border'} />
-            ) : totalPointsData == null ? (
-              <p>Błąd</p>
-            ) : (
-              <strong>Twój wynik to: {totalPointsData.totalPointsReceived}pkt</strong>
-            )}
-          </h5>
-          <h5>
-            <strong>Co stanowi: {percentToNextRank}%</strong>
-          </h5>
+          {totalPointsData === undefined ? (
+            <Spinner animation={'border'} />
+          ) : totalPointsData == null ? (
+            <p>Błąd</p>
+          ) : (
+            <>
+              <h5>
+                <strong>Twój wynik to: {totalPointsData.totalPointsReceived}pkt</strong>
+              </h5>
+              <h5>
+                <strong>
+                  Co stanowi:{' '}
+                  {100 * (totalPointsData.totalPointsReceived / totalPointsData.totalPointsPossibleToReceive)}%
+                </strong>
+              </h5>
+            </>
+          )}
           <h5>
             {/* not yet here */}
             <strong>Do kolejnego poziomu wymagane jest: {pointsToNextRank}pkt</strong>
