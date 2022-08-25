@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Col, Row, Tab } from 'react-bootstrap'
+import { Col, Row, Tab, Spinner } from 'react-bootstrap'
 import { Content } from '../../App/AppGeneralStyles'
 import PercentageCircle from './ChartAndStats/PercentageCircle'
 import LastPointsTable from './Tables/LastPointsTable'
@@ -9,10 +9,9 @@ import StudentService from '../../../services/student.service'
 
 export default function Points() {
   const [pointsData, setPointsData] = useState(undefined)
-
-  const points = 529
-  const maxPoints = 1000
-  const percentageValue = Math.round(100 * (points / maxPoints))
+  const [totalPointsData, setTotalPointsData] = useState(undefined)
+  const percentToNextRank = 21
+  const pointsToNextRank = 210
 
   useEffect(() => {
     StudentService.getPointsStats()
@@ -22,23 +21,49 @@ export default function Points() {
       .catch(() => {
         setPointsData(null)
       })
+    StudentService.getTotalReceivedPoints()
+      .then((response) => {
+        setTotalPointsData(response)
+      })
+      .catch(() => {
+        setTotalPointsData(null)
+      })
   }, [])
 
   return (
     <Content>
       <Row className='m-0'>
         <Col className='p-0'>
-          <PercentageCircle percentageValue={percentageValue} points={points} maxPoints={maxPoints} />
+          {totalPointsData === undefined ? (
+            <Spinner animation={'border'} />
+          ) : totalPointsData == null ? (
+            <p>Błąd</p>
+          ) : (
+            <PercentageCircle
+              percentageValue={Math.round(
+                100 * (totalPointsData.totalPointsReceived / totalPointsData.totalPointsPossibleToReceive)
+              )}
+              points={totalPointsData.totalPointsReceived}
+              maxPoints={totalPointsData.totalPointsPossibleToReceive}
+            />
+          )}
         </Col>
         <Col className='p-0 justify-content-center d-flex flex-column'>
           <h5>
-            <strong>Twój wynik to: {points}pkt</strong>
+            {totalPointsData === undefined ? (
+              <Spinner animation={'border'} />
+            ) : totalPointsData == null ? (
+              <p>Błąd</p>
+            ) : (
+              <strong>Twój wynik to: {totalPointsData.totalPointsReceived}pkt</strong>
+            )}
           </h5>
           <h5>
-            <strong>Co stanowi: {percentageValue}%</strong>
+            <strong>Co stanowi: {percentToNextRank}%</strong>
           </h5>
           <h5>
-            <strong>Do kolejnego poziomu wymagane jest: {maxPoints}pkt</strong>
+            {/* not yet here */}
+            <strong>Do kolejnego poziomu wymagane jest: {pointsToNextRank}pkt</strong>
           </h5>
         </Col>
       </Row>
