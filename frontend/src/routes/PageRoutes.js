@@ -72,6 +72,10 @@ export const PageRoutes = {
       Chapters: {
         MAIN_PATH: '',
         CHAPTER: 'chapter'
+      },
+      RanksAndBadgesManagement: {
+        MAIN_PATH: '',
+        RANKS_BADGES: 'ranks-and-badges'
       }
     },
     Participants: {
