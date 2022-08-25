@@ -92,7 +92,6 @@ public class AllPointsService {
                 .stream()
                 .forEach(additionalPoints -> {
                     totalPointsReceived.updateAndGet(v -> v + additionalPoints.getPointsReceived());
-                    totalPointsToReceive.updateAndGet(v -> v + additionalPoints.getPointsReceived());
                 });
         return new TotalPointsResponse(totalPointsReceived.get(), totalPointsToReceive.get());
     }
