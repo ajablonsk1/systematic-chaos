@@ -39,25 +39,19 @@ public class AllPointsService {
     private final SurveyResultRepo surveyResultRepo;
     private final AdditionalPointsRepo additionalPointsRepo;
 
-    public List<?> getAllPointsList(String studentEmail) throws WrongUserTypeException {
+    public List<?> getAllPointsListForProfessor(String studentEmail) throws WrongUserTypeException {
         String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         userValidator.validateProfessorAccount(professor, professorEmail);
-
-        User student = userRepo.findUserByEmail(studentEmail);
-        userValidator.validateStudentAccount(student, studentEmail);
         log.info("Fetching student all points {} for professor {}", studentEmail, professorEmail);
-        List<TaskPointsStatisticsResponse> taskPoints = taskResultService.getUserPointsStatistics(studentEmail);
-        List<AdditionalPointsResponse> additionalPoints = additionalPointsService.getAdditionalPoints(studentEmail);
-        List<AdditionalPointsListResponse> additionalPointsList = additionalPoints
-                .stream()
-                .map(AdditionalPointsListResponse::new)
-                .toList();
 
-        return Stream.of(taskPoints, additionalPointsList)
-                .flatMap(Collection::stream)
-                .sorted(((o1, o2) -> Long.compare(o2.getDateMillis(), o1.getDateMillis())))
-                .toList();
+        return getAllPointsList(studentEmail);
+    }
+
+    public List<?> getAllPointsListForStudent() throws WrongUserTypeException {
+        String studentEmail = authService.getAuthentication().getName();
+        log.info("Fetching all points for student {}", studentEmail);
+        return getAllPointsList(studentEmail);
     }
 
     public TotalPointsResponse getAllPointsTotal() throws WrongUserTypeException {
@@ -94,5 +88,22 @@ public class AllPointsService {
                     totalPointsReceived.updateAndGet(v -> v + additionalPoints.getPointsReceived());
                 });
         return new TotalPointsResponse(totalPointsReceived.get(), totalPointsToReceive.get());
+    }
+
+    private List<?> getAllPointsList(String studentEmail) throws WrongUserTypeException {
+        User student = userRepo.findUserByEmail(studentEmail);
+        userValidator.validateStudentAccount(student, studentEmail);
+
+        List<TaskPointsStatisticsResponse> taskPoints = taskResultService.getUserPointsStatistics(studentEmail);
+        List<AdditionalPointsResponse> additionalPoints = additionalPointsService.getAdditionalPoints(studentEmail);
+        List<AdditionalPointsListResponse> additionalPointsList = additionalPoints
+                .stream()
+                .map(AdditionalPointsListResponse::new)
+                .toList();
+
+        return Stream.of(taskPoints, additionalPointsList)
+                .flatMap(Collection::stream)
+                .sorted(((o1, o2) -> Long.compare(o2.getDateMillis(), o1.getDateMillis())))
+                .toList();
     }
 }
