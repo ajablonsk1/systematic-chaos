@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Col, Row, Tab, Spinner } from 'react-bootstrap'
 import { Content } from '../../App/AppGeneralStyles'
 import PercentageCircle from './ChartAndStats/PercentageCircle'
@@ -6,10 +6,14 @@ import LastPointsTable from './Tables/LastPointsTable'
 import { TabsContainer } from './PointsPageStyle'
 import BonusPointsTable from './Tables/BonusPointsTable'
 import StudentService from '../../../services/student.service'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 export default function Points() {
   const [pointsData, setPointsData] = useState(undefined)
   const [totalPointsData, setTotalPointsData] = useState(undefined)
+  const calculatedPercentageValue = useCallback(() => {
+    return Math.round(100 * (totalPointsData.totalPointsReceived / totalPointsData.totalPointsPossibleToReceive))
+  }, [totalPointsData])
   const pointsToNextRank = 210
 
   useEffect(() => {
@@ -31,46 +35,33 @@ export default function Points() {
 
   return (
     <Content>
-      <Row className='m-0'>
-        <Col className='p-0'>
-          {totalPointsData === undefined ? (
-            <Spinner animation={'border'} />
-          ) : totalPointsData == null ? (
-            <p>Błąd</p>
-          ) : (
+      {totalPointsData === undefined ? (
+        <Spinner animation={'border'} />
+      ) : totalPointsData == null ? (
+        ERROR_OCCURRED
+      ) : (
+        <Row className='m-0'>
+          <Col className='p-0'>
             <PercentageCircle
-              percentageValue={Math.round(
-                100 * (totalPointsData.totalPointsReceived / totalPointsData.totalPointsPossibleToReceive)
-              )}
+              percentageValue={calculatedPercentageValue()}
               points={totalPointsData.totalPointsReceived}
               maxPoints={totalPointsData.totalPointsPossibleToReceive}
             />
-          )}
-        </Col>
-        <Col className='p-0 justify-content-center d-flex flex-column'>
-          {totalPointsData === undefined ? (
-            <Spinner animation={'border'} />
-          ) : totalPointsData == null ? (
-            <p>Błąd</p>
-          ) : (
-            <>
-              <h5>
-                <strong>Twój wynik to: {totalPointsData.totalPointsReceived}pkt</strong>
-              </h5>
-              <h5>
-                <strong>
-                  Co stanowi:{' '}
-                  {100 * (totalPointsData.totalPointsReceived / totalPointsData.totalPointsPossibleToReceive)}%
-                </strong>
-              </h5>
-            </>
-          )}
-          <h5>
-            {/* not yet here */}
-            <strong>Do kolejnego poziomu wymagane jest: {pointsToNextRank}pkt</strong>
-          </h5>
-        </Col>
-      </Row>
+          </Col>
+          <Col className='p-0 justify-content-center d-flex flex-column'>
+            <h5>
+              <strong>Twój wynik to: {totalPointsData.totalPointsReceived}pkt</strong>
+            </h5>
+            <h5>
+              <strong>{'Co stanowi: ' + calculatedPercentageValue()}%</strong>
+            </h5>
+            <h5>
+              {/* not yet here */}
+              <strong>Do kolejnego poziomu wymagane jest: {pointsToNextRank}pkt</strong>
+            </h5>
+          </Col>
+        </Row>
+      )}
       <Row className='m-3'>
         <TabsContainer
           className={'w-100'}
