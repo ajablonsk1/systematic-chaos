@@ -10,7 +10,6 @@ import StudentService from '../../../services/student.service'
 export default function Points() {
   const [pointsData, setPointsData] = useState(undefined)
   const [totalPointsData, setTotalPointsData] = useState(undefined)
-  const percentToNextRank = 21
   const pointsToNextRank = 210
 
   useEffect(() => {
