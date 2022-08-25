@@ -80,6 +80,9 @@ export default function GameManagement() {
             <ManagementCard
               header={'Rangi i odznaki'}
               description={'Personalizuj nazwy odznak i sposób ich przyznawania.'}
+              routePath={generateFullPath(
+                () => PageRoutes.Teacher.GameManagement.RanksAndBadgesManagement.RANKS_BADGES
+              )}
             />
           </Col>
           <Col md={4} className={'py-2'}>

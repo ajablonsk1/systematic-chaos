@@ -30,5 +30,6 @@ public class GraphTaskResult extends TaskResult {
     private int timeSpentSec;
 
     private Long startDateMillis;
+
 }
 

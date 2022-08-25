@@ -1,5 +1,6 @@
 package com.example.api.controller.activity.result;
 
+import com.example.api.dto.response.activity.task.result.TotalPointsResponse;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.result.AllPointsService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,5 +23,10 @@ public class AllPointsController {
     @GetMapping("/list")
     public ResponseEntity<List<?>> getAllPointsList(@RequestParam String studentEmail) throws WrongUserTypeException {
         return ResponseEntity.ok().body(allPointsService.getAllPointsList(studentEmail));
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<TotalPointsResponse> getAllPointsTotal() throws WrongUserTypeException {
+        return ResponseEntity.ok().body(allPointsService.getAllPointsTotal());
     }
 }

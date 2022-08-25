@@ -32,6 +32,8 @@ export const FormCol = (name, type, colName, size = 12, additionalOptions) => {
         </div>
       ) : type === 'textarea' ? (
         <Field className='form-control' as={'textarea'} type={'text'} name={colName} />
+      ) : type === 'file' ? (
+        <input type={'file'} accept='image/png, image/jpeg' name={colName} />
       ) : (
         <Field
           className='form-control'

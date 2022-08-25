@@ -6,6 +6,7 @@ import Groups from '../../../components/professor/GroupsPage/Groups'
 import { PageRoutes } from '../../PageRoutes'
 import GameManagement from '../../../components/professor/GameManagement/GameManagement'
 import ChapterDetails from '../../../components/professor/ChapterDetails/ChapterDetails'
+import RankAndBadgesManagement from '../../../components/professor/GameManagement/RanksAndBadges/RankAndBadgesManagement'
 
 export default function GameManagementRoutes() {
   return (
@@ -33,6 +34,15 @@ export default function GameManagementRoutes() {
         element={
           <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <ChapterDetails />
+          </PageGuard>
+        }
+      />
+
+      <Route
+        path={PageRoutes.Teacher.GameManagement.RanksAndBadgesManagement.RANKS_BADGES}
+        element={
+          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
+            <RankAndBadgesManagement />
           </PageGuard>
         }
       />
