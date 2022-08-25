@@ -22,10 +22,10 @@ function Table(props) {
               </td>
             ))}
             <td className={'align-middle'}>
-              <FontAwesomeIcon icon={faEdit} />
+              <FontAwesomeIcon icon={faEdit} onClick={props.editIconCallback} />
             </td>
             <td className={'align-middle'}>
-              <FontAwesomeIcon icon={faTrash} />
+              <FontAwesomeIcon icon={faTrash} onClick={props.deleteIconCallback} />
             </td>
           </tr>
         ))}

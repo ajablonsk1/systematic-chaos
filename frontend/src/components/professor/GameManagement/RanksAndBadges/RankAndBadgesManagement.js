@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
-import { Button, Col, Row, Tab } from 'react-bootstrap'
+import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Tab } from 'react-bootstrap'
 import { TabsContainer } from '../../../general/LoginAndRegistrationPage/AuthStyle'
 import { getRanksData } from './mockData'
 import { HeroType } from '../../../../utils/userRole'
@@ -8,9 +8,13 @@ import { getHeroName } from '../../../../utils/constants'
 import { getBadgesList } from '../../../student/BadgesPage/mockData'
 import ContentCard from './ContentCard'
 import Table from './Table'
+import EditionForm from './EditionForm'
 
 function RankAndBadgesManagement(props) {
   const ranksData = getRanksData()
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [editedDataType, setEditedDataType] = useState('')
 
   const ranksContent = useMemo(() => {
     return (
@@ -32,6 +36,11 @@ function RankAndBadgesManagement(props) {
                     {listElements.minPoints} - {listElements.maxPoints}
                   </span>
                 ])}
+                deleteIconCallback={() => setIsDeleteModalOpen(true)}
+                editIconCallback={() => {
+                  setEditedDataType('RANKS')
+                  setIsEditModalOpen(true)
+                }}
               />
             </div>
             <Button className={'my-3'}>Dodaj nową rangę</Button>
@@ -52,6 +61,11 @@ function RankAndBadgesManagement(props) {
               <span>{badge.name}</span>,
               <span>{badge.description}</span>
             ])}
+            deleteIconCallback={() => setIsDeleteModalOpen(true)}
+            editIconCallback={() => {
+              setEditedDataType('BADGES')
+              setIsEditModalOpen(true)
+            }}
           />
         </div>
         <Button className={'my-3'} style={{ position: 'relative', left: '50%', transform: 'translateX(-50%)' }}>
@@ -71,6 +85,34 @@ function RankAndBadgesManagement(props) {
           <ContentCard header={'Odznaki'} body={badgesContent} />
         </Col>
       </Row>
+
+      <Modal show={isDeleteModalOpen} onHide={() => setIsDeleteModalOpen(false)}>
+        <ModalHeader>
+          <h5>Usunięcie elementu</h5>
+        </ModalHeader>
+        <ModalBody>Czy na pewno chcesz usunąć ten element? Tej operacji nie można cofnąć.</ModalBody>
+        <ModalFooter>
+          <Button variant={'info'} onClick={() => setIsDeleteModalOpen(false)}>
+            Anuluj
+          </Button>
+          <Button variant={'danger'} onClick={() => setIsDeleteModalOpen(false)}>
+            Usuń
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal show={isEditModalOpen} onHide={() => setIsEditModalOpen(false)} size={'lg'}>
+        <ModalHeader>
+          <h5>Edycja elementu</h5>
+        </ModalHeader>
+        <ModalBody>
+          <EditionForm
+            formVariant={editedDataType}
+            onSubmit={() => setIsEditModalOpen(false)}
+            onCancel={() => setIsEditModalOpen(false)}
+          />
+        </ModalBody>
+      </Modal>
     </Content>
   )
 }
