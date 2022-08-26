@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { Col, Row, Tab } from 'react-bootstrap'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Col, Row, Tab, Spinner } from 'react-bootstrap'
 import { Content } from '../../App/AppGeneralStyles'
 import PercentageCircle from './ChartAndStats/PercentageCircle'
 import LastPointsTable from './Tables/LastPointsTable'
 import { TabsContainer } from './PointsPageStyle'
 import BonusPointsTable from './Tables/BonusPointsTable'
 import StudentService from '../../../services/student.service'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 export default function Points() {
   const [pointsData, setPointsData] = useState(undefined)
-
-  const points = 529
-  const maxPoints = 1000
-  const percentageValue = Math.round(100 * (points / maxPoints))
+  const [totalPointsData, setTotalPointsData] = useState(undefined)
+  const calculatedPercentageValue = useCallback(() => {
+    return Math.round(100 * (totalPointsData.totalPointsReceived / totalPointsData.totalPointsPossibleToReceive))
+  }, [totalPointsData])
+  const pointsToNextRank = 210
 
   useEffect(() => {
     StudentService.getPointsStats()
@@ -22,26 +24,44 @@ export default function Points() {
       .catch(() => {
         setPointsData(null)
       })
+    StudentService.getTotalReceivedPoints()
+      .then((response) => {
+        setTotalPointsData(response)
+      })
+      .catch(() => {
+        setTotalPointsData(null)
+      })
   }, [])
 
   return (
     <Content>
-      <Row className='m-0'>
-        <Col className='p-0'>
-          <PercentageCircle percentageValue={percentageValue} points={points} maxPoints={maxPoints} />
-        </Col>
-        <Col className='p-0 justify-content-center d-flex flex-column'>
-          <h5>
-            <strong>Twój wynik to: {points}pkt</strong>
-          </h5>
-          <h5>
-            <strong>Co stanowi: {percentageValue}%</strong>
-          </h5>
-          <h5>
-            <strong>Do kolejnego poziomu wymagane jest: {maxPoints}pkt</strong>
-          </h5>
-        </Col>
-      </Row>
+      {totalPointsData === undefined ? (
+        <Spinner animation={'border'} />
+      ) : totalPointsData == null ? (
+        ERROR_OCCURRED
+      ) : (
+        <Row className='m-0'>
+          <Col className='p-0'>
+            <PercentageCircle
+              percentageValue={calculatedPercentageValue()}
+              points={totalPointsData.totalPointsReceived}
+              maxPoints={totalPointsData.totalPointsPossibleToReceive}
+            />
+          </Col>
+          <Col className='p-0 justify-content-center d-flex flex-column'>
+            <h5>
+              <strong>Twój wynik to: {totalPointsData.totalPointsReceived}pkt</strong>
+            </h5>
+            <h5>
+              <strong>{'Co stanowi: ' + calculatedPercentageValue()}%</strong>
+            </h5>
+            <h5>
+              {/* not yet here */}
+              <strong>Do kolejnego poziomu wymagane jest: {pointsToNextRank}pkt</strong>
+            </h5>
+          </Col>
+        </Row>
+      )}
       <Row className='m-3'>
         <TabsContainer
           className={'w-100'}

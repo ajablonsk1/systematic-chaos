@@ -1,4 +1,11 @@
-import { GET_BONUS_POINTS, GET_POINTS_STATISTICS, SET_INDEX_NUMBER, USER_DATA, USER_GROUP } from './urls'
+import {
+  GET_BONUS_POINTS,
+  GET_POINTS_STATISTICS,
+  SET_INDEX_NUMBER,
+  USER_DATA,
+  USER_GROUP,
+  GET_RECEIVED_TOTAL_POINTS
+} from './urls'
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
 import { parseJwt } from '../utils/Api'
 
@@ -31,6 +38,12 @@ class StudentService {
 
   getBonusPointsList() {
     return axiosApiGet(GET_BONUS_POINTS).catch((error) => {
+      throw error
+    })
+  }
+
+  getTotalReceivedPoints() {
+    return axiosApiGet(GET_RECEIVED_TOTAL_POINTS).catch((error) => {
       throw error
     })
   }
