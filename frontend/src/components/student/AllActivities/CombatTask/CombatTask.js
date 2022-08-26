@@ -12,7 +12,6 @@ import { Spinner, Row, Col } from 'react-bootstrap'
 import { debounce } from 'lodash'
 import { faHourglass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import PercentageCircle from '../../PointsPage/ChartAndStats/PercentageCircle'
 import FeedbackFileService from './FeedbackFileService'
 
 export default function CombatTask() {
