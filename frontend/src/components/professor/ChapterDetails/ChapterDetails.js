@@ -157,10 +157,22 @@ function ChapterDetails() {
                         </td>
                         <td>Pkt: {activity.points}</td>
                         <td>
-                          <FontAwesomeIcon icon={faPenToSquare} onClick={() => startActivityEdition(activity)} />
+                          <FontAwesomeIcon
+                            icon={faPenToSquare}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              startActivityEdition(activity)
+                            }}
+                          />
                         </td>
                         <td>
-                          <FontAwesomeIcon icon={faTrash} onClick={() => deleteActivity(activity)} />
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              deleteActivity(activity)
+                            }}
+                          />
                         </td>
                       </TableRow>
                     ))}
