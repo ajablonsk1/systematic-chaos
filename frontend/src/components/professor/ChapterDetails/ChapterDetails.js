@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getChapterDetails } from '../GameManagement/mockData'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Table } from 'react-bootstrap'
@@ -28,7 +28,14 @@ function ChapterDetails() {
   const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
   const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const chapterDetails = getChapterDetails(+chapterId)
+
+  const goToChapterDetails = (activityName) => {
+    navigate(location.pathname + `/activity/${activityName}`)
+  }
 
   useEffect(() => {
     // todo: set mapId, now we always get first map
@@ -139,7 +146,7 @@ function ChapterDetails() {
                 <Table>
                   <tbody>
                     {chapterDetails.activities.map((activity, index) => (
-                      <TableRow key={activity.title + index}>
+                      <TableRow key={activity.title + index} onClick={() => goToChapterDetails(activity.title)}>
                         <td>
                           <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
                         </td>

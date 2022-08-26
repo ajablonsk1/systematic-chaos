@@ -65,6 +65,7 @@ export const ButtonsCol = styled(Col)`
 export const TableRow = styled.tr`
   &:hover {
     background-color: var(--dark-blue);
+    cursor: pointer;
   }
 
   & td:nth-child(4) {

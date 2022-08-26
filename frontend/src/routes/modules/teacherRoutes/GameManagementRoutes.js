@@ -7,6 +7,7 @@ import { PageRoutes } from '../../PageRoutes'
 import GameManagement from '../../../components/professor/GameManagement/GameManagement'
 import ChapterDetails from '../../../components/professor/ChapterDetails/ChapterDetails'
 import RankAndBadgesManagement from '../../../components/professor/GameManagement/RanksAndBadges/RankAndBadgesManagement'
+import ActivityDetails from '../../../components/professor/GameManagement/ActivityDetails/ActivityDetails'
 
 export default function GameManagementRoutes() {
   return (
@@ -34,6 +35,15 @@ export default function GameManagementRoutes() {
         element={
           <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <ChapterDetails />
+          </PageGuard>
+        }
+      />
+
+      <Route
+        path={PageRoutes.Teacher.GameManagement.Chapters.CHAPTER + '/:name/:id/activity/:activityName'}
+        element={
+          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
+            <ActivityDetails />
           </PageGuard>
         }
       />
