@@ -108,7 +108,7 @@ export default function ActivityAssessmentDetails() {
 
   const Header = () => (
     <>
-      <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
+      <ActivityImg src={getActivityImg('TASK')} />
       <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
       <ActivityName>{activityResponseInfo.activityName}</ActivityName>
     </>
