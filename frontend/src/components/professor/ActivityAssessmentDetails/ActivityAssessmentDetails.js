@@ -141,35 +141,6 @@ export default function ActivityAssessmentDetails() {
     </Col>
   )
 
-  const GradingArea = () => (
-    <Col>
-      <h4>Uwagi:</h4>
-      <RemarksTextArea onChange={debounceSetText} ref={textRef} />
-      <ActivityAssesmentProfessorFileCol>
-        <ActivityAssessmentProfessorFileService setFile={setFileBlob} setFileName={setFileName} fileRef={fileRef} />
-      </ActivityAssesmentProfessorFileCol>
-      <PointsRow>
-        <p className='position-relative m-0 top-50'>Punkty: </p>
-        <Row className={'d-flex'}>
-          <PointsInput
-            type='number'
-            min={0}
-            max={activityResponseInfo.maxPoints}
-            onChange={debounceSetGivenPoints}
-            ref={pointRef}
-          ></PointsInput>
-          <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
-        </Row>
-      </PointsRow>
-      <AcceptButton
-        onClick={sendFeedbackAndGetNextIfAble}
-        disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}
-      >
-        Zaakceptuj i przejdź do kolejnej odpowiedzi
-      </AcceptButton>
-    </Col>
-  )
-
   const content = () => {
     return (
       <>
@@ -215,7 +186,36 @@ export default function ActivityAssessmentDetails() {
             className='p-2 rounded mx-2 overflow-auto'
             style={{ backgroundColor: 'var(--dark-blue)', height: '35vh' }}
           >
-            <GradingArea />
+            <Col>
+              <h4>Uwagi:</h4>
+              <RemarksTextArea onChange={debounceSetText} ref={textRef} />
+              <ActivityAssesmentProfessorFileCol>
+                <ActivityAssessmentProfessorFileService
+                  setFile={setFileBlob}
+                  setFileName={setFileName}
+                  fileRef={fileRef}
+                />
+              </ActivityAssesmentProfessorFileCol>
+              <PointsRow>
+                <p className='position-relative m-0 top-50'>Punkty: </p>
+                <Row className={'d-flex'}>
+                  <PointsInput
+                    type='number'
+                    min={0}
+                    max={activityResponseInfo.maxPoints}
+                    onChange={debounceSetGivenPoints}
+                    ref={pointRef}
+                  ></PointsInput>
+                  <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
+                </Row>
+              </PointsRow>
+              <AcceptButton
+                onClick={sendFeedbackAndGetNextIfAble}
+                disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}
+              >
+                Zaakceptuj i przejdź do kolejnej odpowiedzi
+              </AcceptButton>
+            </Col>
           </Row>
         </Col>
         <HorizontalSpacer />
