@@ -5,8 +5,13 @@ import { Form, Tab } from 'react-bootstrap'
 import Ranking from '../../../general/Ranking/Ranking'
 import { getResultsList } from './mockData'
 import { debounce } from 'lodash/function'
+import ActivityStats from './ActivityStats'
+import { useLocation } from 'react-router-dom'
 
-function ActivityDetails(props) {
+function ActivityDetails() {
+  const location = useLocation()
+  const { activityId } = location.state
+
   const [filterQuery, setFilterQuery] = useState(undefined)
 
   const resultsList = getResultsList()
@@ -30,7 +35,7 @@ function ActivityDetails(props) {
           <Ranking rankingList={resultsList} />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
-          STATS
+          <ActivityStats activityId={activityId} />
         </Tab>
       </TabsContainer>
     </Content>
