@@ -127,9 +127,9 @@ public class RankingService {
                         if (o1.getPoints() == null && o2.getPoints() == null) {
                             return 0;
                         } else if (o1.getPoints() == null) {
-                            return Double.compare(o2.getPoints(), 0);
+                            return Double.compare(o2.getPoints(), -1);
                         } else {
-                            return Double.compare(0, o1.getPoints());
+                            return Double.compare(-1, o1.getPoints());
                         }
                     }
                 }))
