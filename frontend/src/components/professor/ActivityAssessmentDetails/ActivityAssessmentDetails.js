@@ -104,7 +104,7 @@ export default function ActivityAssessmentDetails() {
 
   const HorizontalSpacer = () => <Col style={{ height: '3vh' }} />
 
-  const VerticalSpacer = () => <Row style={{ height: '1vh' }}></Row>
+  const VerticalSpacer = () => <Row style={{ height: '1vh' }} />
 
   const Header = () => (
     <>
