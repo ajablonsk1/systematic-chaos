@@ -115,7 +115,7 @@ export default function ActivityAssessmentDetails() {
   )
 
   const UserDetails = () => (
-    <Col className='my-auto mx-auto'>
+    <Col className='m-auto'>
       <h4>
         Autor rozwiązania - {activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName} (
         {'zadanie oddane ' + (activityResponseInfo.isLate ? 'ze spóźnieniem' : 'w terminie')})
