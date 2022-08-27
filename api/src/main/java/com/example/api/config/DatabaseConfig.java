@@ -199,6 +199,14 @@ public class DatabaseConfig {
             student15.setIndexNumber(163456);
             student15.setHeroType(HeroType.ROGUE);
 
+            User student16 = new User("manowak@student.agh.edu.pl",
+                    "Małgorzata Anna",
+                    "Kowalska",
+                    AccountType.STUDENT);
+            student16.setPassword("12345");
+            student16.setIndexNumber(163457);
+            student16.setHeroType(HeroType.ROGUE);
+
             User professor = new User("bmaj@agh.edu.pl",
                     "Bernard",
                     "Maj",
@@ -216,7 +224,7 @@ public class DatabaseConfig {
             student.setIndexNumber(123456);
 
             List<User> students1 = List.of(student, student1, student2, student3, student4, student5, student6, student7);
-            List<User> students2 = List.of(student8, student9, student10, student11, student12, student13, student14, student15);
+            List<User> students2 = List.of(student8, student9, student10, student11, student12, student13, student14, student15, student16);
 
             Group group = new Group();
             group.setInvitationCode("1111");
