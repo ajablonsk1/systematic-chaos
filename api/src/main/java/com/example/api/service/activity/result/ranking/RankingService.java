@@ -85,8 +85,8 @@ public class RankingService {
         List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .filter(student ->
-                                student.getFirstName().concat(student.getLastName()).toLowerCase().contains(searchLower) ||
-                                student.getLastName().concat(student.getFirstName()).toLowerCase().contains(searchLower) ||
+                                student.getFirstName().concat(student.getLastName()).toLowerCase().replaceAll("\\s","").contains(searchLower) ||
+                                student.getLastName().concat(student.getFirstName()).toLowerCase().replaceAll("\\s","").contains(searchLower) ||
                                 student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                                 student.getGroup().getName().toLowerCase().contains(searchLower))
                 .map(this::studentToRankingEntry)
@@ -115,8 +115,8 @@ public class RankingService {
         List<RankingResponse> rankingList = getActivityRanking(activityID)
                 .stream()
                 .filter(student ->
-                            student.getFirstName().concat(student.getLastName()).toLowerCase().contains(searchLower) ||
-                            student.getLastName().concat(student.getFirstName()).toLowerCase().contains(searchLower) ||
+                            student.getFirstName().concat(student.getLastName()).toLowerCase().replaceAll("\\s","").contains(searchLower) ||
+                            student.getLastName().concat(student.getFirstName()).toLowerCase().replaceAll("\\s","").contains(searchLower) ||
                             student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                             student.getGroupName().toLowerCase().contains(searchLower)
                 )
