@@ -1,30 +1,18 @@
 import { Content } from '../../App/AppGeneralStyles'
 import { Row, Col } from 'react-bootstrap'
-import { FullDivider } from '../../student/AllActivities/ExpeditionTask/ActivityInfo/ActivityInfoStyles'
-//import { useLocation, useNavigate } from 'react-router-dom';
 import {
   AcceptButton,
-  ActivityInfo,
-  AnswerCol,
-  AnswerContent,
-  AnswerRow,
-  PointsInput,
-  PointsMax,
-  PointsRow,
-  RemainingCount,
-  RemarksCol,
   RemarksTextArea,
-  TopInfo,
-  TopInfoCard,
-  UserInfo,
   ActivityAssesmentProfessorFileCol,
   HeaderRow,
   ActivityImg,
   ActivityName,
-  ActivityType
+  ActivityType,
+  PointsRow,
+  PointsInput,
+  PointsMax
 } from './ActivityAssesmentDetailsStyles'
 //https://www.flaticon.com/free-icon/user-picture_21104
-import userPicture from '../../../utils/resources/user-picture.png'
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ProfessorService from '../../../services/professor.service'
@@ -160,6 +148,19 @@ export default function ActivityAssessmentDetails() {
       <ActivityAssesmentProfessorFileCol>
         <ActivityAssessmentProfessorFileService setFile={setFileBlob} setFileName={setFileName} fileRef={fileRef} />
       </ActivityAssesmentProfessorFileCol>
+      <PointsRow>
+        <p className='position-relative m-0 top-50'>Punkty: </p>
+        <Row className={'d-flex'}>
+          <PointsInput
+            type='number'
+            min={0}
+            max={activityResponseInfo.maxPoints}
+            onChange={debounceSetGivenPoints}
+            ref={pointRef}
+          ></PointsInput>
+          <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
+        </Row>
+      </PointsRow>
       <AcceptButton
         onClick={sendFeedbackAndGetNextIfAble}
         disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}
