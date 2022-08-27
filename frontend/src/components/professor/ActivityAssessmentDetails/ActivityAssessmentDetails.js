@@ -197,8 +197,28 @@ export default function ActivityAssessmentDetails() {
     <>
       <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
       <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
-      <ActivityName>{activityResponseInfo.name}</ActivityName>
+      <ActivityName>{activityResponseInfo.activityName}</ActivityName>
     </>
+  )
+
+  const UserDetails = () => (
+    <Col className='my-auto mx-auto'>
+      <h4>
+        Autor rozwiązania - {activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName} (
+        {'zadanie oddane' + (activityResponseInfo.isLate ? ' ze spóźnieniem' : ' w terminie')})
+      </h4>
+    </Col>
+  )
+
+  const ResponseDetails = () => <p>response</p>
+
+  const ActivityDetails = () => (
+    <Col>
+      <h4>Treść:</h4>
+      <p>{activityResponseInfo.activityDetails}</p>
+      <h4 className='text-center'>Maksymalna liczba punktów: {activityResponseInfo.maxPoints}</h4>
+      <p></p>
+    </Col>
   )
 
   const content = () => {
@@ -215,29 +235,44 @@ export default function ActivityAssessmentDetails() {
 
           <VerticalSpacer />
 
-          <TopInfo>
-            {/* <TopInfoCard>
-            <h4 className={'text-center'}>Informacje o użytkowniku</h4>
-            <FullDivider />
-            <Row>
-              <img src={userPicture} alt='profile avatar' style={{ paddingLeft: '20px', height: '100px' }}></img>
-              <UserInfo>
-                <h5>{activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName}</h5>
+          <Row
+            className='p-2 rounded mx-2 overflow-auto text-center'
+            style={{ backgroundColor: 'var(--dark-blue)', height: '8vh' }}
+          >
+            <UserDetails />
+          </Row>
 
-                {activityResponseInfo.isLate ? (
-                  <h5 className={'w-100'}>zadanie oddane ze spóźnieniem</h5>
-                ) : (
-                  <h5 className={'w-100'}>zadanie oddane w terminie</h5>
-                )}
-              </UserInfo>
-            </Row>
-          </TopInfoCard>
-          <TopInfoCard>
-            <h4 className={'text-center'}>Informacje o aktywności</h4>
-            <FullDivider />
-            <ActivityInfo>{'Treść: ' + activityResponseInfo.activityDetails}</ActivityInfo>
-            <p className='text-center'>Punkty: {activityResponseInfo.maxPoints}</p>
-          </TopInfoCard> */}
+          <VerticalSpacer />
+
+          <Row
+            className='p-2 rounded mx-2 overflow-auto'
+            style={{ backgroundColor: 'var(--dark-blue)', height: '20vh' }}
+          >
+            <ActivityDetails className='overflow-auto' />
+          </Row>
+          {/* <TopInfo>
+            <TopInfoCard>
+              <h4 className={'text-center'}>Informacje o użytkowniku</h4>
+              <FullDivider />
+              <Row>
+                <img src={userPicture} alt='profile avatar' style={{ paddingLeft: '20px', height: '100px' }}></img>
+                <UserInfo>
+                  <h5>{activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName}</h5>
+
+                  {activityResponseInfo.isLate ? (
+                    <h5 className={'w-100'}>zadanie oddane ze spóźnieniem</h5>
+                  ) : (
+                    <h5 className={'w-100'}>zadanie oddane w terminie</h5>
+                  )}
+                </UserInfo>
+              </Row>
+            </TopInfoCard>
+            <TopInfoCard>
+              <h4 className={'text-center'}>Informacje o aktywności</h4>
+              <FullDivider />
+              <ActivityInfo>{'Treść: ' + activityResponseInfo.activityDetails}</ActivityInfo>
+              <p className='text-center'>Punkty: {activityResponseInfo.maxPoints}</p>
+            </TopInfoCard>
           </TopInfo>
           <AnswerRow>
             <AnswerCol>
@@ -270,20 +305,20 @@ export default function ActivityAssessmentDetails() {
               ></PointsInput>
               <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
             </Row>
-          </PointsRow>
+          </PointsRow> */}
 
-          <AcceptButton
+          {/* <AcceptButton
             onClick={sendFeedbackAndGetNextIfAble}
             disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}
           >
             Zaakceptuj i przejdź do kolejnej odpowiedzi
           </AcceptButton>
-          <RemainingCount>Pozostało {activityResponseInfo.remaining} odpowiedzi do sprawdzenia</RemainingCount>
+          <RemainingCount>Pozostało {activityResponseInfo.remaining} odpowiedzi do sprawdzenia</RemainingCount> */}
         </Col>
         <HorizontalSpacer />
       </>
     )
   }
 
-  return <Content>{activityResponseInfo ? content() : <Loader />}</Content>
+  return <Content style={{ color: 'var(--font-color)' }}>{activityResponseInfo ? content() : <Loader />}</Content>
 }
