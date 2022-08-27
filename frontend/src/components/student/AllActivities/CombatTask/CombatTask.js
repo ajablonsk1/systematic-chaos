@@ -27,19 +27,19 @@ export default function CombatTask() {
   const [answer, setAnswer] = useState('')
   const [isFetching, setIsFetching] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const [hasSentNow, setHasSentNow] = useState(false)
+  const [answerWasSentNow, setAnswerWasSentNow] = useState(false)
 
   const textAreaRef = useRef(null)
-  const isRevieved = useCallback(() => {
+  const isReviewed = () => {
     return task.points
-  }, [task])
+  }
 
   const resetStates = () => {
     setIsFetching(false)
     setFileBlob(null)
     setFileName(null)
     setAnswer('')
-    setHasSentNow(true)
+    setAnswerWasSentNow(true)
     textAreaRef.current.value = ''
   }
 
@@ -131,30 +131,24 @@ export default function CombatTask() {
           <VerticalSpacer />
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '50vh' }}>
             <Col
-              md={task.answer || hasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
+              md={task.answer || answerWasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
               className={'h-100 overflow-auto'}
             >
               <h4>Odpowiedź:</h4>
-              {isRevieved() ? (
+              {isReviewed() ? (
                 <Col>
                   <h4>Twoja odpowiedź</h4>
                   <p>{task.answer}</p>
                 </Col>
               ) : (
                 <>
-                  {task.answer ? (
+                  {task.answer && (
                     <Col>
                       <h5>Twoja obecna odpowiedź</h5>
                       <p>{task.answer}</p>
                     </Col>
-                  ) : null}
-                  <RemarksTextArea
-                    ref={textAreaRef}
-                    disabled={isRevieved()}
-                    onChange={(e) => {
-                      handleAnswerChange(e)
-                    }}
-                  />
+                  )}
+                  <RemarksTextArea ref={textAreaRef} disabled={isReviewed()} onChange={handleAnswerChange} />
                 </>
               )}
               <Col className={'text-center overflow-auto'}>
@@ -164,14 +158,14 @@ export default function CombatTask() {
                   setFileName={setFileName}
                   setIsFetching={setIsFetching}
                   isFetching={isFetching}
-                  isRevieved={isRevieved()}
+                  isRevieved={isReviewed()}
                 />
               </Col>
               <Col className={'w-100 text-center'}>
                 <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
                   {isFetching ? (
                     <Spinner animation={'border'} />
-                  ) : isRevieved() ? (
+                  ) : isReviewed() ? (
                     <span>Aktywność została oceniona</span>
                   ) : (
                     <span>Wyślij</span>
@@ -179,8 +173,8 @@ export default function CombatTask() {
                 </SendTaskButton>
               </Col>
             </Col>
-            {task.answer != null || task.files != null || hasSentNow ? (
-              !isRevieved() ? (
+            {task.answer != null || task.files != null || answerWasSentNow ? (
+              !isReviewed() ? (
                 <AwaitingFeedbackField />
               ) : (
                 <Col className={'border-left border-warning overflow-auto'}>
