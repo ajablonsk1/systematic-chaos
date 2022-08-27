@@ -10,4 +10,6 @@ public class MapTask {
     private Integer posX;
     private Integer posY;
     private ActivityType type;
+    private String title;
+    private Double points;
 }

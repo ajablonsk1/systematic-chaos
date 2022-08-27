@@ -424,6 +424,7 @@ public class DatabaseConfig {
             survey.setDescription("Pomóż nam polepszyć kurs dzieląc się swoją opinią!");
             survey.setPosX(7);
             survey.setPosY(3);
+            survey.setPoints(10.0);
             surveyService.saveSurvey(survey);
 
             ActivityMap activityMap1 = new ActivityMap();
