@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getChapterDetails } from '../GameManagement/mockData'
 import { Content } from '../../App/AppGeneralStyles'
-import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Table } from 'react-bootstrap'
+import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Spinner, Table } from 'react-bootstrap'
 import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
 import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,6 +15,7 @@ import EditChapterModal from './EditChapterModal'
 import JSONEditor from '../../general/jsonEditor/JSONEditor'
 import { getConfigJson } from '../GameManagement/GameLoader/mockData'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
+import ChapterService from '../../../services/chapter.service'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -23,15 +24,25 @@ function ChapterDetails() {
   const [chapterMap, setChapterMap] = useState(undefined)
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false)
   const [isEditChapterModalOpen, setEditChapterModalOpen] = useState(false)
-  const mapCardBody = useRef()
   const [chosenActivityData, setChosenActivityData] = useState(null)
   const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
   const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
+  const [chapterDetails, setChapterDetails] = useState(undefined)
+
+  const mapCardBody = useRef()
 
   const navigate = useNavigate()
   const location = useLocation()
 
-  const chapterDetails = getChapterDetails(+chapterId)
+  useEffect(() => {
+    ChapterService.getChapterDetails(chapterId)
+      .then((response) => {
+        setChapterDetails(response)
+      })
+      .catch(() => {
+        setChapterDetails(null)
+      })
+  }, [chapterId])
 
   const goToChapterDetails = (activityName, activityId) => {
     navigate(location.pathname + `/activity/${activityName}`, {
@@ -86,56 +97,63 @@ function ChapterDetails() {
             <SummaryCard className={'h-100'}>
               <Card.Header>Podsumowanie rozdziału</Card.Header>
               <Card.Body className={'p-0'}>
-                <ListGroup>
-                  <ListGroupItem>Nazwa rozdziału: {chapterDetails.name}</ListGroupItem>
-                  <ListGroupItem>
-                    <Row className={'d-flex align-items-center'}>
-                      <Col sm={10}>Liczba dodanych aktywności: {chapterDetails.noActivities}</Col>
-                      <Col sm={2}>
-                        <FontAwesomeIcon
-                          icon={openActivitiesDetailsList ? faArrowUp : faArrowDown}
-                          className={'mx-5'}
-                          onClick={() => setOpenActivitiesDetailsList(!openActivitiesDetailsList)}
-                          aria-controls={'activities'}
-                          aria-expanded={openActivitiesDetailsList}
-                        />
-                      </Col>
-                    </Row>
-                    <Collapse in={openActivitiesDetailsList}>
-                      <div id='activities'>
-                        <div>Ekspedycje: {chapterDetails.noExpeditions}</div>
-                        <div>Zadania bojowe: {chapterDetails.noCombatTasks}</div>
-                        <div>Wytyczne: {chapterDetails.noInfoTasks}</div>
-                        <div>Wywiady: {chapterDetails.noSurveyTasks}</div>
-                      </div>
-                    </Collapse>
-                  </ListGroupItem>
-                  <ListGroupItem>Suma punktów możliwych do zdobycia w rozdziale: {chapterDetails.points}</ListGroupItem>
-                  <ListGroupItem>Punkty liczone jako 100%: {chapterDetails.points * 0.85}</ListGroupItem>
-                  <ListGroupItem>Aktualny rozmiar mapy: {chapterDetails.mapSize}</ListGroupItem>
-                  <ListGroupItem>
-                    <Row className={'d-flex align-items-center'}>
-                      <Col sm={10}>Warunki odblokowania kolejnego rozdziału:</Col>
-                      <Col sm={2}>
-                        <FontAwesomeIcon
-                          icon={openConditionsList ? faArrowUp : faArrowDown}
-                          className={'mx-5'}
-                          onClick={() => setOpenConditionsList(!openConditionsList)}
-                          aria-controls={'conditions'}
-                          aria-expanded={openConditionsList}
-                        />
-                      </Col>
-                    </Row>
-                    <Collapse in={openConditionsList}>
-                      <div id='conditions'>
-                        <ol>
-                          <li>uczestnik musi zdobyć 300 pkt</li>
-                          <li>data po 15.10.2022</li>
-                        </ol>
-                      </div>
-                    </Collapse>
-                  </ListGroupItem>
-                </ListGroup>
+                {chapterDetails === undefined ? (
+                  <Spinner animation={'border'}></Spinner>
+                ) : chapterDetails == null ? (
+                  <p>{ERROR_OCCURRED}</p>
+                ) : (
+                  <ListGroup>
+                    <ListGroupItem>Nazwa rozdziału: {chapterDetails.name}</ListGroupItem>
+                    <ListGroupItem>
+                      <Row className={'d-flex align-items-center'}>
+                        <Col sm={10}>Liczba dodanych aktywności: {chapterDetails.noActivities}</Col>
+                        <Col sm={2}>
+                          <FontAwesomeIcon
+                            icon={openActivitiesDetailsList ? faArrowUp : faArrowDown}
+                            className={'mx-5'}
+                            onClick={() => setOpenActivitiesDetailsList(!openActivitiesDetailsList)}
+                            aria-controls={'activities'}
+                            aria-expanded={openActivitiesDetailsList}
+                          />
+                        </Col>
+                      </Row>
+                      <Collapse in={openActivitiesDetailsList}>
+                        <div id='activities'>
+                          <div>Ekspedycje: {chapterDetails.noGraphTasks}</div>
+                          <div>Zadania bojowe: {chapterDetails.noFileTasks}</div>
+                          <div>Wytyczne: {chapterDetails.noInfoTasks}</div>
+                          <div>Wywiady: {chapterDetails.noSurveyTasks}</div>
+                        </div>
+                      </Collapse>
+                    </ListGroupItem>
+                    <ListGroupItem>
+                      Suma punktów możliwych do zdobycia w rozdziale: {chapterDetails.maxPoints}
+                    </ListGroupItem>
+                    <ListGroupItem>Aktualny rozmiar mapy: {chapterDetails.mapSize}</ListGroupItem>
+                    <ListGroupItem>
+                      <Row className={'d-flex align-items-center'}>
+                        <Col sm={10}>Warunki odblokowania kolejnego rozdziału:</Col>
+                        <Col sm={2}>
+                          <FontAwesomeIcon
+                            icon={openConditionsList ? faArrowUp : faArrowDown}
+                            className={'mx-5'}
+                            onClick={() => setOpenConditionsList(!openConditionsList)}
+                            aria-controls={'conditions'}
+                            aria-expanded={openConditionsList}
+                          />
+                        </Col>
+                      </Row>
+                      <Collapse in={openConditionsList}>
+                        <div id='conditions'>
+                          <ol>
+                            <li>uczestnik musi zdobyć 300 pkt</li>
+                            <li>data po 15.10.2022</li>
+                          </ol>
+                        </div>
+                      </Collapse>
+                    </ListGroupItem>
+                  </ListGroup>
+                )}
               </Card.Body>
             </SummaryCard>
           </Col>
@@ -147,40 +165,54 @@ function ChapterDetails() {
               <Card.Body className={'p-0'}>
                 <Table>
                   <tbody>
-                    {chapterDetails.activities.map((activity, index) => (
-                      <TableRow
-                        key={activity.title + index}
-                        onClick={() => goToChapterDetails(activity.title, activity.id)}
-                      >
-                        <td>
-                          <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
+                    {chapterDetails === undefined ? (
+                      <tr>
+                        <td colSpan='100%' className={'text-center'}>
+                          <Spinner animation={'border'} />
                         </td>
-                        <td>{getActivityTypeName(activity.type)}</td>
-                        <td>{activity.title}</td>
-                        <td>
-                          ({activity.posX}, {activity.posY})
+                      </tr>
+                    ) : chapterDetails == null || chapterDetails.mapTasks.length === 0 ? (
+                      <tr>
+                        <td colSpan='100%' className={'text-center'}>
+                          <p>{chapterDetails == null ? ERROR_OCCURRED : 'Lista rozdziałów jest pusta'}</p>
                         </td>
-                        <td>Pkt: {activity.points}</td>
-                        <td>
-                          <FontAwesomeIcon
-                            icon={faPenToSquare}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              startActivityEdition(activity)
-                            }}
-                          />
-                        </td>
-                        <td>
-                          <FontAwesomeIcon
-                            icon={faTrash}
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              deleteActivity(activity)
-                            }}
-                          />
-                        </td>
-                      </TableRow>
-                    ))}
+                      </tr>
+                    ) : (
+                      chapterDetails.mapTasks.map((activity, index) => (
+                        <TableRow
+                          key={activity.title + index}
+                          onClick={() => goToChapterDetails(activity.title, activity.id)}
+                        >
+                          <td>
+                            <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
+                          </td>
+                          <td>{getActivityTypeName(activity.type)}</td>
+                          <td>{activity.title}</td>
+                          <td>
+                            ({activity.posX}, {activity.posY})
+                          </td>
+                          <td>Pkt: {activity.points}</td>
+                          <td>
+                            <FontAwesomeIcon
+                              icon={faPenToSquare}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                startActivityEdition(activity)
+                              }}
+                            />
+                          </td>
+                          <td>
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                deleteActivity(activity)
+                              }}
+                            />
+                          </td>
+                        </TableRow>
+                      ))
+                    )}
                   </tbody>
                 </Table>
               </Card.Body>
@@ -205,7 +237,7 @@ function ChapterDetails() {
         modalBody={
           <>
             Czy na pewno chcesz usunąć rozdział: <br />
-            <strong>{chapterDetails.name}</strong>?
+            <strong>{chapterDetails?.name}</strong>?
           </>
         }
       />

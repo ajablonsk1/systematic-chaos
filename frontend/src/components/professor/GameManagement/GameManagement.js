@@ -1,6 +1,5 @@
 import { Content } from '../../App/AppGeneralStyles'
-import { Col, Container, Row, Table } from 'react-bootstrap'
-import { getChaptersList } from './mockData'
+import { Col, Container, Row, Spinner, Table } from 'react-bootstrap'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
 import { GameButton } from './GameButton'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
@@ -8,15 +7,25 @@ import ManagementCard from './ManagementCard'
 import { useNavigate } from 'react-router-dom'
 import { TableBodyRow } from './TableStyles'
 import GameLoader from './GameLoader/GameLoader'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import ChapterService from '../../../services/chapter.service'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 export default function GameManagement() {
-  const [showConfigModal, setShowConfigModal] = useState(false)
-
-  // TODO: use endpoint later
-  const chaptersList = getChaptersList()
-
   const navigate = useNavigate()
+
+  const [showConfigModal, setShowConfigModal] = useState(false)
+  const [chapterList, setChapterList] = useState(undefined)
+
+  useEffect(() => {
+    ChapterService.getChaptersList()
+      .then((response) => {
+        setChapterList(response)
+      })
+      .catch(() => {
+        setChapterList(null)
+      })
+  }, [])
 
   const goToChapterDetailsView = (chapterName, chapterId) => {
     navigate(
@@ -54,14 +63,28 @@ export default function GameManagement() {
                   </tr>
                 </thead>
                 <tbody>
-                  {chaptersList.map((chapter, index) => (
-                    <TableBodyRow key={index} onClick={() => goToChapterDetailsView(chapter.name, chapter.id)}>
-                      <td>{chapter.name}</td>
-                      <td className='text-center'>{chapter.noActivities}</td>
-                      <td className='text-center'>{chapter.points}</td>
-                      <td className='text-center'>{chapter.mapSize}</td>
-                    </TableBodyRow>
-                  ))}
+                  {chapterList === undefined ? (
+                    <tr>
+                      <td colSpan='100%' className={'text-center'}>
+                        <Spinner animation={'border'} />
+                      </td>
+                    </tr>
+                  ) : chapterList == null || chapterList.length === 0 ? (
+                    <tr>
+                      <td colSpan='100%' className={'text-center'}>
+                        <p>{chapterList == null ? ERROR_OCCURRED : 'Lista rozdziałów jest pusta'}</p>
+                      </td>
+                    </tr>
+                  ) : (
+                    chapterList.map((chapter, index) => (
+                      <TableBodyRow key={index} onClick={() => goToChapterDetailsView(chapter.name, chapter.id)}>
+                        <td>{chapter.name}</td>
+                        <td className='text-center'>{chapter.noActivities}</td>
+                        <td className='text-center'>{chapter.maxPoints}</td>
+                        <td className='text-center'>{chapter.mapSize}</td>
+                      </TableBodyRow>
+                    ))
+                  )}
                 </tbody>
               </Table>
               <GameButton text={'Nowy rozdział'} customWidth={'auto'} />
