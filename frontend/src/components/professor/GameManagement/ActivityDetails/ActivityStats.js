@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { getStatsForActivity } from './mockData'
 import { CustomCard } from '../../../student/GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
@@ -7,6 +7,7 @@ import { ChartCol, CustomTable } from '../../../student/GameCardPage/gameCardCon
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js'
 import { Bar, Pie } from 'react-chartjs-2'
 import { getChartConfig, getChartDetails } from './chartHelper'
+import StatsCard from './StatsCard'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 
@@ -49,6 +50,19 @@ function ActivityStats(props) {
     )
   }, [statsData])
 
+  const chartCard = useCallback((chartType, data, options, header) => {
+    return (
+      <StatsCard
+        header={header}
+        body={
+          <ChartCol $customHeight={'95%'}>
+            {chartType === 'BAR' ? <Bar data={data} options={options} /> : <Pie data={data} options={options} />}
+          </ChartCol>
+        }
+      />
+    )
+  }, [])
+
   return (
     <>
       <Row className={'m-0 mt-3'}>
@@ -60,43 +74,12 @@ function ActivityStats(props) {
             <Card.Body>{statsCardBody}</Card.Body>
           </CustomCard>
         </Col>
-        <Col md={6}>
-          <CustomCard>
-            <CardHeader>
-              <h5>Ilość wyników w przedziale ocenowym</h5>
-            </CardHeader>
-            <Card.Body>
-              <ChartCol $customHeight={'95%'}>
-                <Pie data={pieData} options={pieOptions} />
-              </ChartCol>
-            </Card.Body>
-          </CustomCard>
-        </Col>
+        <Col md={6}>{chartCard('PIE', pieData, pieOptions, 'Ilość wyników w przedziale ocenowym')}</Col>
       </Row>
       <Row className={'m-0 mt-3'} style={{ height: '45vh' }}>
+        <Col md={6}>{chartCard('BAR', pointsBarData, pointsBarOptions, 'Średni wynik punktowy każdej grupy')}</Col>
         <Col md={6}>
-          <CustomCard>
-            <CardHeader>
-              <h5>Średni wynik punktowy każdej grupy</h5>
-            </CardHeader>
-            <Card.Body>
-              <ChartCol $customHeight={'95%'}>
-                <Bar data={pointsBarData} options={pointsBarOptions} />
-              </ChartCol>
-            </Card.Body>
-          </CustomCard>
-        </Col>
-        <Col md={6}>
-          <CustomCard>
-            <CardHeader>
-              <h5>Średni wynik procentowy każdej grupy</h5>
-            </CardHeader>
-            <Card.Body>
-              <ChartCol $customHeight={'95%'}>
-                <Bar data={percentageBarData} options={percentageBarOptions} />
-              </ChartCol>
-            </Card.Body>
-          </CustomCard>
+          {chartCard('BAR', percentageBarData, percentageBarOptions, 'Średni wynik procentowy każdej grupy')}
         </Col>
       </Row>
     </>
