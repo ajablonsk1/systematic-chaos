@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getChapterDetails } from '../GameManagement/mockData'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Table } from 'react-bootstrap'
@@ -28,7 +28,16 @@ function ChapterDetails() {
   const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
   const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const chapterDetails = getChapterDetails(+chapterId)
+
+  const goToChapterDetails = (activityName, activityId) => {
+    navigate(location.pathname + `/activity/${activityName}`, {
+      state: { activityId: activityId }
+    })
+  }
 
   useEffect(() => {
     // todo: set mapId, now we always get first map
@@ -139,7 +148,10 @@ function ChapterDetails() {
                 <Table>
                   <tbody>
                     {chapterDetails.activities.map((activity, index) => (
-                      <TableRow key={activity.title + index}>
+                      <TableRow
+                        key={activity.title + index}
+                        onClick={() => goToChapterDetails(activity.title, activity.id)}
+                      >
                         <td>
                           <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
                         </td>
@@ -150,10 +162,22 @@ function ChapterDetails() {
                         </td>
                         <td>Pkt: {activity.points}</td>
                         <td>
-                          <FontAwesomeIcon icon={faPenToSquare} onClick={() => startActivityEdition(activity)} />
+                          <FontAwesomeIcon
+                            icon={faPenToSquare}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              startActivityEdition(activity)
+                            }}
+                          />
                         </td>
                         <td>
-                          <FontAwesomeIcon icon={faTrash} onClick={() => deleteActivity(activity)} />
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              deleteActivity(activity)
+                            }}
+                          />
                         </td>
                       </TableRow>
                     ))}

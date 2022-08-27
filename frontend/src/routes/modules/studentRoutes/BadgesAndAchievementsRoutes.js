@@ -2,8 +2,8 @@ import { Route, Routes } from 'react-router-dom'
 import NotFound from '../../../components/general/NotFoundPage/NotFound'
 import { PageRoutes } from '../../PageRoutes'
 import PageGuard from '../../../components/general/PageGuard/PageGuard'
-import BadgesPage from '../../../components/student/BadgesPage/BadgesPage'
 import { Role } from '../../../utils/userRole'
+import BadgesPage from '../../../components/student/BadgesPage/BadgesPage'
 
 export default function BadgesAndAchievementsRoutes() {
   return (

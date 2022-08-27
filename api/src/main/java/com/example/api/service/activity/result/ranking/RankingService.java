@@ -120,7 +120,19 @@ public class RankingService {
                             student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                             student.getGroupName().toLowerCase().contains(searchLower)
                 )
-                .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
+                .sorted(((o1, o2) -> {
+                    try {
+                        return Double.compare(o2.getPoints(), o1.getPoints());
+                    } catch (NullPointerException e) {
+                        if (o1.getPoints() == null && o2.getPoints() == null) {
+                            return 0;
+                        } else if (o1.getPoints() == null) {
+                            return Double.compare(o2.getPoints(), 0);
+                        } else {
+                            return Double.compare(0, o1.getPoints());
+                        }
+                    }
+                }))
                 .toList();
         addPositionToRankingList(rankingList);
         return rankingList;
@@ -131,17 +143,17 @@ public class RankingService {
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(activityID);
         if (graphTask != null) {
             GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
-            return result != null ? result.getPointsReceived() : 0D;
+            return result != null ? result.getPointsReceived() : null;
         }
         FileTask fileTask = fileTaskRepo.findFileTaskById(activityID);
         if (fileTask != null) {
             FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, user);
-            return result != null ? result.getPointsReceived() : 0D;
+            return result != null ? (result.isEvaluated() ? result.getPointsReceived() : null) : null;
         }
         Survey survey = surveyRepo.findSurveyById(activityID);
         if (survey != null) {
             SurveyResult result = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, user);
-            return result != null ? result.getPointsReceived() : 0D;
+            return result != null ? result.getPointsReceived() : null;
         }
         return null;
     }
