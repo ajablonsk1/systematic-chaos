@@ -48,3 +48,5 @@ export const GET_STUDENT_POINTS_PROFESSOR = BASE_URL + 'points/all/list/professo
 export const GET_STUDENT_GLOBAL_POSITION = GET_RANKING + '/position'
 export const GET_STUDENT_GROUP_POSITION = GET_RANKING + '/group/position'
 export const GET_RECEIVED_TOTAL_POINTS = BASE_URL + 'points/all/total'
+export const GET_ACTIVITY_RESULT_LIST = GET_RANKING + '/activity'
+export const GET_FILTERED_ACTIVITY_RESULT_LIST = GET_ACTIVITY_RESULT_LIST + '/search'
