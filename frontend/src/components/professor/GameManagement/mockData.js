@@ -41,6 +41,14 @@ const chaptersList = [
         type: 'INFO',
         title: 'Wszystko co musisz wiedzieć o kablach.',
         points: 0
+      },
+      {
+        id: 7,
+        posX: 7,
+        posY: 1,
+        type: 'SURVEY',
+        title: 'Badanie zadowolenia z rozdziału 1.',
+        points: 5
       }
     ]
   },

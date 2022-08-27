@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom'
 
 function ActivityDetails() {
   const location = useLocation()
-  const { activityId } = location.state
+  const { activityId, activityType } = location.state
 
   const [filterQuery, setFilterQuery] = useState(undefined)
 
@@ -35,7 +35,7 @@ function ActivityDetails() {
           <Ranking rankingList={resultsList} />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
-          <ActivityStats activityId={activityId} />
+          <ActivityStats activityId={activityId} activityType={activityType} />
         </Tab>
       </TabsContainer>
     </Content>
