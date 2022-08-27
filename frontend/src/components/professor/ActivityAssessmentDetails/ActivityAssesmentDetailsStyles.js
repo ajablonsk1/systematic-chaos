@@ -1,11 +1,6 @@
 import styled from 'styled-components'
 import { Button, Col, Row } from 'react-bootstrap'
 
-export const HeaderRow = styled(Row)`
-  background-color: var(--dark-blue);
-  color: var(--font-color);
-`
-
 export const ActivityImg = styled.img`
   height: 40px;
   width: 40px;

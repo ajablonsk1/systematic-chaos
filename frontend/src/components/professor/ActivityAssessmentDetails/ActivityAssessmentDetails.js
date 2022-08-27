@@ -148,9 +148,9 @@ export default function ActivityAssessmentDetails() {
           className='m-0 pt-4 mx-auto'
           style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
         >
-          <HeaderRow className='p-2 rounded mx-2' style={{ height: '8vh' }}>
+          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '8vh' }}>
             <Header />
-          </HeaderRow>
+          </Row>
 
           <VerticalSpacer />
 
