@@ -3,14 +3,18 @@ package com.example.api.service.activity.result;
 import com.example.api.dto.request.activity.result.ActivityTypeWithIdForm;
 import com.example.api.dto.request.activity.task.GetCSVForm;
 import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
+import com.example.api.dto.response.activity.task.result.ActivityStatisticsResponse;
+import com.example.api.dto.response.activity.task.result.util.GroupActivityStatisticsCreator;
+import com.example.api.dto.response.activity.task.result.util.ScaleActivityStatisticsCreator;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.Feedback;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.SurveyResult;
-import com.example.api.model.activity.task.FileTask;
-import com.example.api.model.activity.task.GraphTask;
-import com.example.api.model.activity.task.Survey;
+import com.example.api.model.activity.result.TaskResult;
+import com.example.api.model.activity.task.*;
+import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
@@ -22,6 +26,7 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.util.csv.CSVConverter;
 import com.example.api.util.csv.CSVTaskResult;
@@ -33,6 +38,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 @Service
@@ -51,6 +58,7 @@ public class TaskResultService {
     private final AuthenticationService authService;
     private final UserValidator userValidator;
     private final ProfessorFeedbackRepo professorFeedbackRepo;
+    private final ActivityValidator activityValidator;
 
     public ByteArrayResource getCSVFile(GetCSVForm csvForm) throws IOException {
         log.info("Fetching csv files for students");
@@ -110,7 +118,7 @@ public class TaskResultService {
                 .stream()
                 .filter(FileTaskResult::isEvaluated)
                 .map(TaskPointsStatisticsResponse::new)
-                .toList();;
+                .toList();
         List<TaskPointsStatisticsResponse> surveyResults = surveyResultRepo.findAllByUser(user)
                 .stream()
                 .map(TaskPointsStatisticsResponse::new)
@@ -119,6 +127,17 @@ public class TaskResultService {
                 .flatMap(Collection::stream)
                 .sorted(((o1, o2) -> Long.compare(o2.getDateMillis(), o1.getDateMillis())))
                 .toList();
+    }
+
+    public ActivityStatisticsResponse getActivityStatistics(Long activityID) throws WrongUserTypeException, EntityNotFoundException {
+        String professorEmail = authService.getAuthentication().getName();
+        User professor = userRepo.findUserByEmail(professorEmail);
+        userValidator.validateProfessorAccount(professor, professorEmail);
+
+        Activity activity = getActivity(activityID);
+        activityValidator.validateActivityIsNotNull(activity, activityID);
+        if (activity instanceof Task) return getActivityStatisticsForTask((Task) activity);
+        return getActivityStatisticsForSurvey((Survey) activity);
     }
 
     private void fillFirstRowAndAddTasksToMap(List<ActivityTypeWithIdForm> forms,
@@ -147,4 +166,121 @@ public class TaskResultService {
         });
     }
 
+    private Activity getActivity(Long activityID) {
+        GraphTask graphTask = graphTaskRepo.findGraphTaskById(activityID);
+        if (graphTask != null) {
+            return graphTask;
+        }
+        FileTask fileTask = fileTaskRepo.findFileTaskById(activityID);
+        if (fileTask != null) {
+            return fileTask;
+        }
+        return surveyRepo.findSurveyById(activityID);
+    }
+
+    private List<? extends TaskResult> getResultsForTask(Task task) {
+        if (task instanceof GraphTask) {
+            return graphTaskResultRepo.findAllByAndGraphTask((GraphTask) task)
+                    .stream()
+                    .filter(result -> result.getPointsReceived() !=null)
+                    .toList();
+        }
+        else if (task instanceof FileTask) {
+            return fileTaskResultRepo.findAllByFileTask((FileTask) task)
+                    .stream()
+                    .filter(FileTaskResult::isEvaluated)
+                    .toList();
+        }
+        return List.of();
+    }
+
+    private ActivityStatisticsResponse getActivityStatisticsForTask(Task task) {
+        ActivityStatisticsResponse result = new ActivityStatisticsResponse();
+        result.setActivity100(task.getMaxPoints());
+
+        AtomicInteger answersNumber = new AtomicInteger(0);
+        AtomicReference<Double> sumPoints = new AtomicReference<>(0D);
+        AtomicReference<Double> bestScore = new AtomicReference<>(null);
+        AtomicReference<Double> worstScore = new AtomicReference<>(null);
+        AtomicReference<HashMap<Group, GroupActivityStatisticsCreator>> avgScoreCreators =
+                new AtomicReference<>(new HashMap<>());
+        AtomicReference<ScaleActivityStatisticsCreator> scaleScores =
+                new AtomicReference<>(new ScaleActivityStatisticsCreator(task));
+
+
+        getResultsForTask(task)
+                .forEach(
+                        taskResult -> {
+                            answersNumber.incrementAndGet();
+                            sumPoints.set(sumPoints.get() + taskResult.getPointsReceived());
+                            if (bestScore.get() == null) bestScore.set(taskResult.getPointsReceived());
+                            else bestScore.set(Math.max(bestScore.get(), taskResult.getPointsReceived()));
+                            if (worstScore.get() == null) worstScore.set(taskResult.getPointsReceived());
+                            else worstScore.set(Math.min(worstScore.get(), taskResult.getPointsReceived()));
+
+                            GroupActivityStatisticsCreator creator = avgScoreCreators.get().get(taskResult.getUser().getGroup());
+                            if (creator == null) avgScoreCreators.get().put(taskResult.getUser().getGroup(), new GroupActivityStatisticsCreator(task, taskResult));
+                            else creator.add(taskResult);
+
+                            scaleScores.get().add(taskResult);
+                        });
+        result.setAnswersNumber(answersNumber.get());
+        if (answersNumber.get() > 0) {
+            result.setAvgPoints(sumPoints.get() / answersNumber.get());
+            result.setAvgPercentageResult(100 * sumPoints.get() / task.getMaxPoints());
+        }
+        result.setBestScore(bestScore.get());
+        result.setWorstScore(worstScore.get());
+        result.setAvgScores(avgScoreCreators.get().values()
+                .stream()
+                .map(GroupActivityStatisticsCreator::create)
+                .toList()
+        );
+        result.setScaleScores(scaleScores.get().create());
+        return result;
+    }
+
+    private ActivityStatisticsResponse getActivityStatisticsForSurvey(Survey survey) {
+        ActivityStatisticsResponse result = new ActivityStatisticsResponse();
+
+        AtomicInteger answersNumber = new AtomicInteger(0);
+        AtomicReference<Double> sumPoints = new AtomicReference<>(0D);
+        AtomicReference<Double> bestScore = new AtomicReference<>(null);
+        AtomicReference<Double> worstScore = new AtomicReference<>(null);
+        AtomicReference<HashMap<Group, GroupActivityStatisticsCreator>> avgScoreCreators =
+                new AtomicReference<>(new HashMap<>());
+        AtomicReference<ScaleActivityStatisticsCreator> scaleScores =
+                new AtomicReference<>(new ScaleActivityStatisticsCreator(survey));
+
+
+        surveyResultRepo.findAllBySurvey(survey)
+                .forEach(
+                        surveyResult -> {
+                            answersNumber.incrementAndGet();
+                            sumPoints.set(sumPoints.get() + surveyResult.getPointsReceived());
+                            if (bestScore.get() == null) bestScore.set(surveyResult.getPointsReceived());
+                            else bestScore.set(Math.max(bestScore.get(), surveyResult.getPointsReceived()));
+                            if (worstScore.get() == null) worstScore.set(surveyResult.getPointsReceived());
+                            else worstScore.set(Math.min(worstScore.get(), surveyResult.getPointsReceived()));
+
+                            GroupActivityStatisticsCreator creator = avgScoreCreators.get().get(surveyResult.getUser().getGroup());
+                            if (creator == null) avgScoreCreators.get().put(surveyResult.getUser().getGroup(), new GroupActivityStatisticsCreator(survey, surveyResult));
+                            else creator.add(surveyResult);
+
+                            scaleScores.get().add(surveyResult);
+                        });
+        result.setAnswersNumber(answersNumber.get());
+        if (answersNumber.get() > 0) {
+            result.setAvgPoints(sumPoints.get() / answersNumber.get());
+        }
+        result.setBestScore(bestScore.get());
+        result.setWorstScore(worstScore.get());
+        result.setAvgScores(avgScoreCreators.get().values()
+                .stream()
+                .map(GroupActivityStatisticsCreator::create)
+                .toList()
+        );
+        result.setScaleScores(scaleScores.get().create());
+        return result;
+    }
 }
