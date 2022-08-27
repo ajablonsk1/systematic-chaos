@@ -65,7 +65,7 @@ function Ranking(props) {
   }, [sortBy, sortingOrders, props])
 
   return (
-    <TableContainer>
+    <TableContainer $customHeight={props.customHeight}>
       <Table className={'my-0'}>
         <thead>{tableHeaders}</thead>
         <tbody>

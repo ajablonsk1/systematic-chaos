@@ -20,7 +20,6 @@ function ActivityDetails(props) {
       .then((response) => {
         setStudentsList(response)
         setFilteredList(response)
-        console.log(response)
       })
       .catch(() => {})
     setStudentsList(null)
@@ -57,7 +56,7 @@ function ActivityDetails(props) {
             />
           </Form.Group>
 
-          <Ranking rankingList={filteredList} />
+          <Ranking rankingList={filteredList} customHeight={'80vh'} />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
           STATS

@@ -6,7 +6,7 @@ export const TableContainer = styled(GameCardOptionPick)`
   position: relative;
   top: 20px;
   margin: 0 25px;
-  max-height: 90vh;
+  max-height: ${(props) => props.$customHeight ?? '90vh'};
   overflow: auto;
 
   table {
