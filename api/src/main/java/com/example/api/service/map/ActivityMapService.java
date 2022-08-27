@@ -31,25 +31,33 @@ public class ActivityMapService {
         log.info("Fetching activity map with id {} as ActivityMapResponse", id);
         ActivityMap activityMap = mapRepo.findActivityMapById(id);
         mapValidator.validateActivityMapIsNotNull(activityMap, id);
+        List<MapTask> allTasks = getMapTasks(activityMap);
+        return new ActivityMapResponse(activityMap.getId(), allTasks, activityMap.getMapSizeX(), activityMap.getMapSizeY());
+    }
+
+    public List<MapTask> getMapTasks(ActivityMap activityMap) {
         List<MapTask> graphTasks = activityMap.getGraphTasks()
                 .stream()
-                .map(graphTask -> new MapTask(graphTask.getId(), graphTask.getPosX(), graphTask.getPosY(), ActivityType.EXPEDITION))
+                .map(graphTask -> new MapTask(graphTask.getId(), graphTask.getPosX(),
+                        graphTask.getPosY(), ActivityType.EXPEDITION, graphTask.getName(), graphTask.getMaxPoints()))
                 .toList();
         List<MapTask> fileTasks = activityMap.getFileTasks()
                 .stream()
-                .map(fileTask -> new MapTask(fileTask.getId(), fileTask.getPosX(), fileTask.getPosY(), ActivityType.TASK))
+                .map(fileTask -> new MapTask(fileTask.getId(), fileTask.getPosX(),
+                        fileTask.getPosY(), ActivityType.TASK, fileTask.getName(), fileTask.getMaxPoints()))
                 .toList();
         List<MapTask> infos = activityMap.getInfos()
                 .stream()
-                .map(info -> new MapTask(info.getId(), info.getPosX(), info.getPosY(), ActivityType.INFO))
+                .map(info -> new MapTask(info.getId(), info.getPosX()
+                        , info.getPosY(), ActivityType.INFO, info.getName(), 0.0))
                 .toList();
         List<MapTask> surveys = activityMap.getSurveys()
                 .stream()
-                .map(survey -> new MapTask(survey.getId(), survey.getPosX(), survey.getPosY(), ActivityType.SURVEY))
+                .map(survey -> new MapTask(survey.getId(), survey.getPosX(),
+                        survey.getPosY(), ActivityType.SURVEY, survey.getName(), survey.getPoints()))
                 .toList();
-        List<MapTask> allTasks = Stream.of(graphTasks, fileTasks, infos, surveys)
+        return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)
                 .toList();
-        return new ActivityMapResponse(activityMap.getId(), allTasks, activityMap.getMapSizeX(), activityMap.getMapSizeY());
     }
 }
