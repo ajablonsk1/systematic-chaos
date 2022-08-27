@@ -171,7 +171,7 @@ export const RemainingCount = styled.p`
   padding: 10px;
   width: 35%;
   text-align: center;
-  position: relative;
+
   margin: 20px 0 5px 65%;
 `
 
