@@ -15,8 +15,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @MappedSuperclass
 public abstract class Activity {
+    @TableGenerator(name = "myGen", table = "ID_GEN", pkColumnName = "GEN_KEY", valueColumnName = "GEN_VALUE", pkColumnValue = "NEXT_ID", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "myGen")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
