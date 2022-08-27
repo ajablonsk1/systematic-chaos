@@ -217,47 +217,6 @@ export default function ActivityAssessmentDetails() {
           >
             <GradingArea />
           </Row>
-          {/* 
-          <AnswerRow>
-            <AnswerCol>
-              <h4>Odpowiedź</h4>
-              <AnswerContent>{activityResponseInfo.userAnswer}</AnswerContent>
-              <div>
-                <ActivityAssessmentStudentFileService activityResponseInfo={activityResponseInfo} />
-              </div>
-            </AnswerCol>
-          </AnswerRow>
-
-          <RemarksCol>
-            <h4>Uwagi:</h4>
-            <RemarksTextArea onChange={debounceSetText} ref={textRef} />
-          </RemarksCol>
-
-          <ActivityAssesmentProfessorFileCol>
-            <ActivityAssessmentProfessorFileService setFile={setFileBlob} setFileName={setFileName} fileRef={fileRef} />
-          </ActivityAssesmentProfessorFileCol>
-
-          <PointsRow>
-            <p className='position-relative m-0 top-50'>Punkty: </p>
-            <Row className={'d-flex'}>
-              <PointsInput
-                type='number'
-                min={0}
-                max={activityResponseInfo.maxPoints}
-                onChange={debounceSetGivenPoints}
-                ref={pointRef}
-              ></PointsInput>
-              <PointsMax>/ {activityResponseInfo.maxPoints}</PointsMax>
-            </Row>
-          </PointsRow> */}
-
-          {/* <AcceptButton
-            onClick={sendFeedbackAndGetNextIfAble}
-            disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}
-          >
-            Zaakceptuj i przejdź do kolejnej odpowiedzi
-          </AcceptButton>
-          <RemainingCount>Pozostało {activityResponseInfo.remaining} odpowiedzi do sprawdzenia</RemainingCount> */}
         </Col>
         <HorizontalSpacer />
       </>
