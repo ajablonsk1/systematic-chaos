@@ -81,12 +81,12 @@ public class RankingService {
     }
 
     public List<RankingResponse> getSearchedRanking(String search) {
-        String searchLower = search.toLowerCase();
+        String searchLower = search.toLowerCase().replaceAll("\\s",""); // removing whitespaces
         List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .filter(student ->
-                        student.getFirstName().toLowerCase().contains(searchLower) ||
-                                student.getLastName().toLowerCase().contains(searchLower) ||
+                                student.getFirstName().concat(student.getLastName()).toLowerCase().contains(searchLower) ||
+                                student.getLastName().concat(student.getFirstName()).toLowerCase().contains(searchLower) ||
                                 student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                                 student.getGroup().getName().toLowerCase().contains(searchLower))
                 .map(this::studentToRankingEntry)
@@ -111,14 +111,14 @@ public class RankingService {
     }
 
     public List<RankingResponse> getActivityRankingSearch(Long activityID, String search) throws WrongUserTypeException, EntityNotFoundException {
-        String searchLower = search.toLowerCase();
+        String searchLower = search.toLowerCase().replaceAll("\\s",""); // removing whitespaces
         List<RankingResponse> rankingList = getActivityRanking(activityID)
                 .stream()
-                .filter(rankingResponse ->
-                    rankingResponse.getFirstName().toLowerCase().equals(searchLower) ||
-                            rankingResponse.getLastName().toLowerCase().equals(searchLower) ||
-                            rankingResponse.getHeroType().getPolishTypeName().toLowerCase().equals(searchLower) ||
-                            rankingResponse.getGroupName().toLowerCase().equals(searchLower)
+                .filter(student ->
+                            student.getFirstName().concat(student.getLastName()).toLowerCase().contains(searchLower) ||
+                            student.getLastName().concat(student.getFirstName()).toLowerCase().contains(searchLower) ||
+                            student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
+                            student.getGroupName().toLowerCase().contains(searchLower)
                 )
                 .sorted(Comparator.comparingDouble(RankingResponse::getPoints).reversed())
                 .toList();
