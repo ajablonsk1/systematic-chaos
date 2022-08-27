@@ -131,17 +131,17 @@ public class RankingService {
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(activityID);
         if (graphTask != null) {
             GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
-            return result != null ? result.getPointsReceived() : 0D;
+            return result != null ? result.getPointsReceived() : null;
         }
         FileTask fileTask = fileTaskRepo.findFileTaskById(activityID);
         if (fileTask != null) {
             FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, user);
-            return result != null ? result.getPointsReceived() : 0D;
+            return result != null ? (result.isEvaluated() ? result.getPointsReceived() : null) : null;
         }
         Survey survey = surveyRepo.findSurveyById(activityID);
         if (survey != null) {
             SurveyResult result = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, user);
-            return result != null ? result.getPointsReceived() : 0D;
+            return result != null ? result.getPointsReceived() : null;
         }
         return null;
     }
