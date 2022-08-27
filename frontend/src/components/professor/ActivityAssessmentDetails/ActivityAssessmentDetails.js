@@ -12,7 +12,6 @@ import {
   PointsInput,
   PointsMax
 } from './ActivityAssesmentDetailsStyles'
-//https://www.flaticon.com/free-icon/user-picture_21104
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ProfessorService from '../../../services/professor.service'
@@ -119,7 +118,7 @@ export default function ActivityAssessmentDetails() {
     <Col className='my-auto mx-auto'>
       <h4>
         Autor rozwiązania - {activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName} (
-        {'zadanie oddane' + (activityResponseInfo.isLate ? ' ze spóźnieniem' : ' w terminie')})
+        {'zadanie oddane ' + (activityResponseInfo.isLate ? 'ze spóźnieniem' : 'w terminie')})
       </h4>
     </Col>
   )
@@ -197,7 +196,7 @@ export default function ActivityAssessmentDetails() {
                 />
               </ActivityAssesmentProfessorFileCol>
               <PointsRow>
-                <p className='position-relative m-0 top-50'>Punkty: </p>
+                <p className='m-0'>Punkty: </p>
                 <Row className={'d-flex'}>
                   <PointsInput
                     type='number'
