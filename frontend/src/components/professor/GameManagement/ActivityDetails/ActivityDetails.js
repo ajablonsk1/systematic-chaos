@@ -56,7 +56,7 @@ function ActivityDetails(props) {
             />
           </Form.Group>
 
-          <Ranking rankingList={filteredList} customHeight={'80vh'} />
+          <Ranking rankingList={filteredList} customHeight={'80vh'} noPointsMessage={'Nie wykonano'} />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
           STATS

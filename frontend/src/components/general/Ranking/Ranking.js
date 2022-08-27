@@ -88,7 +88,7 @@ function Ranking(props) {
                 <td>{student.firstName + ' ' + student.lastName}</td>
                 <td>{student.groupName}</td>
                 <td>{getHeroName(student.heroType)}</td>
-                <td>{student.points}</td>
+                <td>{student.points ?? props.noPointsMessage ?? 'Brak danych'}</td>
                 {!!props.iconCallback && (
                   <td>
                     <FontAwesomeIcon icon={faInfo} onClick={() => props.iconCallback(student.email)} />
