@@ -15,6 +15,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 
 function ActivityStats(props) {
   const isSurvey = props.activityType === Activity.SURVEY
+  const isInfoTask = props.activityType === Activity.INFO
 
   const [statsData, setStatsData] = useState(undefined)
   const [pieChartConfig, setPieChartConfig] = useState({})
@@ -24,14 +25,16 @@ function ActivityStats(props) {
   const rounded = (value) => Math.round(value * 10) / 10
 
   useEffect(() => {
-    ActivityService.getActivityStats(props.activityId)
-      .then((response) => {
-        setStatsData(response)
-      })
-      .catch(() => {
-        setStatsData(null)
-      })
-  }, [props.activityId])
+    if (!isInfoTask) {
+      ActivityService.getActivityStats(props.activityId)
+        .then((response) => {
+          setStatsData(response)
+        })
+        .catch(() => {
+          setStatsData(null)
+        })
+    }
+  }, [isInfoTask, props])
 
   useEffect(() => {
     if (statsData) {
@@ -55,8 +58,14 @@ function ActivityStats(props) {
   }, [statsData])
 
   const statsCardBody = useMemo(() => {
-    if (!statsData) {
-      return <></>
+    if (isInfoTask) {
+      return <p>Brak statystyk dla aktywności typu: Wytyczne</p>
+    }
+    if (statsData === undefined) {
+      return <Spinner animation={'border'} />
+    }
+    if (statsData == null) {
+      return <p>{ERROR_OCCURRED}</p>
     }
 
     const bodyRows = [
@@ -64,17 +73,17 @@ function ActivityStats(props) {
       { info: 'Liczba przesłanych rozwiązań', value: statsData.answersNumber },
       {
         info: isSurvey ? 'Średnia ocena studentów' : 'Średni wynik punktowy dla wszystkich grup',
-        value: rounded(statsData.avgPoints) ?? '-'
+        value: rounded(statsData.avgPoints)
       }
     ]
 
     if (!isSurvey) {
       bodyRows.push({
         info: 'Średni wynik procentowy dla wszystkich grup',
-        value: rounded(statsData.avgPercentageResult) + '%' ?? '-'
+        value: rounded(statsData.avgPercentageResult) + '%'
       })
-      bodyRows.push({ info: 'Najlepszy wynik', value: statsData.bestScore ?? '-' })
-      bodyRows.push({ info: 'Najgorszy wynik', value: statsData.worstScore ?? '-' })
+      bodyRows.push({ info: 'Najlepszy wynik', value: statsData.bestScore })
+      bodyRows.push({ info: 'Najgorszy wynik', value: statsData.worstScore })
     }
 
     return (
@@ -83,13 +92,13 @@ function ActivityStats(props) {
           {bodyRows.map((row, index) => (
             <tr key={index + Date.now()}>
               <td>{row.info}</td>
-              <td>{row.value}</td>
+              <td>{row.value ?? '-'}</td>
             </tr>
           ))}
         </tbody>
       </CustomTable>
     )
-  }, [isSurvey, statsData])
+  }, [isInfoTask, isSurvey, statsData])
 
   const chartCard = useCallback((chartType, data, options, header) => {
     if (!data || !options) {
@@ -120,15 +129,7 @@ function ActivityStats(props) {
             <CardHeader>
               <h5>Statystyki</h5>
             </CardHeader>
-            <Card.Body>
-              {statsData === undefined ? (
-                <Spinner animation={'border'} />
-              ) : statsData == null ? (
-                <p>{ERROR_OCCURRED}</p>
-              ) : (
-                statsCardBody
-              )}
-            </Card.Body>
+            <Card.Body>{statsCardBody}</Card.Body>
           </CustomCard>
         </Col>
         <Col md={6}>
