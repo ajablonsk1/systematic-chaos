@@ -210,13 +210,7 @@ export default function ActivityAssessmentDetails() {
 
   return (
     <Content style={{ color: 'var(--font-color)' }}>
-      {activityResponseInfo === undefined ? (
-        <Loader />
-      ) : activityResponseInfo == null ? (
-        { ERROR_OCCURRED }
-      ) : (
-        contentBody()
-      )}
+      {activityResponseInfo === undefined ? <Loader /> : activityResponseInfo == null ? ERROR_OCCURRED : contentBody()}
     </Content>
   )
 }
