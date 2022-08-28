@@ -99,7 +99,7 @@ public class ProfessorFeedbackService {
         infoResponse.setFileTaskResultId(fileTaskResult.getId());
         infoResponse.setStudentEmail(student.getEmail());
         infoResponse.setFileTaskId(fileTask.getId());
-        infoResponse.setTaskName(fileTask.getName());
+        infoResponse.setTaskName(fileTask.getTitle());
         infoResponse.setDescription(fileTask.getDescription());
         infoResponse.setAnswer(fileTaskResult.getAnswer());
         infoResponse.setTaskFiles(fileTaskResult.getFiles()

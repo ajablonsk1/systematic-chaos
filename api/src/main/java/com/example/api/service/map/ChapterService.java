@@ -45,6 +45,7 @@ public class ChapterService {
     }
 
     public void createChapter(ChapterForm form) throws EntityNotFoundException {
+        log.info("Creating new chapter");
         File image = fileRepo.findFileById(form.getImageId());
         activityValidator.validateFileIsNotNull(image, form.getImageId());
         ActivityMap activityMap = new ActivityMap(form.getSizeX(), form.getSizeY(), image);

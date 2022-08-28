@@ -156,6 +156,7 @@ public class GraphTaskResultService {
         log.info("Setting sendDateMillis for graph task result with id {}", resultId);
         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
         activityValidator.validateTaskResultIsNotNull(graphTaskResult, resultId);
+        graphTaskResult.setMaxPoints100(pointsCalculator.calculateMaxAvailablePoints(graphTaskResult));
         graphTaskResult.setSendDateMillis(form.getSendDateMillis());
         return resultId;
     }

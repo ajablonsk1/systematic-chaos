@@ -27,6 +27,6 @@ public class SurveyService {
         log.info("Fetching survey info");
         Survey survey = surveyRepo.findSurveyById(id);
         activityValidator.validateActivityIsNotNull(survey, id);
-        return new SurveyInfoResponse(survey.getName(), survey.getDescription(), survey.getExperience());
+        return new SurveyInfoResponse(survey.getTitle(), survey.getDescription(), survey.getExperience());
     }
 }

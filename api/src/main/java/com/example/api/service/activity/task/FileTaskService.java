@@ -1,5 +1,6 @@
 package com.example.api.service.activity.task;
 
+import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
 import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -21,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -47,7 +51,7 @@ public class FileTaskService {
         FileTask fileTask = fileTaskRepo.findFileTaskById(id);
         activityValidator.validateActivityIsNotNull(fileTask, id);
         result.setFileTaskId(fileTask.getId());
-        result.setName(fileTask.getName());
+        result.setName(fileTask.getTitle());
         result.setDescription(fileTask.getDescription());
 
         User student = userRepo.findUserByEmail(email);
@@ -75,5 +79,16 @@ public class FileTaskService {
             result.setFeedbackFile(new FileResponse(feedback.getFeedbackFile()));
         }
         return result;
+    }
+
+    public void createFileTask(CreateFileTaskForm form) throws WrongUserTypeException, ParseException {
+        log.info("Creating file task");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = format.parse(form.getActivityExpireDate());
+        String email = authService.getAuthentication().getName();
+        User professor = userRepo.findUserByEmail(email);
+        userValidator.validateProfessorAccount(professor, email);
+        FileTask fileTask = new FileTask(form, professor, date.getTime());
+        fileTaskRepo.save(fileTask);
     }
 }

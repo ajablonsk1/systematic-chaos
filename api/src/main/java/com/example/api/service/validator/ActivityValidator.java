@@ -1,5 +1,6 @@
 package com.example.api.service.validator;
 
+import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.EntityRequiredAttributeNullException;
 import com.example.api.model.activity.result.GraphTaskResult;
@@ -54,5 +55,9 @@ public class ActivityValidator {
             throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
                     "graph task result with id " + id);
         }
+    }
+
+    public void validateCreateGraphTaskForm(CreateGraphTaskForm form) {
+
     }
 }
