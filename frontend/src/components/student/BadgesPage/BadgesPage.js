@@ -6,9 +6,9 @@ import { getBadgesInfo, getBadgesList, getLastUnlockedBadge, getRankInfo, getStu
 import ContentCard from './ContentCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
-import Fade, { Bounce } from 'react-awesome-reveal'
+import Fade, { Bounce, Slide } from 'react-awesome-reveal'
 
-const LAST_BADGE_DELAY = 1200
+const LATER_ITEM_DELAY = 1200
 const BADGE_LIST_STEP = 200
 
 function BadgesPage() {
@@ -70,22 +70,24 @@ function BadgesPage() {
           <HorizontalPointsLine>
             <ul>
               {studentRankInfo.map((rankInfo, index) => (
-                <li key={index + Date.now()}>
-                  <div>
-                    <div className={'pointsInfo'}>
-                      {rankInfo.minPoints} - {rankInfo.maxPoints} pkt
+                <Fade>
+                  <li key={index + Date.now()}>
+                    <div>
+                      <div className={'pointsInfo'}>
+                        {rankInfo.minPoints} - {rankInfo.maxPoints} pkt
+                      </div>
+                      <div className={'rankInfo'}>
+                        <div className={'left-arrow'} />
+                        <p>
+                          <strong>{rankInfo.name}</strong>
+                        </p>
+                        <img width={100} src={rankInfo.imgSrc} alt={'rank-profile'} />
+                        {additionalContent(index, rankInfo.maxPoints)}
+                        <div className={'right-arrow'} />
+                      </div>
                     </div>
-                    <div className={'rankInfo'}>
-                      <div className={'left-arrow'} />
-                      <p>
-                        <strong>{rankInfo.name}</strong>
-                      </p>
-                      <img width={100} src={rankInfo.imgSrc} alt={'rank-profile'} />
-                      {additionalContent(index, rankInfo.maxPoints)}
-                      <div className={'right-arrow'} />
-                    </div>
-                  </div>
-                </li>
+                  </li>
+                </Fade>
               ))}
             </ul>
           </HorizontalPointsLine>
@@ -132,36 +134,37 @@ function BadgesPage() {
               header={'Posiadasz'}
               body={
                 <div className={'h-100 w-100'}>
-                  <p className={'text-center m-0'}>
-                    <span style={{ fontSize: 80 }}>{studentBadgesNumber}</span>
-                    <span className={'pl-5 position-absolute'} style={{ top: '50%' }}>
-                      / {allBadgesNumber}
-                    </span>
-                    <br />
-                    <span>odznak</span>
-                  </p>
-                  <p className={'text-center m-0'}>
-                    Co stanowi
-                    <strong> {Math.floor((studentBadgesNumber * 100) / allBadgesNumber)}% </strong>
-                    wszystkich odznak.
-                  </p>
+                  <Bounce delay={LATER_ITEM_DELAY}>
+                    <p className={'text-center m-0'}>
+                      <span style={{ fontSize: 80 }}>{studentBadgesNumber}</span>
+                      <span className={'pl-5 position-absolute'} style={{ top: '50%' }}>
+                        / {allBadgesNumber}
+                      </span>
+                      <br />
+                      <span>odznak</span>
+                    </p>
+                    <p className={'text-center m-0'}>
+                      Co stanowi
+                      <strong> {Math.floor((studentBadgesNumber * 100) / allBadgesNumber)}% </strong>
+                      wszystkich odznak.
+                    </p>
+                  </Bounce>
                 </div>
               }
             />
           </Row>
+
           <Row className={'m-0 h-50 pr-2'}>
             <ContentCard
               header={'Ostatnio zdobyta'}
               body={
-                <Bounce delay={LAST_BADGE_DELAY}>
-                  <div
-                    className={'h-100 w-100 text-center d-flex justify-content-center align-items-center flex-column'}
-                  >
+                <div className={'h-100 w-100 text-center d-flex justify-content-center align-items-center flex-column'}>
+                  <Bounce delay={LATER_ITEM_DELAY}>
                     <img width={75} src={lastUnlockedBadge.src} alt={'last unlocked badge'} />
                     <strong>{lastUnlockedBadge.name}</strong>
                     <p className={'px-2 '}>{lastUnlockedBadge.description}</p>
-                  </div>
-                </Bounce>
+                  </Bounce>
+                </div>
               }
             />
           </Row>
