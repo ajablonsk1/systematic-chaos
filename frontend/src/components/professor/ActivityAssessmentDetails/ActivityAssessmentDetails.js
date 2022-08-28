@@ -16,8 +16,9 @@ import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ActivityAssessmentStudentFileService from './ActivityAssessmentStudentFileService'
 import { ActivityAssessmentProfessorFileService } from './ActivityAssessmentProfessorFileService'
 import { debounce } from 'lodash'
-import { HorizontalSpacer, VerticalSpacer, Header } from '../../general/TaskStyles'
+import { HorizontalSpacer, VerticalSpacer, Header } from '../../general/TaskSharedComponents'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import { Activity } from '../../../utils/constants'
 
 export default function ActivityAssessmentDetails() {
   const navigate = useNavigate()
@@ -134,7 +135,7 @@ export default function ActivityAssessmentDetails() {
           style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
         >
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}>
-            <Header activityName={activityResponseInfo.activityName} activityType={'TASK'} />
+            <Header activityName={activityResponseInfo.activityName} activityType={Activity.TASK} />
           </Row>
 
           <VerticalSpacer height={'1vh'} />

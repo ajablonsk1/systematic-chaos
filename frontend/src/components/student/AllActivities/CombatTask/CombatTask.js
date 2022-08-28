@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Content } from '../../../App/AppGeneralStyles'
 import Loader from '../../../general/Loader/Loader'
-import { ERROR_OCCURRED } from '../../../../utils/constants'
+import { Activity, ERROR_OCCURRED } from '../../../../utils/constants'
 import FileService from './FileService'
 import { RemarksTextArea } from '../../../professor/ActivityAssessmentDetails/ActivityAssesmentDetailsStyles'
 import { SendTaskButton } from './CombatTaskStyles'
@@ -12,7 +12,7 @@ import { debounce } from 'lodash'
 import { faHourglass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackFileService from './FeedbackFileService'
-import { Header, VerticalSpacer, HorizontalSpacer, ActivityDetails } from '../../../general/TaskStyles'
+import { Header, VerticalSpacer, HorizontalSpacer, ActivityDetails } from '../../../general/TaskSharedComponents'
 
 export default function CombatTask() {
   const location = useLocation()
@@ -45,7 +45,6 @@ export default function CombatTask() {
   useEffect(() => {
     CombatTaskService.getCombatTask(taskState)
       .then((response) => {
-        console.log(response)
         setTask(response)
       })
       .catch(() => {
@@ -94,7 +93,7 @@ export default function CombatTask() {
           style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
         >
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}>
-            <Header activityName={task.name} activityType={'TASK'} />
+            <Header activityName={task.name} activityType={Activity.TASK} />
           </Row>
           <VerticalSpacer height={'2vh'} />
           <Row
@@ -177,7 +176,7 @@ export default function CombatTask() {
 
   return (
     <Content style={{ color: 'var(--font-color)' }}>
-      {task === undefined ? <Loader /> : task == null ? { ERROR_OCCURRED } : contentBody()}
+      {task === undefined ? <Loader /> : task == null ? ERROR_OCCURRED : contentBody()}
     </Content>
   )
 }
