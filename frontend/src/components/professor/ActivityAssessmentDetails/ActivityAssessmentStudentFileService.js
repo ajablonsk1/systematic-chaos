@@ -13,7 +13,7 @@ export default function ActivityAssessmentStudentFileService({ activityResponseI
     })
   }
   return (
-    <>
+    <Col className='text-center'>
       <strong>Załączone pliki:</strong>
       {!activityResponseInfo || activityResponseInfo.file?.length === 0 ? (
         <p>Brak dodanych plików</p>
@@ -29,6 +29,6 @@ export default function ActivityAssessmentStudentFileService({ activityResponseI
           </ActivityAssessmentStudentFileRow>
         ))
       )}
-    </>
+    </Col>
   )
 }
