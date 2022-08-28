@@ -46,6 +46,7 @@ export default function CombatTask() {
   useEffect(() => {
     CombatTaskService.getCombatTask(taskState)
       .then((response) => {
+        console.log(response)
         setTask(response)
       })
       .catch(() => {
@@ -86,11 +87,7 @@ export default function CombatTask() {
   )
 
   const ContentBody = () => {
-    return !task && errorMessage === '' ? (
-      <Loader />
-    ) : errorMessage !== '' ? (
-      <p>{errorMessage}</p>
-    ) : (
+    return (
       <>
         <HorizontalSpacer height={'3vh'} />
         <Col
@@ -177,9 +174,5 @@ export default function CombatTask() {
     )
   }
 
-  return (
-    <Content style={{ color: 'var(--font-color)' }}>
-      <ContentBody />
-    </Content>
-  )
+  return <Content style={{ color: 'var(--font-color)' }}>{task ? <ContentBody /> : <Loader />}</Content>
 }

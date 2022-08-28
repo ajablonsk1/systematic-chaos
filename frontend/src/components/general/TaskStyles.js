@@ -24,8 +24,10 @@ export function HorizontalSpacer({ height }) {
 }
 
 export function ActivityDetails({ description }) {
-  ;<Col>
-    <h2>Treść:</h2>
-    <p>{description}</p>
-  </Col>
+  return (
+    <Col>
+      <h2>Treść:</h2>
+      <p>{description}</p>
+    </Col>
+  )
 }
