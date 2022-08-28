@@ -49,6 +49,7 @@ export const PointsMax = styled.p`
   position: relative;
   margin: 0;
   margin-left: 5px;
+  width: fit-content;
 `
 
 export const AcceptButton = styled(Button)`

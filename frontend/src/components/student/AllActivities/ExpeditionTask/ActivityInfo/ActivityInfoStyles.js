@@ -4,6 +4,7 @@ import { Button, Col, Row } from 'react-bootstrap'
 export const ActivityImg = styled.img`
   height: 30px;
   width: 30px;
+  padding: 0;
   margin-right: 10px;
   align-self: center;
 
@@ -40,6 +41,9 @@ export const FullDivider = styled.hr`
 export const SmallDivider = styled.hr`
   background-color: var(--font-color);
   width: 20%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 `
 
 export const StartActivityButton = styled(Button)`

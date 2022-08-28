@@ -10,7 +10,7 @@ function DeletionModal(props) {
         </Card.Header>
         <Card.Body>{props.modalBody}</Card.Body>
         <Card.Footer className={'text-center'}>
-          <Button className={'mr-1'} variant={'secondary'} onClick={() => props.setModalOpen(false)}>
+          <Button className={'me-1'} variant={'secondary'} onClick={() => props.setModalOpen(false)}>
             Anuluj
           </Button>
           <Button variant={'danger'}>Usuń</Button>

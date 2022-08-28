@@ -15,8 +15,6 @@ export const CustomTable = styled(Table)`
 export const ChartCol = styled(Col)`
   height: ${(props) => props.$customHeight ?? '75%'};
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 
   & canvas {
     width: 100% !important;

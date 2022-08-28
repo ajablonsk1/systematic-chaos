@@ -19,6 +19,7 @@ export const TableContainer = styled(Table)`
 
   td,
   th {
+    color: var(--font-color) !important;
     border: 1px solid var(--dark-blue) !important;
   }
 `

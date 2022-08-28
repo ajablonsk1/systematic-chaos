@@ -108,7 +108,7 @@ export default function GameSummary() {
             </CardHeader>
             <Card.Body>
               {carousel(setBarChartActiveChapterId)}
-              <ChartCol>
+              <ChartCol className={'top-50 translate-middle-y'}>
                 <Bar data={barChartData} options={barChartOptions} />
               </ChartCol>
             </Card.Body>
@@ -123,7 +123,7 @@ export default function GameSummary() {
             </CardHeader>
             <Card.Body style={{ maxHeight: '42vh' }}>
               {carousel(setLineChartActiveChapterId)}
-              <ChartCol>
+              <ChartCol className={'top-50 translate-middle-y'}>
                 {lineChartData && lineChartOptions ? (
                   <Line data={lineChartData} options={lineChartOptions} />
                 ) : (

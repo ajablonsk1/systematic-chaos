@@ -10,6 +10,7 @@ export const HorizontalPointsLine = styled.div`
     gap: 10px;
     border-top: 3px solid #e9ecef;
     list-style-type: none;
+    position: relative;
 
     &::before {
       content: '';
@@ -18,7 +19,7 @@ export const HorizontalPointsLine = styled.div`
       height: 200px;
       background-color: #919bb1;
       position: absolute;
-      bottom: -30px;
+      bottom: -46px;
       left: 10px;
       border-radius: 10px;
     }
