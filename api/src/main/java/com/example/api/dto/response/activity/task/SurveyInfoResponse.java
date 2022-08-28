@@ -8,5 +8,5 @@ import lombok.Data;
 public class SurveyInfoResponse {
     private String name;
     private String description;
-    private Integer experience;
+    private Double experience;
 }

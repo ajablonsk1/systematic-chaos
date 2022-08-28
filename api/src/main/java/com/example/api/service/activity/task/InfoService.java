@@ -33,6 +33,6 @@ public class InfoService {
                 .stream()
                 .map(Url::getUrl)
                 .toList();
-        return new InfoResponse(info.getName(), info.getDescription(), urls);
+        return new InfoResponse(info.getTitle(), info.getDescription(), urls);
     }
 }

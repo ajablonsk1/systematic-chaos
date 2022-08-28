@@ -148,17 +148,17 @@ public class TaskResultService {
             switch (form.getType()){
                 case EXPEDITION -> {
                     GraphTask graphTask = graphTaskRepo.findGraphTaskById(form.getId());
-                    firstRow.addAll(List.of("Zadanie:" + graphTask.getName() + " (Punkty)", "Zadanie:" + graphTask.getName() + " (Informacja zwrotna)"));
+                    firstRow.addAll(List.of("Zadanie:" + graphTask.getTitle() + " (Punkty)", "Zadanie:" + graphTask.getTitle() + " (Informacja zwrotna)"));
                     formToGraphTaskMap.put(graphTask.getId(), graphTask);
                 }
                 case TASK -> {
                     FileTask fileTask = fileTaskRepo.findFileTaskById(form.getId());
-                    firstRow.addAll(List.of("Zadanie:" + fileTask.getName() + " (Punkty)", "Zadanie:" + fileTask.getName() + " (Informacja zwrotna)"));
+                    firstRow.addAll(List.of("Zadanie:" + fileTask.getTitle() + " (Punkty)", "Zadanie:" + fileTask.getTitle() + " (Informacja zwrotna)"));
                     formToFileTaskMap.put(fileTask.getId(), fileTask);
                 }
                 case SURVEY -> {
                     Survey survey = surveyRepo.findSurveyById(form.getId());
-                    firstRow.addAll(List.of("Zadanie:" + survey.getName() + " (Punkty)", "Zadanie:" + survey.getName() + " (Informacja zwrotna)"));
+                    firstRow.addAll(List.of("Zadanie:" + survey.getTitle() + " (Punkty)", "Zadanie:" + survey.getTitle() + " (Informacja zwrotna)"));
                     formToSurveyMap.put(survey.getId(), survey);
                 }
             }
