@@ -17,6 +17,7 @@ import ActivityAssessmentStudentFileService from './ActivityAssessmentStudentFil
 import { ActivityAssessmentProfessorFileService } from './ActivityAssessmentProfessorFileService'
 import { debounce } from 'lodash'
 import { HorizontalSpacer, VerticalSpacer, Header } from '../../general/TaskStyles'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 export default function ActivityAssessmentDetails() {
   const navigate = useNavigate()
@@ -124,7 +125,7 @@ export default function ActivityAssessmentDetails() {
     </Col>
   )
 
-  const ContentBody = () => {
+  const contentBody = () => {
     return (
       <>
         <HorizontalSpacer height={'3vh'} />
@@ -206,5 +207,15 @@ export default function ActivityAssessmentDetails() {
     )
   }
 
-  return <Content style={{ color: 'var(--font-color)' }}>{activityResponseInfo ? <ContentBody /> : <Loader />}</Content>
+  return (
+    <Content style={{ color: 'var(--font-color)' }}>
+      {activityResponseInfo === undefined ? (
+        <Loader />
+      ) : activityResponseInfo == null ? (
+        { ERROR_OCCURRED }
+      ) : (
+        contentBody()
+      )}
+    </Content>
+  )
 }

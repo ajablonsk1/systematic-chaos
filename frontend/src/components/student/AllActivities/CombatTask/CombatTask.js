@@ -86,7 +86,7 @@ export default function CombatTask() {
     </Col>
   )
 
-  const ContentBody = () => {
+  const contentBody = () => {
     return (
       <>
         <HorizontalSpacer height={'3vh'} />
@@ -166,7 +166,9 @@ export default function CombatTask() {
                   <FeedbackFileService feedbackFile={task.feedbackFile} />
                 </Col>
               )
-            ) : null}
+            ) : (
+              <></>
+            )}
           </Row>
         </Col>
         <HorizontalSpacer height={'3vh'} />
@@ -174,5 +176,9 @@ export default function CombatTask() {
     )
   }
 
-  return <Content style={{ color: 'var(--font-color)' }}>{task ? <ContentBody /> : <Loader />}</Content>
+  return (
+    <Content style={{ color: 'var(--font-color)' }}>
+      {task === undefined ? <Loader /> : task == null ? { ERROR_OCCURRED } : contentBody()}
+    </Content>
+  )
 }
