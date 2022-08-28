@@ -4,10 +4,6 @@ import {
   AcceptButton,
   RemarksTextArea,
   ActivityAssesmentProfessorFileCol,
-  HeaderRow,
-  ActivityImg,
-  ActivityName,
-  ActivityType,
   PointsRow,
   PointsInput,
   PointsMax
@@ -20,7 +16,7 @@ import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ActivityAssessmentStudentFileService from './ActivityAssessmentStudentFileService'
 import { ActivityAssessmentProfessorFileService } from './ActivityAssessmentProfessorFileService'
 import { debounce } from 'lodash'
-import { getActivityImg, getActivityTypeName } from '../../../utils/constants'
+import { HorizontalSpacer, VerticalSpacer, Header } from '../../general/TaskStyles'
 
 export default function ActivityAssessmentDetails() {
   const navigate = useNavigate()
@@ -102,18 +98,6 @@ export default function ActivityAssessmentDetails() {
       .catch(() => {})
   }
 
-  const HorizontalSpacer = () => <Col style={{ height: '3vh' }} />
-
-  const VerticalSpacer = () => <Row style={{ height: '1vh' }} />
-
-  const Header = () => (
-    <>
-      <ActivityImg src={getActivityImg('TASK')} />
-      <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
-      <ActivityName>{activityResponseInfo.activityName}</ActivityName>
-    </>
-  )
-
   const UserDetails = () => (
     <Col className='m-auto'>
       <h4>
@@ -140,19 +124,19 @@ export default function ActivityAssessmentDetails() {
     </Col>
   )
 
-  const content = () => {
+  const ContentBody = () => {
     return (
       <>
-        <HorizontalSpacer />
+        <HorizontalSpacer height={'3vh'} />
         <Col
           className='m-0 pt-4 mx-auto'
           style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
         >
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '8vh' }}>
-            <Header />
+            <Header activityName={activityResponseInfo.activityName} activityType={'TASK'} />
           </Row>
 
-          <VerticalSpacer />
+          <VerticalSpacer height={'1vh'} />
 
           <Row
             className='p-2 rounded mx-2 overflow-auto text-center'
@@ -161,7 +145,7 @@ export default function ActivityAssessmentDetails() {
             <UserDetails />
           </Row>
 
-          <VerticalSpacer />
+          <VerticalSpacer height={'1vh'} />
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
@@ -170,7 +154,7 @@ export default function ActivityAssessmentDetails() {
             <ActivityDetails className='overflow-auto' />
           </Row>
 
-          <VerticalSpacer />
+          <VerticalSpacer height={'1vh'} />
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
@@ -179,7 +163,7 @@ export default function ActivityAssessmentDetails() {
             <ResponseDetails />
           </Row>
 
-          <VerticalSpacer />
+          <VerticalSpacer height={'1vh'} />
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
@@ -217,10 +201,10 @@ export default function ActivityAssessmentDetails() {
             </Col>
           </Row>
         </Col>
-        <HorizontalSpacer />
+        <HorizontalSpacer height={'3vh'} />
       </>
     )
   }
 
-  return <Content style={{ color: 'var(--font-color)' }}>{activityResponseInfo ? content() : <Loader />}</Content>
+  return <Content style={{ color: 'var(--font-color)' }}>{activityResponseInfo ? <ContentBody /> : <Loader />}</Content>
 }

@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Content } from '../../../App/AppGeneralStyles'
 import Loader from '../../../general/Loader/Loader'
-import { ActivityImg, ActivityName, ActivityType, HeaderRow } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
-import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../../utils/constants'
+import { ERROR_OCCURRED } from '../../../../utils/constants'
 import FileService from './FileService'
 import { RemarksTextArea } from '../../../professor/ActivityAssessmentDetails/ActivityAssesmentDetailsStyles'
 import { SendTaskButton } from './CombatTaskStyles'
@@ -13,6 +12,7 @@ import { debounce } from 'lodash'
 import { faHourglass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackFileService from './FeedbackFileService'
+import { Header, VerticalSpacer, HorizontalSpacer, ActivityDetails } from '../../../general/TaskStyles'
 
 export default function CombatTask() {
   const location = useLocation()
@@ -78,27 +78,6 @@ export default function CombatTask() {
     []
   )
 
-  //add overflows where needed
-
-  const Header = () => (
-    <>
-      <ActivityImg src={getActivityImg('TASK')}></ActivityImg>
-      <ActivityType>{getActivityTypeName('TASK')}</ActivityType>
-      <ActivityName>{task.name}</ActivityName>
-    </>
-  )
-
-  const VerticalSpacer = () => <Row style={{ height: '2vh' }}></Row>
-
-  const HorizontalSpacer = () => <Col style={{ height: '3vh' }} />
-
-  const ActivityDetails = () => (
-    <Col>
-      <h2>Treść:</h2>
-      <p>{task.description}</p>
-    </Col>
-  )
-
   const AwaitingFeedbackField = () => (
     <Col md={6} className={'text-center p-4 my-auto'}>
       <FontAwesomeIcon className={'m-2'} icon={faHourglass} size='5x' spin />
@@ -106,29 +85,29 @@ export default function CombatTask() {
     </Col>
   )
 
-  const content = () => {
+  const ContentBody = () => {
     return !task && errorMessage === '' ? (
       <Loader />
     ) : errorMessage !== '' ? (
       <p>{errorMessage}</p>
     ) : (
       <>
-        <HorizontalSpacer />
+        <HorizontalSpacer height={'3vh'} />
         <Col
           className='m-0 pt-4 mx-auto'
           style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
         >
-          <HeaderRow className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '8vh' }}>
-            <Header />
-          </HeaderRow>
-          <VerticalSpacer />
+          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '8vh' }}>
+            <Header activityName={task.name} activityType={'TASK'} />
+          </Row>
+          <VerticalSpacer height={'2vh'} />
           <Row
             className='p-2 rounded mx-2 overflow-auto'
             style={{ backgroundColor: 'var(--dark-blue)', height: '25vh' }}
           >
-            <ActivityDetails />
+            <ActivityDetails description={task.description} />
           </Row>
-          <VerticalSpacer />
+          <VerticalSpacer height={'2vh'} />
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '50vh' }}>
             <Col
               md={task.answer || answerWasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
@@ -162,7 +141,7 @@ export default function CombatTask() {
                 />
               </Col>
               <Col className={'w-100 text-center'}>
-                <SendTaskButton disabled={task.points !== null} onClick={sendAnswer}>
+                <SendTaskButton disabled={task.points != null} onClick={sendAnswer}>
                   {isFetching ? (
                     <Spinner animation={'border'} />
                   ) : isReviewed() ? (
@@ -179,12 +158,12 @@ export default function CombatTask() {
               ) : (
                 <Col className={'border-left border-warning overflow-auto'}>
                   <h4>Aktywność została oceniona</h4>
-                  <VerticalSpacer />
+                  <VerticalSpacer height={'2vh'} />
                   <Col className={'text-center mx-auto border border-warning p-1 rounded'} style={{ width: '20%' }}>
                     <h5>Punkty </h5>
                     <p>{task.points}</p>
                   </Col>
-                  <VerticalSpacer />
+                  <VerticalSpacer height={'2vh'} />
                   <h5>Uwagi:</h5>
                   {task.remarks ? <p>{task.remarks}</p> : 'Brak uwag'}
                   <FeedbackFileService feedbackFile={task.feedbackFile} />
@@ -193,10 +172,14 @@ export default function CombatTask() {
             ) : null}
           </Row>
         </Col>
-        <HorizontalSpacer />
+        <HorizontalSpacer height={'3vh'} />
       </>
     )
   }
 
-  return <Content style={{ color: 'var(--font-color)' }}>{content()}</Content>
+  return (
+    <Content style={{ color: 'var(--font-color)' }}>
+      <ContentBody />
+    </Content>
+  )
 }
