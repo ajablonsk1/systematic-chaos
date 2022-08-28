@@ -1,49 +1,80 @@
-import React, { useCallback, useMemo } from 'react'
-import { getStatsForActivity } from './mockData'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { CustomCard } from '../../../student/GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
-import { Card, Col, Row } from 'react-bootstrap'
+import { Card, Col, Row, Spinner } from 'react-bootstrap'
 import { ChartCol, CustomTable } from '../../../student/GameCardPage/gameCardContentsStyle'
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js'
 import { Bar, Pie } from 'react-chartjs-2'
 import { getChartConfig, getChartDetails } from './chartHelper'
 import StatsCard from './StatsCard'
-import { Activity } from '../../../../utils/constants'
+import { Activity, ERROR_OCCURRED } from '../../../../utils/constants'
 import PercentageCircle from '../../../student/PointsPage/ChartAndStats/PercentageCircle'
+import ActivityService from '../../../../services/activity.service'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 
 function ActivityStats(props) {
-  const statsData = getStatsForActivity() // use props.activityId
   const isSurvey = props.activityType === Activity.SURVEY
 
-  const { data: pieData, options: pieOptions } = getChartConfig(
-    'PIE',
-    getChartDetails(statsData.scaleScores, 'grade', 'results')
-  )
-  const { data: pointsBarData, options: pointsBarOptions } = getChartConfig(
-    'BAR',
-    getChartDetails(statsData.avgScores, 'groupName', 'avgPoints')
-  )
-  const { data: percentageBarData, options: percentageBarOptions } = getChartConfig(
-    'BAR',
-    getChartDetails(statsData.avgScores, 'groupName', 'avgPercentageResult')
-  )
+  const [statsData, setStatsData] = useState(undefined)
+  const [pieChartConfig, setPieChartConfig] = useState({})
+  const [pointsBarConfig, setPointsBarConfig] = useState({})
+  const [percentageBarConfig, setPercentageBarConfig] = useState({})
+
+  const rounded = (value) => Math.round(value * 10) / 10
+
+  useEffect(() => {
+    ActivityService.getActivityStats(props.activityId)
+      .then((response) => {
+        setStatsData(response)
+      })
+      .catch(() => {
+        setStatsData(null)
+      })
+  }, [props.activityId])
+
+  useEffect(() => {
+    if (statsData) {
+      const { data: pieData, options: pieOptions } = getChartConfig(
+        'PIE',
+        getChartDetails(statsData.scaleScores, 'grade', 'results')
+      )
+      const { data: pointsBarData, options: pointsBarOptions } = getChartConfig(
+        'BAR',
+        getChartDetails(statsData.avgScores, 'groupName', 'avgPoints')
+      )
+      const { data: percentageBarData, options: percentageBarOptions } = getChartConfig(
+        'BAR',
+        getChartDetails(statsData.avgScores, 'groupName', 'avgPercentageResult')
+      )
+
+      setPieChartConfig({ data: pieData, options: pieOptions })
+      setPointsBarConfig({ data: pointsBarData, options: pointsBarOptions })
+      setPercentageBarConfig({ data: percentageBarData, options: percentageBarOptions })
+    }
+  }, [statsData])
 
   const statsCardBody = useMemo(() => {
+    if (!statsData) {
+      return <></>
+    }
+
     const bodyRows = [
       { info: 'Punkty do zdobycia w aktywności', value: statsData.activity100 },
       { info: 'Liczba przesłanych rozwiązań', value: statsData.answersNumber },
       {
         info: isSurvey ? 'Średnia ocena studentów' : 'Średni wynik punktowy dla wszystkich grup',
-        value: statsData.avgPoints
+        value: rounded(statsData.avgPoints) ?? '-'
       }
     ]
 
     if (!isSurvey) {
-      bodyRows.push({ info: 'Średni wynik procentowy dla wszystkich grup', value: statsData.avgPercentageResult })
-      bodyRows.push({ info: 'Najlepszy wynik', value: statsData.bestScore })
-      bodyRows.push({ info: 'Najgorszy wynik', value: statsData.worstScore })
+      bodyRows.push({
+        info: 'Średni wynik procentowy dla wszystkich grup',
+        value: rounded(statsData.avgPercentageResult) + '%' ?? '-'
+      })
+      bodyRows.push({ info: 'Najlepszy wynik', value: statsData.bestScore ?? '-' })
+      bodyRows.push({ info: 'Najgorszy wynik', value: statsData.worstScore ?? '-' })
     }
 
     return (
@@ -61,6 +92,14 @@ function ActivityStats(props) {
   }, [isSurvey, statsData])
 
   const chartCard = useCallback((chartType, data, options, header) => {
+    if (!data || !options) {
+      return <></>
+    }
+
+    if (data.datasets.length === 0 || !data.datasets.find((set) => set.data.find((element) => element > 0))) {
+      return <StatsCard header={header} body={<p>Nie można narysować wykresu</p>} />
+    }
+
     return (
       <StatsCard
         header={header}
@@ -81,7 +120,15 @@ function ActivityStats(props) {
             <CardHeader>
               <h5>Statystyki</h5>
             </CardHeader>
-            <Card.Body>{statsCardBody}</Card.Body>
+            <Card.Body>
+              {statsData === undefined ? (
+                <Spinner animation={'border'} />
+              ) : statsData == null ? (
+                <p>{ERROR_OCCURRED}</p>
+              ) : (
+                statsCardBody
+              )}
+            </Card.Body>
           </CustomCard>
         </Col>
         <Col md={6}>
@@ -91,15 +138,22 @@ function ActivityStats(props) {
                 <h5>Średnia ocena studentów</h5>
               </CardHeader>
               <Card.Body>
-                <PercentageCircle
-                  percentageValue={(100 * statsData.avgPoints) / 5}
-                  points={statsData.avgPoints}
-                  maxPoints={5}
-                />
+                {statsData === undefined ? (
+                  <Spinner animation={'border'} />
+                ) : statsData == null ? (
+                  <p>{ERROR_OCCURRED}</p>
+                ) : (
+                  <PercentageCircle
+                    percentageValue={(100 * statsData.avgPoints) / 5}
+                    points={statsData.avgPoints}
+                    maxPoints={5}
+                  />
+                )}
               </Card.Body>
             </CustomCard>
           ) : (
-            chartCard('PIE', pieData, pieOptions, 'Ilość wyników w przedziale ocenowym')
+            pieChartConfig &&
+            chartCard('PIE', pieChartConfig.data, pieChartConfig.options, 'Ilość wyników w przedziale ocenowym')
           )}
         </Col>
       </Row>
@@ -107,15 +161,20 @@ function ActivityStats(props) {
         <Col md={6}>
           {chartCard(
             'BAR',
-            pointsBarData,
-            pointsBarOptions,
+            pointsBarConfig.data,
+            pointsBarConfig.options,
             isSurvey ? 'Średnia ocena studentów w każdej grupie' : 'Średni wynik punktowy każdej grupy'
           )}
         </Col>
         <Col md={6}>
           {isSurvey
-            ? chartCard('PIE', pieData, pieOptions, 'Liczba ocen dla każdej oceny')
-            : chartCard('BAR', percentageBarData, percentageBarOptions, 'Średni wynik procentowy każdej grupy')}
+            ? chartCard('PIE', pieChartConfig.data, pieChartConfig.options, 'Liczba ocen dla każdej oceny')
+            : chartCard(
+                'BAR',
+                percentageBarConfig.data,
+                percentageBarConfig.options,
+                'Średni wynik procentowy każdej grupy'
+              )}
         </Col>
       </Row>
     </>
