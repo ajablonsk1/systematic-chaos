@@ -1,56 +1,57 @@
 import React from 'react'
-import { Col, Row } from 'react-bootstrap'
-import {
-  getAverageGrade,
-  getGrades,
-  getUnmarkedActivities,
-  getWeightedAverageGrade
-} from '../../../storage/gradesTable'
-import { FullDivider } from '../../student/AllActivities/ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { Content } from '../../App/AppGeneralStyles'
-import PercentageCircle from '../../student/PointsPage/ChartAndStats/PercentageCircle'
-import { GradesTable, UnmarkedActivitiesTable } from './GradesTables'
+import { Card, Col, Row } from 'react-bootstrap'
+import { CustomCard } from '../../student/GameCardPage/GameCardStyles'
+import CardHeader from 'react-bootstrap/CardHeader'
 
-// TODO: refactor needed
 export default function GameSummary() {
   return (
     <Content>
-      <Row className='m-3'>
-        <Col>
-          <h1>Statystyki ocen</h1>
-          <FullDivider style={{ backgroundColor: 'black' }} />
-          <p>
-            Średnia ocen: <strong>{getAverageGrade()}</strong>
-          </p>
-          <p>
-            Średnia ocen (ważona punktami): <strong>{getWeightedAverageGrade()}</strong>
-          </p>
-          <p>
-            Liczba ocenionych aktywności: <strong>{getGrades().length}</strong>
-          </p>
-          <p>
-            Liczba nieocenionych aktywności: <strong>{getUnmarkedActivities().length}</strong>
-          </p>
+      <Row className={'m-0'} style={{ height: '50vh' }}>
+        <Col md={6}>
+          <Row className={'m-0 h-50 py-2'}>
+            <CustomCard>
+              <CardHeader>
+                <h5>Statystyki ocen studentów</h5>
+              </CardHeader>
+              <Card.Body>body</Card.Body>
+            </CustomCard>
+          </Row>
+          <Row className={'m-0 h-50 py-2'}>
+            <CustomCard>
+              <CardHeader>
+                <h5>Statystyki aktywności</h5>
+              </CardHeader>
+              <Card.Body>body</Card.Body>
+            </CustomCard>
+          </Row>
         </Col>
-        <Col>
-          <PercentageCircle
-            percentageValue={(100 * getAverageGrade()) / 5}
-            points={getAverageGrade()} // todo: move it to variable
-            maxPoints={5}
-          />
+        <Col md={6} className={'py-2'}>
+          <CustomCard>
+            <CardHeader>
+              <h5>Średnia ocen w każdej grupie</h5>
+            </CardHeader>
+            <Card.Body>body</Card.Body>
+          </CustomCard>
         </Col>
       </Row>
-      <Row className='m-3'>
-        <h1>Nieocenione aktywności</h1>
-      </Row>
-      <Row className='m-3'>
-        <UnmarkedActivitiesTable />
-      </Row>
-      <Row className='m-3'>
-        <h1>Oceny</h1>
-      </Row>
-      <Row className='m-3'>
-        <GradesTable />
+      <Row className={'m-0'} style={{ height: '50vh' }}>
+        <Col md={6} className={'py-2'}>
+          <CustomCard>
+            <CardHeader>
+              <h5>Średni wynik z aktywności</h5>
+            </CardHeader>
+            <Card.Body>body</Card.Body>
+          </CustomCard>
+        </Col>
+        <Col md={6} className={'py-2'}>
+          <CustomCard>
+            <CardHeader>
+              <h5>Nieocenione aktywności</h5>
+            </CardHeader>
+            <Card.Body>body</Card.Body>
+          </CustomCard>
+        </Col>
       </Row>
     </Content>
   )
