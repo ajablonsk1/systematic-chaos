@@ -6,6 +6,10 @@ import { getBadgesInfo, getBadgesList, getLastUnlockedBadge, getRankInfo, getStu
 import ContentCard from './ContentCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
+import Fade, { Bounce } from 'react-awesome-reveal'
+
+const LAST_BADGE_DELAY = 1200
+const BADGE_LIST_STEP = 200
 
 function BadgesPage() {
   const studentRankInfo = getRankInfo()
@@ -99,20 +103,23 @@ function BadgesPage() {
                     className={'text-center d-flex flex-column align-items-center justify-content-center'}
                     key={index + Date.now()}
                   >
-                    <Tooltip>
-                      <img style={{ opacity: badge.unlocked ? 1 : 0.4 }} src={badge.src} alt={'badge-icon'} />
-                      <div>
-                        {badge.unlocked ? (
-                          <span>Odblokowano: {badge.unlockedDate}</span>
-                        ) : (
-                          <span>Odznaka nadal nie została zdobyta.</span>
-                        )}
-                      </div>
-                    </Tooltip>
-                    <strong style={{ opacity: badge.unlocked ? 1 : 0.4 }}>{badge.name}</strong>
-                    <p style={{ opacity: badge.unlocked ? 1 : 0.4 }} className={'px-2'}>
-                      {badge.description}
-                    </p>
+                    <Fade delay={BADGE_LIST_STEP * index}>
+                      <Tooltip>
+                        <img style={{ opacity: badge.unlocked ? 1 : 0.4 }} src={badge.src} alt={'badge-icon'} />
+                        <div>
+                          {badge.unlocked ? (
+                            <span>Odblokowano: {badge.unlockedDate}</span>
+                          ) : (
+                            <span>Odznaka nadal nie została zdobyta.</span>
+                          )}
+                        </div>
+                      </Tooltip>
+
+                      <strong style={{ opacity: badge.unlocked ? 1 : 0.4 }}>{badge.name}</strong>
+                      <p style={{ opacity: badge.unlocked ? 1 : 0.4 }} className={'px-2'}>
+                        {badge.description}
+                      </p>
+                    </Fade>
                   </Col>
                 ))}
               </Row>
@@ -146,11 +153,15 @@ function BadgesPage() {
             <ContentCard
               header={'Ostatnio zdobyta'}
               body={
-                <div className={'h-100 w-100 text-center d-flex justify-content-center align-items-center flex-column'}>
-                  <img width={75} src={lastUnlockedBadge.src} alt={'last unlocked badge'} />
-                  <strong>{lastUnlockedBadge.name}</strong>
-                  <p className={'px-2 '}>{lastUnlockedBadge.description}</p>
-                </div>
+                <Bounce delay={LAST_BADGE_DELAY}>
+                  <div
+                    className={'h-100 w-100 text-center d-flex justify-content-center align-items-center flex-column'}
+                  >
+                    <img width={75} src={lastUnlockedBadge.src} alt={'last unlocked badge'} />
+                    <strong>{lastUnlockedBadge.name}</strong>
+                    <p className={'px-2 '}>{lastUnlockedBadge.description}</p>
+                  </div>
+                </Bounce>
               }
             />
           </Row>
