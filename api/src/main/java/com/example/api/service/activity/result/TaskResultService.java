@@ -196,7 +196,10 @@ public class TaskResultService {
     private ActivityStatisticsResponse getActivityStatisticsForActivity(Activity activity) {
         ActivityStatisticsResponse response = new ActivityStatisticsResponse();
         boolean activityIsSurvey = activity instanceof Survey;
-        if (!activityIsSurvey) {
+        if (activityIsSurvey) {
+            response.setActivity100(((Survey) activity).getPoints());
+        }
+        else {
             response.setActivity100(((Task) activity).getMaxPoints());
         }
 

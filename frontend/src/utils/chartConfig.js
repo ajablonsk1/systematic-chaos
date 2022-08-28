@@ -55,7 +55,7 @@ export const pieConfig = (labels, datasets, backgroundColors) => {
             let actualValue = context.raw
             let sumValue = context.dataset.data.reduce((a, b) => a + b)
 
-            return Math.round(100 * (actualValue / sumValue)) + '%'
+            return actualValue + ' - ' + Math.round(100 * (actualValue / sumValue)) + '%'
           },
           title: (tooltipItem) => `${tooltipItem[0]?.label}`
         }
