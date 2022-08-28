@@ -94,7 +94,7 @@ export default function CombatTask() {
           className='m-0 pt-4 mx-auto'
           style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
         >
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '8vh' }}>
+          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}>
             <Header activityName={task.name} activityType={'TASK'} />
           </Row>
           <VerticalSpacer height={'2vh'} />

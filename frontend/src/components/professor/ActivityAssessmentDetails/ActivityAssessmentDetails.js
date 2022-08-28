@@ -101,10 +101,10 @@ export default function ActivityAssessmentDetails() {
 
   const UserDetails = () => (
     <Col className='m-auto'>
-      <h4>
+      <h5>
         Autor rozwiązania - {activityResponseInfo.firstName + ' ' + activityResponseInfo.lastName} (
         {'zadanie oddane ' + (activityResponseInfo.isLate ? 'ze spóźnieniem' : 'w terminie')})
-      </h4>
+      </h5>
     </Col>
   )
 
@@ -120,7 +120,7 @@ export default function ActivityAssessmentDetails() {
     <Col>
       <h4>Treść:</h4>
       <p>{activityResponseInfo.activityDetails}</p>
-      <h4 className='text-center'>Maksymalna liczba punktów: {activityResponseInfo.maxPoints}</h4>
+      <h5 className='text-center'>Maksymalna liczba punktów: {activityResponseInfo.maxPoints}</h5>
       <p className='text-center'>Pozostało {activityResponseInfo.remaining} odpowiedzi do sprawdzenia</p>
     </Col>
   )
@@ -133,7 +133,7 @@ export default function ActivityAssessmentDetails() {
           className='m-0 pt-4 mx-auto'
           style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
         >
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '8vh' }}>
+          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}>
             <Header activityName={activityResponseInfo.activityName} activityType={'TASK'} />
           </Row>
 
@@ -159,7 +159,7 @@ export default function ActivityAssessmentDetails() {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '18vh' }}
+            style={{ backgroundColor: 'var(--dark-blue)', height: '20vh' }}
           >
             <ResponseDetails />
           </Row>

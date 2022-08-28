@@ -2,26 +2,31 @@ import styled from 'styled-components'
 import { Button, Col, Row } from 'react-bootstrap'
 
 export const ActivityImg = styled.img`
-  height: 40px;
-  width: 40px;
-  margin: 10px;
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+  align-self: center;
 
   @media (max-width: 800px) {
     height: 20px;
     width: 20px;
-    margin: 5px;
+    margin: 0px;
   } ;
 `
 
 export const ActivityType = styled.h1`
   text-align: left;
+  align-self: center;
+  font-size: 1.75rem;
   @media (max-width: 800px) {
-    font-size: 1.5rem;
+    font-size: 0.5rem;
   } ;
 `
 
 export const ActivityName = styled.h1`
   text-align: right;
+  align-self: center;
+  font-size: 1.75rem;
   margin-left: auto;
   @media (max-width: 800px) {
     font-size: 1.5rem;
