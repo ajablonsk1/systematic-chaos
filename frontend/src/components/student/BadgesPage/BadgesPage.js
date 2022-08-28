@@ -51,7 +51,7 @@ function BadgesPage() {
 
   return (
     <Content>
-      <Slide>
+      <Slide delay={LATER_ITEM_DELAY}>
         <Row className={'m-0 text-center py-3'}>
           <Col>
             <strong>Twoja ranga: </strong>
@@ -69,30 +69,28 @@ function BadgesPage() {
       </Slide>
       <Row className={'m-0'}>
         <Col md={12}>
-          <Slide>
-            <HorizontalPointsLine>
-              <ul>
-                {studentRankInfo.map((rankInfo, index) => (
-                  <li key={index + Date.now()}>
-                    <div>
-                      <div className={'pointsInfo'}>
-                        {rankInfo.minPoints} - {rankInfo.maxPoints} pkt
-                      </div>
-                      <div className={'rankInfo'}>
-                        <div className={'left-arrow'} />
-                        <p>
-                          <strong>{rankInfo.name}</strong>
-                        </p>
-                        <img width={100} src={rankInfo.imgSrc} alt={'rank-profile'} />
-                        {additionalContent(index, rankInfo.maxPoints)}
-                        <div className={'right-arrow'} />
-                      </div>
+          <HorizontalPointsLine>
+            <ul>
+              {studentRankInfo.map((rankInfo, index) => (
+                <li key={index + Date.now()}>
+                  <div>
+                    <div className={'pointsInfo'}>
+                      {rankInfo.minPoints} - {rankInfo.maxPoints} pkt
                     </div>
-                  </li>
-                ))}
-              </ul>
-            </HorizontalPointsLine>
-          </Slide>
+                    <div className={'rankInfo'}>
+                      <div className={'left-arrow'} />
+                      <p>
+                        <strong>{rankInfo.name}</strong>
+                      </p>
+                      <img width={100} src={rankInfo.imgSrc} alt={'rank-profile'} />
+                      {additionalContent(index, rankInfo.maxPoints)}
+                      <div className={'right-arrow'} />
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </HorizontalPointsLine>
         </Col>
       </Row>
       <Row className={'mx-0 my-5'} style={{ maxHeight: '55vh' }}>
