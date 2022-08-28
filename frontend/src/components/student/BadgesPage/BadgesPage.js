@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import Fade, { Bounce, Slide } from 'react-awesome-reveal'
 
-const LAST_BADGE_DELAY = 1200
+const LATER_ITEM_DELAY = 1200
 const BADGE_LIST_STEP = 200
 
 function BadgesPage() {
@@ -135,8 +135,8 @@ function BadgesPage() {
             <ContentCard
               header={'Posiadasz'}
               body={
-                <Bounce delay={LAST_BADGE_DELAY}>
-                  <div className={'h-100 w-100'}>
+                <div className={'h-100 w-100'}>
+                  <Bounce delay={LATER_ITEM_DELAY}>
                     <p className={'text-center m-0'}>
                       <span style={{ fontSize: 80 }}>{studentBadgesNumber}</span>
                       <span className={'pl-5 position-absolute'} style={{ top: '50%' }}>
@@ -150,24 +150,23 @@ function BadgesPage() {
                       <strong> {Math.floor((studentBadgesNumber * 100) / allBadgesNumber)}% </strong>
                       wszystkich odznak.
                     </p>
-                  </div>
-                </Bounce>
+                  </Bounce>
+                </div>
               }
             />
           </Row>
+
           <Row className={'m-0 h-50 pr-2'}>
             <ContentCard
               header={'Ostatnio zdobyta'}
               body={
-                <Bounce delay={LAST_BADGE_DELAY}>
-                  <div
-                    className={'h-100 w-100 text-center d-flex justify-content-center align-items-center flex-column'}
-                  >
+                <div className={'h-100 w-100 text-center d-flex justify-content-center align-items-center flex-column'}>
+                  <Bounce delay={LATER_ITEM_DELAY}>
                     <img width={75} src={lastUnlockedBadge.src} alt={'last unlocked badge'} />
                     <strong>{lastUnlockedBadge.name}</strong>
                     <p className={'px-2 '}>{lastUnlockedBadge.description}</p>
-                  </div>
-                </Bounce>
+                  </Bounce>
+                </div>
               }
             />
           </Row>
