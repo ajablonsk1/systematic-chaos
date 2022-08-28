@@ -10,7 +10,7 @@ import ActivityStats from './ActivityStats'
 
 function ActivityDetails(props) {
   const location = useLocation()
-  const { activityId } = location.state
+  const { activityId, activityType } = location.state
 
   const [studentsList, setStudentsList] = useState(undefined)
   const [filteredList, setFilteredList] = useState(undefined)

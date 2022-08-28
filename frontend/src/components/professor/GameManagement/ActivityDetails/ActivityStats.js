@@ -10,7 +10,6 @@ import { getChartConfig, getChartDetails } from './chartHelper'
 import StatsCard from './StatsCard'
 import { Activity } from '../../../../utils/constants'
 import PercentageCircle from '../../../student/PointsPage/ChartAndStats/PercentageCircle'
-import { getAverageGrade } from '../../../../storage/gradesTable'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 
