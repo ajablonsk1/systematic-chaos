@@ -4,7 +4,7 @@ import { Col, Table } from 'react-bootstrap'
 export const CustomTable = styled(Table)`
   margin: 0;
   color: var(--font-color);
-  font-size: 18px;
+  font-size: 15px;
 
   & th,
   & td {
@@ -14,6 +14,9 @@ export const CustomTable = styled(Table)`
 
 export const ChartCol = styled(Col)`
   height: ${(props) => props.$customHeight ?? '75%'};
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 
   & canvas {
     width: 100% !important;
