@@ -4,11 +4,19 @@ import com.example.api.dto.response.ranking.RankingResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.model.activity.task.*;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
+import com.example.api.repo.activity.result.SurveyResultRepo;
+import com.example.api.repo.activity.task.FileTaskRepo;
+import com.example.api.repo.activity.task.GraphTaskRepo;
+import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.user.UserService;
@@ -33,7 +41,11 @@ import java.util.stream.DoubleStream;
 public class RankingService {
     private final UserRepo userRepo;
     private final GraphTaskResultRepo graphTaskResultRepo;
+    private final GraphTaskRepo graphTaskRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
+    private final FileTaskRepo fileTaskRepo;
+    private final SurveyResultRepo surveyResultRepo;
+    private final SurveyRepo surveyRepo;
     private final AdditionalPointsRepo additionalPointsRepo;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
@@ -66,12 +78,12 @@ public class RankingService {
     }
 
     public List<RankingResponse> getSearchedRanking(String search) {
-        String searchLower = search.toLowerCase();
+        String searchLower = search.toLowerCase().replaceAll("\\s",""); // removing whitespaces
         List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .filter(student ->
-                        student.getFirstName().toLowerCase().contains(searchLower) ||
-                                student.getLastName().toLowerCase().contains(searchLower) ||
+                                student.getFirstName().concat(student.getLastName()).toLowerCase().replaceAll("\\s","").contains(searchLower) ||
+                                student.getLastName().concat(student.getFirstName()).toLowerCase().replaceAll("\\s","").contains(searchLower) ||
                                 student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                                 student.getGroup().getName().toLowerCase().contains(searchLower))
                 .map(this::studentToRankingEntry)
@@ -80,6 +92,67 @@ public class RankingService {
 
         addPositionToRankingList(rankingList);
         return rankingList;
+    }
+
+    public List<RankingResponse> getActivityRanking(Long activityID) throws WrongUserTypeException, EntityNotFoundException {
+        String professorEmail = authService.getAuthentication().getName();
+        User professor = userRepo.findUserByEmail(professorEmail);
+        userValidator.validateProfessorAccount(professor, professorEmail);
+
+        List<RankingResponse> rankingList =  userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
+                        .stream()
+                        .map(user -> studentAndPointsToRankingEntry(user, getStudentPointsForActivity(activityID, user)))
+                        .toList();
+        addPositionToRankingList(rankingList);
+        return rankingList;
+    }
+
+    public List<RankingResponse> getActivityRankingSearch(Long activityID, String search) throws WrongUserTypeException, EntityNotFoundException {
+        String searchLower = search.toLowerCase().replaceAll("\\s",""); // removing whitespaces
+        List<RankingResponse> rankingList = getActivityRanking(activityID)
+                .stream()
+                .filter(student ->
+                            student.getFirstName().concat(student.getLastName()).toLowerCase().replaceAll("\\s","").contains(searchLower) ||
+                            student.getLastName().concat(student.getFirstName()).toLowerCase().replaceAll("\\s","").contains(searchLower) ||
+                            student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
+                            student.getGroupName().toLowerCase().contains(searchLower)
+                )
+                .sorted(((o1, o2) -> {
+                    try {
+                        return Double.compare(o2.getPoints(), o1.getPoints());
+                    } catch (NullPointerException e) {
+                        if (o1.getPoints() == null && o2.getPoints() == null) {
+                            return 0;
+                        } else if (o1.getPoints() == null) {
+                            return Double.compare(o2.getPoints(), 0);
+                        } else {
+                            return Double.compare(0, o1.getPoints());
+                        }
+                    }
+                }))
+                .toList();
+        addPositionToRankingList(rankingList);
+        return rankingList;
+
+    }
+
+    private Double getStudentPointsForActivity(Long activityID, User user) {
+        GraphTask graphTask = graphTaskRepo.findGraphTaskById(activityID);
+        if (graphTask != null) {
+            GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
+            return result != null ? result.getPointsReceived() : null;
+        }
+        FileTask fileTask = fileTaskRepo.findFileTaskById(activityID);
+        if (fileTask != null) {
+            FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, user);
+            return result != null ? (result.isEvaluated() ? result.getPointsReceived() : null) : null;
+        }
+        Survey survey = surveyRepo.findSurveyById(activityID);
+        if (survey != null) {
+            SurveyResult result = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, user);
+            return result != null ? result.getPointsReceived() : null;
+        }
+        return null;
     }
 
     private void addPositionToRankingList(List<RankingResponse> rankingResponses){
@@ -115,6 +188,12 @@ public class RankingService {
     private RankingResponse studentToRankingEntry(User student) {
         RankingResponse rankingResponse = new RankingResponse(student);
         rankingResponse.setPoints(getStudentPoints(student));
+        return rankingResponse;
+    }
+
+    private RankingResponse studentAndPointsToRankingEntry(User student, Double points) {
+        RankingResponse rankingResponse = new RankingResponse(student);
+        rankingResponse.setPoints(points);
         return rankingResponse;
     }
 
@@ -164,4 +243,5 @@ public class RankingService {
         Double additionalPoints = getAdditionalPoints(student);
         return DoubleStream.of(graphTaskPoints, fileTaskPoints, additionalPoints).sum();
     }
+
 }

@@ -3,6 +3,7 @@ package com.example.api.config;
 import com.example.api.model.activity.result.AdditionalPoints;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Info;
@@ -22,6 +23,7 @@ import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
+import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
@@ -56,6 +58,7 @@ public class DatabaseConfig {
     private final UrlRepo urlRepo;
     private final ChapterRepo chapterRepo;
     private final AdditionalPointsRepo additionalPointsRepo;
+    private final SurveyResultRepo surveyResultRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -199,6 +202,14 @@ public class DatabaseConfig {
             student15.setIndexNumber(163456);
             student15.setHeroType(HeroType.ROGUE);
 
+            User student16 = new User("manowak@student.agh.edu.pl",
+                    "Małgorzata Anna",
+                    "Kowalska",
+                    AccountType.STUDENT);
+            student16.setPassword("12345");
+            student16.setIndexNumber(163457);
+            student16.setHeroType(HeroType.ROGUE);
+
             User professor = new User("bmaj@agh.edu.pl",
                     "Bernard",
                     "Maj",
@@ -216,7 +227,7 @@ public class DatabaseConfig {
             student.setIndexNumber(123456);
 
             List<User> students1 = List.of(student, student1, student2, student3, student4, student5, student6, student7);
-            List<User> students2 = List.of(student8, student9, student10, student11, student12, student13, student14, student15);
+            List<User> students2 = List.of(student8, student9, student10, student11, student12, student13, student14, student15, student16);
 
             Group group = new Group();
             group.setInvitationCode("1111");
@@ -416,6 +427,7 @@ public class DatabaseConfig {
             survey.setDescription("Pomóż nam polepszyć kurs dzieląc się swoją opinią!");
             survey.setPosX(7);
             survey.setPosY(3);
+            survey.setPoints(10.0);
             surveyService.saveSurvey(survey);
 
             ActivityMap activityMap1 = new ActivityMap();
@@ -484,6 +496,33 @@ public class DatabaseConfig {
             calendar.set(2022, Calendar.JUNE, 15);
             additionalPoints.setSendDateMillis(calendar.getTimeInMillis());
             additionalPointsRepo.save(additionalPoints);
+
+            SurveyResult surveyResult1 = new SurveyResult();
+            surveyResult1.setSurvey(survey);
+            surveyResult1.setId(1L);
+            surveyResult1.setUser(student);
+            surveyResult1.setPointsReceived(1D);
+            calendar.set(2022, Calendar.JUNE, 16);
+            surveyResult1.setSendDateMillis(calendar.getTimeInMillis());
+            surveyResultRepo.save(surveyResult1);
+
+            SurveyResult surveyResult2 = new SurveyResult();
+            surveyResult2.setSurvey(survey);
+            surveyResult2.setId(2L);
+            surveyResult2.setUser(student1);
+            surveyResult2.setPointsReceived(3D);
+            calendar.set(2022, Calendar.JUNE, 18);
+            surveyResult2.setSendDateMillis(calendar.getTimeInMillis());
+            surveyResultRepo.save(surveyResult2);
+
+            SurveyResult surveyResult3 = new SurveyResult();
+            surveyResult3.setSurvey(survey);
+            surveyResult3.setId(3L);
+            surveyResult3.setUser(student10);
+            surveyResult3.setPointsReceived(5D);
+            calendar.set(2022, Calendar.JUNE, 19);
+            surveyResult3.setSendDateMillis(calendar.getTimeInMillis());
+            surveyResultRepo.save(surveyResult3);
         };
     }
 }

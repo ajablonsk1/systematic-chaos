@@ -1,20 +1,45 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
 import { TabsContainer } from '../../ParticipantsPage/ParticipantsStyles'
 import { Form, Tab } from 'react-bootstrap'
 import Ranking from '../../../general/Ranking/Ranking'
-import { getResultsList } from './mockData'
 import { debounce } from 'lodash/function'
-import ActivityStats from './ActivityStats'
+import ActivityService from '../../../../services/activity.service'
 import { useLocation } from 'react-router-dom'
+import ActivityStats from './ActivityStats'
 
-function ActivityDetails() {
+function ActivityDetails(props) {
   const location = useLocation()
-  const { activityId, activityType } = location.state
+  const { activityId } = location.state
 
+  const [studentsList, setStudentsList] = useState(undefined)
+  const [filteredList, setFilteredList] = useState(undefined)
   const [filterQuery, setFilterQuery] = useState(undefined)
 
-  const resultsList = getResultsList()
+  useEffect(() => {
+    ActivityService.getStudentsResultList(activityId)
+      .then((response) => {
+        setStudentsList(response)
+        setFilteredList(response)
+      })
+      .catch(() => {})
+    setStudentsList(null)
+    setFilteredList(null)
+  }, [activityId])
+
+  useEffect(() => {
+    if (filterQuery) {
+      ActivityService.getFilteredStudentsResultList(activityId, filterQuery)
+        .then((response) => {
+          setFilteredList(response)
+        })
+        .catch(() => {
+          setFilteredList(null)
+        })
+    } else {
+      setFilteredList(studentsList)
+    }
+  }, [filterQuery, studentsList, activityId])
 
   const filterList = debounce((query) => {
     setFilterQuery(query)
@@ -32,7 +57,7 @@ function ActivityDetails() {
             />
           </Form.Group>
 
-          <Ranking rankingList={resultsList} />
+          <Ranking rankingList={filteredList} customHeight={'80vh'} noPointsMessage={'Nie wykonano'} />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
           <ActivityStats activityId={activityId} activityType={activityType} />

@@ -13,4 +13,5 @@ public interface GraphTaskResultRepo extends JpaRepository<GraphTaskResult, Long
     GraphTaskResult findGraphTaskResultById(Long id);
     GraphTaskResult findGraphTaskResultByGraphTaskAndUser(GraphTask task, User user);
     List<GraphTaskResult> findAllByUser(User user);
+    List<GraphTaskResult> findAllByAndGraphTask(GraphTask graphTask);
 }

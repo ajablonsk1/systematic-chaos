@@ -11,4 +11,5 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 public class Survey extends Activity{
+    private double points;
 }
