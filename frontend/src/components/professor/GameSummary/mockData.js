@@ -43,11 +43,11 @@ export const getGameSummaryInfo = () => {
             scores: [
               {
                 groupName: 'pn1440A',
-                score: '70'
+                score: '75'
               },
               {
                 groupName: 'wt1250A',
-                score: '80'
+                score: '82'
               }
             ]
           },
@@ -56,11 +56,11 @@ export const getGameSummaryInfo = () => {
             scores: [
               {
                 groupName: 'pn1440A',
-                score: '70'
+                score: '79'
               },
               {
                 groupName: 'wt1250A',
-                score: '80'
+                score: '81'
               }
             ]
           }
@@ -68,6 +68,36 @@ export const getGameSummaryInfo = () => {
       }
     ],
     notAssessedActivitiesTable: [
+      {
+        activityName: 'Ekspedycja 1',
+        activityType: 'Ekspedycja',
+        waitingAnswersNumber: 10
+      },
+      {
+        activityName: 'Zadanie bojowe 1',
+        activityType: 'Zadanie bojowe',
+        waitingAnswersNumber: 20
+      },
+      {
+        activityName: 'Ekspedycja 1',
+        activityType: 'Ekspedycja',
+        waitingAnswersNumber: 10
+      },
+      {
+        activityName: 'Zadanie bojowe 1',
+        activityType: 'Zadanie bojowe',
+        waitingAnswersNumber: 20
+      },
+      {
+        activityName: 'Ekspedycja 1',
+        activityType: 'Ekspedycja',
+        waitingAnswersNumber: 10
+      },
+      {
+        activityName: 'Zadanie bojowe 1',
+        activityType: 'Zadanie bojowe',
+        waitingAnswersNumber: 20
+      },
       {
         activityName: 'Ekspedycja 1',
         activityType: 'Ekspedycja',

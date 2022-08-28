@@ -76,3 +76,43 @@ export const pieConfig = (labels, datasets, backgroundColors) => {
 
   return { options, data }
 }
+
+export const lineConfig = (labels, datasets, colors) => {
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          color: '#FFFFFF',
+          boxWidth: 20
+        }
+      },
+      title: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            return context.raw + '%'
+          },
+          title: (tooltipItem) => `${tooltipItem[0]?.label}`
+        }
+      }
+    }
+  }
+
+  const data = {
+    labels: labels,
+    datasets: datasets.map((set, index) => {
+      return {
+        label: set.label,
+        data: set.data,
+        borderColor: colors[index],
+        backgroundColor: colors[index]
+      }
+    })
+  }
+
+  return { options, data }
+}
