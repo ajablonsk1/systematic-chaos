@@ -26,7 +26,6 @@ export default function CombatTask() {
   const [fileName, setFileName] = useState()
   const [answer, setAnswer] = useState('')
   const [isFetching, setIsFetching] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
   const [answerWasSentNow, setAnswerWasSentNow] = useState(false)
 
   const textAreaRef = useRef(null)
@@ -50,7 +49,7 @@ export default function CombatTask() {
         setTask(response)
       })
       .catch(() => {
-        setErrorMessage(ERROR_OCCURRED)
+        setTask(null)
       })
   }, [isFetching, taskState])
 
