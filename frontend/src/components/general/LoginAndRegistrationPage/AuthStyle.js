@@ -60,6 +60,7 @@ export const AccountType = styled(Col)`
   margin: 0 5px;
   padding: 10px;
   transition: all 0.2s linear;
+  position: relative;
 
   & img {
     width: 50%;
