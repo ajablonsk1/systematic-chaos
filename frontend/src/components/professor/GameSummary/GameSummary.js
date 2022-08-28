@@ -1,13 +1,17 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
-import { Card, Col, Row } from 'react-bootstrap'
+import { Card, Carousel, CarouselItem, Col, Row } from 'react-bootstrap'
 import { CustomCard } from '../../student/GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
 import { getGameSummaryInfo } from './mockData'
 import GameSummaryCard from './GameSummaryCard'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 export default function GameSummary() {
   const summaryDetails = getGameSummaryInfo()
+
+  const [activeChapterId, setActiveChapterId] = useState(0)
 
   const gradesStatsCardTitles = [
     { text: 'Średnia ocen studentów:', value: summaryDetails.avgGrade },
@@ -20,6 +24,10 @@ export default function GameSummary() {
     { text: 'Liczba nieocenionych aktywności:', value: summaryDetails.notAssessedActivityCounter },
     { text: 'Liczba odpowiedzi oczekujących na sprawdzenie:', value: summaryDetails.waitingAnswersNumber }
   ]
+
+  const getChapterNames = () => {
+    return summaryDetails.avgGradesList.map((chapter) => chapter.chapterName)
+  }
 
   const statsCardBody = useCallback((titles) => {
     return titles.map((title, index) => (
@@ -35,10 +43,10 @@ export default function GameSummary() {
       <Row className={'m-0'} style={{ height: '50vh' }}>
         <Col md={6}>
           <Row className={'m-0 h-50 py-2'}>
-            <GameSummaryCard header={'Statystyki ocen studentów'} body={statsCardBody(gradesStatsCardTitles)} />
+            <GameSummaryCard header={<h5>Statystyki ocen studentów</h5>} body={statsCardBody(gradesStatsCardTitles)} />
           </Row>
           <Row className={'m-0 h-50 py-2'}>
-            <GameSummaryCard header={'Statystyki aktywności'} body={statsCardBody(activityStatsCardTitles)} />
+            <GameSummaryCard header={<h5>Statystyki aktywności</h5>} body={statsCardBody(activityStatsCardTitles)} />
           </Row>
         </Col>
         <Col md={6} className={'py-2'}>
@@ -46,7 +54,24 @@ export default function GameSummary() {
             <CardHeader>
               <h5>Średnia ocen w każdej grupie</h5>
             </CardHeader>
-            <Card.Body>body</Card.Body>
+            <Card.Body>
+              <Carousel
+                fade
+                interval={null}
+                indicators={false}
+                nextLabel={null}
+                prevLabel={null}
+                nextIcon={<FontAwesomeIcon icon={faArrowRight} color={'var(--font-color)'} />}
+                prevIcon={<FontAwesomeIcon icon={faArrowLeft} color={'var(--font-color)'} />}
+                onSelect={setActiveChapterId}
+              >
+                {getChapterNames().map((name, index) => (
+                  <CarouselItem key={index + Date.now()}>
+                    <p className={'text-center m-0'}>{name}</p>
+                  </CarouselItem>
+                ))}
+              </Carousel>
+            </Card.Body>
           </CustomCard>
         </Col>
       </Row>

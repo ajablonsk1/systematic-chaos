@@ -6,9 +6,7 @@ import { Card } from 'react-bootstrap'
 function GameSummaryCard(props) {
   return (
     <CustomCard>
-      <CardHeader>
-        <h5>{props.header}</h5>
-      </CardHeader>
+      <CardHeader>{props.header}</CardHeader>
       <Card.Body>{props.body}</Card.Body>
     </CustomCard>
   )
