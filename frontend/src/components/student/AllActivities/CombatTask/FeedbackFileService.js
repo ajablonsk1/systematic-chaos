@@ -13,7 +13,7 @@ export default function FeedbackFileService({ feedbackFile }) {
   }
 
   return (
-    <>
+    <Col className={'text-center'}>
       <strong>Załączony plik prowadzącego:</strong>
       {!feedbackFile ? (
         <p>Brak pliku</p>
@@ -27,6 +27,6 @@ export default function FeedbackFileService({ feedbackFile }) {
           </Col>
         </Row>
       )}
-    </>
+    </Col>
   )
 }

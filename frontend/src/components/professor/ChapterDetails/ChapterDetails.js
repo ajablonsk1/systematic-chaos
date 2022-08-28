@@ -43,9 +43,9 @@ function ChapterDetails() {
       })
   }, [chapterId])
 
-  const goToChapterDetails = (activityName, activityId) => {
+  const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
-      state: { activityId: activityId }
+      state: { activityId: activityId, activityType: activityType }
     })
   }
 
@@ -180,7 +180,7 @@ function ChapterDetails() {
                       chapterDetails.mapTasks.map((activity, index) => (
                         <TableRow
                           key={activity.title + index}
-                          onClick={() => goToChapterDetails(activity.title, activity.id)}
+                          onClick={() => goToChapterDetails(activity.title, activity.id, activity.type)}
                         >
                           <td>
                             <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />

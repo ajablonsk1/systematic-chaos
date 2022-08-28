@@ -3,6 +3,7 @@ package com.example.api.config;
 import com.example.api.model.activity.result.AdditionalPoints;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Info;
@@ -22,6 +23,7 @@ import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
+import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
@@ -56,6 +58,7 @@ public class DatabaseConfig {
     private final UrlRepo urlRepo;
     private final ChapterRepo chapterRepo;
     private final AdditionalPointsRepo additionalPointsRepo;
+    private final SurveyResultRepo surveyResultRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -493,6 +496,33 @@ public class DatabaseConfig {
             calendar.set(2022, Calendar.JUNE, 15);
             additionalPoints.setSendDateMillis(calendar.getTimeInMillis());
             additionalPointsRepo.save(additionalPoints);
+
+            SurveyResult surveyResult1 = new SurveyResult();
+            surveyResult1.setSurvey(survey);
+            surveyResult1.setId(1L);
+            surveyResult1.setUser(student);
+            surveyResult1.setPointsReceived(1D);
+            calendar.set(2022, Calendar.JUNE, 16);
+            surveyResult1.setSendDateMillis(calendar.getTimeInMillis());
+            surveyResultRepo.save(surveyResult1);
+
+            SurveyResult surveyResult2 = new SurveyResult();
+            surveyResult2.setSurvey(survey);
+            surveyResult2.setId(2L);
+            surveyResult2.setUser(student1);
+            surveyResult2.setPointsReceived(3D);
+            calendar.set(2022, Calendar.JUNE, 18);
+            surveyResult2.setSendDateMillis(calendar.getTimeInMillis());
+            surveyResultRepo.save(surveyResult2);
+
+            SurveyResult surveyResult3 = new SurveyResult();
+            surveyResult3.setSurvey(survey);
+            surveyResult3.setId(3L);
+            surveyResult3.setUser(student10);
+            surveyResult3.setPointsReceived(5D);
+            calendar.set(2022, Calendar.JUNE, 19);
+            surveyResult3.setSendDateMillis(calendar.getTimeInMillis());
+            surveyResultRepo.save(surveyResult3);
         };
     }
 }
