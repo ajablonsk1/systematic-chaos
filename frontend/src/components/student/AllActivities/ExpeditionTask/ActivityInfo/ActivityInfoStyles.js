@@ -68,8 +68,17 @@ export const ActivityCol = styled(Col)`
 `
 
 export const HeaderRow = styled(Row)`
+  width: 100%;
+  margin: 0;
   background-color: var(--dark-blue);
   color: var(--font-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > * {
+    width: fit-content;
+  }
 `
 
 export const HeaderCol = styled(Col)`
