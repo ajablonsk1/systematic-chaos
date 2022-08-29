@@ -15,6 +15,7 @@ class ChapterService {
   }
 
   sendNewChapterData({ name, sizeX, sizeY, imageId }) {
+    console.log(ADD_NEW_CHAPTER)
     return axiosApiPost(ADD_NEW_CHAPTER, { name: name, sizeX: sizeX, sizeY: sizeY, imageId: imageId }).catch(
       (error) => {
         throw error

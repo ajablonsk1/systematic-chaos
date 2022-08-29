@@ -31,6 +31,8 @@ export function AddChapterModal({ showModal, setShowModal }) {
           }}
           onSubmit={(values, { setSubmitting }) => {
             // TODO: send edit data to backend
+
+            console.log(values)
             ChapterService.sendNewChapterData({
               name: values.name,
               sizeX: values.sizeX,
@@ -41,13 +43,13 @@ export function AddChapterModal({ showModal, setShowModal }) {
                 console.log(response)
                 // setShowModal(false)
                 // setSuccessModalOpen(true)
-                // setSubmitting(false)
+                setSubmitting(false)
               })
-              .catch()
+              .catch(() => {})
           }}
         >
           {({ isSubmitting, values, errors, handleSubmit }) => (
-            <Form onSubmit={() => {}}>
+            <Form onSubmit={handleSubmit}>
               <Container>
                 <Row className='mx-auto'>
                   {FormCol('Nazwa rozdziału', 'text', 'chapterName', 12)}
