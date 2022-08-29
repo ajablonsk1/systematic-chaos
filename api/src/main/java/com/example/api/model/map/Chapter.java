@@ -29,6 +29,11 @@ public class Chapter {
     @OneToOne
     private ActivityMap activityMap;
 
+    public Chapter(String name, ActivityMap activityMap) {
+        this.name = name;
+        this.activityMap = activityMap;
+    }
+
     public int getNoActivities() {
         return activityMap.getGraphTasks().size() + activityMap.getFileTasks().size() +
                 activityMap.getInfos().size() + activityMap.getSurveys().size();

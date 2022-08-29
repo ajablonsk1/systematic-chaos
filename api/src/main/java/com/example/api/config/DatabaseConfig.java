@@ -21,10 +21,12 @@ import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
+import com.example.api.model.util.File;
 import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
+import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
@@ -59,6 +61,7 @@ public class DatabaseConfig {
     private final ChapterRepo chapterRepo;
     private final AdditionalPointsRepo additionalPointsRepo;
     private final SurveyResultRepo surveyResultRepo;
+    private final FileRepo fileRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -523,6 +526,9 @@ public class DatabaseConfig {
             calendar.set(2022, Calendar.JUNE, 19);
             surveyResult3.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult3);
+
+            File file = new File();
+            fileRepo.save(file);
         };
     }
 }
