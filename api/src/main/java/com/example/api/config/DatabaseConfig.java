@@ -445,6 +445,7 @@ public class DatabaseConfig {
             GraphTaskResult result1 = new GraphTaskResult();
             result1.setGraphTask(graphTask);
             result1.setUser(student);
+            result1.setMaxPoints100(30.0);
             result1.setPointsReceived(12.0);
             result1.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 28);
@@ -455,6 +456,7 @@ public class DatabaseConfig {
             GraphTaskResult result2 = new GraphTaskResult();
             result2.setGraphTask(graphTaskTwo);
             result2.setUser(student1);
+            result2.setMaxPoints100(10.0);
             result2.setPointsReceived(10.0);
             result2.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 13);
@@ -465,6 +467,7 @@ public class DatabaseConfig {
             GraphTaskResult result3 = new GraphTaskResult();
             result3.setGraphTask(graphTaskTwo);
             result3.setUser(student8);
+            result3.setMaxPoints100(20.0);
             result3.setPointsReceived(11.0);
             result3.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);

@@ -112,6 +112,7 @@ public class TaskResultService {
         userValidator.validateStudentAccount(user, email);
         List<TaskPointsStatisticsResponse> graphTaskStatistics = graphTaskResultRepo.findAllByUser(user)
                 .stream()
+                .filter(graphTaskResult -> graphTaskResult.getSendDateMillis() != null)
                 .map(TaskPointsStatisticsResponse::new)
                 .toList();
         List<TaskPointsStatisticsResponse> fileTaskResults = fileTaskResultRepo.findAllByUser(user)
