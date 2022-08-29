@@ -14,5 +14,5 @@ public class SummaryResponse {
     private Integer waitingAnswersNumber;
     private List<AverageGrade> avgGradesList;
     private List<AverageActivityScore> avgActivitiesScore;
-
+    private List<NotAssessedActivity> notAssessedActivitiesTable;
 }

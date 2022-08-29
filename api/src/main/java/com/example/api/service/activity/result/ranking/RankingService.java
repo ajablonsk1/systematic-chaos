@@ -249,7 +249,7 @@ public class RankingService {
 
     private List<? extends TaskResult> getResultForActivity(Activity activity) {
         if (activity instanceof GraphTask) {
-            return graphTaskResultRepo.findAllByAndGraphTask((GraphTask) activity);
+            return graphTaskResultRepo.findAllByGraphTask((GraphTask) activity);
         }
         else if (activity instanceof FileTask) {
             return fileTaskResultRepo.findAllByFileTask((FileTask) activity);
