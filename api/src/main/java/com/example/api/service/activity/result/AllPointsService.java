@@ -63,11 +63,11 @@ public class AllPointsService {
         AtomicReference<Double> totalPointsReceived = new AtomicReference<>(0D);
         AtomicReference<Double> totalPointsToReceive = new AtomicReference<>(0D);
         graphTaskResultRepo.findAllByUser(student)
+                .stream()
+                .filter(graphTaskResult -> graphTaskResult.getPointsReceived() != null)
                 .forEach(graphTaskResult -> {
-                    if (graphTaskResult.getGraphTask().getMaxPoints() > 0) {
-                        totalPointsReceived.updateAndGet(v -> v + graphTaskResult.getPointsReceived());
-                        totalPointsToReceive.updateAndGet(v -> v + graphTaskResult.getMaxPoints100());
-                    }
+                    totalPointsReceived.updateAndGet(v -> v + graphTaskResult.getPointsReceived());
+                    totalPointsToReceive.updateAndGet(v -> v + graphTaskResult.getMaxPoints100());
                 });
         fileTaskResultRepo.findAllByUser(student)
                 .stream()
