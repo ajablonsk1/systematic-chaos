@@ -10,11 +10,11 @@ export const GameButton = (props) => {
     width: `${props.customWidth ?? '100%'}`,
     textAlign: 'center',
     backgroundColor: '#085454',
-    border: 'none'
+    border: 'none',
+    position: 'relative'
   }
 
   if (centerButton) {
-    buttonStyle.position = 'relative'
     buttonStyle.left = '50%'
     buttonStyle.transform = 'translateX(-50%)'
   }

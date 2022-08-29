@@ -52,7 +52,7 @@ function Ranking(props) {
       <tr>
         {headersWithSortedInfo.map((header, index) => (
           <th key={index + Date.now()}>
-            <span className={'mr-2'}>{header.headerName}</span>
+            <span className={'me-2'}>{header.headerName}</span>
             <CustomIcon
               icon={getSortIcon(sortingOrders[index])}
               onClick={() => sortBy(index, [header.sortedVar1, header.sortedVar2])}

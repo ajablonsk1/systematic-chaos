@@ -49,6 +49,7 @@ export const PointsMax = styled.p`
   position: relative;
   margin: 0;
   margin-left: 5px;
+  width: fit-content;
 `
 
 export const AcceptButton = styled(Button)`
@@ -82,10 +83,10 @@ export const ActivityAssessmentStudentFileRow = styled(Row)`
 export const ActivityAssesmentProfessorFileCol = styled(Col)`
   background-color: var(--dark-blue);
   color: var(--font-color);
-  margin: 10px auto auto auto;
+  margin: 0 auto;
   width: 80%;
   display: flex;
   flex-direction: column;
   text-align: center;
-  padding: 20px;
+  padding: 10px;
 `

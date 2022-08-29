@@ -52,7 +52,7 @@ function ExportModal(props) {
               <Button variant={'danger'} onClick={() => props.setModalVisible(false)}>
                 Anuluj
               </Button>
-              <Button variant={'success'} className={'ml-2'} onClick={startExporting} disabled={exportButtonDisabled}>
+              <Button variant={'success'} className={'ms-2'} onClick={startExporting} disabled={exportButtonDisabled}>
                 Eksportuj
               </Button>
             </>

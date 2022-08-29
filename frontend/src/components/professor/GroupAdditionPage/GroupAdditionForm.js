@@ -42,7 +42,7 @@ export default function GroupAdditionForm(props) {
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>
-                <Button variant={'danger'} className='mr-3' onClick={() => props.setModalOpen(false)}>
+                <Button variant={'danger'} className='me-3' onClick={() => props.setModalOpen(false)}>
                   Anuluj
                 </Button>
                 <Button

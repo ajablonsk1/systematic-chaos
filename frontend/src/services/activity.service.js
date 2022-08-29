@@ -1,5 +1,11 @@
 import { axiosApiGet } from '../utils/axios'
-import { ACTIVITY_MAP, GET_ACTIVITIES_LIST, GET_ACTIVITY_RESULT_LIST, GET_FILTERED_ACTIVITY_RESULT_LIST } from './urls'
+import {
+  ACTIVITY_MAP,
+  GET_ACTIVITIES_LIST,
+  GET_ACTIVITY_RESULT_LIST,
+  GET_ACTIVITY_STATS,
+  GET_FILTERED_ACTIVITY_RESULT_LIST
+} from './urls'
 
 class ActivityService {
   getActivityMap(mapId) {
@@ -25,6 +31,12 @@ class ActivityService {
       activityID: activityId,
       search: query
     }).catch((error) => {
+      throw error
+    })
+  }
+
+  getActivityStats(activityId) {
+    return axiosApiGet(GET_ACTIVITY_STATS, { activityID: activityId }).catch((error) => {
       throw error
     })
   }

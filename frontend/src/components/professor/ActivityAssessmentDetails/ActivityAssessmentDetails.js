@@ -183,7 +183,7 @@ export default function ActivityAssessmentDetails() {
               </ActivityAssesmentProfessorFileCol>
               <PointsRow>
                 <p className='m-0'>Punkty: </p>
-                <Row className={'d-flex'}>
+                <Row className={'d-flex justify-content-center'}>
                   <PointsInput
                     type='number'
                     min={0}

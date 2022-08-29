@@ -6,10 +6,11 @@ import Ranking from '../../../general/Ranking/Ranking'
 import { debounce } from 'lodash/function'
 import ActivityService from '../../../../services/activity.service'
 import { useLocation } from 'react-router-dom'
+import ActivityStats from './ActivityStats'
 
 function ActivityDetails(props) {
   const location = useLocation()
-  const { activityId } = location.state
+  const { activityId, activityType } = location.state
 
   const [studentsList, setStudentsList] = useState(undefined)
   const [filteredList, setFilteredList] = useState(undefined)
@@ -59,7 +60,7 @@ function ActivityDetails(props) {
           <Ranking rankingList={filteredList} customHeight={'80vh'} noPointsMessage={'Nie wykonano'} />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
-          STATS
+          <ActivityStats activityId={activityId} activityType={activityType} />
         </Tab>
       </TabsContainer>
     </Content>

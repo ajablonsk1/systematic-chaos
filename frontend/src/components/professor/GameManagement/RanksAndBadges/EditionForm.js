@@ -61,7 +61,7 @@ function EditionForm(props) {
           </Row>
           <Row className='mt-4 d-flex justify-content-center'>
             <Col sm={12} className='d-flex justify-content-center mb-2'>
-              <Button variant={'secondary'} className={'mr-3'} onClick={props.onCancel}>
+              <Button variant={'secondary'} className={'me-3'} onClick={props.onCancel}>
                 Anuluj
               </Button>
               <Button type='submit'>Zapisz zmiany</Button>

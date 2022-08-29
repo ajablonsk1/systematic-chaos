@@ -7,11 +7,11 @@ import { getActivityImg, getActivityTypeName } from '../../utils/constants'
 import { Row, Col } from 'react-bootstrap'
 export function Header({ activityName, activityType }) {
   return (
-    <>
+    <div className={'d-flex'}>
       <ActivityImg src={getActivityImg(activityType)}></ActivityImg>
       <ActivityType>{getActivityTypeName(activityType)}</ActivityType>
       <ActivityName>{activityName}</ActivityName>
-    </>
+    </div>
   )
 }
 
