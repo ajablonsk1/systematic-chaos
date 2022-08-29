@@ -6,8 +6,7 @@ import {
   GET_FIRST_TASK_TO_EVALUATE,
   PROF_FEEDBACK,
   ADD_BONUS_POINTS,
-  GET_STUDENT_POINTS_PROFESSOR,
-  ADD_NEW_CHAPTER
+  GET_STUDENT_POINTS_PROFESSOR
 } from './urls'
 
 class ProfessorService {
@@ -64,14 +63,6 @@ class ProfessorService {
     return axiosApiGet(GET_STUDENT_POINTS_PROFESSOR, { studentEmail: studentEmail }).catch((error) => {
       throw error
     })
-  }
-
-  sendNewChapterData(name, sizeX, sizeY, imageId) {
-    return axiosApiPost(ADD_NEW_CHAPTER, { name: name, sizeX: sizeX, sizeY: sizeY, imageId: imageId }).catch(
-      (error) => {
-        throw error
-      }
-    )
   }
 }
 

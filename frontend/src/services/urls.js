@@ -53,4 +53,4 @@ export const GET_FILTERED_ACTIVITY_RESULT_LIST = GET_ACTIVITY_RESULT_LIST + '/se
 export const GET_CHAPTER_LIST = BASE_URL + 'chapter'
 export const GET_CHAPTER_DETAILS = GET_CHAPTER_LIST + '/info'
 export const GET_ACTIVITY_STATS = BASE_URL + 'task/result/activity/statistics'
-export const ADD_NEW_CHAPTER = BASE_URL + 'chapter/create'
+export const ADD_NEW_CHAPTER = BASE_URL + 'chapter/create/'

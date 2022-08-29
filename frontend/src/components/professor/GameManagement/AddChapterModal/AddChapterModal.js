@@ -3,7 +3,8 @@ import { Formik } from 'formik'
 import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner } from 'react-bootstrap'
 import { FIELD_REQUIRED, NONNEGATIVE_NUMBER, POSITIVE_NUMBER } from '../../../../utils/constants'
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
-import ProfessorService from '../../../../services/professor.service'
+import ChapterService from '../../../../services/chapter.service'
+
 export function AddChapterModal({ showModal, setShowModal }) {
   const [successModalOpen, setSuccessModalOpen] = useState(false)
 
@@ -22,15 +23,20 @@ export function AddChapterModal({ showModal, setShowModal }) {
           }}
           validate={(values) => {
             const errors = {}
-            if (!values.chapterName) errors.chapterName = FIELD_REQUIRED
-            if (values.chapterSizeX < 1) errors.chapterSizeX = POSITIVE_NUMBER
-            if (values.chapterSizeY < 1) errors.chapterSizeY = POSITIVE_NUMBER
+            if (!values.name) errors.chapterName = FIELD_REQUIRED
+            if (values.sizeX < 1) errors.chapterSizeX = POSITIVE_NUMBER
+            if (values.sizeY < 1) errors.chapterSizeY = POSITIVE_NUMBER
             if (values.imageId < 0) errors.imageId = NONNEGATIVE_NUMBER
             return errors
           }}
           onSubmit={(values, { setSubmitting }) => {
             // TODO: send edit data to backend
-            ProfessorService.sendNewChapterData(...values)
+            ChapterService.sendNewChapterData({
+              name: values.name,
+              sizeX: values.sizeX,
+              sizeY: values.sizeY,
+              imageId: values.imageId
+            })
               .then((response) => {
                 console.log(response)
                 // setShowModal(false)
