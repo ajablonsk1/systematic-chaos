@@ -8,7 +8,7 @@ import InfoTaskService from '../../../../services/infoTask.service'
 import { Card, Col, Row } from 'react-bootstrap'
 import { CustomCard } from '../../GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
-import GridLayout from 'react-grid-layout'
+import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 
 export default function Information() {
   const location = useLocation()
@@ -65,82 +65,17 @@ export default function Information() {
       return <p>{ERROR_OCCURRED}</p>
     }
 
-    const images = information.imageUrls.concat([...information.imageUrls, ...information.imageUrls])
-
-    const imagesNumber = images.length
-    const parentWidth = gridCardRef.current.offsetWidth - 32
-    const parentHeight = gridCardRef.current.offsetHeight - 50
-    const imagesNumberInOneRow = 3
-    const rowsNumber = Math.ceil(imagesNumber / 3)
-
-    const imagesHeight = []
-    images.forEach((url) => {
-      const imgTemplate = document.createElement('img')
-      imgTemplate.src = url
-      const originalWidth = imgTemplate.width
-      const originalHeight = imgTemplate.height
-      const scaledWidth = Math.floor(parentWidth / imagesNumberInOneRow)
-      const scaledHeight = Math.floor((originalHeight * scaledWidth) / originalWidth)
-
-      imagesHeight.push(scaledHeight)
-    })
-
-    const rowHeight = Math.min(...imagesHeight)
-    console.log(rowHeight)
-
-    // const layout = [
-    //   { i: '0', x: 0, y: 0, w: 1, h: 2 },
-    //   { i: '1', x: 1, y: 0, w: 3, h: 2 },
-    //   { i: '2', x: 4, y: 0, w: 1, h: 2 }
-    // ]
-    // return (
-    //   <GridLayout className='layout' layout={layout} cols={12} rowHeight={30} width={1200}>
-    //     <div key='0' style={{ background: 'red' }}>
-    //       a
-    //     </div>
-    //     <div key='1' style={{ background: 'red' }}>
-    //       b
-    //     </div>
-    //     <div key='2' style={{ background: 'red' }}>
-    //       c
-    //     </div>
-    //   </GridLayout>
-    // )
-
-    const layout = images.map((url, index) => {
-      const rowNumber = Math.floor(index / imagesNumberInOneRow)
-
-      console.log(
-        index.toString(),
-        index % imagesNumberInOneRow,
-        index >= imagesNumberInOneRow ? imagesHeight[index - imagesNumberInOneRow] + rowNumber : 0,
-        Math.ceil(imagesHeight[index] / rowHeight)
+    if (gridCardRef.current?.offsetWidth) {
+      return (
+        <ImagesGallery
+          width={gridCardRef.current.offsetWidth - 32}
+          images={information.imageUrls.concat([...information.imageUrls, ...information.imageUrls])}
+          cols={3}
+        />
       )
+    }
 
-      return {
-        i: index.toString(),
-        x: index % imagesNumberInOneRow,
-        y: index >= imagesNumberInOneRow ? imagesHeight[index - imagesNumberInOneRow] + rowNumber : 0,
-        w: 1,
-        h: Math.ceil(imagesHeight[index] / rowHeight) //Math.round(imgTemplate.height / imgTemplate.width)
-      }
-    })
-
-    return (
-      <GridLayout
-        className={'layout'}
-        layout={layout}
-        cols={imagesNumberInOneRow}
-        width={parentWidth}
-        rowHeight={rowHeight}
-      >
-        {images.map((url, index) => (
-          <div key={index.toString()}>
-            <img width={'100%'} height={'100%'} src={url} alt={'info-task-attachment'} />
-          </div>
-        ))}
-      </GridLayout>
-    )
+    return <></>
   }, [information])
 
   return (
