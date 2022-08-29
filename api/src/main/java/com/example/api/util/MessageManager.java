@@ -17,9 +17,9 @@ public class MessageManager {
     public static final String ANS_6 = "Fryderyk von Wallenrode";
     public static final String ANS_7 = "Władysław Jagiełło";
 
-    public static final String TITLE = "Władysław Jagiełło";
-    public static final String DESC = "Władysław Jagiełło";
-    public static final String REQ_KNOWLEDGE = "Władysław Jagiełło";
+    public static final String TITLE = "Przykładowy tytuł";
+    public static final String DESC = "rzykładowy opis";
+    public static final String REQ_KNOWLEDGE = "Wymagana wiedza";
 
     public static final String LINK = "https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg";
 }
