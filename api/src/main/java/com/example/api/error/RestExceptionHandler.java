@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.format.DateTimeParseException;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -81,6 +80,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ParseException.class)
     public ResponseEntity<Object> handleDateTimeParseException(ParseException ex) {
+        return handleExceptionWithStatusCode(BAD_REQUEST, ex);
+    }
+
+    @ExceptionHandler(RequestValidationException.class)
+    public ResponseEntity<Object> handleRequestValidationException(RequestValidationException ex) {
         return handleExceptionWithStatusCode(BAD_REQUEST, ex);
     }
 

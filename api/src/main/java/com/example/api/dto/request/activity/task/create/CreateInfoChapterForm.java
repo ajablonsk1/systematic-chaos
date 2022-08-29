@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OptionForm {
-    @Schema(required = true) private String content;
-    @Schema(required = true) private Boolean isCorrect;
+public class CreateInfoChapterForm {
+    @Schema(required = true) private Long chapterId;
+    @Schema(required = true) private CreateInfoForm form;
 }

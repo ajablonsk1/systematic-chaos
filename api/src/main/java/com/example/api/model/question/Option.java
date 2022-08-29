@@ -28,6 +28,6 @@ public class Option {
 
     public Option(OptionForm form, Question question) {
         this.content = form.getContent();
-        this.isCorrect = form.isCorrect();
+        this.isCorrect = form.getIsCorrect();
     }
 }
