@@ -1,15 +1,19 @@
 package com.example.api.controller.activity.task;
 
+import com.example.api.dto.request.activity.task.create.CreateInfoChapterForm;
+import com.example.api.dto.request.activity.task.create.CreateInfoForm;
 import com.example.api.dto.response.activity.task.InfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.service.activity.task.InfoService;
+import com.example.api.util.MessageManager;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +23,27 @@ public class InfoController {
     private final InfoService infoService;
 
     @GetMapping
-    ResponseEntity<InfoResponse> getInfo(@RequestParam Long infoId)
+    public ResponseEntity<InfoResponse> getInfo(@RequestParam Long infoId)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(infoService.getInfo(infoId));
+    }
+
+    @GetMapping("/create")
+    public ResponseEntity<CreateInfoForm> getExampleCreateInfoForm() {
+        CreateInfoForm form = new CreateInfoForm(
+                MessageManager.TITLE,
+                MessageManager.DESC,
+                1,
+                2,
+                List.of(MessageManager.LINK)
+        );
+        return ResponseEntity.ok().body(form);
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createInfo(@RequestBody CreateInfoChapterForm form)
+            throws RequestValidationException {
+        infoService.createInfo(form);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

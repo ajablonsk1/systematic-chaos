@@ -1,10 +1,5 @@
 package com.example.api.dto.response.map;
 
-import com.example.api.model.activity.task.FileTask;
-import com.example.api.model.activity.task.GraphTask;
-import com.example.api.model.activity.task.Info;
-import com.example.api.model.activity.task.Survey;
-import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
