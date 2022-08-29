@@ -94,10 +94,10 @@ export default function GameSummary() {
     <Content>
       <Row className={'m-0'} style={{ height: '50vh' }}>
         <Col md={6}>
-          <Row className={'m-0 h-50 py-2'}>
+          <Row className={'h-50 py-2'}>
             <GameSummaryCard header={<h5>Statystyki ocen studentów</h5>} body={statsCardBody(gradesStatsCardTitles)} />
           </Row>
-          <Row className={'m-0 h-50 py-2'}>
+          <Row className={'h-50 py-2'}>
             <GameSummaryCard header={<h5>Statystyki aktywności</h5>} body={statsCardBody(activityStatsCardTitles)} />
           </Row>
         </Col>
@@ -108,7 +108,7 @@ export default function GameSummary() {
             </CardHeader>
             <Card.Body>
               {carousel(setBarChartActiveChapterId)}
-              <ChartCol>
+              <ChartCol className={'top-50 translate-middle-y'}>
                 <Bar data={barChartData} options={barChartOptions} />
               </ChartCol>
             </Card.Body>
@@ -123,7 +123,7 @@ export default function GameSummary() {
             </CardHeader>
             <Card.Body style={{ maxHeight: '42vh' }}>
               {carousel(setLineChartActiveChapterId)}
-              <ChartCol>
+              <ChartCol className={'top-50 translate-middle-y'}>
                 {lineChartData && lineChartOptions ? (
                   <Line data={lineChartData} options={lineChartOptions} />
                 ) : (

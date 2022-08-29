@@ -28,6 +28,7 @@ export const SummaryCard = styled(ChapterCard)`
 
   .list-group-item {
     background-color: var(--light-blue);
+    color: var(--font-color);
   }
 
   #activities,

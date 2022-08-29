@@ -22,7 +22,7 @@ export default function ActivityAssessmentStudentFileService({ activityResponseI
           <ActivityAssessmentStudentFileRow key={idx} className='mt-4'>
             <Col>{file.name}</Col>
             <Col>
-              <Button variant='warning' className='ml-2' onClick={() => downloadFile(idx)}>
+              <Button variant='warning' className='ms-2' onClick={() => downloadFile(idx)}>
                 <FontAwesomeIcon icon={faDownload} />
               </Button>
             </Col>

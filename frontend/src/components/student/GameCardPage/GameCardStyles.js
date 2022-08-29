@@ -6,6 +6,7 @@ export const CustomCard = styled(Card)`
   height: ${(props) => props.$customHeight ?? '100%'};
   width: 100%;
   border-radius: 10px;
+  border: none;
 
   & h5 {
     margin: 0;

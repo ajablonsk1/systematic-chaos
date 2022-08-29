@@ -125,7 +125,7 @@ export default function CombatTask() {
                   <RemarksTextArea ref={textAreaRef} disabled={isReviewed()} onChange={handleAnswerChange} />
                 </>
               )}
-              <Col className={'text-center overflow-auto'}>
+              <Col className={'text-center'}>
                 <FileService
                   task={task}
                   setFile={setFileBlob}
