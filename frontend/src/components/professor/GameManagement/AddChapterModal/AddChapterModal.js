@@ -16,9 +16,9 @@ export function AddChapterModal({ showModal, setShowModal }) {
       <ModalBody>
         <Formik
           initialValues={{
-            chapterName: '',
-            chapterSizeX: '',
-            chapterSizeY: '',
+            name: '',
+            sizeX: '',
+            sizeY: '',
             imageId: ''
           }}
           validate={(values) => {
