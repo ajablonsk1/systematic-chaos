@@ -6,6 +6,7 @@ export const ActivityImg = styled.img`
   width: 30px;
   padding: 0;
   margin-right: 10px;
+  margin: 0 10px;
   align-self: center;
 
   @media (max-width: 800px) {
