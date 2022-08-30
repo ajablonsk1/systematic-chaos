@@ -51,7 +51,7 @@ function ChapterDetails() {
 
   useEffect(() => {
     // todo: set mapId, now we always get first map
-    ActivityService.getActivityMap(1)
+    ActivityService.getActivityMap(chapterId)
       .then((response) => setChapterMap(response))
       .catch(() => setChapterMap(null))
   }, [])
