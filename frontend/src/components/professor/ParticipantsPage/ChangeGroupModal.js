@@ -4,7 +4,7 @@ import CardHeader from 'react-bootstrap/CardHeader'
 import Loader from '../../general/Loader/Loader'
 import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import { SuccessModal } from '../GameManagement/SuccessModal'
+import { SuccessModal } from '../SuccessModal'
 
 function ChangeGroupModal(props) {
   const [student, setStudent] = useState()

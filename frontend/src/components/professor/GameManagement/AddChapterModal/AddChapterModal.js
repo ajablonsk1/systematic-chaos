@@ -4,7 +4,7 @@ import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinn
 import { FIELD_REQUIRED, NONNEGATIVE_NUMBER, POSITIVE_NUMBER } from '../../../../utils/constants'
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
 import ChapterService from '../../../../services/chapter.service'
-import { SuccessModal } from '../SuccessModal'
+import { SuccessModal } from '../../SuccessModal'
 
 export function AddChapterModal({ showModal, setShowModal }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)

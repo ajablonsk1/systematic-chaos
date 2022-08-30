@@ -3,7 +3,7 @@ import { Button, Card, Col, Container, Form, Modal, Row, Spinner } from 'react-b
 import { FIELD_REQUIRED, POSITIVE_NUMBER } from '../../../utils/constants'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { Formik } from 'formik'
-import { SuccessModal } from '../GameManagement/SuccessModal'
+import { SuccessModal } from '../SuccessModal'
 
 function EditChapterModal(props) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
