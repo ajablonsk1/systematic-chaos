@@ -62,8 +62,10 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                 <Container>
                   <Row className='mx-auto'>
                     {FormCol('Nazwa rozdziału', 'text', 'name', 12)}
+                    <div className={'m-2'}></div>
                     {FormCol('Liczba kolumn', 'number', 'sizeX', 6, { min: 1 })}
                     {FormCol('Liczba wierszy', 'number', 'sizeY', 6, { min: 1 })}
+                    <div className={'m-2'}></div>
                     {FormCol('Id obrazu', 'number', 'imageId', 12, { min: 0 })}
                   </Row>
                   <Row className='mt-4 d-flex justify-content-center'>
