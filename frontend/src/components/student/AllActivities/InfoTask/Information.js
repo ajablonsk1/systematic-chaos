@@ -66,13 +66,7 @@ export default function Information() {
     }
 
     if (gridCardRef.current?.offsetWidth) {
-      return (
-        <ImagesGallery
-          width={gridCardRef.current.offsetWidth - 32}
-          images={information.imageUrls.concat([...information.imageUrls, ...information.imageUrls])}
-          cols={3}
-        />
-      )
+      return <ImagesGallery width={gridCardRef.current.offsetWidth - 32} images={information.imageUrls} cols={3} />
     }
 
     return <></>
