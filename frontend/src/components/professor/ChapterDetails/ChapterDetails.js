@@ -50,11 +50,10 @@ function ChapterDetails() {
   }
 
   useEffect(() => {
-    // todo: set mapId, now we always get first map
     ActivityService.getActivityMap(chapterId)
       .then((response) => setChapterMap(response))
       .catch(() => setChapterMap(null))
-  }, [])
+  }, [chapterId])
 
   const startActivityEdition = (activity) => {
     // TODO: depending on the type of activity, we will use a different endpoint
