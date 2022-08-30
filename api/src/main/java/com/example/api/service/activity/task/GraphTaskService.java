@@ -107,6 +107,7 @@ public class GraphTaskService {
                         List<Option> options = optionForms.stream()
                                 .map(optionForm -> new Option(optionForm, question))
                                 .toList();
+                        options.forEach(option -> option.setQuestion(question));
                         optionRepo.saveAll(options);
                         question.setOptions(options);
                         numToQuestion.put(questionForm.getQuestionNum(), question);
