@@ -114,44 +114,46 @@ export default function CombatTask() {
               className={'h-100 overflow-auto'}
             >
               <Fade delay={FIELD_DELAY}>
-                <h4>Odpowiedź:</h4>
-                {isReviewed() ? (
-                  <Col>
-                    <h4>Twoja odpowiedź</h4>
-                    <p>{task.answer}</p>
+                <>
+                  <h4>Odpowiedź:</h4>
+                  {isReviewed() ? (
+                    <Col>
+                      <h4>Twoja odpowiedź</h4>
+                      <p>{task.answer}</p>
+                    </Col>
+                  ) : (
+                    <>
+                      {task.answer && (
+                        <Col>
+                          <h5>Twoja obecna odpowiedź</h5>
+                          <p>{task.answer}</p>
+                        </Col>
+                      )}
+                      <RemarksTextArea ref={textAreaRef} disabled={isReviewed()} onChange={handleAnswerChange} />
+                    </>
+                  )}
+                  <Col className={'text-center'}>
+                    <FileService
+                      task={task}
+                      setFile={setFileBlob}
+                      setFileName={setFileName}
+                      setIsFetching={setIsFetching}
+                      isFetching={isFetching}
+                      isRevieved={isReviewed()}
+                    />
                   </Col>
-                ) : (
-                  <>
-                    {task.answer && (
-                      <Col>
-                        <h5>Twoja obecna odpowiedź</h5>
-                        <p>{task.answer}</p>
-                      </Col>
-                    )}
-                    <RemarksTextArea ref={textAreaRef} disabled={isReviewed()} onChange={handleAnswerChange} />
-                  </>
-                )}
-                <Col className={'text-center'}>
-                  <FileService
-                    task={task}
-                    setFile={setFileBlob}
-                    setFileName={setFileName}
-                    setIsFetching={setIsFetching}
-                    isFetching={isFetching}
-                    isRevieved={isReviewed()}
-                  />
-                </Col>
-                <Col className={'w-100 text-center'}>
-                  <SendTaskButton disabled={task.points != null} onClick={sendAnswer}>
-                    {isFetching ? (
-                      <Spinner animation={'border'} />
-                    ) : isReviewed() ? (
-                      <span>Aktywność została oceniona</span>
-                    ) : (
-                      <span>Wyślij</span>
-                    )}
-                  </SendTaskButton>
-                </Col>
+                  <Col className={'w-100 text-center'}>
+                    <SendTaskButton disabled={task.points != null} onClick={sendAnswer}>
+                      {isFetching ? (
+                        <Spinner animation={'border'} />
+                      ) : isReviewed() ? (
+                        <span>Aktywność została oceniona</span>
+                      ) : (
+                        <span>Wyślij</span>
+                      )}
+                    </SendTaskButton>
+                  </Col>
+                </>
               </Fade>
             </Col>
 
