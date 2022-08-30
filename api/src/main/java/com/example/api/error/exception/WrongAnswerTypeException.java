@@ -2,7 +2,7 @@ package com.example.api.error.exception;
 
 import com.example.api.model.question.QuestionType;
 
-public class WrongAnswerTypeException extends Exception{
+public class WrongAnswerTypeException extends RequestValidationException{
     private final QuestionType expectedType;
     private final String OPENED_MESSAGE = "Opened answer must have be provided with field (string) 'openAnswer'. " +
             "Please check your answer object.";

@@ -1,19 +1,32 @@
-package com.example.api.service.validator;
+package com.example.api.service.validator.activity;
 
+import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
+import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
+import com.example.api.dto.request.activity.task.create.CreateInfoForm;
+import com.example.api.dto.request.activity.task.create.CreateSurveyForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.EntityRequiredAttributeNullException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.question.Difficulty;
+import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class ActivityValidator {
+    private final GraphTaskValidator graphTaskValidator;
+    private final FileTaskValidator fileTaskValidator;
+    private final InfoValidator infoValidator;
+    private final SurveyValidator surveyValidator;
 
     public void validateActivityIsNotNull(Activity activity, Long id) throws EntityNotFoundException {
         if(activity == null) {
@@ -54,5 +67,29 @@ public class ActivityValidator {
             throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
                     "graph task result with id " + id);
         }
+    }
+
+    public void validateCreateFileTaskFormFields(CreateFileTaskForm form) throws RequestValidationException {
+        fileTaskValidator.validateCreateFileTaskForm(form);
+    }
+
+    public void validateCreateGraphTaskFormFields(CreateGraphTaskForm form) throws RequestValidationException {
+        graphTaskValidator.validateCreateGraphTaskFormFields(form);
+    }
+
+    public void validateCreateSurveyForm(CreateInfoForm form) throws RequestValidationException {
+        infoValidator.validateCreateInfoForm(form);
+    }
+
+    public void validateCreateSurveyForm(CreateSurveyForm form) throws RequestValidationException {
+        surveyValidator.validateCreateSurveyForm(form);
+    }
+
+    public QuestionType getQuestionTypeFromString(String questionType) throws RequestValidationException {
+        return graphTaskValidator.getQuestionTypeFromString(questionType);
+    }
+
+    public Difficulty getDifficultyFromString(String difficulty) throws RequestValidationException {
+        return graphTaskValidator.getDifficultyFromString(difficulty);
     }
 }

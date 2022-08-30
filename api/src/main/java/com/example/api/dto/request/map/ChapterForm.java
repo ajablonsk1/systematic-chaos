@@ -1,5 +1,6 @@
 package com.example.api.dto.request.map;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChapterForm {
-    private String name;
-    private Integer sizeX;
-    private Integer sizeY;
-    private Long imageId;
+    @Schema(required = true) private String name;
+    @Schema(required = true) private Integer sizeX;
+    @Schema(required = true) private Integer sizeY;
+    @Schema(required = true) private Long imageId;
 }

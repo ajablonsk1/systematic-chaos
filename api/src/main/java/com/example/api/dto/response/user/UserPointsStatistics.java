@@ -19,20 +19,20 @@ public class UserPointsStatistics {
         this.dateInMillis = result.getSendDateMillis();
         this.pointsReceived = result.getPointsReceived();
         this.activityType = ActivityType.EXPEDITION;
-        this.activityName = result.getGraphTask().getName();
+        this.activityName = result.getGraphTask().getTitle();
     }
 
     public UserPointsStatistics(FileTaskResult result) {
         this.dateInMillis = result.getSendDateMillis();
         this.pointsReceived = result.getPointsReceived();
         this.activityType = ActivityType.TASK;
-        this.activityName = result.getFileTask().getName();
+        this.activityName = result.getFileTask().getTitle();
     }
 
     public UserPointsStatistics(SurveyResult result) {
         this.dateInMillis = result.getSendDateMillis();
         this.pointsReceived = result.getPointsReceived();
         this.activityType = ActivityType.SURVEY;
-        this.activityName = result.getSurvey().getName();
+        this.activityName = result.getSurvey().getTitle();
     }
 }

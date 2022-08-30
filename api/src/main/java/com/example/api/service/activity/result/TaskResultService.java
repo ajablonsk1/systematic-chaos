@@ -2,10 +2,8 @@ package com.example.api.service.activity.result;
 
 import com.example.api.dto.request.activity.result.ActivityTypeWithIdForm;
 import com.example.api.dto.request.activity.task.GetCSVForm;
-import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
 import com.example.api.dto.response.activity.task.result.ActivityStatisticsResponse;
-import com.example.api.service.activity.result.util.GroupActivityStatisticsCreator;
-import com.example.api.service.activity.result.util.ScaleActivityStatisticsCreator;
+import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.Feedback;
@@ -26,8 +24,10 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.validator.ActivityValidator;
+import com.example.api.service.activity.result.util.GroupActivityStatisticsCreator;
+import com.example.api.service.activity.result.util.ScaleActivityStatisticsCreator;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import com.example.api.util.csv.CSVConverter;
 import com.example.api.util.csv.CSVTaskResult;
 import lombok.RequiredArgsConstructor;
@@ -112,6 +112,7 @@ public class TaskResultService {
         userValidator.validateStudentAccount(user, email);
         List<TaskPointsStatisticsResponse> graphTaskStatistics = graphTaskResultRepo.findAllByUser(user)
                 .stream()
+                .filter(graphTaskResult -> graphTaskResult.getSendDateMillis() != null)
                 .map(TaskPointsStatisticsResponse::new)
                 .toList();
         List<TaskPointsStatisticsResponse> fileTaskResults = fileTaskResultRepo.findAllByUser(user)
@@ -148,17 +149,17 @@ public class TaskResultService {
             switch (form.getType()){
                 case EXPEDITION -> {
                     GraphTask graphTask = graphTaskRepo.findGraphTaskById(form.getId());
-                    firstRow.addAll(List.of("Zadanie:" + graphTask.getName() + " (Punkty)", "Zadanie:" + graphTask.getName() + " (Informacja zwrotna)"));
+                    firstRow.addAll(List.of("Zadanie:" + graphTask.getTitle() + " (Punkty)", "Zadanie:" + graphTask.getTitle() + " (Informacja zwrotna)"));
                     formToGraphTaskMap.put(graphTask.getId(), graphTask);
                 }
                 case TASK -> {
                     FileTask fileTask = fileTaskRepo.findFileTaskById(form.getId());
-                    firstRow.addAll(List.of("Zadanie:" + fileTask.getName() + " (Punkty)", "Zadanie:" + fileTask.getName() + " (Informacja zwrotna)"));
+                    firstRow.addAll(List.of("Zadanie:" + fileTask.getTitle() + " (Punkty)", "Zadanie:" + fileTask.getTitle() + " (Informacja zwrotna)"));
                     formToFileTaskMap.put(fileTask.getId(), fileTask);
                 }
                 case SURVEY -> {
                     Survey survey = surveyRepo.findSurveyById(form.getId());
-                    firstRow.addAll(List.of("Zadanie:" + survey.getName() + " (Punkty)", "Zadanie:" + survey.getName() + " (Informacja zwrotna)"));
+                    firstRow.addAll(List.of("Zadanie:" + survey.getTitle() + " (Punkty)", "Zadanie:" + survey.getTitle() + " (Informacja zwrotna)"));
                     formToSurveyMap.put(survey.getId(), survey);
                 }
             }

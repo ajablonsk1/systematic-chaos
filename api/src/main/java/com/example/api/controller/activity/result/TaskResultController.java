@@ -1,8 +1,8 @@
 package com.example.api.controller.activity.result;
 
 import com.example.api.dto.request.activity.task.GetCSVForm;
-import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
 import com.example.api.dto.response.activity.task.result.ActivityStatisticsResponse;
+import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.result.TaskResultService;

@@ -19,15 +19,23 @@ public abstract class Activity {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "myGen")
     @Id
     private Long id;
-    private String name;
+    private String title;
     private String description;
     private Integer posX;
     private Integer posY;
-    private Integer experience;
+    private Double experience;
 
     @OneToOne
     private Requirement requirement;
 
     @OneToOne
     private User professor;
+
+    public Activity(String name, String description, int posX, int posY, User professor){
+        this.title = name;
+        this.description = description;
+        this.posX = posX;
+        this.posY = posY;
+        this.professor = professor;
+    }
 }
