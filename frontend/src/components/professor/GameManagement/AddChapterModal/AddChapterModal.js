@@ -39,7 +39,6 @@ export function AddChapterModal({ showModal, setShowModal }) {
                 imageId: values.imageId
               })
                 .then((response) => {
-                  console.log(response)
                   setShowModal(false)
                   setIsSuccessModalOpen(true)
                   setSubmitting(false)
