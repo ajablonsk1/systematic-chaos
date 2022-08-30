@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Card, Col, Container, Form, Modal, ModalBody, ModalFooter, Row, Spinner } from 'react-bootstrap'
+import { Button, Card, Col, Container, Form, Modal, Row, Spinner } from 'react-bootstrap'
 import { FIELD_REQUIRED, POSITIVE_NUMBER } from '../../../utils/constants'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { Formik } from 'formik'
+import { SuccessModal } from '../GameManagement/SuccessModal'
 
 function EditChapterModal(props) {
-  const [isSuccessModalOpen, setSuccessModalOpen] = useState(false)
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
 
   return (
     <>
@@ -35,7 +36,7 @@ function EditChapterModal(props) {
               onSubmit={(values, { setSubmitting }) => {
                 // TODO: send edit data to backend
                 props.setModalOpen(false)
-                setSuccessModalOpen(true)
+                setIsSuccessModalOpen(true)
                 setSubmitting(false)
               }}
             >
@@ -84,14 +85,11 @@ function EditChapterModal(props) {
           </Card.Body>
         </Card>
       </Modal>
-      <Modal show={isSuccessModalOpen}>
-        <ModalBody className={'text-center'}>Dane rozdziału zmienione pomyślnie.</ModalBody>
-        <ModalFooter className={'justify-content-center'}>
-          <Button variant={'success'} onClick={() => setSuccessModalOpen(false)}>
-            Zakończ
-          </Button>
-        </ModalFooter>
-      </Modal>
+      <SuccessModal
+        isSuccessModalOpen={isSuccessModalOpen}
+        setIsSuccessModalOpen={setIsSuccessModalOpen}
+        text='Dane rozdziału zmieniono pomyślnie'
+      />
     </>
   )
 }
