@@ -20,6 +20,10 @@ export default function GameManagement() {
   const [chapterList, setChapterList] = useState(undefined)
 
   useEffect(() => {
+    fetchChaptersList()
+  }, [chapterList])
+
+  const fetchChaptersList = () => {
     ChapterService.getChaptersList()
       .then((response) => {
         setChapterList(response)
@@ -27,7 +31,7 @@ export default function GameManagement() {
       .catch(() => {
         setChapterList(null)
       })
-  }, [])
+  }
 
   const goToChapterDetailsView = (chapterName, chapterId) => {
     navigate(
@@ -146,7 +150,11 @@ export default function GameManagement() {
         </Row>
       </Container>
       <GameLoader showModal={showConfigModal} setShowModal={setShowConfigModal} />
-      <AddChapterModal showModal={showAddChapterModal} setShowModal={setShowAddChapterModal} />
+      <AddChapterModal
+        showModal={showAddChapterModal}
+        setShowModal={setShowAddChapterModal}
+        refetchChapterList={fetchChaptersList}
+      />
     </Content>
   )
 }

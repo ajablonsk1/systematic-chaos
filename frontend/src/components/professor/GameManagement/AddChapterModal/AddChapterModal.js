@@ -1,13 +1,19 @@
 import { useState } from 'react'
 import { Formik } from 'formik'
 import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner } from 'react-bootstrap'
-import { FIELD_REQUIRED, NONNEGATIVE_NUMBER, POSITIVE_NUMBER } from '../../../../utils/constants'
+import {
+  FIELD_REQUIRED,
+  NONNEGATIVE_NUMBER,
+  POSITIVE_NUMBER,
+  SANE_MAP_FIELDCOUNT_LIMIT
+} from '../../../../utils/constants'
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
 import ChapterService from '../../../../services/chapter.service'
 import { SuccessModal } from '../../SuccessModal'
 
-export function AddChapterModal({ showModal, setShowModal }) {
+export function AddChapterModal({ showModal, setShowModal, refetchChapterList }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   return (
     <>
@@ -26,8 +32,8 @@ export function AddChapterModal({ showModal, setShowModal }) {
             validate={(values) => {
               const errors = {}
               if (!values.name) errors.chapterName = FIELD_REQUIRED
-              if (values.sizeX < 1) errors.chapterSizeX = POSITIVE_NUMBER
-              if (values.sizeY < 1) errors.chapterSizeY = POSITIVE_NUMBER
+              if (values.sizeX < 1 || values.sizeX > SANE_MAP_FIELDCOUNT_LIMIT) errors.chapterSizeX = POSITIVE_NUMBER
+              if (values.sizeY < 1 || values.sizeY > SANE_MAP_FIELDCOUNT_LIMIT) errors.chapterSizeY = POSITIVE_NUMBER
               if (values.imageId < 0) errors.imageId = NONNEGATIVE_NUMBER
               return errors
             }}
@@ -42,8 +48,13 @@ export function AddChapterModal({ showModal, setShowModal }) {
                   setShowModal(false)
                   setIsSuccessModalOpen(true)
                   setSubmitting(false)
+                  setErrorMessage('')
+                  refetchChapterList()
                 })
-                .catch(() => {})
+                .catch((errorMessage) => {
+                  setSubmitting(false)
+                  setErrorMessage(errorMessage)
+                })
             }}
           >
             {({ isSubmitting, values, errors, handleSubmit }) => (
@@ -80,6 +91,7 @@ export function AddChapterModal({ showModal, setShowModal }) {
               </Form>
             )}
           </Formik>
+          {errorMessage && <p className={'text-center text-danger mt-2'}>{errorMessage}</p>}
         </ModalBody>
       </Modal>
       <SuccessModal
