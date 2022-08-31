@@ -22,6 +22,8 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
+import com.example.api.model.util.Image;
+import com.example.api.model.util.ImageType;
 import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
@@ -539,7 +541,7 @@ public class DatabaseConfig {
             ImageIO.write(image, "png", output);
             byte [] data = output.toByteArray();
 
-            File chapterImage = new File(null, "Chapter image 1", data);
+            Image chapterImage = new Image("Chapter image 1", data, ImageType.CHAPTER);
             fileRepo.save(chapterImage);
         };
     }

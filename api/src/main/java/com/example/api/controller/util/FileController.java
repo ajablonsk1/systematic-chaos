@@ -1,6 +1,7 @@
 package com.example.api.controller.util;
 
 import com.example.api.model.util.File;
+import com.example.api.model.util.Image;
 import com.example.api.service.util.FileService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class FileController {
     private final FileService fileService;
 
     @GetMapping("/chapter/images")
-    public ResponseEntity<List<File>> getImagesForChapter() {
+    public ResponseEntity<List<Image>> getImagesForChapter() {
         return ResponseEntity.ok().body(fileService.getImagesForChapter());
     }
 }
