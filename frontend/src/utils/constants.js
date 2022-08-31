@@ -220,3 +220,12 @@ export const getHeroName = (heroName) => {
       return
   }
 }
+
+export const RequirementType = {
+  NUMBER: 'number',
+  TEXT: 'text',
+  BOOLEAN: 'boolean',
+  DATE: 'date,',
+  EMAIL: 'email',
+  RANGE: 'range'
+}
