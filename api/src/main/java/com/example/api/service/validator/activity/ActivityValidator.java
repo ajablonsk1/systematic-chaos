@@ -77,7 +77,7 @@ public class ActivityValidator {
         graphTaskValidator.validateCreateGraphTaskFormFields(form);
     }
 
-    public void validateCreateSurveyForm(CreateInfoForm form) throws RequestValidationException {
+    public void validateCreateInfoForm(CreateInfoForm form) throws RequestValidationException {
         infoValidator.validateCreateInfoForm(form);
     }
 
