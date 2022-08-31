@@ -48,6 +48,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -529,6 +533,14 @@ public class DatabaseConfig {
 
             File file = new File();
             fileRepo.save(file);
+
+            BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", output);
+            byte [] data = output.toByteArray();
+
+            File chapterImage = new File(null, "Chapter image 1", data);
+            fileRepo.save(chapterImage);
         };
     }
 }
