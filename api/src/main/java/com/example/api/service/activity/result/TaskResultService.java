@@ -180,7 +180,7 @@ public class TaskResultService {
 
     private List<? extends TaskResult> getResultsForTask(Task task) {
         if (task instanceof GraphTask) {
-            return graphTaskResultRepo.findAllByAndGraphTask((GraphTask) task)
+            return graphTaskResultRepo.findAllByGraphTask((GraphTask) task)
                     .stream()
                     .filter(result -> result.getPointsReceived() !=null)
                     .toList();

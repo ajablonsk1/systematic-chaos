@@ -14,7 +14,7 @@ public class NotAssessedActivity {
     private Integer waitingAnswersNumber;
 
     public NotAssessedActivity(Activity activity) {
-        this.activityName = activity.getName();
+        this.activityName = activity.getTitle();
         this.activityType = ActivityType.getActivityType(activity).getActivityType();
         this.waitingAnswersNumber = 0;
     }

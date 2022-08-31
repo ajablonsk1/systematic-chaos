@@ -210,7 +210,7 @@ public class SummaryService {
 
     private ActivityScore toActivityScore(Activity activity) {
         ActivityScore activityScore = new ActivityScore();
-        activityScore.setActivityName(activity.getName());
+        activityScore.setActivityName(activity.getTitle());
         activityScore.setScores(getScores(activity));
 
         if (activityScore.getScores().size() == 0) return null;
