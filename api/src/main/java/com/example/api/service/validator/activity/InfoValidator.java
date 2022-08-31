@@ -22,7 +22,7 @@ public class InfoValidator {
         }
         if(form.getInfoContent().length() > MAX_CONTENT_LENGTH) {
             log.info("Info content can be max {}", MAX_CONTENT_LENGTH);
-            throw new RequestValidationException(ExceptionMessage.CONTENT_LEN_TO_BIG + MAX_CONTENT_LENGTH);
+            throw new RequestValidationException(ExceptionMessage.CONTENT_LEN_TOO_BIG + MAX_CONTENT_LENGTH);
         }
     }
 }
