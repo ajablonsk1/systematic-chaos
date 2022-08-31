@@ -1,16 +1,14 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
-import { onTextInputChange, toggleSelect } from './formHelpers'
-import { RequirementType } from '../../../../../utils/constants'
+import { onInputChange, onCheckboxChange, onSwitchChange, onSelectChange } from './formHelpers'
 
-export const TextInput = (props) => {
+export const Input = (props) => {
   return (
     <Form.Control
-      key={'key'}
-      type={'text'}
+      type={props.requirement.type}
       className={'w-100'}
-      value={props.requirement.value}
-      onChange={(e) => onTextInputChange(props.requirement.id, e.target.value, props.onChangeCallback)}
+      value={props.requirement.answer ?? props.requirement.value}
+      onChange={(e) => onInputChange(props.requirement.id, e.target.value, props.onChangeCallback)}
     />
   )
 }
@@ -18,10 +16,33 @@ export const TextInput = (props) => {
 export const CheckBox = (props) => {
   return (
     <Form.Check
-      type={props.requirement.type === RequirementType.BOOLEAN ? 'switch' : 'checkbox'}
+      type={'checkbox'}
       id={props.requirement.id}
       checked={props.requirement.selected}
-      onChange={() => toggleSelect(props.requirement.id, props.onChangeCallback)}
+      onChange={() => onCheckboxChange(props.requirement.id, props.onChangeCallback)}
     />
+  )
+}
+
+export const Switch = (props) => {
+  return (
+    <Form.Check
+      type={'switch'}
+      id={props.requirement.id}
+      checked={props.requirement.answer ?? props.requirement.value}
+      onChange={() => onSwitchChange(props.requirement.id, props.onChangeCallback)}
+    />
+  )
+}
+
+export const Select = (props) => {
+  return (
+    <Form.Select onChange={(e) => onSelectChange(props.requirement.id, e.target.value, props.onChangeCallback)}>
+      {props.requirement.value.map((option, index) => (
+        <option key={'option' + index} value={option}>
+          {option}
+        </option>
+      ))}
+    </Form.Select>
   )
 }

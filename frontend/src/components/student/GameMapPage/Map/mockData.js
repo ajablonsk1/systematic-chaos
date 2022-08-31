@@ -11,9 +11,9 @@ export const getRequirements = () => [
   },
   {
     id: 2,
-    name: 'Liczba punktów z przedziału',
-    value: [500, 700],
-    type: RequirementType.RANGE,
+    name: 'Liczba punktów min',
+    value: 700,
+    type: RequirementType.NUMBER,
     selected: true
   },
   {
@@ -41,7 +41,7 @@ export const getRequirements = () => [
     id: 6,
     name: 'Dostępne dla określonej grupy osób',
     value: ['jgorski@student.agh.edu.pl'],
-    type: RequirementType.EMAIL,
+    type: RequirementType.MULTI_SELECT,
     selected: true
   },
   {
@@ -49,6 +49,13 @@ export const getRequirements = () => [
     name: 'Dostępne dla grupy o podanej nazwie',
     value: 'pn1440B',
     type: RequirementType.TEXT,
+    selected: true
+  },
+  {
+    id: 8,
+    name: 'Dostępne po wykonaniu aktywności',
+    value: ['Ekspedycja 1', 'Zadanie bojowe 1'],
+    type: RequirementType.SELECT,
     selected: true
   }
 ]

@@ -226,6 +226,6 @@ export const RequirementType = {
   TEXT: 'text',
   BOOLEAN: 'boolean',
   DATE: 'date,',
-  EMAIL: 'email',
-  RANGE: 'range'
+  MULTI_SELECT: 'email',
+  SELECT: 'select'
 }

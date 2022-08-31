@@ -9,6 +9,7 @@ export const CustomTable = styled(Table)`
   & th,
   & td {
     border: 1px solid var(--dark-blue) !important;
+    background-color: var(--light-blue);
   }
 `
 
