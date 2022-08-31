@@ -10,7 +10,7 @@ export const InformationTable = styled.table`
   border: none !important;
 
   tr {
-    word-break: break-all;
+    word-break: break-word;
   }
 
   td {

@@ -34,7 +34,7 @@ export default function Information() {
     const tableElements = [
       { name: 'Typ aktywności', value: getActivityTypeName(Activity.INFO) },
       { name: 'Nazwa', value: information.name },
-      { name: 'Opis', value: 'Tutaj będzie krótki opis gdy backend to doda' }
+      { name: 'Opis', value: information.description }
     ]
 
     return (
@@ -87,7 +87,7 @@ export default function Information() {
           <Row className={'m-0 w-100 h-75'}>
             <CustomCard className={'p-0'}>
               <CardHeader>
-                <h5>Opis</h5>
+                <h5>Wytyczne</h5>
               </CardHeader>
               <Card.Body className={'overflow-auto'} style={{ maxHeight: '70vh' }}>
                 {information === undefined ? (
@@ -95,7 +95,7 @@ export default function Information() {
                 ) : information == null ? (
                   <p>{ERROR_OCCURRED}</p>
                 ) : (
-                  <p>{information.description}</p>
+                  <p>{information.content}</p>
                 )}
               </Card.Body>
             </CustomCard>
