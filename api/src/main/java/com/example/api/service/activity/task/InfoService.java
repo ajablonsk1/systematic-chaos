@@ -50,7 +50,7 @@ public class InfoService {
                 .stream()
                 .map(Url::getUrl)
                 .toList();
-        return new InfoResponse(info.getTitle(), info.getDescription(), urls);
+        return new InfoResponse(info.getTitle(), info.getDescription(), urls, info.getContent());
     }
 
     public void createInfo(CreateInfoChapterForm chapterForm) throws RequestValidationException {
