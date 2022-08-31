@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/summary")
 @SecurityRequirement(name = "JWT_AUTH")
 public class SummaryController {
-    private SummaryService summaryService;
+    private final SummaryService summaryService;
     @GetMapping("")
     public ResponseEntity<SummaryResponse> getUserPointsStatistics() throws WrongUserTypeException {
         return ResponseEntity.ok().body(summaryService.getSummary());

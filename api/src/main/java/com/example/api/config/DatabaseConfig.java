@@ -441,7 +441,7 @@ public class DatabaseConfig {
             GraphTaskResult result1 = new GraphTaskResult();
             result1.setGraphTask(graphTask);
             result1.setUser(student);
-            result1.setPointsReceived(12.0);
+            result1.setPointsReceived(22.0);
             result1.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 28);
             result1.setStartDateMillis(calendar.getTimeInMillis());
@@ -451,7 +451,7 @@ public class DatabaseConfig {
             GraphTaskResult result2 = new GraphTaskResult();
             result2.setGraphTask(graphTaskTwo);
             result2.setUser(student1);
-            result2.setPointsReceived(10.0);
+            result2.setPointsReceived(10.8);
             result2.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 13);
             result2.setStartDateMillis(calendar.getTimeInMillis());
@@ -461,12 +461,22 @@ public class DatabaseConfig {
             GraphTaskResult result3 = new GraphTaskResult();
             result3.setGraphTask(graphTaskTwo);
             result3.setUser(student8);
-            result3.setPointsReceived(11.0);
+            result3.setPointsReceived(11.3);
             result3.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);
             result3.setStartDateMillis(calendar.getTimeInMillis());
             result3.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
             graphTaskResultService.saveGraphTaskResult(result3);
+
+            GraphTaskResult result4 = new GraphTaskResult();
+            result4.setGraphTask(graphTaskTwo);
+            result4.setUser(student9);
+            result4.setPointsReceived(30.5);
+            result4.setTimeSpentSec(60 * 10);
+            calendar.set(2022, Calendar.APRIL, 14);
+            result4.setStartDateMillis(calendar.getTimeInMillis());
+            result4.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
+            graphTaskResultService.saveGraphTaskResult(result4);
 
             FileTaskResult fileResult = new FileTaskResult();
             fileResult.setId(1L);

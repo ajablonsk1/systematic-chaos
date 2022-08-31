@@ -31,6 +31,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
@@ -40,18 +42,18 @@ import java.util.stream.Stream;
 @Slf4j
 @Transactional
 public class SummaryService {
-    private AuthenticationService authService;
-    private UserRepo userRepo;
-    private UserValidator userValidator;
-    private GroupRepo groupRepo;
-    private GraphTaskRepo graphTaskRepo;
-    private GraphTaskResultRepo graphTaskResultRepo;
-    private FileTaskRepo fileTaskRepo;
-    private FileTaskResultRepo fileTaskResultRepo;
-    private SurveyRepo surveyRepo;
-    private SurveyResultRepo surveyResultRepo;
-    private ChapterRepo chapterRepo;
-    private PointsToGradeMapper pointsToGradeMapper;
+    private final AuthenticationService authService;
+    private final UserRepo userRepo;
+    private final UserValidator userValidator;
+    private final GroupRepo groupRepo;
+    private final GraphTaskRepo graphTaskRepo;
+    private final GraphTaskResultRepo graphTaskResultRepo;
+    private final FileTaskRepo fileTaskRepo;
+    private final FileTaskResultRepo fileTaskResultRepo;
+    private final SurveyRepo surveyRepo;
+    private final SurveyResultRepo surveyResultRepo;
+    private final ChapterRepo chapterRepo;
+    private final PointsToGradeMapper pointsToGradeMapper;
 
     public SummaryResponse getSummary() throws WrongUserTypeException {
         String professorEmail = authService.getAuthentication().getName();
@@ -59,15 +61,29 @@ public class SummaryService {
         userValidator.validateProfessorAccount(professor, professorEmail);
 
         List<AverageGrade> avgGradesList = getAvgGradesList(professor);
-        List<AverageActivityScore> avgActivitiesScore = getAvgActivitiesScore();
+        List<AverageActivityScore> avgActivitiesScore = getAvgActivitiesScore(professor);
         List<NotAssessedActivity> notAssessedActivitiesTable = getNotAssessedActivitiesTable(professor);
 
         Double avgGrade = getAvgGrade(avgGradesList);
-        String bestScore = getBestScore(avgActivitiesScore);
-        String worstScore = getWorstScore(avgActivitiesScore);
+        String bestScoreActivityName = getBestScoreActivityName(avgActivitiesScore);
+        String worstScoreActivityName = getWorstScoreActivityName(avgActivitiesScore);
 
+        Integer assessedActivitiesCounter = getAssessedActivitiesCounter(professor, notAssessedActivitiesTable);
+        Integer notAssessedActivityCounter = getNotAssessedActivitiesCounter(notAssessedActivitiesTable);
+        Integer waitingAnswersNumber = getWaitingAnswersNumber(notAssessedActivitiesTable);
 
-        return null;
+        SummaryResponse summaryResponse = new SummaryResponse();
+        summaryResponse.setAvgGrade(avgGrade);
+        summaryResponse.setBestScoreActivityName(bestScoreActivityName);
+        summaryResponse.setWorstScoreActivityName(worstScoreActivityName);
+        summaryResponse.setAssessedActivityCounter(assessedActivitiesCounter);
+        summaryResponse.setNotAssessedActivityCounter(notAssessedActivityCounter);
+        summaryResponse.setWaitingAnswersNumber(waitingAnswersNumber);
+        summaryResponse.setAvgGradesList(avgGradesList);
+        summaryResponse.setAvgActivitiesScore(avgActivitiesScore);
+        summaryResponse.setNotAssessedActivitiesTable(notAssessedActivitiesTable);
+        return summaryResponse;
+
     }
 
     public DoubleStream flatMapAvgGradesList(List<AverageGrade> avgGradesList) {
@@ -79,6 +95,7 @@ public class SummaryService {
     }
 
     public Double getAvgGrade(List<AverageGrade> avgGradesList) {
+        if (avgGradesList.size() == 0) return null;
         return flatMapAvgGradesList(avgGradesList)
                 .average().getAsDouble();
     }
@@ -91,20 +108,43 @@ public class SummaryService {
                 .toList();
     }
 
-    public String getBestScore(List<AverageActivityScore> avgActivitiesScore) {
-        return flatMapAvgActivitiesScore(avgActivitiesScore)
+    public String getBestScoreActivityName(List<AverageActivityScore> avgActivitiesScore) {
+        Optional<ActivityScore> result = flatMapAvgActivitiesScore(avgActivitiesScore)
                 .stream()
+                .filter(Objects::nonNull)
                 .reduce(((activityScore1, activityScore2) ->
                         activityScore1.getAvgScore() > activityScore2.getAvgScore() ? activityScore1 : activityScore2
-                )).get().getActivityName();
+                ));
+        if (result.isEmpty()) return null;
+        return result.get().getActivityName();
     }
 
-    public String getWorstScore(List<AverageActivityScore> avgActivitiesScore) {
-        return flatMapAvgActivitiesScore(avgActivitiesScore)
+    public String getWorstScoreActivityName(List<AverageActivityScore> avgActivitiesScore) {
+        Optional<ActivityScore> result = flatMapAvgActivitiesScore(avgActivitiesScore)
                 .stream()
+                .filter(Objects::nonNull)
                 .reduce(((activityScore1, activityScore2) ->
                         activityScore1.getAvgScore() < activityScore2.getAvgScore() ? activityScore1 : activityScore2
-                )).get().getActivityName();
+                ));
+        if (result.isEmpty()) return null;
+        return result.get().getActivityName();
+    }
+
+    public Integer getAssessedActivitiesCounter(User professor, List<NotAssessedActivity> notAssessedActivitiesTable) {
+        return getAllProfessorActivities(professor).size() - notAssessedActivitiesTable.size();
+    }
+
+
+    public Integer getNotAssessedActivitiesCounter(List<NotAssessedActivity> notAssessedActivitiesTable) {
+        return notAssessedActivitiesTable.size();
+    }
+
+    public Integer getWaitingAnswersNumber(List<NotAssessedActivity> notAssessedActivitiesTable) {
+        if (notAssessedActivitiesTable.size() == 0) return 0;
+        return notAssessedActivitiesTable
+                .stream()
+                .mapToInt(NotAssessedActivity::getWaitingAnswersNumber)
+                .sum();
     }
 
     /////////////////////////////
@@ -113,28 +153,28 @@ public class SummaryService {
     private List<AverageGrade> getAvgGradesList(User professor) {
         return chapterRepo.findAll()
                 .stream()
-                .map(this::toAverageGrade)
+                .map(chapter -> toAverageGrade(chapter, professor))
                 .toList();
     }
 
-    private AverageGrade toAverageGrade(Chapter chapter) {
+    private AverageGrade toAverageGrade(Chapter chapter, User professor) {
         AverageGrade averageGrade = new AverageGrade(chapter);
-        averageGrade.setAvgGradesForChapter(getAvgGradesForChapter(chapter));
+        averageGrade.setAvgGradesForChapter(getAvgGradesForChapter(chapter, professor));
         return averageGrade;
     }
 
-    private List<AverageGradeForChapter> getAvgGradesForChapter(Chapter chapter) {
+    private List<AverageGradeForChapter> getAvgGradesForChapter(Chapter chapter, User professor) {
         return groupRepo.findAll()
                 .stream()
-                .map(group -> toAvgGradeForChapter(chapter, group))
+                .map(group -> toAvgGradeForChapter(chapter, group, professor))
                 .toList();
     }
 
-    private AverageGradeForChapter toAvgGradeForChapter(Chapter chapter, Group group) {
+    private AverageGradeForChapter toAvgGradeForChapter(Chapter chapter, Group group, User professor) {
         AverageGradeForChapterCreator averageGradeForChapterCreator = new AverageGradeForChapterCreator(group);
         AtomicReference<AverageGradeForChapterCreator> avgGradeForChapterCreator =
                 new AtomicReference<AverageGradeForChapterCreator>(averageGradeForChapterCreator);
-        getAllChapterActivitiesResult(chapter)
+        getAllProfessorChapterActivitiesResult(chapter, professor)
                 .stream()
                 .filter(this::isActivityEvaluated)
                 .filter(taskResult -> taskResult.getUser().getGroup().equals(group))
@@ -145,24 +185,25 @@ public class SummaryService {
     /////////////////////////////
     // avgActivitiesScore
     /////////////////////////////
-    private List<AverageActivityScore> getAvgActivitiesScore() {
+    private List<AverageActivityScore> getAvgActivitiesScore(User professor) {
         return chapterRepo.findAll()
                 .stream()
-                .map(this::toAvgActivityScore)
+                .map(chapter -> toAvgActivityScore(chapter, professor))
                 .toList();
     }
 
-    private AverageActivityScore toAvgActivityScore(Chapter chapter) {
+    private AverageActivityScore toAvgActivityScore(Chapter chapter, User professor) {
         AverageActivityScore avgActivityScore = new AverageActivityScore();
         avgActivityScore.setChapterName(chapter.getName());
-        avgActivityScore.setActivitiesScore(getActivitiesScore(chapter));
+        avgActivityScore.setActivitiesScore(getActivitiesScore(chapter, professor));
         return avgActivityScore;
     }
 
-    private List<ActivityScore> getActivitiesScore(Chapter chapter) {
-        return getAllChapterActivities(chapter)
+    private List<ActivityScore> getActivitiesScore(Chapter chapter, User professor) {
+        return getAllProfessorChapterActivities(chapter, professor)
                 .stream()
                 .map(this::toActivityScore)
+                .filter(Objects::nonNull)
                 .toList();
     }
 
@@ -170,6 +211,8 @@ public class SummaryService {
         ActivityScore activityScore = new ActivityScore();
         activityScore.setActivityName(activity.getName());
         activityScore.setScores(getScores(activity));
+
+        if (activityScore.getScores().size() == 0) return null;
 
         Double avgScore = activityScore.getScores()
                 .stream()
@@ -184,6 +227,7 @@ public class SummaryService {
         return groupRepo.findAll()
                 .stream()
                 .map(group -> toScore(activity, group))
+                .filter(Objects::nonNull)
                 .toList();
     }
 
@@ -192,9 +236,10 @@ public class SummaryService {
         AtomicReference<ScoreCreator> scoreRef = new AtomicReference<>(scoreCreator);
         getAllResultsForActivity(activity)
                 .stream()
+                .filter(this::isActivityEvaluated)
                 .filter(taskResult -> taskResult.getUser().getGroup().equals(group))
                 .forEach(taskResult -> scoreRef.get().add(taskResult));
-        return scoreRef.get().create();
+        return scoreRef.get().getNumberOfScores() > 0 ? scoreRef.get().create() : null;
     }
 
 
@@ -206,6 +251,7 @@ public class SummaryService {
         return getAllProfessorActivities(professor)
                 .stream()
                 .map(this::toNotAssessedActivity)
+                .filter(notAssessedActivity -> notAssessedActivity.getWaitingAnswersNumber() > 0) // only activities with left answers
                 .toList();
 
     }
@@ -245,13 +291,21 @@ public class SummaryService {
     private List<? extends Activity> getAllProfessorActivities(User professor) { // without Info
         return getAllActivities()
                 .stream()
-                .filter(activity -> activity.getProfessor().equals(professor))
+                .filter(activity -> isProfessorActivity(activity, professor))
                 .toList();
     }
 
     private List<? extends Activity> getAllChapterActivities(Chapter chapter) { // without Info
         return getAllActivities()
                 .stream()
+                .filter(activity -> isActivityInChapter(activity, chapter))
+                .toList();
+    }
+
+    private List<? extends Activity> getAllProfessorChapterActivities(Chapter chapter, User professor) { // without Info
+        return getAllActivities()
+                .stream()
+                .filter(activity -> isActivityInChapter(activity, chapter))
                 .filter(activity -> isActivityInChapter(activity, chapter))
                 .toList();
     }
@@ -266,8 +320,8 @@ public class SummaryService {
         return surveyResultRepo.findAllBySurvey((Survey) activity);
     }
 
-    private List<? extends TaskResult> getAllChapterActivitiesResult(Chapter chapter) {
-        return getAllChapterActivities(chapter)
+    private List<? extends TaskResult> getAllProfessorChapterActivitiesResult(Chapter chapter, User professor) {
+        return getAllProfessorChapterActivities(chapter, professor)
                 .stream()
                 .map(this::getAllResultsForActivity)
                 .flatMap(Collection::stream)
@@ -321,6 +375,11 @@ public class SummaryService {
             return ((Survey) activity).getPoints();
         }
         return null;
+    }
+
+    private boolean isProfessorActivity(Activity activity, User professor) {
+        return activity.getProfessor() == null || activity.getProfessor().equals(professor); // assumption that when activity has no professor it means it is everyones
+
     }
 
 }
