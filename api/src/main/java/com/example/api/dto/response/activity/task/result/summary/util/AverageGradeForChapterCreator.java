@@ -21,7 +21,10 @@ public class AverageGradeForChapterCreator {
 
     public AverageGradeForChapter create() {
         Double avgGrades = null;
-        if (numberOfGrades > 0) avgGrades = sumOfGrades / numberOfGrades;
+        if (numberOfGrades > 0) {
+            avgGrades = sumOfGrades / numberOfGrades;
+            avgGrades = Math.round(avgGrades * 10.0) / 10.0;
+        }
         return new AverageGradeForChapter(groupName, avgGrades);
     }
 }

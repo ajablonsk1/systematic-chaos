@@ -97,8 +97,9 @@ public class SummaryService {
 
     public Double getAvgGrade(List<AverageGrade> avgGradesList) {
         if (avgGradesList.size() == 0) return null;
-        return flatMapAvgGradesList(avgGradesList)
+        Double grade = flatMapAvgGradesList(avgGradesList)
                 .average().getAsDouble();
+        return round(grade);
     }
 
     public List<ActivityScore> flatMapAvgActivitiesScore(List<AverageActivityScore> avgActivitiesScore) {
@@ -220,7 +221,7 @@ public class SummaryService {
                 .mapToDouble(Score::getScore)
                 .average().getAsDouble();
 
-        activityScore.setAvgScore(avgScore);
+        activityScore.setAvgScore(round(avgScore));
         return activityScore;
     }
 
@@ -381,6 +382,10 @@ public class SummaryService {
     private boolean isProfessorActivity(Activity activity, User professor) {
         return activity.getProfessor() == null || activity.getProfessor().equals(professor); // assumption that when activity has no professor it means it is everyones
 
+    }
+
+    private Double round(Double score) {
+        return Math.round(score * 10.0) / 10.0;
     }
 
 }
