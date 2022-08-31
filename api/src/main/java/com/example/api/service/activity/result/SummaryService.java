@@ -59,6 +59,7 @@ public class SummaryService {
         String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         userValidator.validateProfessorAccount(professor, professorEmail);
+        log.info("Fetching summary for professor {}", professorEmail);
 
         List<AverageGrade> avgGradesList = getAvgGradesList(professor);
         List<AverageActivityScore> avgActivitiesScore = getAvgActivitiesScore(professor);
