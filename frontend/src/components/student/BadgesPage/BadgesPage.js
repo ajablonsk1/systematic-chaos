@@ -6,6 +6,10 @@ import { getBadgesInfo, getBadgesList, getLastUnlockedBadge, getRankInfo, getStu
 import ContentCard from './ContentCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
+import Fade, { Bounce, Slide } from 'react-awesome-reveal'
+
+const LATER_ITEM_DELAY = 1200
+const BADGE_LIST_STEP = 200
 
 function BadgesPage() {
   const studentRankInfo = getRankInfo()
@@ -47,20 +51,22 @@ function BadgesPage() {
 
   return (
     <Content>
-      <Row className={'m-0 text-center py-3'}>
-        <Col>
-          <strong>Twoja ranga: </strong>
-          <span>{studentRankInfo[1].name}</span>
-        </Col>
-        <Col>
-          <strong>Liczba punktów: </strong>
-          <span>{studentPoints}</span>
-        </Col>
-        <Col>
-          <strong>Do następnej rangi brakuje: </strong>
-          <span>{missingPoints} pkt</span>
-        </Col>
-      </Row>
+      <Slide delay={LATER_ITEM_DELAY}>
+        <Row className={'m-0 text-center py-3'}>
+          <Col>
+            <strong>Twoja ranga: </strong>
+            <span>{studentRankInfo[1].name}</span>
+          </Col>
+          <Col>
+            <strong>Liczba punktów: </strong>
+            <span>{studentPoints}</span>
+          </Col>
+          <Col>
+            <strong>Do następnej rangi brakuje: </strong>
+            <span>{missingPoints} pkt</span>
+          </Col>
+        </Row>
+      </Slide>
       <Row className={'m-0'}>
         <Col md={12}>
           <HorizontalPointsLine>
@@ -99,20 +105,23 @@ function BadgesPage() {
                     className={'text-center d-flex flex-column align-items-center justify-content-center'}
                     key={index + Date.now()}
                   >
-                    <Tooltip>
-                      <img style={{ opacity: badge.unlocked ? 1 : 0.4 }} src={badge.src} alt={'badge-icon'} />
-                      <div>
-                        {badge.unlocked ? (
-                          <span>Odblokowano: {badge.unlockedDate}</span>
-                        ) : (
-                          <span>Odznaka nadal nie została zdobyta.</span>
-                        )}
-                      </div>
-                    </Tooltip>
-                    <strong style={{ opacity: badge.unlocked ? 1 : 0.4 }}>{badge.name}</strong>
-                    <p style={{ opacity: badge.unlocked ? 1 : 0.4 }} className={'px-2'}>
-                      {badge.description}
-                    </p>
+                    <Fade delay={BADGE_LIST_STEP * index}>
+                      <Tooltip>
+                        <img style={{ opacity: badge.unlocked ? 1 : 0.4 }} src={badge.src} alt={'badge-icon'} />
+                        <div>
+                          {badge.unlocked ? (
+                            <span>Odblokowano: {badge.unlockedDate}</span>
+                          ) : (
+                            <span>Odznaka nadal nie została zdobyta.</span>
+                          )}
+                        </div>
+                      </Tooltip>
+
+                      <strong style={{ opacity: badge.unlocked ? 1 : 0.4 }}>{badge.name}</strong>
+                      <p style={{ opacity: badge.unlocked ? 1 : 0.4 }} className={'px-2'}>
+                        {badge.description}
+                      </p>
+                    </Fade>
                   </Col>
                 ))}
               </Row>
@@ -125,31 +134,36 @@ function BadgesPage() {
               header={'Posiadasz'}
               body={
                 <div className={'h-100 w-100'}>
-                  <p className={'text-center m-0'}>
-                    <span style={{ fontSize: 80 }}>{studentBadgesNumber}</span>
-                    <span className={'pl-5 position-absolute'} style={{ top: '50%' }}>
-                      / {allBadgesNumber}
-                    </span>
-                    <br />
-                    <span>odznak</span>
-                  </p>
-                  <p className={'text-center m-0'}>
-                    Co stanowi
-                    <strong> {Math.floor((studentBadgesNumber * 100) / allBadgesNumber)}% </strong>
-                    wszystkich odznak.
-                  </p>
+                  <Bounce delay={LATER_ITEM_DELAY}>
+                    <p className={'text-center m-0'}>
+                      <span style={{ fontSize: 80 }}>{studentBadgesNumber}</span>
+                      <span className={'pl-5 position-absolute'} style={{ top: '50%' }}>
+                        / {allBadgesNumber}
+                      </span>
+                      <br />
+                      <span>odznak</span>
+                    </p>
+                    <p className={'text-center m-0'}>
+                      Co stanowi
+                      <strong> {Math.floor((studentBadgesNumber * 100) / allBadgesNumber)}% </strong>
+                      wszystkich odznak.
+                    </p>
+                  </Bounce>
                 </div>
               }
             />
           </Row>
+
           <Row className={'m-0 h-50 pr-2'}>
             <ContentCard
               header={'Ostatnio zdobyta'}
               body={
                 <div className={'h-100 w-100 text-center d-flex justify-content-center align-items-center flex-column'}>
-                  <img width={75} src={lastUnlockedBadge.src} alt={'last unlocked badge'} />
-                  <strong>{lastUnlockedBadge.name}</strong>
-                  <p className={'px-2 '}>{lastUnlockedBadge.description}</p>
+                  <Bounce delay={LATER_ITEM_DELAY}>
+                    <img width={75} src={lastUnlockedBadge.src} alt={'last unlocked badge'} />
+                    <strong>{lastUnlockedBadge.name}</strong>
+                    <p className={'px-2 '}>{lastUnlockedBadge.description}</p>
+                  </Bounce>
                 </div>
               }
             />
