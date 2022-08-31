@@ -14,9 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateInfoForm extends CreateActivityForm{
     @Schema(required = true) private List<String> imageUrls;
+    @Schema(required = true) private String infoContent;
 
-    public CreateInfoForm(String title, String description, Integer posX, Integer posY, List<String> imageUrls){
+    public CreateInfoForm(String title,
+                          String description,
+                          Integer posX,
+                          Integer posY,
+                          List<String> imageUrls,
+                          String content){
         super(title, description, posX, posY);
         this.imageUrls = imageUrls;
+        this.infoContent = content;
     }
 }

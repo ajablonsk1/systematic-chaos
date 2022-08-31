@@ -56,7 +56,7 @@ public class InfoService {
     public void createInfo(CreateInfoChapterForm chapterForm) throws RequestValidationException {
         log.info("Starting the creation of info");
         CreateInfoForm form = chapterForm.getForm();
-        activityValidator.validateCreateSurveyForm(form);
+        activityValidator.validateCreateInfoForm(form);
 
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);

@@ -43,6 +43,7 @@ import com.example.api.service.map.RequirementService;
 import com.example.api.service.question.OptionService;
 import com.example.api.service.question.QuestionService;
 import com.example.api.service.user.UserService;
+import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -411,6 +412,8 @@ public class DatabaseConfig {
             info1.setPosY(0);
             info1.setTitle("Skrętki");
             info1.setDescription("Przewody internetowe da się podzielić także pod względem ich ekranowania.");
+            info1.setContent(MessageManager.LOREM_IPSUM);
+
             Url url1 = new Url();
             Url url2 = new Url();
             url1.setUrl("https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg");
