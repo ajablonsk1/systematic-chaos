@@ -52,7 +52,7 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
               <Button variant='danger' disabled={isRevieved} onClick={() => remove(idx)}>
                 {isRemoving ? <Spinner animation={'border'} /> : <FontAwesomeIcon icon={faTrash} />}
               </Button>
-              <Button variant='warning' className='ml-2' onClick={() => downloadFile(idx)}>
+              <Button variant='warning' className='ms-2' onClick={() => downloadFile(idx)}>
                 <FontAwesomeIcon icon={faDownload} />
               </Button>
             </Col>

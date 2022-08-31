@@ -4,6 +4,7 @@ import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Info;
 import com.example.api.model.activity.task.Survey;
+import com.example.api.model.util.File;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,4 +38,13 @@ public class ActivityMap {
 
     private Integer mapSizeX;
     private Integer mapSizeY;
+
+    @OneToOne
+    private File image;
+
+    public ActivityMap(int mapSizeX, int mapSizeY, File image) {
+        this.mapSizeX = mapSizeX;
+        this.mapSizeY = mapSizeY;
+        this.image = image;
+    }
 }

@@ -8,6 +8,10 @@ export const TabsContainer = styled(Tabs)`
     background-color: var(--button-green);
     color: white;
   }
+
+  .nav-link:not(.active) {
+    color: var(--dark-blue) !important;
+  }
 `
 
 export const GradesTable = styled(Table)`

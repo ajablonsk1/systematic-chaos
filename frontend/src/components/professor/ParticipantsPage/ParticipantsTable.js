@@ -67,7 +67,7 @@ function ParticipantsTable(props) {
                     Zmień grupę
                   </Button>
                   <Button
-                    className={'ml-2'}
+                    className={'ms-2'}
                     style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
                     onClick={() => {
                       setChosenStudent(student)

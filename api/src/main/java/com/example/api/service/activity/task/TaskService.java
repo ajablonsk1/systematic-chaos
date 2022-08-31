@@ -17,8 +17,8 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -81,13 +81,13 @@ public class TaskService {
             boolean isLate = false;
             //TODO: investigate further
             if(result.getSendDateMillis() != null){
-                isLate = result.getSendDateMillis() - result.getFileTask().getSolveDateMillis() > 0;
+                isLate = result.getSendDateMillis() - result.getFileTask().getExpireDateMillis() > 0;
             }
 
             List<FileResponse> filesResponse = result.getFiles().stream().map(FileResponse::new).toList();
 
             return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), result.getUser().getFirstName(),
-                    result.getUser().getLastName(), task.getName(), isLate, task.getDescription(),
+                    result.getUser().getLastName(), task.getTitle(), isLate, task.getDescription(),
                     result.getAnswer(), filesResponse, task.getMaxPoints(), id, num-1);
         }
         return null;
@@ -101,15 +101,15 @@ public class TaskService {
             ActivityMap activityMap = chapter.getActivityMap();
             List<ActivitiesResponse> graphTasks = activityMap.getGraphTasks()
                     .stream()
-                    .map(graphTask -> new ActivitiesResponse(graphTask.getId(), graphTask.getName(), chapter.getName(), ActivityType.EXPEDITION))
+                    .map(graphTask -> new ActivitiesResponse(graphTask.getId(), graphTask.getTitle(), chapter.getName(), ActivityType.EXPEDITION))
                     .toList();
             List<ActivitiesResponse> fileTasks = activityMap.getFileTasks()
                     .stream()
-                    .map(fileTask -> new ActivitiesResponse(fileTask.getId(), fileTask.getName(), chapter.getName(), ActivityType.TASK))
+                    .map(fileTask -> new ActivitiesResponse(fileTask.getId(), fileTask.getTitle(), chapter.getName(), ActivityType.TASK))
                     .toList();
             List<ActivitiesResponse> surveys = activityMap.getSurveys()
                     .stream()
-                    .map(survey -> new ActivitiesResponse(survey.getId(), survey.getName(), chapter.getName(), ActivityType.SURVEY))
+                    .map(survey -> new ActivitiesResponse(survey.getId(), survey.getTitle(), chapter.getName(), ActivityType.SURVEY))
                     .toList();
             List<ActivitiesResponse> responses = Stream.of(graphTasks, fileTasks, surveys)
                     .flatMap(Collection::stream)

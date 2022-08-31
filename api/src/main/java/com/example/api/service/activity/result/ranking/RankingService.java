@@ -7,8 +7,9 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.SurveyResult;
-import com.example.api.model.activity.result.TaskResult;
-import com.example.api.model.activity.task.*;
+import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.activity.task.Survey;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
@@ -21,7 +22,6 @@ import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.user.UserService;
-import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.GroupValidator;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,6 @@ public class RankingService {
     private final UserValidator userValidator;
     private final GroupValidator groupValidator;
     private final UserService userService;
-    private final ActivityValidator activityValidator;
 
 
     public List<RankingResponse> getRanking() {

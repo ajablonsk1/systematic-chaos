@@ -10,4 +10,8 @@ export const TabsContainer = styled(Tabs)`
       overflow: auto;
     }
   }
+
+  .nav-link:not(.active) {
+    color: var(--dark-blue) !important;
+  }
 `

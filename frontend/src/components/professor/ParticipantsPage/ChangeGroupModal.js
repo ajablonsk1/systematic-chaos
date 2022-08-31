@@ -76,7 +76,7 @@ function ChangeGroupModal(props) {
                 <Button onClick={() => props.setModalOpen(false)} variant={'danger'}>
                   Anuluj
                 </Button>
-                <Button style={{ backgroundColor: 'var(--button-green)' }} className={'ml-2'} onClick={submitChange}>
+                <Button style={{ backgroundColor: 'var(--button-green)' }} className={'ms-2'} onClick={submitChange}>
                   {isFetching ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz</span>}
                 </Button>
               </Card.Footer>

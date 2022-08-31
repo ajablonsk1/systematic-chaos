@@ -40,4 +40,31 @@ public class Question {
 
     @Nullable
     private String answerForOpenedQuestion;
+
+    // Only for QuestionType.OPENED
+    public Question(QuestionType type,
+                    String content,
+                    String hint,
+                    Difficulty difficulty,
+                    Double points,
+                    String answerForOpenedQuestion) {
+        this.type = type;
+        this.content = content;
+        this.hint = hint;
+        this.difficulty = difficulty;
+        this.points = points;
+        this.answerForOpenedQuestion = answerForOpenedQuestion;
+    }
+
+    public Question(QuestionType type,
+                    String content,
+                    String hint,
+                    Difficulty difficulty,
+                    Double points) {
+        this.type = type;
+        this.content = content;
+        this.hint = hint;
+        this.difficulty = difficulty;
+        this.points = points;
+    }
 }

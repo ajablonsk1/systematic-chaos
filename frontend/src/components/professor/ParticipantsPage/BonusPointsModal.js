@@ -49,7 +49,7 @@ function BonusPointsModal(props) {
                   </Row>
                   <Row className='mt-4 d-flex justify-content-center'>
                     <Col sm={12} className='d-flex justify-content-center mb-2'>
-                      <Button className={'mr-2'} variant={'danger'} onClick={() => props.setModalOpen(false)}>
+                      <Button className={'me-2'} variant={'danger'} onClick={() => props.setModalOpen(false)}>
                         Anuluj
                       </Button>
                       <Button
