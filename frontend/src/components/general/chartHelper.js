@@ -13,7 +13,13 @@ export const getChartDetails = (data, labelKey, datasetKey) => {
 export const getChartConfig = (chartType, chartDetails) => {
   switch (chartType) {
     case 'BAR':
-      return barConfig(chartDetails.labels, chartDetails.dataset, colorPalette(chartDetails.dataset.length))
+      return barConfig(
+        chartDetails.labels,
+        chartDetails.dataset,
+        colorPalette(chartDetails.dataset.length),
+        chartDetails.mainLabels,
+        chartDetails.xAxisDisplay ?? false
+      )
     case 'PIE':
       return pieConfig(chartDetails.labels, chartDetails.dataset, colorPalette(chartDetails.dataset.length))
     case 'LINE':
