@@ -1,11 +1,10 @@
-import moment from 'moment'
 import { RequirementType } from '../../../../utils/constants'
 
 export const getRequirements = () => [
   {
     id: 1,
     name: 'Data zamknięcia aktywności',
-    value: moment(Date.now()).add(2, 'days').format('DD.MM.YYYY, HH:mm'),
+    value: new Date('2022-05-23T12:20:00'),
     type: RequirementType.DATE,
     selected: true
   },
