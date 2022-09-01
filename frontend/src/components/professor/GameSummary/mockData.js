@@ -1,6 +1,7 @@
 export const getGameSummaryInfo = () => {
   return {
     avgGrade: 3.3,
+    medianGrade: 3.0,
     bestScoreActivityName: 'Super Ekspedycja 1',
     worstScoreActivityName: 'Super Ekspedycja 2',
     assessedActivitiesCounter: 8,
@@ -12,11 +13,13 @@ export const getGameSummaryInfo = () => {
         avgGradesForChapter: [
           {
             groupName: 'pn1250A',
-            avgGrade: '3.3'
+            avgGrade: '3.3',
+            medianGrade: '3.2'
           },
           {
             groupName: 'wt1250B',
-            avgGrade: '4.5'
+            avgGrade: '4.5',
+            medianGrade: '3.4'
           }
         ]
       },
@@ -25,11 +28,13 @@ export const getGameSummaryInfo = () => {
         avgGradesForChapter: [
           {
             groupName: 'pn1250A',
-            avgGrade: '3.6'
+            avgGrade: '3.6',
+            medianGrade: '2.5'
           },
           {
             groupName: 'wt1250B',
-            avgGrade: '4.2'
+            avgGrade: '4.2',
+            medianGrade: '3.8'
           }
         ]
       }

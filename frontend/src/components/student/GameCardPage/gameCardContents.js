@@ -120,7 +120,7 @@ export const HeroStatsContent = () => {
 }
 
 export const PersonalRankingInfoContent = () => {
-  const heroType = HeroType.WIZARD
+  const heroType = HeroType.WARRIOR
   // I know it's stupid now, but I want to show you what it will look like later
   const rankComment =
     heroType === HeroType.WARRIOR || heroType === HeroType.ROGUE ? (
