@@ -10,14 +10,20 @@ import GameLoader from './GameLoader/GameLoader'
 import { useEffect, useState } from 'react'
 import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import { AddChapterModal } from './AddChapterModal/AddChapterModal'
 
 export default function GameManagement() {
   const navigate = useNavigate()
 
   const [showConfigModal, setShowConfigModal] = useState(false)
+  const [showAddChapterModal, setShowAddChapterModal] = useState(false)
   const [chapterList, setChapterList] = useState(undefined)
 
   useEffect(() => {
+    fetchChaptersList()
+  }, [])
+
+  const fetchChaptersList = () => {
     ChapterService.getChaptersList()
       .then((response) => {
         setChapterList(response)
@@ -25,7 +31,7 @@ export default function GameManagement() {
       .catch(() => {
         setChapterList(null)
       })
-  }, [])
+  }
 
   const goToChapterDetailsView = (chapterName, chapterId) => {
     navigate(
@@ -87,7 +93,13 @@ export default function GameManagement() {
                   )}
                 </tbody>
               </Table>
-              <GameButton text={'Nowy rozdział'} customWidth={'auto'} />
+              <GameButton
+                text={'Nowy rozdział'}
+                customWidth={'auto'}
+                callback={() => {
+                  setShowAddChapterModal(true)
+                }}
+              />
             </GameCardOptionPick>
           </Col>
         </Row>
@@ -138,6 +150,11 @@ export default function GameManagement() {
         </Row>
       </Container>
       <GameLoader showModal={showConfigModal} setShowModal={setShowConfigModal} />
+      <AddChapterModal
+        showModal={showAddChapterModal}
+        setShowModal={setShowAddChapterModal}
+        refetchChapterList={fetchChaptersList}
+      />
     </Content>
   )
 }

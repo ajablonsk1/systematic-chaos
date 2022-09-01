@@ -1,6 +1,6 @@
 package com.example.api.error.exception;
 
-public class WrongPointsNumberException extends Exception {
+public class WrongPointsNumberException extends RequestValidationException {
     private Double points;
     private Double maxPoints;
     public WrongPointsNumberException(String message, Double points, Double maxPoints) {

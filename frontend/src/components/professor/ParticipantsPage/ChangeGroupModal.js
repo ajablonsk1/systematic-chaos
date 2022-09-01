@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Form, Modal, ModalBody, ModalFooter, Spinner } from 'react-bootstrap'
+import { Button, Card, Form, Modal, Spinner } from 'react-bootstrap'
 import CardHeader from 'react-bootstrap/CardHeader'
 import Loader from '../../general/Loader/Loader'
 import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import { SuccessModal } from '../SuccessModal'
 
 function ChangeGroupModal(props) {
   const [student, setStudent] = useState()
@@ -84,20 +85,13 @@ function ChangeGroupModal(props) {
           )}
         </Card>
       </Modal>
-      <Modal show={successModalOpen}>
-        <Modal.Header>
-          <Modal.Title>Zmiana zakończona.</Modal.Title>
-        </Modal.Header>
-        <ModalBody>
-          Grupa studenta {student?.firstName} {student?.lastName}
-          została zmieniona pomyślnie z {student?.groupName} na {newGroup?.name}
-        </ModalBody>
-        <ModalFooter>
-          <Button variant={'success'} onClick={() => setSuccessModalOpen(false)}>
-            Zakończ
-          </Button>
-        </ModalFooter>
-      </Modal>
+      <SuccessModal
+        isSuccessModalOpen={successModalOpen}
+        setIsSuccessModalOpen={setSuccessModalOpen}
+        text={`Grupa studenta ${student?.firstName} ${student?.lastName}
+          została zmieniona pomyślnie z ${student?.groupName} na ${newGroup?.name}`}
+        headerText='Zmiana zakończona'
+      />
     </>
   )
 }

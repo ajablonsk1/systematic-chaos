@@ -9,7 +9,7 @@ export const validHeader = (params) => ({
 
 export const multipartFileHeader = (params) => ({
   headers: {
-    ...authHeader(),
+    ...authHeader()
   },
   params: params
 })

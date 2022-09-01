@@ -15,9 +15,9 @@ import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.ResultValidator;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import com.example.api.util.calculator.PointsCalculator;
 import com.example.api.util.calculator.TimeCalculator;
 import lombok.RequiredArgsConstructor;
@@ -156,6 +156,7 @@ public class GraphTaskResultService {
         log.info("Setting sendDateMillis for graph task result with id {}", resultId);
         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
         activityValidator.validateTaskResultIsNotNull(graphTaskResult, resultId);
+        graphTaskResult.setMaxPoints100(pointsCalculator.calculateMaxAvailablePoints(graphTaskResult));
         graphTaskResult.setSendDateMillis(form.getSendDateMillis());
         return resultId;
     }

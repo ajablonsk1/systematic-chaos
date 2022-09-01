@@ -17,9 +17,9 @@ import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.FeedbackValidator;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -99,7 +99,7 @@ public class ProfessorFeedbackService {
         infoResponse.setFileTaskResultId(fileTaskResult.getId());
         infoResponse.setStudentEmail(student.getEmail());
         infoResponse.setFileTaskId(fileTask.getId());
-        infoResponse.setTaskName(fileTask.getName());
+        infoResponse.setTaskName(fileTask.getTitle());
         infoResponse.setDescription(fileTask.getDescription());
         infoResponse.setAnswer(fileTaskResult.getAnswer());
         infoResponse.setTaskFiles(fileTaskResult.getFiles()

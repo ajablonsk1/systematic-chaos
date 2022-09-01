@@ -10,8 +10,8 @@ import com.example.api.model.map.Chapter;
 import com.example.api.model.util.File;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.util.FileRepo;
-import com.example.api.service.validator.ActivityValidator;
 import com.example.api.service.validator.MapValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,6 +45,7 @@ public class ChapterService {
     }
 
     public void createChapter(ChapterForm form) throws EntityNotFoundException {
+        log.info("Creating new chapter");
         File image = fileRepo.findFileById(form.getImageId());
         activityValidator.validateFileIsNotNull(image, form.getImageId());
         ActivityMap activityMap = new ActivityMap(form.getSizeX(), form.getSizeY(), image);
