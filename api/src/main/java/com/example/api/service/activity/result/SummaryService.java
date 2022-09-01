@@ -356,19 +356,6 @@ public class SummaryService {
         return false;
     }
 
-    private Activity getAcitvityFromResult(TaskResult taskResult) {
-        if (taskResult instanceof GraphTaskResult) {
-            return ((GraphTaskResult) taskResult).getGraphTask();
-        }
-        else if (taskResult instanceof FileTaskResult) {
-            return ((FileTaskResult) taskResult).getFileTask();
-        }
-        else if (taskResult instanceof SurveyResult) {
-            return ((SurveyResult) taskResult).getSurvey();
-        }
-        return null;
-    }
-
     public Double getMaxPoints(Activity activity) {
         if (activity instanceof Task) {
             return ((Task) activity).getMaxPoints();
