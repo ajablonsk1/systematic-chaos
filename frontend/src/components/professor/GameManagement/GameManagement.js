@@ -21,7 +21,7 @@ export default function GameManagement() {
 
   useEffect(() => {
     fetchChaptersList()
-  }, [chapterList])
+  }, [])
 
   const fetchChaptersList = () => {
     ChapterService.getChaptersList()
