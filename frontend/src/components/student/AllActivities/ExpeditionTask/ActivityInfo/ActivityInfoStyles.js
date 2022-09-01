@@ -5,7 +5,6 @@ export const ActivityImg = styled.img`
   height: 30px;
   width: 30px;
   padding: 0;
-  margin-right: 10px;
   margin: 0 10px;
   align-self: center;
 
@@ -78,7 +77,7 @@ export const HeaderRow = styled(Row)`
   justify-content: center;
 
   & > * {
-    width: fit-content;
+    width: auto;
   }
 `
 

@@ -1,5 +1,6 @@
 package com.example.api.model.activity.task;
 
+import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +16,13 @@ import javax.persistence.MappedSuperclass;
 public abstract class Task extends Activity {
     private String requiredKnowledge;
     private Double maxPoints;
-    private Long solveDateMillis;
+    private Long expireDateMillis;
+
+    public Task(String name, String description, int posX, int posY, User professor,
+                String requiredKnowledge, Double maxPoints, Long expireDateMillis){
+        super(name, description, posX, posY, professor);
+        this.requiredKnowledge = requiredKnowledge;
+        this.maxPoints = maxPoints;
+        this.expireDateMillis = expireDateMillis;
+    }
 }

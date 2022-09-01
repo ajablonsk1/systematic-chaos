@@ -11,4 +11,5 @@ public class InfoResponse {
     private String name;
     private String description;
     private List<String> imageUrls;
+    private String content;
 }

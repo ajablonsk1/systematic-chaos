@@ -2,7 +2,7 @@ package com.example.api.error.exception;
 
 import java.util.List;
 
-public class WrongBodyParametersNumberException extends Exception{
+public class WrongBodyParametersNumberException extends RequestValidationException{
     private final List<String> bodyFields;
     private final int version;
     private final String MESSAGE_ALL = "Request body should contain: ";

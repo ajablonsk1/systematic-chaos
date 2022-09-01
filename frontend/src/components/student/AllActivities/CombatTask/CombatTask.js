@@ -13,6 +13,9 @@ import { faHourglass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackFileService from './FeedbackFileService'
 import { Header, VerticalSpacer, HorizontalSpacer, ActivityDetails } from '../../../general/TaskSharedComponents'
+import { Fade } from 'react-awesome-reveal'
+
+const FIELD_DELAY = 600
 
 export default function CombatTask() {
   const location = useLocation()
@@ -79,8 +82,10 @@ export default function CombatTask() {
 
   const AwaitingFeedbackField = () => (
     <Col md={6} className={'text-center p-4 my-auto'}>
-      <FontAwesomeIcon className={'m-2'} icon={faHourglass} size='5x' spin />
-      <h2 className={'m-2'}>Odpowiedź została przesłana, oczekiwanie na sprawdzenie przez prowadzącego</h2>
+      <Fade delay={FIELD_DELAY}>
+        <FontAwesomeIcon className={'m-2'} icon={faHourglass} size='5x' spin />
+        <h2 className={'m-2'}>Odpowiedź została przesłana, oczekiwanie na sprawdzenie przez prowadzącego</h2>
+      </Fade>
     </Col>
   )
 
@@ -108,45 +113,50 @@ export default function CombatTask() {
               md={task.answer || answerWasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
               className={'h-100 overflow-auto'}
             >
-              <h4>Odpowiedź:</h4>
-              {isReviewed() ? (
-                <Col>
-                  <h4>Twoja odpowiedź</h4>
-                  <p>{task.answer}</p>
-                </Col>
-              ) : (
+              <Fade delay={FIELD_DELAY}>
                 <>
-                  {task.answer && (
+                  <h4>Odpowiedź:</h4>
+                  {isReviewed() ? (
                     <Col>
-                      <h5>Twoja obecna odpowiedź</h5>
+                      <h4>Twoja odpowiedź</h4>
                       <p>{task.answer}</p>
                     </Col>
-                  )}
-                  <RemarksTextArea ref={textAreaRef} disabled={isReviewed()} onChange={handleAnswerChange} />
-                </>
-              )}
-              <Col className={'text-center'}>
-                <FileService
-                  task={task}
-                  setFile={setFileBlob}
-                  setFileName={setFileName}
-                  setIsFetching={setIsFetching}
-                  isFetching={isFetching}
-                  isRevieved={isReviewed()}
-                />
-              </Col>
-              <Col className={'w-100 text-center'}>
-                <SendTaskButton disabled={task.points != null} onClick={sendAnswer}>
-                  {isFetching ? (
-                    <Spinner animation={'border'} />
-                  ) : isReviewed() ? (
-                    <span>Aktywność została oceniona</span>
                   ) : (
-                    <span>Wyślij</span>
+                    <>
+                      {task.answer && (
+                        <Col>
+                          <h5>Twoja obecna odpowiedź</h5>
+                          <p>{task.answer}</p>
+                        </Col>
+                      )}
+                      <RemarksTextArea ref={textAreaRef} disabled={isReviewed()} onChange={handleAnswerChange} />
+                    </>
                   )}
-                </SendTaskButton>
-              </Col>
+                  <Col className={'text-center'}>
+                    <FileService
+                      task={task}
+                      setFile={setFileBlob}
+                      setFileName={setFileName}
+                      setIsFetching={setIsFetching}
+                      isFetching={isFetching}
+                      isRevieved={isReviewed()}
+                    />
+                  </Col>
+                  <Col className={'w-100 text-center'}>
+                    <SendTaskButton disabled={task.points != null} onClick={sendAnswer}>
+                      {isFetching ? (
+                        <Spinner animation={'border'} />
+                      ) : isReviewed() ? (
+                        <span>Aktywność została oceniona</span>
+                      ) : (
+                        <span>Wyślij</span>
+                      )}
+                    </SendTaskButton>
+                  </Col>
+                </>
+              </Fade>
             </Col>
+
             {task.answer != null || task.files != null || answerWasSentNow ? (
               !isReviewed() ? (
                 <AwaitingFeedbackField />

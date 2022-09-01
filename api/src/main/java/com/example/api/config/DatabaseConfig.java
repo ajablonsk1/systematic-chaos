@@ -43,6 +43,7 @@ import com.example.api.service.map.RequirementService;
 import com.example.api.service.question.OptionService;
 import com.example.api.service.question.QuestionService;
 import com.example.api.service.user.UserService;
+import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -323,11 +324,10 @@ public class DatabaseConfig {
 
             GraphTask graphTask = new GraphTask();
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
-            graphTask.setName("Dżungla kabli");
+            graphTask.setTitle("Dżungla kabli");
             graphTask.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
             graphTask.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTask.setMaxPoints(60.0);
-            graphTask.setMaxPoints100(30.0);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTask.setRequirement(req);
             graphTask.setPosX(5);
@@ -386,11 +386,10 @@ public class DatabaseConfig {
 
             GraphTask graphTaskTwo = new GraphTask();
             graphTaskTwo.setQuestions(List.of(startQuestionTwo, questionTwo1, questionTwo2, questionTwo3,  questionTwo4, questionTwo5));
-            graphTaskTwo.setName("Dżungla kabli II");
+            graphTaskTwo.setTitle("Dżungla kabli II");
             graphTaskTwo.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
             graphTaskTwo.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTaskTwo.setMaxPoints(60.0);
-            graphTaskTwo.setMaxPoints100(30.0);
             graphTaskTwo.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTaskTwo.setPosX(2);
             graphTaskTwo.setPosY(2);
@@ -400,19 +399,21 @@ public class DatabaseConfig {
             FileTask fileTask = new FileTask();
             fileTask.setPosX(3);
             fileTask.setPosY(3);
-            fileTask.setName("Niszczator kabli");
+            fileTask.setTitle("Niszczator kabli");
             fileTask.setDescription("Jak złamałbyś kabel światłowodowy? Czym?");
             fileTask.setProfessor(professor);
             fileTask.setMaxPoints(30.0);
-            fileTask.setSolveDateMillis(System.currentTimeMillis() + 1_000_000);
+            fileTask.setExpireDateMillis(System.currentTimeMillis() + 1_000_000);
 
             fileTaskService.saveFileTask(fileTask);
 
             Info info1 = new Info();
             info1.setPosX(3);
             info1.setPosY(0);
-            info1.setName("Skrętki");
+            info1.setTitle("Skrętki");
             info1.setDescription("Przewody internetowe da się podzielić także pod względem ich ekranowania.");
+            info1.setContent(MessageManager.LOREM_IPSUM);
+
             Url url1 = new Url();
             Url url2 = new Url();
             url1.setUrl("https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg");
@@ -420,13 +421,13 @@ public class DatabaseConfig {
             urlRepo.save(url1);
             urlRepo.save(url2);
             info1.setImageUrls(List.of(url1, url2));
-            info1.setName("Skrętki");
-            info1.setExperience(10);
+            info1.setTitle("Skrętki");
+            info1.setExperience(10.0);
             info1.setProfessor(professor);
             infoService.saveInfo(info1);
 
             Survey survey = new Survey();
-            survey.setName("Example map feedback");
+            survey.setTitle("Example map feedback");
             survey.setDescription("Pomóż nam polepszyć kurs dzieląc się swoją opinią!");
             survey.setPosX(7);
             survey.setPosY(3);
@@ -447,6 +448,7 @@ public class DatabaseConfig {
             GraphTaskResult result1 = new GraphTaskResult();
             result1.setGraphTask(graphTask);
             result1.setUser(student);
+            result1.setMaxPoints100(30.0);
             result1.setPointsReceived(12.0);
             result1.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 28);
@@ -457,6 +459,7 @@ public class DatabaseConfig {
             GraphTaskResult result2 = new GraphTaskResult();
             result2.setGraphTask(graphTaskTwo);
             result2.setUser(student1);
+            result2.setMaxPoints100(10.0);
             result2.setPointsReceived(10.0);
             result2.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 13);
@@ -467,6 +470,7 @@ public class DatabaseConfig {
             GraphTaskResult result3 = new GraphTaskResult();
             result3.setGraphTask(graphTaskTwo);
             result3.setUser(student8);
+            result3.setMaxPoints100(20.0);
             result3.setPointsReceived(11.0);
             result3.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);

@@ -28,8 +28,7 @@ public class GraphTaskResult extends TaskResult {
     private GraphTask graphTask;
 
     private int timeSpentSec;
-
     private Long startDateMillis;
-
+    private Double maxPoints100;
 }
 

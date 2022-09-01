@@ -39,22 +39,22 @@ public class ActivityMapService {
         List<MapTask> graphTasks = activityMap.getGraphTasks()
                 .stream()
                 .map(graphTask -> new MapTask(graphTask.getId(), graphTask.getPosX(),
-                        graphTask.getPosY(), ActivityType.EXPEDITION, graphTask.getName(), graphTask.getMaxPoints()))
+                        graphTask.getPosY(), ActivityType.EXPEDITION, graphTask.getTitle(), graphTask.getMaxPoints()))
                 .toList();
         List<MapTask> fileTasks = activityMap.getFileTasks()
                 .stream()
                 .map(fileTask -> new MapTask(fileTask.getId(), fileTask.getPosX(),
-                        fileTask.getPosY(), ActivityType.TASK, fileTask.getName(), fileTask.getMaxPoints()))
+                        fileTask.getPosY(), ActivityType.TASK, fileTask.getTitle(), fileTask.getMaxPoints()))
                 .toList();
         List<MapTask> infos = activityMap.getInfos()
                 .stream()
                 .map(info -> new MapTask(info.getId(), info.getPosX()
-                        , info.getPosY(), ActivityType.INFO, info.getName(), 0.0))
+                        , info.getPosY(), ActivityType.INFO, info.getTitle(), 0.0))
                 .toList();
         List<MapTask> surveys = activityMap.getSurveys()
                 .stream()
                 .map(survey -> new MapTask(survey.getId(), survey.getPosX(),
-                        survey.getPosY(), ActivityType.SURVEY, survey.getName(), survey.getPoints()))
+                        survey.getPosY(), ActivityType.SURVEY, survey.getTitle(), survey.getPoints()))
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)
