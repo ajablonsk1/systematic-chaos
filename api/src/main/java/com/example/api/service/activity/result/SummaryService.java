@@ -308,7 +308,7 @@ public class SummaryService {
         return getAllActivities()
                 .stream()
                 .filter(activity -> isActivityInChapter(activity, chapter))
-                .filter(activity -> isActivityInChapter(activity, chapter))
+                .filter(activity -> isProfessorActivity(activity, professor))
                 .toList();
     }
 
