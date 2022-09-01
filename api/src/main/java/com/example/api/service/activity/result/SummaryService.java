@@ -297,12 +297,6 @@ public class SummaryService {
                 .toList();
     }
 
-    private List<? extends Activity> getAllChapterActivities(Chapter chapter) { // without Info
-        return getAllActivities()
-                .stream()
-                .filter(activity -> isActivityInChapter(activity, chapter))
-                .toList();
-    }
 
     private List<? extends Activity> getAllProfessorChapterActivities(Chapter chapter, User professor) { // without Info
         return getAllActivities()
