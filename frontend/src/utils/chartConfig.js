@@ -1,9 +1,12 @@
-export const barConfig = (labels, datasets, backgroundColors) => {
+export const barConfig = (datasetLabels, datasets, backgroundColors, labels = [''], xAxisDisplay = false) => {
   const options = {
     responsive: true,
     scales: {
       xAxis: {
-        display: false
+        display: xAxisDisplay,
+        ticks: {
+          color: '#ffffff'
+        }
       },
       yAxis: {
         display: false
@@ -24,10 +27,10 @@ export const barConfig = (labels, datasets, backgroundColors) => {
   }
 
   const data = {
-    labels: [''],
-    datasets: labels.map((label, index) => ({
+    labels: labels,
+    datasets: datasetLabels.map((label, index) => ({
       label: label,
-      data: [datasets[index]],
+      data: typeof datasets[index] === 'number' ? [datasets[index]] : [...datasets[index]], // Yes, I know - it's stupid and ugly, so... TODO later
       backgroundColor: backgroundColors[index]
     }))
   }

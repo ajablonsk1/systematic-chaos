@@ -34,6 +34,7 @@ export default function GameSummary() {
 
   const gradesStatsCardTitles = [
     { text: 'Średnia ocen studentów:', value: summaryDetails.avgGrade },
+    { text: 'Mediana ocen studentów', value: summaryDetails.medianGrade },
     { text: 'Aktywność z najlepszym wynikiem średnim:', value: summaryDetails.bestScoreActivityName },
     { text: 'Aktywność z najgorszym wynikiem średnim:', value: summaryDetails.worstScoreActivityName }
   ]
@@ -44,10 +45,17 @@ export default function GameSummary() {
     { text: 'Liczba odpowiedzi oczekujących na sprawdzenie:', value: summaryDetails.waitingAnswersNumber }
   ]
 
-  const { data: barChartData, options: barChartOptions } = getChartConfig(
-    'BAR',
-    getChartDetails(summaryDetails.avgGradesList[barChartActiveChapterId].avgGradesForChapter, 'groupName', 'avgGrade')
-  )
+  const { data: barChartData, options: barChartOptions } = getChartConfig('BAR', {
+    mainLabels: summaryDetails.avgGradesList[barChartActiveChapterId].avgGradesForChapter.map(
+      (grades) => grades.groupName
+    ),
+    labels: ['Średnia', 'Mediana'],
+    dataset: [
+      summaryDetails.avgGradesList[barChartActiveChapterId].avgGradesForChapter.map((grades) => grades.avgGrade),
+      summaryDetails.avgGradesList[barChartActiveChapterId].avgGradesForChapter.map((grades) => grades.medianGrade)
+    ],
+    xAxisDisplay: true
+  })
 
   const { data: lineChartData, options: lineChartOptions } = lineChartConfig(
     summaryDetails.avgActivitiesScore[lineChartActiveChapterId]?.activitiesScore
