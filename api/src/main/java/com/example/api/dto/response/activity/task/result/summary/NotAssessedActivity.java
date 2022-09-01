@@ -15,7 +15,7 @@ public class NotAssessedActivity {
 
     public NotAssessedActivity(Activity activity) {
         this.activityName = activity.getTitle();
-        this.activityType = activity.getActivityType().toString();
+        this.activityType = activity.getActivityType().getActivityType();
         this.waitingAnswersNumber = 0;
     }
 

@@ -1,6 +1,5 @@
 package com.example.api.dto.response.map.task;
 
-import com.example.api.model.activity.task.*;
 
 public enum ActivityType {
     EXPEDITION("EXPEDITION"),

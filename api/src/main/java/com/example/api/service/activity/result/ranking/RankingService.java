@@ -248,16 +248,4 @@ public class RankingService {
         return DoubleStream.of(graphTaskPoints, fileTaskPoints, additionalPoints).sum();
     }
 
-    private List<? extends TaskResult> getResultForActivity(Activity activity) {
-        if (activity instanceof GraphTask) {
-            return graphTaskResultRepo.findAllByGraphTask((GraphTask) activity);
-        }
-        else if (activity instanceof FileTask) {
-            return fileTaskResultRepo.findAllByFileTask((FileTask) activity);
-        }
-        else if (activity instanceof Survey) {
-            return surveyResultRepo.findAllBySurvey((Survey) activity);
-        }
-        return List.of();
-    }
 }
