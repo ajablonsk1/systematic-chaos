@@ -7,7 +7,7 @@ import { getGameSummaryInfo } from './mockData'
 import GameSummaryCard from './GameSummaryCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import { getChartConfig, getChartDetails } from '../../general/chartHelper'
+import { getChartConfig } from '../../general/chartHelper'
 import { Bar, Line } from 'react-chartjs-2'
 import { ChartCol, CustomTable } from '../../student/GameCardPage/gameCardContentsStyle'
 import {
