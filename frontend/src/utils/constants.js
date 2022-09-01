@@ -221,3 +221,12 @@ export const getHeroName = (heroName) => {
       return
   }
 }
+
+export const RequirementType = {
+  NUMBER: 'number',
+  TEXT: 'text',
+  BOOLEAN: 'boolean',
+  DATE: 'date,',
+  MULTI_SELECT: 'email',
+  SELECT: 'select'
+}

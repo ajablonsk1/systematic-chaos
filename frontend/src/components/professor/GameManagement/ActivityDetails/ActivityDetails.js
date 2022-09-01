@@ -7,6 +7,7 @@ import { debounce } from 'lodash/function'
 import ActivityService from '../../../../services/activity.service'
 import { useLocation } from 'react-router-dom'
 import ActivityStats from './ActivityStats'
+import ActivityRequirements from './ActivityRequirements/ActivityRequirements'
 
 function ActivityDetails(props) {
   const location = useLocation()
@@ -61,6 +62,9 @@ function ActivityDetails(props) {
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
           <ActivityStats activityId={activityId} activityType={activityType} />
+        </Tab>
+        <Tab eventKey={'requirements'} title={'Wymagania'}>
+          <ActivityRequirements />
         </Tab>
       </TabsContainer>
     </Content>
