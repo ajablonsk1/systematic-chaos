@@ -15,6 +15,7 @@ import com.example.api.repo.util.FileRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -43,6 +44,7 @@ public class FileTaskResultServiceTest {
     @Mock private UserValidator userValidator;
     @Mock private AuthenticationService authService;
     @Mock private Authentication authentication;
+    @Mock private ActivityValidator activityValidator;
     FileTaskResult result;
     FileTask fileTask;
     @Captor  ArgumentCaptor<Long> idArgumentCaptor;
@@ -60,7 +62,8 @@ public class FileTaskResultServiceTest {
                 userRepo,
                 fileRepo,
                 userValidator,
-                authService
+                authService,
+                activityValidator
         );
         fileTask = new FileTask();
         result = new FileTaskResult();

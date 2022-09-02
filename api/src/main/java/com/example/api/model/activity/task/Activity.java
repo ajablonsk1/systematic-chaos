@@ -42,4 +42,5 @@ public abstract class Activity {
         this.posY = posY;
         this.professor = professor;
     }
+    abstract public Double getMaxPoints();
 }

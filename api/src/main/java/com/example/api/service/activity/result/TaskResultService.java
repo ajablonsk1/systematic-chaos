@@ -4,6 +4,7 @@ import com.example.api.dto.request.activity.result.ActivityTypeWithIdForm;
 import com.example.api.dto.request.activity.task.GetCSVForm;
 import com.example.api.dto.response.activity.task.result.ActivityStatisticsResponse;
 import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.Feedback;
@@ -179,13 +180,13 @@ public class TaskResultService {
     }
 
     private List<? extends TaskResult> getResultsForTask(Task task) {
-        if (task instanceof GraphTask) {
+        if (task.getActivityType().equals(ActivityType.EXPEDITION)) {
             return graphTaskResultRepo.findAllByGraphTask((GraphTask) task)
                     .stream()
                     .filter(result -> result.getPointsReceived() !=null)
                     .toList();
         }
-        else if (task instanceof FileTask) {
+        else if (task.getActivityType().equals(ActivityType.TASK)) {
             return fileTaskResultRepo.findAllByFileTask((FileTask) task)
                     .stream()
                     .filter(FileTaskResult::isEvaluated)
@@ -196,7 +197,7 @@ public class TaskResultService {
 
     private ActivityStatisticsResponse getActivityStatisticsForActivity(Activity activity) {
         ActivityStatisticsResponse response = new ActivityStatisticsResponse();
-        boolean activityIsSurvey = activity instanceof Survey;
+        boolean activityIsSurvey = activity.getActivityType().equals(ActivityType.SURVEY);
         if (activityIsSurvey) {
             response.setActivity100(((Survey) activity).getPoints());
         }
@@ -249,7 +250,7 @@ public class TaskResultService {
     }
 
     private List<? extends TaskResult> getActivityResults(Activity activity) {
-        if (activity instanceof Survey) {
+        if (activity.getActivityType().equals(ActivityType.SURVEY)) {
             return surveyResultRepo.findAllBySurvey((Survey) activity);
         }
         return getResultsForTask((Task) activity);

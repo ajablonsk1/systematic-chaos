@@ -1,9 +1,6 @@
 package com.example.api.dto.response.activity.task.result.summary;
 
-import com.example.api.dto.response.map.task.ActivityType;
-import com.example.api.model.activity.result.FileTaskResult;
-import com.example.api.model.activity.result.GraphTaskResult;
-import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
 import lombok.Data;
 
@@ -19,20 +16,8 @@ public class NotAssessedActivity {
         this.waitingAnswersNumber = 0;
     }
 
-    public void add(GraphTaskResult graphTaskResult) {
-        if (graphTaskResult.getPointsReceived() == null) {
-            waitingAnswersNumber += 1;
-        }
-    }
-
-    public void add(FileTaskResult fileTaskResult) {
-        if (!fileTaskResult.isEvaluated()) {
-            waitingAnswersNumber += 1;
-        }
-    }
-
-    public void add(SurveyResult surveyResult) {
-        if (surveyResult.getPointsReceived() == null) {
+    public void add(TaskResult taskResult) {
+        if (taskResult.isEvaluated()) {
             waitingAnswersNumber += 1;
         }
     }

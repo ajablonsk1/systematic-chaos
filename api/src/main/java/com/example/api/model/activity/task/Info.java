@@ -31,4 +31,9 @@ public class Info extends Activity {
         this.imageUrls = imageUrls;
         this.content = form.getInfoContent();
     }
+
+    @Override
+    public Double getMaxPoints() {
+        return null;
+    }
 }

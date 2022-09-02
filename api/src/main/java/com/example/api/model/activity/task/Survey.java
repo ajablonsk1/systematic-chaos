@@ -21,4 +21,9 @@ public class Survey extends Activity{
         super(form.getTitle(), form.getDescription(), form.getPosX(), form.getPosY(), professor);
         this.points = form.getPoints();
     }
+
+    @Override
+    public Double getMaxPoints() {
+        return points;
+    }
 }

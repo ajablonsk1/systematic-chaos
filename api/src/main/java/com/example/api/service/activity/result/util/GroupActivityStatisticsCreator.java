@@ -1,6 +1,7 @@
 package com.example.api.service.activity.result.util;
 
 import com.example.api.dto.response.activity.task.result.GroupActivityStatistics;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
@@ -18,7 +19,9 @@ public class GroupActivityStatisticsCreator {
     private Double maxPointsForTask;
 
     public GroupActivityStatisticsCreator(Activity activity, TaskResult taskResult) {
-        if (activity instanceof Survey) initSurvey((Survey) activity, (SurveyResult) taskResult);
+        if (activity.getActivityType().equals(ActivityType.SURVEY)) {
+            initSurvey((Survey) activity, (SurveyResult) taskResult);
+        }
         else initTask((Task) activity, taskResult);
     }
 
@@ -36,7 +39,9 @@ public class GroupActivityStatisticsCreator {
     }
 
     public void add(TaskResult taskResult) {
-        if (taskResult instanceof SurveyResult) addSurvey((SurveyResult) taskResult);
+        if (taskResult.getActivity().getActivityType().equals(ActivityType.SURVEY)) {
+            addSurvey((SurveyResult) taskResult);
+        }
         else addTask(taskResult);
     }
 

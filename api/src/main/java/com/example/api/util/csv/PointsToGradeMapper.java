@@ -1,8 +1,5 @@
 package com.example.api.util.csv;
 
-import com.example.api.model.activity.result.FileTaskResult;
-import com.example.api.model.activity.result.GraphTaskResult;
-import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.result.TaskResult;
 import org.springframework.stereotype.Component;
 
@@ -30,19 +27,6 @@ public class PointsToGradeMapper {
     }
 
     public Double getGrade(TaskResult taskResult) {
-        return getGrade(taskResult.getPointsReceived(), getMaxPoints(taskResult));
-    }
-
-    public Double getMaxPoints(TaskResult taskResult) {
-        if (taskResult instanceof GraphTaskResult) {
-            return ((GraphTaskResult) taskResult).getGraphTask().getMaxPoints();
-        }
-        else if (taskResult instanceof FileTaskResult) {
-            return ((FileTaskResult) taskResult).getFileTask().getMaxPoints();
-        }
-        else if (taskResult instanceof SurveyResult) {
-            return ((SurveyResult) taskResult).getSurvey().getPoints();
-        }
-        return null;
+        return getGrade(taskResult.getPointsReceived(), taskResult.getActivity().getMaxPoints());
     }
 }

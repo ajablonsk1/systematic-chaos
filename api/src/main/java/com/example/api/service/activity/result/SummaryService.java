@@ -3,10 +3,8 @@ package com.example.api.service.activity.result;
 import com.example.api.dto.response.activity.task.result.summary.*;
 import com.example.api.dto.response.activity.task.result.summary.util.AverageGradeForChapterCreator;
 import com.example.api.dto.response.activity.task.result.summary.util.ScoreCreator;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.result.FileTaskResult;
-import com.example.api.model.activity.result.GraphTaskResult;
-import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.*;
 import com.example.api.model.group.Group;
@@ -178,7 +176,7 @@ public class SummaryService {
                 new AtomicReference<AverageGradeForChapterCreator>(averageGradeForChapterCreator);
         getAllProfessorChapterActivitiesResult(chapter, professor)
                 .stream()
-                .filter(this::isActivityEvaluated)
+                .filter(TaskResult::isEvaluated)
                 .filter(taskResult -> taskResult.getUser().getGroup().equals(group))
                 .forEach(taskResult -> avgGradeForChapterCreator.get().add(pointsToGradeMapper.getGrade(taskResult)));
         return avgGradeForChapterCreator.get().create(); // it will return entities with no results from group
@@ -234,11 +232,11 @@ public class SummaryService {
     }
 
     private Score toScore(Activity activity, Group group) {
-        ScoreCreator scoreCreator = new ScoreCreator(group.getName(), getMaxPoints(activity));
+        ScoreCreator scoreCreator = new ScoreCreator(group.getName(), activity.getMaxPoints());
         AtomicReference<ScoreCreator> scoreRef = new AtomicReference<>(scoreCreator);
         getAllResultsForActivity(activity)
                 .stream()
-                .filter(this::isActivityEvaluated)
+                .filter(TaskResult::isEvaluated)
                 .filter(taskResult -> taskResult.getUser().getGroup().equals(group))
                 .forEach(taskResult -> scoreRef.get().add(taskResult));
         return scoreRef.get().getNumberOfScores() > 0 ? scoreRef.get().create() : null;
@@ -260,18 +258,8 @@ public class SummaryService {
 
     private NotAssessedActivity toNotAssessedActivity(Activity activity) {
         NotAssessedActivity notAssessedActivity = new NotAssessedActivity(activity);
-        if (activity instanceof GraphTask) {
-            graphTaskResultRepo.findAllByGraphTask((GraphTask) activity)
-                    .forEach(notAssessedActivity::add);
-        }
-        else if (activity instanceof FileTask) {
-            fileTaskResultRepo.findAllByFileTask((FileTask) activity)
-                    .forEach(notAssessedActivity::add);
-        }
-        else if (activity instanceof Survey) {
-            surveyResultRepo.findAllBySurvey((Survey) activity)
-                    .forEach(notAssessedActivity::add);
-        }
+        getAllResultsForActivity(activity)
+                .forEach(notAssessedActivity::add);
         return notAssessedActivity;
     }
 
@@ -301,19 +289,22 @@ public class SummaryService {
     private List<? extends Activity> getAllProfessorChapterActivities(Chapter chapter, User professor) { // without Info
         return getAllActivities()
                 .stream()
-                .filter(activity -> isActivityInChapter(activity, chapter))
+                .filter(activity -> chapter.getActivityMap().hasActivity(activity))
                 .filter(activity -> isProfessorActivity(activity, professor))
                 .toList();
     }
 
     private List<? extends TaskResult> getAllResultsForActivity(Activity activity) {
-        if (activity instanceof GraphTask) {
+        if (activity.getActivityType().equals(ActivityType.EXPEDITION)) {
             return graphTaskResultRepo.findAllByGraphTask((GraphTask) activity);
         }
-        else if (activity instanceof FileTask) {
+        else if (activity.getActivityType().equals(ActivityType.TASK)) {
             return fileTaskResultRepo.findAllByFileTask((FileTask) activity);
         }
-        return surveyResultRepo.findAllBySurvey((Survey) activity);
+        else if (activity.getActivityType().equals(ActivityType.SURVEY)) {
+            return surveyResultRepo.findAllBySurvey((Survey) activity);
+        }
+        return List.of();
     }
 
     private List<? extends TaskResult> getAllProfessorChapterActivitiesResult(Chapter chapter, User professor) {
@@ -322,42 +313,6 @@ public class SummaryService {
                 .map(this::getAllResultsForActivity)
                 .flatMap(Collection::stream)
                 .toList();
-    }
-
-    private boolean isActivityInChapter(Activity activity, Chapter chapter) {
-        if (activity instanceof GraphTask) {
-            return chapter.getActivityMap().getGraphTasks().contains((GraphTask) activity);
-        }
-        else if (activity instanceof FileTask) {
-            return chapter.getActivityMap().getFileTasks().contains((FileTask) activity);
-        }
-        else if (activity instanceof Survey) {
-            return chapter.getActivityMap().getSurveys().contains((Survey) activity);
-        }
-        return false;
-    }
-
-    private boolean isActivityEvaluated(TaskResult taskResult) {
-        if (taskResult instanceof GraphTaskResult) {
-            return ((GraphTaskResult) taskResult).getPointsReceived() != null;
-        }
-        else if (taskResult instanceof FileTaskResult) {
-            return ((FileTaskResult) taskResult).isEvaluated();
-        }
-        else if (taskResult instanceof SurveyResult) {
-            return ((SurveyResult) taskResult).getPointsReceived() != null;
-        }
-        return false;
-    }
-
-    public Double getMaxPoints(Activity activity) {
-        if (activity instanceof Task) {
-            return ((Task) activity).getMaxPoints();
-        }
-        else if (activity instanceof Survey) {
-            return ((Survey) activity).getPoints();
-        }
-        return null;
     }
 
     private boolean isProfessorActivity(Activity activity, User professor) {

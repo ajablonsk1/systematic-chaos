@@ -1,9 +1,6 @@
 package com.example.api.model.map;
 
-import com.example.api.model.activity.task.FileTask;
-import com.example.api.model.activity.task.GraphTask;
-import com.example.api.model.activity.task.Info;
-import com.example.api.model.activity.task.Survey;
+import com.example.api.model.activity.task.*;
 import com.example.api.model.util.File;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -46,5 +46,12 @@ public class ActivityMap {
         this.mapSizeX = mapSizeX;
         this.mapSizeY = mapSizeY;
         this.image = image;
+    }
+
+    public boolean hasActivity(Activity activity) {
+        return Stream.of(graphTasks, fileTasks, infos, surveys)
+                .flatMap(Collection::stream)
+                .toList()
+                .contains(activity);
     }
 }
