@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Spinner, Table } from 'react-bootstrap'
@@ -14,6 +14,7 @@ import EditChapterModal from './EditChapterModal'
 import { getConfigJson } from '../GameManagement/GameLoader/mockData'
 import ChapterService from '../../../services/chapter.service'
 import EditActivityModal from './EditActivityModal'
+import AddActivityModal from './AddActivityModal'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -26,13 +27,14 @@ function ChapterDetails() {
   const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
   const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
   const [chapterDetails, setChapterDetails] = useState(undefined)
+  const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false)
 
   const mapCardBody = useRef()
 
   const navigate = useNavigate()
   const location = useLocation()
 
-  useEffect(() => {
+  const getChapterDetails = useCallback(() => {
     ChapterService.getChapterDetails(chapterId)
       .then((response) => {
         setChapterDetails(response)
@@ -41,6 +43,10 @@ function ChapterDetails() {
         setChapterDetails(null)
       })
   }, [chapterId])
+
+  useEffect(() => {
+    getChapterDetails()
+  }, [getChapterDetails])
 
   const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
@@ -223,6 +229,9 @@ function ChapterDetails() {
             <Button variant={'danger'} onClick={() => setDeletionModalOpen(true)}>
               Usuń rozdział
             </Button>
+            <Button variant={'success'} onClick={() => setIsAddActivityModalOpen(true)}>
+              Dodaj aktywność
+            </Button>
           </ButtonsCol>
         </Col>
       </Row>
@@ -264,6 +273,13 @@ function ChapterDetails() {
             <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
           </>
         }
+      />
+
+      <AddActivityModal
+        showModal={isAddActivityModalOpen}
+        setShow={setIsAddActivityModalOpen}
+        chapterId={chapterId}
+        onSuccess={getChapterDetails}
       />
     </Content>
   )
