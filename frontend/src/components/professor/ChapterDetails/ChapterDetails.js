@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Spinner, Table } from 'react-bootstrap'
 import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
 import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ActivityService from '../../../services/activity.service'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
 import EditChapterModal from './EditChapterModal'
-import JSONEditor from '../../general/jsonEditor/JSONEditor'
 import { getConfigJson } from '../GameManagement/GameLoader/mockData'
-import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChapterService from '../../../services/chapter.service'
+import EditActivityModal from './EditActivityModal'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -242,13 +241,11 @@ function ChapterDetails() {
 
       <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
 
-      <JSONEditor
+      <EditActivityModal
         setShowModal={setIsEditActivityModalOpen}
         showModal={isEditActivityModalOpen}
-        modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
         jsonConfig={chosenActivityData?.jsonConfig}
-        submitButtonText={'Zapisz zmiany'}
-        successModalHeader={'Edycja zakończona pomyślnie'}
+        modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
         successModalBody={
           <p>
             Twoje zmiany wprowadzone dla aktywności typu: <strong>{chosenActivityData?.activityType}</strong>

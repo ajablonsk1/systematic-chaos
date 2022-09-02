@@ -6,7 +6,7 @@ import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ManagementCard from './ManagementCard'
 import { useNavigate } from 'react-router-dom'
 import { TableBodyRow } from './TableStyles'
-import GameLoader from './GameLoader/GameLoader'
+import GameLoaderModal from './GameLoader/GameLoaderModal'
 import { useEffect, useState } from 'react'
 import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
@@ -149,7 +149,7 @@ export default function GameManagement() {
           </Col>
         </Row>
       </Container>
-      <GameLoader showModal={showConfigModal} setShowModal={setShowConfigModal} />
+      <GameLoaderModal showModal={showConfigModal} setShowModal={setShowConfigModal} />
       <AddChapterModal
         showModal={showAddChapterModal}
         setShowModal={setShowAddChapterModal}
