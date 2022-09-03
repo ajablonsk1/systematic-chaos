@@ -68,7 +68,6 @@ export const TeacherSidebarTitles = {
 export const FIELD_REQUIRED = 'Pole wymagane.'
 export const POSITIVE_NUMBER = 'Wymagana liczba z przedziału [1,10]'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
-export const START_GRAPH_NODE_ID = -1
 export const NOT_LOGGED_IN_ERROR = 'Logowanie nieudane. Niepoprawny login lub hasło.'
 export const ERROR_OCCURRED = 'Wystąpił nieoczekiwany błąd'
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10

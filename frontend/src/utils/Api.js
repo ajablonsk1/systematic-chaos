@@ -24,5 +24,5 @@ export const convertSecondsToStringInfo = (endDate) => {
   const stringFormat = moment.utc(duration.asSeconds() * 1000).format('HH:mm:ss')
   const splitString = stringFormat.split(':')
 
-  return `${days} dni, ${splitString[0]} godz, ${splitString[1]} min, ${splitString[2]} sek`
+  return `${days} dni, ${splitString[0]} godz, ${splitString[1]} min`
 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { InfoContainer } from './InfoContainer'
 import { Content } from '../../../../App/AppGeneralStyles'
 import ActivityContent from './ActivityContent'
 import Loader from '../../../../general/Loader/Loader'
@@ -31,9 +30,7 @@ export default function ActivityInfo() {
       ) : errorMessage ? (
         <p className={'text-center text-danger h4'}>{errorMessage}</p>
       ) : (
-        <InfoContainer fluid className='p-0'>
-          <ActivityContent activity={activity} activityId={activityId} />
-        </InfoContainer>
+        <ActivityContent activity={activity} activityId={activityId} />
       )}
     </Content>
   )
