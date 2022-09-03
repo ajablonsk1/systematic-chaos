@@ -29,8 +29,4 @@ public class PointsToGradeMapper {
     public Double getGrade(TaskResult taskResult) {
         return getGrade(taskResult.getPointsReceived(), taskResult.getActivity().getMaxPoints());
     }
-
-    public static Double roundGrade(Double score) {
-        return Math.round(score * 10.0) / 10.0;
-    }
 }

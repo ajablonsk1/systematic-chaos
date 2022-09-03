@@ -21,6 +21,7 @@ import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.util.calculator.GradesCalculator;
 import com.example.api.util.csv.PointsToGradeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +65,7 @@ public class SummaryService {
         List<NotAssessedActivity> notAssessedActivitiesTable = getNotAssessedActivitiesTable(professor);
 
         Double avgGrade = getAvgGrade(avgGradesList);
-        Double medianGrade = getMedianGrade();
+        Double medianGrade = getMedianGrade(professor);
         String bestScoreActivityName = getBestScoreActivityName(avgActivitiesScore);
         String worstScoreActivityName = getWorstScoreActivityName(avgActivitiesScore);
 
@@ -74,6 +75,7 @@ public class SummaryService {
 
         SummaryResponse summaryResponse = new SummaryResponse();
         summaryResponse.setAvgGrade(avgGrade);
+        summaryResponse.setMedianGrade(medianGrade);
         summaryResponse.setBestScoreActivityName(bestScoreActivityName);
         summaryResponse.setWorstScoreActivityName(worstScoreActivityName);
         summaryResponse.setAssessedActivityCounter(assessedActivitiesCounter);
@@ -98,11 +100,14 @@ public class SummaryService {
         if (avgGradesList.isEmpty()) return null;
         Double grade = flatMapAvgGradesList(avgGradesList)
                 .average().getAsDouble();
-        return PointsToGradeMapper.roundGrade(grade);
+        return GradesCalculator.roundGrade(grade);
     }
 
-    public Double getMedianGrade() {
-        return null;
+    public Double getMedianGrade(User professor) {
+        List<Double> grades = getAllProfessorGrades(professor);
+        Double medianGrade = GradesCalculator.getMedian(grades);
+        if (medianGrade == null) return medianGrade;
+        return GradesCalculator.roundGrade(medianGrade);
     }
 
     public List<ActivityScore> flatMapAvgActivitiesScore(List<AverageActivityScore> avgActivitiesScore) {
@@ -224,7 +229,7 @@ public class SummaryService {
                 .mapToDouble(Score::getScore)
                 .average().getAsDouble();
 
-        activityScore.setAvgScore(PointsToGradeMapper.roundGrade(avgScore));
+        activityScore.setAvgScore(GradesCalculator.roundGrade(avgScore));
         return activityScore;
     }
 
@@ -320,8 +325,14 @@ public class SummaryService {
                 .toList();
     }
 
-    private List<? extends TaskResult> getAllProfessorActivitiesResult() {
-        return null;
+    private List<Double> getAllProfessorGrades(User professor) {
+        return getAllProfessorActivities(professor)
+                .stream()
+                .map(this::getAllResultsForActivity)
+                .flatMap(Collection::stream)
+                .filter(TaskResult::isEvaluated)
+                .map(taskResult -> pointsToGradeMapper.getGrade(taskResult))
+                .toList();
     }
 
 
