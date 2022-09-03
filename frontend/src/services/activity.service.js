@@ -1,11 +1,14 @@
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
 import {
   ACTIVITY_MAP,
+  FILE_TASK_JSON,
   GET_ACTIVITIES_LIST,
   GET_ACTIVITY_RESULT_LIST,
   GET_ACTIVITY_STATS,
   GET_FILTERED_ACTIVITY_RESULT_LIST,
-  GRAPH_TASK_JSON
+  GRAPH_TASK_JSON,
+  INFO_TASK_JSON,
+  SURVEY_TASK_JSON
 } from './urls'
 
 class ActivityService {
@@ -50,6 +53,51 @@ class ActivityService {
 
   setGraphTaskJson(chapterId, form) {
     return axiosApiPost(GRAPH_TASK_JSON, {
+      chapterId: chapterId,
+      form: form
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getFileTaskJson() {
+    return axiosApiGet(FILE_TASK_JSON).catch((error) => {
+      throw error
+    })
+  }
+
+  setFileTaskJson(chapterId, form) {
+    return axiosApiPost(FILE_TASK_JSON, {
+      chapterId: chapterId,
+      form: form
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getInfoTaskJson() {
+    return axiosApiGet(INFO_TASK_JSON).catch((error) => {
+      throw error
+    })
+  }
+
+  setInfoTaskJson(chapterId, form) {
+    return axiosApiPost(INFO_TASK_JSON, {
+      chapterId: chapterId,
+      form: form
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getSurveyTaskJson() {
+    return axiosApiGet(SURVEY_TASK_JSON).catch((error) => {
+      throw error
+    })
+  }
+
+  setSurveyTaskJson(chapterId, form) {
+    return axiosApiPost(SURVEY_TASK_JSON, {
       chapterId: chapterId,
       form: form
     }).catch((error) => {

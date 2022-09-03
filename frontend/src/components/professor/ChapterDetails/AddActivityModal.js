@@ -13,24 +13,21 @@ function AddActivityModal(props) {
 
   const getActivityTab = useCallback(
     (activityType) => {
+      const onCancel = () => props.setShow(false)
+      const onSuccess = () => {
+        props.setShow(false)
+        setIsSuccessModalOpen(true)
+      }
+
       switch (activityType) {
         case Activity.EXPEDITION:
-          return (
-            <AddGraphTask
-              chapterId={props.chapterId}
-              onSuccess={() => {
-                props.setShow(false)
-                setIsSuccessModalOpen(true)
-              }}
-              onCancel={() => props.setShow(false)}
-            />
-          )
+          return <AddGraphTask chapterId={props.chapterId} onSuccess={onSuccess} onCancel={onCancel} />
         case Activity.TASK:
-          return <AddCombatTask />
+          return <AddCombatTask chapterId={props.chapterId} onSuccess={onSuccess} onCancel={onCancel} />
         case Activity.INFO:
-          return <AddInfoTask />
+          return <AddInfoTask chapterId={props.chapterId} onSuccess={onSuccess} onCancel={onCancel} />
         case Activity.SURVEY:
-          return <AddSurveyTask />
+          return <AddSurveyTask chapterId={props.chapterId} onSuccess={onSuccess} onCancel={onCancel} />
         default:
           return <></>
       }
@@ -38,7 +35,7 @@ function AddActivityModal(props) {
     [props]
   )
 
-  const onSuccess = () => {
+  const onSuccessModalClose = () => {
     setIsSuccessModalOpen(false)
     props.onSuccess()
   }
@@ -51,11 +48,14 @@ function AddActivityModal(props) {
         </ModalHeader>
         <ModalBody>
           <TabsContainer defaultActiveKey={Activity.EXPEDITION}>
-            {activities.map((activity, index) => (
-              <Tab title={getActivityTypeName(activity)} eventKey={activity} key={index + Date.now()}>
-                {getActivityTab(activity)}
-              </Tab>
-            ))}
+            {activities.map(
+              (activity, index) =>
+                activity !== Activity.ADDITIONAL && (
+                  <Tab title={getActivityTypeName(activity)} eventKey={activity} key={index + Date.now()}>
+                    {getActivityTab(activity)}
+                  </Tab>
+                )
+            )}
           </TabsContainer>
         </ModalBody>
       </Modal>
@@ -67,7 +67,7 @@ function AddActivityModal(props) {
           <p>Twoja aktywność została pomyślnie zapisana w bazie danych.</p>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={onSuccess}>Zakończ</Button>
+          <Button onClick={onSuccessModalClose}>Zakończ</Button>
         </ModalFooter>
       </Modal>
     </>
