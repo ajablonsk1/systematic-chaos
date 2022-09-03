@@ -31,6 +31,7 @@ export const ActivityCol = styled(Col)`
 export const CustomOffcanvas = styled(Offcanvas)`
   background-color: var(--light-blue);
   color: var(--font-color);
+  width: 50vw !important;
 
   .btn-close {
     filter: invert(81%) sepia(21%) saturate(5299%) hue-rotate(351deg) brightness(101%) contrast(101%);
@@ -43,7 +44,7 @@ export const CustomOffcanvas = styled(Offcanvas)`
 
     tbody {
       tr {
-        word-break: break-all;
+        word-break: break-word;
       }
 
       th,
@@ -61,7 +62,6 @@ export const CustomOffcanvas = styled(Offcanvas)`
       }
 
       td:nth-child(odd) {
-        white-space: nowrap;
         color: var(--font-color);
       }
 

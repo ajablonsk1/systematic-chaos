@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Spinner, Table } from 'react-bootstrap'
 import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
 import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
+import { faArrowDown, faArrowUp, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ActivityService from '../../../services/activity.service'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
 import EditChapterModal from './EditChapterModal'
-import JSONEditor from '../../general/jsonEditor/JSONEditor'
 import { getConfigJson } from '../GameManagement/GameLoader/mockData'
-import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChapterService from '../../../services/chapter.service'
+import EditActivityModal from './EditActivityModal'
+import AddActivityModal from './AddActivityModal'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -27,13 +27,14 @@ function ChapterDetails() {
   const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
   const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
   const [chapterDetails, setChapterDetails] = useState(undefined)
+  const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false)
 
   const mapCardBody = useRef()
 
   const navigate = useNavigate()
   const location = useLocation()
 
-  useEffect(() => {
+  const getChapterDetails = useCallback(() => {
     ChapterService.getChapterDetails(chapterId)
       .then((response) => {
         setChapterDetails(response)
@@ -42,6 +43,10 @@ function ChapterDetails() {
         setChapterDetails(null)
       })
   }, [chapterId])
+
+  useEffect(() => {
+    getChapterDetails()
+  }, [getChapterDetails])
 
   const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
@@ -224,6 +229,9 @@ function ChapterDetails() {
             <Button variant={'danger'} onClick={() => setDeletionModalOpen(true)}>
               Usuń rozdział
             </Button>
+            <Button variant={'success'} onClick={() => setIsAddActivityModalOpen(true)}>
+              Dodaj aktywność
+            </Button>
           </ButtonsCol>
         </Col>
       </Row>
@@ -242,13 +250,11 @@ function ChapterDetails() {
 
       <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
 
-      <JSONEditor
+      <EditActivityModal
         setShowModal={setIsEditActivityModalOpen}
         showModal={isEditActivityModalOpen}
-        modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
         jsonConfig={chosenActivityData?.jsonConfig}
-        submitButtonText={'Zapisz zmiany'}
-        successModalHeader={'Edycja zakończona pomyślnie'}
+        modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
         successModalBody={
           <p>
             Twoje zmiany wprowadzone dla aktywności typu: <strong>{chosenActivityData?.activityType}</strong>
@@ -267,6 +273,13 @@ function ChapterDetails() {
             <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
           </>
         }
+      />
+
+      <AddActivityModal
+        showModal={isAddActivityModalOpen}
+        setShow={setIsAddActivityModalOpen}
+        chapterId={chapterId}
+        onSuccess={getChapterDetails}
       />
     </Content>
   )
