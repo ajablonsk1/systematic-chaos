@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import { Row } from 'react-bootstrap'
+import { Button, Row } from 'react-bootstrap'
 import { Content } from '../../App/AppGeneralStyles'
-import { AddButton, Title } from './GroupsStyle'
+import { Title } from './GroupsStyle'
 import GroupsTable from './Table/GroupsTable'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import GroupAdditionModal from '../GroupAdditionPage/GroupAdditionModal'
 
 export default function Groups() {
@@ -12,17 +10,24 @@ export default function Groups() {
   const [refreshFunction, setRefreshFunction] = useState(() => {})
 
   return (
-    <Content>
-      <AddButton className='m-5' onClick={() => setModalOpen(true)}>
-        <FontAwesomeIcon icon={faPlus} size='2x' />
-      </AddButton>
-      <Row className='m-3'>
-        <Title>Grupy</Title>
-      </Row>
-      <Row className='m-3'>
-        <GroupsTable setRefreshFunction={setRefreshFunction} />
-      </Row>
+    <>
+      <Content className={'d-flex flex-column align-items-center h-100'}>
+        <Row className='m-3'>
+          <Title>Grupy</Title>
+        </Row>
+        <Row className='m-3 w-100 px-3'>
+          <GroupsTable setRefreshFunction={setRefreshFunction} />
+        </Row>
+        <Button
+          style={{ position: 'absolute', top: 'calc(100% - 10px)', transform: 'translateY(-100%)' }}
+          className={'justify-content-end'}
+          variant={'success'}
+          onClick={() => setModalOpen(true)}
+        >
+          Dodaj grupę
+        </Button>
+      </Content>
       <GroupAdditionModal show={modalOpen} setModalOpen={setModalOpen} refreshFunction={refreshFunction} />
-    </Content>
+    </>
   )
 }

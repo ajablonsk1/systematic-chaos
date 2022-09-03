@@ -33,9 +33,8 @@ export default function GroupsTable(props) {
   }
 
   return (
-    // marginBottom prevents last records coverage by add button
     <>
-      <TableContainer striped bordered hover style={{ marginBottom: '150px' }}>
+      <TableContainer>
         <thead>
           <tr>
             <th>Nr</th>

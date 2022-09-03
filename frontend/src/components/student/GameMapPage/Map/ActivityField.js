@@ -75,7 +75,9 @@ export default function ActivityField({ activity, posX, posY, colClickable, colS
     <>
       <ActivityCol $isClickable={colClickable} $colSize={colSize}>
         {activity ? (
-          <img src={getActivityImg(activity.type)} alt='activityImg' onClick={() => setIsOffcanvasOpen(true)} />
+          <div style={{ backgroundColor: 'white' }}>
+            <img src={getActivityImg(activity.type)} alt='activityImg' onClick={() => setIsOffcanvasOpen(true)} />
+          </div>
         ) : (
           <div
             style={{
@@ -90,13 +92,15 @@ export default function ActivityField({ activity, posX, posY, colClickable, colS
         </OffcanvasHeader>
         <OffcanvasBody>
           {offcanvasContent}
-          <Button
-            variant={'outline-warning'}
-            className={'position-relative start-50 translate-middle-x mt-3'}
-            onClick={startActivity}
-          >
-            Rozpocznij
-          </Button>
+          {colClickable && (
+            <Button
+              variant={'outline-warning'}
+              className={'position-relative start-50 translate-middle-x mt-3'}
+              onClick={startActivity}
+            >
+              Rozpocznij
+            </Button>
+          )}
         </OffcanvasBody>
       </CustomOffcanvas>
     </>

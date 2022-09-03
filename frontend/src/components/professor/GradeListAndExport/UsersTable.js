@@ -5,6 +5,7 @@ import { debounce } from 'lodash/function'
 import ExportModal from './ExportModal'
 import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import { GameCardOptionPick } from '../../general/GameCardStyles'
 
 export default function UsersTable(props) {
   const [usersList, setUsersList] = useState(undefined)
@@ -73,41 +74,43 @@ export default function UsersTable(props) {
         <Form.Control type={'text'} placeholder={'Wyszukaj studenta...'} onChange={(e) => filterList(e.target.value)} />
       </Form.Group>
 
-      <GradesTable bordered>
-        <thead>
-          <tr>
-            <th>
-              <input type={'checkbox'} onChange={checkAllRows} />
-            </th>
-            <th>Grupa</th>
-            <th>Imię i nazwisko członka</th>
-            <th>Przewidywana ocena</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users?.length > 0 ? (
-            users.map((user, index) => (
-              <tr key={index + user.groupName}>
-                <td>
-                  <input type={'checkbox'} onChange={checkRow} value={user.id} checked={inputChecked(user.id)} />
-                </td>
-                <td className={'py-2'}>{user.groupName}</td>
-                <td className={'py-2'}>
-                  {user.firstName} {user.lastName}
-                </td>
-                {/*TODO: we don't have this information*/}
-                <td className={'py-2'}>3.5</td>
-              </tr>
-            ))
-          ) : (
+      <GameCardOptionPick style={{ maxHeight: '75vh', overflowY: 'auto' }}>
+        <GradesTable bordered>
+          <thead>
             <tr>
-              <td colSpan='100%' className={'text-center'}>
-                <p>{users == null ? ERROR_OCCURRED : 'Brak członków'}</p>
-              </td>
+              <th>
+                <input type={'checkbox'} onChange={checkAllRows} />
+              </th>
+              <th>Grupa</th>
+              <th>Imię i nazwisko członka</th>
+              <th>Przewidywana ocena</th>
             </tr>
-          )}
-        </tbody>
-      </GradesTable>
+          </thead>
+          <tbody>
+            {users?.length > 0 ? (
+              users.map((user, index) => (
+                <tr key={index + user.groupName}>
+                  <td>
+                    <input type={'checkbox'} onChange={checkRow} value={user.id} checked={inputChecked(user.id)} />
+                  </td>
+                  <td className={'py-2'}>{user.groupName}</td>
+                  <td className={'py-2'}>
+                    {user.firstName} {user.lastName}
+                  </td>
+                  {/*TODO: we don't have this information*/}
+                  <td className={'py-2'}>3.5</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan='100%' className={'text-center'}>
+                  <p>{users == null ? ERROR_OCCURRED : 'Brak członków'}</p>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </GradesTable>
+      </GameCardOptionPick>
 
       <ExportButton disabled={isButtonDisabled} onClick={() => setModalVisible(true)}>
         Eksportuj oceny
