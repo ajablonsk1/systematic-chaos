@@ -223,13 +223,15 @@ function ChapterDetails() {
           </Col>
           <ButtonsCol md={12} style={{ height: '10vh' }}>
             <Link to={generateFullPath(() => PageRoutes.Teacher.GameManagement.GAME_MANAGEMENT)}>
-              <Button variant={'warning'}>Wyjdź</Button>
+              <Button variant={'outline-secondary'}>Wyjdź</Button>
             </Link>
-            <Button onClick={() => setEditChapterModalOpen(true)}>Edytuj rozdział</Button>
-            <Button variant={'danger'} onClick={() => setDeletionModalOpen(true)}>
+            <Button variant={'outline-primary'} onClick={() => setEditChapterModalOpen(true)}>
+              Edytuj rozdział
+            </Button>
+            <Button variant={'outline-danger'} onClick={() => setDeletionModalOpen(true)}>
               Usuń rozdział
             </Button>
-            <Button variant={'success'} onClick={() => setIsAddActivityModalOpen(true)}>
+            <Button variant={'outline-success'} onClick={() => setIsAddActivityModalOpen(true)}>
               Dodaj aktywność
             </Button>
           </ButtonsCol>
