@@ -20,6 +20,20 @@ function ChaptersNav() {
   }, [chaptersList])
 
   useEffect(() => {
+    const updateContainerSize = () =>
+      setMapsContainerSize({
+        x: refs.current[0].current?.offsetWidth ?? 0,
+        y: refs.current[0].current?.offsetHeight ?? 0
+      })
+
+    window.addEventListener('resize', updateContainerSize)
+
+    return () => {
+      window.removeEventListener('resize', updateContainerSize)
+    }
+  }, [])
+
+  useEffect(() => {
     if (chaptersList) {
       const listLength = chaptersList.length ?? 0
       refs.current = refs.current.splice(0, listLength)

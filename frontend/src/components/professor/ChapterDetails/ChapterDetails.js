@@ -40,6 +40,20 @@ function ChapterDetails() {
     })
   }, [])
 
+  useEffect(() => {
+    const updateContainerSize = () =>
+      setMapContainerSize({
+        x: mapCardBody.current?.offsetWidth ?? 0,
+        y: mapCardBody.current?.offsetHeight ?? 0
+      })
+
+    window.addEventListener('resize', updateContainerSize)
+
+    return () => {
+      window.removeEventListener('resize', updateContainerSize)
+    }
+  }, [])
+
   const getChapterDetails = useCallback(() => {
     ChapterService.getChapterDetails(chapterId)
       .then((response) => {
@@ -173,7 +187,7 @@ function ChapterDetails() {
                     ) : chapterDetails == null || chapterDetails.mapTasks.length === 0 ? (
                       <tr>
                         <td colSpan='100%' className={'text-center'}>
-                          <p>{chapterDetails == null ? ERROR_OCCURRED : 'Lista rozdziałów jest pusta'}</p>
+                          <p>{chapterDetails == null ? ERROR_OCCURRED : 'Lista aktywności jest pusta'}</p>
                         </td>
                       </tr>
                     ) : (

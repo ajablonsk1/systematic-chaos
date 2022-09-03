@@ -62,18 +62,13 @@ export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapCli
   }, [marginNeeded, parentSize, rows])
 
   useEffect(() => {
-    function setHeight() {
-      if (!chapterMap) {
-        setSize(0)
-      } else {
-        let { x, y } = getParentSize()
-        const possibleSize = Math.floor(Math.min(x / chapterMap.mapSizeX, y / chapterMap.mapSizeY))
-        setSize(possibleSize ?? 0)
-      }
+    if (!chapterMap) {
+      setSize(0)
+    } else {
+      let { x, y } = getParentSize()
+      const possibleSize = Math.floor(Math.min(x / chapterMap.mapSizeX, y / chapterMap.mapSizeY))
+      setSize(possibleSize ?? 0)
     }
-
-    setHeight() // first time, on component mount
-    window.addEventListener('resize', setHeight) // always when window resize
   }, [chapterMap, getParentSize])
 
   return (
