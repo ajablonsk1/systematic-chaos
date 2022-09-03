@@ -62,6 +62,8 @@ export default function ActivityContent(props) {
         .catch(() => {
           setPointsReceived(null)
         })
+    } else {
+      setPointsReceived(0)
     }
   }, [activityScore])
 
@@ -127,7 +129,7 @@ export default function ActivityContent(props) {
       },
       {
         name: 'Czas na rozwiązanie aktywności',
-        value: <span>{props.activity.timeToSolveMillis / 1000 / 60} min}</span>
+        value: <span>{props.activity.timeToSolveMillis / 1000 / 60} min</span>
       },
       {
         name: 'Data dostępności aktywności',
