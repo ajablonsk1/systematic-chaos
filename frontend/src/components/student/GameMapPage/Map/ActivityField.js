@@ -1,7 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getActivityByPosition } from '../../../../storage/activityMap'
-import { getActivityImg, getActivityPath, getActivityTypeName } from '../../../../utils/constants'
+import {
+  getActivityImg,
+  getActivityPath,
+  getActivityTypeName,
+  requirementValueConverter
+} from '../../../../utils/constants'
 import { ActivityCol, CustomOffcanvas } from './ActivityFieldStyle'
 import { Button, OffcanvasBody, OffcanvasHeader, OffcanvasTitle } from 'react-bootstrap'
 import moment from 'moment'
@@ -58,13 +63,13 @@ export default function ActivityField({ activity, posX, posY, colClickable, colS
           {requirements.map((requirement, index) => (
             <tr key={index + Date.now()}>
               <td>{requirement.name}:</td>
-              <td>{requirement.value}</td>
+              <td>{requirementValueConverter(requirement)}</td>
             </tr>
           ))}
         </tbody>
       </table>
     )
-  }, [activity?.points, activity?.title, activity?.type, requirements])
+  }, [activity, requirements])
 
   return (
     <>

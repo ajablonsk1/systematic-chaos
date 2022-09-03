@@ -90,7 +90,7 @@ function AddGraphTask(props) {
         <div className={'d-flex flex-column justify-content-center align-items-center pt-4 gap-2'}>
           {errorMessage && <p className={'text-danger h6'}>{errorMessage}</p>}
           <div className={'d-flex gap-2'}>
-            <Button variant={'danger'} onClick={() => props.setShow(false)}>
+            <Button variant={'danger'} onClick={props.onCancel}>
               Anuluj
             </Button>
             <Button variant={'success'} onClick={() => sendJson()}>

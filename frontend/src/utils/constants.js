@@ -38,6 +38,7 @@ import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
 import { generateFullPath, PageRoutes } from '../routes/PageRoutes'
 import { HeroType } from './userRole'
+import moment from 'moment'
 
 export const UserSidebarTitles = {
   [generateFullPath(() => PageRoutes.Student.GameCard.GAME_CARD)]: ['Karta gry', faHouse],
@@ -229,4 +230,22 @@ export const RequirementType = {
   DATE: 'date,',
   MULTI_SELECT: 'email',
   SELECT: 'select'
+}
+
+export const requirementValueConverter = (requirement) => {
+  switch (requirement.type) {
+    case RequirementType.DATE:
+      return moment(requirement.value).format('DD.MM.YYYY, HH:mm')
+    case RequirementType.SELECT:
+      return requirement.value[0] // TODO later endpoint will get one value
+    case RequirementType.MULTI_SELECT:
+      return requirement.value.join(', ')
+    case RequirementType.BOOLEAN:
+      return requirement.value ? 'TAK' : 'NIE'
+    case RequirementType.TEXT:
+    case RequirementType.NUMBER:
+      return requirement.value
+    default:
+      return ''
+  }
 }

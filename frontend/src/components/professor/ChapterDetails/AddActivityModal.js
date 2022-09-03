@@ -22,6 +22,7 @@ function AddActivityModal(props) {
                 props.setShow(false)
                 setIsSuccessModalOpen(true)
               }}
+              onCancel={() => props.setShow(false)}
             />
           )
         case Activity.TASK:
