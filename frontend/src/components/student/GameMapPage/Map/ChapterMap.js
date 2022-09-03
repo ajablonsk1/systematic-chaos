@@ -78,7 +78,12 @@ export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapCli
       ) : rows == null ? (
         <p>{ERROR_OCCURRED}</p>
       ) : (
-        <Map fluid className={`${marginNeeded && 'my-2'} h-100`}>
+        <Map
+          fluid
+          className={`${marginNeeded && 'my-2'} h-100`}
+          $width={size * rows[0].length + 'px'}
+          $height={size * rows.length + 'px'}
+        >
           {rows.map((row, idx1) => (
             <Row key={idx1} className='mx-auto'>
               {row.map((activity, idx2) => (

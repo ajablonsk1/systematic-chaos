@@ -11,6 +11,7 @@ import { ActivityCol, CustomOffcanvas } from './ActivityFieldStyle'
 import { Button, OffcanvasBody, OffcanvasHeader, OffcanvasTitle } from 'react-bootstrap'
 import moment from 'moment'
 import { getRequirements } from './mockData'
+import { Tooltip } from '../../BadgesPage/BadgesStyle'
 
 export default function ActivityField({ activity, posX, posY, colClickable, colSize }) {
   const navigate = useNavigate()
@@ -76,7 +77,10 @@ export default function ActivityField({ activity, posX, posY, colClickable, colS
       <ActivityCol $isClickable={colClickable} $colSize={colSize}>
         {activity ? (
           <div style={{ backgroundColor: 'white' }}>
-            <img src={getActivityImg(activity.type)} alt='activityImg' onClick={() => setIsOffcanvasOpen(true)} />
+            <Tooltip>
+              <img src={getActivityImg(activity.type)} alt='activityImg' onClick={() => setIsOffcanvasOpen(true)} />
+              <div style={{ height: 40 }}>{getActivityTypeName(activity.type)}</div>
+            </Tooltip>
           </div>
         ) : (
           <div

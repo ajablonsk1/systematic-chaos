@@ -62,7 +62,7 @@ function ChaptersNav() {
     <TabColored defaultActiveKey={chaptersList[0]?.id ?? 0} id='chaptersNav' className='mb-3 justify-content-center'>
       {chaptersList?.map((chapter, index) => (
         <Tab key={index + Date.now()} eventKey={chapter.id} title={chapter.name}>
-          <div style={{ maxHeight: '70vh', height: '70vh', width: '100%' }} ref={refs.current[index]}>
+          <div style={{ maxHeight: '90vh', height: '90vh', width: '100%' }} ref={refs.current[index]}>
             <ChapterMap chapterId={chapter.id} marginNeeded mapClickable parentSize={mapsContainerSize} />
           </div>
         </Tab>
