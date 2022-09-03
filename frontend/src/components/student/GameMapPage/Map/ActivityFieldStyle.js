@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { Col, Offcanvas } from 'react-bootstrap'
 
 export const ActivityCol = styled(Col)`
@@ -11,21 +11,26 @@ export const ActivityCol = styled(Col)`
   width: ${(props) => props.$colSize + 'px'};
   height: ${(props) => props.$colSize + 'px'};
 
-  & img,
+  & img {
+    width: 85%;
+    height: 85%;
+    border-radius: 5px;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
   & div {
     width: 100%;
     height: 100%;
     border-radius: 5px;
   }
 
-  ${(props) =>
-    props.$isClickable &&
-    css`
-      &:hover {
-        cursor: pointer;
-        transform: scale(1.1);
-      }
-    `}
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
 `
 
 export const CustomOffcanvas = styled(Offcanvas)`

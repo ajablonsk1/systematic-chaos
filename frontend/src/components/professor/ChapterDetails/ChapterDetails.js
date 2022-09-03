@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Content } from '../../App/AppGeneralStyles'
 import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Spinner, Table } from 'react-bootstrap'
@@ -7,7 +7,6 @@ import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './Ch
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
-import ActivityService from '../../../services/activity.service'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
 import EditChapterModal from './EditChapterModal'
@@ -20,7 +19,6 @@ function ChapterDetails() {
   const { id: chapterId } = useParams()
   const [openActivitiesDetailsList, setOpenActivitiesDetailsList] = useState(false)
   const [openConditionsList, setOpenConditionsList] = useState(false)
-  const [chapterMap, setChapterMap] = useState(undefined)
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false)
   const [isEditChapterModalOpen, setEditChapterModalOpen] = useState(false)
   const [chosenActivityData, setChosenActivityData] = useState(null)
@@ -28,11 +26,33 @@ function ChapterDetails() {
   const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
   const [chapterDetails, setChapterDetails] = useState(undefined)
   const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false)
+  const [mapContainerSize, setMapContainerSize] = useState({ x: 0, y: 0 })
 
   const mapCardBody = useRef()
 
   const navigate = useNavigate()
   const location = useLocation()
+
+  useLayoutEffect(() => {
+    setMapContainerSize({
+      x: mapCardBody.current?.offsetWidth ?? 0,
+      y: mapCardBody.current?.offsetHeight ?? 0
+    })
+  }, [])
+
+  useEffect(() => {
+    const updateContainerSize = () =>
+      setMapContainerSize({
+        x: mapCardBody.current?.offsetWidth ?? 0,
+        y: mapCardBody.current?.offsetHeight ?? 0
+      })
+
+    window.addEventListener('resize', updateContainerSize)
+
+    return () => {
+      window.removeEventListener('resize', updateContainerSize)
+    }
+  }, [])
 
   const getChapterDetails = useCallback(() => {
     ChapterService.getChapterDetails(chapterId)
@@ -53,12 +73,6 @@ function ChapterDetails() {
       state: { activityId: activityId, activityType: activityType }
     })
   }
-
-  useEffect(() => {
-    ActivityService.getActivityMap(chapterId)
-      .then((response) => setChapterMap(response))
-      .catch(() => setChapterMap(null))
-  }, [chapterId])
 
   const startActivityEdition = (activity) => {
     // TODO: depending on the type of activity, we will use a different endpoint
@@ -88,11 +102,7 @@ function ChapterDetails() {
             <MapCard className={'mt-2'}>
               <Card.Header>Mapa rozdziału</Card.Header>
               <Card.Body ref={mapCardBody}>
-                {chapterMap ? (
-                  <ChapterMap map={chapterMap} marginNeeded parentRef={mapCardBody} />
-                ) : (
-                  chapterMap == null && <p className={'text-center h6 p-4'}>{ERROR_OCCURRED}</p>
-                )}
+                <ChapterMap chapterId={chapterId} marginNeeded parentSize={mapContainerSize} />
               </Card.Body>
             </MapCard>
           </Col>
@@ -177,7 +187,7 @@ function ChapterDetails() {
                     ) : chapterDetails == null || chapterDetails.mapTasks.length === 0 ? (
                       <tr>
                         <td colSpan='100%' className={'text-center'}>
-                          <p>{chapterDetails == null ? ERROR_OCCURRED : 'Lista rozdziałów jest pusta'}</p>
+                          <p>{chapterDetails == null ? ERROR_OCCURRED : 'Lista aktywności jest pusta'}</p>
                         </td>
                       </tr>
                     ) : (
@@ -223,13 +233,15 @@ function ChapterDetails() {
           </Col>
           <ButtonsCol md={12} style={{ height: '10vh' }}>
             <Link to={generateFullPath(() => PageRoutes.Teacher.GameManagement.GAME_MANAGEMENT)}>
-              <Button variant={'warning'}>Wyjdź</Button>
+              <Button variant={'outline-secondary'}>Wyjdź</Button>
             </Link>
-            <Button onClick={() => setEditChapterModalOpen(true)}>Edytuj rozdział</Button>
-            <Button variant={'danger'} onClick={() => setDeletionModalOpen(true)}>
+            <Button variant={'outline-primary'} onClick={() => setEditChapterModalOpen(true)}>
+              Edytuj rozdział
+            </Button>
+            <Button variant={'outline-danger'} onClick={() => setDeletionModalOpen(true)}>
               Usuń rozdział
             </Button>
-            <Button variant={'success'} onClick={() => setIsAddActivityModalOpen(true)}>
+            <Button variant={'outline-success'} onClick={() => setIsAddActivityModalOpen(true)}>
               Dodaj aktywność
             </Button>
           </ButtonsCol>

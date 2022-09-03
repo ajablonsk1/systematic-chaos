@@ -39,7 +39,7 @@ function ParticipantsTable(props) {
   }, [props, changeGroupModalOpen])
 
   return (
-    <GameCardOptionPick>
+    <GameCardOptionPick style={{ maxHeight: '90vh', overflowY: 'auto' }}>
       <TableContainer>
         <thead>
           <tr>
@@ -48,7 +48,7 @@ function ParticipantsTable(props) {
             <th className={'text-center'}>Akcje</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className={'mh-100'}>
           {studentsList?.length > 0 ? (
             studentsList.map((student, index) => (
               <tr key={index + student.groupName}>
@@ -56,7 +56,7 @@ function ParticipantsTable(props) {
                 <td className={'py-2'}>
                   {student.firstName} {student.lastName}
                 </td>
-                <td className={'py-2 text-center d-flex justify-content-center align-items-center'}>
+                <td className={'py-2 text-center'}>
                   <Button
                     style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
                     onClick={() => {

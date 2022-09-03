@@ -15,18 +15,40 @@ export const TabsContainer = styled(Tabs)`
 `
 
 export const GradesTable = styled(Table)`
-  background-color: var(--dark-blue);
   color: var(--font-color);
+  margin-bottom: 0;
+
+  th {
+    background-color: var(--dark-blue);
+    border-color: var(--dark-blue);
+  }
+
+  tr {
+    border-color: var(--dark-blue);
+  }
+  td {
+    background-color: var(--light-blue);
+    border-color: var(--dark-blue);
+  }
+
+  thead {
+    position: sticky;
+    top: 0; /* Don't forget this, required for the stickiness */
+  }
 `
 
 export const ExportButton = styled(Button)`
   background-color: var(--button-green);
-  margin: 0 auto;
+  margin: 10px auto 0 auto;
   display: flex;
+  border: none;
 
   &:disabled,
-  &:disabled:hover {
+  &:disabled:hover,
+  &:focus {
+    border: none;
     background-color: var(--button-green);
+    box-shadow: none;
   }
 
   &:hover {
