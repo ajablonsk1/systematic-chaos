@@ -64,6 +64,7 @@ public class SummaryService {
         List<NotAssessedActivity> notAssessedActivitiesTable = getNotAssessedActivitiesTable(professor);
 
         Double avgGrade = getAvgGrade(avgGradesList);
+        Double medianGrade = getMedianGrade();
         String bestScoreActivityName = getBestScoreActivityName(avgActivitiesScore);
         String worstScoreActivityName = getWorstScoreActivityName(avgActivitiesScore);
 
@@ -94,10 +95,14 @@ public class SummaryService {
     }
 
     public Double getAvgGrade(List<AverageGrade> avgGradesList) {
-        if (avgGradesList.size() == 0) return null;
+        if (avgGradesList.isEmpty()) return null;
         Double grade = flatMapAvgGradesList(avgGradesList)
                 .average().getAsDouble();
-        return round(grade);
+        return PointsToGradeMapper.roundGrade(grade);
+    }
+
+    public Double getMedianGrade() {
+        return null;
     }
 
     public List<ActivityScore> flatMapAvgActivitiesScore(List<AverageActivityScore> avgActivitiesScore) {
@@ -140,7 +145,7 @@ public class SummaryService {
     }
 
     public Integer getWaitingAnswersNumber(List<NotAssessedActivity> notAssessedActivitiesTable) {
-        if (notAssessedActivitiesTable.size() == 0) return 0;
+        if (notAssessedActivitiesTable.isEmpty()) return 0;
         return notAssessedActivitiesTable
                 .stream()
                 .mapToInt(NotAssessedActivity::getWaitingAnswersNumber)
@@ -212,14 +217,14 @@ public class SummaryService {
         activityScore.setActivityName(activity.getTitle());
         activityScore.setScores(getScores(activity));
 
-        if (activityScore.getScores().size() == 0) return null;
+        if (activityScore.getScores().isEmpty()) return null;
 
         Double avgScore = activityScore.getScores()
                 .stream()
                 .mapToDouble(Score::getScore)
                 .average().getAsDouble();
 
-        activityScore.setAvgScore(round(avgScore));
+        activityScore.setAvgScore(PointsToGradeMapper.roundGrade(avgScore));
         return activityScore;
     }
 
@@ -315,13 +320,15 @@ public class SummaryService {
                 .toList();
     }
 
+    private List<? extends TaskResult> getAllProfessorActivitiesResult() {
+        return null;
+    }
+
+
+
     private boolean isProfessorActivity(Activity activity, User professor) {
         return activity.getProfessor() == null || activity.getProfessor().equals(professor); // assumption that when activity has no professor it means it is everyones
 
-    }
-
-    private Double round(Double score) {
-        return Math.round(score * 10.0) / 10.0;
     }
 
 }

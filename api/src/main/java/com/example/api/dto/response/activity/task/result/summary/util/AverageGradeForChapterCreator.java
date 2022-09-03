@@ -2,29 +2,49 @@ package com.example.api.dto.response.activity.task.result.summary.util;
 
 import com.example.api.dto.response.activity.task.result.summary.AverageGradeForChapter;
 import com.example.api.model.group.Group;
+import com.example.api.util.csv.PointsToGradeMapper;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.OptionalDouble;
+
 
 public class AverageGradeForChapterCreator {
     private String groupName;
-    private Double sumOfGrades;
-    private Integer numberOfGrades;
+    private List<Double> grades;
 
     public AverageGradeForChapterCreator(Group group) {
         this.groupName = group.getName();
-        this.sumOfGrades = 0.0;
-        this.numberOfGrades = 0;
+        this.grades = new LinkedList<>();
     }
 
     public void add(Double grade) {
-        this.numberOfGrades += 1;
-        this.sumOfGrades += grade;
+        grades.add(grade);
     }
 
     public AverageGradeForChapter create() {
-        Double avgGrades = null;
-        if (numberOfGrades > 0) {
-            avgGrades = sumOfGrades / numberOfGrades;
-            avgGrades = Math.round(avgGrades * 10.0) / 10.0;
+        Double avgGrade = PointsToGradeMapper.roundGrade(getAvg());
+        Double medianGrade = PointsToGradeMapper.roundGrade(getMedian());
+        return new AverageGradeForChapter(groupName, avgGrade, medianGrade);
+    }
+
+    private Double getAvg() {
+        OptionalDouble avg = grades
+                .stream()
+                .mapToDouble(d -> d)
+                .average();
+        if (avg.isEmpty()) return null;
+        return avg.getAsDouble();
+    }
+
+    private Double getMedian() {
+        if (grades.isEmpty()) return null;
+        boolean isEven = grades.size() % 2 == 0;
+        int medianIndex = grades.size() / 2;
+
+        if (isEven) {
+            return (grades.get(medianIndex - 1) + grades.get(medianIndex)) / 2.0;
         }
-        return new AverageGradeForChapter(groupName, avgGrades);
+        return grades.get(medianIndex);
     }
 }

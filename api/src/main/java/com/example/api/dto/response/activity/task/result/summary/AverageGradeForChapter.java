@@ -12,4 +12,5 @@ import lombok.Setter;
 public class AverageGradeForChapter {
     private String groupName;
     private Double avgGrade;
+    private Double medianGrade;
 }

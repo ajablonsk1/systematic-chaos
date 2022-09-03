@@ -7,6 +7,7 @@ import java.util.List;
 @Data
 public class SummaryResponse {
     private Double avgGrade;
+    private Double medianGrade;
     private String bestScoreActivityName;
     private String worstScoreActivityName;
     private Integer assessedActivityCounter;
