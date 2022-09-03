@@ -3,6 +3,8 @@ import { Row } from 'react-bootstrap'
 import Loader from '../../../general/Loader/Loader'
 import { Map } from '../GameMapStyles'
 import ActivityField from './ActivityField'
+import ActivityService from '../../../../services/activity.service'
+import { ERROR_OCCURRED } from '../../../../utils/constants'
 
 function getActivity(map, x, y) {
   return map.tasks.find((activity) => activity.posX === x && activity.posY === y) || null
@@ -20,56 +22,82 @@ function createMap(map) {
   return rowsObj
 }
 
-export default function ChapterMap({ map, marginNeeded, parentRef, mapClickable }) {
+export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapClickable }) {
   const [size, setSize] = useState(undefined)
+  const [chapterMap, setChapterMap] = useState(undefined)
+  const [rows, setRows] = useState(undefined)
 
-  const rows = createMap(map)
+  useEffect(() => {
+    ActivityService.getActivityMap(chapterId)
+      .then((response) => {
+        setChapterMap(response)
+      })
+      .catch(() => {
+        setChapterMap(null)
+      })
+  }, [chapterId])
+
+  useEffect(() => {
+    if (chapterMap) {
+      setRows(createMap(chapterMap))
+    }
+  }, [chapterMap])
 
   const getParentSize = useCallback(() => {
+    if (!rows) {
+      return { x: 0, y: 0 }
+    }
+
     const emptySpaceX = 32 + rows[0].length * 2
     const emptySpaceY = 32 + rows.length * 2 + marginNeeded ? 32 : 0 // margin-x only
 
-    if (parentRef?.current?.offsetWidth && parentRef.current?.offsetHeight) {
+    if (parentSize.x && parentSize.y) {
       return {
-        x: parentRef?.current?.offsetWidth - emptySpaceX,
-        y: parentRef.current?.offsetHeight - emptySpaceY
+        x: parentSize.x - emptySpaceX,
+        y: parentSize.y - emptySpaceY
       }
-    } else return { x: 0, y: 0 }
-  }, [marginNeeded, parentRef, rows])
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }, [marginNeeded, parentSize, rows])
 
   useEffect(() => {
     function setHeight() {
-      let { x, y } = getParentSize()
-      const possibleSize = Math.floor(Math.min(x / map.mapSizeX, y / map.mapSizeY))
-      setSize(possibleSize ?? 0)
+      if (!chapterMap) {
+        setSize(0)
+      } else {
+        let { x, y } = getParentSize()
+        const possibleSize = Math.floor(Math.min(x / chapterMap.mapSizeX, y / chapterMap.mapSizeY))
+        setSize(possibleSize ?? 0)
+      }
     }
 
     setHeight() // first time, on component mount
     window.addEventListener('resize', setHeight) // always when window resize
-  }, [parentRef, map.mapSizeX, map.mapSizeY, getParentSize])
-
-  const MapRows = rows.map((row, idx1) => (
-    <Row key={idx1} className='mx-auto'>
-      {row.map((activity, idx2) => (
-        <ActivityField
-          key={idx2 + ' ' + idx1}
-          activity={activity}
-          posX={idx2}
-          posY={idx1}
-          colClickable={mapClickable}
-          colSize={size}
-        />
-      ))}
-    </Row>
-  ))
+  }, [chapterMap, getParentSize])
 
   return (
     <>
-      {!rows ? (
+      {rows === undefined ? (
         <Loader />
+      ) : rows == null ? (
+        <p>{ERROR_OCCURRED}</p>
       ) : (
         <Map fluid className={`${marginNeeded && 'my-2'} h-100`}>
-          {MapRows}
+          {rows.map((row, idx1) => (
+            <Row key={idx1} className='mx-auto'>
+              {row.map((activity, idx2) => (
+                <ActivityField
+                  key={idx2 + ' ' + idx1}
+                  activity={activity}
+                  posX={idx2}
+                  posY={idx1}
+                  colClickable={mapClickable}
+                  colSize={size}
+                />
+              ))}
+            </Row>
+          ))}
         </Map>
       )}
     </>

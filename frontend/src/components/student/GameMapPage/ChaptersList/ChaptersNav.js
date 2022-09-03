@@ -3,37 +3,53 @@ import { Tab } from 'react-bootstrap'
 import ChapterMap from '../Map/ChapterMap'
 import { TabColored } from './ChaptersNavStyle'
 import Loader from '../../../general/Loader/Loader'
-import ActivityService from '../../../../services/activity.service'
-import { uniqBy } from 'lodash'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
+import ChapterService from '../../../../services/chapter.service'
 
 function ChaptersNav() {
-  const [chaptersMap, setChaptersMap] = useState([])
-  const chapterMapParentRef = useRef()
+  const [chaptersList, setChaptersList] = useState(undefined)
+  const [mapsContainerSize, setMapsContainerSize] = useState({})
+  let refs = useRef([React.createRef(), React.createRef()])
 
-  // TODO: z jakiegos powodu wywolywany jest ten endpoint za kazdym razem gdy sie strona odswiezy
-  //  i dlatego zawsze duplikowalo mapy i sie pojawialy nowe pod spodem przy auto-refreshu
-  //  na razie dodalem uniqBy ale trzeba zbadać sprawe
   useEffect(() => {
-    // todo: set mapId, now we always get first map
-    ActivityService.getActivityMap(1)
+    setMapsContainerSize({
+      x: refs.current[0].current?.offsetWidth ?? 0,
+      y: refs.current[0].current?.offsetHeight ?? 0
+    })
+    refs.current[0].current?.focus()
+  }, [chaptersList])
+
+  useEffect(() => {
+    if (chaptersList) {
+      const listLength = chaptersList.length ?? 0
+      refs.current = refs.current.splice(0, listLength)
+      for (let i = 0; i < listLength; i++) {
+        refs.current[i] = refs.current[i] || React.createRef()
+      }
+      refs.current = refs.current.map((item) => item || React.createRef())
+    }
+  }, [chaptersList])
+
+  useEffect(() => {
+    ChapterService.getChaptersList()
       .then((response) => {
-        return setChaptersMap(uniqBy([...chaptersMap, response], 'id'))
+        setChaptersList(response)
       })
-      .catch(() => setChaptersMap(null))
-    // eslint-disable-next-line
+      .catch(() => {
+        setChaptersList(null)
+      })
   }, [])
 
-  return chaptersMap === undefined ? (
+  return chaptersList === undefined ? (
     <Loader />
-  ) : chaptersMap == null ? (
+  ) : chaptersList == null ? (
     <p className={'text-center text-danger h3'}>{ERROR_OCCURRED}</p>
   ) : (
-    <TabColored defaultActiveKey={'Example map'} id='chaptersNav' className='mb-3 justify-content-center'>
-      {chaptersMap?.map((chapter, index) => (
-        <Tab key={index + Date.now()} eventKey={'Example map'} title={'Example map'}>
-          <div style={{ maxHeight: '70vh', height: '70vh', width: '100%' }} ref={chapterMapParentRef}>
-            <ChapterMap map={chapter} marginNeeded mapClickable parentRef={chapterMapParentRef} />
+    <TabColored defaultActiveKey={chaptersList[0]?.id ?? 0} id='chaptersNav' className='mb-3 justify-content-center'>
+      {chaptersList?.map((chapter, index) => (
+        <Tab key={index + Date.now()} eventKey={chapter.id} title={chapter.name}>
+          <div style={{ maxHeight: '70vh', height: '70vh', width: '100%' }} ref={refs.current[index]}>
+            <ChapterMap chapterId={chapter.id} marginNeeded mapClickable parentSize={mapsContainerSize} />
           </div>
         </Tab>
       ))}
