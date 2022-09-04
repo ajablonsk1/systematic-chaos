@@ -1,5 +1,6 @@
 package com.example.api.model.activity.result;
 
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Answer;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,15 @@ public class GraphTaskResult extends TaskResult {
     private int timeSpentSec;
     private Long startDateMillis;
     private Double maxPoints100;
+
+    @Override
+    public boolean isEvaluated() {
+        return this.getPointsReceived() != null;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return graphTask;
+    }
 }
 

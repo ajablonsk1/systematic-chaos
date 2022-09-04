@@ -1,6 +1,7 @@
 package com.example.api.model.activity.task;
 
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.question.Question;
 import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class GraphTask extends Task {
+    private ActivityType activityType = ActivityType.EXPEDITION;
     @OneToMany
     private List<Question> questions = new LinkedList<>();
     private Long timeToSolveMillis;

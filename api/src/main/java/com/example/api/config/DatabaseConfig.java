@@ -478,6 +478,16 @@ public class DatabaseConfig {
             result3.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
             graphTaskResultService.saveGraphTaskResult(result3);
 
+            GraphTaskResult result4 = new GraphTaskResult();
+            result4.setGraphTask(graphTaskTwo);
+            result4.setUser(student9);
+            result4.setPointsReceived(30.5);
+            result4.setTimeSpentSec(60 * 10);
+            calendar.set(2022, Calendar.APRIL, 14);
+            result4.setStartDateMillis(calendar.getTimeInMillis());
+            result4.setSendDateMillis(calendar.getTimeInMillis() + result2.getTimeSpentSec() / 1000);
+            graphTaskResultService.saveGraphTaskResult(result4);
+
             FileTaskResult fileResult = new FileTaskResult();
             fileResult.setId(1L);
             fileResult.setFileTask(fileTask);

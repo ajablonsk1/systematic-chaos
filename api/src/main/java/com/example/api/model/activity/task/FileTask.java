@@ -1,6 +1,7 @@
 package com.example.api.model.activity.task;
 
 import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Entity
 public class FileTask extends Task {
+    private ActivityType activityType = ActivityType.TASK;
 
     public FileTask(CreateFileTaskForm form, User professor, Long expireDateMillis) {
         super(form.getTitle(), form.getDescription(), form.getPosX(), form.getPosY(), professor,

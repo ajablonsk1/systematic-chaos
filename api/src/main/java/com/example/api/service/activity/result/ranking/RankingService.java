@@ -7,6 +7,8 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.model.activity.result.TaskResult;
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;

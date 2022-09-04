@@ -1,5 +1,6 @@
 package com.example.api.dto.response.map.task;
 
+
 public enum ActivityType {
     EXPEDITION("EXPEDITION"),
     TASK("TASK"),
@@ -16,4 +17,5 @@ public enum ActivityType {
     public String getActivityType() {
         return activityType;
     }
+
 }

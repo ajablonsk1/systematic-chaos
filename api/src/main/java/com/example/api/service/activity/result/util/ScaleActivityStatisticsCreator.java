@@ -1,6 +1,7 @@
 package com.example.api.service.activity.result.util;
 
 import com.example.api.dto.response.activity.task.result.ScaleActivityStatistics;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
@@ -19,7 +20,9 @@ public class ScaleActivityStatisticsCreator {
     private HashMap<Double, ScaleActivityStatistics> statistics = new HashMap<>();
 
     public ScaleActivityStatisticsCreator(Activity activity) {
-        if (activity instanceof Survey) initSurvey((Survey) activity);
+        if (activity.getActivityType().equals(ActivityType.SURVEY)) {
+            initSurvey((Survey) activity);
+        }
         else initTask((Task) activity);
     }
 
@@ -36,7 +39,9 @@ public class ScaleActivityStatisticsCreator {
     }
 
     public void add(TaskResult taskResult) {
-        if (taskResult instanceof SurveyResult) addSurvey((SurveyResult) taskResult);
+        if (taskResult.getActivity().getActivityType().equals(ActivityType.SURVEY)) {
+            addSurvey((SurveyResult) taskResult);
+        }
         else addTask(taskResult);
     }
     public void addTask(TaskResult taskResult) {

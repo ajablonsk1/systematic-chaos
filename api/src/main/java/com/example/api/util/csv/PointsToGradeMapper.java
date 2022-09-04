@@ -1,5 +1,6 @@
 package com.example.api.util.csv;
 
+import com.example.api.model.activity.result.TaskResult;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -23,5 +24,9 @@ public class PointsToGradeMapper {
         } else {
             return 5.0;
         }
+    }
+
+    public Double getGrade(TaskResult taskResult) {
+        return getGrade(taskResult.getPointsReceived(), taskResult.getActivity().getMaxPoints());
     }
 }

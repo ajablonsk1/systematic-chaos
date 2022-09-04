@@ -1,5 +1,6 @@
 package com.example.api.model.activity.result;
 
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.util.File;
 import lombok.AllArgsConstructor;
@@ -30,5 +31,10 @@ public class FileTaskResult extends TaskResult {
     @JoinColumn(name = "fileTask_id")
     private FileTask fileTask;
 
-    private boolean isEvaluated;
+    public boolean isEvaluated;
+
+    @Override
+    public Activity getActivity() {
+        return fileTask;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.api.model.activity.result;
 
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,15 @@ public class AdditionalPoints extends TaskResult{
         super(id, student, points, sendDateMillis);
         this.professorEmail = professorEmail;
         this.description = description;
+    }
+
+    @Override
+    public boolean isEvaluated() {
+        return true;
+    }
+
+    @Override
+    public Activity getActivity() {
+        return null;
     }
 }
