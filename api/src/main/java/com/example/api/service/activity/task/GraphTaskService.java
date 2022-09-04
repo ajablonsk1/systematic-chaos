@@ -79,12 +79,10 @@ public class GraphTaskService {
 
         List<QuestionForm> questionForms = form.getQuestions();
         Map<Integer, Question> numToQuestion = new HashMap<>();
-        List<Double> points = new LinkedList<>();
         for (QuestionForm questionForm: questionForms) {
             if(questionForm.getQuestionType() == null) {
                 numToQuestion.put(questionForm.getQuestionNum(), new Question());
             } else {
-                points.add(questionForm.getPoints());
                 QuestionType type = activityValidator.getQuestionTypeFromString(questionForm.getQuestionType());
                 Difficulty difficulty = activityValidator.getDifficultyFromString(questionForm.getDifficulty());
                 switch (type) {
@@ -127,16 +125,30 @@ public class GraphTaskService {
         }
         questionRepo.saveAll(questions);
 
+        double maxPoints = calculateMaxPoints(questions.get(0), 0);
+
         GraphTask graphTask = new GraphTask(form,
                 professor,
                 questions,
                 expireDateMillis,
                 timeToSolveMillis,
-                points.stream().mapToDouble(f -> f).sum());
+                maxPoints);
         graphTaskRepo.save(graphTask);
 
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
         mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         chapter.getActivityMap().getGraphTasks().add(graphTask);
+    }
+
+    private double calculateMaxPoints(Question question, double maxPoints) {
+        List<Question> nextQuestions = question.getNext();
+        if (nextQuestions.isEmpty()) {
+            return maxPoints;
+        }
+        List<Double> points = new LinkedList<>();
+        for (Question nextQuestion: nextQuestions) {
+            points.add(calculateMaxPoints(nextQuestion, maxPoints + nextQuestion.getPoints()));
+        }
+        return points.stream().max(Double::compareTo).get();
     }
 }
