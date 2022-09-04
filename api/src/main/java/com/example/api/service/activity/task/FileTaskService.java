@@ -95,7 +95,7 @@ public class FileTaskService {
 
         mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateFileTaskFormFields(form);
-        activityValidator.validateActivityPosition(form, chapter, ActivityType.TASK);
+        activityValidator.validateActivityPosition(form, chapter);
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(format, form.getActivityExpireDate());

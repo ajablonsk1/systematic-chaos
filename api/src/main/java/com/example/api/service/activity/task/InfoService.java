@@ -61,7 +61,7 @@ public class InfoService {
 
         mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateInfoForm(form);
-        activityValidator.validateActivityPosition(form, chapter, ActivityType.INFO);
+        activityValidator.validateActivityPosition(form, chapter);
 
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);

@@ -70,7 +70,7 @@ public class GraphTaskService {
 
         mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateGraphTaskFormFields(form);
-        activityValidator.validateActivityPosition(form, chapter, ActivityType.EXPEDITION);
+        activityValidator.validateActivityPosition(form, chapter);
 
         SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");

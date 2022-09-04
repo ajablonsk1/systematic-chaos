@@ -53,7 +53,7 @@ public class SurveyService {
 
         mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateSurveyForm(form);
-        activityValidator.validateActivityPosition(form, chapter, ActivityType.SURVEY);
+        activityValidator.validateActivityPosition(form, chapter);
 
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);

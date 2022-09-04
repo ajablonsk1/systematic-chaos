@@ -8,9 +8,7 @@ import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.TaskResult;
-import com.example.api.model.activity.task.Activity;
-import com.example.api.model.activity.task.FileTask;
-import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.activity.task.*;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.question.Difficulty;
@@ -22,8 +20,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.awt.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
 @Slf4j
@@ -99,22 +100,26 @@ public class ActivityValidator {
         return graphTaskValidator.getDifficultyFromString(difficulty);
     }
 
-    public void validateActivityPosition(CreateActivityForm form, Chapter chapter, ActivityType type) throws RequestValidationException {
+    public void validateActivityPosition(CreateActivityForm form, Chapter chapter) throws RequestValidationException {
         ActivityMap activityMap = chapter.getActivityMap();
         if(form.getPosX() < 0 || form.getPosY() < 0 || form.getPosX() >= activityMap.getMapSizeX() ||
                 form.getPosY() >= activityMap.getMapSizeY()) {
             log.error("Activity must be inside map boundaries!");
             throw new RequestValidationException(ExceptionMessage.ACTIVITY_OUTSIDE_BOUNDARIES);
         }
-        List<? extends Activity> activities = null;
-        switch (type) {
-            case EXPEDITION -> activities = activityMap.getGraphTasks();
-            case TASK -> activities = activityMap.getFileTasks();
-            case SURVEY -> activities = activityMap.getSurveys();
-            case INFO -> activities = activityMap.getInfos();
-        }
-        if (activities.stream().anyMatch(activity -> Objects.equals(activity.getPosX(), form.getPosX()) &&
-                Objects.equals(activity.getPosY(), form.getPosY()))) {
+        List<Point> graphTasks = activityMap.getGraphTasks()
+                .stream().map(graphTask -> new Point(graphTask.getPosX(), graphTask.getPosY())).toList();
+        List<Point> fileTasks = activityMap.getFileTasks()
+                .stream().map(fileTask -> new Point(fileTask.getPosX(), fileTask.getPosY())).toList();
+        List<Point> surveys = activityMap.getSurveys()
+                .stream().map(survey -> new Point(survey.getPosX(), survey.getPosY())).toList();
+        List<Point> infos = activityMap.getInfos()
+                .stream().map(info -> new Point(info.getPosX(), info.getPosY())).toList();
+        List<Point> points = Stream.of(graphTasks, fileTasks, surveys, infos)
+                .flatMap(Collection::stream)
+                .toList();
+        if (points.stream().anyMatch(point -> Objects.equals(point.getX(), Double.valueOf(form.getPosX())) &&
+                Objects.equals(point.getY(), Double.valueOf(form.getPosY())))) {
             log.error("Two activities cannot be on the same position!");
             throw new RequestValidationException(ExceptionMessage.TWO_ACTIVITIES_ON_THE_SAME_POSITION);
         }
