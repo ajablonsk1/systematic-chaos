@@ -4,6 +4,7 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskChapterFo
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.task.GraphTask;
@@ -65,8 +66,11 @@ public class GraphTaskService {
     public void createGraphTask(CreateGraphTaskChapterForm chapterForm) throws ParseException, RequestValidationException {
         log.info("Starting creation of new GraphTask");
         CreateGraphTaskForm form = chapterForm.getForm();
+        Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
+        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateGraphTaskFormFields(form);
+        activityValidator.validateActivityPosition(form, chapter, ActivityType.EXPEDITION);
 
         SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");
@@ -135,7 +139,6 @@ public class GraphTaskService {
                 points.stream().mapToDouble(f -> f).sum());
         graphTaskRepo.save(graphTask);
 
-        Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
         mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         chapter.getActivityMap().getGraphTasks().add(graphTask);
     }

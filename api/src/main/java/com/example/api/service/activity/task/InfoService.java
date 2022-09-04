@@ -3,6 +3,7 @@ package com.example.api.service.activity.task;
 import com.example.api.dto.request.activity.task.create.CreateInfoChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateInfoForm;
 import com.example.api.dto.response.activity.task.InfoResponse;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.task.Info;
@@ -56,7 +57,11 @@ public class InfoService {
     public void createInfo(CreateInfoChapterForm chapterForm) throws RequestValidationException {
         log.info("Starting the creation of info");
         CreateInfoForm form = chapterForm.getForm();
+        Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
+
+        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateInfoForm(form);
+        activityValidator.validateActivityPosition(form, chapter, ActivityType.INFO);
 
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);
@@ -74,9 +79,6 @@ public class InfoService {
                 imageUrls
         );
         infoRepo.save(info);
-
-        Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         chapter.getActivityMap().getInfos().add(info);
     }
 }
