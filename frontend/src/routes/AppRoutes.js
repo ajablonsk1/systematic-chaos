@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
 import NotFound from '../components/general/NotFoundPage/NotFound'
-import { generateFullPath, PageRoutes } from './PageRoutes'
 import PageGuard from '../components/general/PageGuard/PageGuard'
 import { Role } from '../utils/userRole'
 import LoginAndRegistration from '../components/general/LoginAndRegistrationPage/LoginAndRegistration'
@@ -32,7 +31,7 @@ export default function AppRoutes() {
       />
 
       <Route
-        path={generateFullPath(() => PageRoutes.General.CANVAS)}
+        path={'/canvas'}
         exact
         element={
           <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
@@ -41,29 +40,29 @@ export default function AppRoutes() {
         }
       />
 
-      <Route path={PageRoutes.Student.GameCard.MAIN_PATH} element={<GameCardRoutes />} />
+      <Route path={'/game-card/*'} element={<GameCardRoutes />} />
 
-      <Route path={PageRoutes.Student.GameMap.MAIN_PATH} element={<GameMapRoutes />} />
+      <Route path={'/game-map/*'} element={<GameMapRoutes />} />
 
-      <Route path={PageRoutes.Student.Points.MAIN_PATH} element={<PointsRoutes />} />
+      <Route path={'/points/*'} element={<PointsRoutes />} />
 
-      <Route path={PageRoutes.Student.Ranking.MAIN_PATH} element={<StudentRankingRoutes />} />
+      <Route path={'/ranking/*'} element={<StudentRankingRoutes />} />
 
-      <Route path={PageRoutes.Student.BadgesAndAchievements.MAIN_PATH} element={<BadgesAndAchievementsRoutes />} />
+      <Route path={'/badges-achievements/*'} element={<BadgesAndAchievementsRoutes />} />
 
-      <Route path={PageRoutes.Student.Profile.MAIN_PATH} element={<ProfileRoutes />} />
+      <Route path={'/profile/*'} element={<ProfileRoutes />} />
 
-      <Route path={PageRoutes.Teacher.GameSummary.MAIN_PATH} element={<GameSummaryRoutes />} />
+      <Route path={'/game-summary/*'} element={<GameSummaryRoutes />} />
 
-      <Route path={PageRoutes.Teacher.Ranking.MAIN_PATH} element={<TeacherRankingRoutes />} />
+      <Route path={'/students-ranking/*'} element={<TeacherRankingRoutes />} />
 
-      <Route path={PageRoutes.Teacher.GameManagement.MAIN_PATH} element={<GameManagementRoutes />} />
+      <Route path={'/game-management/*'} element={<GameManagementRoutes />} />
 
-      <Route path={PageRoutes.Teacher.Participants.MAIN_PATH} element={<ParticipantsRoutes />} />
+      <Route path={'/participants/*'} element={<ParticipantsRoutes />} />
 
-      <Route path={PageRoutes.Teacher.ActivityAssessment.MAIN_PATH} element={<ActivityAssessmentRoutes />} />
+      <Route path={'/assessment/*'} element={<ActivityAssessmentRoutes />} />
 
-      <Route path={PageRoutes.Teacher.Grades.MAIN_PATH} element={<GradesRoutes />} />
+      <Route path={'/grades/*'} element={<GradesRoutes />} />
 
       <Route path='*' element={<NotFound />} />
     </Routes>

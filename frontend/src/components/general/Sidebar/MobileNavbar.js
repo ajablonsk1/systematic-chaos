@@ -7,7 +7,7 @@ import { buildNavLinkMobile, NavLinkStylesMobile } from './navBuilder'
 import { MobileNav } from './SidebarStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
+import { GeneralRoutes } from '../../../routes/PageRoutes'
 
 function MobileNavbar(props) {
   const navigate = useNavigate()
@@ -20,12 +20,7 @@ function MobileNavbar(props) {
     <MobileNav>
       <Nav className='justify-content-center'>
         {link_titles.map(([to, linkTitle]) => buildNavLinkMobile(to, linkTitle[1]))}
-        <NavLinkStylesMobile
-          as={Link}
-          key={'logout'}
-          to={generateFullPath(() => PageRoutes.General.HOME)}
-          onClick={() => logOut()}
-        >
+        <NavLinkStylesMobile as={Link} key={'logout'} to={GeneralRoutes.HOME} onClick={() => logOut()}>
           <FontAwesomeIcon icon={faArrowRightFromBracket} />
         </NavLinkStylesMobile>
       </Nav>

@@ -2,7 +2,6 @@ import { Content } from '../../App/AppGeneralStyles'
 import { Col, Container, Row, Spinner, Table } from 'react-bootstrap'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
 import { GameButton } from './GameButton'
-import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
 import ManagementCard from './ManagementCard'
 import { useNavigate } from 'react-router-dom'
 import { TableBodyRow } from './TableStyles'
@@ -11,6 +10,7 @@ import { useEffect, useState } from 'react'
 import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { AddChapterModal } from './AddChapterModal/AddChapterModal'
+import { TeacherRoutes } from '../../../routes/PageRoutes'
 
 export default function GameManagement() {
   const navigate = useNavigate()
@@ -34,9 +34,7 @@ export default function GameManagement() {
   }
 
   const goToChapterDetailsView = (chapterName, chapterId) => {
-    navigate(
-      generateFullPath(() => PageRoutes.Teacher.GameManagement.Chapters.CHAPTER) + `/${chapterName}/${chapterId}`
-    )
+    navigate(TeacherRoutes.GAME_MANAGEMENT.CHAPTER + `/${chapterName}/${chapterId}`)
   }
 
   const downloadBackupFile = () => {
@@ -108,16 +106,14 @@ export default function GameManagement() {
             <ManagementCard
               header={'Grupy'}
               description={'Sprawdź listę grup zajęciowych i ich kody dostępu.'}
-              routePath={generateFullPath(() => PageRoutes.Teacher.GameManagement.Groups.GROUPS)}
+              routePath={TeacherRoutes.GAME_MANAGEMENT.GROUPS}
             />
           </Col>
           <Col md={4} className={'py-2'}>
             <ManagementCard
               header={'Rangi i odznaki'}
               description={'Personalizuj nazwy odznak i sposób ich przyznawania.'}
-              routePath={generateFullPath(
-                () => PageRoutes.Teacher.GameManagement.RanksAndBadgesManagement.RANKS_BADGES
-              )}
+              routePath={TeacherRoutes.GAME_MANAGEMENT.RANKS_AND_BADGES}
             />
           </Col>
           <Col md={4} className={'py-2'}>

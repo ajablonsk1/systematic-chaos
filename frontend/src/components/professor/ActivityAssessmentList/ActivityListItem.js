@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { getActivityImg, getActivityTypeName } from '../../../utils/constants'
 import { ActivityImg } from '../../student/AllActivities/ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { useNavigate } from 'react-router-dom'
-import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
+import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { Activity } from '../../../utils/constants'
 
 // todo: move it to styles file
@@ -26,12 +26,9 @@ export default function ActivityListItem(props) {
   return (
     <ActivityListItemRow
       onClick={() => {
-        navigate(
-          generateFullPath(() => PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT),
-          {
-            state: { activityId: props.activity.fileTaskId }
-          }
-        )
+        navigate(TeacherRoutes.ACTIVITY_ASSESSMENT.ACTIVITY, {
+          state: { activityId: props.activity.fileTaskId }
+        })
       }}
     >
       <ActivityImg src={getActivityImg(Activity.TASK)}></ActivityImg>

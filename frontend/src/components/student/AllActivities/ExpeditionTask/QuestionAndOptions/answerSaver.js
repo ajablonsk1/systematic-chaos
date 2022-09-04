@@ -1,6 +1,6 @@
 import { QuestionType } from '../../../../../utils/constants'
 import ExpeditionService from '../../../../../services/expedition.service'
-import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
+import { StudentRoutes } from '../../../../../routes/PageRoutes'
 
 const getAnswerForm = (questionType, userAnswer) => {
   switch (questionType) {
@@ -31,12 +31,9 @@ export default function answerSaver(userAnswer, questionType, resultId, question
     }
 
     ExpeditionService.saveAnswer(result).then(() => {
-      navigate(
-        generateFullPath(() => PageRoutes.Student.GameMap.Expedition.QUESTION_SELECTION),
-        {
-          state: { activityId: expeditionId, nodeId: questionId, taskResultId: resultId }
-        }
-      )
+      navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.QUESTION_SELECTION, {
+        state: { activityId: expeditionId, nodeId: questionId, taskResultId: resultId }
+      })
     })
   }
 }

@@ -1,6 +1,6 @@
 import AuthService from '../services/auth.service'
 import { LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT, REGISTER_FAIL, REGISTER_SUCCESS, SET_MESSAGE } from './types'
-import { generateFullPath, PageRoutes } from '../routes/PageRoutes'
+import { GeneralRoutes } from '../routes/PageRoutes'
 
 const message = (error) =>
   (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -50,5 +50,5 @@ export const login = (email, password) => (dispatch) => {
 export const logout = (navigate) => (dispatch) => {
   AuthService.logout()
   dispatch({ type: LOGOUT })
-  navigate(generateFullPath(() => PageRoutes.General.HOME))
+  navigate(GeneralRoutes.HOME)
 }

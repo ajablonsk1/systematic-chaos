@@ -6,7 +6,7 @@ import Loader from '../../../../general/Loader/Loader'
 import { ContentWithBackground } from './QuestionAndOptionsStyle'
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage'
 import ExpeditionService from '../../../../../services/expedition.service'
-import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
+import { StudentRoutes } from '../../../../../routes/PageRoutes'
 
 function QuestionAndOptions(props) {
   const [question, setQuestion] = useState(undefined)
@@ -17,7 +17,7 @@ function QuestionAndOptions(props) {
 
   useEffect(() => {
     if (expeditionId == null || questionId == null || taskResultId == null) {
-      navigate(generateFullPath(() => PageRoutes.Student.GameCard.GAME_CARD))
+      navigate(StudentRoutes.GAME_CARD)
     } else {
       ExpeditionService.getQuestion(questionId)
         .then((response) => setQuestion(response ?? null))
@@ -31,16 +31,13 @@ function QuestionAndOptions(props) {
     if (remainingTime === 0) {
       ExpeditionService.setSendTime(taskResultId, Date.now())
         .then(() => {
-          navigate(
-            generateFullPath(() => PageRoutes.Student.GameMap.Expedition.EXPEDITION_SUMMARY),
-            {
-              state: {
-                expeditionId: expeditionId,
-                remainingTime: remainingTime,
-                taskResultId: taskResultId
-              }
+          navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, {
+            state: {
+              expeditionId: expeditionId,
+              remainingTime: remainingTime,
+              taskResultId: taskResultId
             }
-          )
+          })
         })
         .catch(() => {})
     }

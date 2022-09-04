@@ -12,7 +12,7 @@ import { useEffect, useRef, useState, useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import ProfessorService from '../../../services/professor.service'
 import Loader from '../../general/Loader/Loader'
-import { generateFullPath, PageRoutes } from '../../../routes/PageRoutes'
+import { TeacherRoutes } from '../../../routes/PageRoutes'
 import ActivityAssessmentStudentFileService from './ActivityAssessmentStudentFileService'
 import { ActivityAssessmentProfessorFileService } from './ActivityAssessmentProfessorFileService'
 import { debounce } from 'lodash'
@@ -72,7 +72,7 @@ export default function ActivityAssessmentDetails() {
           setActivityResponseInfo(null)
         })
     } else {
-      navigate(generateFullPath(() => PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT_LIST))
+      navigate(TeacherRoutes.ACTIVITY_ASSESSMENT.LIST)
     }
   }
 

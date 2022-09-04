@@ -8,8 +8,8 @@ import Loader from '../../../../general/Loader/Loader'
 
 import { Content } from '../../../../App/AppGeneralStyles'
 import ExpeditionService from '../../../../../services/expedition.service'
-import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
 import { getTimer } from '../../../../../utils/storageManager'
+import { GeneralRoutes, StudentRoutes } from '../../../../../routes/PageRoutes'
 
 export default function ExpeditionSummary() {
   const navigate = useNavigate()
@@ -23,7 +23,7 @@ export default function ExpeditionSummary() {
 
   useEffect(() => {
     if (expeditionId == null) {
-      navigate(generateFullPath(() => PageRoutes.General.HOME))
+      navigate(GeneralRoutes.HOME)
     } else {
       const promise1 = ExpeditionService.getExpeditionPointsMaxOpen(taskResultId)
         .then((response) => setMaxPointsOpen(response ?? 0))
@@ -48,7 +48,7 @@ export default function ExpeditionSummary() {
   }, [expeditionId, navigate, taskResultId])
 
   const finishExpeditionAndGoHome = () => {
-    navigate(generateFullPath(() => PageRoutes.Student.GameMap.GAME_MAP))
+    navigate(StudentRoutes.GAME_MAP.MAIN)
   }
 
   const showRemainingTime = () =>
