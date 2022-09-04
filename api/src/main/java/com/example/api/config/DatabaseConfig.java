@@ -22,6 +22,8 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
+import com.example.api.model.util.Image;
+import com.example.api.model.util.ImageType;
 import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
@@ -49,6 +51,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -543,6 +549,14 @@ public class DatabaseConfig {
 
             File file = new File();
             fileRepo.save(file);
+
+            BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", output);
+            byte [] data = output.toByteArray();
+
+            Image chapterImage = new Image("Chapter image 1", data, ImageType.CHAPTER);
+            fileRepo.save(chapterImage);
         };
     }
 }
