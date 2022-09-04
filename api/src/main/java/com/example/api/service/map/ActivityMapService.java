@@ -10,9 +10,9 @@ import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
-import com.example.api.model.activity.task.Info;
 import com.example.api.model.activity.task.Survey;
 import com.example.api.model.map.ActivityMap;
+import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
@@ -42,6 +42,7 @@ public class ActivityMapService {
     private final GraphTaskResultRepo graphTaskResultRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final SurveyResultRepo surveyResultRepo;
+    private final UserValidator userValidator;
 
     public ActivityMap saveActivityMap(ActivityMap activityMap){
         return mapRepo.save(activityMap);
@@ -78,7 +79,7 @@ public class ActivityMapService {
         List<MapTask> infos = activityMap.getInfos()
                 .stream()
                 .map(info -> new MapTask(info.getId(), info.getPosX()
-                        , info.getPosY(), ActivityType.INFO, info.getTitle(), 0.0, isInfoCompleted(info, student)))
+                        , info.getPosY(), ActivityType.INFO, info.getTitle(), 0.0, isInfoCompleted(student)))
                 .toList();
         List<MapTask> surveys = activityMap.getSurveys()
                 .stream()
@@ -92,19 +93,19 @@ public class ActivityMapService {
     }
 
     private boolean isGraphTaskCompleted(GraphTask graphTask, User student) {
-        if (student == null) {
+        if (!isValidStudent(student)) {
             return false;
         }
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
         return result != null && result.getSendDateMillis() != null;
     }
 
-    private boolean isInfoCompleted(Info info, User student) {
-        return student != null;
+    private boolean isInfoCompleted(User student) {
+        return isValidStudent(student);
     }
 
     private boolean isFileTaskCompleted(FileTask fileTask, User student) {
-        if (student == null) {
+        if (!isValidStudent(student)) {
             return false;
         }
         FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
@@ -113,10 +114,14 @@ public class ActivityMapService {
 
     // TODO: after adding survey result it probably should be updated
     private boolean isSurveyCompleted(Survey survey, User student) {
-        if (student == null) {
+        if (!isValidStudent(student)) {
             return false;
         }
         SurveyResult result = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
         return result != null;
+    }
+
+    private boolean isValidStudent(User student) {
+        return student != null && student.getAccountType() == AccountType.STUDENT;
     }
 }
