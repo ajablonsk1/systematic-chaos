@@ -2,6 +2,7 @@ package com.example.api.controller.map;
 
 import com.example.api.dto.response.map.ActivityMapResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.map.ActivityMapService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class ActivityMapController {
 
     @GetMapping
     public ResponseEntity<ActivityMapResponse> getActivityMap(@RequestParam Long activityMapId)
-            throws EntityNotFoundException {
+            throws EntityNotFoundException, WrongUserTypeException {
         return ResponseEntity.ok().body(activityMapService.getActivityMap(activityMapId));
     }
 }

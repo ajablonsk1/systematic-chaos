@@ -12,4 +12,5 @@ public class MapTask {
     private ActivityType type;
     private String title;
     private Double points;
+    private Boolean isCompleted;
 }
