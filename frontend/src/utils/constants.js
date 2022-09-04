@@ -36,33 +36,27 @@ import warrior14 from '../storage/resources/warrior/13.png'
 import warrior15 from '../storage/resources/warrior/14.png'
 import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
-import { generateFullPath, PageRoutes } from '../routes/PageRoutes'
 import { HeroType } from './userRole'
 import moment from 'moment'
+import { GeneralRoutes, StudentRoutes, TeacherRoutes } from '../routes/PageRoutes'
 
 export const UserSidebarTitles = {
-  [generateFullPath(() => PageRoutes.Student.GameCard.GAME_CARD)]: ['Karta gry', faHouse],
-  [generateFullPath(() => PageRoutes.Student.GameMap.GAME_MAP)]: ['Mapa gry', faChessBoard],
-  [generateFullPath(() => PageRoutes.Student.Points.POINTS)]: ['Punkty', faStar],
-  [generateFullPath(() => PageRoutes.Student.Ranking.RANKING)]: ['Ranking', faRankingStar],
-  [generateFullPath(() => PageRoutes.Student.BadgesAndAchievements.BADGES_ACHIEVEMENTS)]: [
-    'Rangi i odznaki',
-    faCertificate
-  ],
-  [generateFullPath(() => PageRoutes.General.CANVAS)]: ['Świat gry', faChessBoard],
-  [generateFullPath(() => PageRoutes.Student.Profile.PROFILE)]: ['Profil', faUser]
+  [StudentRoutes.GAME_CARD]: ['Karta gry', faHouse],
+  [StudentRoutes.GAME_MAP.MAIN]: ['Mapa gry', faChessBoard],
+  [StudentRoutes.POINTS]: ['Punkty', faStar],
+  [StudentRoutes.RANKING]: ['Ranking', faRankingStar],
+  [StudentRoutes.BADGES]: ['Rangi i odznaki', faCertificate],
+  [GeneralRoutes.CANVAS]: ['Świat gry', faChessBoard],
+  [StudentRoutes.PROFILE]: ['Profil', faUser]
 }
 
 export const TeacherSidebarTitles = {
-  [generateFullPath(() => PageRoutes.Teacher.GameSummary.GAME_SUMMARY)]: ['Podsumowanie gry', faBullseye],
-  [generateFullPath(() => PageRoutes.Teacher.Ranking.RANKING)]: ['Ranking', faRankingStar],
-  [generateFullPath(() => PageRoutes.Teacher.GameManagement.GAME_MANAGEMENT)]: ['Zarządzanie grą', faListCheck],
-  [generateFullPath(() => PageRoutes.Teacher.Participants.PARTICIPANTS)]: ['Uczestnicy', faUsers],
-  [generateFullPath(() => PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT_LIST)]: [
-    'Sprawdzanie aktywności',
-    faArrowsToEye
-  ],
-  [generateFullPath(() => PageRoutes.Teacher.Grades.GRADES)]: ['Oceny', fa5]
+  [TeacherRoutes.GAME_SUMMARY]: ['Podsumowanie gry', faBullseye],
+  [TeacherRoutes.RANKING]: ['Ranking', faRankingStar],
+  [TeacherRoutes.GAME_MANAGEMENT.MAIN]: ['Zarządzanie grą', faListCheck],
+  [TeacherRoutes.PARTICIPANTS]: ['Uczestnicy', faUsers],
+  [TeacherRoutes.ACTIVITY_ASSESSMENT.LIST]: ['Sprawdzanie aktywności', faArrowsToEye],
+  [TeacherRoutes.GRADES]: ['Oceny', fa5]
 }
 
 export const FIELD_REQUIRED = 'Pole wymagane.'
@@ -120,13 +114,13 @@ export const getActivityTypeName = (type) => {
 export const getActivityPath = (type) => {
   switch (type) {
     case Activity.EXPEDITION:
-      return generateFullPath(() => PageRoutes.Student.GameMap.Expedition.ACTIVITY_INFO)
+      return StudentRoutes.GAME_MAP.GRAPH_TASK.INFO
     case Activity.TASK:
-      return generateFullPath(() => PageRoutes.Student.GameMap.CombatTask.COMBAT_TASK)
+      return StudentRoutes.GAME_MAP.COMBAT_TASK
     case Activity.SURVEY:
-      return generateFullPath(() => PageRoutes.Student.GameMap.SurveyTask.SURVEY_TASK)
+      return StudentRoutes.GAME_MAP.SURVEY_TASK
     case Activity.INFO:
-      return generateFullPath(() => PageRoutes.Student.GameMap.InformationTask.INFORMATION)
+      return StudentRoutes.GAME_MAP.INFO_TASK
     default:
       return
   }

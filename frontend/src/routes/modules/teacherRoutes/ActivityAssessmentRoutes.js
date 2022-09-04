@@ -4,13 +4,12 @@ import PageGuard from '../../../components/general/PageGuard/PageGuard'
 import { Role } from '../../../utils/userRole'
 import ActivityAssessmentList from '../../../components/professor/ActivityAssessmentList/ActivityAssessmentList'
 import ActivityAssessmentDetails from '../../../components/professor/ActivityAssessmentDetails/ActivityAssessmentDetails'
-import { PageRoutes } from '../../PageRoutes'
 
 export default function ActivityAssessmentRoutes() {
   return (
     <Routes>
       <Route
-        path={`${PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT_LIST}`}
+        path={'list'}
         element={
           <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <ActivityAssessmentList />
@@ -19,7 +18,7 @@ export default function ActivityAssessmentRoutes() {
       />
 
       <Route
-        path={`${PageRoutes.Teacher.ActivityAssessment.ACTIVITY_ASSESSMENT}`}
+        path={'activity-assessment'}
         element={
           <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <ActivityAssessmentDetails />

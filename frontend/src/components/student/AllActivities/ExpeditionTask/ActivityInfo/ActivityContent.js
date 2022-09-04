@@ -6,11 +6,11 @@ import { useEffect, useMemo, useState } from 'react'
 import StudentService from '../../../../../services/student.service'
 import { convertSecondsToStringInfo } from '../../../../../utils/Api'
 import ExpeditionService from '../../../../../services/expedition.service'
-import { generateFullPath, PageRoutes } from '../../../../../routes/PageRoutes'
 import { CustomTable } from '../../../GameCardPage/gameCardContentsStyle'
 import moment from 'moment'
 import PercentageCircle from '../../../PointsPage/ChartAndStats/PercentageCircle'
 import ActivityInfoContentCard from './ActivityInfoContentCard'
+import { StudentRoutes } from '../../../../../routes/PageRoutes'
 
 export default function ActivityContent(props) {
   const navigate = useNavigate()
@@ -68,17 +68,14 @@ export default function ActivityContent(props) {
   }, [activityScore])
 
   const navigateTo = (nodeId, taskResultId) =>
-    navigate(
-      generateFullPath(() => PageRoutes.Student.GameMap.Expedition.QUESTION_SELECTION),
-      {
-        state: {
-          activityId: activityId,
-          nodeId: nodeId,
-          taskResultId: taskResultId,
-          timeToSolveMillis: props.activity.timeToSolveMillis
-        }
+    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.QUESTION_SELECTION, {
+      state: {
+        activityId: activityId,
+        nodeId: nodeId,
+        taskResultId: taskResultId,
+        timeToSolveMillis: props.activity.timeToSolveMillis
       }
-    )
+    })
 
   const startExpedition = () => {
     setIsFetching(true)
@@ -223,11 +220,7 @@ export default function ActivityContent(props) {
           />
         </Row>
         <Row className={'justify-content-center align-items-start gap-2 py-2 px-2'} style={{ height: '5vh' }}>
-          <Button
-            className={'w-auto'}
-            variant={'secondary'}
-            onClick={() => navigate(generateFullPath(() => PageRoutes.Student.GameMap.GAME_MAP))}
-          >
+          <Button className={'w-auto'} variant={'secondary'} onClick={() => navigate(StudentRoutes.GAME_MAP.MAIN)}>
             Wstecz
           </Button>
           <Button className={'w-auto'} variant={'warning'} onClick={startExpedition} disabled={activityScore?.id}>
