@@ -13,7 +13,13 @@ import moment from 'moment'
 import { getRequirements } from './mockData'
 import { Tooltip } from '../../BadgesPage/BadgesStyle'
 
-export default function ActivityField({ activity, posX, posY, colClickable, colSize }) {
+export default function ActivityField({
+  activity,
+  colClickable,
+  colSize,
+  isCompletedActivityAround,
+  allActivitiesCompleted
+}) {
   const navigate = useNavigate()
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false)
   const requirements = getRequirements()
@@ -24,19 +30,6 @@ export default function ActivityField({ activity, posX, posY, colClickable, colS
       navigate(`${getActivityPath(activity.type)}`, {
         state: { activityId: activity.id }
       })
-  }
-
-  const isCompletedActivityAround = () => {
-    for (let i = posX - 1; i <= posX + 1; i++) {
-      for (let j = posY - 1; j <= posY + 1; j++) {
-        const adjacentActivity = getActivityByPosition(0, i, j)
-
-        if (adjacentActivity && adjacentActivity.completed) {
-          return true
-        }
-      }
-    }
-    return false
   }
 
   const offcanvasContent = useMemo(() => {
@@ -72,11 +65,13 @@ export default function ActivityField({ activity, posX, posY, colClickable, colS
     )
   }, [activity, requirements])
 
+  console.log(allActivitiesCompleted, isCompletedActivityAround)
+
   return (
     <>
       <ActivityCol $isClickable={colClickable} $colSize={colSize}>
         {activity ? (
-          <div style={{ backgroundColor: 'white' }}>
+          <div style={{ backgroundColor: allActivitiesCompleted || activity?.isCompleted ? 'transparent' : 'white' }}>
             <Tooltip>
               <img src={getActivityImg(activity.type)} alt='activityImg' onClick={() => setIsOffcanvasOpen(true)} />
               <div style={{ height: 40 }}>{getActivityTypeName(activity.type)}</div>
@@ -85,7 +80,7 @@ export default function ActivityField({ activity, posX, posY, colClickable, colS
         ) : (
           <div
             style={{
-              backgroundColor: isCompletedActivityAround() ? 'transparent' : 'white'
+              backgroundColor: allActivitiesCompleted || isCompletedActivityAround ? 'transparent' : 'white'
             }}
           />
         )}
