@@ -71,6 +71,27 @@ export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapCli
     }
   }, [chapterMap, getParentSize])
 
+  const isCompletedActivityAround = (posX, posY) => {
+    for (let i = posX - 1; i <= posX + 1; i++) {
+      for (let j = posY - 1; j <= posY + 1; j++) {
+        const adjacentActivity = chapterMap?.tasks.find((task) => task.posX === i && task.posY === j)
+
+        if (adjacentActivity && adjacentActivity.isCompleted) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  const allActivitiesCompleted = () => {
+    if (!chapterMap) return false
+
+    const uncompletedActivity = chapterMap.tasks.find((task) => !task.isCompleted)
+
+    return !uncompletedActivity
+  }
+
   return (
     <>
       {rows === undefined ? (
@@ -94,6 +115,8 @@ export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapCli
                   posY={idx1}
                   colClickable={mapClickable}
                   colSize={size}
+                  isCompletedActivityAround={isCompletedActivityAround(idx2, idx1)}
+                  allActivitiesCompleted={allActivitiesCompleted()}
                 />
               ))}
             </Row>
