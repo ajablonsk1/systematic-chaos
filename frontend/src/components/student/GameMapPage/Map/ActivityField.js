@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getActivityByPosition } from '../../../../storage/activityMap'
 import {
   getActivityImg,
   getActivityPath,
@@ -64,8 +63,6 @@ export default function ActivityField({
       </table>
     )
   }, [activity, requirements])
-
-  console.log(allActivitiesCompleted, isCompletedActivityAround)
 
   return (
     <>

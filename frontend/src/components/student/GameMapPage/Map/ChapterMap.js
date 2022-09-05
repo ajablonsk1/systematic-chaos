@@ -5,7 +5,6 @@ import { Map } from '../GameMapStyles'
 import ActivityField from './ActivityField'
 import ActivityService from '../../../../services/activity.service'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
-import { getActivityByPosition } from '../../../../storage/activityMap'
 
 function getActivity(map, x, y) {
   return map.tasks.find((activity) => activity.posX === x && activity.posY === y) || null
