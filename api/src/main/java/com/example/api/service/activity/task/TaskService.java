@@ -1,34 +1,42 @@
 package com.example.api.service.activity.task;
 
+import com.example.api.dto.request.activity.task.ActivityRequirementForm;
+import com.example.api.dto.request.map.RequirementForm;
 import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
+import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
+import com.example.api.model.map.requirement.Requirement;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
+import com.example.api.repo.activity.task.GraphTaskRepo;
+import com.example.api.repo.activity.task.InfoRepo;
+import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.map.ChapterRepo;
+import com.example.api.repo.map.RequirementRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
+import com.example.api.util.visitor.RequirementResponseVisitorImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -37,12 +45,18 @@ import java.util.stream.Stream;
 @Transactional
 public class TaskService {
     private final FileTaskRepo fileTaskRepo;
+    private final GraphTaskRepo graphTaskRepo;
+    private final SurveyRepo surveyRepo;
+    private final InfoRepo infoRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final UserRepo userRepo;
     private final ChapterRepo chapterRepo;
+    private final RequirementRepo requirementRepo;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
     private final ActivityValidator taskValidator;
+    private final MapValidator mapValidator;
+    private final RequirementResponseVisitorImpl visitor;
 
     public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate()
             throws WrongUserTypeException, UsernameNotFoundException {
@@ -119,5 +133,45 @@ public class TaskService {
         return activitiesResponses.stream()
                 .flatMap(Collection::stream)
                 .toList();
+    }
+
+    public List<RequirementResponse<?>> getRequirementForActivity(Long id) throws EntityNotFoundException {
+        Activity activity = getActivity(id);
+        List<Requirement> requirements = activity.getRequirements();
+        List<RequirementResponse<?>> responses = new LinkedList<>();
+        requirements.forEach(requirement -> {
+            responses.add(requirement.getRequirementResponse(visitor));
+        });
+        return responses;
+    }
+
+    public void addRequirementToActivity(ActivityRequirementForm form) throws EntityNotFoundException {
+        Activity activity = getActivity(form.getActivityId());
+        List<Requirement> requirements = activity.getRequirements();
+        List<RequirementForm<?>> activityRequirements = form.getRequirements();
+        for (RequirementForm<?> requirementForm: activityRequirements) {
+            Optional<Requirement> requirementOptional = requirements
+                    .stream()
+                    .filter(req -> req.getId().equals(requirementForm.getId()))
+                    .findFirst();
+            if (requirementOptional.isPresent()) {
+
+            }
+        }
+    }
+
+    public Activity getActivity(Long id) throws EntityNotFoundException {
+        if (graphTaskRepo.existsById(id)) {
+            return graphTaskRepo.findGraphTaskById(id);
+        } else if (fileTaskRepo.existsById(id)){
+            return fileTaskRepo.findFileTaskById(id);
+        } else if (surveyRepo.existsById(id)) {
+            return surveyRepo.findSurveyById(id);
+        } else if (infoRepo.existsById(id)) {
+            return infoRepo.findInfoById(id);
+        } else {
+            log.error("Activity with id {} not found in database", id);
+            throw new EntityNotFoundException("Activity with id " + id + " not found in database");
+        }
     }
 }

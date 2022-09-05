@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GraphTaskRepo extends JpaRepository<GraphTask, Long> {
     GraphTask findGraphTaskById(Long id);
+    boolean existsById(long id);
 }

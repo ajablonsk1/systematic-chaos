@@ -6,7 +6,10 @@ import com.example.api.dto.response.activity.task.result.summary.util.ScoreCreat
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.TaskResult;
-import com.example.api.model.activity.task.*;
+import com.example.api.model.activity.task.Activity;
+import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.activity.task.Survey;
 import com.example.api.model.group.Group;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.user.User;

@@ -1,6 +1,6 @@
 package com.example.api.service.map;
 
-import com.example.api.model.map.Requirement;
+import com.example.api.model.map.requirement.Requirement;
 import com.example.api.repo.map.RequirementRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -12,8 +12,7 @@ import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
-import com.example.api.model.map.MustFulfil;
-import com.example.api.model.map.Requirement;
+import com.example.api.model.map.requirement.*;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
@@ -52,7 +51,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
@@ -323,10 +321,36 @@ public class DatabaseConfig {
             accessDateService.saveAccessDate(ac1);
             accessDateService.saveAccessDate(ac2);
 
-            Requirement req = new Requirement();
-            req.setMustFulfil(MustFulfil.NONE);
-            req.setAccessDates(List.of(ac1, ac2));
-            requirementService.saveRequirement(req);
+            DateRequirement dateRequirement = new DateRequirement();
+            dateRequirement.setName("Przedział czasowy, kiedy aktowność będzie dostępna");
+            dateRequirement.setType(RequirementType.DATE);
+            dateRequirement.setSelected(false);
+
+            PointsRequirement pointsRequirement = new PointsRequirement();
+            pointsRequirement.setName("Wymagana ilość zdobytych punktów");
+            pointsRequirement.setType(RequirementType.NUMBER);
+            pointsRequirement.setSelected(false);
+
+            GroupRequirement groupRequirement = new GroupRequirement();
+            groupRequirement.setName("Grupy, które mogą wziąć udział w aktywności");
+            groupRequirement.setType(RequirementType.MULTI_SELECT);
+            groupRequirement.setSelected(false);
+
+            StudentRequirement studentRequirement = new StudentRequirement();
+            studentRequirement.setName("Studenci, którzy mogą wiąć udział w aktywności");
+            studentRequirement.setType(RequirementType.MULTI_SELECT);
+            studentRequirement.setSelected(false);
+
+            ActivitiesRequirement activitiesRequirement = new ActivitiesRequirement();
+            activitiesRequirement.setName("Aktywności, które muszą zostać wcześniej ukończone");
+            activitiesRequirement.setType(RequirementType.MULTI_SELECT);
+            activitiesRequirement.setSelected(false);
+
+            requirementService.saveRequirement(dateRequirement);
+            requirementService.saveRequirement(pointsRequirement);
+            requirementService.saveRequirement(groupRequirement);
+            requirementService.saveRequirement(studentRequirement);
+            requirementService.saveRequirement(activitiesRequirement);
 
             GraphTask graphTask = new GraphTask();
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
@@ -335,7 +359,7 @@ public class DatabaseConfig {
             graphTask.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTask.setMaxPoints(60.0);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
-            graphTask.setRequirement(req);
+            graphTask.setRequirements(List.of(dateRequirement, pointsRequirement, groupRequirement, studentRequirement, activitiesRequirement));
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
