@@ -1,7 +1,6 @@
 package com.example.api.service.activity.task;
 
 import com.example.api.dto.request.activity.task.ActivityRequirementForm;
-import com.example.api.dto.request.map.RequirementForm;
 import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
@@ -9,10 +8,14 @@ import com.example.api.dto.response.activity.task.util.FileResponse;
 import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.map.requirement.Requirement;
@@ -22,6 +25,8 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.InfoRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
+import com.example.api.repo.group.AccessDateRepo;
+import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.map.RequirementRepo;
 import com.example.api.repo.user.UserRepo;
@@ -29,14 +34,16 @@ import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
-import com.example.api.util.visitor.RequirementResponseVisitorImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
@@ -52,11 +59,12 @@ public class TaskService {
     private final UserRepo userRepo;
     private final ChapterRepo chapterRepo;
     private final RequirementRepo requirementRepo;
+    private final GroupRepo groupRepo;
+    private final AccessDateRepo accessDateRepo;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
     private final ActivityValidator taskValidator;
     private final MapValidator mapValidator;
-    private final RequirementResponseVisitorImpl visitor;
 
     public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate()
             throws WrongUserTypeException, UsernameNotFoundException {
@@ -135,29 +143,96 @@ public class TaskService {
                 .toList();
     }
 
-    public List<RequirementResponse<?>> getRequirementForActivity(Long id) throws EntityNotFoundException {
+    public List<RequirementResponse<?>> getRequirementForActivity(Long id) throws EntityNotFoundException, MissingAttributeException {
         Activity activity = getActivity(id);
         List<Requirement> requirements = activity.getRequirements();
-        List<RequirementResponse<?>> responses = new LinkedList<>();
-        requirements.forEach(requirement -> {
-            responses.add(requirement.getRequirementResponse(visitor));
-        });
-        return responses;
-    }
-
-    public void addRequirementToActivity(ActivityRequirementForm form) throws EntityNotFoundException {
-        Activity activity = getActivity(form.getActivityId());
-        List<Requirement> requirements = activity.getRequirements();
-        List<RequirementForm<?>> activityRequirements = form.getRequirements();
-        for (RequirementForm<?> requirementForm: activityRequirements) {
-            Optional<Requirement> requirementOptional = requirements
-                    .stream()
-                    .filter(req -> req.getId().equals(requirementForm.getId()))
-                    .findFirst();
-            if (requirementOptional.isPresent()) {
-
+        List<RequirementResponse<?>> requirementResponses = new LinkedList<>();
+        for(Requirement requirement: requirements) {
+            switch (requirement.getType()) {
+                case DATE_FROM -> {
+                    requirementResponses.add(new RequirementResponse<>(
+                            requirement.getId(),
+                            requirement.getName(),
+                            requirement.getDateFrom(),
+                            requirement.isSelected()
+                    ));
+                }
+                case DATE_TO -> {
+                    requirementResponses.add(new RequirementResponse<>(
+                            requirement.getId(),
+                            requirement.getName(),
+                            requirement.getDateTo(),
+                            requirement.isSelected()
+                    ));
+                }
+                case MIN_POINTS -> {
+                    requirementResponses.add(new RequirementResponse<>(
+                            requirement.getId(),
+                            requirement.getName(),
+                            requirement.getMinPoints(),
+                            requirement.isSelected()
+                    ));
+                }
+                case GROUPS -> {
+                    List<String> groupNames = requirement.getAllowedGroups()
+                            .stream()
+                            .map(Group::getName)
+                            .toList();
+                    requirementResponses.add(new RequirementResponse<>(
+                            requirement.getId(),
+                            requirement.getName(),
+                            groupNames,
+                            requirement.isSelected()
+                    ));
+                }
+                case STUDENTS -> {
+                    List<String> emails = requirement.getAllowedStudents()
+                            .stream()
+                            .map(User::getEmail)
+                            .toList();
+                    requirementResponses.add(new RequirementResponse<>(
+                            requirement.getId(),
+                            requirement.getName(),
+                            emails,
+                            requirement.isSelected()
+                    ));
+                }
+                case GRAPH_TASKS -> {
+                    List<String> titles = requirement.getGraphTasks()
+                            .stream()
+                            .map(GraphTask::getTitle)
+                            .toList();
+                    requirementResponses.add(new RequirementResponse<>(
+                            requirement.getId(),
+                            requirement.getName(),
+                            titles,
+                            requirement.isSelected()
+                    ));
+                }
+                case FILE_TASKS -> {
+                    List<String> titles = requirement.getFileTasks()
+                            .stream()
+                            .map(FileTask::getTitle)
+                            .toList();
+                    requirementResponses.add(new RequirementResponse<>(
+                            requirement.getId(),
+                            requirement.getName(),
+                            titles,
+                            requirement.isSelected()
+                    ));
+                }
+                default -> {
+                    log.error("Requirement has to have its type");
+                    throw new MissingAttributeException("Requirement has to have its type");
+                }
             }
         }
+        return requirementResponses;
+    }
+
+
+    public void addRequirementToActivity(ActivityRequirementForm form) throws RequestValidationException {
+
     }
 
     public Activity getActivity(Long id) throws EntityNotFoundException {

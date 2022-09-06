@@ -1,25 +1,26 @@
 package com.example.api.model.map.requirement;
 
 public enum RequirementType {
-    DATE("date"),
-    NUMBER("number"),
-    BOOLEAN("boolean"),
-    TEXT("text"),
-    MULTI_SELECT("multi_select"),
-    SELECT("select");
+    DATE_FROM(1),
+    DATE_TO(2),
+    MIN_POINTS(3),
+    GROUPS(4),
+    STUDENTS(5),
+    GRAPH_TASKS(6),
+    FILE_TASKS(7);
 
-    private final String type;
+    private final int type;
 
-    RequirementType(String type) {
+    RequirementType(int type) {
         this.type = type;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
     @Override
     public String toString() {
-        return type;
+        return String.valueOf(type);
     }
 }

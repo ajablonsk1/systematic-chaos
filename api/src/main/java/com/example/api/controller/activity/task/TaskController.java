@@ -6,6 +6,8 @@ import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
 import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.task.TaskService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -42,12 +44,12 @@ public class TaskController {
 
     @GetMapping("/requirements")
     ResponseEntity<List<RequirementResponse<?>>> getRequirementsForActivity(@RequestParam Long activityId)
-            throws EntityNotFoundException {
+            throws EntityNotFoundException, MissingAttributeException {
         return ResponseEntity.ok().body(taskService.getRequirementForActivity(activityId));
     }
 
     @PostMapping("/requirements/add")
-    ResponseEntity<?> addRequirementToActivity(@RequestBody ActivityRequirementForm form) throws EntityNotFoundException {
+    ResponseEntity<?> addRequirementToActivity(@RequestBody ActivityRequirementForm form) throws RequestValidationException {
         taskService.addRequirementToActivity(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }

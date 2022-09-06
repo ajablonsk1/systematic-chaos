@@ -12,7 +12,8 @@ import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
-import com.example.api.model.map.requirement.*;
+import com.example.api.model.map.requirement.Requirement;
+import com.example.api.model.map.requirement.RequirementType;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
@@ -53,10 +54,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -322,36 +320,51 @@ public class DatabaseConfig {
             accessDateService.saveAccessDate(ac1);
             accessDateService.saveAccessDate(ac2);
 
-            DateRequirement dateRequirement = new DateRequirement();
-            dateRequirement.setName("Przedział czasowy, kiedy aktowność będzie dostępna");
-            dateRequirement.setType(RequirementType.DATE);
-            dateRequirement.setSelected(false);
+            Requirement requirement1 = new Requirement();
+            Requirement requirement2 = new Requirement();
+            Requirement requirement3 = new Requirement();
+            Requirement requirement4 = new Requirement();
+            Requirement requirement5 = new Requirement();
+            Requirement requirement6 = new Requirement();
+            Requirement requirement7 = new Requirement();
 
-            PointsRequirement pointsRequirement = new PointsRequirement();
-            pointsRequirement.setName("Wymagana ilość zdobytych punktów");
-            pointsRequirement.setType(RequirementType.NUMBER);
-            pointsRequirement.setSelected(false);
+            requirement1.setName("Date from");
+            requirement1.setSelected(false);
+            requirement1.setType(RequirementType.DATE_FROM);
+            requirement2.setName("Date to");
+            requirement2.setSelected(false);
+            requirement2.setType(RequirementType.DATE_TO);
+            requirement3.setName("Min points");
+            requirement3.setSelected(false);
+            requirement3.setType(RequirementType.MIN_POINTS);
+            requirement4.setName("Groups");
+            requirement4.setSelected(false);
+            requirement4.setType(RequirementType.GROUPS);
+            requirement5.setName("Students");
+            requirement5.setSelected(false);
+            requirement5.setType(RequirementType.STUDENTS);
+            requirement6.setName("Graph task");
+            requirement6.setSelected(false);
+            requirement6.setType(RequirementType.GRAPH_TASKS);
+            requirement7.setName("File task");
+            requirement7.setSelected(false);
+            requirement7.setType(RequirementType.FILE_TASKS);
 
-            GroupRequirement groupRequirement = new GroupRequirement();
-            groupRequirement.setName("Grupy, które mogą wziąć udział w aktywności");
-            groupRequirement.setType(RequirementType.MULTI_SELECT);
-            groupRequirement.setSelected(false);
+            requirement1.setDateFrom(System.currentTimeMillis());
+            requirement2.setDateTo(System.currentTimeMillis() + 1_000 * 60 * 60);
+            requirement3.setMinPoints(100.0);
+            requirement4.setAllowedGroups(List.of());
+            requirement5.setAllowedStudents(List.of());
+            requirement6.setGraphTasks(List.of());
+            requirement7.setFileTasks(List.of());
 
-            StudentRequirement studentRequirement = new StudentRequirement();
-            studentRequirement.setName("Studenci, którzy mogą wiąć udział w aktywności");
-            studentRequirement.setType(RequirementType.MULTI_SELECT);
-            studentRequirement.setSelected(false);
-
-            ActivitiesRequirement activitiesRequirement = new ActivitiesRequirement();
-            activitiesRequirement.setName("Aktywności, które muszą zostać wcześniej ukończone");
-            activitiesRequirement.setType(RequirementType.MULTI_SELECT);
-            activitiesRequirement.setSelected(false);
-
-            requirementService.saveRequirement(dateRequirement);
-            requirementService.saveRequirement(pointsRequirement);
-            requirementService.saveRequirement(groupRequirement);
-            requirementService.saveRequirement(studentRequirement);
-            requirementService.saveRequirement(activitiesRequirement);
+            requirementService.saveRequirement(requirement1);
+            requirementService.saveRequirement(requirement2);
+            requirementService.saveRequirement(requirement3);
+            requirementService.saveRequirement(requirement4);
+            requirementService.saveRequirement(requirement5);
+            requirementService.saveRequirement(requirement6);
+            requirementService.saveRequirement(requirement7);
 
             GraphTask graphTask = new GraphTask();
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
@@ -360,7 +373,7 @@ public class DatabaseConfig {
             graphTask.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTask.setMaxPoints(60.0);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
-            graphTask.setRequirements(List.of(dateRequirement, pointsRequirement, groupRequirement, studentRequirement, activitiesRequirement));
+            graphTask.setRequirements(List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7));
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);

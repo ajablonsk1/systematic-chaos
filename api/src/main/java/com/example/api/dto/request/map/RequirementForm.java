@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RequirementForm<T> {
     private Long id;
+    private Integer reqNumber;
     private Boolean selected;
     private T value;
 }
