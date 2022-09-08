@@ -66,7 +66,7 @@ public class Requirement {
                 return System.currentTimeMillis() < dateTo;
             }
             case MIN_POINTS -> {
-                return student.getPoints() > minPoints;
+                return student.getPoints() >= minPoints;
             }
             case GROUPS -> {
                 return allowedGroups.contains(student.getGroup());

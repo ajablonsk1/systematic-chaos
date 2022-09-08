@@ -249,7 +249,7 @@ public class TaskService {
                     requirement.setMinPoints(form.getMinPoints().getMinPoints());
                 }
                 case GROUPS -> {
-                    requirement.setSelected(form.getDateFrom().getSelected());
+                    requirement.setSelected(form.getAllowedGroups().getSelected());
                     List<String> groupNames = form.getAllowedGroups().getValues();
                     List<Group> groups = groupRepo.findAll()
                             .stream()
@@ -258,7 +258,7 @@ public class TaskService {
                     requirement.setAllowedGroups(groups);
                 }
                 case STUDENTS -> {
-                    requirement.setSelected(form.getDateFrom().getSelected());
+                    requirement.setSelected(form.getAllowedStudents().getSelected());
                     List<String> emails = form.getAllowedStudents().getValues();
                     List<User> users = userRepo.findAll()
                             .stream()
@@ -267,7 +267,7 @@ public class TaskService {
                     requirement.setAllowedStudents(users);
                 }
                 case GRAPH_TASKS -> {
-                    requirement.setSelected(form.getDateFrom().getSelected());
+                    requirement.setSelected(form.getFinishedGraphTasks().getSelected());
                     List<String> titles = form.getFinishedGraphTasks().getValues();
                     List<GraphTask> graphTasks = graphTaskRepo.findAll()
                             .stream()
@@ -276,7 +276,7 @@ public class TaskService {
                     requirement.setFinishedGraphTasks(graphTasks);
                 }
                 case FILE_TASKS -> {
-                    requirement.setSelected(form.getDateFrom().getSelected());
+                    requirement.setSelected(form.getFinishedFileTasks().getSelected());
                     List<String> titles = form.getFinishedFileTasks().getValues();
                     List<FileTask> fileTasks = fileTaskRepo.findAll()
                             .stream()

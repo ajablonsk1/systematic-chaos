@@ -85,6 +85,7 @@ public class RequirementService {
     }
 
     public boolean areRequirementsFulfilled(List<Requirement> requirements) {
+        log.debug("XDDD");
         User student = userRepo.findUserByEmail(authService.getAuthentication().getName());
         List<GraphTask> graphTasks = graphTaskResultRepo.findAllByUser(student)
                 .stream()

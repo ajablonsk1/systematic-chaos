@@ -12,7 +12,6 @@ import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
-import com.example.api.model.activity.task.Task;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.User;
