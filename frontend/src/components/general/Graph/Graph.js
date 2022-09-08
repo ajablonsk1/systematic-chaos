@@ -9,12 +9,13 @@ import { getLayoutConfig } from './layoutConfigs'
  *   - height: graph height
  *   - layoutName: layout configuration json
  *   - onNodeClick: on node tap callback
- *   - isNodeMovable: if the value is true or does not exist, the nodes can be moved, otherwise the shifting is blocked
+ *   - movable: if the value is true or does not exist, the layout can be moved, otherwise moving function is blocked
  * */
 
 function Graph(props) {
   const container = useRef()
   const graph = useRef()
+  const movingBlockingLayer = useRef()
 
   // add nodes and edges to the graph
   useEffect(() => {
@@ -48,19 +49,18 @@ function Graph(props) {
         console.log(e.target.id(), e.target.position())
       })
 
-      // if (props.isNodeMovable === false) {
-      //   graph.current?.nodes().lock()
-      // }
+      if (props.movable === false) {
+        graph.current.autoungrabify(true)
+        graph.current.panningEnabled(false)
+      }
     }
   }, [props])
 
   // TODO: pomysł to użyć taki layout w którym można zastosować granicę canvasa i ustalić rozmiar tego canvasa tak żeby wypełnić cały obszar
   //        może wtedy zniknie drag-and-drop na layoucie
   useEffect(() => {
-    if (props.isNodeMovable !== false) {
-      const layout = graph.current?.layout(getLayoutConfig(props.layoutName))
-      layout?.run()
-    }
+    const layout = graph.current?.layout(getLayoutConfig(props.layoutName))
+    layout?.run()
   }, [props])
 
   // before unmount component
@@ -68,7 +68,11 @@ function Graph(props) {
     return () => graph.current?.destroy()
   }, [])
 
-  return <div style={{ height: props.height }} ref={container} />
+  return (
+    <>
+      <div style={{ height: props.height }} ref={container} />
+    </>
+  )
 }
 
 export default Graph

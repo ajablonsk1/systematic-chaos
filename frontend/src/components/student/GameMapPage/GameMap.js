@@ -81,7 +81,7 @@ function GameMap() {
                 onNodeClick={(nodeId) => {
                   setChosenChapterId({ id: nodeId })
                 }}
-                isNodeMovable={false}
+                movable={false}
               />
             </GameMapContainer>
           </>
