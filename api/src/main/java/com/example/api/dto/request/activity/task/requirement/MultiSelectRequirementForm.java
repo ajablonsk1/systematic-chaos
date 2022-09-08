@@ -1,15 +1,15 @@
-package com.example.api.dto.request.map;
+package com.example.api.dto.request.activity.task.requirement;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequirementForm<T> {
-    private Long id;
-    private Integer reqNumber;
+public class MultiSelectRequirementForm {
     private Boolean selected;
-    private T value;
+    private List<String> values;
 }

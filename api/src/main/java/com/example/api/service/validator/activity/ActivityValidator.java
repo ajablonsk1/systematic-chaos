@@ -11,6 +11,8 @@ import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.activity.task.Task;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.User;
@@ -18,6 +20,8 @@ import com.example.api.model.util.File;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Slf4j
@@ -91,5 +95,13 @@ public class ActivityValidator {
 
     public Difficulty getDifficultyFromString(String difficulty) throws RequestValidationException {
         return graphTaskValidator.getDifficultyFromString(difficulty);
+    }
+
+    public void validateGraphTaskTitleIsUnique(String title, List<GraphTask> graphTasks) throws RequestValidationException {
+        graphTaskValidator.validateGraphTaskTitleIsUnique(title, graphTasks);
+    }
+
+    public void validateFileTaskTitleIsUnique(String title, List<FileTask> fileTasks) throws RequestValidationException {
+        fileTaskValidator.validateFileTaskTitleIsUnique(title, fileTasks);
     }
 }

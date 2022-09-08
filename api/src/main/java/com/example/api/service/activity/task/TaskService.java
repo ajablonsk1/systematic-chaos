@@ -1,6 +1,6 @@
 package com.example.api.service.activity.task;
 
-import com.example.api.dto.request.activity.task.ActivityRequirementForm;
+import com.example.api.dto.request.activity.task.requirement.ActivityRequirementForm;
 import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
@@ -40,10 +40,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -146,6 +143,9 @@ public class TaskService {
     public List<RequirementResponse<?>> getRequirementForActivity(Long id) throws EntityNotFoundException, MissingAttributeException {
         Activity activity = getActivity(id);
         List<Requirement> requirements = activity.getRequirements();
+        requirements = requirements.stream()
+                .sorted(Comparator.comparingInt(o -> o.getType().getType()))
+                .toList();
         List<RequirementResponse<?>> requirementResponses = new LinkedList<>();
         for(Requirement requirement: requirements) {
             switch (requirement.getType()) {
@@ -198,7 +198,7 @@ public class TaskService {
                     ));
                 }
                 case GRAPH_TASKS -> {
-                    List<String> titles = requirement.getGraphTasks()
+                    List<String> titles = requirement.getFinishedGraphTasks()
                             .stream()
                             .map(GraphTask::getTitle)
                             .toList();
@@ -210,7 +210,7 @@ public class TaskService {
                     ));
                 }
                 case FILE_TASKS -> {
-                    List<String> titles = requirement.getFileTasks()
+                    List<String> titles = requirement.getFinishedFileTasks()
                             .stream()
                             .map(FileTask::getTitle)
                             .toList();
@@ -232,7 +232,64 @@ public class TaskService {
 
 
     public void addRequirementToActivity(ActivityRequirementForm form) throws RequestValidationException {
-
+        Activity activity = getActivity(form.getActivityId());
+        List<Requirement> requirements = activity.getRequirements();
+        for (Requirement requirement: requirements) {
+            switch (requirement.getType()) {
+                case DATE_FROM -> {
+                    requirement.setSelected(form.getDateFrom().getSelected());
+                    requirement.setDateFrom(form.getDateFrom().getDateMillis());
+                }
+                case DATE_TO -> {
+                    requirement.setSelected(form.getDateTo().getSelected());
+                    requirement.setDateTo(form.getDateTo().getDateMillis());
+                }
+                case MIN_POINTS -> {
+                    requirement.setSelected(form.getMinPoints().getSelected());
+                    requirement.setMinPoints(form.getMinPoints().getMinPoints());
+                }
+                case GROUPS -> {
+                    requirement.setSelected(form.getDateFrom().getSelected());
+                    List<String> groupNames = form.getAllowedGroups().getValues();
+                    List<Group> groups = groupRepo.findAll()
+                            .stream()
+                            .filter(group -> groupNames.contains(group.getName()))
+                            .toList();
+                    requirement.setAllowedGroups(groups);
+                }
+                case STUDENTS -> {
+                    requirement.setSelected(form.getDateFrom().getSelected());
+                    List<String> emails = form.getAllowedStudents().getValues();
+                    List<User> users = userRepo.findAll()
+                            .stream()
+                            .filter(user -> emails.contains(user.getEmail()))
+                            .toList();
+                    requirement.setAllowedStudents(users);
+                }
+                case GRAPH_TASKS -> {
+                    requirement.setSelected(form.getDateFrom().getSelected());
+                    List<String> titles = form.getFinishedGraphTasks().getValues();
+                    List<GraphTask> graphTasks = graphTaskRepo.findAll()
+                            .stream()
+                            .filter(graphTask -> titles.contains(graphTask.getTitle()))
+                            .toList();
+                    requirement.setFinishedGraphTasks(graphTasks);
+                }
+                case FILE_TASKS -> {
+                    requirement.setSelected(form.getDateFrom().getSelected());
+                    List<String> titles = form.getFinishedFileTasks().getValues();
+                    List<FileTask> fileTasks = fileTaskRepo.findAll()
+                            .stream()
+                            .filter(fileTask -> titles.contains(fileTask.getTitle()))
+                            .toList();
+                    requirement.setFinishedFileTasks(fileTasks);
+                }
+                default -> {
+                    log.error("Requirement has to have its type");
+                    throw new MissingAttributeException("Requirement has to have its type");
+                }
+            }
+        }
     }
 
     public Activity getActivity(Long id) throws EntityNotFoundException {

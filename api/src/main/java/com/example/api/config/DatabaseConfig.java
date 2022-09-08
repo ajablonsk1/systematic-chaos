@@ -355,8 +355,8 @@ public class DatabaseConfig {
             requirement3.setMinPoints(100.0);
             requirement4.setAllowedGroups(List.of());
             requirement5.setAllowedStudents(List.of());
-            requirement6.setGraphTasks(List.of());
-            requirement7.setFileTasks(List.of());
+            requirement6.setFinishedGraphTasks(List.of());
+            requirement7.setFinishedFileTasks(List.of());
 
             requirementService.saveRequirement(requirement1);
             requirementService.saveRequirement(requirement2);

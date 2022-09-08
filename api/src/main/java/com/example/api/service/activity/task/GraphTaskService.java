@@ -19,6 +19,7 @@ import com.example.api.repo.question.OptionRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
@@ -50,6 +51,7 @@ public class GraphTaskService {
     private final UserValidator userValidator;
     private final MapValidator mapValidator;
     private final TimeParser timeParser;
+    private final RequirementService requirementService;
 
     public GraphTask saveGraphTask(GraphTask graphTask) {
         return graphTaskRepo.save(graphTask);
@@ -67,6 +69,9 @@ public class GraphTaskService {
         CreateGraphTaskForm form = chapterForm.getForm();
 
         activityValidator.validateCreateGraphTaskFormFields(form);
+
+        List<GraphTask> graphTasks = graphTaskRepo.findAll();
+        activityValidator.validateGraphTaskTitleIsUnique(form.getTitle(), graphTasks);
 
         SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");
@@ -133,6 +138,7 @@ public class GraphTaskService {
                 expireDateMillis,
                 timeToSolveMillis,
                 points.stream().mapToDouble(f -> f).sum());
+        graphTask.setRequirements(requirementService.getDefaultRequirements());
         graphTaskRepo.save(graphTask);
 
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());

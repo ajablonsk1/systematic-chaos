@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 @Transactional
 public class ActivityMapService {
     private final MapRepo mapRepo;
+    private final RequirementService requirementService;
     private final MapValidator mapValidator;
 
     public ActivityMap saveActivityMap(ActivityMap activityMap){
@@ -38,26 +39,52 @@ public class ActivityMapService {
     public List<MapTask> getMapTasks(ActivityMap activityMap) {
         List<MapTask> graphTasks = activityMap.getGraphTasks()
                 .stream()
-                .map(graphTask -> new MapTask(graphTask.getId(), graphTask.getPosX(),
-                        graphTask.getPosY(), ActivityType.EXPEDITION, graphTask.getTitle(), graphTask.getMaxPoints()))
+                .map(graphTask -> new MapTask(
+                        graphTask.getId(),
+                        graphTask.getPosX(),
+                        graphTask.getPosY(),
+                        ActivityType.EXPEDITION,
+                        graphTask.getTitle(),
+                        graphTask.getMaxPoints(),
+                        requirementService.areRequirementsFulfilled(graphTask.getRequirements())))
                 .toList();
         List<MapTask> fileTasks = activityMap.getFileTasks()
                 .stream()
-                .map(fileTask -> new MapTask(fileTask.getId(), fileTask.getPosX(),
-                        fileTask.getPosY(), ActivityType.TASK, fileTask.getTitle(), fileTask.getMaxPoints()))
+                .map(fileTask -> new MapTask(
+                        fileTask.getId(),
+                        fileTask.getPosX(),
+                        fileTask.getPosY(),
+                        ActivityType.TASK,
+                        fileTask.getTitle(),
+                        fileTask.getMaxPoints(),
+                        requirementService.areRequirementsFulfilled(fileTask.getRequirements())))
                 .toList();
         List<MapTask> infos = activityMap.getInfos()
                 .stream()
-                .map(info -> new MapTask(info.getId(), info.getPosX()
-                        , info.getPosY(), ActivityType.INFO, info.getTitle(), 0.0))
+                .map(info -> new MapTask(
+                        info.getId(),
+                        info.getPosX(),
+                        info.getPosY(),
+                        ActivityType.INFO,
+                        info.getTitle(),
+                        0.0,
+                        requirementService.areRequirementsFulfilled(info.getRequirements())))
                 .toList();
         List<MapTask> surveys = activityMap.getSurveys()
                 .stream()
-                .map(survey -> new MapTask(survey.getId(), survey.getPosX(),
-                        survey.getPosY(), ActivityType.SURVEY, survey.getTitle(), survey.getPoints()))
+                .map(survey -> new MapTask(
+                        survey.getId(),
+                        survey.getPosX(),
+                        survey.getPosY(),
+                        ActivityType.SURVEY,
+                        survey.getTitle(),
+                        survey.getPoints(),
+                        requirementService.areRequirementsFulfilled(survey.getRequirements())))
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)
                 .toList();
     }
+
+
 }

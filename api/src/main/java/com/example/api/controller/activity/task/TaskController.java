@@ -1,6 +1,6 @@
 package com.example.api.controller.activity.task;
 
-import com.example.api.dto.request.activity.task.ActivityRequirementForm;
+import com.example.api.dto.request.activity.task.requirement.ActivityRequirementForm;
 import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;

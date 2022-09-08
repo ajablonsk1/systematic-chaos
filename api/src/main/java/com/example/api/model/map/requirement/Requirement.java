@@ -43,8 +43,46 @@ public class Requirement {
     private List<User> allowedStudents = new LinkedList<>();
 
     @OneToMany
-    private List<GraphTask> graphTasks = new LinkedList<>();
+    private List<GraphTask> finishedGraphTasks = new LinkedList<>();
 
     @OneToMany
-    private List<FileTask> fileTasks = new LinkedList<>();
+    private List<FileTask> finishedFileTasks = new LinkedList<>();
+
+    public Requirement(String name, RequirementType type, boolean selected) {
+        this.name = name;
+        this.type = type;
+        this.selected = selected;
+    }
+
+    public boolean isFulfilled(User student, List<GraphTask> graphTasks, List<FileTask> fileTasks) {
+        if (!selected) {
+            return true;
+        }
+        switch (type) {
+            case DATE_FROM -> {
+                return System.currentTimeMillis() > dateFrom;
+            }
+            case DATE_TO -> {
+                return System.currentTimeMillis() < dateTo;
+            }
+            case MIN_POINTS -> {
+                return student.getPoints() > minPoints;
+            }
+            case GROUPS -> {
+                return allowedGroups.contains(student.getGroup());
+            }
+            case STUDENTS -> {
+                return allowedStudents.contains(student);
+            }
+            case GRAPH_TASKS -> {
+                return graphTasks.containsAll(finishedGraphTasks);
+            }
+            case FILE_TASKS -> {
+                return fileTasks.containsAll(finishedFileTasks);
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
 }
