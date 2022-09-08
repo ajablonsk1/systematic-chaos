@@ -19,6 +19,7 @@ import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.map.requirement.Requirement;
+import com.example.api.model.map.requirement.RequirementValueType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
@@ -154,6 +155,7 @@ public class TaskService {
                             requirement.getId(),
                             requirement.getName(),
                             requirement.getDateFrom(),
+                            RequirementValueType.DATE,
                             requirement.isSelected()
                     ));
                 }
@@ -162,6 +164,7 @@ public class TaskService {
                             requirement.getId(),
                             requirement.getName(),
                             requirement.getDateTo(),
+                            RequirementValueType.DATE,
                             requirement.isSelected()
                     ));
                 }
@@ -170,6 +173,7 @@ public class TaskService {
                             requirement.getId(),
                             requirement.getName(),
                             requirement.getMinPoints(),
+                            RequirementValueType.NUMBER,
                             requirement.isSelected()
                     ));
                 }
@@ -182,6 +186,7 @@ public class TaskService {
                             requirement.getId(),
                             requirement.getName(),
                             groupNames,
+                            RequirementValueType.MULTI_SELECT,
                             requirement.isSelected()
                     ));
                 }
@@ -194,6 +199,7 @@ public class TaskService {
                             requirement.getId(),
                             requirement.getName(),
                             emails,
+                            RequirementValueType.MULTI_SELECT,
                             requirement.isSelected()
                     ));
                 }
@@ -206,6 +212,7 @@ public class TaskService {
                             requirement.getId(),
                             requirement.getName(),
                             titles,
+                            RequirementValueType.MULTI_SELECT,
                             requirement.isSelected()
                     ));
                 }
@@ -218,6 +225,7 @@ public class TaskService {
                             requirement.getId(),
                             requirement.getName(),
                             titles,
+                            RequirementValueType.MULTI_SELECT,
                             requirement.isSelected()
                     ));
                 }
