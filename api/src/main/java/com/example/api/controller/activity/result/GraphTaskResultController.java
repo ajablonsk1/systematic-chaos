@@ -69,7 +69,7 @@ public class GraphTaskResultController {
 
     @PostMapping("/answer/add")
     public ResponseEntity<Long> addAnswerToGraphTaskResult(@RequestBody AddAnswerToGraphTaskForm form)
-            throws EntityNotFoundException, WrongBodyParametersNumberException, EntityRequiredAttributeNullException {
+            throws EntityNotFoundException, EntityRequiredAttributeNullException {
         return ResponseEntity.ok().body(graphTaskResultService.addAnswerToGraphTaskResult(form));
     }
 
