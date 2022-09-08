@@ -90,7 +90,7 @@ export default function GameSummary() {
 
       return (
         <Carousel
-          fade
+          slide={false}
           interval={null}
           indicators={false}
           nextLabel={null}
