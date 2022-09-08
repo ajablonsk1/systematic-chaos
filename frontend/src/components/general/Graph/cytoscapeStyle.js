@@ -2,13 +2,15 @@ export const cytoscapeStylesheet = [
   {
     selector: 'node',
     style: {
-      backgroundColor: 'white',
+      backgroundColor: 'data(backgroundColor)',
       borderWidth: 5,
       borderColor: 'data(color)',
       content: 'data(id)',
-      fontSize: 32,
-      width: 20,
-      height: 20,
+      textValign: 'center',
+      textHalign: 'center',
+      fontSize: 48,
+      width: 25,
+      height: 25,
       padding: 30
     }
   },
@@ -19,7 +21,20 @@ export const cytoscapeStylesheet = [
       lineColor: 'black',
       targetArrowShape: 'triangle',
       targetArrowColor: 'black',
-      curveStyle: 'bezier'
+      curveStyle: 'bezier',
+      lineStyle: 'solid'
+    }
+  },
+  {
+    selector: '.gameMapEdge',
+    style: {
+      lineColor: 'red',
+      targetArrowShape: 'none',
+      curveStyle: 'unbundled-bezier',
+      lineStyle: 'dashed',
+      lineDashPattern: [40, 15],
+      controlPointWeights: '0.3 0.5 0.8',
+      controlPointDistances: '-100 100 -100'
     }
   }
 ]

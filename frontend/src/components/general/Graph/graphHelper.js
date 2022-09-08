@@ -1,17 +1,21 @@
-export const getGraphElements = (graphNodes) => {
-  const nodes = graphNodes.map((nodeInfo) => ({
+export const getGraphElements = (graphElements) => {
+  const nodes = graphElements.map((nodeInfo) => ({
     data: {
       id: nodeInfo.id,
-      color: nodeInfo.color
+      color: nodeInfo.color,
+      backgroundColor: nodeInfo.backgroundColor ?? 'white',
+      content: nodeInfo.content ?? nodeInfo.id,
+      position: nodeInfo.position
     }
   }))
 
-  const edges = graphNodes.map((nodeInfo) =>
+  const edges = graphElements.map((nodeInfo) =>
     nodeInfo.targetIds.map((targetId) => ({
       data: {
         source: nodeInfo.id,
         target: targetId
-      }
+      },
+      classes: nodeInfo.customClass ?? ''
     }))
   )
 

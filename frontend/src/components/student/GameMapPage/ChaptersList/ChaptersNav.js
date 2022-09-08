@@ -47,7 +47,10 @@ function ChaptersNav() {
   useEffect(() => {
     ChapterService.getChaptersList()
       .then((response) => {
-        setChaptersList(response)
+        // TODO: replace with "response" when it will be included chapterPosition
+        const responseWithPosition = [...response].map(chapter => ({...chapter, chapterPosition: Math.floor(Math.random() * 10)}))
+        setChaptersList(responseWithPosition)
+        console.log(responseWithPosition)
       })
       .catch(() => {
         setChaptersList(null)
