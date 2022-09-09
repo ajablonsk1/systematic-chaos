@@ -45,14 +45,10 @@ function GameMap() {
     if (chaptersList) {
       const graphInfo = chaptersList.map((chapter, index) => ({
         id: chapter.id,
-        borderWidth: 2,
-        backgroundColor: '#6b6a6a',
-        fontColor: 'white',
-        borderColor: 'white',
         targetIds: index === chaptersList.length - 1 ? [] : [chaptersList[index + 1].id],
-        content: '',
         position: getNodePosition(chapter.chapterPosition, mapContainerSize),
-        customClass: 'gameMapEdge'
+        edgeClass: 'gameMapEdge',
+        nodeClass: 'gameMapNode'
       }))
 
       setGraphElements(getGraphElements(graphInfo))
