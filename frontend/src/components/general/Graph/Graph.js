@@ -15,7 +15,6 @@ import { getLayoutConfig } from './layoutConfigs'
 function Graph(props) {
   const container = useRef()
   const graph = useRef()
-  const movingBlockingLayer = useRef()
 
   // add nodes and edges to the graph
   useEffect(() => {
@@ -36,17 +35,13 @@ function Graph(props) {
       graph.current = cytoscape({
         elements: props.elements,
         maxZoom: 1,
-        zoom: 1,
+        zoom: props.movable !== false ? 0.5 : 1,
         style: cytoscapeStylesheet,
         container: container.current
       })
 
       graph.current.on('tap', 'node', (e) => {
         props.onNodeClick(e.target.id())
-      })
-
-      graph.current.on('cxttap', 'node', (e) => {
-        console.log(e.target.id(), e.target.position())
       })
 
       if (props.movable === false) {
@@ -56,8 +51,6 @@ function Graph(props) {
     }
   }, [props])
 
-  // TODO: pomysł to użyć taki layout w którym można zastosować granicę canvasa i ustalić rozmiar tego canvasa tak żeby wypełnić cały obszar
-  //        może wtedy zniknie drag-and-drop na layoucie
   useEffect(() => {
     const layout = graph.current?.layout(getLayoutConfig(props.layoutName))
     layout?.run()
@@ -68,11 +61,7 @@ function Graph(props) {
     return () => graph.current?.destroy()
   }, [])
 
-  return (
-    <>
-      <div style={{ height: props.height }} ref={container} />
-    </>
-  )
+  return <div style={{ height: props.height }} ref={container} />
 }
 
 export default Graph

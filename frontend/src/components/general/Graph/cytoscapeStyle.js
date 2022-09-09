@@ -3,15 +3,18 @@ export const cytoscapeStylesheet = [
     selector: 'node',
     style: {
       backgroundColor: 'data(backgroundColor)',
-      borderWidth: 5,
-      borderColor: 'data(color)',
+      borderWidth: 'data(borderWidth)',
+      borderColor: 'data(borderColor)',
       content: 'data(id)',
       textValign: 'center',
       textHalign: 'center',
-      fontSize: 48,
-      width: 25,
-      height: 25,
-      padding: 30
+      fontSize: 64,
+      width: 20,
+      height: 20,
+      padding: 30,
+      textMarginY: 5,
+      color: 'data(fontColor)',
+      fontFamily: 'Patrick Hand'
     }
   },
   {
@@ -28,7 +31,7 @@ export const cytoscapeStylesheet = [
   {
     selector: '.gameMapEdge',
     style: {
-      lineColor: 'red',
+      lineColor: 'white',
       targetArrowShape: 'none',
       curveStyle: 'unbundled-bezier',
       lineStyle: 'dashed',

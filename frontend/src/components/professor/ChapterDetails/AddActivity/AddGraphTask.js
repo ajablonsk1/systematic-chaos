@@ -31,7 +31,7 @@ function AddGraphTask(props) {
     if (placeholderJson) {
       const graphInfo = placeholderJson.questions.map((question) => ({
         id: question.questionNum,
-        color: getNodeColor(question.difficulty),
+        borderColor: getNodeColor(question.difficulty),
         targetIds: question.nextQuestions
       }))
 

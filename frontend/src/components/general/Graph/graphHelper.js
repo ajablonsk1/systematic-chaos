@@ -2,10 +2,12 @@ export const getGraphElements = (graphElements) => {
   const nodes = graphElements.map((nodeInfo) => ({
     data: {
       id: nodeInfo.id,
-      color: nodeInfo.color,
       backgroundColor: nodeInfo.backgroundColor ?? 'white',
       content: nodeInfo.content ?? nodeInfo.id,
-      position: nodeInfo.position
+      position: nodeInfo.position,
+      fontColor: nodeInfo.fontColor ?? 'black',
+      borderWidth: nodeInfo.borderWidth ?? 5,
+      borderColor: nodeInfo.borderColor
     }
   }))
 
