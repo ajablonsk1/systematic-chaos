@@ -7,6 +7,10 @@ export function BackgroundImagePicker(props) {
   const [imagesHeight, setImagesHeight] = useState([])
   const [rowHeight, setRowHeight] = useState(undefined)
 
+  const pickImageId = (imageId) => {
+    props.setFieldValue('imageId', imageId)
+  }
+
   useEffect(() => {
     setImagesHeight(Array(props.images.length).fill(0))
 
@@ -54,7 +58,6 @@ export function BackgroundImagePicker(props) {
         cols={props.cols}
         width={props.width}
         height={'100%'}
-        maxRows={2}
         className='layout'
         layout={layout}
         rowHeight={rowHeight > 0 ? rowHeight : props.width}
@@ -62,7 +65,14 @@ export function BackgroundImagePicker(props) {
       >
         {props.images.map((url, index) => (
           <ImageContainer key={index.toString()}>
-            <img className={'p-3'} width={'100%'} height={'100%'} src={url} alt={'select-background'} />
+            <img
+              className={'p-3'}
+              width={'100%'}
+              height={'100%'}
+              src={url}
+              alt={'select-background'}
+              onClick={() => pickImageId(1)}
+            />
           </ImageContainer>
         ))}
       </GridLayout>

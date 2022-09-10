@@ -42,10 +42,10 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
             validate={(values) => {
               const errors = {}
               if (!values.name) errors.chapterName = FIELD_REQUIRED
-
               if (values.sizeX < 1 || values.sizeX > SANE_MAP_FIELDCOUNT_LIMIT) errors.sizeX = POSITIVE_NUMBER
               if (values.sizeY < 1 || values.sizeY > SANE_MAP_FIELDCOUNT_LIMIT) errors.sizeY = POSITIVE_NUMBER
               if (values.imageId < 0) errors.imageId = NONNEGATIVE_NUMBER
+              if (!values.imageId) errors.imageId = FIELD_REQUIRED
               return errors
             }}
             onSubmit={(values, { setSubmitting }) => {
@@ -68,7 +68,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                 })
             }}
           >
-            {({ isSubmitting, values, errors, handleSubmit }) => (
+            {({ isSubmitting, values, errors, handleSubmit, setFieldValue }) => (
               <Form onSubmit={handleSubmit}>
                 <Container>
                   <Row className='mx-auto'>
@@ -81,7 +81,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                   </Row>
 
                   {/* <div className={'container'} style={{ overflow: 'auto', maxHeight: '200px' }}> */}
-                  <BackgroundImagePicker width={700} cols={2} images={images} />
+                  <BackgroundImagePicker width={700} cols={2} images={images} setFieldValue={setFieldValue} />
                   {/* </div> */}
 
                   <Row className='mt-4 d-flex justify-content-center'>
