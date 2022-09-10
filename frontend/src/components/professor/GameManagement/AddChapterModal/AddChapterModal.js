@@ -27,7 +27,6 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
   useEffect(() => {
     ChapterService.getChapterImagesList()
       .then((response) => {
-        console.log(response)
         Promise.all(
           response.map((imageData) => {
             return ChapterService.getChapterImage({ imageId: imageData.id })

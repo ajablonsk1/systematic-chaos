@@ -6,7 +6,7 @@ export function BackgroundImagePicker(props) {
   const [layout, setLayout] = useState(undefined)
   const [imagesHeight, setImagesHeight] = useState([])
   const [rowHeight, setRowHeight] = useState(undefined)
-  console.log(props)
+
   const pickImageId = (imageId) => {
     props.setFieldValue('imageId', imageId)
   }
