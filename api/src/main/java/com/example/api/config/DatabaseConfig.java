@@ -557,6 +557,38 @@ public class DatabaseConfig {
 
             Image chapterImage = new Image("Chapter image 1", data, ImageType.CHAPTER);
             fileRepo.save(chapterImage);
+
+            BufferedImage image2 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image2.png"));
+            ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+            ImageIO.write(image2, "png", output2);
+            byte [] data2 = output2.toByteArray();
+
+            Image chapterImage2 = new Image("Chapter image 2", data2, ImageType.CHAPTER);
+            fileRepo.save(chapterImage2);
+
+            BufferedImage image3 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image3.png"));
+            ByteArrayOutputStream output3 = new ByteArrayOutputStream();
+            ImageIO.write(image3, "png", output3);
+            byte [] data3 = output3.toByteArray();
+
+            Image chapterImage3 = new Image("Chapter image 3", data3, ImageType.CHAPTER);
+            fileRepo.save(chapterImage3);
+
+            BufferedImage image4 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image4.png"));
+            ByteArrayOutputStream output4 = new ByteArrayOutputStream();
+            ImageIO.write(image4, "png", output4);
+            byte [] data4 = output4.toByteArray();
+
+            Image chapterImage4 = new Image("Chapter image 4", data4, ImageType.CHAPTER);
+            fileRepo.save(chapterImage4);
+
+            BufferedImage image5 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image5.png"));
+            ByteArrayOutputStream output5 = new ByteArrayOutputStream();
+            ImageIO.write(image5, "png", output5);
+            byte [] data5 = output5.toByteArray();
+
+            Image chapterImage5 = new Image("Chapter image 5", data5, ImageType.CHAPTER);
+            fileRepo.save(chapterImage5);
         };
     }
 }
