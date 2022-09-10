@@ -6,7 +6,8 @@ import {
   GET_FIRST_TASK_TO_EVALUATE,
   PROF_FEEDBACK,
   ADD_BONUS_POINTS,
-  GET_STUDENT_POINTS_PROFESSOR
+  GET_STUDENT_POINTS_PROFESSOR,
+  GET_GAME_SUMMARY_STATS
 } from './urls'
 
 class ProfessorService {
@@ -61,6 +62,12 @@ class ProfessorService {
 
   getStudentPointsList(studentEmail) {
     return axiosApiGet(GET_STUDENT_POINTS_PROFESSOR, { studentEmail: studentEmail }).catch((error) => {
+      throw error
+    })
+  }
+
+  getGameSummaryStats() {
+    return axiosApiGet(GET_GAME_SUMMARY_STATS).catch((error) => {
       throw error
     })
   }
