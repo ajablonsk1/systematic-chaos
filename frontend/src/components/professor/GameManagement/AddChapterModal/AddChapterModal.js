@@ -17,11 +17,12 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
   const [errorMessage, setErrorMessage] = useState('')
 
   const images = [
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Wikipe-tan_full_length.svg/800px-Wikipe-tan_full_length.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/1/1f/Wiki-sisters.png',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Wikipe-tan_full_length.svg/800px-Wikipe-tan_full_length.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Wikipe-tan_full_length.svg/800px-Wikipe-tan_full_length.svg.png',
-    'https://upload.wikimedia.org/wikipedia/commons/1/1f/Wiki-sisters.png'
+    'https://upload.wikimedia.org/wikipedia/commons/1/19/Thatched_cottage_in_Boreham%2C_Essex%2C_England.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/f/fb/-_panoramio_%282714%29.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/f/fb/A_New_Day_of_Mirpur_Sakro_Sindh%2C_Pakistan.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/4/40/A_house_and_white_rose_in_Great_Waltham%2C_Essex%2C_England_01.JPG',
+    'https://upload.wikimedia.org/wikipedia/commons/4/42/A_French_meadow_in_the_afternoon.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/1/1f/88829-wallpaper06.jpg'
   ]
 
   return (
@@ -101,7 +102,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                     </Col>
                   </Row>
                 </Container>
-                <BackgroundImagePicker width={700} cols={4} images={images} />
+                <BackgroundImagePicker width={700} cols={2} images={images} />
               </Form>
             )}
           </Formik>
