@@ -56,7 +56,7 @@ public class ActivityMapService {
         ActivityMap activityMap = mapRepo.findActivityMapById(id);
         mapValidator.validateActivityMapIsNotNull(activityMap, id);
         List<MapTask> allTasks = getMapTasks(activityMap, student);
-        return new ActivityMapResponse(activityMap.getId(), allTasks, activityMap.getMapSizeX(), activityMap.getMapSizeY());
+        return new ActivityMapResponse(activityMap.getId(), allTasks, activityMap.getMapSizeX(), activityMap.getMapSizeY(), activityMap.getImage());
     }
 
     public List<MapTask> getMapTasks(ActivityMap activityMap) {

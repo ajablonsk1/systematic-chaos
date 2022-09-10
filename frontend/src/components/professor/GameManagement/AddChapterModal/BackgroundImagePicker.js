@@ -14,9 +14,9 @@ export function BackgroundImagePicker(props) {
   useEffect(() => {
     setImagesHeight(Array(props.images.length).fill(0))
 
-    props.images.forEach((url, index) => {
+    props.images.forEach((image, index) => {
       const img = new Image()
-      img.src = url
+      img.src = image.url
       img.onload = (e) => {
         const scaledWidth = Math.floor(props.width / props.cols)
         const scaledHeight = Math.floor((e.target.height * scaledWidth) / e.target.width)
@@ -63,18 +63,22 @@ export function BackgroundImagePicker(props) {
         layout={layout}
         isDraggable={false}
       >
-        {props.images.map((url, index) => (
+        {props.images.map((image) => (
           <ImageContainer
-            key={index.toString()}
-            style={props.pickedImage == index ? { border: '1px solid rgba(0, 179, 16, 0.5)' } : { border: 'none' }}
+            key={image.id}
+            style={
+              props.pickedImage === image.id
+                ? { border: '2px solid rgba(0, 179, 16, 0.5)', padding: '5px' }
+                : { border: 'none' }
+            }
           >
             <img
               className={'p-3'}
               width={'100%'}
               height={'100%'}
-              src={url}
+              src={image.url}
               alt={'select-background'}
-              onClick={() => pickImageId(1)}
+              onClick={() => pickImageId(image.id)}
             />
           </ImageContainer>
         ))}
