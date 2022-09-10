@@ -53,6 +53,8 @@ export function BackgroundImagePicker(props) {
       <GridLayout
         cols={props.cols}
         width={props.width}
+        height={'100%'}
+        maxRows={2}
         className='layout'
         layout={layout}
         rowHeight={rowHeight > 0 ? rowHeight : props.width}

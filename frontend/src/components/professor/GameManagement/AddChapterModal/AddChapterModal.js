@@ -79,7 +79,11 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                     <div className={'m-2'}></div>
                     {FormCol('Id obrazu', 'number', 'imageId', 12, { min: 0 })}
                   </Row>
-                  <Row></Row>
+
+                  {/* <div className={'container'} style={{ overflow: 'auto', maxHeight: '200px' }}> */}
+                  <BackgroundImagePicker width={700} cols={2} images={images} />
+                  {/* </div> */}
+
                   <Row className='mt-4 d-flex justify-content-center'>
                     <Col sm={12} className='d-flex justify-content-center mb-2'>
                       <Button variant={'danger'} className={'me-2'} onClick={() => setShowModal(false)}>
@@ -102,7 +106,6 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                     </Col>
                   </Row>
                 </Container>
-                <BackgroundImagePicker width={700} cols={2} images={images} />
               </Form>
             )}
           </Formik>
