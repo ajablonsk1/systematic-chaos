@@ -6,7 +6,7 @@ export function BackgroundImagePicker(props) {
   const [layout, setLayout] = useState(undefined)
   const [imagesHeight, setImagesHeight] = useState([])
   const [rowHeight, setRowHeight] = useState(undefined)
-
+  console.log(props)
   const pickImageId = (imageId) => {
     props.setFieldValue('imageId', imageId)
   }
@@ -64,7 +64,10 @@ export function BackgroundImagePicker(props) {
         isDraggable={false}
       >
         {props.images.map((url, index) => (
-          <ImageContainer key={index.toString()}>
+          <ImageContainer
+            key={index.toString()}
+            style={props.pickedImage == index ? { border: '1px solid rgba(0, 179, 16, 0.5)' } : { border: 'none' }}
+          >
             <img
               className={'p-3'}
               width={'100%'}

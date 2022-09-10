@@ -89,7 +89,13 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                     </Row>
 
                     {/* <div className={'container'} style={{ overflow: 'auto', maxHeight: '200px' }}> */}
-                    <MemoBackgroundImagePicker width={700} cols={2} images={images} setFieldValue={setFieldValue} />
+                    <MemoBackgroundImagePicker
+                      width={700}
+                      cols={2}
+                      images={images}
+                      setFieldValue={setFieldValue}
+                      pickedImage={values.imageId}
+                    />
                     {/* </div> */}
 
                     <Row className='mt-4 d-flex justify-content-center'>
