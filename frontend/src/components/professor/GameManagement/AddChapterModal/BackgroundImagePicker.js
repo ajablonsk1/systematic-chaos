@@ -58,9 +58,9 @@ export function BackgroundImagePicker(props) {
         cols={props.cols}
         width={props.width}
         height={'100%'}
+        rowHeight={rowHeight > 0 ? rowHeight : props.width}
         className='layout'
         layout={layout}
-        rowHeight={rowHeight > 0 ? rowHeight : props.width}
         isDraggable={false}
       >
         {props.images.map((url, index) => (

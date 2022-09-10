@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Formik } from 'formik'
 import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner } from 'react-bootstrap'
 import {
@@ -15,7 +15,6 @@ import { BackgroundImagePicker } from './BackgroundImagePicker'
 export function AddChapterModal({ showModal, setShowModal, refetchChapterList }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-
   const images = [
     'https://upload.wikimedia.org/wikipedia/commons/1/19/Thatched_cottage_in_Boreham%2C_Essex%2C_England.jpg',
     'https://upload.wikimedia.org/wikipedia/commons/f/fb/-_panoramio_%282714%29.jpg',
@@ -24,6 +23,15 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
     'https://upload.wikimedia.org/wikipedia/commons/4/42/A_French_meadow_in_the_afternoon.jpg',
     'https://upload.wikimedia.org/wikipedia/commons/1/1f/88829-wallpaper06.jpg'
   ]
+
+  // we need this memo to avoid re-rendering the layout too many times
+  //
+  // why not useMemo? specifying dependencies which are scoped inside the formik call
+  // is hard, and all of the approaches I've tried have failed - React.memo() which
+  // updates the component only on shallow comparison dependency change should be enough
+  const MemoImagePicker = React.memo(BackgroundImagePicker)
+
+  useEffect(() => {}, [])
 
   return (
     <>
@@ -68,46 +76,47 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                 })
             }}
           >
-            {({ isSubmitting, values, errors, handleSubmit, setFieldValue }) => (
-              <Form onSubmit={handleSubmit}>
-                <Container>
-                  <Row className='mx-auto'>
-                    {FormCol('Nazwa rozdziału', 'text', 'name', 12)}
-                    <div className={'m-2'}></div>
-                    {FormCol('Liczba kolumn', 'number', 'sizeX', 6, { min: 1 })}
-                    {FormCol('Liczba wierszy', 'number', 'sizeY', 6, { min: 1 })}
-                    <div className={'m-2'}></div>
-                    {FormCol('Id obrazu', 'number', 'imageId', 12, { min: 0 })}
-                  </Row>
+            {({ isSubmitting, values, errors, handleSubmit, setFieldValue }) => {
+              return (
+                <Form onSubmit={handleSubmit}>
+                  <Container>
+                    <Row className='mx-auto'>
+                      {FormCol('Nazwa rozdziału', 'text', 'name', 12)}
+                      <div className={'m-2'}></div>
+                      {FormCol('Liczba kolumn', 'number', 'sizeX', 6, { min: 1 })}
+                      {FormCol('Liczba wierszy', 'number', 'sizeY', 6, { min: 1 })}
+                      <div className={'m-2'}></div>
+                    </Row>
 
-                  {/* <div className={'container'} style={{ overflow: 'auto', maxHeight: '200px' }}> */}
-                  <BackgroundImagePicker width={700} cols={2} images={images} setFieldValue={setFieldValue} />
-                  {/* </div> */}
+                    {/* <div className={'container'} style={{ overflow: 'auto', maxHeight: '200px' }}> */}
+                    <MemoImagePicker width={700} cols={2} images={images} setFieldValue={setFieldValue} />
+                    {/* </div> */}
 
-                  <Row className='mt-4 d-flex justify-content-center'>
-                    <Col sm={12} className='d-flex justify-content-center mb-2'>
-                      <Button variant={'danger'} className={'me-2'} onClick={() => setShowModal(false)}>
-                        Anuluj
-                      </Button>
-                      <Button
-                        type='submit'
-                        disabled={isSubmitting}
-                        style={{
-                          backgroundColor: 'var(--button-green)',
-                          borderColor: 'var(--button-green)'
-                        }}
-                      >
-                        {isSubmitting ? (
-                          <Spinner as='span' animation='border' size='sm' role='status' />
-                        ) : (
-                          <span>Dodaj rozdział</span>
-                        )}
-                      </Button>
-                    </Col>
-                  </Row>
-                </Container>
-              </Form>
-            )}
+                    <Row className='mt-4 d-flex justify-content-center'>
+                      <Col sm={12} className='d-flex justify-content-center mb-2'>
+                        <Button variant={'danger'} className={'me-2'} onClick={() => setShowModal(false)}>
+                          Anuluj
+                        </Button>
+                        <Button
+                          type='submit'
+                          disabled={isSubmitting}
+                          style={{
+                            backgroundColor: 'var(--button-green)',
+                            borderColor: 'var(--button-green)'
+                          }}
+                        >
+                          {isSubmitting ? (
+                            <Spinner as='span' animation='border' size='sm' role='status' />
+                          ) : (
+                            <span>Dodaj rozdział</span>
+                          )}
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Container>
+                </Form>
+              )
+            }}
           </Formik>
           {errorMessage && <p className={'text-center text-danger mt-2'}>{errorMessage}</p>}
         </ModalBody>
