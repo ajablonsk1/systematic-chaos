@@ -3,6 +3,7 @@ import cytoscape from 'cytoscape'
 import klay from 'cytoscape-klay'
 import { cytoscapeStylesheet } from './cytoscapeStyle'
 import { getLayoutConfig } from './layoutConfigs'
+import { createLabels } from './graphHelper'
 
 /* @props
  *   - elements: list of edges and nodes
@@ -10,6 +11,7 @@ import { getLayoutConfig } from './layoutConfigs'
  *   - layoutName: layout configuration json
  *   - onNodeClick: on node tap callback
  *   - movable: if the value is true or does not exist, the layout can be moved, otherwise moving function is blocked
+ *   - labels: labels list for nodes (optional)
  * */
 
 function Graph(props) {
@@ -20,7 +22,7 @@ function Graph(props) {
   useEffect(() => {
     graph.current?.elements().remove()
     graph.current?.add(props.elements)
-  }, [props.elements])
+  }, [props.elements, props.labels])
 
   useEffect(() => {
     if (!container.current) {
@@ -53,6 +55,12 @@ function Graph(props) {
 
   useEffect(() => {
     const layout = graph.current?.layout(getLayoutConfig(props.layoutName))
+
+    layout.pon('layoutstop', () => {
+      if (props.labels && graph.current) {
+        createLabels(graph.current, props.labels)
+      }
+    })
     layout?.run()
   }, [props])
 

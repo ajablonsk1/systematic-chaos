@@ -49,3 +49,19 @@ export const cytoscapeStylesheet = [
     }
   }
 ]
+
+export const nodeLabelStyle = (node) => {
+  const styleTransform = `translate(-50%, 100%) translate(${node.position('x').toFixed(2)}px, ${node
+    .position('y')
+    .toFixed(2)}px)`
+
+  return {
+    transform: styleTransform,
+    backgroundColor: 'red',
+    position: 'absolute',
+    zIndex: 10,
+    width: '100px',
+    textAlign: 'center',
+    borderRadius: '5px'
+  }
+}

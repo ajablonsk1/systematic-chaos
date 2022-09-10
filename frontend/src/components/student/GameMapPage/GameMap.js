@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { GameMapContainer } from './GameMapStyles'
 import Graph from '../../general/Graph/Graph'
 import ChapterService from '../../../services/chapter.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import { getGraphElements } from '../../general/Graph/graphHelper'
+import { getGraphElements, getGraphElementsWithLabels } from '../../general/Graph/graphHelper'
 import ChapterMapModal from './ChapterMapModal'
 import { getNodePosition } from './gameMapHelper'
 
@@ -61,6 +61,16 @@ function GameMap() {
     }
   }, [chosenChapterId])
 
+  const getNodesLabels = useCallback(() => {
+    if (chaptersList) {
+      return chaptersList.map((chapter) => ({
+        id: chapter.id,
+        label: chapter.name
+      }))
+    }
+    return null
+  }, [chaptersList])
+
   return (
     <>
       <Content className={'vh-100'}>
@@ -80,6 +90,7 @@ function GameMap() {
                   setChosenChapterId({ id: nodeId })
                 }}
                 movable={false}
+                labels={getNodesLabels()}
               />
             </GameMapContainer>
           </>
