@@ -29,7 +29,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
   // why not useMemo? specifying dependencies which are scoped inside the formik call
   // is hard, and all of the approaches I've tried have failed - React.memo() which
   // updates the component only on shallow comparison dependency change should be enough
-  const MemoImagePicker = React.memo(BackgroundImagePicker)
+  const MemoBackgroundImagePicker = React.memo(BackgroundImagePicker)
 
   useEffect(() => {}, [])
 
@@ -89,7 +89,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                     </Row>
 
                     {/* <div className={'container'} style={{ overflow: 'auto', maxHeight: '200px' }}> */}
-                    <MemoImagePicker width={700} cols={2} images={images} setFieldValue={setFieldValue} />
+                    <MemoBackgroundImagePicker width={700} cols={2} images={images} setFieldValue={setFieldValue} />
                     {/* </div> */}
 
                     <Row className='mt-4 d-flex justify-content-center'>
