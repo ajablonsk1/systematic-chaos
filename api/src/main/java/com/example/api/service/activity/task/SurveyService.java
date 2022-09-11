@@ -3,6 +3,7 @@ package com.example.api.service.activity.task;
 import com.example.api.dto.request.activity.task.create.CreateSurveyChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateSurveyForm;
 import com.example.api.dto.response.activity.task.SurveyInfoResponse;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.task.Survey;
@@ -50,8 +51,11 @@ public class SurveyService {
     public void createSurvey(CreateSurveyChapterForm chapterForm) throws RequestValidationException {
         log.info("Starting the creation of survey");
         CreateSurveyForm form = chapterForm.getForm();
+        Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
+        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateSurveyForm(form);
+        activityValidator.validateActivityPosition(form, chapter);
 
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);
@@ -63,9 +67,6 @@ public class SurveyService {
         );
         survey.setRequirements(requirementService.getDefaultRequirements());
         surveyRepo.save(survey);
-
-        Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         chapter.getActivityMap().getSurveys().add(survey);
     }
 }

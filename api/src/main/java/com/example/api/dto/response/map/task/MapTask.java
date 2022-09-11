@@ -13,4 +13,5 @@ public class MapTask {
     private String title;
     private Double points;
     private Boolean isFulfilled;
+    private Boolean isCompleted;
 }

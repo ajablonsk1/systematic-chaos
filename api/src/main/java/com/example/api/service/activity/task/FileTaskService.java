@@ -4,6 +4,7 @@ import com.example.api.dto.request.activity.task.create.CreateFileTaskChapterFor
 import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
 import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -92,7 +93,11 @@ public class FileTaskService {
     public void createFileTask(CreateFileTaskChapterForm chapterForm) throws RequestValidationException, ParseException {
         log.info("Starting the creation of file task");
         CreateFileTaskForm form = chapterForm.getForm();
+        Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
+
+        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateFileTaskFormFields(form);
+        activityValidator.validateActivityPosition(form, chapter);
 
         List<FileTask> fileTasks = fileTaskRepo.findAll();
         activityValidator.validateFileTaskTitleIsUnique(form.getTitle(), fileTasks);
@@ -107,9 +112,6 @@ public class FileTaskService {
         FileTask fileTask = new FileTask(form, professor, expireDateMillis);
         fileTask.setRequirements(requirementService.getDefaultRequirements());
         fileTaskRepo.save(fileTask);
-
-        Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         chapter.getActivityMap().getFileTasks().add(fileTask);
     }
 }

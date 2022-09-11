@@ -4,9 +4,24 @@ import com.example.api.dto.response.map.ActivityMapResponse;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.dto.response.map.task.MapTask;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.activity.task.Survey;
 import com.example.api.model.map.ActivityMap;
+import com.example.api.model.user.AccountType;
+import com.example.api.model.user.User;
+import com.example.api.repo.activity.result.FileTaskResultRepo;
+import com.example.api.repo.activity.result.GraphTaskResultRepo;
+import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.MapRepo;
+import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.MapValidator;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +29,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor
@@ -23,20 +40,33 @@ public class ActivityMapService {
     private final MapRepo mapRepo;
     private final RequirementService requirementService;
     private final MapValidator mapValidator;
+    private final AuthenticationService authService;
+    private final UserRepo userRepo;
+    private final GraphTaskResultRepo graphTaskResultRepo;
+    private final FileTaskResultRepo fileTaskResultRepo;
+    private final SurveyResultRepo surveyResultRepo;
+    private final UserValidator userValidator;
 
     public ActivityMap saveActivityMap(ActivityMap activityMap){
         return mapRepo.save(activityMap);
     }
 
-    public ActivityMapResponse getActivityMap(Long id) throws EntityNotFoundException {
+    public ActivityMapResponse getActivityMap(Long id) throws EntityNotFoundException, WrongUserTypeException {
         log.info("Fetching activity map with id {} as ActivityMapResponse", id);
+        String studentEmail = authService.getAuthentication().getName();
+        User student = userRepo.findUserByEmail(studentEmail);
+
         ActivityMap activityMap = mapRepo.findActivityMapById(id);
         mapValidator.validateActivityMapIsNotNull(activityMap, id);
-        List<MapTask> allTasks = getMapTasks(activityMap);
+        List<MapTask> allTasks = getMapTasks(activityMap, student);
         return new ActivityMapResponse(activityMap.getId(), allTasks, activityMap.getMapSizeX(), activityMap.getMapSizeY());
     }
 
     public List<MapTask> getMapTasks(ActivityMap activityMap) {
+        return getMapTasks(activityMap, null); // results for professor
+    }
+
+    public List<MapTask> getMapTasks(ActivityMap activityMap, User student) {
         List<MapTask> graphTasks = activityMap.getGraphTasks()
                 .stream()
                 .map(graphTask -> new MapTask(
@@ -46,7 +76,8 @@ public class ActivityMapService {
                         ActivityType.EXPEDITION,
                         graphTask.getTitle(),
                         graphTask.getMaxPoints(),
-                        requirementService.areRequirementsFulfilled(graphTask.getRequirements())))
+                        requirementService.areRequirementsFulfilled(graphTask.getRequirements()),
+                        isGraphTaskCompleted(graphTask, student)))
                 .toList();
         List<MapTask> fileTasks = activityMap.getFileTasks()
                 .stream()
@@ -57,7 +88,8 @@ public class ActivityMapService {
                         ActivityType.TASK,
                         fileTask.getTitle(),
                         fileTask.getMaxPoints(),
-                        requirementService.areRequirementsFulfilled(fileTask.getRequirements())))
+                        requirementService.areRequirementsFulfilled(fileTask.getRequirements()),
+                        isFileTaskCompleted(fileTask, student)))
                 .toList();
         List<MapTask> infos = activityMap.getInfos()
                 .stream()
@@ -68,7 +100,8 @@ public class ActivityMapService {
                         ActivityType.INFO,
                         info.getTitle(),
                         0.0,
-                        requirementService.areRequirementsFulfilled(info.getRequirements())))
+                        requirementService.areRequirementsFulfilled(info.getRequirements()),
+                        isInfoCompleted(student)))
                 .toList();
         List<MapTask> surveys = activityMap.getSurveys()
                 .stream()
@@ -79,12 +112,44 @@ public class ActivityMapService {
                         ActivityType.SURVEY,
                         survey.getTitle(),
                         survey.getPoints(),
-                        requirementService.areRequirementsFulfilled(survey.getRequirements())))
+                        requirementService.areRequirementsFulfilled(survey.getRequirements()),
+                        isSurveyCompleted(survey, student)))
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)
                 .toList();
     }
 
+    private boolean isGraphTaskCompleted(GraphTask graphTask, User student) {
+        if (!isValidStudent(student)) {
+            return false;
+        }
+        GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
+        return result != null && result.getSendDateMillis() != null;
+    }
 
+    private boolean isInfoCompleted(User student) {
+        return isValidStudent(student);
+    }
+
+    private boolean isFileTaskCompleted(FileTask fileTask, User student) {
+        if (!isValidStudent(student)) {
+            return false;
+        }
+        FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
+        return result != null;
+    }
+
+    // TODO: after adding survey result it probably should be updated
+    private boolean isSurveyCompleted(Survey survey, User student) {
+        if (!isValidStudent(student)) {
+            return false;
+        }
+        SurveyResult result = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
+        return result != null;
+    }
+
+    private boolean isValidStudent(User student) {
+        return student != null && student.getAccountType() == AccountType.STUDENT;
+    }
 }

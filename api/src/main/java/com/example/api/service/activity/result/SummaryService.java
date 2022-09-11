@@ -31,10 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
@@ -96,14 +93,18 @@ public class SummaryService {
                 .stream()
                 .map(AverageGrade::getAvgGradesForChapter)
                 .flatMap(Collection::stream)
-                .mapToDouble(AverageGradeForChapter::getAvgGrade);
+                .filter(Objects::nonNull)
+                .map(AverageGradeForChapter::getAvgGrade)
+                .filter(Objects::nonNull)
+                .mapToDouble(d -> d);
     }
 
     public Double getAvgGrade(List<AverageGrade> avgGradesList) {
         if (avgGradesList.isEmpty()) return null;
-        Double grade = flatMapAvgGradesList(avgGradesList)
-                .average().getAsDouble();
-        return GradesCalculator.roundGrade(grade);
+        OptionalDouble grade = flatMapAvgGradesList(avgGradesList)
+                .filter(Objects::nonNull)
+                .average();
+        return grade.isPresent() ? GradesCalculator.roundGrade(grade.getAsDouble()) : null;
     }
 
     public Double getMedianGrade(User professor) {
