@@ -5,7 +5,7 @@ import Graph from '../../general/Graph/Graph'
 import ChapterService from '../../../services/chapter.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import { getGraphElements, getGraphElementsWithLabels } from '../../general/Graph/graphHelper'
+import { getGraphElements } from '../../general/Graph/graphHelper'
 import ChapterMapModal from './ChapterMapModal'
 import { getNodePosition } from './gameMapHelper'
 

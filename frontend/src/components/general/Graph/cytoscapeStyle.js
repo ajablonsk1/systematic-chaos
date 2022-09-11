@@ -51,17 +51,18 @@ export const cytoscapeStylesheet = [
 ]
 
 export const nodeLabelStyle = (node) => {
-  const styleTransform = `translate(-50%, 100%) translate(${node.position('x').toFixed(2)}px, ${node
+  const styleTransform = `translate(-50%, 48%) translate(${node.position('x').toFixed(2)}px, ${node
     .position('y')
     .toFixed(2)}px)`
 
   return {
     transform: styleTransform,
+    position: 'absolute', // very important !
     backgroundColor: 'red',
-    position: 'absolute',
     zIndex: 10,
     width: '100px',
+    height: '50px',
     textAlign: 'center',
-    borderRadius: '5px'
+    clipPath: `polygon(50% 14%, 100% 0, 100% 50%, 50% 64%, 0 50%, 0 0)`
   }
 }
