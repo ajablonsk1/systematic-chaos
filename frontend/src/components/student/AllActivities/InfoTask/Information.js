@@ -13,7 +13,26 @@ import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 export default function Information() {
   const location = useLocation()
   const { activityId: informationId } = location.state
-
+  const testURLs = [
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png',
+    'https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/25_pair_color_code_chart.svg/800px-25_pair_color_code_chart.svg.png'
+  ]
   const [information, setInformation] = useState(undefined)
   const gridCardRef = useRef()
 
@@ -66,7 +85,9 @@ export default function Information() {
     }
 
     if (gridCardRef.current?.offsetWidth) {
-      return <ImagesGallery width={gridCardRef.current.offsetWidth - 32} images={information.imageUrls} cols={3} />
+      return (
+        <ImagesGallery width={gridCardRef.current.offsetWidth - 32} images={testURLs} cols={3} imagesWithId={false} />
+      )
     }
 
     return <></>

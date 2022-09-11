@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Formik } from 'formik'
-import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner } from 'react-bootstrap'
+import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner, Card } from 'react-bootstrap'
 import {
   FIELD_REQUIRED,
   NONNEGATIVE_NUMBER,
@@ -10,8 +10,9 @@ import {
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
 import ChapterService from '../../../../services/chapter.service'
 import { SuccessModal } from '../../SuccessModal'
-import { BackgroundImagePicker } from './BackgroundImagePicker'
-
+import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
+import { CustomCard } from '../../../student/GameCardPage/GameCardStyles'
+import CardHeader from 'react-bootstrap/esm/CardHeader'
 export function AddChapterModal({ showModal, setShowModal, refetchChapterList, isLoaded }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -22,7 +23,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
   // why not useMemo? specifying dependencies which are scoped inside the formik call
   // is hard, and all of the approaches I've tried have failed - React.memo() which
   // updates the component only on shallow comparison dependency change should be enough
-  const MemoBackgroundImagePicker = React.memo(BackgroundImagePicker)
+  const MemoImagesGallery = React.memo(ImagesGallery)
 
   useEffect(() => {
     if (isLoaded) {
@@ -42,14 +43,14 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
             setImages(convertedImages)
           })
         })
-        .catch({})
+        .catch(() => {})
     }
   }, [isLoaded])
 
   return (
     images && (
       <>
-        <Modal show={showModal} className={'modal-lg'}>
+        <Modal show={showModal} size={'lg'}>
           <ModalHeader>
             <h4 className={'text-center w-100'}>Dodaj nowy rozdział</h4>
           </ModalHeader>
@@ -77,10 +78,10 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                   sizeY: values.sizeY,
                   imageId: values.imageId
                 })
-                  .then((response) => {
+                  .then(() => {
+                    setSubmitting(false)
                     setShowModal(false)
                     setIsSuccessModalOpen(true)
-                    setSubmitting(false)
                     setErrorMessage('')
                     refetchChapterList()
                   })
@@ -101,6 +102,23 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                         {FormCol('Liczba wierszy', 'number', 'sizeY', 6, { min: 1 })}
                         <div className={'m-2'}></div>
                       </Row>
+
+                      <CustomCard className={'p-0'} style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                        <CardHeader className={'position-sticky top-0'} style={{ zIndex: 2 }}>
+                          <h5>Wybierz zdjęcie</h5>
+                        </CardHeader>
+                        <Card.Body>
+                          <MemoImagesGallery
+                            width={700}
+                            images={images}
+                            cols={4}
+                            imagesWithId={true}
+                            pickedImage={values.imageId}
+                            setFieldValue={setFieldValue}
+                          />
+                        </Card.Body>
+                      </CustomCard>
+
                       <Row className='mt-4 d-flex justify-content-center'>
                         <Col sm={12} className='d-flex justify-content-center mb-2'>
                           <Button variant={'danger'} className={'me-2'} onClick={() => setShowModal(false)}>
@@ -122,13 +140,6 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                           </Button>
                         </Col>
                       </Row>
-                      <MemoBackgroundImagePicker
-                        width={700}
-                        cols={2}
-                        images={images}
-                        setFieldValue={setFieldValue}
-                        pickedImage={values.imageId}
-                      />
                     </Container>
                   </Form>
                 )
