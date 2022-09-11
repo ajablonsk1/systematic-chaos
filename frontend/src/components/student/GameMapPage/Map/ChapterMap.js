@@ -104,6 +104,7 @@ export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapCli
           className={`${marginNeeded && 'my-2'} h-100`}
           $width={size * rows[0].length + 'px'}
           $height={size * rows.length + 'px'}
+          $background={'data:image/png;base64, ' + chapterMap?.image?.file}
         >
           {rows.map((row, idx1) => (
             <Row key={idx1} className='mx-auto'>
