@@ -440,6 +440,14 @@ public class DatabaseConfig {
             survey.setPoints(10.0);
             surveyService.saveSurvey(survey);
 
+            BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", output);
+            byte [] data = output.toByteArray();
+
+            Image chapterImage = new Image("Chapter image 1", data, ImageType.CHAPTER);
+            fileRepo.save(chapterImage);
+
             ActivityMap activityMap1 = new ActivityMap();
             activityMap1.setMapSizeX(8);
             activityMap1.setMapSizeY(5);
@@ -447,6 +455,7 @@ public class DatabaseConfig {
             activityMap1.setFileTasks(List.of(fileTask));
             activityMap1.setInfos(List.of(info1));
             activityMap1.setSurveys(List.of(survey));
+            activityMap1.setImage(chapterImage);
             activityMapService.saveActivityMap(activityMap1);
 
             Calendar calendar = Calendar.getInstance();
@@ -549,14 +558,6 @@ public class DatabaseConfig {
 
             File file = new File();
             fileRepo.save(file);
-
-            BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", output);
-            byte [] data = output.toByteArray();
-
-            Image chapterImage = new Image("Chapter image 1", data, ImageType.CHAPTER);
-            fileRepo.save(chapterImage);
 
             BufferedImage image2 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image2.png"));
             ByteArrayOutputStream output2 = new ByteArrayOutputStream();
