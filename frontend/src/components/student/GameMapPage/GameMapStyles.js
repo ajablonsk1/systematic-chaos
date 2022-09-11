@@ -10,7 +10,7 @@ export const Map = styled(Container)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: ${(props) => `url(${props.background}) no-repeat center`};
+  background: ${(props) => `url(${props.$background}) no-repeat center`};
   background-size: ${(props) => (props.$width && props.$height ? `${props.$width} ${props.$height}` : 'cover')};
 
   @media (max-width: 1000px) {
