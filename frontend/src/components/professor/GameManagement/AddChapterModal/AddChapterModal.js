@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Formik } from 'formik'
-import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner, Card } from 'react-bootstrap'
+import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner } from 'react-bootstrap'
 import {
   FIELD_REQUIRED,
   NONNEGATIVE_NUMBER,
@@ -102,21 +102,17 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                         <div className={'m-2'}></div>
                       </Row>
 
-                      <CustomCard className={'p-0'} style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                        <CardHeader className={'position-sticky top-0'} style={{ zIndex: 2 }}>
-                          <h5>Wybierz zdjęcie</h5>
-                        </CardHeader>
-                        <Card.Body>
-                          <MemoImagesGallery
-                            width={700}
-                            images={images}
-                            cols={4}
-                            imagesWithId={true}
-                            pickedImage={values.imageId}
-                            setFieldValue={setFieldValue}
-                          />
-                        </Card.Body>
-                      </CustomCard>
+                      <div className={'p-0'} style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                        <div className={'text-center'}>Wybierz zdjęcie</div>
+                        <MemoImagesGallery
+                          width={700}
+                          images={images}
+                          cols={4}
+                          imagesWithId={true}
+                          pickedImage={values.imageId}
+                          setFieldValue={setFieldValue}
+                        />
+                      </div>
 
                       <Row className='mt-4 d-flex justify-content-center'>
                         <Col sm={12} className='d-flex justify-content-center mb-2'>
