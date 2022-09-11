@@ -18,6 +18,7 @@ export default function GameManagement() {
   const [showConfigModal, setShowConfigModal] = useState(false)
   const [showAddChapterModal, setShowAddChapterModal] = useState(false)
   const [chapterList, setChapterList] = useState(undefined)
+  const [shouldLoadAddChapterModal, setShouldLoadAddChapterModal] = useState(false)
 
   useEffect(() => {
     fetchChaptersList()
@@ -96,6 +97,7 @@ export default function GameManagement() {
                 customWidth={'auto'}
                 callback={() => {
                   setShowAddChapterModal(true)
+                  setShouldLoadAddChapterModal(true)
                 }}
               />
             </GameCardOptionPick>
@@ -150,6 +152,7 @@ export default function GameManagement() {
         showModal={showAddChapterModal}
         setShowModal={setShowAddChapterModal}
         refetchChapterList={fetchChaptersList}
+        isLoaded={shouldLoadAddChapterModal}
       />
     </Content>
   )

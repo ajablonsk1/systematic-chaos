@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Formik } from 'formik'
-import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner } from 'react-bootstrap'
+import { Modal, ModalBody, ModalHeader, Row, Col, Button, Container, Form, Spinner, Card } from 'react-bootstrap'
 import {
   FIELD_REQUIRED,
   NONNEGATIVE_NUMBER,
@@ -12,7 +12,7 @@ import ChapterService from '../../../../services/chapter.service'
 import { SuccessModal } from '../../SuccessModal'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 
-export function AddChapterModal({ showModal, setShowModal, refetchChapterList }) {
+export function AddChapterModal({ showModal, setShowModal, refetchChapterList, isLoaded }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -25,7 +25,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
   const MemoImagesGallery = React.memo(ImagesGallery)
 
   useEffect(() => {
-    if (showModal & !images) {
+    if (isLoaded) {
       ChapterService.getChapterImagesList()
         .then((response) => {
           Promise.all(
@@ -44,7 +44,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
         })
         .catch(() => {})
     }
-  }, [showModal, images])
+  }, [isLoaded])
 
   return (
     images && (
@@ -102,17 +102,21 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
                         <div className={'m-2'}></div>
                       </Row>
 
-                      <div className={'p-0'} style={{ maxHeight: '400px', overflowY: 'auto' }}>
-                        <div className={'text-center'}>Wybierz zdjęcie</div>
-                        <MemoImagesGallery
-                          width={700}
-                          images={images}
-                          cols={4}
-                          imagesWithId={true}
-                          pickedImage={values.imageId}
-                          setFieldValue={setFieldValue}
-                        />
-                      </div>
+                      <CustomCard className={'p-0'} style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                        <CardHeader className={'position-sticky top-0'} style={{ zIndex: 2 }}>
+                          <h5>Wybierz zdjęcie</h5>
+                        </CardHeader>
+                        <Card.Body>
+                          <MemoImagesGallery
+                            width={700}
+                            images={images}
+                            cols={4}
+                            imagesWithId={true}
+                            pickedImage={values.imageId}
+                            setFieldValue={setFieldValue}
+                          />
+                        </Card.Body>
+                      </CustomCard>
 
                       <Row className='mt-4 d-flex justify-content-center'>
                         <Col sm={12} className='d-flex justify-content-center mb-2'>
