@@ -1,6 +1,5 @@
 package com.example.api.service.activity.result;
 
-import com.example.api.dto.request.activity.result.ActivityTypeWithIdForm;
 import com.example.api.dto.request.activity.task.GetCSVForm;
 import com.example.api.dto.response.activity.task.result.ActivityStatisticsResponse;
 import com.example.api.dto.response.activity.task.result.TaskPointsStatisticsResponse;
@@ -64,7 +63,7 @@ public class TaskResultService {
     public ByteArrayResource getCSVFile(GetCSVForm csvForm) throws IOException {
         log.info("Fetching csv files for students");
         List<Long> studentIds = csvForm.getStudentIds();
-        List<ActivityTypeWithIdForm> forms = csvForm.getForms();
+        List<Long> activityIds = csvForm.getActivityIds();
         List<User> students = userRepo.findAll()
                 .stream()
                 .filter(user -> studentIds.contains(user.getId()))
@@ -75,26 +74,27 @@ public class TaskResultService {
         Map<Long, GraphTask> formToGraphTaskMap = new HashMap<>();
         Map<Long, FileTask> formToFileTaskMap = new HashMap<>();
         Map<Long, Survey> formToSurveyMap = new HashMap<>();
-        fillFirstRowAndAddTasksToMap(forms, formToGraphTaskMap, formToFileTaskMap, formToSurveyMap, firstRow);
+        fillFirstRowAndAddTasksToMap(activityIds, formToGraphTaskMap, formToFileTaskMap, formToSurveyMap, firstRow);
         students.forEach(student -> {
             List<CSVTaskResult> csvTaskResults = new LinkedList<>();
-            forms.forEach(form -> {
-                switch (form.getType()){
-                    case EXPEDITION -> {
-                        GraphTask graphTask = formToGraphTaskMap.get(form.getId());
-                        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
-                        csvTaskResults.add(new CSVTaskResult(graphTaskResult));
-                    }
-                    case TASK -> {
-                        FileTask fileTask = formToFileTaskMap.get(form.getId());
+            activityIds.forEach(activityId -> {
+                
+                GraphTask graphTask = formToGraphTaskMap.get(activityId);
+                if(graphTask != null){
+                    GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
+                    csvTaskResults.add(new CSVTaskResult(graphTaskResult));
+                } else {
+                    FileTask fileTask = formToFileTaskMap.get(activityId);
+                    if(fileTask != null) {
                         FileTaskResult fileTaskResult = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
                         Feedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
                         csvTaskResults.add(new CSVTaskResult(fileTaskResult, feedback));
-                    }
-                    case SURVEY -> {
-                        Survey survey = formToSurveyMap.get(form.getId());
-                        SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
-                        csvTaskResults.add(new CSVTaskResult(surveyResult));
+                    } else {
+                        Survey survey = formToSurveyMap.get(activityId);
+                        if(survey != null){
+                            SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
+                            csvTaskResults.add(new CSVTaskResult(surveyResult));
+                        }
                     }
                 }
             });
@@ -141,27 +141,27 @@ public class TaskResultService {
         return getActivityStatisticsForActivity(activity);
     }
 
-    private void fillFirstRowAndAddTasksToMap(List<ActivityTypeWithIdForm> forms,
+    private void fillFirstRowAndAddTasksToMap(List<Long> activityIds,
                                               Map<Long, GraphTask> formToGraphTaskMap,
                                               Map<Long, FileTask> formToFileTaskMap,
                                               Map<Long, Survey> formToSurveyMap,
                                               List<String> firstRow) {
-        forms.forEach(form -> {
-            switch (form.getType()){
-                case EXPEDITION -> {
-                    GraphTask graphTask = graphTaskRepo.findGraphTaskById(form.getId());
-                    firstRow.addAll(List.of("Zadanie:" + graphTask.getTitle() + " (Punkty)", "Zadanie:" + graphTask.getTitle() + " (Informacja zwrotna)"));
-                    formToGraphTaskMap.put(graphTask.getId(), graphTask);
-                }
-                case TASK -> {
-                    FileTask fileTask = fileTaskRepo.findFileTaskById(form.getId());
+        activityIds.forEach(activityId -> {
+            GraphTask graphTask = graphTaskRepo.findGraphTaskById(activityId);
+            if(graphTask != null){
+                firstRow.addAll(List.of("Zadanie:" + graphTask.getTitle() + " (Punkty)", "Zadanie:" + graphTask.getTitle() + " (Informacja zwrotna)"));
+                formToGraphTaskMap.put(graphTask.getId(), graphTask);
+            } else {
+                FileTask fileTask = fileTaskRepo.findFileTaskById(activityId);
+                if (fileTask != null) {
                     firstRow.addAll(List.of("Zadanie:" + fileTask.getTitle() + " (Punkty)", "Zadanie:" + fileTask.getTitle() + " (Informacja zwrotna)"));
                     formToFileTaskMap.put(fileTask.getId(), fileTask);
-                }
-                case SURVEY -> {
-                    Survey survey = surveyRepo.findSurveyById(form.getId());
-                    firstRow.addAll(List.of("Zadanie:" + survey.getTitle() + " (Punkty)", "Zadanie:" + survey.getTitle() + " (Informacja zwrotna)"));
-                    formToSurveyMap.put(survey.getId(), survey);
+                } else {
+                    Survey survey = surveyRepo.findSurveyById(activityId);
+                    if(survey != null){
+                        firstRow.addAll(List.of("Zadanie:" + survey.getTitle() + " (Punkty)", "Zadanie:" + survey.getTitle() + " (Informacja zwrotna)"));
+                        formToSurveyMap.put(survey.getId(), survey);
+                    }
                 }
             }
         });
