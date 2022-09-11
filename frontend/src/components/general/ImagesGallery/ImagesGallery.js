@@ -57,7 +57,7 @@ function ImagesGallery(props) {
 
       setLayout(layoutConfig)
     }
-  }, [rowHeight, imagesHeight, props.images, props.cols])
+  }, [rowHeight, imagesHeight, props.images, props.cols, props.imagesWithId])
 
   const openFullPreview = (e, url, index) => {
     e.stopPropagation()
