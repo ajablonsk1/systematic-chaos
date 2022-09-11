@@ -12,7 +12,7 @@ import ChapterService from '../../../../services/chapter.service'
 import { SuccessModal } from '../../SuccessModal'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 
-export function AddChapterModal({ showModal, setShowModal, refetchChapterList, isLoaded }) {
+export function AddChapterModal({ showModal, setShowModal, refetchChapterList }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -25,7 +25,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
   const MemoImagesGallery = React.memo(ImagesGallery)
 
   useEffect(() => {
-    if (isLoaded) {
+    if (showModal & !images) {
       ChapterService.getChapterImagesList()
         .then((response) => {
           Promise.all(
@@ -44,7 +44,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
         })
         .catch(() => {})
     }
-  }, [isLoaded])
+  }, [showModal, images])
 
   return (
     images && (
