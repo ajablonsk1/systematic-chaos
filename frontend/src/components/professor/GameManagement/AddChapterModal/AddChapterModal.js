@@ -12,7 +12,7 @@ import ChapterService from '../../../../services/chapter.service'
 import { SuccessModal } from '../../SuccessModal'
 import { BackgroundImagePicker } from './BackgroundImagePicker'
 
-export function AddChapterModal({ showModal, setShowModal, refetchChapterList }) {
+export function AddChapterModal({ showModal, setShowModal, refetchChapterList, isLoaded }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -25,24 +25,26 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList })
   const MemoBackgroundImagePicker = React.memo(BackgroundImagePicker)
 
   useEffect(() => {
-    ChapterService.getChapterImagesList()
-      .then((response) => {
-        Promise.all(
-          response.map((imageData) => {
-            return ChapterService.getChapterImage({ imageId: imageData.id })
+    if (isLoaded) {
+      ChapterService.getChapterImagesList()
+        .then((response) => {
+          Promise.all(
+            response.map((imageData) => {
+              return ChapterService.getChapterImage({ imageId: imageData.id })
+            })
+          ).then((responseList) => {
+            const convertedImages = responseList.map((fullImageData) => {
+              return {
+                id: fullImageData.id,
+                url: 'data:image/png;base64, ' + fullImageData.file
+              }
+            })
+            setImages(convertedImages)
           })
-        ).then((responseList) => {
-          const convertedImages = responseList.map((fullImageData) => {
-            return {
-              id: fullImageData.id,
-              url: 'data:image/png;base64, ' + fullImageData.file
-            }
-          })
-          setImages(convertedImages)
         })
-      })
-      .catch({})
-  }, [])
+        .catch({})
+    }
+  }, [isLoaded])
 
   return (
     images && (
