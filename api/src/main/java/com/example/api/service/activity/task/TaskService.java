@@ -1,6 +1,7 @@
 package com.example.api.service.activity.task;
 
 import com.example.api.dto.request.activity.task.requirement.ActivityRequirementForm;
+import com.example.api.dto.request.activity.task.requirement.RequirementForm;
 import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
@@ -41,6 +42,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.xml.bind.ValidationException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -240,25 +242,26 @@ public class TaskService {
 
 
     public void addRequirementToActivity(ActivityRequirementForm form) throws RequestValidationException {
-        Activity activity = getActivity(form.getActivityId());
-        List<Requirement> requirements = activity.getRequirements();
-        for (Requirement requirement: requirements) {
+        List<RequirementForm> requirementForms = form.getRequirements();
+        for (RequirementForm requirementForm: requirementForms) {
+            Requirement requirement = requirementRepo.findRequirementById(requirementForm.getId());
+            mapValidator.validateRequirementIsNotNull(requirement, requirementForm.getId());
+            requirement.setSelected(requirementForm.getSelected());
             switch (requirement.getType()) {
                 case DATE_FROM -> {
-                    requirement.setSelected(form.getDateFrom().getSelected());
-                    requirement.setDateFrom(form.getDateFrom().getDateMillis());
+                    Long dateFrom = Long.valueOf(requirementForm.getValue());
+                    requirement.setDateFrom(dateFrom);
                 }
                 case DATE_TO -> {
-                    requirement.setSelected(form.getDateTo().getSelected());
-                    requirement.setDateTo(form.getDateTo().getDateMillis());
+                    Long dateTo = Long.valueOf(requirementForm.getValue());
+                    requirement.setDateTo(dateTo);
                 }
                 case MIN_POINTS -> {
-                    requirement.setSelected(form.getMinPoints().getSelected());
-                    requirement.setMinPoints(form.getMinPoints().getMinPoints());
+                    Double minPoints = Double.valueOf(requirementForm.getValue());
+                    requirement.setMinPoints(minPoints);
                 }
                 case GROUPS -> {
-                    requirement.setSelected(form.getAllowedGroups().getSelected());
-                    List<String> groupNames = form.getAllowedGroups().getValues();
+                    List<String> groupNames = Arrays.asList(requirementForm.getValue().split(";"));
                     List<Group> groups = groupRepo.findAll()
                             .stream()
                             .filter(group -> groupNames.contains(group.getName()))
@@ -266,17 +269,15 @@ public class TaskService {
                     requirement.setAllowedGroups(groups);
                 }
                 case STUDENTS -> {
-                    requirement.setSelected(form.getAllowedStudents().getSelected());
-                    List<String> emails = form.getAllowedStudents().getValues();
-                    List<User> users = userRepo.findAll()
+                    List<String> emails = Arrays.asList(requirementForm.getValue().split(";"));
+                    List<User> students = userRepo.findAll()
                             .stream()
                             .filter(user -> emails.contains(user.getEmail()))
                             .toList();
-                    requirement.setAllowedStudents(users);
+                    requirement.setAllowedStudents(students);
                 }
                 case GRAPH_TASKS -> {
-                    requirement.setSelected(form.getFinishedGraphTasks().getSelected());
-                    List<String> titles = form.getFinishedGraphTasks().getValues();
+                    List<String> titles = Arrays.asList(requirementForm.getValue().split(";"));
                     List<GraphTask> graphTasks = graphTaskRepo.findAll()
                             .stream()
                             .filter(graphTask -> titles.contains(graphTask.getTitle()))
@@ -284,8 +285,7 @@ public class TaskService {
                     requirement.setFinishedGraphTasks(graphTasks);
                 }
                 case FILE_TASKS -> {
-                    requirement.setSelected(form.getFinishedFileTasks().getSelected());
-                    List<String> titles = form.getFinishedFileTasks().getValues();
+                    List<String> titles = Arrays.asList(requirementForm.getValue().split(";"));
                     List<FileTask> fileTasks = fileTaskRepo.findAll()
                             .stream()
                             .filter(fileTask -> titles.contains(fileTask.getTitle()))
@@ -293,8 +293,9 @@ public class TaskService {
                     requirement.setFinishedFileTasks(fileTasks);
                 }
                 default -> {
-                    log.error("Requirement has to have its type");
-                    throw new MissingAttributeException("Requirement has to have its type");
+                    String errorMessage = "Requirement has to have type!";
+                    log.error(errorMessage);
+                    throw new RequestValidationException(errorMessage);
                 }
             }
         }

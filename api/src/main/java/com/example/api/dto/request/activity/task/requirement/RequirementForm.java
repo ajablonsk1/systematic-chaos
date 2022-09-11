@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MultiSelectRequirementForm {
+public class RequirementForm {
+    private Long id;
     private Boolean selected;
-    private List<String> values;
+    private String value;
 }

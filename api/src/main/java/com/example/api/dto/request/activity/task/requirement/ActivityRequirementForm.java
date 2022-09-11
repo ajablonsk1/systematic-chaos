@@ -4,16 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActivityRequirementForm {
     private Long activityId;
-    private DateRequirementForm dateFrom;
-    private DateRequirementForm dateTo;
-    private PointsRequirementForm minPoints;
-    private MultiSelectRequirementForm allowedGroups;
-    private MultiSelectRequirementForm allowedStudents;
-    private MultiSelectRequirementForm finishedGraphTasks;
-    private MultiSelectRequirementForm finishedFileTasks;
+    private List<RequirementForm> requirements;
 }
