@@ -102,7 +102,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                         <div className={'m-2'}></div>
                       </Row>
 
-                      <p className={'text-center'}>Wybierz zdjęcie</p>
+                      <label className='pb-1'>Wybierz zdjęcie</label>
                       <Card className={'p-0'} style={{ maxHeight: '400px', overflowY: 'auto' }}>
                         <Card.Body>
                           <MemoImagesGallery
