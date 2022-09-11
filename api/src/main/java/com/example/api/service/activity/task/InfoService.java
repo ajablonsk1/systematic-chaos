@@ -15,6 +15,7 @@ import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
@@ -38,6 +39,7 @@ public class InfoService {
     private final UserValidator userValidator;
     private final MapValidator mapValidator;
     private final UrlRepo urlRepo;
+    private final RequirementService requirementService;
 
     public Info saveInfo(Info info){
         return infoRepo.save(info);
@@ -78,6 +80,7 @@ public class InfoService {
                 professor,
                 imageUrls
         );
+        info.setRequirements(requirementService.getDefaultRequirements());
         infoRepo.save(info);
         chapter.getActivityMap().getInfos().add(info);
     }

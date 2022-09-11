@@ -1,5 +1,5 @@
 package com.example.api.model.achievement;
-import com.example.api.model.map.Requirement;
+import com.example.api.model.map.requirement.Requirement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

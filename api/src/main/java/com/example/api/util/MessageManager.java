@@ -28,4 +28,12 @@ public class MessageManager {
             "Integer in tortor ante. Nulla eu velit augue. Vestibulum eget lorem ac nibh interdum semper. Duis dictum " +
             "tortor vitae ex iaculis, hendrerit elementum massa pharetra. Nullam fermentum condimentum lacus. Pellentesque " +
             "tempus accumsan commodo.";
+
+    public static final String DATE_FROM_REQ_NAME = "Data, od której aktywność będzie dostępna";
+    public static final String DATE_TO_REQ_NAME = "Data, do której aktywność będzie dostępna";
+    public static final String MIN_POINTS_REQ_NAME = "Minimalna ilość punktów";
+    public static final String GROUPS_REQ_NAME = "Nazwy grup, które są dopuszczone do tej aktywności";
+    public static final String STUDENTS_REQ_NAME = "Emaile studentów, którzy są dopuszczeni do tej aktywności";
+    public static final String GRAPH_TASKS_REQ_NAME = "Nazwy ekpsedycji, które muszą zostać wcześniej ukończone";
+    public static final String FILE_TASKS_REQ_NAME = "Nazwy zadań bojowych, które muszą zostać wcześniej ukończone";
 }

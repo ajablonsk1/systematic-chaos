@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FileTaskRepo extends JpaRepository<FileTask, Long> {
     FileTask findFileTaskById(Long id);
+    boolean existsById(long id);
 }

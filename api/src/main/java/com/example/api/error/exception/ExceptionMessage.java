@@ -21,7 +21,9 @@ public class ExceptionMessage {
     public static final String OPTION_FORM_FIELDS ="Każde pole w odpowiedzi do pytania powinno miec wartość";
     public static final String INVALID_QUESTION_TYPE ="Pole questionType powinno mieć wartość OPENED / SINGLE_CHOICE / MULTIPLE_CHOICE";
     public static final String INVALID_DIFFICULTY ="Pole difficulty powinno mieć wartość EASY / MEDIUM / HARD";
-    public static final String CONTENT_LEN_TOO_BIG ="Liczba znaków w polu content nie może przekraczać ";
+    public static final String CONTENT_LEN_TOO_BIG ="Liczba znaków w polu content nie może przekraczać 1000";
+    public static final String GRAPH_TASK_TITLE_NOT_UNIQUE ="Tytuł ekspedycji musi byc unikalny";
+    public static final String FILE_TASK_TITLE_NOT_UNIQUE ="Tytuł zadania bojowego musi byc unikalny";
     public static final String TWO_ACTIVITIES_ON_THE_SAME_POSITION ="Dwie aktywności nie mogą być na takiej samej pozycji!";
     public static final String ACTIVITY_OUTSIDE_BOUNDARIES ="Pozycja aktywności musi mieścić się w obszarze mapy!";
 }

@@ -2,10 +2,8 @@ package com.example.api.service.util;
 
 import com.example.api.dto.response.util.ChapterImageResponse;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.model.util.File;
 import com.example.api.model.util.Image;
 import com.example.api.model.util.ImageType;
-import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.ImageRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

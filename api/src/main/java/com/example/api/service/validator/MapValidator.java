@@ -3,6 +3,7 @@ package com.example.api.service.validator;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
+import com.example.api.model.map.requirement.Requirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,13 @@ public class MapValidator {
         if(chapter == null) {
             log.error("Chapter with id {} not found in database", id);
             throw new EntityNotFoundException("Chapter with id" + id + " not found in database");
+        }
+    }
+
+    public void validateRequirementIsNotNull(Requirement requirement, Long id) throws EntityNotFoundException {
+        if(requirement == null) {
+            log.error("Requirement with id {} not found in database", id);
+            throw new EntityNotFoundException("Requirement with id" + id + " not found in database");
         }
     }
 }
