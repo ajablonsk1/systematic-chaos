@@ -146,9 +146,6 @@ public class TaskService {
     public List<RequirementResponse<?>> getRequirementForActivity(Long id) throws EntityNotFoundException, MissingAttributeException {
         Activity activity = getActivity(id);
         List<Requirement> requirements = activity.getRequirements();
-        requirements = requirements.stream()
-                .sorted(Comparator.comparingInt(o -> o.getType().getType()))
-                .toList();
         List<RequirementResponse<?>> requirementResponses = new LinkedList<>();
         for(Requirement requirement: requirements) {
             switch (requirement.getType()) {
