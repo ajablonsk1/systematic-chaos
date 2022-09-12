@@ -20,7 +20,6 @@ function ActivityRequirements(props) {
   useEffect(() => {
     ActivityService.getActivityRequirements(props.activityId)
       .then((response) => {
-        console.log(response)
         setRequirementsList(response.map((requirement) => ({ ...requirement, answer: null })))
       })
       .catch(() => {
