@@ -149,6 +149,13 @@ public class GraphTaskService {
         chapter.getActivityMap().getGraphTasks().add(graphTask);
     }
 
+    public List<GraphTask> getStudentGraphTasks(User student) {
+        return graphTaskRepo.findAll()
+                .stream()
+                .filter(graphTask -> requirementService.areRequirementsFulfilled(student, graphTask.getRequirements()))
+                .toList();
+    }
+
     private double calculateMaxPoints(Question question, double maxPoints) {
         List<Question> nextQuestions = question.getNext();
         if (nextQuestions.isEmpty()) {

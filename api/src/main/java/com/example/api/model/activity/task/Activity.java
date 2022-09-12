@@ -27,6 +27,7 @@ public abstract class Activity {
     private Integer posX;
     private Integer posY;
     private Double experience;
+    private Long creationTime;
 
     @OneToMany
     private List<Requirement> requirements = new LinkedList<>();
@@ -43,6 +44,7 @@ public abstract class Activity {
         this.posX = posX;
         this.posY = posY;
         this.professor = professor;
+        this.creationTime = System.currentTimeMillis();
     }
     abstract public Double getMaxPoints();
 }

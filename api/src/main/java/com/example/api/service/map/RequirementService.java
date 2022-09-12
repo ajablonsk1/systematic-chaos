@@ -84,8 +84,7 @@ public class RequirementService {
         return requirements;
     }
 
-    public boolean areRequirementsFulfilled(List<Requirement> requirements) {
-        User student = userRepo.findUserByEmail(authService.getAuthentication().getName());
+    public boolean areRequirementsFulfilled(User student, List<Requirement> requirements) {
         List<GraphTask> graphTasks = graphTaskResultRepo.findAllByUser(student)
                 .stream()
                 .map(GraphTaskResult::getGraphTask)
@@ -100,5 +99,9 @@ public class RequirementService {
             }
         }
         return true;
+    }
+    public boolean areRequirementsFulfilled(List<Requirement> requirements) {
+        User student = userRepo.findUserByEmail(authService.getAuthentication().getName());
+        return areRequirementsFulfilled(student, requirements);
     }
 }

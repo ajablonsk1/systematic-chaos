@@ -8,27 +8,30 @@ import com.example.api.dto.response.user.dashboard.LastAddedActivity;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.*;
-import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.*;
+import com.example.api.model.map.Chapter;
+import com.example.api.model.map.requirement.Requirement;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
-import com.example.api.repo.activity.task.FileTaskRepo;
-import com.example.api.repo.activity.task.GraphTaskRepo;
-import com.example.api.repo.activity.task.InfoRepo;
-import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.ranking.RankingService;
+import com.example.api.service.activity.task.FileTaskService;
+import com.example.api.service.activity.task.GraphTaskService;
+import com.example.api.service.activity.task.InfoService;
+import com.example.api.service.activity.task.SurveyService;
+import com.example.api.service.map.ChapterService;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +46,13 @@ public class DashboardService {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final SurveyResultRepo surveyResultRepo;
     private final AdditionalPointsRepo additionalPointsRepo;
-    private final GraphTaskRepo graphTaskRepo;
-    private final FileTaskRepo fileTaskRepo;
-    private final SurveyRepo surveyRepo;
-    private final InfoRepo infoRepo;
+    private final GraphTaskService graphTaskService;
+    private final FileTaskService fileTaskService;
+    private final SurveyService surveyService;
+    private final InfoService infoService;
+    private final ChapterService chapterService;
+
+    private final long MAX_LAST_ACTIVITIES_IN_DASHBOARD = 8;
 
     public DashboardResponse getStudentDashboard() throws WrongUserTypeException, EntityNotFoundException {
         String studentEmail = authService.getAuthentication().getName();
@@ -57,7 +63,6 @@ public class DashboardService {
         response.setHeroTypeStats(getHeroTypeStats(student));
         response.setGeneralStats(getGeneralStats(student));
         response.setLastAddedActivities(getLastAddedActivities(student));
-
 
         return response;
     }
@@ -170,6 +175,31 @@ public class DashboardService {
     }
 
     private List<LastAddedActivity> getLastAddedActivities(User student) {
-        return null;
+        List<GraphTask> graphTasks = graphTaskService.getStudentGraphTasks(student);
+        List<FileTask> fileTasks = fileTaskService.getStudentFileTasks(student);
+        List<Survey> surveys = surveyService.getStudentSurvey(student);
+        List<Info> infos = infoService.getStudentInfos(student);
+
+        return Stream.of(graphTasks, fileTasks, surveys, infos)
+                .flatMap(Collection::stream)
+                .sorted(((o1, o2) -> Long.compare(o2.getCreationTime(), o1.getCreationTime())))
+                .limit(MAX_LAST_ACTIVITIES_IN_DASHBOARD)
+                .map(this::toLastAddedActivity)
+                .toList();
+    }
+
+    private LastAddedActivity toLastAddedActivity(Activity activity) {
+        Chapter chapter = chapterService.getChapterWithActivity(activity);
+        String chapterName = Objects.nonNull(chapter) ? chapter.getName() : null;
+        String activityType = activity.getActivityType().getActivityType();
+        Double points = activity.getMaxPoints();
+        Requirement requirement = activity.getRequirements()
+                .stream()
+                .filter(req -> req.isSelected() && Objects.nonNull(req.getDateFrom()))
+                .findAny()
+                .orElse(null);
+        String availableUntil = Objects.nonNull(requirement) ? new Date(requirement.getDateFrom()).toString() : null;
+        return new LastAddedActivity(chapterName, activityType, points, availableUntil);
+
     }
 }

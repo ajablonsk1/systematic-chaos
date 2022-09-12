@@ -6,6 +6,7 @@ import com.example.api.dto.response.activity.task.SurveyInfoResponse;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.user.User;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -68,5 +70,12 @@ public class SurveyService {
         survey.setRequirements(requirementService.getDefaultRequirements());
         surveyRepo.save(survey);
         chapter.getActivityMap().getSurveys().add(survey);
+    }
+
+    public List<Survey> getStudentSurvey(User student) {
+        return surveyRepo.findAll()
+                .stream()
+                .filter(survey -> requirementService.areRequirementsFulfilled(student, survey.getRequirements()))
+                .toList();
     }
 }
