@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,8 +17,8 @@ public class AccessDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDateTime dateFrom;
-    private LocalDateTime dateTo;
+    private Long dateFrom;
+    private Long dateTo;
 
     @OneToMany
     private List<Group> group;

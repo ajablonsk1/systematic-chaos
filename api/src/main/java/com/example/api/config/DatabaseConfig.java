@@ -12,8 +12,8 @@ import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
-import com.example.api.model.map.MustFulfil;
-import com.example.api.model.map.Requirement;
+import com.example.api.model.map.requirement.Requirement;
+import com.example.api.model.map.requirement.RequirementType;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
@@ -52,11 +52,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -91,6 +88,7 @@ public class DatabaseConfig {
             student.setPassword("12345");
             student.setIndexNumber(123456);
             student.setHeroType(HeroType.PRIEST);
+            student.setPoints(0);
 
             User student1 = new User("smazur@student.agh.edu.pl",
                     "Szymon",
@@ -318,15 +316,56 @@ public class DatabaseConfig {
 
             optionService.saveAll(List.of(option, option1, option2, option3, option4, option5));
 
-            AccessDate ac1 = new AccessDate(null, LocalDateTime.parse("2022-05-23 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), LocalDateTime.parse("2022-07-06 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), List.of(group1));
-            AccessDate ac2 = new AccessDate(null, LocalDateTime.parse("2022-05-23 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), LocalDateTime.parse("2022-07-08 12:20", DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")), List.of(group));
+            AccessDate ac1 = new AccessDate(null, System.currentTimeMillis(), System.currentTimeMillis(), List.of(group1));
+            AccessDate ac2 = new AccessDate(null, System.currentTimeMillis(), System.currentTimeMillis(), List.of(group));
             accessDateService.saveAccessDate(ac1);
             accessDateService.saveAccessDate(ac2);
 
-            Requirement req = new Requirement();
-            req.setMustFulfil(MustFulfil.NONE);
-            req.setAccessDates(List.of(ac1, ac2));
-            requirementService.saveRequirement(req);
+            Requirement requirement1 = new Requirement();
+            Requirement requirement2 = new Requirement();
+            Requirement requirement3 = new Requirement();
+            Requirement requirement4 = new Requirement();
+            Requirement requirement5 = new Requirement();
+            Requirement requirement6 = new Requirement();
+            Requirement requirement7 = new Requirement();
+
+            requirement1.setName("Date from");
+            requirement1.setSelected(false);
+            requirement1.setType(RequirementType.DATE_FROM);
+            requirement2.setName("Date to");
+            requirement2.setSelected(false);
+            requirement2.setType(RequirementType.DATE_TO);
+            requirement3.setName("Min points");
+            requirement3.setSelected(false);
+            requirement3.setType(RequirementType.MIN_POINTS);
+            requirement4.setName("Groups");
+            requirement4.setSelected(false);
+            requirement4.setType(RequirementType.GROUPS);
+            requirement5.setName("Students");
+            requirement5.setSelected(false);
+            requirement5.setType(RequirementType.STUDENTS);
+            requirement6.setName("Graph task");
+            requirement6.setSelected(false);
+            requirement6.setType(RequirementType.GRAPH_TASKS);
+            requirement7.setName("File task");
+            requirement7.setSelected(false);
+            requirement7.setType(RequirementType.FILE_TASKS);
+
+            requirement1.setDateFrom(System.currentTimeMillis());
+            requirement2.setDateTo(System.currentTimeMillis() + 1_000 * 60 * 60);
+            requirement3.setMinPoints(100.0);
+            requirement4.setAllowedGroups(List.of());
+            requirement5.setAllowedStudents(List.of());
+            requirement6.setFinishedGraphTasks(List.of());
+            requirement7.setFinishedFileTasks(List.of());
+
+            requirementService.saveRequirement(requirement1);
+            requirementService.saveRequirement(requirement2);
+            requirementService.saveRequirement(requirement3);
+            requirementService.saveRequirement(requirement4);
+            requirementService.saveRequirement(requirement5);
+            requirementService.saveRequirement(requirement6);
+            requirementService.saveRequirement(requirement7);
 
             GraphTask graphTask = new GraphTask();
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
@@ -335,7 +374,7 @@ public class DatabaseConfig {
             graphTask.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTask.setMaxPoints(60.0);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
-            graphTask.setRequirement(req);
+            graphTask.setRequirements(List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7));
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
@@ -440,6 +479,14 @@ public class DatabaseConfig {
             survey.setPoints(10.0);
             surveyService.saveSurvey(survey);
 
+            BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", output);
+            byte [] data = output.toByteArray();
+
+            Image chapterImage = new Image("Chapter image 1", data, ImageType.CHAPTER);
+            fileRepo.save(chapterImage);
+
             ActivityMap activityMap1 = new ActivityMap();
             activityMap1.setMapSizeX(8);
             activityMap1.setMapSizeY(5);
@@ -447,6 +494,7 @@ public class DatabaseConfig {
             activityMap1.setFileTasks(List.of(fileTask));
             activityMap1.setInfos(List.of(info1));
             activityMap1.setSurveys(List.of(survey));
+            activityMap1.setImage(chapterImage);
             activityMapService.saveActivityMap(activityMap1);
 
             Calendar calendar = Calendar.getInstance();
@@ -550,13 +598,37 @@ public class DatabaseConfig {
             File file = new File();
             fileRepo.save(file);
 
-            BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", output);
-            byte [] data = output.toByteArray();
+            BufferedImage image2 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image2.png"));
+            ByteArrayOutputStream output2 = new ByteArrayOutputStream();
+            ImageIO.write(image2, "png", output2);
+            byte [] data2 = output2.toByteArray();
 
-            Image chapterImage = new Image("Chapter image 1", data, ImageType.CHAPTER);
-            fileRepo.save(chapterImage);
+            Image chapterImage2 = new Image("Chapter image 2", data2, ImageType.CHAPTER);
+            fileRepo.save(chapterImage2);
+
+            BufferedImage image3 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image3.png"));
+            ByteArrayOutputStream output3 = new ByteArrayOutputStream();
+            ImageIO.write(image3, "png", output3);
+            byte [] data3 = output3.toByteArray();
+
+            Image chapterImage3 = new Image("Chapter image 3", data3, ImageType.CHAPTER);
+            fileRepo.save(chapterImage3);
+
+            BufferedImage image4 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image4.png"));
+            ByteArrayOutputStream output4 = new ByteArrayOutputStream();
+            ImageIO.write(image4, "png", output4);
+            byte [] data4 = output4.toByteArray();
+
+            Image chapterImage4 = new Image("Chapter image 4", data4, ImageType.CHAPTER);
+            fileRepo.save(chapterImage4);
+
+            BufferedImage image5 = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image5.png"));
+            ByteArrayOutputStream output5 = new ByteArrayOutputStream();
+            ImageIO.write(image5, "png", output5);
+            byte [] data5 = output5.toByteArray();
+
+            Image chapterImage5 = new Image("Chapter image 5", data5, ImageType.CHAPTER);
+            fileRepo.save(chapterImage5);
         };
     }
 }

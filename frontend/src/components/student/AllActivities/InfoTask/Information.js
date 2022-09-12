@@ -13,7 +13,6 @@ import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 export default function Information() {
   const location = useLocation()
   const { activityId: informationId } = location.state
-
   const [information, setInformation] = useState(undefined)
   const gridCardRef = useRef()
 

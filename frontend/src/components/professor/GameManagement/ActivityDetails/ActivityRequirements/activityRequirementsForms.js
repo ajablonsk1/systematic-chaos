@@ -7,7 +7,7 @@ export const Input = (props) => {
     <Form.Control
       type={props.requirement.type}
       className={'w-100'}
-      value={props.requirement.answer ?? props.requirement.value}
+      value={props.requirement.answer ?? props.requirement.value ?? '0'}
       onChange={(e) => onInputChange(props.requirement.id, e.target.value, props.onChangeCallback)}
     />
   )

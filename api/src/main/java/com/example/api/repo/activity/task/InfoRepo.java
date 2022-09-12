@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InfoRepo extends JpaRepository<Info, Long> {
     Info findInfoById(Long id);
+    boolean existsById(long id);
 }

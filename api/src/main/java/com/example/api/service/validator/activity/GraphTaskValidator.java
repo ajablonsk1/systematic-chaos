@@ -5,6 +5,7 @@ import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;
 import lombok.extern.slf4j.Slf4j;
@@ -127,6 +128,13 @@ public class GraphTaskValidator {
         } catch (IllegalArgumentException e) {
             log.error("Invalid difficulty. [EASY / MEDIUM / HARD]");
             throw new RequestValidationException(ExceptionMessage.INVALID_DIFFICULTY);
+        }
+    }
+
+    public void validateGraphTaskTitleIsUnique(String title, List<GraphTask> graphTasks) throws RequestValidationException {
+        if (graphTasks.stream().anyMatch(graphTask -> graphTask.getTitle().equals(title))) {
+            log.error("Graph task has to have unique title");
+            throw new RequestValidationException(ExceptionMessage.GRAPH_TASK_TITLE_NOT_UNIQUE);
         }
     }
 }
