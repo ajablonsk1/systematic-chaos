@@ -220,8 +220,8 @@ export const RequirementType = {
   NUMBER: 'number',
   TEXT: 'text',
   BOOLEAN: 'boolean',
-  DATE: 'date,',
-  MULTI_SELECT: 'email',
+  DATE: 'date',
+  MULTI_SELECT: 'multi_select',
   SELECT: 'select'
 }
 

@@ -3,11 +3,13 @@ import {
   ACTIVITY_MAP,
   FILE_TASK_JSON,
   GET_ACTIVITIES_LIST,
+  GET_ACTIVITY_REQUIREMENTS,
   GET_ACTIVITY_RESULT_LIST,
   GET_ACTIVITY_STATS,
   GET_FILTERED_ACTIVITY_RESULT_LIST,
   GRAPH_TASK_JSON,
   INFO_TASK_JSON,
+  SET_ACTIVITY_REQUIREMENTS,
   SURVEY_TASK_JSON
 } from './urls'
 
@@ -100,6 +102,23 @@ class ActivityService {
     return axiosApiPost(SURVEY_TASK_JSON, {
       chapterId: chapterId,
       form: form
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getActivityRequirements(activityId) {
+    return axiosApiGet(GET_ACTIVITY_REQUIREMENTS, {
+      activityId: activityId
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  setActivityRequirements(activityId, requirements) {
+    return axiosApiPost(SET_ACTIVITY_REQUIREMENTS, {
+      activityId: activityId,
+      requirements: requirements
     }).catch((error) => {
       throw error
     })
