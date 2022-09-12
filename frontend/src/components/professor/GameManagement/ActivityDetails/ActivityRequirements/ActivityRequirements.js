@@ -39,14 +39,20 @@ function ActivityRequirements(props) {
           return requirementAnswers ? requirementAnswers.join(';') : requirement.value.join(';')
 
         case RequirementType.DATE:
-          const date = requirement.answer?.getTime() ?? requirement.value
+          const date = requirement.answer?.getTime() ?? requirement.value ?? Date.now()
           return date.toString()
 
         case RequirementType.TEXT:
+          const textAnswer = requirement.answer ?? requirement.value ?? ''
+          return textAnswer.toString()
+
         case RequirementType.NUMBER:
+          const numberAnswer = requirement.answer ?? requirement.value ?? 0
+          return numberAnswer.toString()
+
         case RequirementType.BOOLEAN:
-          const answer = requirement.answer ?? requirement.value ?? ''
-          return answer.toString()
+          const booleanAnswer = requirement.answer ?? requirement.value ?? 'false'
+          return booleanAnswer.toString()
 
         case RequirementType.SELECT:
           return requirement.answer ?? requirement.value[0] ?? ''
@@ -79,7 +85,7 @@ function ActivityRequirements(props) {
       case RequirementType.DATE:
         return (
           <DatePicker
-            selected={new Date(requirement.answer ?? requirement.value)}
+            selected={new Date(requirement.answer ?? requirement.value ?? Date.now())}
             onChange={(date) => onInputChange(requirement.id, date, setRequirementsList)}
             showTimeSelect
             timeFormat={'p'}
