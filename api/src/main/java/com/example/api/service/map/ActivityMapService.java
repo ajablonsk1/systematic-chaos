@@ -30,12 +30,15 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
 public class ActivityMapService {
     private final MapRepo mapRepo;
+    private final RequirementService requirementService;
     private final MapValidator mapValidator;
     private final AuthenticationService authService;
     private final UserRepo userRepo;
@@ -56,7 +59,7 @@ public class ActivityMapService {
         ActivityMap activityMap = mapRepo.findActivityMapById(id);
         mapValidator.validateActivityMapIsNotNull(activityMap, id);
         List<MapTask> allTasks = getMapTasks(activityMap, student);
-        return new ActivityMapResponse(activityMap.getId(), allTasks, activityMap.getMapSizeX(), activityMap.getMapSizeY());
+        return new ActivityMapResponse(activityMap.getId(), allTasks, activityMap.getMapSizeX(), activityMap.getMapSizeY(), activityMap.getImage());
     }
 
     public List<MapTask> getMapTasks(ActivityMap activityMap) {
@@ -66,25 +69,50 @@ public class ActivityMapService {
     public List<MapTask> getMapTasks(ActivityMap activityMap, User student) {
         List<MapTask> graphTasks = activityMap.getGraphTasks()
                 .stream()
-                .map(graphTask -> new MapTask(graphTask.getId(), graphTask.getPosX(),
-                        graphTask.getPosY(), ActivityType.EXPEDITION, graphTask.getTitle(), graphTask.getMaxPoints(),
+                .map(graphTask -> new MapTask(
+                        graphTask.getId(),
+                        graphTask.getPosX(),
+                        graphTask.getPosY(),
+                        ActivityType.EXPEDITION,
+                        graphTask.getTitle(),
+                        graphTask.getMaxPoints(),
+                        requirementService.areRequirementsFulfilled(graphTask.getRequirements()),
                         isGraphTaskCompleted(graphTask, student)))
                 .toList();
         List<MapTask> fileTasks = activityMap.getFileTasks()
                 .stream()
-                .map(fileTask -> new MapTask(fileTask.getId(), fileTask.getPosX(),
-                        fileTask.getPosY(), ActivityType.TASK, fileTask.getTitle(), fileTask.getMaxPoints(),
+                .map(fileTask -> new MapTask(
+                        fileTask.getId(),
+                        fileTask.getPosX(),
+                        fileTask.getPosY(),
+                        ActivityType.TASK,
+                        fileTask.getTitle(),
+                        fileTask.getMaxPoints(),
+                        requirementService.areRequirementsFulfilled(fileTask.getRequirements()),
                         isFileTaskCompleted(fileTask, student)))
                 .toList();
         List<MapTask> infos = activityMap.getInfos()
                 .stream()
-                .map(info -> new MapTask(info.getId(), info.getPosX()
-                        , info.getPosY(), ActivityType.INFO, info.getTitle(), 0.0, isInfoCompleted(student)))
+                .map(info -> new MapTask(
+                        info.getId(),
+                        info.getPosX(),
+                        info.getPosY(),
+                        ActivityType.INFO,
+                        info.getTitle(),
+                        0.0,
+                        requirementService.areRequirementsFulfilled(info.getRequirements()),
+                        isInfoCompleted(student)))
                 .toList();
         List<MapTask> surveys = activityMap.getSurveys()
                 .stream()
-                .map(survey -> new MapTask(survey.getId(), survey.getPosX(),
-                        survey.getPosY(), ActivityType.SURVEY, survey.getTitle(), survey.getPoints(),
+                .map(survey -> new MapTask(
+                        survey.getId(),
+                        survey.getPosX(),
+                        survey.getPosY(),
+                        ActivityType.SURVEY,
+                        survey.getTitle(),
+                        survey.getPoints(),
+                        requirementService.areRequirementsFulfilled(survey.getRequirements()),
                         isSurveyCompleted(survey, student)))
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)

@@ -6,6 +6,8 @@ import { faChevronLeft, faChevronRight, faEllipsisVertical } from '@fortawesome/
 import { Button, Dropdown, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import download from 'downloadjs'
 
+//prop - imagesWithId
+
 function ImagesGallery(props) {
   const [imagesHeight, setImagesHeight] = useState([])
   const [rowHeight, setRowHeight] = useState(undefined)
@@ -16,9 +18,14 @@ function ImagesGallery(props) {
   useEffect(() => {
     setImagesHeight(Array(props.images.length).fill(0))
 
-    props.images.forEach((url, index) => {
+    props.images.forEach((image, index) => {
       const img = new Image()
-      img.src = url
+      if (props.imagesWithId) {
+        img.src = image.url
+      } else {
+        img.src = image
+      }
+
       img.onload = (e) => {
         const scaledWidth = Math.floor(props.width / props.cols)
         const scaledHeight = Math.floor((e.target.height * scaledWidth) / e.target.width)
@@ -36,11 +43,11 @@ function ImagesGallery(props) {
 
   useEffect(() => {
     if (rowHeight) {
-      const layoutConfig = props.images.map((url, index) => {
+      const layoutConfig = props.images.map((image, index) => {
         const rowNumber = props.cols > 0 ? Math.floor(index / props.cols) : 1
 
         return {
-          i: index.toString(),
+          i: props.imagesWithId ? image.id.toString() : index.toString(),
           x: index % props.cols,
           y: index >= props.cols ? imagesHeight[index - props.cols] + rowNumber : 0,
           w: 1,
@@ -50,7 +57,7 @@ function ImagesGallery(props) {
 
       setLayout(layoutConfig)
     }
-  }, [rowHeight, imagesHeight, props.images, props.cols])
+  }, [rowHeight, imagesHeight, props.images, props.cols, props.imagesWithId])
 
   const openFullPreview = (e, url, index) => {
     e.stopPropagation()
@@ -66,13 +73,23 @@ function ImagesGallery(props) {
   const nextImage = (index) => {
     const nextImageId = Math.min(props.images.length - 1, index + 1)
     const isLast = nextImageId === props.images.length - 1
-    setFullPreviewSource({ id: nextImageId, src: props.images[nextImageId], isFirst: false, isLast: isLast })
+    setFullPreviewSource({
+      id: nextImageId,
+      src: props.imagesWithId ? props.images[nextImageId].url : props.images[nextImageId],
+      isFirst: false,
+      isLast: isLast
+    })
   }
 
   const prevImage = (index) => {
     const prevImageId = Math.max(0, index - 1)
     const isFirst = prevImageId === 0
-    setFullPreviewSource({ id: prevImageId, src: props.images[prevImageId], isFirst: isFirst, isLast: false })
+    setFullPreviewSource({
+      id: prevImageId,
+      src: props.imagesWithId ? props.images[prevImageId].url : props.images[prevImageId],
+      isFirst: isFirst,
+      isLast: false
+    })
   }
 
   return (
@@ -86,17 +103,38 @@ function ImagesGallery(props) {
           rowHeight={rowHeight > 0 ? rowHeight : props.width}
           isDraggable={false}
         >
-          {props.images.map((url, index) => (
-            <ImageContainer key={index.toString()} className={'rounded'}>
-              <img className={'p-3'} width={'100%'} height={'100%'} src={url} alt={'info-task-attachment'} />
+          {props.images.map((image, index) => (
+            <ImageContainer
+              key={props.imagesWithId ? image.id : index.toString()}
+              className={'rounded'}
+              style={
+                props.pickedImage && props.pickedImage === image.id
+                  ? { border: '4px solid var(--button-green)', padding: '5px' }
+                  : {}
+              }
+            >
+              <img
+                className={'p-3'}
+                width={'100%'}
+                height={'100%'}
+                src={props.imagesWithId ? image.url : image}
+                alt={'info-task-attachment'}
+                onClick={() => {
+                  if (props.imagesWithId) props.setFieldValue('imageId', image.id)
+                }}
+              />
 
               <ControlPanel drop={'start'}>
                 <Dropdown.Toggle variant='warning'>
                   <FontAwesomeIcon icon={faEllipsisVertical} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={(e) => openFullPreview(e, url, index)}>Pełny podgląd</Dropdown.Item>
-                  <Dropdown.Item onClick={(e) => downloadFile(e, url)}>Pobierz</Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => openFullPreview(e, props.imagesWithId ? image.url : image, index)}>
+                    Pełny podgląd
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={(e) => downloadFile(e, props.imagesWithId ? image.url : image)}>
+                    Pobierz
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </ControlPanel>
             </ImageContainer>

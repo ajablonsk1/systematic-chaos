@@ -124,4 +124,12 @@ public class ActivityValidator {
             throw new RequestValidationException(ExceptionMessage.TWO_ACTIVITIES_ON_THE_SAME_POSITION);
         }
     }
+
+    public void validateGraphTaskTitleIsUnique(String title, List<GraphTask> graphTasks) throws RequestValidationException {
+        graphTaskValidator.validateGraphTaskTitleIsUnique(title, graphTasks);
+    }
+
+    public void validateFileTaskTitleIsUnique(String title, List<FileTask> fileTasks) throws RequestValidationException {
+        fileTaskValidator.validateFileTaskTitleIsUnique(title, fileTasks);
+    }
 }

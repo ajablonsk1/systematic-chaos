@@ -1,7 +1,7 @@
 package com.example.api.model.activity.task;
 
 import com.example.api.dto.response.map.task.ActivityType;
-import com.example.api.model.map.Requirement;
+import com.example.api.model.map.requirement.Requirement;
 import com.example.api.model.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,8 +28,8 @@ public abstract class Activity {
     private Integer posY;
     private Double experience;
 
-    @OneToOne
-    private Requirement requirement;
+    @OneToMany
+    private List<Requirement> requirements = new LinkedList<>();
 
     @OneToOne
     private User professor;

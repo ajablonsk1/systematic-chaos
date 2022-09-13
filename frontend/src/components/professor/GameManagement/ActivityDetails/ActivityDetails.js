@@ -64,7 +64,7 @@ function ActivityDetails(props) {
           <ActivityStats activityId={activityId} activityType={activityType} />
         </Tab>
         <Tab eventKey={'requirements'} title={'Wymagania'}>
-          <ActivityRequirements />
+          <ActivityRequirements activityId={activityId} />
         </Tab>
       </TabsContainer>
     </Content>

@@ -13,6 +13,7 @@ import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
@@ -34,6 +35,7 @@ public class SurveyService {
     private final UserValidator userValidator;
     private final MapValidator mapValidator;
     private final AuthenticationService authService;
+    private final RequirementService requirementService;
 
     public Survey saveSurvey(Survey survey){
         return surveyRepo.save(survey);
@@ -63,6 +65,7 @@ public class SurveyService {
                 form,
                 professor
         );
+        survey.setRequirements(requirementService.getDefaultRequirements());
         surveyRepo.save(survey);
         chapter.getActivityMap().getSurveys().add(survey);
     }

@@ -20,6 +20,7 @@ import com.example.api.repo.question.OptionRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
@@ -51,6 +52,7 @@ public class GraphTaskService {
     private final UserValidator userValidator;
     private final MapValidator mapValidator;
     private final TimeParser timeParser;
+    private final RequirementService requirementService;
 
     public GraphTask saveGraphTask(GraphTask graphTask) {
         return graphTaskRepo.save(graphTask);
@@ -72,6 +74,9 @@ public class GraphTaskService {
         activityValidator.validateCreateGraphTaskFormFields(form);
         activityValidator.validateActivityPosition(form, chapter);
 
+        List<GraphTask> graphTasks = graphTaskRepo.findAll();
+        activityValidator.validateGraphTaskTitleIsUnique(form.getTitle(), graphTasks);
+
         SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");
         long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(expireDateFormat, form.getActivityExpireDate());
@@ -83,12 +88,10 @@ public class GraphTaskService {
 
         List<QuestionForm> questionForms = form.getQuestions();
         Map<Integer, Question> numToQuestion = new HashMap<>();
-        List<Double> points = new LinkedList<>();
         for (QuestionForm questionForm: questionForms) {
             if(questionForm.getQuestionType() == null) {
                 numToQuestion.put(questionForm.getQuestionNum(), new Question());
             } else {
-                points.add(questionForm.getPoints());
                 QuestionType type = activityValidator.getQuestionTypeFromString(questionForm.getQuestionType());
                 Difficulty difficulty = activityValidator.getDifficultyFromString(questionForm.getDifficulty());
                 switch (type) {
@@ -131,15 +134,30 @@ public class GraphTaskService {
         }
         questionRepo.saveAll(questions);
 
+        double maxPoints = calculateMaxPoints(questions.get(0), 0);
+
         GraphTask graphTask = new GraphTask(form,
                 professor,
                 questions,
                 expireDateMillis,
                 timeToSolveMillis,
-                points.stream().mapToDouble(f -> f).sum());
+                maxPoints);
+        graphTask.setRequirements(requirementService.getDefaultRequirements());
         graphTaskRepo.save(graphTask);
 
         mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         chapter.getActivityMap().getGraphTasks().add(graphTask);
+    }
+
+    private double calculateMaxPoints(Question question, double maxPoints) {
+        List<Question> nextQuestions = question.getNext();
+        if (nextQuestions.isEmpty()) {
+            return maxPoints;
+        }
+        List<Double> points = new LinkedList<>();
+        for (Question nextQuestion: nextQuestions) {
+            points.add(calculateMaxPoints(nextQuestion, maxPoints + nextQuestion.getPoints()));
+        }
+        return points.stream().max(Double::compareTo).get();
     }
 }

@@ -85,7 +85,7 @@ public class GraphTaskResultService {
         return pointsCalculator.calculatePointsForOpenedQuestions(result);
     }
 
-    public Double getAndSetAllPoints(Long id) throws EntityNotFoundException, WrongAnswerTypeException {
+    public Double getAndSetAllPoints(Long id) throws EntityNotFoundException {
         log.info("Calculating and setting points from all questions for graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
         activityValidator.validateTaskResultIsNotNull(result, id);
@@ -116,7 +116,7 @@ public class GraphTaskResultService {
     }
 
     public Long addAnswerToGraphTaskResult(AddAnswerToGraphTaskForm form) throws EntityNotFoundException,
-            WrongBodyParametersNumberException, EntityRequiredAttributeNullException {
+            EntityRequiredAttributeNullException {
         Long id = form.getResultId();
         long timeRemaining = getTimeRemaining(id);
         if(timeRemaining < 0) {

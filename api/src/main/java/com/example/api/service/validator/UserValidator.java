@@ -101,6 +101,7 @@ public class UserValidator {
                 log.error("User with index number {} already in database", indexNumber);
                 throw new EntityAlreadyInDatabaseException(ExceptionMessage.INDEX_TAKEN);
             }
+            newUser.setIndexNumber(indexNumber);
         } else {
             if(form.getHeroType() != null || form.getInvitationCode() != null || form.getIndexNumber() != null){
                 log.error("Request body for registering professor requires 4 body parameters");

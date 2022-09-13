@@ -2,7 +2,6 @@ package com.example.api.controller.util;
 
 import com.example.api.dto.response.util.ChapterImageResponse;
 import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.model.util.File;
 import com.example.api.model.util.Image;
 import com.example.api.service.util.FileService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

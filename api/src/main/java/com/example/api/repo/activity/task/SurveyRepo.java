@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SurveyRepo extends JpaRepository<Survey, Long> {
     Survey findSurveyById(Long id);
+    boolean existsById(long id);
 }

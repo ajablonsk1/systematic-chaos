@@ -19,6 +19,7 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
@@ -47,6 +48,7 @@ public class FileTaskService {
     private final ActivityValidator activityValidator;
     private final MapValidator mapValidator;
     private final TimeParser timeParser;
+    private final RequirementService requirementService;
 
     public FileTask saveFileTask(FileTask fileTask) {
         return fileTaskRepo.save(fileTask);
@@ -97,6 +99,9 @@ public class FileTaskService {
         activityValidator.validateCreateFileTaskFormFields(form);
         activityValidator.validateActivityPosition(form, chapter);
 
+        List<FileTask> fileTasks = fileTaskRepo.findAll();
+        activityValidator.validateFileTaskTitleIsUnique(form.getTitle(), fileTasks);
+
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(format, form.getActivityExpireDate());
 
@@ -105,6 +110,7 @@ public class FileTaskService {
         userValidator.validateProfessorAccount(professor, email);
 
         FileTask fileTask = new FileTask(form, professor, expireDateMillis);
+        fileTask.setRequirements(requirementService.getDefaultRequirements());
         fileTaskRepo.save(fileTask);
         chapter.getActivityMap().getFileTasks().add(fileTask);
     }
