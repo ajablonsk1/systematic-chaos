@@ -1,3 +1,6 @@
+import nodeIcon from './node-edit.png'
+import labelIcon from './label1.png'
+
 export const cytoscapeStylesheet = [
   {
     selector: 'node',
@@ -41,28 +44,72 @@ export const cytoscapeStylesheet = [
   {
     selector: '.gameMapNode',
     style: {
-      backgroundColor: '#6b6a6a',
       color: 'white',
-      borderColor: 'white',
-      borderWidth: 2,
-      fontFamily: 'Patrick Hand'
+      borderWidth: 0,
+      borderColor: 'transparent'
     }
   }
 ]
 
 export const nodeLabelStyle = (node) => {
-  const styleTransform = `translate(-50%, 48%) translate(${node.position('x').toFixed(2)}px, ${node
+  const styleTransform = `translate(-50%, 15%) translate(${node.position('x').toFixed(2)}px, ${node
     .position('y')
     .toFixed(2)}px)`
 
   return {
     transform: styleTransform,
     position: 'absolute', // very important !
-    backgroundColor: 'red',
-    zIndex: 10,
-    width: '100px',
-    height: '50px',
+    background: `url('${labelIcon}') no-repeat center`,
+    backgroundSize: 'cover',
+    zIndex: 12,
+    width: '120px',
+    height: '60px',
     textAlign: 'center',
-    clipPath: `polygon(50% 14%, 100% 0, 100% 50%, 50% 64%, 0 50%, 0 0)`
+    padding: '15px',
+    fontSize: '14px',
+    display: 'flex',
+    justifyContent: 'center'
+  }
+}
+
+export const gameNodeStyle = (node) => {
+  const styleTransform = `translate(-50%, -50%) translate(${node.position('x').toFixed(2)}px, ${node
+    .position('y')
+    .toFixed(2)}px)`
+
+  return {
+    transform: styleTransform,
+    background: `url('${nodeIcon}') no-repeat center`,
+    position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundSize: 'contain',
+    width: '100px',
+    height: '100px',
+    zIndex: 10,
+    fontFamily: 'Patrick Hand'
+  }
+}
+
+export const gameNodeChildStyle = () => {
+  return {
+    width: '50%',
+    height: '50%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '60px',
+    color: 'white',
+    zIndex: 11
+  }
+}
+
+export const nodeLabelChildStyle = () => {
+  return {
+    width: '70px',
+    textOverflow: 'ellipsis',
+    overflow: 'hidden',
+    fontFamily: 'Patrick Hand'
   }
 }

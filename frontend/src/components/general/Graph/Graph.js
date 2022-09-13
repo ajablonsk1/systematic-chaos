@@ -3,7 +3,7 @@ import cytoscape from 'cytoscape'
 import klay from 'cytoscape-klay'
 import { cytoscapeStylesheet } from './cytoscapeStyle'
 import { getLayoutConfig } from './layoutConfigs'
-import { createLabels } from './graphHelper'
+import { createLabelsAndNodes } from './graphHelper'
 
 /* @props
  *   - elements: list of edges and nodes
@@ -58,7 +58,7 @@ function Graph(props) {
 
     layout.pon('layoutstop', () => {
       if (props.labels && graph.current) {
-        createLabels(graph.current, props.labels)
+        createLabelsAndNodes(graph.current, props.labels)
       }
     })
     layout?.run()

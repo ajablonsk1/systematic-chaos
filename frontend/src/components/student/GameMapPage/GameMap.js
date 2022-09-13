@@ -80,8 +80,8 @@ function GameMap() {
           <p>{ERROR_OCCURRED}</p>
         ) : (
           <>
-            <h2 className={'text-center pt-4'}>Mapa gry</h2>
-            <GameMapContainer className={'mx-auto rounded mt-5'} ref={containerRef}>
+            <h2 className={'text-center pt-2'}>Mapa gry</h2>
+            <GameMapContainer className={'mx-auto rounded mt-3'} ref={containerRef}>
               <Graph
                 elements={graphElements}
                 layoutName={'preset'}

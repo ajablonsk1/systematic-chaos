@@ -1,9 +1,9 @@
 import { Container } from 'react-bootstrap'
 import styled from 'styled-components'
-import gameMap from './resources/game-map.png'
+import gameMap from './resources/map1.png'
 
 export const GameMapContainer = styled.div`
-  height: 80vh;
+  height: 90vh;
   width: 90%;
   border: 10px solid var(--dark-blue);
   background: url('${gameMap}') no-repeat center;
