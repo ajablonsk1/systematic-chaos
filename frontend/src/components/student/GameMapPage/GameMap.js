@@ -43,9 +43,9 @@ function GameMap() {
 
   useEffect(() => {
     if (chaptersList) {
-      const graphInfo = chaptersList.map((chapter, index) => ({
+      const graphInfo = chaptersList.map((chapter) => ({
         id: chapter.id,
-        targetIds: index === chaptersList.length - 1 ? [] : [chaptersList[index + 1].id],
+        targetIds: chapter.id === Math.max(...chaptersList.map((c) => c.id)) ? [] : [chapter.id + 1],
         position: getNodePosition(chapter.chapterPosition, mapContainerSize),
         edgeClass: 'gameMapEdge',
         nodeClass: 'gameMapNode'
