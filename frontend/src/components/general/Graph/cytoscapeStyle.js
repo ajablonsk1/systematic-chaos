@@ -1,6 +1,8 @@
 import nodeIcon from './node-edit.png'
 import labelIcon from './label1.png'
 
+const FONT_FAMILY = 'Patrick Hand'
+
 export const cytoscapeStylesheet = [
   {
     selector: 'node',
@@ -88,7 +90,7 @@ export const gameNodeStyle = (node) => {
     width: '100px',
     height: '100px',
     zIndex: 10,
-    fontFamily: 'Patrick Hand'
+    fontFamily: FONT_FAMILY
   }
 }
 
@@ -110,6 +112,6 @@ export const nodeLabelChildStyle = () => {
     width: '70px',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    fontFamily: 'Patrick Hand'
+    fontFamily: FONT_FAMILY
   }
 }
