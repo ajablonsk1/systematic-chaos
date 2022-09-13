@@ -74,6 +74,5 @@ export const createLabelsAndNodes = (cy, labels) => {
     if (!nodesDomContainer.querySelector(`#nodeHtml-${node.id()}`)) {
       nodesDomContainer.appendChild(nodeHtml)
     }
-    console.log(labelHtml)
   })
 }
