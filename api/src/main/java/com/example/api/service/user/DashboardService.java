@@ -1,10 +1,7 @@
 package com.example.api.service.user;
 
 import com.example.api.dto.response.ranking.RankingResponse;
-import com.example.api.dto.response.user.dashboard.DashboardResponse;
-import com.example.api.dto.response.user.dashboard.GeneralStats;
-import com.example.api.dto.response.user.dashboard.HeroTypeStats;
-import com.example.api.dto.response.user.dashboard.LastAddedActivity;
+import com.example.api.dto.response.user.dashboard.*;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.*;
@@ -25,6 +22,7 @@ import com.example.api.service.activity.task.InfoService;
 import com.example.api.service.activity.task.SurveyService;
 import com.example.api.service.map.ChapterService;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.util.calculator.PointsCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,13 +56,12 @@ public class DashboardService {
         String studentEmail = authService.getAuthentication().getName();
         User student = userRepo.findUserByEmail(studentEmail);
         userValidator.validateStudentAccount(student, studentEmail);
-
-        DashboardResponse response = new DashboardResponse();
-        response.setHeroTypeStats(getHeroTypeStats(student));
-        response.setGeneralStats(getGeneralStats(student));
-        response.setLastAddedActivities(getLastAddedActivities(student));
-
-        return response;
+        return new DashboardResponse(
+                getHeroTypeStats(student),
+                getGeneralStats(student),
+                getLastAddedActivities(student),
+                getHeroStats(student)
+        );
     }
 
     private HeroTypeStats getHeroTypeStats(User student) throws EntityNotFoundException {
@@ -119,7 +116,7 @@ public class DashboardService {
                 .filter(GraphTaskResult::isEvaluated)
                 .mapToDouble(result -> 100 * result.getPointsReceived() / result.getGraphTask().getMaxPoints())
                 .average();
-        return avg.isPresent() ? avg.getAsDouble() : null;
+        return avg.isPresent() ? PointsCalculator.round(avg.getAsDouble(), 2) : null;
     }
 
     private Double getAvgCombatTask(User student) {
@@ -128,7 +125,7 @@ public class DashboardService {
                 .filter(FileTaskResult::isEvaluated)
                 .mapToDouble(result -> 100 * result.getPointsReceived() / result.getFileTask().getMaxPoints())
                 .average();
-        return avg.isPresent() ? avg.getAsDouble() : null;
+        return avg.isPresent() ? PointsCalculator.round(avg.getAsDouble(), 2) : null;
     }
 
     private Long getSurveysNumber(User student) {
@@ -151,6 +148,7 @@ public class DashboardService {
     private Double getTaskPoints(List<? extends TaskResult> taskResults) {
         return taskResults
                 .stream()
+                .filter(TaskResult::isEvaluated)
                 .mapToDouble(TaskResult::getPointsReceived)
                 .sum();
     }
@@ -201,5 +199,65 @@ public class DashboardService {
         String availableUntil = Objects.nonNull(requirement) ? new Date(requirement.getDateFrom()).toString() : null;
         return new LastAddedActivity(chapterName, activityType, points, availableUntil);
 
+    }
+
+    // TODO: Replace mocks
+    private HeroStats getHeroStats(User student) {
+        Double experiencePoints = getExperiencePoints(student);
+        Double nextLvlPoints = 100D; // TODO
+        String rankName = "Nowicjusz"; // TODO
+        Long badgesNumber = 3L; // TODO
+        Long completedActivities = getCompletedActivities(student);
+
+        return new HeroStats(
+                experiencePoints,
+                nextLvlPoints,
+                rankName,
+                badgesNumber,
+                completedActivities
+        );
+    }
+
+    private Double getExperiencePoints(User student) {
+        Double graphTasksExperience = graphTaskResultRepo.findAllByUser(student)
+                .stream()
+                .filter(GraphTaskResult::isEvaluated)
+                .map(GraphTaskResult::getGraphTask)
+                .filter(graphTask -> Objects.nonNull(graphTask.getExperience()))
+                .mapToDouble(Activity::getExperience)
+                .sum();
+        Double fileTaskExperience = fileTaskResultRepo.findAllByUser(student)
+                .stream()
+                .filter(FileTaskResult::isEvaluated)
+                .map(FileTaskResult::getFileTask)
+                .filter(fileTask -> Objects.nonNull(fileTask.getExperience()))
+                .mapToDouble(Activity::getExperience)
+                .sum();
+        Double surveyExperience = surveyResultRepo.findAllByUser(student)
+                .stream()
+                .filter(SurveyResult::isEvaluated)
+                .map(SurveyResult::getSurvey)
+                .filter(survey -> Objects.nonNull(survey.getExperience()))
+                .mapToDouble(Activity::getExperience)
+                .sum();
+        Double infoExperience = infoService.getStudentInfos(student)
+                .stream()
+                .filter(info -> Objects.nonNull(info.getExperience()))
+                .mapToDouble(Activity::getExperience)
+                .sum();
+        return graphTasksExperience + fileTaskExperience + surveyExperience + infoExperience;
+    }
+
+    // Completed means answer was sent (not necessarily rated)
+    private Long getCompletedActivities(User student) {
+        Long graphTasksCompleted = graphTaskResultRepo.findAllByUser(student)
+                .stream()
+                .filter(result -> Objects.nonNull(result.getSendDateMillis()))
+                .count();
+        Long fileTasksCompleted = (long) fileTaskResultRepo.findAllByUser(student)
+                .size();
+        Long surveysCompleted = (long) surveyResultRepo.findAllByUser(student).size();
+        Long infosCompleted = (long) infoService.getStudentInfos(student).size();
+        return graphTasksCompleted + fileTasksCompleted + surveysCompleted + infosCompleted;
     }
 }

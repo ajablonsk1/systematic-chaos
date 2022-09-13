@@ -1,12 +1,9 @@
 package com.example.api.dto.response.user.dashboard;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Data
-@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 public class HeroStats {
