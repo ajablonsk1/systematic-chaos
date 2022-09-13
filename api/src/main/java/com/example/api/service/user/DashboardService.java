@@ -222,16 +222,26 @@ public class DashboardService {
         Double graphTasksExperience = graphTaskResultRepo.findAllByUser(student)
                 .stream()
                 .filter(GraphTaskResult::isEvaluated)
-                .map(GraphTaskResult::getGraphTask)
-                .filter(graphTask -> Objects.nonNull(graphTask.getExperience()))
-                .mapToDouble(Activity::getExperience)
+                .filter(graphTaskResult ->
+                        Objects.nonNull(graphTaskResult.getGraphTask().getExperience()) &&
+                        graphTaskResult.getGraphTask().getMaxPoints() > 0
+                        )
+                .mapToDouble(graphTaskResult ->
+                        graphTaskResult.getGraphTask().getExperience() *
+                        graphTaskResult.getPointsReceived() /
+                        graphTaskResult.getGraphTask().getMaxPoints())
                 .sum();
         Double fileTaskExperience = fileTaskResultRepo.findAllByUser(student)
                 .stream()
                 .filter(FileTaskResult::isEvaluated)
-                .map(FileTaskResult::getFileTask)
-                .filter(fileTask -> Objects.nonNull(fileTask.getExperience()))
-                .mapToDouble(Activity::getExperience)
+                .filter(fileTaskResult ->
+                        Objects.nonNull(fileTaskResult.getFileTask().getExperience()) &&
+                        fileTaskResult.getFileTask().getMaxPoints() > 0
+                )
+                .mapToDouble(fileTaskResult ->
+                        fileTaskResult.getFileTask().getExperience() *
+                        fileTaskResult.getPointsReceived() /
+                        fileTaskResult.getFileTask().getMaxPoints())
                 .sum();
         Double surveyExperience = surveyResultRepo.findAllByUser(student)
                 .stream()
@@ -245,7 +255,8 @@ public class DashboardService {
                 .filter(info -> Objects.nonNull(info.getExperience()))
                 .mapToDouble(Activity::getExperience)
                 .sum();
-        return graphTasksExperience + fileTaskExperience + surveyExperience + infoExperience;
+        Double exp = graphTasksExperience + fileTaskExperience + surveyExperience + infoExperience;
+        return PointsCalculator.round(exp, 2);
     }
 
     // Completed means answer was sent (not necessarily rated)
