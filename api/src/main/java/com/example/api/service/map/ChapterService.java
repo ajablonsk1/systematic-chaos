@@ -5,11 +5,13 @@ import com.example.api.dto.response.map.ChapterInfoResponse;
 import com.example.api.dto.response.map.ChapterResponse;
 import com.example.api.dto.response.map.task.MapTask;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.util.File;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.util.FileRepo;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class ChapterService {
     private final FileRepo fileRepo;
     private final MapValidator mapValidator;
     private final ActivityValidator activityValidator;
+    private final ChapterValidator chapterValidator;
 
     public List<ChapterResponse> getAllChapters() {
         log.info("Fetching all chapters");
@@ -44,13 +47,14 @@ public class ChapterService {
         return new ChapterInfoResponse(chapter, allTasks);
     }
 
-    public void createChapter(ChapterForm form) throws EntityNotFoundException {
+    public void createChapter(ChapterForm form) throws RequestValidationException {
         log.info("Creating new chapter");
         File image = fileRepo.findFileById(form.getImageId());
         activityValidator.validateFileIsNotNull(image, form.getImageId());
+        chapterValidator.validateChapterCreation(form);
         ActivityMap activityMap = new ActivityMap(form.getSizeX(), form.getSizeY(), image);
         activityMapService.saveActivityMap(activityMap);
-        Chapter chapter = new Chapter(form.getName(), activityMap);
+        Chapter chapter = new Chapter(form.getName(), activityMap, form.getPosX(), form.getPosY());
         List<Chapter> allChapters = chapterRepo.findAll();
         chapterRepo.save(chapter);
         if (!allChapters.isEmpty()) {

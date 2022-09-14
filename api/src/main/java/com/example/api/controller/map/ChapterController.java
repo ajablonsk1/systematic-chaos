@@ -4,6 +4,7 @@ import com.example.api.dto.request.map.ChapterForm;
 import com.example.api.dto.response.map.ChapterInfoResponse;
 import com.example.api.dto.response.map.ChapterResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.service.map.ChapterService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class ChapterController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createChapter(@RequestBody ChapterForm form) throws EntityNotFoundException {
+    public ResponseEntity<?> createChapter(@RequestBody ChapterForm form) throws RequestValidationException {
         chapterService.createChapter(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
