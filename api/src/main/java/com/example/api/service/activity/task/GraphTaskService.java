@@ -4,7 +4,6 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskChapterFo
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.task.GraphTask;
@@ -75,7 +74,7 @@ public class GraphTaskService {
         activityValidator.validateActivityPosition(form, chapter);
 
         List<GraphTask> graphTasks = graphTaskRepo.findAll();
-        activityValidator.validateGraphTaskTitleIsUnique(form.getTitle(), graphTasks);
+        activityValidator.validateGraphTaskTitle(form.getTitle(), graphTasks);
 
         SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");

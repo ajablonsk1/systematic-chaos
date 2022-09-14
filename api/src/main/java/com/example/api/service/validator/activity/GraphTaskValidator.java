@@ -131,7 +131,12 @@ public class GraphTaskValidator {
         }
     }
 
-    public void validateGraphTaskTitleIsUnique(String title, List<GraphTask> graphTasks) throws RequestValidationException {
+    public void validateGraphTaskTitle(String title, List<GraphTask> graphTasks) throws RequestValidationException {
+        int idx = title.indexOf(";");
+        if (idx != -1) {
+            log.error("Title cannot have a semicolon!");
+            throw new RequestValidationException(ExceptionMessage.GRAPH_TASK_TITLE_CONTAINS_SEMICOLON);
+        }
         if (graphTasks.stream().anyMatch(graphTask -> graphTask.getTitle().equals(title))) {
             log.error("Graph task has to have unique title");
             throw new RequestValidationException(ExceptionMessage.GRAPH_TASK_TITLE_NOT_UNIQUE);

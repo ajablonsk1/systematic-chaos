@@ -4,7 +4,6 @@ import com.example.api.dto.request.activity.task.create.CreateFileTaskChapterFor
 import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
 import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -100,7 +99,7 @@ public class FileTaskService {
         activityValidator.validateActivityPosition(form, chapter);
 
         List<FileTask> fileTasks = fileTaskRepo.findAll();
-        activityValidator.validateFileTaskTitleIsUnique(form.getTitle(), fileTasks);
+        activityValidator.validateFileTaskTitle(form.getTitle(), fileTasks);
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(format, form.getActivityExpireDate());

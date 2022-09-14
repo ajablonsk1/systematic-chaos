@@ -77,7 +77,8 @@ public class ActivityMapService {
                         graphTask.getTitle(),
                         graphTask.getMaxPoints(),
                         requirementService.areRequirementsFulfilled(graphTask.getRequirements()),
-                        isGraphTaskCompleted(graphTask, student)))
+                        isGraphTaskCompleted(graphTask, student),
+                        !requirementService.areRequirementsDefault(graphTask.getRequirements())))
                 .toList();
         List<MapTask> fileTasks = activityMap.getFileTasks()
                 .stream()
@@ -89,7 +90,8 @@ public class ActivityMapService {
                         fileTask.getTitle(),
                         fileTask.getMaxPoints(),
                         requirementService.areRequirementsFulfilled(fileTask.getRequirements()),
-                        isFileTaskCompleted(fileTask, student)))
+                        isFileTaskCompleted(fileTask, student),
+                        !requirementService.areRequirementsDefault(fileTask.getRequirements())))
                 .toList();
         List<MapTask> infos = activityMap.getInfos()
                 .stream()
@@ -101,7 +103,8 @@ public class ActivityMapService {
                         info.getTitle(),
                         0.0,
                         requirementService.areRequirementsFulfilled(info.getRequirements()),
-                        isInfoCompleted(student)))
+                        isInfoCompleted(student),
+                        !requirementService.areRequirementsDefault(info.getRequirements())))
                 .toList();
         List<MapTask> surveys = activityMap.getSurveys()
                 .stream()
@@ -113,7 +116,8 @@ public class ActivityMapService {
                         survey.getTitle(),
                         survey.getPoints(),
                         requirementService.areRequirementsFulfilled(survey.getRequirements()),
-                        isSurveyCompleted(survey, student)))
+                        isSurveyCompleted(survey, student),
+                        !requirementService.areRequirementsDefault(survey.getRequirements())))
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)

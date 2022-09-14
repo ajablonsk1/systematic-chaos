@@ -40,7 +40,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<Long> saveUser(@RequestBody RegisterUserForm form)
-            throws EntityNotFoundException, EntityAlreadyInDatabaseException, WrongBodyParametersNumberException {
+            throws RequestValidationException {
         return ResponseEntity.ok().body(userService.registerUser(form));
     }
 
