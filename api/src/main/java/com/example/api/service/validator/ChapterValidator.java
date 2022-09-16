@@ -1,6 +1,7 @@
 package com.example.api.service.validator;
 
 import com.example.api.dto.request.map.ChapterForm;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.map.Chapter;
@@ -17,6 +18,13 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ChapterValidator {
     private final ChapterRepo chapterRepo;
+
+    public void validateChapterIsNotNull(Chapter chapter, Long id) throws EntityNotFoundException {
+        if(chapter == null) {
+            log.error("Chapter with id {} not found in database", id);
+            throw new EntityNotFoundException("Chapter with id" + id + " not found in database");
+        }
+    }
 
     public void validateChapterCreation(ChapterForm form) throws RequestValidationException {
         List<Chapter> chapters = chapterRepo.findAll();

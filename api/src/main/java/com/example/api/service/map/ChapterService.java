@@ -12,7 +12,6 @@ import com.example.api.model.util.File;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.service.validator.ChapterValidator;
-import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,6 @@ public class ChapterService {
     private final ChapterRepo chapterRepo;
     private final ActivityMapService activityMapService;
     private final FileRepo fileRepo;
-    private final MapValidator mapValidator;
     private final ActivityValidator activityValidator;
     private final ChapterValidator chapterValidator;
 
@@ -42,7 +40,7 @@ public class ChapterService {
     public ChapterInfoResponse getChapterInfo(Long id) throws EntityNotFoundException {
         log.info("Fetching info for chapter with id {}", id);
         Chapter chapter = chapterRepo.findChapterById(id);
-        mapValidator.validateChapterIsNotNull(chapter, id);
+        chapterValidator.validateChapterIsNotNull(chapter, id);
         List<MapTask> allTasks = activityMapService.getMapTasks(chapter.getActivityMap());
         return new ChapterInfoResponse(chapter, allTasks);
     }
