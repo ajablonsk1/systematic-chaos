@@ -196,7 +196,7 @@ public class DashboardService {
                 .filter(req -> req.isSelected() && Objects.nonNull(req.getDateFrom()))
                 .findAny()
                 .orElse(null);
-        String availableUntil = Objects.nonNull(requirement) ? new Date(requirement.getDateFrom()).toString() : null;
+        Long availableUntil = Objects.nonNull(requirement) ? requirement.getDateFrom() : null;
         return new LastAddedActivity(chapterName, activityType, points, availableUntil);
 
     }

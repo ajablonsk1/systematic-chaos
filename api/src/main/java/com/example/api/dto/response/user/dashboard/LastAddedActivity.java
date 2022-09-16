@@ -10,5 +10,5 @@ public class LastAddedActivity {
     private String chapterName;
     private String activityType;
     private Double points;
-    private String availableUntil;
+    private Long availableUntil;
 }
