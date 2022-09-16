@@ -330,7 +330,7 @@ public class DatabaseConfig {
             Requirement requirement7 = new Requirement();
 
             requirement1.setName("Date from");
-            requirement1.setSelected(false);
+            requirement1.setSelected(true);
             requirement1.setType(RequirementType.DATE_FROM);
             requirement2.setName("Date to");
             requirement2.setSelected(false);
