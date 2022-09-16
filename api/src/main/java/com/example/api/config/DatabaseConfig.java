@@ -88,7 +88,6 @@ public class DatabaseConfig {
             student.setPassword("12345");
             student.setIndexNumber(123456);
             student.setHeroType(HeroType.PRIEST);
-            student.setPoints(0);
 
             User student1 = new User("smazur@student.agh.edu.pl",
                     "Szymon",
