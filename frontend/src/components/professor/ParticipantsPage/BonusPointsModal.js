@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Col, Container, Form, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'react-bootstrap'
-import { FIELD_REQUIRED, POSITIVE_NUMBER } from '../../../utils/constants'
+import { FIELD_REQUIRED, NUMBER_FROM_RANGE } from '../../../utils/constants'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { Formik } from 'formik'
 import ProfessorService from '../../../services/professor.service'
@@ -24,7 +24,7 @@ function BonusPointsModal(props) {
             validate={(values) => {
               const errors = {}
               if (!values.points) errors.points = FIELD_REQUIRED
-              if (values.points === 0) errors.points = POSITIVE_NUMBER
+              if (values.points === 0) errors.points = NUMBER_FROM_RANGE(1, 10)
               return errors
             }}
             onSubmit={(values, { setSubmitting }) => {

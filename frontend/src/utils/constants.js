@@ -60,11 +60,12 @@ export const TeacherSidebarTitles = {
 }
 
 export const FIELD_REQUIRED = 'Pole wymagane.'
-export const POSITIVE_NUMBER = 'Wymagana liczba z przedziału [1,10]'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
 export const NOT_LOGGED_IN_ERROR = 'Logowanie nieudane. Niepoprawny login lub hasło.'
 export const ERROR_OCCURRED = 'Wystąpił nieoczekiwany błąd'
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
+export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
+
 export const Activity = {
   EXPEDITION: 'EXPEDITION',
   INFO: 'INFO',
