@@ -91,20 +91,20 @@ public class DashboardService {
 
     private GeneralStats getGeneralStats(User student) {
         Double avgGraphTask = getAvgGraphTask(student);
-        Double avgCombatTask = getAvgCombatTask(student);
+        Double avgFileTask = getAvgFileTask(student);
         Long surveysNumber = getSurveysNumber(student);
         Double graphTaskPoints = getGraphTaskPoints(student);
-        Double combatTaskPoints = getCombatTaskPoints(student);
+        Double fileTaskPoints = getFileTaskPoints(student);
         Double additionalPoints=  getAdditionalPoints(student);
-        Double allPoints = graphTaskPoints + combatTaskPoints + additionalPoints;
+        Double allPoints = graphTaskPoints + fileTaskPoints + additionalPoints;
         Double maxPoints = getMaxPoints(student);
 
         return new GeneralStats(
                 avgGraphTask,
-                avgCombatTask,
+                avgFileTask,
                 surveysNumber,
                 graphTaskPoints,
-                combatTaskPoints,
+                fileTaskPoints,
                 allPoints,
                 maxPoints
         );
@@ -119,7 +119,7 @@ public class DashboardService {
         return avg.isPresent() ? PointsCalculator.round(avg.getAsDouble(), 2) : null;
     }
 
-    private Double getAvgCombatTask(User student) {
+    private Double getAvgFileTask(User student) {
         OptionalDouble avg = fileTaskResultRepo.findAllByUser(student)
                 .stream()
                 .filter(FileTaskResult::isEvaluated)
@@ -137,7 +137,7 @@ public class DashboardService {
         return getTaskPoints(graphTaskResultRepo.findAllByUser(student));
     }
 
-    private Double getCombatTaskPoints(User student) {
+    private Double getFileTaskPoints(User student) {
         return getTaskPoints(fileTaskResultRepo.findAllByUser(student));
     }
 

@@ -8,10 +8,10 @@ import lombok.*;
 @Setter
 public class GeneralStats {
     private Double avgGraphTask;
-    private Double avgCombatTask;
+    private Double avgFileTask;
     private Long surveysNumber;
     private Double graphTaskPoints;
-    private Double combatTaskPoints;
+    private Double fileTaskPoints;
     private Double allPoints;
     private Double maxPoints;
 }

@@ -1,10 +1,8 @@
 package com.example.api.controller.user;
 
-import com.example.api.dto.response.activity.task.result.summary.SummaryResponse;
 import com.example.api.dto.response.user.dashboard.DashboardResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.service.activity.result.SummaryService;
 import com.example.api.service.user.DashboardService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "JWT_AUTH")
 public class DashboardController {
     private final DashboardService dashboardService;
-    @GetMapping("")
+
+    @GetMapping
     public ResponseEntity<DashboardResponse> getStudentDashboard() throws WrongUserTypeException, EntityNotFoundException {
         return ResponseEntity.ok().body(dashboardService.getStudentDashboard());
     }
