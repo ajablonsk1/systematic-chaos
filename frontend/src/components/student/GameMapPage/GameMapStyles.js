@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import gameMap from './resources/map1.png'
 
 export const GameMapContainer = styled.div`
-  height: 90vh;
-  width: 90%;
+  height: ${(props) => (props.$customHeight ? props.$customHeight + 'px' : '90vh')};
+  width: ${(props) => (props.$customHeight ? props.$customHeight * 1.5 + 'px' : '135vh')};
   border: 10px solid var(--dark-blue);
   background: url('${gameMap}') no-repeat center;
   background-size: cover;
