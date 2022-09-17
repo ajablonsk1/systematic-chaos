@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Formik } from 'formik'
 import {
   Modal,
@@ -26,6 +26,9 @@ import { SuccessModal } from '../../SuccessModal'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import GameMapContainer from '../../../student/GameMapPage/GameMapContainer'
 import { getGraphElements } from '../../../general/Graph/graphHelper'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRefresh } from '@fortawesome/free-solid-svg-icons'
+import FormikContext from '../../../general/FormikContext/FormikContext'
 
 const MAP_HEIGHT = 500
 const MAP_WIDTH = 1.5 * MAP_HEIGHT
@@ -41,15 +44,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
     size: Math.min(MAP_HEIGHT / 8, MAP_WIDTH / 10) / 5
   })
 
-  const getGraphNodeDetails = (e) => {
-    if (e.target.name === 'name') {
-      setGraphPreviewNode({ ...graphPreviewNode, label: e.target.value })
-    } else if (e.target.name === 'posX') {
-      setGraphPreviewNode({ ...graphPreviewNode, position: { x: +e.target.value, y: graphPreviewNode.position.y } })
-    } else if (e.target.name === 'posY') {
-      setGraphPreviewNode({ ...graphPreviewNode, position: { y: +e.target.value, x: graphPreviewNode.position.x } })
-    }
-  }
+  const formikContextRef = useRef()
 
   // we need this memo to avoid re-rendering the layout too many times
   //
@@ -63,7 +58,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
       ChapterService.getChapterImagesList()
         .then((response) => {
           Promise.all(
-            response.map((imageData) => {
+            response?.map((imageData) => {
               return ChapterService.getChapterImage({ imageId: imageData.id })
             })
           ).then((responseList) => {
@@ -79,6 +74,13 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
         .catch(() => {})
     }
   }, [isLoaded])
+
+  const updateMap = () => {
+    const labelValue = formikContextRef.current?.getValue('name')
+    const positionX = formikContextRef.current?.getValue('posX')
+    const positionY = formikContextRef.current?.getValue('posY')
+    setGraphPreviewNode({ ...graphPreviewNode, label: labelValue, position: { x: positionX, y: positionY } })
+  }
 
   return (
     images && (
@@ -117,7 +119,9 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                       name: values.name,
                       sizeX: values.sizeX,
                       sizeY: values.sizeY,
-                      imageId: values.imageId
+                      imageId: values.imageId,
+                      posX: values.posX,
+                      posY: values.posY
                     })
                       .then(() => {
                         setSubmitting(false)
@@ -126,15 +130,16 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                         setErrorMessage('')
                         refetchChapterList()
                       })
-                      .catch((errorMessage) => {
+                      .catch((error) => {
                         setSubmitting(false)
-                        setErrorMessage(errorMessage)
+                        setErrorMessage(error.response.data.message)
                       })
                   }}
                 >
-                  {({ isSubmitting, values, errors, handleSubmit, setFieldValue }) => {
+                  {({ isSubmitting, values, handleSubmit, setFieldValue }) => {
                     return (
-                      <Form onSubmit={handleSubmit} onBlur={getGraphNodeDetails}>
+                      <Form onSubmit={handleSubmit}>
+                        <FormikContext ref={formikContextRef} />
                         <Container>
                           <Row className='mx-auto'>
                             {FormCol('Nazwa rozdziału', 'text', 'name', 12)}
@@ -196,6 +201,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                   customHeight={MAP_HEIGHT}
                   nodeClickCallback={() => {}}
                 />
+                <FontAwesomeIcon icon={faRefresh} onClick={updateMap} style={{ cursor: 'pointer' }} />
               </Tab>
             </Tabs>
           </ModalBody>

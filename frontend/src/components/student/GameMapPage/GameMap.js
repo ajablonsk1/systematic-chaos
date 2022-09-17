@@ -16,12 +16,7 @@ function GameMap() {
   useEffect(() => {
     ChapterService.getChaptersList()
       .then((response) => {
-        // TODO: replace with "response" when it will be included chapterPosition
-        const responseWithPosition = [...response].map((chapter) => ({
-          ...chapter,
-          chapterPosition: { x: Math.floor(Math.random() * 10 + 1), y: Math.floor(Math.random() * 8 + 1) }
-        }))
-        setChaptersList(responseWithPosition)
+        setChaptersList(response)
       })
       .catch(() => {
         setChaptersList(null)
@@ -33,7 +28,7 @@ function GameMap() {
       const graphInfo = chaptersList.map((chapter) => ({
         id: chapter.id,
         targetIds: chapter.id === Math.max(...chaptersList.map((c) => c.id)) ? [] : [chapter.id + 1],
-        position: chapter.chapterPosition,
+        position: { x: chapter.posX, y: chapter.posY },
         edgeClass: 'gameMapEdge',
         nodeClass: 'gameMapNode'
       }))
