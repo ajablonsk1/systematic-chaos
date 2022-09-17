@@ -20,6 +20,8 @@ public class Chapter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Integer posX;
+    private Integer posY;
 
     @OneToOne
     private Requirement requirement;
@@ -30,9 +32,11 @@ public class Chapter {
     @OneToOne
     private ActivityMap activityMap;
 
-    public Chapter(String name, ActivityMap activityMap) {
+    public Chapter(String name, ActivityMap activityMap, Integer posX, Integer poxY) {
         this.name = name;
         this.activityMap = activityMap;
+        this.posX = posX;
+        this.posY = poxY;
     }
 
     public int getNoActivities() {

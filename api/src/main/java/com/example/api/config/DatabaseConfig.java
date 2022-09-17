@@ -88,7 +88,6 @@ public class DatabaseConfig {
             student.setPassword("12345");
             student.setIndexNumber(123456);
             student.setHeroType(HeroType.PRIEST);
-            student.setPoints(0);
 
             User student1 = new User("smazur@student.agh.edu.pl",
                     "Szymon",
@@ -554,6 +553,8 @@ public class DatabaseConfig {
 
             Chapter chapter = new Chapter();
             chapter.setName("Rozdział 1");
+            chapter.setPosX(2);
+            chapter.setPosY(2);
             chapter.setActivityMap(activityMap1);
 
             chapterRepo.save(chapter);

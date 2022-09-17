@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useTransition } from 'react'
 import { Row, Button, Spinner } from 'react-bootstrap'
 import { ERROR_OCCURRED, RequirementType } from '../../../../../utils/constants'
 import { CustomTable } from '../../../../student/GameCardPage/gameCardContentsStyle'
@@ -9,6 +9,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import pl from 'date-fns/locale/pl'
 import CreatableInput from '../../../../general/CreatableInput/CreatableInput'
 import ActivityService from '../../../../../services/activity.service'
+import { successToast } from '../../../../../utils/toasts'
 
 registerLocale('pl', pl)
 
@@ -16,6 +17,7 @@ function ActivityRequirements(props) {
   const [requirementsList, setRequirementsList] = useState(undefined)
   const [multiSelectLists, setMultiSelectLists] = useState([])
   const [onSaveError, setOnSaveError] = useState('')
+  const [isSaving, startSaving] = useTransition()
 
   useEffect(() => {
     ActivityService.getActivityRequirements(props.activityId)
@@ -32,46 +34,52 @@ function ActivityRequirements(props) {
   }, [multiSelectLists])
 
   const saveRequirements = () => {
-    const getAnswer = (requirement) => {
-      switch (requirement.type.toLowerCase()) {
-        case RequirementType.MULTI_SELECT:
-          const requirementAnswers = multiSelectLists.find((element) => element.id === requirement.id)?.list
-          return requirementAnswers ? requirementAnswers.join(';') : requirement.value.join(';')
+    startSaving(() => {
+      const getAnswer = (requirement) => {
+        switch (requirement.type.toLowerCase()) {
+          case RequirementType.MULTI_SELECT:
+            const requirementAnswers = multiSelectLists.find((element) => element.id === requirement.id)?.list
+            return requirementAnswers ? requirementAnswers.join(';') : requirement.value.join(';')
 
-        case RequirementType.DATE:
-          const date = requirement.answer?.getTime() ?? requirement.value ?? Date.now()
-          return date.toString()
+          case RequirementType.DATE:
+            const date = requirement.answer?.getTime() ?? requirement.value ?? Date.now()
+            return date.toString()
 
-        case RequirementType.TEXT:
-          const textAnswer = requirement.answer ?? requirement.value ?? ''
-          return textAnswer.toString()
+          case RequirementType.TEXT:
+            const textAnswer = requirement.answer ?? requirement.value ?? ''
+            return textAnswer.toString()
 
-        case RequirementType.NUMBER:
-          const numberAnswer = requirement.answer ?? requirement.value ?? 0
-          return numberAnswer.toString()
+          case RequirementType.NUMBER:
+            const numberAnswer = requirement.answer ?? requirement.value ?? 0
+            return numberAnswer.toString()
 
-        case RequirementType.BOOLEAN:
-          const booleanAnswer = requirement.answer ?? requirement.value ?? 'false'
-          return booleanAnswer.toString()
+          case RequirementType.BOOLEAN:
+            const booleanAnswer = requirement.answer ?? requirement.value ?? 'false'
+            return booleanAnswer.toString()
 
-        case RequirementType.SELECT:
-          return requirement.answer ?? requirement.value[0] ?? ''
+          case RequirementType.SELECT:
+            return requirement.answer ?? requirement.value[0] ?? ''
 
-        default:
-          return ''
+          default:
+            return ''
+        }
       }
-    }
 
-    const requirementsToSend = requirementsList.map((r) => {
-      return {
-        id: r.id,
-        selected: r.selected,
-        value: getAnswer(r)
-      }
-    })
+      const requirementsToSend = requirementsList.map((r) => {
+        return {
+          id: r.id,
+          selected: r.selected,
+          value: getAnswer(r)
+        }
+      })
 
-    ActivityService.setActivityRequirements(props.activityId, requirementsToSend).catch((error) => {
-      setOnSaveError(error.response.data.message)
+      ActivityService.setActivityRequirements(props.activityId, requirementsToSend)
+        .then(() => {
+          successToast()
+        })
+        .catch((error) => {
+          setOnSaveError(error.response.data.message)
+        })
     })
   }
 
@@ -156,7 +164,7 @@ function ActivityRequirements(props) {
       </Row>
       {onSaveError && <p className={'w-100 text-center text-danger'}>{onSaveError}</p>}
       <Button className={'position-relative start-50 translate-middle-x w-auto mt-3'} onClick={saveRequirements}>
-        Zapisz zmiany
+        {isSaving ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz zmiany</span>}
       </Button>
     </>
   )

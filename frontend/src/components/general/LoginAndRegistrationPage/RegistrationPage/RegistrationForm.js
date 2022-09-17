@@ -112,7 +112,6 @@ function RegistrationForm(props) {
                           style={{
                             display: 'none'
                           }}
-                          className='align-items-center flex-column'
                         >
                           {HeroDescriptions[character]}
                           <img src={HeroImg[character]} alt={character} />
