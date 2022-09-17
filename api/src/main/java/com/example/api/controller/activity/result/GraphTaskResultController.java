@@ -9,6 +9,7 @@ import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +26,11 @@ public class GraphTaskResultController {
         return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResult(graphTaskId));
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<GraphTaskResult> saveGraphTaskResult(@RequestBody SaveGraphTaskResultForm form)
-            throws EntityNotFoundException, WrongUserTypeException {
-        return ResponseEntity.ok().body(graphTaskResultService.saveGraphTaskResult(form.getGraphTaskId()));
+    @PostMapping("/start")
+    public ResponseEntity<?> startGraphTaskResult(@RequestBody SaveGraphTaskResultForm form)
+            throws EntityNotFoundException, WrongUserTypeException, EntityAlreadyInDatabaseException {
+        graphTaskResultService.startGraphTaskResult(form.getGraphTaskId());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/points/closed")
@@ -45,7 +47,7 @@ public class GraphTaskResultController {
 
     @GetMapping("/points/all")
     public ResponseEntity<Double> getAndSetAllPoints(@RequestParam Long graphTaskResultId)
-            throws WrongAnswerTypeException, EntityNotFoundException {
+            throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskResultService.getAndSetAllPoints(graphTaskResultId));
     }
 
@@ -69,7 +71,7 @@ public class GraphTaskResultController {
 
     @PostMapping("/answer/add")
     public ResponseEntity<Long> addAnswerToGraphTaskResult(@RequestBody AddAnswerToGraphTaskForm form)
-            throws EntityNotFoundException, EntityRequiredAttributeNullException {
+            throws RequestValidationException {
         return ResponseEntity.ok().body(graphTaskResultService.addAnswerToGraphTaskResult(form));
     }
 

@@ -1,6 +1,9 @@
 package com.example.api.controller.question;
 
+import com.example.api.dto.response.activity.task.result.question.QuestionInfo;
+import com.example.api.dto.response.activity.task.result.question.QuestionResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.question.Question;
 import com.example.api.service.question.QuestionService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -27,8 +30,14 @@ public class QuestionController {
     }
 
     @GetMapping("/next")
-    public ResponseEntity<List<Question>> getNextQuestions(@RequestParam Long questionId)
-            throws EntityNotFoundException {
-        return ResponseEntity.ok().body(questionService.getNextQuestions(questionId));
+    public ResponseEntity<List<QuestionResponse>> getNextQuestions(@RequestParam Long graphTaskId)
+            throws RequestValidationException {
+        return ResponseEntity.ok().body(questionService.getNextQuestions(graphTaskId));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<QuestionInfo> getQuestionInfo(@RequestParam Long questionId, @RequestParam Long graphTaskId)
+            throws RequestValidationException {
+        return ResponseEntity.ok().body(questionService.getQuestionInfo(questionId, graphTaskId));
     }
 }

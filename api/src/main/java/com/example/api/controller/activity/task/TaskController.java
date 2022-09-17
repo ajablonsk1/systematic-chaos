@@ -5,10 +5,7 @@ import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
 import com.example.api.dto.response.map.RequirementResponse;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.MissingAttributeException;
-import com.example.api.error.exception.RequestValidationException;
-import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.error.exception.*;
 import com.example.api.service.activity.task.TaskService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.bind.ValidationException;
 import java.util.List;
 
 @RestController
@@ -34,7 +30,7 @@ public class TaskController {
 
     @GetMapping("/evaluate/first")
     ResponseEntity<TaskToEvaluateResponse> getFirstAnswerToEvaluate(@RequestParam Long fileTaskId)
-            throws EntityNotFoundException {
+            throws EntityNotFoundException, EntityRequiredAttributeNullException {
         return ResponseEntity.ok().body(taskService.getFirstAnswerToEvaluate(fileTaskId));
     }
 

@@ -148,7 +148,7 @@ public class GraphTaskResultServiceTest {
 
 
         // when
-        graphTaskResultService.saveGraphTaskResult(graphTask.getId());
+        graphTaskResultService.startGraphTaskResult(graphTask.getId());
 
         // then
         verify(graphTaskRepo).findGraphTaskById(idArgumentCaptor.capture());
@@ -168,7 +168,7 @@ public class GraphTaskResultServiceTest {
         given(authentication.getName()).willReturn("random@email.com");
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(graphTask.getId()))
+        assertThatThrownBy(() -> graphTaskResultService.startGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
     }
@@ -184,7 +184,7 @@ public class GraphTaskResultServiceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(graphTask.getId()))
+        assertThatThrownBy(() -> graphTaskResultService.startGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("User" + user.getEmail() + " not found in database");
     }

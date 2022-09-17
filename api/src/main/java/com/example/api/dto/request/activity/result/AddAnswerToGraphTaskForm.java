@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddAnswerToGraphTaskForm {
-    @Schema(required = true) private Long resultId;
+    @Schema(required = true) private Long graphTaskId;
     @Schema(required = true) private Long questionId;
     @Schema(required = true) private AnswerForm answerForm;
 }

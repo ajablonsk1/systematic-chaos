@@ -448,7 +448,6 @@ public class DatabaseConfig {
             fileTask.setDescription("Jak złamałbyś kabel światłowodowy? Czym?");
             fileTask.setProfessor(professor);
             fileTask.setMaxPoints(30.0);
-            fileTask.setExpireDateMillis(System.currentTimeMillis() + 1_000_000);
 
             fileTaskService.saveFileTask(fileTask);
 

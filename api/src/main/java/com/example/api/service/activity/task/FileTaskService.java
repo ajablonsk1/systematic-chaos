@@ -4,7 +4,6 @@ import com.example.api.dto.request.activity.task.create.CreateFileTaskChapterFor
 import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
 import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -29,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -90,7 +88,7 @@ public class FileTaskService {
         return result;
     }
 
-    public void createFileTask(CreateFileTaskChapterForm chapterForm) throws RequestValidationException, ParseException {
+    public void createFileTask(CreateFileTaskChapterForm chapterForm) throws RequestValidationException {
         log.info("Starting the creation of file task");
         CreateFileTaskForm form = chapterForm.getForm();
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
@@ -103,13 +101,12 @@ public class FileTaskService {
         activityValidator.validateFileTaskTitleIsUnique(form.getTitle(), fileTasks);
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(format, form.getActivityExpireDate());
 
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);
         userValidator.validateProfessorAccount(professor, email);
 
-        FileTask fileTask = new FileTask(form, professor, expireDateMillis);
+        FileTask fileTask = new FileTask(form, professor);
         fileTask.setRequirements(requirementService.getDefaultRequirements());
         fileTaskRepo.save(fileTask);
         chapter.getActivityMap().getFileTasks().add(fileTask);

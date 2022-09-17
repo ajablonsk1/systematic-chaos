@@ -28,11 +28,10 @@ public class GraphTask extends Task {
     public GraphTask(CreateGraphTaskForm form,
                      User professor,
                      List<Question> questions,
-                     long expireDateMillis,
                      long timeToSolveMillis,
                      double maxPoints){
         super(form.getTitle(), form.getDescription(), form.getPosX(), form.getPosY(), professor,
-                form.getRequiredKnowledge(), maxPoints, expireDateMillis);
+                form.getRequiredKnowledge(), maxPoints);
         this.questions = questions;
         this.timeToSolveMillis = timeToSolveMillis;
         super.setExperience(maxPoints * 10);

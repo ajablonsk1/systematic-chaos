@@ -4,9 +4,10 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskChapterFo
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
-import com.example.api.dto.response.map.task.ActivityType;
+import com.example.api.dto.response.activity.task.result.GraphTaskResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.question.Difficulty;
@@ -58,11 +59,11 @@ public class GraphTaskService {
         return graphTaskRepo.save(graphTask);
     }
 
-    public GraphTask getGraphTaskById(Long id) throws EntityNotFoundException {
+    public GraphTaskResponse getGraphTaskById(Long id) throws EntityNotFoundException {
         log.info("Fetching graph task with id {}", id);
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(id);
         activityValidator.validateActivityIsNotNull(graphTask, id);
-        return graphTaskRepo.findGraphTaskById(id);
+        return new GraphTaskResponse(graphTask);
     }
 
     public void createGraphTask(CreateGraphTaskChapterForm chapterForm) throws ParseException, RequestValidationException {
@@ -77,9 +78,7 @@ public class GraphTaskService {
         List<GraphTask> graphTasks = graphTaskRepo.findAll();
         activityValidator.validateGraphTaskTitleIsUnique(form.getTitle(), graphTasks);
 
-        SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");
-        long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(expireDateFormat, form.getActivityExpireDate());
         long timeToSolveMillis = timeParser.parseAndGetTimeMillisFromHour(timeToSolveFormat, form.getTimeToSolve());
 
         String email = authService.getAuthentication().getName();
@@ -139,7 +138,6 @@ public class GraphTaskService {
         GraphTask graphTask = new GraphTask(form,
                 professor,
                 questions,
-                expireDateMillis,
                 timeToSolveMillis,
                 maxPoints);
         graphTask.setRequirements(requirementService.getDefaultRequirements());

@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerForm {
-    @Schema(required = false) private Option option;
-    @Schema(required = false) List<Option> options;
+    @Schema(required = false) List<Long> optionIds;
     @Schema(required = false) String openAnswer;
 }

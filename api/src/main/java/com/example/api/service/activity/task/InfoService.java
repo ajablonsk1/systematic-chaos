@@ -3,7 +3,6 @@ package com.example.api.service.activity.task;
 import com.example.api.dto.request.activity.task.create.CreateInfoChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateInfoForm;
 import com.example.api.dto.response.activity.task.InfoResponse;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.task.Info;

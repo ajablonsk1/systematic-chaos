@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateGraphTaskForm extends CreateActivityForm{
     @Schema(required = true) private String requiredKnowledge;
-    @Schema(required = true) private String activityExpireDate;
     @Schema(required = true) private List<QuestionForm> questions;
     @Schema(required = true) private String timeToSolve;
 
@@ -23,12 +22,10 @@ public class CreateGraphTaskForm extends CreateActivityForm{
                                Integer posX,
                                Integer posY,
                                String requiredKnowledge,
-                               String activityExpireDate,
                                List<QuestionForm> questions,
                                String timeToSolve) {
         super(title, description, posX, posY);
         this.requiredKnowledge = requiredKnowledge;
-        this.activityExpireDate = activityExpireDate;
         this.questions = questions;
         this.timeToSolve = timeToSolve;
     }

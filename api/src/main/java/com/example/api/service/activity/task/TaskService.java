@@ -8,10 +8,7 @@ import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
 import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.dto.response.map.task.ActivityType;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.MissingAttributeException;
-import com.example.api.error.exception.RequestValidationException;
-import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.error.exception.*;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
@@ -20,6 +17,7 @@ import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.map.requirement.Requirement;
+import com.example.api.model.map.requirement.RequirementType;
 import com.example.api.model.map.requirement.RequirementValueType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
@@ -27,7 +25,6 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.InfoRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
-import com.example.api.repo.group.AccessDateRepo;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.map.RequirementRepo;
@@ -42,7 +39,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.xml.bind.ValidationException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -60,10 +56,9 @@ public class TaskService {
     private final ChapterRepo chapterRepo;
     private final RequirementRepo requirementRepo;
     private final GroupRepo groupRepo;
-    private final AccessDateRepo accessDateRepo;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
-    private final ActivityValidator taskValidator;
+    private final ActivityValidator activityValidator;
     private final MapValidator mapValidator;
 
     public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate()
@@ -88,10 +83,10 @@ public class TaskService {
         return response;
     }
 
-    public TaskToEvaluateResponse getFirstAnswerToEvaluate(Long id) throws EntityNotFoundException {
+    public TaskToEvaluateResponse getFirstAnswerToEvaluate(Long id) throws EntityNotFoundException, EntityRequiredAttributeNullException {
         log.info("Fetching first activity that is needed to be evaluated for file task with id {}", id);
         FileTask task = fileTaskRepo.findFileTaskById(id);
-        taskValidator.validateActivityIsNotNull(task, id);
+        activityValidator.validateActivityIsNotNull(task, id);
         List<FileTaskResult> fileTaskResults = fileTaskResultRepo.findAll()
                 .stream()
                 .filter(result -> Objects.equals(result.getFileTask().getId(), task.getId()))
@@ -101,11 +96,16 @@ public class TaskService {
             FileTaskResult result = fileTaskResults.get(0);
             long num = fileTaskResults.size();
             boolean isLate = false;
-            //TODO: investigate further
             if(result.getSendDateMillis() != null){
-                isLate = result.getSendDateMillis() - result.getFileTask().getExpireDateMillis() > 0;
+                List<Requirement> dateToList = result.getFileTask()
+                        .getRequirements()
+                        .stream()
+                        .filter(requirement -> requirement.getType() == RequirementType.DATE_TO)
+                        .toList();
+                activityValidator.validateRequirementsHasDateTo(dateToList);
+                Long dateTo = dateToList.get(0).getDateTo();
+                isLate = dateTo != null && result.getSendDateMillis() - dateTo > 0;
             }
-
             List<FileResponse> filesResponse = result.getFiles().stream().map(FileResponse::new).toList();
 
             return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), result.getUser().getFirstName(),
