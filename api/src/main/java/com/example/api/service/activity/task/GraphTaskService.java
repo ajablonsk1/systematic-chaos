@@ -20,7 +20,7 @@ import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.map.RequirementService;
-import com.example.api.service.validator.MapValidator;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import com.example.api.util.calculator.TimeParser;
@@ -49,9 +49,9 @@ public class GraphTaskService {
     private final QuestionRepo questionRepo;
     private final ChapterRepo chapterRepo;
     private final UserValidator userValidator;
-    private final MapValidator mapValidator;
     private final TimeParser timeParser;
     private final RequirementService requirementService;
+    private final ChapterValidator chapterValidator;
 
     public GraphTask saveGraphTask(GraphTask graphTask) {
         return graphTaskRepo.save(graphTask);
@@ -69,7 +69,7 @@ public class GraphTaskService {
         CreateGraphTaskForm form = chapterForm.getForm();
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateGraphTaskFormFields(form);
         activityValidator.validateActivityPosition(form, chapter);
 
@@ -144,7 +144,7 @@ public class GraphTaskService {
         graphTask.setRequirements(requirementService.getDefaultRequirements());
         graphTaskRepo.save(graphTask);
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         chapter.getActivityMap().getGraphTasks().add(graphTask);
     }
 

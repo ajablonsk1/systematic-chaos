@@ -13,10 +13,10 @@ export const cytoscapeStylesheet = [
       content: 'data(id)',
       textValign: 'center',
       textHalign: 'center',
-      fontSize: 64,
-      width: 20,
-      height: 20,
-      padding: 30,
+      fontSize: 'data(fontSize)',
+      width: 'data(size)',
+      height: 'data(size)',
+      padding: 'data(padding)',
       textMarginY: 5
     }
   },
@@ -64,11 +64,11 @@ export const nodeLabelStyle = (node) => {
     background: `url('${labelIcon}') no-repeat center`,
     backgroundSize: 'cover',
     zIndex: 12,
-    width: '120px',
-    height: '60px',
+    width: parseFloat(node.data().size) * 6 + 'px',
+    height: parseFloat(node.data().size) * 3 + 'px',
     textAlign: 'center',
-    padding: '15px',
-    fontSize: '14px',
+    padding: parseFloat(node.data().size) * 0.75 + 'px',
+    fontSize: parseFloat(node.data().size) * 0.7 + 'px',
     display: 'flex',
     justifyContent: 'center'
   }
@@ -87,29 +87,29 @@ export const gameNodeStyle = (node) => {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundSize: 'contain',
-    width: '100px',
-    height: '100px',
+    width: parseFloat(node.data().size) * 5 + 'px',
+    height: parseFloat(node.data().size) * 5 + 'px',
     zIndex: 10,
     fontFamily: FONT_FAMILY
   }
 }
 
-export const gameNodeChildStyle = () => {
+export const gameNodeChildStyle = (node) => {
   return {
     width: '50%',
     height: '50%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '60px',
+    fontSize: parseFloat(node.data().size) * 3 + 'px',
     color: 'white',
     zIndex: 11
   }
 }
 
-export const nodeLabelChildStyle = () => {
+export const nodeLabelChildStyle = (node) => {
   return {
-    width: '70px',
+    width: (parseFloat(node.data().size) * 7) / 2 + 'px',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     fontFamily: FONT_FAMILY

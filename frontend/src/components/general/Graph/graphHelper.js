@@ -3,20 +3,26 @@ import { gameNodeChildStyle, gameNodeStyle, nodeLabelChildStyle, nodeLabelStyle 
 export const getGraphElements = (graphElements) => {
   const nodes = graphElements.map((nodeInfo) => ({
     data: {
-      id: nodeInfo.id,
-      position: nodeInfo.position
+      id: nodeInfo.id ?? 0,
+      position: nodeInfo.position,
+      borderColor: nodeInfo.borderColor ?? 'black',
+      size: nodeInfo.size ? nodeInfo.size + 'px' : '20px',
+      padding: nodeInfo.size ? nodeInfo.size * 1.5 + 'px' : '30px',
+      fontSize: nodeInfo.size ? nodeInfo.size * 3.2 + 'px' : '64px'
     },
     classes: nodeInfo.nodeClass ?? ''
   }))
 
   const edges = graphElements.map((nodeInfo) =>
-    nodeInfo.targetIds.map((targetId) => ({
-      data: {
-        source: nodeInfo.id,
-        target: targetId
-      },
-      classes: nodeInfo.edgeClass ?? ''
-    }))
+    nodeInfo.targetIds
+      ? nodeInfo.targetIds.map((targetId) => ({
+          data: {
+            source: nodeInfo.id ?? 0,
+            target: targetId
+          },
+          classes: nodeInfo.edgeClass ?? ''
+        }))
+      : []
   )
 
   const merged = [].concat(...edges)
@@ -44,8 +50,7 @@ export const createLabelsAndNodes = (cy, labels) => {
 
     if (!labelHtml) {
       const labelChild = document.createElement('div')
-      labelChild.innerHTML = labels.find((label) => label.id === +node.data().id).label
-      Object.assign(labelChild.style, nodeLabelChildStyle())
+      Object.assign(labelChild.style, nodeLabelChildStyle(node))
 
       labelHtml = document.createElement('div')
       labelHtml.id = 'labelHtml-' + node.id()
@@ -53,10 +58,12 @@ export const createLabelsAndNodes = (cy, labels) => {
       labelHtml.appendChild(labelChild)
     }
 
+    labelHtml.children[0].innerHTML = labels.find((label) => label.id === +node.data().id).label
+
     if (!nodeHtml) {
       const nodeChild = document.createElement('div')
       nodeChild.innerHTML = node.data().id
-      Object.assign(nodeChild.style, gameNodeChildStyle())
+      Object.assign(nodeChild.style, gameNodeChildStyle(node))
 
       nodeHtml = document.createElement('div')
       nodeHtml.id = 'nodeHtml-' + node.id()

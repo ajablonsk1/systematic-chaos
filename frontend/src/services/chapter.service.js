@@ -20,12 +20,17 @@ class ChapterService {
     })
   }
 
-  sendNewChapterData({ name, sizeX, sizeY, imageId }) {
-    return axiosApiPost(ADD_NEW_CHAPTER, { name: name, sizeX: sizeX, sizeY: sizeY, imageId: imageId }).catch(
-      (error) => {
-        throw error
-      }
-    )
+  sendNewChapterData({ name, sizeX, sizeY, imageId, posX, posY }) {
+    return axiosApiPost(ADD_NEW_CHAPTER, {
+      name: name,
+      sizeX: sizeX,
+      sizeY: sizeY,
+      imageId: imageId,
+      posX: posX,
+      posY: posY
+    }).catch((error) => {
+      throw error
+    })
   }
 
   getChapterImagesList() {

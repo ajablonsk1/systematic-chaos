@@ -60,11 +60,12 @@ export const TeacherSidebarTitles = {
 }
 
 export const FIELD_REQUIRED = 'Pole wymagane.'
-export const POSITIVE_NUMBER = 'Wymagana liczba z przedziału [1,10]'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
 export const NOT_LOGGED_IN_ERROR = 'Logowanie nieudane. Niepoprawny login lub hasło.'
 export const ERROR_OCCURRED = 'Wystąpił nieoczekiwany błąd'
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
+export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
+
 export const Activity = {
   EXPEDITION: 'EXPEDITION',
   INFO: 'INFO',
@@ -138,17 +139,17 @@ export const RegistrationLabelsAndTypes = {
 }
 
 export const HeroDescriptions = {
-  warrior: `Skupiony na zdolnościach walki, całkowicie pozbawiony magicznych zdolności. 
+  [HeroType.WARRIOR]: `Skupiony na zdolnościach walki, całkowicie pozbawiony magicznych zdolności. 
             Łatwiej mu pokonać trudnego przeciwnika (daje raz w miesiącu możliwość podmiany 
             treści pytania trudnego na treść pytania łatwego w ekspedycji bez zmiany ilości puntków za zadanie).
             W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz.`,
-  wizard: `Przejawiający zdolności magiczne, lecz fizycznie słaby. Dzięki swoim czarom może cofnąć się w grafie
+  [HeroType.WIZARD]: `Przejawiający zdolności magiczne, lecz fizycznie słaby. Dzięki swoim czarom może cofnąć się w grafie
             ekspedycji do wyboru pytania (anulować ostatni wybór) i wybrać inne (umiejętność dostępna raz na miesiąc).
             W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz.`,
-  priest: `Specjalizujący się w uzdrawianiu. Dzięki swoim umiejętnościom uzdrawiania może dodać sobie 5pkt po zakończeniu
+  [HeroType.PRIEST]: `Specjalizujący się w uzdrawianiu. Dzięki swoim umiejętnościom uzdrawiania może dodać sobie 5pkt po zakończeniu
             ekspedycji. Umiejętność ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
             lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`,
-  rogue: `Potrafi poruszać się bezszelestnie, skradanie to jego dominująca umiejętność. Dzięki swoim zdolnościom 
+  [HeroType.ROGUE]: `Potrafi poruszać się bezszelestnie, skradanie to jego dominująca umiejętność. Dzięki swoim zdolnościom 
             umożliwi Ci pominąć jedno pytanie w ekspedycji na poziomie łatwym warte nie więcej niż 5pkt. Umiejętność
             ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
             lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`

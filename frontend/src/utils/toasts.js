@@ -22,3 +22,5 @@ export const refreshSessionToast = (user, dispatch, navigate) =>
       theme: 'dark'
     }
   )
+
+export const successToast = (successMsg) => toast.success(successMsg ?? 'Zmiany dokonane pomyślnie.', { theme: 'dark' })
