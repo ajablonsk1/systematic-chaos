@@ -151,7 +151,7 @@ public class GraphTaskService {
     public List<GraphTask> getStudentGraphTasks(User student) {
         return graphTaskRepo.findAll()
                 .stream()
-                .filter(graphTask -> requirementService.areRequirementsFulfilled(student, graphTask.getRequirements()))
+                .filter(graphTask -> !requirementService.areRequirementsDefault(graphTask.getRequirements()))
                 .toList();
     }
 

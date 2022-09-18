@@ -118,7 +118,7 @@ public class FileTaskService {
     public List<FileTask> getStudentFileTasks(User student) {
         return fileTaskRepo.findAll()
                 .stream()
-                .filter(fileTask -> requirementService.areRequirementsFulfilled(student, fileTask.getRequirements()))
+                .filter(fileTask -> !requirementService.areRequirementsDefault(fileTask.getRequirements()))
                 .toList();
     }
 }

@@ -74,7 +74,7 @@ public class SurveyService {
     public List<Survey> getStudentSurvey(User student) {
         return surveyRepo.findAll()
                 .stream()
-                .filter(survey -> requirementService.areRequirementsFulfilled(student, survey.getRequirements()))
+                .filter(survey -> !requirementService.areRequirementsDefault(survey.getRequirements()))
                 .toList();
     }
 }

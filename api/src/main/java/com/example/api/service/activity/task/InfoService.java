@@ -88,7 +88,7 @@ public class InfoService {
     public List<Info> getStudentInfos(User student) {
         return infoRepo.findAll()
                 .stream()
-                .filter(info -> requirementService.areRequirementsFulfilled(student, info.getRequirements()))
+                .filter(info -> !requirementService.areRequirementsDefault(info.getRequirements()))
                 .toList();
     }
 }

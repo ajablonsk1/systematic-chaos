@@ -489,6 +489,7 @@ public class DatabaseConfig {
             survey.setPosY(3);
             survey.setPoints(10.0);
             survey.setExperience(5D);
+            survey.setRequirements(requirements);
             surveyService.saveSurvey(survey);
 
             BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
