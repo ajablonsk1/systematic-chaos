@@ -46,4 +46,9 @@ public class User {
     @JoinColumn(name = "group_id")
     @JsonManagedReference
     private Group group;
+
+    public synchronized void changePoints(Double diff) {
+        if (points + diff < 0) return;
+        points = points + diff;
+    }
 }
