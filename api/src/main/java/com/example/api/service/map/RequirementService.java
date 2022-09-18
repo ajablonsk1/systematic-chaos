@@ -101,4 +101,13 @@ public class RequirementService {
         }
         return true;
     }
+
+    public boolean areRequirementsDefault(List<Requirement> requirements) {
+        for (Requirement requirement: requirements) {
+            if (!requirement.getIsDefault()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

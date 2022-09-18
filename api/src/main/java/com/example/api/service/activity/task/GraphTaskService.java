@@ -74,7 +74,7 @@ public class GraphTaskService {
         activityValidator.validateActivityPosition(form, chapter);
 
         List<GraphTask> graphTasks = graphTaskRepo.findAll();
-        activityValidator.validateGraphTaskTitleIsUnique(form.getTitle(), graphTasks);
+        activityValidator.validateGraphTaskTitle(form.getTitle(), graphTasks);
 
         SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");

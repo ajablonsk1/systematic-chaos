@@ -5,6 +5,7 @@ import com.example.api.dto.response.group.GroupCode;
 import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.repo.group.GroupRepo;
@@ -31,7 +32,7 @@ public class GroupService {
         return groupRepo.save(group);
     }
 
-    public Long saveGroup(SaveGroupForm form) throws EntityAlreadyInDatabaseException {
+    public Long saveGroup(SaveGroupForm form) throws RequestValidationException {
         log.info("Saving group to database with name {}", form.getName());
         List<Group> groups = groupRepo.findAll();
         groupValidator.validateGroup(groups, form);

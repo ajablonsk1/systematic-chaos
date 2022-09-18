@@ -99,7 +99,7 @@ public class FileTaskService {
         activityValidator.validateActivityPosition(form, chapter);
 
         List<FileTask> fileTasks = fileTaskRepo.findAll();
-        activityValidator.validateFileTaskTitleIsUnique(form.getTitle(), fileTasks);
+        activityValidator.validateFileTaskTitle(form.getTitle(), fileTasks);
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(format, form.getActivityExpireDate());

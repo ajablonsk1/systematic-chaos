@@ -1,10 +1,7 @@
 package com.example.api.service.validator;
 
 import com.example.api.dto.request.group.SaveGroupForm;
-import com.example.api.error.exception.EntityAlreadyInDatabaseException;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.ExceptionMessage;
-import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.*;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.User;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +27,19 @@ public class GroupValidator {
         }
     }
 
-    public void validateGroup(List<Group> groups, SaveGroupForm form) throws EntityAlreadyInDatabaseException {
+    public void validateGroupIsNotNullWithMessage(Group group, String groupName, String message) throws EntityNotFoundException {
+        if (group == null) {
+            log.error("Group with group name {} not found in database", groupName);
+            throw new EntityNotFoundException(message);
+        }
+    }
+
+    public void validateGroup(List<Group> groups, SaveGroupForm form) throws RequestValidationException {
+        int idx = form.getName().indexOf(";");
+        if (idx != -1) {
+            log.error("Group name cannot have a semicolon!");
+            throw new RequestValidationException(ExceptionMessage.GROUP_NAME_CONTAINS_SEMICOLON);
+        }
         boolean groupNameExists = groups.stream()
                 .anyMatch(group -> group.getName().equals(form.getName()));
         if(groupNameExists) {

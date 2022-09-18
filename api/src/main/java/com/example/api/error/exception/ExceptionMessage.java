@@ -27,5 +27,12 @@ public class ExceptionMessage {
     public static final String TWO_ACTIVITIES_ON_THE_SAME_POSITION ="Dwie aktywności nie mogą być na takiej samej pozycji!";
     public static final String ACTIVITY_OUTSIDE_BOUNDARIES ="Pozycja aktywności musi mieścić się w obszarze mapy!";
     public static final String TWO_CHAPTERS_ON_THE_SAME_POSITION ="Dwa rozdziały nie mogą być na takiej samej pozycji!";
-
+    public static final String GROUP_NOT_FOUND ="Grupa o podanej nazwie nie istnieje: ";
+    public static final String STUDENT_NOT_FOUND ="Student o podanym emailu nie istnieje: ";
+    public static final String GRAPH_TASK_NOT_FOUND ="Ekspedycja o podanej nazwie nie istnieje: ";
+    public static final String FILE_TASK_NOT_FOUND ="Zadanie bojowe o podanej nazwie nie istnieje: ";
+    public static final String GROUP_NAME_CONTAINS_SEMICOLON ="Nazwa grupy nie może posiadać średnika";
+    public static final String EMAIL_CONTAINS_SEMICOLON ="Email nie może posiadać średnika";
+    public static final String FILE_TASK_TITLE_CONTAINS_SEMICOLON ="Nazwa zadania bojowego nie może posiadać średnika";
+    public static final String GRAPH_TASK_TITLE_CONTAINS_SEMICOLON ="Nazwa ekspedycji nie może posiadać średnika";
 }
