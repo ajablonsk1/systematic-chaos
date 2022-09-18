@@ -643,6 +643,17 @@ public class DatabaseConfig {
 
             Image chapterImage5 = new Image("Chapter image 5", data5, ImageType.CHAPTER);
             fileRepo.save(chapterImage5);
+
+
+            // Again save to update user points
+            for (User user: students1) {
+                user.setGroup(group);
+                userService.saveUser(user);
+            }
+            for (User user: students2) {
+                user.setGroup(group1);
+                userService.saveUser(user);
+            }
         };
     }
 }
