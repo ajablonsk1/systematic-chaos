@@ -48,6 +48,8 @@ public class Requirement {
     @OneToMany
     private List<FileTask> finishedFileTasks = new LinkedList<>();
 
+    private Boolean isDefault = true;
+
     public Requirement(String name, RequirementType type, boolean selected) {
         this.name = name;
         this.type = type;
@@ -55,6 +57,9 @@ public class Requirement {
     }
 
     public boolean isFulfilled(User student, List<GraphTask> graphTasks, List<FileTask> fileTasks) {
+        if (isDefault) {
+            return false;
+        }
         if (!selected) {
             return true;
         }

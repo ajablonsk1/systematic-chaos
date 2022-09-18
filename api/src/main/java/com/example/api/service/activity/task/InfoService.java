@@ -3,7 +3,6 @@ package com.example.api.service.activity.task;
 import com.example.api.dto.request.activity.task.create.CreateInfoChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateInfoForm;
 import com.example.api.dto.response.activity.task.InfoResponse;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.task.GraphTask;
@@ -17,7 +16,7 @@ import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.map.RequirementService;
-import com.example.api.service.validator.MapValidator;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +37,9 @@ public class InfoService {
     private final AuthenticationService authService;
     private final UserRepo userRepo;
     private final UserValidator userValidator;
-    private final MapValidator mapValidator;
     private final UrlRepo urlRepo;
     private final RequirementService requirementService;
+    private final ChapterValidator chapterValidator;
 
     public Info saveInfo(Info info){
         return infoRepo.save(info);
@@ -62,7 +61,7 @@ public class InfoService {
         CreateInfoForm form = chapterForm.getForm();
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateInfoForm(form);
         activityValidator.validateActivityPosition(form, chapter);
 

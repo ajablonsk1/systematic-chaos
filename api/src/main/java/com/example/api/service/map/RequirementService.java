@@ -100,8 +100,13 @@ public class RequirementService {
         }
         return true;
     }
-    public boolean areRequirementsFulfilled(List<Requirement> requirements) {
-        User student = userRepo.findUserByEmail(authService.getAuthentication().getName());
-        return areRequirementsFulfilled(student, requirements);
+
+    public boolean areRequirementsDefault(List<Requirement> requirements) {
+        for (Requirement requirement: requirements) {
+            if (!requirement.getIsDefault()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

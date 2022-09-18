@@ -5,6 +5,7 @@ import com.example.api.dto.response.group.GroupCode;
 import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.service.group.GroupService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class GroupController {
     private final GroupService groupService;
 
     @PostMapping
-    public ResponseEntity<Long> saveGroup(@RequestBody SaveGroupForm form) throws EntityAlreadyInDatabaseException {
+    public ResponseEntity<Long> saveGroup(@RequestBody SaveGroupForm form) throws RequestValidationException {
         return ResponseEntity.ok().body(groupService.saveGroup(form));
     }
 

@@ -23,7 +23,12 @@ public class FileTaskValidator {
         }
     }
 
-    public void validateFileTaskTitleIsUnique(String title, List<FileTask> fileTasks) throws RequestValidationException {
+    public void validateFileTaskTitle(String title, List<FileTask> fileTasks) throws RequestValidationException {
+        int idx = title.indexOf(";");
+        if (idx != -1) {
+            log.error("Title cannot have a semicolon!");
+            throw new RequestValidationException(ExceptionMessage.FILE_TASK_TITLE_CONTAINS_SEMICOLON);
+        }
         if (fileTasks.stream().anyMatch(fileTask -> fileTask.getTitle().equals(title))) {
             log.error("Graph task has to have unique title");
             throw new RequestValidationException(ExceptionMessage.FILE_TASK_TITLE_NOT_UNIQUE);

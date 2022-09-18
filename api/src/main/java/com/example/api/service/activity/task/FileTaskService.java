@@ -4,7 +4,6 @@ import com.example.api.dto.request.activity.task.create.CreateFileTaskChapterFor
 import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
 import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -21,7 +20,7 @@ import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.map.RequirementService;
-import com.example.api.service.validator.MapValidator;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import com.example.api.util.calculator.TimeParser;
@@ -47,9 +46,9 @@ public class FileTaskService {
     private final UserValidator userValidator;
     private final AuthenticationService authService;
     private final ActivityValidator activityValidator;
-    private final MapValidator mapValidator;
     private final TimeParser timeParser;
     private final RequirementService requirementService;
+    private final ChapterValidator chapterValidator;
 
     public FileTask saveFileTask(FileTask fileTask) {
         return fileTaskRepo.save(fileTask);
@@ -96,12 +95,12 @@ public class FileTaskService {
         CreateFileTaskForm form = chapterForm.getForm();
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateFileTaskFormFields(form);
         activityValidator.validateActivityPosition(form, chapter);
 
         List<FileTask> fileTasks = fileTaskRepo.findAll();
-        activityValidator.validateFileTaskTitleIsUnique(form.getTitle(), fileTasks);
+        activityValidator.validateFileTaskTitle(form.getTitle(), fileTasks);
 
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(format, form.getActivityExpireDate());

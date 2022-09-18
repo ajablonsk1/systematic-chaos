@@ -88,7 +88,6 @@ public class DatabaseConfig {
             student.setPassword("12345");
             student.setIndexNumber(123456);
             student.setHeroType(HeroType.PRIEST);
-            student.setPoints(0);
 
             User student1 = new User("smazur@student.agh.edu.pl",
                     "Szymon",
@@ -332,28 +331,31 @@ public class DatabaseConfig {
             requirement1.setName("Date from");
             requirement1.setSelected(true);
             requirement1.setType(RequirementType.DATE_FROM);
-            requirement2.setName("Date to");
+            requirement2.setName(MessageManager.DATE_FROM_REQ_NAME);
             requirement2.setSelected(false);
             requirement2.setType(RequirementType.DATE_TO);
-            requirement3.setName("Min points");
+            requirement3.setName(MessageManager.DATE_TO_REQ_NAME);
             requirement3.setSelected(false);
             requirement3.setType(RequirementType.MIN_POINTS);
-            requirement4.setName("Groups");
+            requirement4.setName(MessageManager.MIN_POINTS_REQ_NAME);
             requirement4.setSelected(false);
             requirement4.setType(RequirementType.GROUPS);
-            requirement5.setName("Students");
+            requirement5.setName(MessageManager.GROUPS_REQ_NAME);
             requirement5.setSelected(false);
             requirement5.setType(RequirementType.STUDENTS);
-            requirement6.setName("Graph task");
+            requirement6.setName(MessageManager.GRAPH_TASKS_REQ_NAME);
             requirement6.setSelected(false);
             requirement6.setType(RequirementType.GRAPH_TASKS);
-            requirement7.setName("File task");
+            requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
             requirement7.setSelected(false);
             requirement7.setType(RequirementType.FILE_TASKS);
 
             requirement1.setDateFrom(System.currentTimeMillis());
+            requirement1.setIsDefault(false);
             requirement2.setDateTo(System.currentTimeMillis() + 1_000 * 60 * 60);
+            requirement2.setIsDefault(false);
             requirement3.setMinPoints(100.0);
+            requirement3.setIsDefault(false);
             requirement4.setAllowedGroups(List.of());
             requirement5.setAllowedStudents(List.of());
             requirement6.setFinishedGraphTasks(List.of());
@@ -366,6 +368,8 @@ public class DatabaseConfig {
             requirementService.saveRequirement(requirement5);
             requirementService.saveRequirement(requirement6);
             requirementService.saveRequirement(requirement7);
+
+            List<Requirement> requirements = List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7);
 
             GraphTask graphTask = new GraphTask();
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
@@ -430,6 +434,8 @@ public class DatabaseConfig {
 
             optionService.saveAll(List.of(optionTwo, optionTwo1, optionTwo2, optionTwo3, optionTwo4, optionTwo5));
 
+            List<Requirement> graphTaskTwoReq = requirementService.getDefaultRequirements();
+
             GraphTask graphTaskTwo = new GraphTask();
             graphTaskTwo.setQuestions(List.of(startQuestionTwo, questionTwo1, questionTwo2, questionTwo3,  questionTwo4, questionTwo5));
             graphTaskTwo.setTitle("Dżungla kabli II");
@@ -440,6 +446,7 @@ public class DatabaseConfig {
             graphTaskTwo.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTaskTwo.setPosX(2);
             graphTaskTwo.setPosY(2);
+            graphTaskTwo.setRequirements(graphTaskTwoReq);
 
             graphTaskService.saveGraphTask(graphTaskTwo);
 
@@ -559,6 +566,8 @@ public class DatabaseConfig {
 
             Chapter chapter = new Chapter();
             chapter.setName("Rozdział 1");
+            chapter.setPosX(2);
+            chapter.setPosY(2);
             chapter.setActivityMap(activityMap1);
 
             chapterRepo.save(chapter);

@@ -31,7 +31,7 @@ function AddGraphTask(props) {
     if (placeholderJson) {
       const graphInfo = placeholderJson.questions.map((question) => ({
         id: question.questionNum,
-        color: getNodeColor(question.difficulty),
+        borderColor: getNodeColor(question.difficulty),
         targetIds: question.nextQuestions
       }))
 
@@ -81,7 +81,7 @@ function AddGraphTask(props) {
           )}
         </Tab>
         <Tab eventKey={'preview'} title={'Podgląd grafu'}>
-          <Graph elements={graphElements} height={'60vh'} />
+          <Graph elements={graphElements} height={'60vh'} layoutName={'klay'} />
           <FontAwesomeIcon icon={faRefresh} onClick={refreshGraph} style={{ cursor: 'pointer' }} />
         </Tab>
       </Tabs>
