@@ -203,7 +203,7 @@ public class DashboardService {
 
     // TODO: Replace mocks
     private HeroStats getHeroStats(User student) {
-        Double experiencePoints = getExperiencePoints(student);
+        Double experiencePoints = student.getPoints();
         Double nextLvlPoints = 100D; // TODO
         String rankName = "Nowicjusz"; // TODO
         Long badgesNumber = 3L; // TODO
@@ -216,47 +216,6 @@ public class DashboardService {
                 badgesNumber,
                 completedActivities
         );
-    }
-
-    private Double getExperiencePoints(User student) {
-        Double graphTasksExperience = graphTaskResultRepo.findAllByUser(student)
-                .stream()
-                .filter(GraphTaskResult::isEvaluated)
-                .filter(graphTaskResult ->
-                        Objects.nonNull(graphTaskResult.getGraphTask().getExperience()) &&
-                        graphTaskResult.getGraphTask().getMaxPoints() > 0
-                        )
-                .mapToDouble(graphTaskResult ->
-                        graphTaskResult.getGraphTask().getExperience() *
-                        graphTaskResult.getPointsReceived() /
-                        graphTaskResult.getGraphTask().getMaxPoints())
-                .sum();
-        Double fileTaskExperience = fileTaskResultRepo.findAllByUser(student)
-                .stream()
-                .filter(FileTaskResult::isEvaluated)
-                .filter(fileTaskResult ->
-                        Objects.nonNull(fileTaskResult.getFileTask().getExperience()) &&
-                        fileTaskResult.getFileTask().getMaxPoints() > 0
-                )
-                .mapToDouble(fileTaskResult ->
-                        fileTaskResult.getFileTask().getExperience() *
-                        fileTaskResult.getPointsReceived() /
-                        fileTaskResult.getFileTask().getMaxPoints())
-                .sum();
-        Double surveyExperience = surveyResultRepo.findAllByUser(student)
-                .stream()
-                .filter(SurveyResult::isEvaluated)
-                .map(SurveyResult::getSurvey)
-                .filter(survey -> Objects.nonNull(survey.getExperience()))
-                .mapToDouble(Activity::getExperience)
-                .sum();
-        Double infoExperience = infoService.getStudentInfos(student)
-                .stream()
-                .filter(info -> Objects.nonNull(info.getExperience()))
-                .mapToDouble(Activity::getExperience)
-                .sum();
-        Double exp = graphTasksExperience + fileTaskExperience + surveyExperience + infoExperience;
-        return PointsCalculator.round(exp, 2);
     }
 
     // Completed means answer was sent (not necessarily rated)
