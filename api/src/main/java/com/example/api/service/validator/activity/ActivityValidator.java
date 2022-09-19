@@ -1,19 +1,21 @@
 package com.example.api.service.validator.activity;
 
 import com.example.api.dto.request.activity.task.create.*;
-import com.example.api.error.exception.*;
+import com.example.api.dto.response.map.task.ActivityType;
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.EntityRequiredAttributeNullException;
+import com.example.api.error.exception.ExceptionMessage;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.TaskResult;
-import com.example.api.model.activity.task.Activity;
-import com.example.api.model.activity.task.FileTask;
-import com.example.api.model.activity.task.GraphTask;
+import com.example.api.model.activity.task.*;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
-import com.example.api.model.map.requirement.Requirement;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
+import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -37,6 +39,13 @@ public class ActivityValidator {
         if(activity == null) {
             log.error("Activity with id {} not found in database", id);
             throw new EntityNotFoundException("Activity with id" + id + " not found in database");
+        }
+    }
+
+    public void validateActivityIsNotNullWithMessage(Activity activity, String title, String message) throws EntityNotFoundException {
+        if(activity == null) {
+            log.error("Activity with title {} not found in database", title);
+            throw new EntityNotFoundException(message);
         }
     }
 
@@ -123,12 +132,12 @@ public class ActivityValidator {
         }
     }
 
-    public void validateGraphTaskTitleIsUnique(String title, List<GraphTask> graphTasks) throws RequestValidationException {
-        graphTaskValidator.validateGraphTaskTitleIsUnique(title, graphTasks);
+    public void validateGraphTaskTitle(String title, List<GraphTask> graphTasks) throws RequestValidationException {
+        graphTaskValidator.validateGraphTaskTitle(title, graphTasks);
     }
 
-    public void validateFileTaskTitleIsUnique(String title, List<FileTask> fileTasks) throws RequestValidationException {
-        fileTaskValidator.validateFileTaskTitleIsUnique(title, fileTasks);
+    public void validateFileTaskTitle(String title, List<FileTask> fileTasks) throws RequestValidationException {
+        fileTaskValidator.validateFileTaskTitle(title, fileTasks);
     }
 
     public void validateRequirementsHasDateTo(List<Requirement> requirements) throws EntityRequiredAttributeNullException {

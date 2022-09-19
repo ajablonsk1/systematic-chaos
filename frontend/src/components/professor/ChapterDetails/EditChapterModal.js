@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Card, Col, Container, Form, Modal, Row, Spinner } from 'react-bootstrap'
-import { FIELD_REQUIRED, POSITIVE_NUMBER } from '../../../utils/constants'
+import { FIELD_REQUIRED, NUMBER_FROM_RANGE } from '../../../utils/constants'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { Formik } from 'formik'
 import { SuccessModal } from '../SuccessModal'
@@ -27,9 +27,9 @@ function EditChapterModal(props) {
               validate={(values) => {
                 const errors = {}
                 if (!values.chapterName) errors.chapterName = FIELD_REQUIRED
-                if (!values.chapterSizeX) errors.chapterSizeX = POSITIVE_NUMBER
-                if (!values.chapterSizeY) errors.chapterSizeY = POSITIVE_NUMBER
-                if (!values.points100) errors.points100 = POSITIVE_NUMBER
+                if (!values.chapterSizeX) errors.chapterSizeX = NUMBER_FROM_RANGE(1, 10)
+                if (!values.chapterSizeY) errors.chapterSizeY = NUMBER_FROM_RANGE(1, 10)
+                if (!values.points100) errors.points100 = NUMBER_FROM_RANGE(1, 10)
                 if (values.chapterConditions.length === 0) errors.chapterConditions = FIELD_REQUIRED
                 return errors
               }}

@@ -1,5 +1,5 @@
 export const getNodePosition = (chapterPosition, mapContainerSize) => {
-  if (!mapContainerSize) {
+  if (!mapContainerSize || !chapterPosition) {
     return { x: 0, y: 0 }
   }
 

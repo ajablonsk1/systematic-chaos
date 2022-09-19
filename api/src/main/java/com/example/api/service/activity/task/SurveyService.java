@@ -13,7 +13,7 @@ import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.map.RequirementService;
-import com.example.api.service.validator.MapValidator;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +32,9 @@ public class SurveyService {
     private final ChapterRepo chapterRepo;
     private final ActivityValidator activityValidator;
     private final UserValidator userValidator;
-    private final MapValidator mapValidator;
     private final AuthenticationService authService;
     private final RequirementService requirementService;
+    private final ChapterValidator chapterValidator;
 
     public Survey saveSurvey(Survey survey){
         return surveyRepo.save(survey);
@@ -52,7 +52,7 @@ public class SurveyService {
         CreateSurveyForm form = chapterForm.getForm();
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateSurveyForm(form);
         activityValidator.validateActivityPosition(form, chapter);
 

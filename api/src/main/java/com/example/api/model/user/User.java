@@ -37,7 +37,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
     private Integer level;
-    private Integer points;
+    private Double points = 0.0;
 
     @Enumerated(EnumType.STRING)
     private HeroType heroType;
@@ -46,4 +46,9 @@ public class User {
     @JoinColumn(name = "group_id")
     @JsonManagedReference
     private Group group;
+
+    public synchronized void changePoints(Double diff) {
+        if (points + diff < 0) return;
+        points = points + diff;
+    }
 }

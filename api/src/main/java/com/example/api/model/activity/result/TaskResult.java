@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @MappedSuperclass
 public abstract class TaskResult {
 
@@ -28,4 +27,17 @@ public abstract class TaskResult {
 
     public abstract boolean isEvaluated();
     public abstract Activity getActivity();
+
+    public TaskResult(Long id, User user, Double pointsReceived, Long sendDateMillis) {
+        this.id = id;
+        this.user = user;
+        this.setPointsReceived(pointsReceived);
+        this.sendDateMillis = sendDateMillis;
+    }
+
+    public void setPointsReceived(Double newPoints) {
+        if (pointsReceived == null) user.changePoints(newPoints);
+        else user.changePoints(newPoints - pointsReceived);
+        pointsReceived = newPoints;
+    }
 }

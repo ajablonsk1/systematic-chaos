@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Long registerUser(RegisterUserForm form)
-            throws EntityNotFoundException, EntityAlreadyInDatabaseException, WrongBodyParametersNumberException {
+            throws RequestValidationException {
         String email = form.getEmail();
         log.info("Registering user {}", email);
         User dbUser = userRepo.findUserByEmail(email);

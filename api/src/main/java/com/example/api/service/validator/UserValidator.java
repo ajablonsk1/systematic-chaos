@@ -29,6 +29,13 @@ public class UserValidator {
             throw new UsernameNotFoundException("User " + email + " not found in database");
         }
     }
+
+    public void validateUserIsNotNullWithMessage(User user, String email, String message) throws UsernameNotFoundException {
+        if(user == null) {
+            log.error("User {} not found in database", email);
+            throw new UsernameNotFoundException(message);
+        }
+    }
     
     public void validateUserAccountType(User user, AccountType type) throws WrongUserTypeException {
         if(user.getAccountType() != type) {
@@ -76,10 +83,15 @@ public class UserValidator {
         groupRepo.save(newGroup);
     }
 
-    public void validateUserRegistration(User dbUser, User newUser, RegisterUserForm form, String email) throws EntityAlreadyInDatabaseException, WrongBodyParametersNumberException, EntityNotFoundException {
+    public void validateUserRegistration(User dbUser, User newUser, RegisterUserForm form, String email) throws RequestValidationException {
         if(dbUser != null) {
             log.error("User {} already exist in database", email);
             throw new EntityAlreadyInDatabaseException(ExceptionMessage.EMAIL_TAKEN);
+        }
+        int idx = email.indexOf(";");
+        if (idx != -1) {
+            log.error("Email cannot have a semicolon!");
+            throw new RequestValidationException(ExceptionMessage.EMAIL_CONTAINS_SEMICOLON);
         }
         if(form.getAccountType() == AccountType.STUDENT){
             if(form.getHeroType() == null || form.getInvitationCode() == null) {

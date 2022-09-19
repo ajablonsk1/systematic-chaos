@@ -22,7 +22,7 @@ import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.map.RequirementService;
-import com.example.api.service.validator.MapValidator;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import com.example.api.util.calculator.TimeParser;
@@ -54,6 +54,7 @@ public class GraphTaskService {
     private final MapValidator mapValidator;
     private final TimeParser timeParser;
     private final RequirementService requirementService;
+    private final ChapterValidator chapterValidator;
 
     public GraphTask saveGraphTask(GraphTask graphTask) {
         return graphTaskRepo.save(graphTask);
@@ -71,14 +72,16 @@ public class GraphTaskService {
         CreateGraphTaskForm form = chapterForm.getForm();
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateGraphTaskFormFields(form);
         activityValidator.validateActivityPosition(form, chapter);
 
         List<GraphTask> graphTasks = graphTaskRepo.findAll();
-        activityValidator.validateGraphTaskTitleIsUnique(form.getTitle(), graphTasks);
+        activityValidator.validateGraphTaskTitle(form.getTitle(), graphTasks);
 
+        SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");
+        long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(expireDateFormat, form.getActivityExpireDate());
         long timeToSolveMillis = timeParser.parseAndGetTimeMillisFromHour(timeToSolveFormat, form.getTimeToSolve());
 
         String email = authService.getAuthentication().getName();
@@ -138,12 +141,13 @@ public class GraphTaskService {
         GraphTask graphTask = new GraphTask(form,
                 professor,
                 questions,
+                expireDateMillis,
                 timeToSolveMillis,
                 maxPoints);
         graphTask.setRequirements(requirementService.getDefaultRequirements());
         graphTaskRepo.save(graphTask);
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         chapter.getActivityMap().getGraphTasks().add(graphTask);
     }
 

@@ -30,6 +30,7 @@ import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.map.RequirementRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.GroupValidator;
 import com.example.api.service.validator.MapValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
@@ -60,6 +61,7 @@ public class TaskService {
     private final UserValidator userValidator;
     private final ActivityValidator activityValidator;
     private final MapValidator mapValidator;
+    private final GroupValidator groupValidator;
 
     public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate()
             throws WrongUserTypeException, UsernameNotFoundException {
@@ -258,35 +260,59 @@ public class TaskService {
                     requirement.setMinPoints(minPoints);
                 }
                 case GROUPS -> {
-                    List<String> groupNames = Arrays.asList(requirementForm.getValue().split(";"));
-                    List<Group> groups = groupRepo.findAll()
-                            .stream()
-                            .filter(group -> groupNames.contains(group.getName()))
-                            .toList();
+                    String[] groupNames = requirementForm.getValue().split(";");
+                    List<Group> groups = new LinkedList<>();
+                    for (String grouName: groupNames) {
+                        Group group = groupRepo.findGroupByName(grouName);
+                        groupValidator.validateGroupIsNotNullWithMessage(
+                                group,
+                                grouName,
+                                ExceptionMessage.GROUP_NOT_FOUND + grouName
+                        );
+                        groups.add(group);
+                    }
                     requirement.setAllowedGroups(groups);
                 }
                 case STUDENTS -> {
-                    List<String> emails = Arrays.asList(requirementForm.getValue().split(";"));
-                    List<User> students = userRepo.findAll()
-                            .stream()
-                            .filter(user -> emails.contains(user.getEmail()))
-                            .toList();
+                    String[] emails = requirementForm.getValue().split(";");
+                    List<User> students = new LinkedList<>();
+                    for(String email: emails) {
+                        User student = userRepo.findUserByEmail(email);
+                        userValidator.validateUserIsNotNullWithMessage(
+                                student,
+                                email,
+                                ExceptionMessage.STUDENT_NOT_FOUND + email
+                        );
+                        students.add(student);
+                    }
                     requirement.setAllowedStudents(students);
                 }
                 case GRAPH_TASKS -> {
-                    List<String> titles = Arrays.asList(requirementForm.getValue().split(";"));
-                    List<GraphTask> graphTasks = graphTaskRepo.findAll()
-                            .stream()
-                            .filter(graphTask -> titles.contains(graphTask.getTitle()))
-                            .toList();
+                    String[] titles = requirementForm.getValue().split(";");
+                    List<GraphTask> graphTasks = new LinkedList<>();
+                    for (String title: titles) {
+                        GraphTask graphTask = graphTaskRepo.findGraphTaskByTitle(title);
+                        activityValidator.validateActivityIsNotNullWithMessage(
+                                graphTask,
+                                title,
+                                ExceptionMessage.GRAPH_TASK_NOT_FOUND + title
+                        );
+                        graphTasks.add(graphTask);
+                    }
                     requirement.setFinishedGraphTasks(graphTasks);
                 }
                 case FILE_TASKS -> {
                     List<String> titles = Arrays.asList(requirementForm.getValue().split(";"));
-                    List<FileTask> fileTasks = fileTaskRepo.findAll()
-                            .stream()
-                            .filter(fileTask -> titles.contains(fileTask.getTitle()))
-                            .toList();
+                    List<FileTask> fileTasks = new LinkedList<>();
+                    for (String title: titles) {
+                        FileTask fileTask = fileTaskRepo.findFileTaskByTitle(title);
+                        activityValidator.validateActivityIsNotNullWithMessage(
+                                fileTask,
+                                title,
+                                ExceptionMessage.FILE_TASK_NOT_FOUND + title
+                        );
+                        fileTasks.add(fileTask);
+                    }
                     requirement.setFinishedFileTasks(fileTasks);
                 }
                 default -> {
@@ -295,6 +321,7 @@ public class TaskService {
                     throw new RequestValidationException(errorMessage);
                 }
             }
+            requirement.setIsDefault(false);
         }
     }
 
