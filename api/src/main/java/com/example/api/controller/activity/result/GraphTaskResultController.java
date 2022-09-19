@@ -1,6 +1,5 @@
 package com.example.api.controller.activity.result;
 
-import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
 import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
 import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
 import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
@@ -35,13 +34,13 @@ public class GraphTaskResultController {
 
     @GetMapping("/points/closed")
     public ResponseEntity<Double> getPointsFromClosedQuestions(@RequestParam Long graphTaskResultId)
-            throws WrongAnswerTypeException, EntityNotFoundException {
+            throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskResultService.getPointsFromClosedQuestions(graphTaskResultId));
     }
 
     @GetMapping("/points/opened")
     public ResponseEntity<Double> getPointsFromOpenedQuestions(@RequestParam Long graphTaskResultId)
-            throws WrongAnswerTypeException, EntityNotFoundException {
+            throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskResultService.getPointsFromOpenedQuestions(graphTaskResultId));
     }
 
@@ -67,12 +66,6 @@ public class GraphTaskResultController {
     public ResponseEntity<Double> getMaxAvailablePoints(@RequestParam Long graphTaskResultId)
             throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskResultService.getMaxAvailablePoints(graphTaskResultId));
-    }
-
-    @PostMapping("/answer/add")
-    public ResponseEntity<Long> addAnswerToGraphTaskResult(@RequestBody AddAnswerToGraphTaskForm form)
-            throws RequestValidationException {
-        return ResponseEntity.ok().body(graphTaskResultService.addAnswerToGraphTaskResult(form));
     }
 
     @PostMapping("/start-date/set")
