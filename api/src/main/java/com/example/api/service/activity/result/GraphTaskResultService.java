@@ -2,15 +2,16 @@ package com.example.api.service.activity.result;
 
 import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
 import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
-import com.example.api.error.exception.*;
+import com.example.api.error.exception.EntityAlreadyInDatabaseException;
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.EntityRequiredAttributeNullException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.ResultStatus;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
-import com.example.api.repo.question.AnswerRepo;
-import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.ResultValidator;
@@ -155,7 +156,7 @@ public class GraphTaskResultService {
         return resultId;
     }
 
-    public Pair<GraphTask, GraphTaskResult> getGraphTaskAndResult(Long graphTaskId, String email)
+    public GraphTaskResult getGraphTaskResult(Long graphTaskId, String email)
             throws EntityNotFoundException, WrongUserTypeException {
         User user = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(user, email);
@@ -166,6 +167,6 @@ public class GraphTaskResultService {
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
         resultValidator.validateResultIsNotNull(result, graphTaskId, email);
 
-        return Pair.of(graphTask, result);
+        return result;
     }
 }

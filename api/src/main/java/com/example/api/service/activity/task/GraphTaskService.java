@@ -7,7 +7,6 @@ import com.example.api.dto.request.activity.task.create.QuestionForm;
 import com.example.api.dto.response.activity.task.result.GraphTaskResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
-import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.question.Difficulty;
@@ -51,7 +50,6 @@ public class GraphTaskService {
     private final QuestionRepo questionRepo;
     private final ChapterRepo chapterRepo;
     private final UserValidator userValidator;
-    private final MapValidator mapValidator;
     private final TimeParser timeParser;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
@@ -79,9 +77,7 @@ public class GraphTaskService {
         List<GraphTask> graphTasks = graphTaskRepo.findAll();
         activityValidator.validateGraphTaskTitle(form.getTitle(), graphTasks);
 
-        SimpleDateFormat expireDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");
-        long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(expireDateFormat, form.getActivityExpireDate());
         long timeToSolveMillis = timeParser.parseAndGetTimeMillisFromHour(timeToSolveFormat, form.getTimeToSolve());
 
         String email = authService.getAuthentication().getName();
@@ -141,7 +137,6 @@ public class GraphTaskService {
         GraphTask graphTask = new GraphTask(form,
                 professor,
                 questions,
-                expireDateMillis,
                 timeToSolveMillis,
                 maxPoints);
         graphTask.setRequirements(requirementService.getDefaultRequirements());

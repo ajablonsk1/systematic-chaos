@@ -34,7 +34,6 @@ public class QuestionController {
     @PostMapping("/set-status")
     public ResponseEntity<Long> getInfoAboutCurrentResultState(@RequestBody SetStatusForm form)
             throws RequestValidationException {
-        questionService.setStatus(form);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().body(questionService.setStatus(form));
     }
 }

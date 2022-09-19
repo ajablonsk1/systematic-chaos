@@ -1,21 +1,22 @@
 package com.example.api.service.validator.activity;
 
 import com.example.api.dto.request.activity.task.create.*;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.EntityRequiredAttributeNullException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.TaskResult;
-import com.example.api.model.activity.task.*;
+import com.example.api.model.activity.task.Activity;
+import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
+import com.example.api.model.map.requirement.Requirement;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
-import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

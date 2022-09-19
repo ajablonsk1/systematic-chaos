@@ -1,6 +1,5 @@
 package com.example.api.service.question;
 
-import com.example.api.dto.request.activity.result.AnswerForm;
 import com.example.api.dto.request.activity.result.SetStatusForm;
 import com.example.api.dto.response.activity.task.result.question.QuestionDetails;
 import com.example.api.dto.response.activity.task.result.question.QuestionInfoResponse;
@@ -19,14 +18,12 @@ import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.validator.QuestionValidator;
 import com.example.api.service.validator.ResultValidator;
-import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -57,9 +54,7 @@ public class QuestionService {
         ResultStatus status = form.getStatus();
         Long graphTaskId = form.getGraphTaskId();
 
-        Pair<GraphTask, GraphTaskResult> graphTaskAndResultPair =
-                graphTaskResultService.getGraphTaskAndResult(graphTaskId, email);
-        GraphTaskResult result = graphTaskAndResultPair.getSecond();
+        GraphTaskResult result = graphTaskResultService.getGraphTaskResult(graphTaskId, email);
 
         Long timeRemaining = graphTaskResultService.getTimeRemaining(result);
         if (timeRemaining < 0) {
@@ -68,20 +63,22 @@ public class QuestionService {
 
         switch (status) {
             case CHOOSE -> {
-                resultValidator.validateGraphTaskResultStatusIsChoose(result, graphTaskId, email);
+                resultValidator.validateGraphTaskResultStatusIsChoose(result);
                 Long questionId = form.getQuestionId();
                 Question question = questionRepo.findQuestionById(questionId);
                 questionValidator.validateQuestionIsNotNull(question, questionId);
                 result.setCurrQuestion(question);
+                result.setStatus(ResultStatus.ANSWER);
                 return timeRemaining;
             }
             case ANSWER -> {
-                resultValidator.validateGraphTaskResultStatusIsAnswer(result, graphTaskId, email);
-                Answer answer = resultValidator.validateAndCreateAnswer(form.getAnswerForm());
+                resultValidator.validateGraphTaskResultStatusIsAnswer(result);
                 Question question = result.getCurrQuestion();
+                Answer answer = resultValidator.validateAndCreateAnswer(form.getAnswerForm(), question);
                 answer.setQuestion(question);
                 answerRepo.save(answer);
                 result.getAnswers().add(answer);
+                result.setStatus(ResultStatus.CHOOSE);
                 return timeRemaining;
             }
             default ->
@@ -91,18 +88,13 @@ public class QuestionService {
 
     public QuestionInfoResponse getQuestionInfo(Long graphTaskId) throws RequestValidationException {
         String email = authService.getAuthentication().getName();
-
-        Pair<GraphTask, GraphTaskResult> graphTaskAndResultPair = graphTaskResultService.getGraphTaskAndResult(graphTaskId, email);
-
-        GraphTask graphTask = graphTaskAndResultPair.getFirst();
-        GraphTaskResult result = graphTaskAndResultPair.getSecond();
-
+        GraphTaskResult result = graphTaskResultService.getGraphTaskResult(graphTaskId, email);
         ResultStatus status = result.getStatus();
+
         switch (status) {
             case CHOOSE -> {
                 List<QuestionList> questionList = getNextQuestions(
                         graphTaskId,
-                        graphTask,
                         result,
                         email
                 );
@@ -128,7 +120,6 @@ public class QuestionService {
     }
 
     private List<QuestionList> getNextQuestions(Long graphTaskId,
-                                                GraphTask graphTask,
                                                 GraphTaskResult result,
                                                 String email) {
         log.info("Fetching next questions for graph task with id {} and user {}", graphTaskId, email);

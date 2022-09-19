@@ -10,6 +10,7 @@ import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.question.Answer;
 import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
+import com.example.api.model.question.QuestionType;
 import com.example.api.repo.question.OptionRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,20 +24,51 @@ import java.util.List;
 public class ResultValidator {
     private final OptionRepo optionRepo;
 
-    public Answer validateAndCreateAnswer(AnswerForm form) throws RequestValidationException {
+    public Answer validateAndCreateAnswer(AnswerForm form, Question question) throws RequestValidationException {
         if (form == null) {
             log.error("Answer form cannot be null!");
             throw new RequestValidationException("Answer form cannot be null!");
         }
+        QuestionType questionType = question.getType();
         Answer answer = new Answer();
-        List<Long> ids = form.getOptionIds();
-        List<Option> options = optionRepo.findAllById(ids);
-        if (options.size() > 1) {
-            answer.setOptions(options);
-        } else if (options.size() == 1) {
-            answer.setOption(options.get(0));
+        switch (questionType) {
+            case OPENED -> {
+                if (form.getOpenAnswer() == null) {
+                    log.error("Opened answer for question type OPENED cannot be null!");
+                    throw new RequestValidationException("Opened answer for question type OPENED cannot be null!");
+                }
+               answer.setOpenAnswer(form.getOpenAnswer());
+            }
+            case SINGLE_CHOICE -> {
+                List<Long> optionIds = form.getOptionIds();
+                if (optionIds == null || optionIds.size() != 1) {
+                    log.error("Option ids for question type SINGLE_CHOICE has to contain one element and cannot be null!");
+                    throw new RequestValidationException("Option ids for question type SINGLE_CHOICE has to contain one element and cannot be null!");
+                }
+                Long id = optionIds.get(0);
+                Option option = optionRepo.findOptionById(id);
+                if (option == null) {
+                    log.error("Option with id {} not found in database!", id);
+                    throw new EntityNotFoundException("Option with id " + id + " not found in database!");
+                }
+                answer.setOption(option);
+            }
+            case MULTIPLE_CHOICE -> {
+                List<Long> optionIds = form.getOptionIds();
+                if (optionIds == null) {
+                    log.error("Option ids for question type SINGLE_CHOICE cannot be null!");
+                    throw new RequestValidationException("Option ids for question type SINGLE_CHOICE cannot be null!");
+                }
+                List<Option> options = optionRepo.findAllById(optionIds);
+                int optionSize = options.size();
+                int optionIdsSize = optionIds.size();
+                if (optionSize != optionIdsSize) {
+                    log.error("All options should match the number of ids provided. Num of options: {}, ids: {}", optionSize, optionIdsSize);
+                    throw new RequestValidationException("All options should match the number of ids provided. Num of options: " + optionSize + ", ids: " + optionIdsSize);
+                }
+                answer.setOptions(options);
+            }
         }
-        answer.setOpenAnswer(form.getOpenAnswer());
         return answer;
     }
 
@@ -57,21 +89,19 @@ public class ResultValidator {
         }
     }
 
-    public void validateGraphTaskResultStatusIsChoose(GraphTaskResult result, Long id, String email)
+    public void validateGraphTaskResultStatusIsChoose(GraphTaskResult result)
             throws RequestValidationException {
-        validateResultIsNotNull(result, id, email);
         if (result.getStatus() != ResultStatus.CHOOSE) {
-            log.error("GraphTaskResult with id {} should has CHOOSE status", result.getId());
-            throw new RequestValidationException("GraphTaskResult with id " + result.getId() + " should has CHOOSE status");
+            log.error("Wrong request body status! It should be {}", result.getStatus());
+            throw new RequestValidationException("Wrong request body status! It should be " +  result.getStatus());
         }
     }
 
-    public void validateGraphTaskResultStatusIsAnswer(GraphTaskResult result, Long id, String email)
+    public void validateGraphTaskResultStatusIsAnswer(GraphTaskResult result)
             throws RequestValidationException {
-        validateResultIsNotNull(result, id, email);
         if (result.getStatus() != ResultStatus.ANSWER) {
-            log.error("GraphTaskResult with id {} should has ANSWER status", result.getId());
-            throw new RequestValidationException("GraphTaskResult with id " + result.getId() + " should has ANSWER status");
+            log.error("Wrong request body status! It should be {}", result.getStatus());
+            throw new RequestValidationException("Wrong request body status! It should be " +  result.getStatus());
         }
     }
 }
