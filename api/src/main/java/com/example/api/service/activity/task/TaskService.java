@@ -239,34 +239,43 @@ public class TaskService {
             Requirement requirement = requirementRepo.findRequirementById(requirementForm.getId());
             mapValidator.validateRequirementIsNotNull(requirement, requirementForm.getId());
             requirement.setSelected(requirementForm.getSelected());
+            String value = requirementForm.getValue();
             switch (requirement.getType()) {
                 case DATE_FROM -> {
-                    Long dateFrom = Long.valueOf(requirementForm.getValue());
+                    Long dateFrom = value.equals("") ? null : Long.valueOf(value);
                     requirement.setDateFrom(dateFrom);
                 }
                 case DATE_TO -> {
-                    Long dateTo = Long.valueOf(requirementForm.getValue());
+                    Long dateTo =  value.equals("") ? null : Long.valueOf(requirementForm.getValue());
                     requirement.setDateTo(dateTo);
                 }
                 case MIN_POINTS -> {
-                    Double minPoints = Double.valueOf(requirementForm.getValue());
+                    Double minPoints =  value.equals("") ? null : Double.valueOf(requirementForm.getValue());
                     requirement.setMinPoints(minPoints);
                 }
                 case GROUPS -> {
+                    if (value.equals("")) {
+                        requirement.setAllowedGroups(new LinkedList<>());
+                        break;
+                    }
                     String[] groupNames = requirementForm.getValue().split(";");
                     List<Group> groups = new LinkedList<>();
-                    for (String grouName: groupNames) {
-                        Group group = groupRepo.findGroupByName(grouName);
+                    for (String groupName: groupNames) {
+                        Group group = groupRepo.findGroupByName(groupName);
                         groupValidator.validateGroupIsNotNullWithMessage(
                                 group,
-                                grouName,
-                                ExceptionMessage.GROUP_NOT_FOUND + grouName
+                                groupName,
+                                ExceptionMessage.GROUP_NOT_FOUND + groupName
                         );
                         groups.add(group);
                     }
                     requirement.setAllowedGroups(groups);
                 }
                 case STUDENTS -> {
+                    if (value.equals("")) {
+                        requirement.setAllowedStudents(new LinkedList<>());
+                        break;
+                    }
                     String[] emails = requirementForm.getValue().split(";");
                     List<User> students = new LinkedList<>();
                     for(String email: emails) {
@@ -281,6 +290,10 @@ public class TaskService {
                     requirement.setAllowedStudents(students);
                 }
                 case GRAPH_TASKS -> {
+                    if (value.equals("")) {
+                        requirement.setFinishedGraphTasks(new LinkedList<>());
+                        break;
+                    }
                     String[] titles = requirementForm.getValue().split(";");
                     List<GraphTask> graphTasks = new LinkedList<>();
                     for (String title: titles) {
@@ -295,6 +308,10 @@ public class TaskService {
                     requirement.setFinishedGraphTasks(graphTasks);
                 }
                 case FILE_TASKS -> {
+                    if (value.equals("")) {
+                        requirement.setFinishedFileTasks(new LinkedList<>());
+                        break;
+                    }
                     List<String> titles = Arrays.asList(requirementForm.getValue().split(";"));
                     List<FileTask> fileTasks = new LinkedList<>();
                     for (String title: titles) {
