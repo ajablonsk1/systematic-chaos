@@ -8,14 +8,14 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class QuestionResponse {
+public class QuestionList {
     private Long id;
     private QuestionType type;
     private String hint;
     private Difficulty difficulty;
     private Double points;
 
-    public QuestionResponse(Question question) {
+    public QuestionList(Question question) {
         this.id = question.getId();
         this.type = question.getType();
         this.hint = question.getHint();

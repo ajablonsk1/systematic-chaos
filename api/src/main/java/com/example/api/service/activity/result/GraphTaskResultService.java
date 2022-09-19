@@ -1,14 +1,11 @@
 package com.example.api.service.activity.result;
 
-import com.example.api.dto.request.activity.result.AddAnswerToGraphTaskForm;
 import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
 import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
 import com.example.api.error.exception.*;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.ResultStatus;
 import com.example.api.model.activity.task.GraphTask;
-import com.example.api.model.question.Answer;
-import com.example.api.model.question.Question;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
@@ -36,8 +33,6 @@ public class GraphTaskResultService {
     private final GraphTaskResultRepo graphTaskResultRepo;
     private final GraphTaskRepo graphTaskRepo;
     private final UserRepo userRepo;
-    private final QuestionRepo questionRepo;
-    private final AnswerRepo answerRepo;
     private final PointsCalculator pointsCalculator;
     private final ResultValidator resultValidator;
     private final UserValidator userValidator;
@@ -71,11 +66,13 @@ public class GraphTaskResultService {
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
         resultValidator.validateGraphTaskResultIsNotInDatabase(result, id, email);
 
-        GraphTaskResult graphTaskResult = new GraphTaskResult();
-        graphTaskResult.setGraphTask(graphTask);
-        graphTaskResult.setUser(user);
-        graphTaskResult.setStartDateMillis(System.currentTimeMillis());
-        graphTaskResult.setStatus(ResultStatus.CHOOSE);
+        GraphTaskResult graphTaskResult = new GraphTaskResult(
+                graphTask,
+                user,
+                System.currentTimeMillis(),
+                ResultStatus.CHOOSE,
+                graphTask.getQuestions().get(0)
+        );
         graphTaskResultRepo.save(graphTaskResult);
     }
 
@@ -123,30 +120,6 @@ public class GraphTaskResultService {
         return pointsCalculator.calculateMaxOpenedPoints(result);
     }
 
-    public Long addAnswerToGraphTaskResult(AddAnswerToGraphTaskForm form) throws RequestValidationException {
-        Long graphTaskId = form.getGraphTaskId();
-        String email = authService.getAuthentication().getName();
-
-        Pair<GraphTask, GraphTaskResult> pair = getGraphTaskAndResult(graphTaskId, email);
-        GraphTaskResult result = pair.getSecond();
-        resultValidator.validateGraphTaskResultIsNotNullAndStatusIsAnswer(result, graphTaskId, email);
-
-        long timeRemaining = getTimeRemaining(result);
-        if(timeRemaining < 0) {
-            log.debug("Time for graph task result with id {} has ended", result.getId());
-            return timeRemaining;
-        }
-        log.info("Saving answer to database for task result with id {}", result.getId());
-        Answer answer = resultValidator.validateAndCreateAnswer(form.getAnswerForm());
-        Question question = questionRepo.findQuestionById(form.getQuestionId());
-
-        answer.setQuestion(question);
-        answerRepo.save(answer);
-        result.getAnswers().add(answer);
-        result.setStatus(ResultStatus.CHOOSE);
-        return timeRemaining;
-    }
-
     public Long setStartDateMillis(SetStartDateMillisForm form) throws EntityNotFoundException {
         Long id = form.getResultId();
         log.info("Setting start time for graph task result with id {}", id);
@@ -191,6 +164,8 @@ public class GraphTaskResultService {
         activityValidator.validateActivityIsNotNull(graphTask, graphTaskId);
 
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
+        resultValidator.validateResultIsNotNull(result, graphTaskId, email);
+
         return Pair.of(graphTask, result);
     }
 }

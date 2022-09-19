@@ -23,7 +23,11 @@ import java.util.List;
 public class ResultValidator {
     private final OptionRepo optionRepo;
 
-    public Answer validateAndCreateAnswer(AnswerForm form) {
+    public Answer validateAndCreateAnswer(AnswerForm form) throws RequestValidationException {
+        if (form == null) {
+            log.error("Answer form cannot be null!");
+            throw new RequestValidationException("Answer form cannot be null!");
+        }
         Answer answer = new Answer();
         List<Long> ids = form.getOptionIds();
         List<Option> options = optionRepo.findAllById(ids);
@@ -53,7 +57,7 @@ public class ResultValidator {
         }
     }
 
-    public void validateGraphTaskResultIsNotNullAndStatusIsChoose(GraphTaskResult result, Long id, String email)
+    public void validateGraphTaskResultStatusIsChoose(GraphTaskResult result, Long id, String email)
             throws RequestValidationException {
         validateResultIsNotNull(result, id, email);
         if (result.getStatus() != ResultStatus.CHOOSE) {
@@ -62,7 +66,7 @@ public class ResultValidator {
         }
     }
 
-    public void validateGraphTaskResultIsNotNullAndStatusIsAnswer(GraphTaskResult result, Long id, String email)
+    public void validateGraphTaskResultStatusIsAnswer(GraphTaskResult result, Long id, String email)
             throws RequestValidationException {
         validateResultIsNotNull(result, id, email);
         if (result.getStatus() != ResultStatus.ANSWER) {

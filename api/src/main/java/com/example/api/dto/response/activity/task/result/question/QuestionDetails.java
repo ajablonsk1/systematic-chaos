@@ -8,19 +8,17 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class QuestionInfo {
-    private Long id;
+public class QuestionDetails {
+    private Long questionId;
     private String content;
     private Double points;
-    private Long timeRemaining;
-    private List<OptionInfo> optionInfos;
+    private List<OptionInfo> options;
 
-    public QuestionInfo(Question question, Long timeRemaining) {
-        this.id = question.getId();
+    public QuestionDetails(Question question) {
+        this.questionId = question.getId();
         this.content = question.getContent();
         this.points = question.getPoints();
-        this.timeRemaining = timeRemaining;
-        this.optionInfos = question.getOptions()
+        this.options = question.getOptions()
                 .stream()
                 .map(OptionInfo::new)
                 .toList();
