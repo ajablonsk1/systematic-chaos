@@ -93,7 +93,7 @@ public class GraphTaskResultServiceTest {
         given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
 
         // when
-        graphTaskResultService.getGraphTaskResult(graphTask.getId());
+        graphTaskResultService.getGraphTaskResultId(graphTask.getId());
 
         // then
         verify(graphTaskResultRepo).findGraphTaskResultByGraphTaskAndUser(
@@ -117,7 +117,7 @@ public class GraphTaskResultServiceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResult(graphTask.getId()))
+        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResultId(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
     }

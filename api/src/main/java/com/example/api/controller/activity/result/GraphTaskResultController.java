@@ -7,7 +7,6 @@ import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.EntityRequiredAttributeNullException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +22,9 @@ public class GraphTaskResultController {
     private final GraphTaskResultService graphTaskResultService;
 
     @GetMapping
-    public ResponseEntity<GraphTaskResult> getGraphTaskResult(@RequestParam Long graphTaskId)
+    public ResponseEntity<Long> getGraphTaskResultId(@RequestParam Long graphTaskId)
             throws EntityNotFoundException, WrongUserTypeException {
-        return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResult(graphTaskId));
+        return ResponseEntity.ok().body(graphTaskResultService.getGraphTaskResultId(graphTaskId));
     }
 
     @PostMapping("/start")

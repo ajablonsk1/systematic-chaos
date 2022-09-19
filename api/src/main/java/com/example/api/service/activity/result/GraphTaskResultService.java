@@ -21,7 +21,6 @@ import com.example.api.util.calculator.PointsCalculator;
 import com.example.api.util.calculator.TimeCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -41,14 +40,15 @@ public class GraphTaskResultService {
     private final AuthenticationService authService;
     private final ActivityValidator activityValidator;
 
-    public GraphTaskResult getGraphTaskResult(Long graphTaskId)
+    public Long getGraphTaskResultId(Long graphTaskId)
             throws WrongUserTypeException, EntityNotFoundException {
         String email = authService.getAuthentication().getName();
         User student = userRepo.findUserByEmail(email);
         userValidator.validateStudentAccount(student, email);
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(graphTaskId);
         activityValidator.validateActivityIsNotNull(graphTask, graphTaskId);
-        return graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
+        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
+        return graphTaskResult == null ? null : graphTaskResult.getId();
     }
 
     public GraphTaskResult saveGraphTaskResult(GraphTaskResult result) {
