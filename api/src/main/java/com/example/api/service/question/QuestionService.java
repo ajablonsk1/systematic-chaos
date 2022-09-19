@@ -1,6 +1,6 @@
 package com.example.api.service.question;
 
-import com.example.api.dto.request.activity.result.SetStatusForm;
+import com.example.api.dto.request.activity.result.QuestionActionForm;
 import com.example.api.dto.response.activity.task.result.question.QuestionDetails;
 import com.example.api.dto.response.activity.task.result.question.QuestionInfoResponse;
 import com.example.api.dto.response.activity.task.result.question.QuestionList;
@@ -9,7 +9,6 @@ import com.example.api.error.exception.EntityRequiredAttributeNullException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.ResultStatus;
-import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Answer;
 import com.example.api.model.question.Question;
 import com.example.api.repo.question.AnswerRepo;
@@ -20,7 +19,6 @@ import com.example.api.service.validator.QuestionValidator;
 import com.example.api.service.validator.ResultValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -49,7 +47,7 @@ public class QuestionService {
         return question;
     }
 
-    public Long setStatus(SetStatusForm form) throws RequestValidationException {
+    public Long performQuestionAction(QuestionActionForm form) throws RequestValidationException {
         String email = authService.getAuthentication().getName();
         ResultStatus status = form.getStatus();
         Long graphTaskId = form.getGraphTaskId();

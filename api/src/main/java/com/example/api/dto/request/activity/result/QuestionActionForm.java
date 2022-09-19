@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SetStatusForm {
+public class QuestionActionForm {
     @Schema(required = true) private ResultStatus status;
     @Schema(required = true) private Long graphTaskId;
     @Schema(required = false) private Long questionId;

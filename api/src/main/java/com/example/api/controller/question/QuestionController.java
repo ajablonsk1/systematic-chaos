@@ -1,6 +1,6 @@
 package com.example.api.controller.question;
 
-import com.example.api.dto.request.activity.result.SetStatusForm;
+import com.example.api.dto.request.activity.result.QuestionActionForm;
 import com.example.api.dto.response.activity.task.result.question.QuestionInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -8,7 +8,6 @@ import com.example.api.model.question.Question;
 import com.example.api.service.question.QuestionService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +30,9 @@ public class QuestionController {
         return ResponseEntity.ok().body(questionService.getQuestionInfo(graphTaskId));
     }
 
-    @PostMapping("/set-status")
-    public ResponseEntity<Long> getInfoAboutCurrentResultState(@RequestBody SetStatusForm form)
+    @PostMapping("/action")
+    public ResponseEntity<Long> performQuestionAction(@RequestBody QuestionActionForm form)
             throws RequestValidationException {
-        return ResponseEntity.ok().body(questionService.setStatus(form));
+        return ResponseEntity.ok().body(questionService.performQuestionAction(form));
     }
 }

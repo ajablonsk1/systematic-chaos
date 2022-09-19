@@ -337,7 +337,7 @@ public class GraphTaskResultServiceTest {
         // given
         AnswerForm answerForm = new AnswerForm();
         answerForm.setOpenAnswer("random answer");
-        SetStatusForm form = new SetStatusForm(
+        QuestionActionForm form = new QuestionActionForm(
                 result.getId(),
                 1L,
                 answerForm
@@ -374,7 +374,7 @@ public class GraphTaskResultServiceTest {
         calendar.set(2022, Calendar.APRIL, 21);
         AnswerForm answerForm = new AnswerForm();
         answerForm.setOpenAnswer("random answer");
-        SetStatusForm form = new SetStatusForm(
+        QuestionActionForm form = new QuestionActionForm(
                 result.getId(),
                 1L,
                 answerForm
@@ -398,7 +398,7 @@ public class GraphTaskResultServiceTest {
         // given
         AnswerForm answerForm = new AnswerForm();
         answerForm.setOpenAnswer("random answer");
-        SetStatusForm form = new SetStatusForm(
+        QuestionActionForm form = new QuestionActionForm(
                 result.getId(),
                 1L,
                 answerForm
