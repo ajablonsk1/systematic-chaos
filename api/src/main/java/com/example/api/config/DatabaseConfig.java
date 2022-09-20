@@ -329,24 +329,25 @@ public class DatabaseConfig {
             Requirement requirement7 = new Requirement();
 
             requirement1.setSelected(false);
-            requirement1.setType(RequirementType.DATE_FROM);
             requirement1.setName(MessageManager.DATE_FROM_REQ_NAME);
+            requirement1.setType(RequirementType.DATE_FROM);
             requirement2.setSelected(false);
-            requirement2.setType(RequirementType.DATE_TO);
             requirement2.setName(MessageManager.DATE_TO_REQ_NAME);
+            requirement2.setType(RequirementType.DATE_TO);
             requirement3.setSelected(false);
-            requirement3.setType(RequirementType.MIN_POINTS);
             requirement3.setName(MessageManager.MIN_POINTS_REQ_NAME);
+            requirement3.setType(RequirementType.MIN_POINTS);
             requirement4.setSelected(false);
-            requirement4.setType(RequirementType.GROUPS);
             requirement4.setName(MessageManager.GROUPS_REQ_NAME);
+            requirement4.setType(RequirementType.GROUPS);
             requirement5.setSelected(false);
-            requirement5.setType(RequirementType.STUDENTS);
             requirement5.setName(MessageManager.STUDENTS_REQ_NAME);
+            requirement5.setType(RequirementType.STUDENTS);
             requirement6.setSelected(false);
-            requirement6.setType(RequirementType.GRAPH_TASKS);
             requirement6.setName(MessageManager.GRAPH_TASKS_REQ_NAME);
+            requirement6.setType(RequirementType.GRAPH_TASKS);
             requirement7.setSelected(false);
+            requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
             requirement7.setType(RequirementType.FILE_TASKS);
             requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
 

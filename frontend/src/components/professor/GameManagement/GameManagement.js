@@ -122,6 +122,7 @@ export default function GameManagement() {
             <ManagementCard
               header={'Temat gry'}
               description={'Dopasuj temat fabuły i wygląd całej gry oraz całego systemu.'}
+              routePath={TeacherRoutes.GAME_MANAGEMENT.GAME_SETTINGS}
             />
           </Col>
           <Col md={4} className={'py-2'}>
