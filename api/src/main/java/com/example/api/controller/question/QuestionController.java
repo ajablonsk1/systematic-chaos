@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.TimeLimitExceededException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/question")
@@ -32,7 +34,7 @@ public class QuestionController {
 
     @PostMapping("/action")
     public ResponseEntity<Long> performQuestionAction(@RequestBody QuestionActionForm form)
-            throws RequestValidationException {
+            throws RequestValidationException, TimeLimitExceededException {
         return ResponseEntity.ok().body(questionService.performQuestionAction(form));
     }
 }

@@ -35,4 +35,5 @@ public class ExceptionMessage {
     public static final String EMAIL_CONTAINS_SEMICOLON ="Email nie może posiadać średnika";
     public static final String FILE_TASK_TITLE_CONTAINS_SEMICOLON ="Nazwa zadania bojowego nie może posiadać średnika";
     public static final String GRAPH_TASK_TITLE_CONTAINS_SEMICOLON ="Nazwa ekspedycji nie może posiadać średnika";
+    public static final String TIME_REMAINING_IS_UP ="Czas na przejście ekspedycji się skończył";
 }

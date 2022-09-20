@@ -6,6 +6,7 @@ import com.example.api.dto.response.activity.task.result.question.QuestionInfoRe
 import com.example.api.dto.response.activity.task.result.question.QuestionList;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.EntityRequiredAttributeNullException;
+import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.ResultStatus;
@@ -17,10 +18,12 @@ import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.validator.QuestionValidator;
 import com.example.api.service.validator.ResultValidator;
+import com.example.api.util.calculator.PointsCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.naming.TimeLimitExceededException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -35,6 +38,7 @@ public class QuestionService {
     private final ResultValidator resultValidator;
     private final AuthenticationService authService;
     private final GraphTaskResultService graphTaskResultService;
+    private final PointsCalculator pointsCalculator;
 
     public Question saveQuestion(Question question) {
         return questionRepo.save(question);
@@ -47,7 +51,7 @@ public class QuestionService {
         return question;
     }
 
-    public Long performQuestionAction(QuestionActionForm form) throws RequestValidationException {
+    public Long performQuestionAction(QuestionActionForm form) throws RequestValidationException, TimeLimitExceededException {
         String email = authService.getAuthentication().getName();
         ResultStatus status = form.getStatus();
         Long graphTaskId = form.getGraphTaskId();
@@ -56,7 +60,7 @@ public class QuestionService {
 
         Long timeRemaining = graphTaskResultService.getTimeRemaining(result);
         if (timeRemaining < 0) {
-            return timeRemaining;
+            throw new TimeLimitExceededException(ExceptionMessage.TIME_REMAINING_IS_UP);
         }
 
         switch (status) {
@@ -99,6 +103,7 @@ public class QuestionService {
                 return new QuestionInfoResponse(
                         status,
                         graphTaskResultService.getTimeRemaining(result),
+                        pointsCalculator.calculateAllPoints(result),
                         questionList,
                         null
                 );
@@ -108,6 +113,7 @@ public class QuestionService {
                 return new QuestionInfoResponse(
                         status,
                         graphTaskResultService.getTimeRemaining(result),
+                        pointsCalculator.calculateAllPoints(result),
                         null,
                         new QuestionDetails(question)
                 );

@@ -13,6 +13,7 @@ import java.util.List;
 public class QuestionInfoResponse {
     private ResultStatus status;
     private Long timeRemaining;
+    private Double actualPointsReceived;
     private List<QuestionList> questions;
     private QuestionDetails questionDetails;
 }
