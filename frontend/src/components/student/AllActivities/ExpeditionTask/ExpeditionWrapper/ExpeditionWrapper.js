@@ -4,6 +4,17 @@ import { Spinner } from 'react-bootstrap'
 import { EXPEDITION_STATUS } from './ExpeditionWrapperHelpers'
 import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import ExpeditionService from '../../../../../services/expedition.service'
+import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor'
+
+// wrapped elements should be:
+
+// -- in ANSWER
+// QuestionAndOptions
+// ClosedQuestionPage
+// OpenQuestionPage
+
+// -- in CHOOSE
+// QuestionSelectionDoor
 
 export function ExpeditionWrapper() {
   const navigate = useNavigate()
@@ -49,7 +60,9 @@ export function ExpeditionWrapper() {
       return <p>I am in choose state without questions!</p>
     }
 
-    return <p>I am in choose state with questions!</p>
+    return (
+      <QuestionSelectionDoor activityId={activityId} questions={expeditionState.questions} reloadInfo={reloadState} />
+    )
   }
 
   if (expeditionState.status === EXPEDITION_STATUS.ANSWER) {

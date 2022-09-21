@@ -13,7 +13,7 @@ import { GeneralRoutes, StudentRoutes } from '../../../../../routes/PageRoutes'
 
 //with API - with null?
 
-function generateDoor(question, navigate, expeditionId, noDoors, taskResultId) {
+function generateDoor(question, expeditionId, noDoors, reloadInfo) {
   return (
     <DoorColumn key={question.id + Date.now()} xl={12 / noDoors} md={12}>
       <Row className='mx-auto'>
@@ -31,9 +31,13 @@ function generateDoor(question, navigate, expeditionId, noDoors, taskResultId) {
       <Row className='mx-auto'>
         <Button
           onClick={() =>
-            navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.QUESTION_CONTENT, {
-              state: { activityId: expeditionId, nodeId: question.id, taskResultId }
-            })
+            // change state, reloadInfo
+            ExpeditionService.sendAction({
+              status: 'CHOOSE',
+              graphTaskId: expeditionId,
+              questionId: question.id,
+              answerForm: null
+            }).then(() => reloadInfo())
           }
         >
           Wybierz
@@ -43,48 +47,48 @@ function generateDoor(question, navigate, expeditionId, noDoors, taskResultId) {
   )
 }
 
+// what do we need here?
+// activityId
+// reload callback
+// list of questions
+// remaining time
+
 function QuestionSelectionDoor(props) {
-  const navigate = useNavigate()
-  const [questions, setQuestions] = useState(undefined)
-  const location = useLocation()
-  const { activityId: expeditionId, nodeId: parentId, taskResultId } = location.state
-  const remainingTime = props.remainingTime
+  const { activityId: expeditionId, questions, reloadInfo } = props
 
-  useEffect(() => {
-    if (parentId == null || expeditionId == null || taskResultId == null) {
-      navigate(GeneralRoutes.HOME)
-    } else {
-      ExpeditionService.getChildQuestions(parentId)
-        .then((response) => setQuestions(response))
-        .catch(() => setQuestions(null))
-    }
-  }, [parentId, expeditionId, navigate, taskResultId])
+  // useEffect(() => {
+  //   if (parentId == null || expeditionId == null || taskResultId == null) {
+  //     navigate(GeneralRoutes.HOME)
+  //   } else {
+  //     ExpeditionService.getChildQuestions(parentId)
+  //       .then((response) => setQuestions(response))
+  //       .catch(() => setQuestions(null))
+  //   }
+  // }, [parentId, expeditionId, navigate, taskResultId])
 
-  useEffect(() => {
-    if (remainingTime === 0 || questions?.length === 0) {
-      ExpeditionService.setSendTime(taskResultId, Date.now())
-        .then(() => {
-          navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, {
-            state: {
-              expeditionId: expeditionId,
-              remainingTime: remainingTime,
-              taskResultId: taskResultId
-            }
-          })
-        })
-        .catch(() => {})
-    }
-  }, [questions, expeditionId, navigate, remainingTime, taskResultId])
+  // useEffect(() => {
+  //   if (remainingTime === 0 || questionList?.length === 0) {
+  //     ExpeditionService.setSendTime(taskResultId, Date.now())
+  //       .then(() => {
+  //         navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, {
+  //           state: {
+  //             expeditionId: expeditionId,
+  //             remainingTime: remainingTime,
+  //             taskResultId: taskResultId
+  //           }
+  //         })
+  //       })
+  //       .catch(() => {})
+  //   }
+  // }, [questions, expeditionId, navigate, remainingTime, taskResultId])
 
   return (
     <Content>
-      {questions === undefined ? (
-        <Loader />
-      ) : questions == null ? (
+      {questions == null ? (
         <p className={'text-center text-danger h3 p-5'}>{ERROR_OCCURRED}</p>
       ) : (
         <Row className='m-0'>
-          {questions.map((question) => generateDoor(question, navigate, expeditionId, questions.length, taskResultId))}
+          {questions.map((question) => generateDoor(question, expeditionId, questions.length, reloadInfo))}
         </Row>
       )}
     </Content>
