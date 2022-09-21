@@ -349,6 +349,7 @@ public class DatabaseConfig {
             requirement7.setSelected(false);
             requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
             requirement7.setType(RequirementType.FILE_TASKS);
+            requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
 
             requirement1.setDateFrom(System.currentTimeMillis());
             requirement1.setIsDefault(false);
@@ -479,6 +480,7 @@ public class DatabaseConfig {
             info1.setExperience(10.0);
             info1.setProfessor(professor);
             infoService.saveInfo(info1);
+
 
             Survey survey = new Survey();
             survey.setTitle("Example map feedback");
