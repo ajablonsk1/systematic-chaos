@@ -21,7 +21,7 @@ export default function ActivityContent(props) {
   const [endDate, setEndDate] = useState(undefined)
   const [pointsReceived, setPointsReceived] = useState(undefined)
   const [isFetching, setIsFetching] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(null)
+  // const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     ExpeditionService.getExpeditionScore(activityId)
@@ -69,37 +69,46 @@ export default function ActivityContent(props) {
     }
   }, [activityScore])
 
-  const navigateTo = (nodeId, taskResultId) =>
-    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.QUESTION_SELECTION, {
+  const navigateToExpeditionWrapper = () =>
+    // navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.QUESTION_SELECTION, {
+    //   state: {
+    //     activityId: activityId,
+    //     nodeId: nodeId,
+    //     taskResultId: taskResultId,
+    //     timeToSolveMillis: props.activity.timeToSolveMillis
+    //   }
+    // }
+    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.EXPEDITION_WRAPPER, {
       state: {
         activityId: activityId,
-        nodeId: nodeId,
-        taskResultId: taskResultId,
-        timeToSolveMillis: props.activity.timeToSolveMillis
       }
-    })
+    }
+    )
 
   const startExpedition = () => {
     setIsFetching(true)
-    // returns resultId value, very important
-    ExpeditionService.getTaskAnswerId(activityId)
-      .then((response) => {
-        // set startTime in milliseconds
-        ExpeditionService.setStartTime(response?.id, Date.now())
-          .then(() => {
-            setIsFetching(false)
-            // later get the first question on endpoint
-            navigateTo(props.activity.questions[0].id, response?.id)
-          })
-          .catch((error) => {
-            setIsFetching(false)
-            setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
-          })
-      })
-      .catch((error) => {
-        setIsFetching(false)
-        setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
-      })
+    // // returns resultId value, very important
+    // ExpeditionService.getTaskAnswerId(activityId)
+    //   .then((response) => {
+    //     // set startTime in milliseconds
+    //     ExpeditionService.setStartTime(response?.id, Date.now())
+    //       .then(() => {
+    //         setIsFetching(false)
+    //         // later get the first question on endpoint
+    //         navigateTo(props.activity.questions[0].id, response?.id)
+    //       })
+    //       .catch((error) => {
+    //         setIsFetching(false)
+    //         setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
+    //       })
+    //   })
+    //   .catch((error) => {
+    //     setIsFetching(false)
+    //     setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
+    //   })
+
+    //do the start here? or not, we can do this in the wrapper
+    navigateToExpeditionWrapper();
   }
 
   const basicInfoCard = useMemo(() => {
@@ -229,7 +238,7 @@ export default function ActivityContent(props) {
             {isFetching ? <Spinner animation={'border'} /> : <span>Rozpocznij</span>}
           </Button>
         </Row>
-        {!!errorMessage && <p className={'text-center text-danger pt-2 text-truncate'}>{errorMessage}</p>}
+        {/* {!!errorMessage && <p className={'text-center text-danger pt-2 text-truncate'}>{errorMessage}</p>} */}
       </Col>
     </Row>
   )
