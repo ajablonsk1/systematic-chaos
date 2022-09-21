@@ -26,7 +26,7 @@ export default function ActivityContent(props) {
   useEffect(() => {
     ExpeditionService.getExpeditionScore(activityId)
       .then((response) => {
-        setActivityScore(response || {})
+        setActivityScore(response || -1)
       })
       .catch(() => {
         setActivityScore(null)
@@ -54,9 +54,11 @@ export default function ActivityContent(props) {
 
   useEffect(() => {
     // if activityScore from endpoint has id value, this task was finished by logged student
-    if (activityScore?.id) {
-      ExpeditionService.getExpeditionAllPoints(activityScore.id)
+    if (activityScore && activityScore !== -1) {
+      console.log(activityScore)
+      ExpeditionService.getExpeditionAllPoints(activityScore)
         .then((response) => {
+          console.log(response)
           setPointsReceived(response ?? 0)
         })
         .catch(() => {

@@ -379,7 +379,7 @@ public class DatabaseConfig {
             graphTask.setMaxPoints(60.0);
             graphTask.setExperience(20D);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
-            graphTask.setRequirements(List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7));
+            graphTask.setRequirements(requirements);
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
@@ -480,7 +480,6 @@ public class DatabaseConfig {
             info1.setExperience(10.0);
             info1.setProfessor(professor);
             infoService.saveInfo(info1);
-
 
             Survey survey = new Survey();
             survey.setTitle("Example map feedback");

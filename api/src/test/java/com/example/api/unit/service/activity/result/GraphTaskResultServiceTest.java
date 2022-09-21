@@ -93,7 +93,7 @@ public class GraphTaskResultServiceTest {
         given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
 
         // when
-        graphTaskResultService.getGraphTaskResult(graphTask.getId());
+        graphTaskResultService.getGraphTaskResultId(graphTask.getId());
 
         // then
         verify(graphTaskResultRepo).findGraphTaskResultByGraphTaskAndUser(
@@ -117,7 +117,7 @@ public class GraphTaskResultServiceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResult(graphTask.getId()))
+        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResultId(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
     }
@@ -148,7 +148,7 @@ public class GraphTaskResultServiceTest {
 
 
         // when
-        graphTaskResultService.saveGraphTaskResult(graphTask.getId());
+        graphTaskResultService.startGraphTaskResult(graphTask.getId());
 
         // then
         verify(graphTaskRepo).findGraphTaskById(idArgumentCaptor.capture());
@@ -168,7 +168,7 @@ public class GraphTaskResultServiceTest {
         given(authentication.getName()).willReturn("random@email.com");
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(graphTask.getId()))
+        assertThatThrownBy(() -> graphTaskResultService.startGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
     }
@@ -184,7 +184,7 @@ public class GraphTaskResultServiceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> graphTaskResultService.saveGraphTaskResult(graphTask.getId()))
+        assertThatThrownBy(() -> graphTaskResultService.startGraphTaskResult(graphTask.getId()))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("User" + user.getEmail() + " not found in database");
     }
@@ -337,7 +337,7 @@ public class GraphTaskResultServiceTest {
         // given
         AnswerForm answerForm = new AnswerForm();
         answerForm.setOpenAnswer("random answer");
-        AddAnswerToGraphTaskForm form = new AddAnswerToGraphTaskForm(
+        QuestionActionForm form = new QuestionActionForm(
                 result.getId(),
                 1L,
                 answerForm
@@ -374,7 +374,7 @@ public class GraphTaskResultServiceTest {
         calendar.set(2022, Calendar.APRIL, 21);
         AnswerForm answerForm = new AnswerForm();
         answerForm.setOpenAnswer("random answer");
-        AddAnswerToGraphTaskForm form = new AddAnswerToGraphTaskForm(
+        QuestionActionForm form = new QuestionActionForm(
                 result.getId(),
                 1L,
                 answerForm
@@ -398,7 +398,7 @@ public class GraphTaskResultServiceTest {
         // given
         AnswerForm answerForm = new AnswerForm();
         answerForm.setOpenAnswer("random answer");
-        AddAnswerToGraphTaskForm form = new AddAnswerToGraphTaskForm(
+        QuestionActionForm form = new QuestionActionForm(
                 result.getId(),
                 1L,
                 answerForm

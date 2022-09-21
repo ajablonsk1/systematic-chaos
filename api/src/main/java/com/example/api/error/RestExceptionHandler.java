@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.naming.TimeLimitExceededException;
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.text.ParseException;
@@ -86,6 +87,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RequestValidationException.class)
     public ResponseEntity<Object> handleRequestValidationException(RequestValidationException ex) {
         return handleExceptionWithStatusCode(BAD_REQUEST, ex);
+    }
+
+    @ExceptionHandler(TimeLimitExceededException.class)
+    public ResponseEntity<Object> handleTimeLimitExceededException(TimeLimitExceededException ex) {
+        return handleExceptionWithStatusCode(REQUEST_TIMEOUT, ex);
     }
 
     private ResponseEntity<Object> handleExceptionWithStatusCode(HttpStatus httpStatus, Exception ex) {

@@ -17,6 +17,7 @@ import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.map.requirement.Requirement;
+import com.example.api.model.map.requirement.RequirementType;
 import com.example.api.model.map.requirement.RequirementValueType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
@@ -84,7 +85,7 @@ public class TaskService {
         return response;
     }
 
-    public TaskToEvaluateResponse getFirstAnswerToEvaluate(Long id) throws EntityNotFoundException {
+    public TaskToEvaluateResponse getFirstAnswerToEvaluate(Long id) throws EntityNotFoundException, EntityRequiredAttributeNullException {
         log.info("Fetching first activity that is needed to be evaluated for file task with id {}", id);
         FileTask task = fileTaskRepo.findFileTaskById(id);
         activityValidator.validateActivityIsNotNull(task, id);
@@ -98,9 +99,15 @@ public class TaskService {
             long num = fileTaskResults.size();
             boolean isLate = false;
             if(result.getSendDateMillis() != null){
-                isLate = result.getSendDateMillis() - result.getFileTask().getExpireDateMillis() > 0;
+                List<Requirement> dateToList = result.getFileTask()
+                        .getRequirements()
+                        .stream()
+                        .filter(requirement -> requirement.getType() == RequirementType.DATE_TO)
+                        .toList();
+                activityValidator.validateRequirementsHasDateTo(dateToList);
+                Long dateTo = dateToList.get(0).getDateTo();
+                isLate = dateTo != null && result.getSendDateMillis() - dateTo > 0;
             }
-
             List<FileResponse> filesResponse = result.getFiles().stream().map(FileResponse::new).toList();
 
             return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), result.getUser().getFirstName(),

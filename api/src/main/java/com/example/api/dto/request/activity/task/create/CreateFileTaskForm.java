@@ -13,18 +13,15 @@ import lombok.Setter;
 public class CreateFileTaskForm extends CreateActivityForm{
     @Schema(required = true) private String requiredKnowledge;
     @Schema(required = true) private Double maxPoints;
-    @Schema(required = true) private String activityExpireDate;
 
     public CreateFileTaskForm(String title,
                               String description,
                               Integer posX,
                               Integer posY,
                               String requiredKnowledge,
-                              Double maxPoints,
-                              String activityExpireDate) {
+                              Double maxPoints) {
         super(title, description, posX, posY);
         this.requiredKnowledge = requiredKnowledge;
         this.maxPoints = maxPoints;
-        this.activityExpireDate = activityExpireDate;
     }
 }
