@@ -349,6 +349,7 @@ public class DatabaseConfig {
             requirement7.setSelected(false);
             requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
             requirement7.setType(RequirementType.FILE_TASKS);
+            requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
 
             requirement1.setDateFrom(System.currentTimeMillis());
             requirement1.setIsDefault(false);
@@ -378,7 +379,7 @@ public class DatabaseConfig {
             graphTask.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTask.setMaxPoints(60.0);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
-            graphTask.setRequirements(List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7));
+            graphTask.setRequirements(requirements);
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
@@ -455,7 +456,6 @@ public class DatabaseConfig {
             fileTask.setDescription("Jak złamałbyś kabel światłowodowy? Czym?");
             fileTask.setProfessor(professor);
             fileTask.setMaxPoints(30.0);
-            fileTask.setExpireDateMillis(System.currentTimeMillis() + 1_000_000);
 
             fileTaskService.saveFileTask(fileTask);
 

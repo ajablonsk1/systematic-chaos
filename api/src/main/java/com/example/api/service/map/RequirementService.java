@@ -103,11 +103,6 @@ public class RequirementService {
     }
 
     public boolean areRequirementsDefault(List<Requirement> requirements) {
-        for (Requirement requirement: requirements) {
-            if (!requirement.getIsDefault()) {
-                return false;
-            }
-        }
-        return true;
+        return requirements.stream().allMatch(Requirement::getIsDefault);
     }
 }
