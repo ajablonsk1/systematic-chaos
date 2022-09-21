@@ -6,6 +6,7 @@ import com.example.api.dto.response.map.ChapterResponse;
 import com.example.api.dto.response.map.task.MapTask;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.util.File;
@@ -62,5 +63,13 @@ public class ChapterService {
                 }
              });
         }
+    }
+
+    public Chapter getChapterWithActivity(Activity activity) {
+        return chapterRepo.findAll()
+                .stream()
+                .filter(chapter -> chapter.getActivityMap().hasActivity(activity))
+                .findAny()
+                .orElse(null);
     }
 }

@@ -5,6 +5,7 @@ import com.example.api.dto.request.activity.task.create.CreateInfoForm;
 import com.example.api.dto.response.activity.task.InfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Info;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.user.User;
@@ -82,5 +83,12 @@ public class InfoService {
         info.setRequirements(requirementService.getDefaultRequirements());
         infoRepo.save(info);
         chapter.getActivityMap().getInfos().add(info);
+    }
+
+    public List<Info> getStudentInfos(User student) {
+        return infoRepo.findAll()
+                .stream()
+                .filter(info -> !requirementService.areRequirementsDefault(info.getRequirements()))
+                .toList();
     }
 }

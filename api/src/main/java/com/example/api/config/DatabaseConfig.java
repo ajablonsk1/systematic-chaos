@@ -378,6 +378,7 @@ public class DatabaseConfig {
             graphTask.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
             graphTask.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTask.setMaxPoints(60.0);
+            graphTask.setExperience(20D);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTask.setRequirements(requirements);
             graphTask.setPosX(5);
@@ -442,6 +443,7 @@ public class DatabaseConfig {
             graphTaskTwo.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
             graphTaskTwo.setRequiredKnowledge("skrętki, rodzaje ich ekranowania, łączenie urządzeń różnych warstw ze sobą");
             graphTaskTwo.setMaxPoints(60.0);
+            graphTaskTwo.setExperience(25D);
             graphTaskTwo.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTaskTwo.setPosX(2);
             graphTaskTwo.setPosY(2);
@@ -456,6 +458,7 @@ public class DatabaseConfig {
             fileTask.setDescription("Jak złamałbyś kabel światłowodowy? Czym?");
             fileTask.setProfessor(professor);
             fileTask.setMaxPoints(30.0);
+            fileTask.setExperience(10D);
 
             fileTaskService.saveFileTask(fileTask);
 
@@ -478,12 +481,15 @@ public class DatabaseConfig {
             info1.setProfessor(professor);
             infoService.saveInfo(info1);
 
+
             Survey survey = new Survey();
             survey.setTitle("Example map feedback");
             survey.setDescription("Pomóż nam polepszyć kurs dzieląc się swoją opinią!");
             survey.setPosX(7);
             survey.setPosY(3);
             survey.setPoints(10.0);
+            survey.setExperience(5D);
+            survey.setRequirements(requirements);
             surveyService.saveSurvey(survey);
 
             BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
@@ -638,6 +644,7 @@ public class DatabaseConfig {
 
             Image chapterImage5 = new Image("Chapter image 5", data5, ImageType.CHAPTER);
             fileRepo.save(chapterImage5);
+
         };
     }
 }

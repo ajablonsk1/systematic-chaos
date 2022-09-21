@@ -27,6 +27,7 @@ public abstract class Activity {
     private Integer posX;
     private Integer posY;
     private Double experience;
+    private Long creationTime = System.currentTimeMillis();
 
     @OneToMany
     private List<Requirement> requirements = new LinkedList<>();
