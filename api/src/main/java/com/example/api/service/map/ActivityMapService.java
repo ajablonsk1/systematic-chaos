@@ -65,6 +65,7 @@ public class ActivityMapService {
     }
 
     public List<MapTask> getMapTasks(ActivityMap activityMap, User student) {
+        boolean alwaysFulfilledForProfessor = student != null;
         List<MapTask> graphTasks = activityMap.getGraphTasks()
                 .stream()
                 .map(graphTask -> new MapTask(
@@ -74,7 +75,7 @@ public class ActivityMapService {
                         ActivityType.EXPEDITION,
                         graphTask.getTitle(),
                         graphTask.getMaxPoints(),
-                        requirementService.areRequirementsFulfilled(student, graphTask.getRequirements()),
+                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, graphTask.getRequirements()),
                         isGraphTaskCompleted(graphTask, student),
                         !requirementService.areRequirementsDefault(graphTask.getRequirements())))
                 .toList();
@@ -87,7 +88,7 @@ public class ActivityMapService {
                         ActivityType.TASK,
                         fileTask.getTitle(),
                         fileTask.getMaxPoints(),
-                        requirementService.areRequirementsFulfilled(student, fileTask.getRequirements()),
+                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, fileTask.getRequirements()),
                         isFileTaskCompleted(fileTask, student),
                         !requirementService.areRequirementsDefault(fileTask.getRequirements())))
                 .toList();
@@ -100,7 +101,7 @@ public class ActivityMapService {
                         ActivityType.INFO,
                         info.getTitle(),
                         0.0,
-                        requirementService.areRequirementsFulfilled(student, info.getRequirements()),
+                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, info.getRequirements()),
                         isInfoCompleted(student),
                         !requirementService.areRequirementsDefault(info.getRequirements())))
                 .toList();
@@ -113,7 +114,7 @@ public class ActivityMapService {
                         ActivityType.SURVEY,
                         survey.getTitle(),
                         survey.getPoints(),
-                        requirementService.areRequirementsFulfilled(student, survey.getRequirements()),
+                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, survey.getRequirements()),
                         isSurveyCompleted(survey, student),
                         !requirementService.areRequirementsDefault(survey.getRequirements())))
                 .toList();
