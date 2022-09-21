@@ -81,11 +81,9 @@ export default function ActivityContent(props) {
     navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.EXPEDITION_WRAPPER, {
       state: {
         activityId: activityId,
-        //change to resultId !== -1 later
-        alreadyStarted: false,
+        alreadyStarted: activityScore !== -1
       }
-    }
-    )
+    })
 
   const startExpedition = () => {
     setIsFetching(true)
@@ -110,7 +108,7 @@ export default function ActivityContent(props) {
     //   })
 
     //do the start here? or not, we can do this in the wrapper
-    navigateToExpeditionWrapper();
+    navigateToExpeditionWrapper()
   }
 
   const basicInfoCard = useMemo(() => {
@@ -236,7 +234,8 @@ export default function ActivityContent(props) {
           <Button className={'w-auto'} variant={'secondary'} onClick={() => navigate(StudentRoutes.GAME_MAP.MAIN)}>
             Wstecz
           </Button>
-          <Button className={'w-auto'} variant={'warning'} onClick={startExpedition} disabled={activityScore?.id}>
+          {/* we don't need to disable the button anymore, as we can try to continue with the server-side flow rework */}
+          <Button className={'w-auto'} variant={'warning'} onClick={startExpedition}>
             {isFetching ? <Spinner animation={'border'} /> : <span>Rozpocznij</span>}
           </Button>
         </Row>
