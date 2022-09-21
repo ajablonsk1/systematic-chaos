@@ -138,10 +138,9 @@ class ExpeditionService {
     })
   }
 
+  // check whether body works correctly
   sendAction(action) {
-    return axiosApiPost(SEND_EXPEDITION_ACTION, {
-      activityId: activityId
-    }).catch((error) => {
+    return axiosApiPost(SEND_EXPEDITION_ACTION, action).catch((error) => {
       throw error
     })
   }
