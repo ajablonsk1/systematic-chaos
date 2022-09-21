@@ -12,7 +12,8 @@ export const StudentRoutes = {
       INFO: '/game-map/expedition/info',
       QUESTION_SELECTION: '/game-map/expedition/doors-selection',
       QUESTION_CONTENT: '/game-map/expedition/question',
-      SUMMARY: '/game-map/expedition/summary'
+      SUMMARY: '/game-map/expedition/summary',
+      EXPEDITION_WRAPPER: '/game-map/expedition/wrapper'
     },
     COMBAT_TASK: '/game-map/combat-task',
     SURVEY_TASK: '/game-map/survey-task',

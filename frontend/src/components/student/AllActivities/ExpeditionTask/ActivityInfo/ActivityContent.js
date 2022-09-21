@@ -81,6 +81,8 @@ export default function ActivityContent(props) {
     navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.EXPEDITION_WRAPPER, {
       state: {
         activityId: activityId,
+        //change to resultId !== -1 later
+        alreadyStarted: false,
       }
     }
     )
