@@ -1,5 +1,6 @@
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
 import {
+  GET_CURRENT_EXPEDITION_STATUS,
   GET_REMAINING_TIME,
   GRAPH_GET_TASK_ANSWER_ID,
   GRAPH_QUESTION,
@@ -12,8 +13,10 @@ import {
   GRAPH_TASK_RESULT_URL,
   GRAPH_TASK_SEND_ANSWER,
   GRAPH_TASK_URL,
+  SEND_EXPEDITION_ACTION,
   SEND_EXPEDITION_FINISHED_TIME,
-  SET_START_TIME
+  SET_START_TIME,
+  START_EXPEDITION_TASK
 } from './urls'
 
 class ExpeditionService {
@@ -122,6 +125,29 @@ class ExpeditionService {
       resultId: resultId,
       sendDateMillis: sendDateMillis
     }).catch((error) => {
+      throw error
+    })
+  }
+
+  //reworked flow endpoints
+  setExpeditionStart(activityId) {
+    return axiosApiPost(START_EXPEDITION_TASK, {
+      graphTaskId: activityId
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  sendAction(action) {
+    return axiosApiPost(SEND_EXPEDITION_ACTION, {
+      activityId: activityId
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getCurrentState(activityId) {
+    return axiosApiGet(GET_CURRENT_EXPEDITION_STATUS, { graphTaskId: activityId }).catch((error) => {
       throw error
     })
   }
