@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Card, Col } from 'react-bootstrap'
+import { Card, Col, Tooltip } from 'react-bootstrap'
 
 const ChapterCard = styled(Card)`
   color: var(--font-color);
@@ -75,5 +75,10 @@ export const TableRow = styled.tr`
 
   & td svg:hover {
     cursor: pointer;
+  }
+`
+export const CustomTooltip = styled(Tooltip)`
+  & > .tooltip-inner {
+    max-width: 500px;
   }
 `

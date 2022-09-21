@@ -1,9 +1,20 @@
 import React, { useCallback, useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Content } from '../../App/AppGeneralStyles'
-import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Spinner, Table } from 'react-bootstrap'
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  ListGroup,
+  ListGroupItem,
+  OverlayTrigger,
+  Row,
+  Spinner,
+  Table
+} from 'react-bootstrap'
 import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
-import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
+import { ActivitiesCard, ButtonsCol, CustomTooltip, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
@@ -192,38 +203,53 @@ function ChapterDetails() {
                       </tr>
                     ) : (
                       chapterDetails.mapTasks.map((activity, index) => (
-                        <TableRow
+                        <OverlayTrigger
                           key={activity.title + index}
-                          onClick={() => goToChapterDetails(activity.title, activity.id, activity.type)}
+                          placement='top'
+                          overlay={
+                            !activity.areRequirementsAdded ? (
+                              <CustomTooltip style={{ position: 'fixed' }}>
+                                Aktywność nie ma ustawionych wymagań odblokowania. Studenci nie mogą rozwiązywać
+                                aktywności bez ustawionych wymagań.
+                              </CustomTooltip>
+                            ) : (
+                              <></>
+                            )
+                          }
                         >
-                          <td>
-                            <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
-                          </td>
-                          <td>{getActivityTypeName(activity.type)}</td>
-                          <td>{activity.title}</td>
-                          <td>
-                            ({activity.posX}, {activity.posY})
-                          </td>
-                          <td>Pkt: {activity.points}</td>
-                          <td>
-                            <FontAwesomeIcon
-                              icon={faPenToSquare}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                startActivityEdition(activity)
-                              }}
-                            />
-                          </td>
-                          <td>
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                deleteActivity(activity)
-                              }}
-                            />
-                          </td>
-                        </TableRow>
+                          <TableRow
+                            onClick={() => goToChapterDetails(activity.title, activity.id, activity.type)}
+                            style={{ opacity: activity.areRequirementsAdded ? 1 : 0.4 }}
+                          >
+                            <td>
+                              <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
+                            </td>
+                            <td>{getActivityTypeName(activity.type)}</td>
+                            <td>{activity.title}</td>
+                            <td>
+                              ({activity.posX}, {activity.posY})
+                            </td>
+                            <td>Pkt: {activity.points}</td>
+                            <td>
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  startActivityEdition(activity)
+                                }}
+                              />
+                            </td>
+                            <td>
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  deleteActivity(activity)
+                                }}
+                              />
+                            </td>
+                          </TableRow>
+                        </OverlayTrigger>
                       ))
                     )}
                   </tbody>

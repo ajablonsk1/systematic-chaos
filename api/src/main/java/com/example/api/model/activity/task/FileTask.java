@@ -16,9 +16,9 @@ import javax.persistence.Entity;
 public class FileTask extends Task {
     private ActivityType activityType = ActivityType.TASK;
 
-    public FileTask(CreateFileTaskForm form, User professor, Long expireDateMillis) {
+    public FileTask(CreateFileTaskForm form, User professor) {
         super(form.getTitle(), form.getDescription(), form.getPosX(), form.getPosY(), professor,
-                form.getRequiredKnowledge(), form.getMaxPoints(), expireDateMillis);
+                form.getRequiredKnowledge(), form.getMaxPoints());
         double experiance = form.getMaxPoints() * 10;
         super.setExperience(experiance);
     }
