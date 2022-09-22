@@ -2,11 +2,9 @@ import React, { useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { Answer, ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle'
 import answerSaver from '../answerSaver'
-import { useNavigate } from 'react-router-dom'
 
 function ClosedQuestionPage(props) {
   const answersParent = useRef(null)
-  const navigate = useNavigate()
 
   // this array should only have an id
   const [userAnswers, setUserAnswers] = useState([])
@@ -22,7 +20,7 @@ function ClosedQuestionPage(props) {
   }
 
   const saveAnswer = () => {
-    answerSaver(userAnswers, props.question.type, props.taskResultId, props.question.id, props.expeditionId, navigate)
+    answerSaver(userAnswers, props.question.type, props.expeditionId, props.question.id, props.reloadInfo)
   }
 
   return (

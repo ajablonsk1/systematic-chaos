@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import ClosedQuestionPage from './ClosedQuestionPage/ClosedQuestionPage'
 import { ERROR_OCCURRED, QuestionType } from '../../../../../utils/constants'
 import Loader from '../../../../general/Loader/Loader'
 import { ContentWithBackground } from './QuestionAndOptionsStyle'
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage'
-import ExpeditionService from '../../../../../services/expedition.service'
-import { StudentRoutes } from '../../../../../routes/PageRoutes'
 
 // we don't need navigate, we don't need location - props are enough
 
 function QuestionAndOptions(props) {
-  const { activityId: expeditionId, remainingTime, question, reloadInfo } = props
+  const { activityId: expeditionId, question, reloadInfo } = props
 
   // NOTE: do we need the below block at all? don't we record it on endpoint already?
 
@@ -32,7 +28,7 @@ function QuestionAndOptions(props) {
   //       .catch(() => {})
   //   }
   // }, [expeditionId, navigate, remainingTime, taskResultId])
-
+  console.log(props)
   return (
     <ContentWithBackground>
       {question === undefined ? (
@@ -42,9 +38,9 @@ function QuestionAndOptions(props) {
       ) : (
         <>
           {question.type === QuestionType.OPEN_QUESTION ? (
-            <OpenQuestionPage expeditionId={expeditionId} question={question} taskResultId={taskResultId} />
+            <OpenQuestionPage expeditionId={expeditionId} question={question} reloadInfo={reloadInfo} />
           ) : (
-            <ClosedQuestionPage expeditionId={expeditionId} question={question} taskResultId={taskResultId} />
+            <ClosedQuestionPage expeditionId={expeditionId} question={question} reloadInfo={reloadInfo} />
           )}
         </>
       )}

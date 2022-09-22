@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Spinner } from 'react-bootstrap'
-import { EXPEDITION_STATUS, QUESTION_TYPE } from './ExpeditionWrapperHelpers'
+import { EXPEDITION_STATUS } from './ExpeditionWrapperHelpers'
 import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import ExpeditionService from '../../../../../services/expedition.service'
 import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor'
+import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions'
 
 // wrapped elements should be:
 
@@ -24,7 +25,6 @@ export function ExpeditionWrapper() {
   const [remainingTime, setRemainingTime] = useState(undefined)
   const [score, setScore] = useState(0)
   const [expeditionState, setExpeditionState] = useState(undefined)
-  const [questionType, setQuestionType] = useState(QUESTION_TYPE.NOT_APPLICABLE)
 
   // we will pass this function to "lower" components so that we can reload info from endpoint
   // in wrapper on changes
@@ -68,9 +68,10 @@ export function ExpeditionWrapper() {
 
   if (expeditionState.status === EXPEDITION_STATUS.ANSWER) {
     // return changed Question Answer Screen
-    // a thing I missed - we don't return a question type on answer state, for now I'll hardcode all as multiple
-
-    return <p> I am in answer mode</p>
+    console.log(expeditionState)
+    return (
+      <QuestionAndOptions activityId={activityId} question={expeditionState.questionDetails} reloadInfo={reloadState} />
+    )
   }
 
   return <p>... I shouldn't be here</p>
