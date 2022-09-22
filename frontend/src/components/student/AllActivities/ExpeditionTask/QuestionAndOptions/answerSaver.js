@@ -5,13 +5,15 @@ import { EXPEDITION_STATUS } from '../ExpeditionWrapper/ExpeditionWrapperHelpers
 
 const getAnswerForm = (questionType, userAnswer) => {
   console.log(userAnswer)
-  const idList = userAnswer.map((answer) => answer.id)
+  let idList = null
   switch (questionType) {
     case QuestionType.OPEN_QUESTION:
-      return { openAnswer: userAnswer }
+      return { optionIds: idList, openAnswer: userAnswer }
     case QuestionType.SINGLE_CHOICE:
-      return { option: userAnswer[0] }
+      idList = [userAnswer[0].id]
+      return { optionIds: idList, openAnswer: null }
     case QuestionType.MULTIPLE_CHOICE:
+      idList = userAnswer.map((answer) => answer.id)
       return { optionIds: idList, openAnswer: null }
     default:
       return
