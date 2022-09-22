@@ -26,6 +26,10 @@ export function ExpeditionWrapper() {
   const [score, setScore] = useState(0)
   const [expeditionState, setExpeditionState] = useState(undefined)
 
+  const goToSummary = () => {
+    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, { state: { expeditionId: activityId } })
+  }
+
   // we will pass this function to "lower" components so that we can reload info from endpoint
   // in wrapper on changes
   // if it breaks, check whether we don't need to pass activityId in here explicitly
@@ -52,13 +56,17 @@ export function ExpeditionWrapper() {
     return <Spinner />
   }
 
+  if (expeditionState.remainingTime <= 0) {
+    goToSummary()
+  }
+
   if (expeditionState.status === EXPEDITION_STATUS.CHOOSE) {
     // return changed Question Select screen
 
     if (expeditionState.questions.length === 0) {
       //navigate to summary if there are no questions left
-      //navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY)
-      return <p>I am in choose state without questions!</p>
+      goToSummary()
+      // return <p>I am in choose state without questions!</p>
     }
 
     return (

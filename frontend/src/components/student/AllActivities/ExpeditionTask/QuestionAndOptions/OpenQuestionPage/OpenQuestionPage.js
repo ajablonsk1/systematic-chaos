@@ -13,24 +13,16 @@ function fitAreaToContent(text) {
 
 export default function OpenQuestionPage(props) {
   const userAnswer = useRef()
-  const navigate = useNavigate()
-
+  console.log(props.question)
   const saveAnswer = () => {
-    answerSaver(
-      userAnswer.current.value,
-      props.question.type,
-      props.taskResultId,
-      props.question.id,
-      props.expeditionId,
-      navigate
-    )
+    answerSaver(userAnswer.current.value, props.question.type, props.expeditionId, props.question.id, props.reloadInfo)
   }
 
   return (
     <Row>
       <Col xs={12}>
         <QuestionCard className='h-auto py-5'>
-          <div>{props.question.category}</div>
+          <div>{props.question.hint}</div>
           <div>
             <p>{props.question.content}</p>
           </div>

@@ -15,6 +15,7 @@ public class QuestionDetails {
     private Double points;
     private List<OptionInfo> options;
     private QuestionType type;
+    private String hint;
 
     public QuestionDetails(Question question) {
         this.questionId = question.getId();
@@ -25,5 +26,6 @@ public class QuestionDetails {
                 .map(OptionInfo::new)
                 .toList();
         this.type = question.getType();
+        this.hint = question.getHint();
     }
 }

@@ -20,7 +20,7 @@ export default function ExpeditionSummary() {
   const location = useLocation()
   const { expeditionId, remainingTime, taskResultId } = location.state
   const [loaded, setLoaded] = useState(false)
-
+  console.log(location)
   useEffect(() => {
     if (expeditionId == null) {
       navigate(GeneralRoutes.HOME)
