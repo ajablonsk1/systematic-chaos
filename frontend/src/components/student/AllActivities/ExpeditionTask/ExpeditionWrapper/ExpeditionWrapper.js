@@ -22,19 +22,24 @@ export function ExpeditionWrapper() {
   const location = useLocation()
   const { activityId, alreadyStarted } = location.state
 
-  const [remainingTime, setRemainingTime] = useState(undefined)
   const [score, setScore] = useState(0)
+  const [remainingTime, setRemainingTime] = useState(undefined)
   const [expeditionState, setExpeditionState] = useState(undefined)
 
   const goToSummary = () => {
-    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, { state: { expeditionId: activityId } })
+    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, {
+      state: { expeditionId: activityId, remainingTime: expeditionState.timeRemaining }
+    })
   }
 
   // we will pass this function to "lower" components so that we can reload info from endpoint
   // in wrapper on changes
   // if it breaks, check whether we don't need to pass activityId in here explicitly
   const reloadState = useCallback(
-    () => ExpeditionService.getCurrentState(activityId).then((response) => setExpeditionState(response)),
+    () =>
+      ExpeditionService.getCurrentState(activityId).then((response) => {
+        setExpeditionState(response)
+      }),
     [activityId]
   )
 

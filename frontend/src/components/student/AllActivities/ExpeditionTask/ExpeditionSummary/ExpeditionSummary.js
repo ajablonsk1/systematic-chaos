@@ -18,41 +18,55 @@ export default function ExpeditionSummary() {
   const [scoredPoints, setScoredPoints] = useState(0)
   const [closedQuestionPoints, setClosedQuestionPoints] = useState(0)
   const location = useLocation()
-  const { expeditionId, remainingTime, taskResultId } = location.state
+  const { expeditionId, remainingTime } = location.state
+
   const [loaded, setLoaded] = useState(false)
+  const [activityScore, setActivityScore] = useState(undefined)
+
   console.log(location)
+
+  useEffect(() => {
+    ExpeditionService.getExpeditionScore(expeditionId)
+      .then((response) => {
+        setActivityScore(response || -1)
+      })
+      .catch(() => {
+        setActivityScore(null)
+      })
+  }, [])
+
   useEffect(() => {
     if (expeditionId == null) {
       navigate(GeneralRoutes.HOME)
-    } else {
-      const promise1 = ExpeditionService.getExpeditionPointsMaxOpen(taskResultId)
+    } else if (activityScore != undefined) {
+      const promise1 = ExpeditionService.getExpeditionPointsMaxOpen(activityScore)
         .then((response) => setMaxPointsOpen(response ?? 0))
         .catch(() => setMaxPointsOpen(0))
 
       // TODO: For now we get points from /all, later we will get it from getActivityScore() when it gets fixed
       //StudentService.getActivityScore()...
-      const promise2 = ExpeditionService.getExpeditionAllPoints(taskResultId)
+      const promise2 = ExpeditionService.getExpeditionAllPoints(activityScore)
         .then((response) => setScoredPoints(response ?? 0))
         .catch(() => setScoredPoints(0))
 
-      const promise3 = ExpeditionService.getExpeditionPointsClosed(taskResultId)
+      const promise3 = ExpeditionService.getExpeditionPointsClosed(activityScore)
         .then((response) => setClosedQuestionPoints(response ?? 0))
         .catch(() => setClosedQuestionPoints(0))
 
-      const promise4 = ExpeditionService.getExpeditionPointsMaxClosed(taskResultId)
+      const promise4 = ExpeditionService.getExpeditionPointsMaxClosed(activityScore)
         .then((response) => setMaxPointsClosed(response ?? 0))
         .catch(() => setMaxPointsClosed(0))
 
       Promise.allSettled([promise1, promise2, promise3, promise4]).then(() => setLoaded(true))
     }
-  }, [expeditionId, navigate, taskResultId])
+  }, [expeditionId, navigate, activityScore])
 
   const finishExpeditionAndGoHome = () => {
     navigate(StudentRoutes.GAME_MAP.MAIN)
   }
 
   const showRemainingTime = () =>
-    remainingTime > 60 ? getTimer(remainingTime).replace(':', 'min ') + 's' : remainingTime + 's'
+    remainingTime > 60 ? getTimer(remainingTime / 1000).replace(':', 'min ') + 's' : remainingTime + 's'
 
   return (
     <Content>
@@ -85,9 +99,11 @@ export default function ExpeditionSummary() {
                 {scoredPoints - closedQuestionPoints}/{maxPointsOpen}
               </strong>
             </p>
-            <p style={{ fontSize: 20 }}>
-              Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.
-            </p>
+            {remainingTime > 0 && (
+              <p style={{ fontSize: 20 }}>
+                Pozostało <strong>{showRemainingTime()}</strong> przed końcem czasu.
+              </p>
+            )}
           </Row>
           <Row>
             <ButtonRow>
