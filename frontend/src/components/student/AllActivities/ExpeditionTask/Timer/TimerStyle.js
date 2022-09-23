@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const TimerContainer = styled.h1`
   position: absolute;
-  left: 50%;
+  left: 58%;
   top: 0;
   transform: translateX(-50%);
   z-index: 3;
