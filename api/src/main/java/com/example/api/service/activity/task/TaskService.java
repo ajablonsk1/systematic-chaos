@@ -17,7 +17,6 @@ import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.map.requirement.Requirement;
-import com.example.api.model.map.requirement.RequirementType;
 import com.example.api.model.map.requirement.RequirementValueType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
@@ -73,6 +72,7 @@ public class TaskService {
         List<FileTask> fileTasks = fileTaskRepo.findAll()
                 .stream()
                 .filter(fileTask -> fileTask.getProfessor().getEmail().equals(email))
+                .filter(this::isFileTaskClosed)
                 .toList();
         List<FileTaskResult> fileTaskResults = fileTaskResultRepo.findAll();
         for (FileTask task : fileTasks) {
@@ -94,27 +94,23 @@ public class TaskService {
                 .filter(result -> Objects.equals(result.getFileTask().getId(), task.getId()))
                 .filter(result -> !result.isEvaluated())
                 .toList();
-        if(fileTaskResults.size() > 0) {
-            FileTaskResult result = fileTaskResults.get(0);
-            long num = fileTaskResults.size();
-            boolean isLate = false;
-            if(result.getSendDateMillis() != null){
-                List<Requirement> dateToList = result.getFileTask()
-                        .getRequirements()
-                        .stream()
-                        .filter(requirement -> requirement.getType() == RequirementType.DATE_TO)
-                        .toList();
-                activityValidator.validateRequirementsHasDateTo(dateToList);
-                Long dateTo = dateToList.get(0).getDateTo();
-                isLate = dateTo != null && result.getSendDateMillis() - dateTo > 0;
-            }
-            List<FileResponse> filesResponse = result.getFiles().stream().map(FileResponse::new).toList();
-
-            return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), result.getUser().getFirstName(),
-                    result.getUser().getLastName(), task.getTitle(), isLate, task.getDescription(),
-                    result.getAnswer(), filesResponse, task.getMaxPoints(), id, num-1);
+        if (fileTaskResults.size() == 0) return null;
+        FileTaskResult result = fileTaskResults.get(0);
+        long num = fileTaskResults.size();
+        boolean isLate = false;
+        if(result.getSendDateMillis() != null && isFileTaskClosed(task)){
+            Optional<Long> dateTo = task.getRequirements()
+                    .stream()
+                    .map(Requirement::getDateTo)
+                    .filter(Objects::nonNull)
+                    .findFirst();
+            isLate = dateTo.isPresent() && result.getSendDateMillis() - dateTo.get() > 0;
         }
-        return null;
+        List<FileResponse> filesResponse = result.getFiles().stream().map(FileResponse::new).toList();
+
+        return new TaskToEvaluateResponse(result.getUser().getEmail(), result.getId(), result.getUser().getFirstName(),
+                result.getUser().getLastName(), task.getTitle(), isLate, task.getDescription(),
+                result.getAnswer(), filesResponse, task.getMaxPoints(), id, num-1);
     }
 
     public List<ActivitiesResponse> getAllActivities() {
@@ -355,5 +351,13 @@ public class TaskService {
             log.error("Activity with id {} not found in database", id);
             throw new EntityNotFoundException("Activity with id " + id + " not found in database");
         }
+    }
+
+    // FileTask is closed when its date to requirement is exceeded
+    public boolean isFileTaskClosed(FileTask fileTask) {
+        return fileTask.getRequirements()
+                .stream()
+                .filter(requirement -> requirement.getDateTo() != null)
+                .anyMatch(requirement -> requirement.getDateTo() < System.currentTimeMillis());
     }
 }
