@@ -143,8 +143,8 @@ public class ActivityValidator {
 
     public void validateRequirementsHasDateTo(List<Requirement> requirements) throws EntityRequiredAttributeNullException {
         if (requirements.size() != 1) {
-            log.error("Requirements should have one requirement with type DATE_FROM");
-            throw new EntityRequiredAttributeNullException("Requirements should have one requirement with type DATE_FROM");
+            log.error("Requirements should have one requirement with type DATE_TO");
+            throw new EntityRequiredAttributeNullException("Requirements should have one requirement with type DATE_TO");
         }
     }
 }
