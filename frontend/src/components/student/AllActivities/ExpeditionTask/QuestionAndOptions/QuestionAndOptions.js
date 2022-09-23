@@ -28,7 +28,7 @@ function QuestionAndOptions(props) {
   //       .catch(() => {})
   //   }
   // }, [expeditionId, navigate, remainingTime, taskResultId])
-  console.log(props)
+
   return (
     <ContentWithBackground>
       {question === undefined ? (

@@ -75,7 +75,7 @@ export function ExpeditionWrapper() {
     }
 
     return (
-      <Timer timeToSolveMillis={expeditionState.timeRemaining} activityId={activityId}>
+      <Timer activityId={activityId} timeToSolveMillis={expeditionState.timeRemaining} endAction={goToSummary}>
         <QuestionSelectionDoor activityId={activityId} questions={expeditionState.questions} reloadInfo={reloadState} />
       </Timer>
     )
@@ -85,7 +85,13 @@ export function ExpeditionWrapper() {
     // return changed Question Answer Screen
     console.log(expeditionState)
     return (
-      <QuestionAndOptions activityId={activityId} question={expeditionState.questionDetails} reloadInfo={reloadState} />
+      <Timer activityId={activityId} timeToSolveMillis={expeditionState.timeRemaining} endAction={goToSummary}>
+        <QuestionAndOptions
+          activityId={activityId}
+          question={expeditionState.questionDetails}
+          reloadInfo={reloadState}
+        />
+      </Timer>
     )
   }
 

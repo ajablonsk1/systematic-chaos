@@ -5,15 +5,16 @@ import { TimerContainer } from './TimerStyle'
 
 export default function Timer(props) {
   const navigate = useNavigate()
-  const { timeToSolveMillis, activityId } = props
+  const { timeToSolveMillis, activityId, endAction } = props
   const [remainingTime, setRemainingTime] = useState(undefined)
   const [timer, setTimer] = useState('')
   const [timerInterval, setTimerInterval] = useState(null)
 
-  console.log(props)
+  // console.log(props)
 
   useEffect(() => {
-    const timeInSeconds = parseInt(timeToSolveMillis / 1000)
+    // console.log(timeToSolveMillis)
+    const timeInSeconds = timeToSolveMillis / 1000
     setRemainingTime(timeInSeconds)
     setTimerInterval(
       setInterval(function () {
@@ -25,8 +26,9 @@ export default function Timer(props) {
   // complete the expedition and record user responses if the expedition has not been completed
   // before the timer runs out
   useEffect(() => {
-    if (remainingTime === 0) {
+    if (remainingTime <= 0) {
       clearInterval(timerInterval)
+      endAction()
     } else {
       setTimer(getTimer(remainingTime))
     }
