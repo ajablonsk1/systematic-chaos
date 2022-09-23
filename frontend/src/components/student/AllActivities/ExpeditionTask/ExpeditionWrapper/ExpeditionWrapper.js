@@ -22,8 +22,6 @@ export function ExpeditionWrapper() {
   const location = useLocation()
   const { activityId, alreadyStarted } = location.state
 
-  const [score, setScore] = useState(0)
-  const [remainingTime, setRemainingTime] = useState(undefined)
   const [expeditionState, setExpeditionState] = useState(undefined)
 
   const goToSummary = () => {

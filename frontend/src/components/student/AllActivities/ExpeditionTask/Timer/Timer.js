@@ -27,7 +27,7 @@ export default function Timer(props) {
     } else {
       setTimer(getTimer(remainingTime))
     }
-  }, [activityId, remainingTime, timerInterval])
+  }, [activityId, remainingTime, timerInterval, endAction])
 
   return (
     <>
