@@ -6,7 +6,7 @@ import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import ExpeditionService from '../../../../../services/expedition.service'
 import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor'
 import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions'
-
+import Timer from '../Timer/Timer'
 // wrapped elements should be:
 
 // -- in ANSWER
@@ -75,7 +75,9 @@ export function ExpeditionWrapper() {
     }
 
     return (
-      <QuestionSelectionDoor activityId={activityId} questions={expeditionState.questions} reloadInfo={reloadState} />
+      <Timer timeToSolveMillis={expeditionState.timeRemaining} activityId={activityId}>
+        <QuestionSelectionDoor activityId={activityId} questions={expeditionState.questions} reloadInfo={reloadState} />
+      </Timer>
     )
   }
 
