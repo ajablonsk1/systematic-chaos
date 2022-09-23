@@ -1,6 +1,5 @@
 import { QuestionType } from '../../../../../utils/constants'
 import ExpeditionService from '../../../../../services/expedition.service'
-import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import { EXPEDITION_STATUS } from '../ExpeditionWrapper/ExpeditionWrapperHelpers'
 
 const getAnswerForm = (questionType, userAnswer) => {

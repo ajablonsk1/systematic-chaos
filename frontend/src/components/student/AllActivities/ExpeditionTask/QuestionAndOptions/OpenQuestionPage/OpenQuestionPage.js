@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle'
 import { UserAnswerArea } from './OpenQuestionStyle'
-import { useNavigate } from 'react-router-dom'
 import answerSaver from '../answerSaver'
 
 function fitAreaToContent(text) {

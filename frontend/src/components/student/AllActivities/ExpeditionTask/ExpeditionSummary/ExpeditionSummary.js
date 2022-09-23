@@ -31,12 +31,12 @@ export default function ExpeditionSummary() {
       .catch(() => {
         setActivityScore(null)
       })
-  }, [])
+  }, [expeditionId])
 
   useEffect(() => {
     if (expeditionId == null) {
       navigate(GeneralRoutes.HOME)
-    } else if (activityScore != undefined) {
+    } else if (activityScore !== undefined) {
       const promise1 = ExpeditionService.getExpeditionPointsMaxOpen(activityScore)
         .then((response) => setMaxPointsOpen(response ?? 0))
         .catch(() => setMaxPointsOpen(0))

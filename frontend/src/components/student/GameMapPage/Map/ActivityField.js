@@ -91,7 +91,7 @@ export default function ActivityField({
           {colClickable && (
             <Button
               variant={'outline-warning'}
-              disabled={false}
+              disabled={!activity?.isFulfilled}
               className={'position-relative start-50 translate-middle-x mt-3'}
               onClick={startActivity}
             >
