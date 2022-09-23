@@ -9,17 +9,6 @@ import { ExpeditionWrapper } from '../../../components/student/AllActivities/Exp
 export default function ExpeditionRoutes() {
   return (
     <Routes>
-      {/* <Route
-        path={'doors-selection'}
-        element={
-          <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
-            <Timer>
-              <QuestionSelectionDoor />
-            </Timer>
-          </PageGuard>
-        }
-      /> */}
-
       <Route
         path={'summary'}
         element={
@@ -28,17 +17,6 @@ export default function ExpeditionRoutes() {
           </PageGuard>
         }
       />
-
-      {/* <Route
-        path={'question'}
-        element={
-          <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
-            <Timer>
-              <QuestionAndOptions />
-            </Timer>
-          </PageGuard>
-        }
-      /> */}
 
       <Route
         path={'info'}
@@ -49,13 +27,13 @@ export default function ExpeditionRoutes() {
         }
       />
 
-      <Route 
-      path={'wrapper'}
-      element={
-        <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
-          <ExpeditionWrapper />
-        </PageGuard>
-      }
+      <Route
+        path={'wrapper'}
+        element={
+          <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
+            <ExpeditionWrapper />
+          </PageGuard>
+        }
       />
 
       <Route path='*' element={<NotFound />} />
