@@ -102,4 +102,9 @@ public class PointsCalculator {
                 .mapToDouble(this::calculatePointsForOpenedQuestion)
                 .sum();
     }
+
+    public static Double round(Double score, Integer precision) {
+        Double epsilon = Math.pow(10.0, precision);
+        return Math.round(score * epsilon) / epsilon;
+    }
 }
