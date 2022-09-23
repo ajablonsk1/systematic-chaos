@@ -23,8 +23,6 @@ export default function ExpeditionSummary() {
   const [loaded, setLoaded] = useState(false)
   const [activityScore, setActivityScore] = useState(undefined)
 
-  console.log(location)
-
   useEffect(() => {
     ExpeditionService.getExpeditionScore(expeditionId)
       .then((response) => {

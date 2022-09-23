@@ -4,7 +4,6 @@ import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import { EXPEDITION_STATUS } from '../ExpeditionWrapper/ExpeditionWrapperHelpers'
 
 const getAnswerForm = (questionType, userAnswer) => {
-  console.log(userAnswer)
   let idList = null
   switch (questionType) {
     case QuestionType.OPEN_QUESTION:

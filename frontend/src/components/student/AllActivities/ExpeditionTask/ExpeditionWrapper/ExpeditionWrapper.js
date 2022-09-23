@@ -69,7 +69,6 @@ export function ExpeditionWrapper() {
     if (expeditionState.questions.length === 0) {
       //navigate to summary if there are no questions left
       goToSummary()
-      // return <p>I am in choose state without questions!</p>
     }
 
     return (
@@ -81,7 +80,6 @@ export function ExpeditionWrapper() {
 
   if (expeditionState.status === EXPEDITION_STATUS.ANSWER) {
     // return changed Question Answer Screen
-    console.log(expeditionState)
     return (
       <Timer activityId={activityId} timeToSolveMillis={expeditionState.timeRemaining} endAction={goToSummary}>
         <QuestionAndOptions
@@ -92,6 +90,4 @@ export function ExpeditionWrapper() {
       </Timer>
     )
   }
-
-  return <p>... I shouldn't be here</p>
 }

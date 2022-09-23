@@ -55,10 +55,8 @@ export default function ActivityContent(props) {
   useEffect(() => {
     // if activityScore from endpoint has id value, this task was finished by logged student
     if (activityScore && activityScore !== -1) {
-      console.log(activityScore)
       ExpeditionService.getExpeditionAllPoints(activityScore)
         .then((response) => {
-          console.log(response)
           setPointsReceived(response ?? 0)
         })
         .catch(() => {

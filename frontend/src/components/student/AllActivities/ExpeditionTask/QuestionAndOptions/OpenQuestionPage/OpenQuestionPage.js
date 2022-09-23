@@ -13,7 +13,6 @@ function fitAreaToContent(text) {
 
 export default function OpenQuestionPage(props) {
   const userAnswer = useRef()
-  console.log(props.question)
   const saveAnswer = () => {
     answerSaver(userAnswer.current.value, props.question.type, props.expeditionId, props.question.id, props.reloadInfo)
   }
