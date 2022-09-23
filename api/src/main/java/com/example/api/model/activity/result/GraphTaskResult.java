@@ -31,6 +31,7 @@ public class GraphTaskResult extends TaskResult {
     private Long startDateMillis;
     private Double maxPoints100;
     private ResultStatus status;
+    private Long sendDateMillis;
 
     @OneToOne
     private Question currQuestion;
@@ -53,6 +54,7 @@ public class GraphTaskResult extends TaskResult {
         this.graphTask = graphTask;
         this.setUser(user);
         this.startDateMillis = startDateMillis;
+        this.sendDateMillis = startDateMillis;
         this.status = status;
         this.currQuestion = currQuestion;
     }
