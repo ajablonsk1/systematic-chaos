@@ -41,7 +41,11 @@ export function ExpeditionWrapper() {
   const goToSummary = useCallback(() => {
     if (expeditionState) {
       navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, {
-        state: { expeditionId: activityId, remainingTime: expeditionState.timeRemaining }
+        state: {
+          expeditionId: activityId,
+          remainingTime: expeditionState.timeRemaining,
+          isFinished: expeditionState.finished
+        }
       })
     }
   }, [activityId, expeditionState, navigate])

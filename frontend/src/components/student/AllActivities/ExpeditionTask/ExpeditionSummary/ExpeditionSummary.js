@@ -19,8 +19,7 @@ export default function ExpeditionSummary() {
   const [closedQuestionPoints, setClosedQuestionPoints] = useState(0)
   const [remainingTime, setRemainingTime] = useState(0)
   const location = useLocation()
-  const { expeditionId } = location.state
-
+  const { expeditionId, isFinished } = location.state
   const [loaded, setLoaded] = useState(false)
   const [activityScore, setActivityScore] = useState(undefined)
 
@@ -45,7 +44,9 @@ export default function ExpeditionSummary() {
       // TODO: For now we get points from /all, later we will get it from getActivityScore() when it gets fixed
       //StudentService.getActivityScore()...
       const promise2 = ExpeditionService.getExpeditionAllPoints(activityScore)
-        .then((response) => setScoredPoints(response ?? 0))
+        .then((response) => {
+          setScoredPoints(response !== '' ? response : 0)
+        })
         .catch(() => setScoredPoints(0))
 
       const promise3 = ExpeditionService.getExpeditionPointsClosed(activityScore)
@@ -102,7 +103,7 @@ export default function ExpeditionSummary() {
                 {scoredPoints - closedQuestionPoints}/{maxPointsOpen}
               </strong>
             </p>
-            {remainingTime > 0 && (
+            {remainingTime > 0 && isFinished && (
               <p style={{ fontSize: 20 }}>
                 Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.
               </p>

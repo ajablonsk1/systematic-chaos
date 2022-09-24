@@ -140,6 +140,7 @@ export default function ActivityContent(props) {
   }, [endDate, props, startDate])
 
   const pointsCard = useMemo(() => {
+    console.log(pointsReceived)
     if (pointsReceived === undefined) {
       return <Spinner animation={'border'} />
     }
@@ -149,7 +150,7 @@ export default function ActivityContent(props) {
     }
 
     const tableElements = [
-      { name: 'Obecna liczba punktów', value: pointsReceived },
+      { name: 'Obecna liczba punktów', value: pointsReceived !== '' ? pointsReceived : 0 },
       { name: 'Maksymalna liczba punktów do zdobycia', value: props.activity.maxPoints },
       { name: 'Liczba punktów licząca się jako 100%', value: props.activity.maxPoints100 ?? '-' }
     ]
@@ -171,7 +172,7 @@ export default function ActivityContent(props) {
         <Col md={6}>
           <PercentageCircle
             percentageValue={(100 * pointsReceived) / props.activity.maxPoints}
-            points={pointsReceived}
+            points={pointsReceived !== '' ? pointsReceived : 0}
             maxPoints={props.activity.maxPoints} // TODO: replace it with props.activity.maxPoints 100 when backend will be work appropriately
           />
         </Col>
