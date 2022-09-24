@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Spinner } from 'react-bootstrap'
 import { EXPEDITION_STATUS } from '../../../../../utils/constants'
@@ -70,30 +70,38 @@ export function ExpeditionWrapper() {
     }
   }, [expeditionState, goToSummary])
 
-  if (expeditionState === undefined) {
-    return <Spinner />
-  }
+  const wrapperContent = useMemo(() => {
+    if (expeditionState == null) {
+      // nie jestem pewien czy ten if potrzebny, sprawdź sobie
+      return <></>
+    }
+    switch (expeditionState.status) {
+      case EXPEDITION_STATUS.ANSWER:
+        return (
+          <QuestionAndOptions
+            activityId={activityId}
+            question={expeditionState.questionDetails}
+            reloadInfo={reloadState}
+          />
+        )
+      case EXPEDITION_STATUS.CHOOSE:
+        return (
+          <QuestionSelectionDoor
+            activityId={activityId}
+            questions={expeditionState.questions}
+            reloadInfo={reloadState}
+          />
+        )
+      default:
+        return <></>
+    }
+  }, [activityId, expeditionState, reloadState])
 
-  if (expeditionState.status === EXPEDITION_STATUS.CHOOSE) {
-    // return changed Question Select screen
-
-    return (
-      <Timer activityId={activityId} timeToSolveMillis={expeditionState.timeRemaining} endAction={goToSummary}>
-        <QuestionSelectionDoor activityId={activityId} questions={expeditionState.questions} reloadInfo={reloadState} />
-      </Timer>
-    )
-  }
-
-  if (expeditionState.status === EXPEDITION_STATUS.ANSWER) {
-    // return changed Question Answer Screen
-    return (
-      <Timer activityId={activityId} timeToSolveMillis={expeditionState.timeRemaining} endAction={goToSummary}>
-        <QuestionAndOptions
-          activityId={activityId}
-          question={expeditionState.questionDetails}
-          reloadInfo={reloadState}
-        />
-      </Timer>
-    )
-  }
+  return expeditionState === undefined ? (
+    <Spinner animation={'border'} />
+  ) : (
+    <Timer activityId={activityId} timeToSolveMillis={expeditionState.timeRemaining} endAction={goToSummary}>
+      {wrapperContent}
+    </Timer>
+  )
 }
