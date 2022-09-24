@@ -104,7 +104,7 @@ export default function ExpeditionSummary() {
             </p>
             {remainingTime > 0 && (
               <p style={{ fontSize: 20 }}>
-                Ekspedycja ukończona <strong>{showRemainingTime()}</strong> przed końcem czasu.
+                Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.
               </p>
             )}
           </Row>
