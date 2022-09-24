@@ -17,8 +17,9 @@ export default function ExpeditionSummary() {
   const [maxPointsClosed, setMaxPointsClosed] = useState(0)
   const [scoredPoints, setScoredPoints] = useState(0)
   const [closedQuestionPoints, setClosedQuestionPoints] = useState(0)
+  const [remainingTime, setRemainingTime] = useState(0)
   const location = useLocation()
-  const { expeditionId, remainingTime } = location.state
+  const { expeditionId } = location.state
 
   const [loaded, setLoaded] = useState(false)
   const [activityScore, setActivityScore] = useState(undefined)
@@ -54,6 +55,10 @@ export default function ExpeditionSummary() {
       const promise4 = ExpeditionService.getExpeditionPointsMaxClosed(activityScore)
         .then((response) => setMaxPointsClosed(response ?? 0))
         .catch(() => setMaxPointsClosed(0))
+
+      const promise5 = ExpeditionService.getRemainingTime(activityScore)
+        .then((response) => setRemainingTime(response ?? 0))
+        .catch(() => setRemainingTime(0))
 
       Promise.allSettled([promise1, promise2, promise3, promise4]).then(() => setLoaded(true))
     }
@@ -99,7 +104,7 @@ export default function ExpeditionSummary() {
             </p>
             {remainingTime > 0 && (
               <p style={{ fontSize: 20 }}>
-                Pozostało <strong>{showRemainingTime()}</strong> przed końcem czasu.
+                Ekspedycja ukończona <strong>{showRemainingTime()}</strong> przed końcem czasu.
               </p>
             )}
           </Row>

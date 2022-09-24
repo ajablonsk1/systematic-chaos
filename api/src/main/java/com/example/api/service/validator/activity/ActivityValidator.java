@@ -84,6 +84,23 @@ public class ActivityValidator {
         }
     }
 
+    public void validateGraphTaskResultExistsAndHasStartAndEndDate(GraphTaskResult result, Long id) throws EntityNotFoundException, EntityRequiredAttributeNullException {
+        if(result == null) {
+            log.error("Graph task result with given id {} does not exist", id);
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
+        }
+        if(result.getStartDateMillis() == null) {
+            log.error("Start time not set for graph task with id {}", id);
+            throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
+                    "graph task result with id " + id);
+        }
+        if(result.getSendDateMillis() == null) {
+            log.error("End time not set for graph task with id {}", id);
+            throw new EntityRequiredAttributeNullException("Required attribute sendDateMillis is null for " +
+                    "graph task result with id " + id);
+        }
+    }
+
     public void validateCreateFileTaskFormFields(CreateFileTaskForm form) throws RequestValidationException {
         fileTaskValidator.validateCreateFileTaskForm(form);
     }

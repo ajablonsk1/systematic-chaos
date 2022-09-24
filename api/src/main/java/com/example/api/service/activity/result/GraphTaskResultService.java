@@ -127,6 +127,14 @@ public class GraphTaskResultService {
         return timeCalculator.getTimeRemaining(graphTaskResult.getStartDateMillis(), graphTask.getTimeToSolveMillis());
     }
 
+    public Long getTimeLeftAfterEnd(Long resultId) throws EntityNotFoundException, EntityRequiredAttributeNullException {
+        log.info("Calculating how much time left after last action for graph task result with id {}", resultId);
+        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
+        activityValidator.validateGraphTaskResultExistsAndHasStartAndEndDate(graphTaskResult, resultId);
+        GraphTask graphTask = graphTaskResult.getGraphTask();
+        return timeCalculator.getTimeLeftAfterLastAnswer(graphTaskResult.getStartDateMillis(), graphTask.getTimeToSolveMillis(), graphTaskResult.getSendDateMillis());
+    }
+
     public Long getTimeRemaining(GraphTaskResult result) throws EntityNotFoundException, EntityRequiredAttributeNullException {
         log.info("Calculating time remaining for graph task result with id {}", result.getId());
         activityValidator.validateGraphTaskResultExistsAndHasStartDate(result, result.getId());

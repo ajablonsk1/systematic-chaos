@@ -71,9 +71,9 @@ public class GraphTaskResultController {
     }
 
     @GetMapping("/time-remaining")
-    public ResponseEntity<Long> getTimeRemaining(@RequestParam Long resultId)
+    public ResponseEntity<Long> getTimeLeftAfterEnd(@RequestParam Long resultId)
             throws EntityNotFoundException, EntityRequiredAttributeNullException {
-        return ResponseEntity.ok().body(graphTaskResultService.getTimeRemaining(resultId));
+        return ResponseEntity.ok().body(graphTaskResultService.getTimeLeftAfterEnd(resultId));
     }
 
 }
