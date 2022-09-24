@@ -21,7 +21,6 @@ export default function ActivityContent(props) {
   const [endDate, setEndDate] = useState(undefined)
   const [pointsReceived, setPointsReceived] = useState(undefined)
   const [isFetching, setIsFetching] = useState(false)
-  // const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     ExpeditionService.getExpeditionScore(activityId)
@@ -209,7 +208,6 @@ export default function ActivityContent(props) {
             {isFetching ? <Spinner animation={'border'} /> : <span>Rozpocznij</span>}
           </Button>
         </Row>
-        {/* {!!errorMessage && <p className={'text-center text-danger pt-2 text-truncate'}>{errorMessage}</p>} */}
       </Col>
     </Row>
   )

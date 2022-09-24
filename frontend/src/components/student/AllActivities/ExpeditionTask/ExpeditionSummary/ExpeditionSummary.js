@@ -88,7 +88,7 @@ export default function ExpeditionSummary() {
             <p style={{ fontSize: 20 }}>
               Punkty z pytań zamkniętych: {/* there will be a closed all endpoint later*/}
               <strong>
-                {closedQuestionPoints} / {maxPointsClosed}
+                {closedQuestionPoints}/{maxPointsClosed}
               </strong>
             </p>
             <p style={{ fontSize: 20 }}>

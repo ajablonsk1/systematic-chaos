@@ -2,8 +2,7 @@ import styled from 'styled-components'
 
 export const TimerContainer = styled.h1`
   position: absolute;
-  left: 58%;
-  top: 0;
+  left: calc(50% + var(--sidebar-width) / 2);
   transform: translateX(-50%);
   z-index: 3;
   color: ${(props) => (parseInt(props.time) > 10 ? 'black' : 'red')};

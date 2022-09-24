@@ -28,7 +28,7 @@ export default function ExpeditionRoutes() {
       />
 
       <Route
-        path={'wrapper'}
+        path={'test'}
         element={
           <PageGuard role={Role.LOGGED_IN_AS_STUDENT}>
             <ExpeditionWrapper />

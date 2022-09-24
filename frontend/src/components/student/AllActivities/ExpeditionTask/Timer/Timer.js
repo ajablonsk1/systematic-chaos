@@ -11,12 +11,14 @@ export default function Timer(props) {
   useEffect(() => {
     const timeInSeconds = timeToSolveMillis / 1000
     setRemainingTime(timeInSeconds)
-    setTimerInterval(
-      setInterval(function () {
-        setRemainingTime((prevState) => prevState - 1)
-      }, 1000)
-    )
-  }, [timeToSolveMillis])
+    if (timerInterval == null) {
+      setTimerInterval(
+        setInterval(function () {
+          setRemainingTime((prevState) => prevState - 1)
+        }, 1000)
+      )
+    }
+  }, [timeToSolveMillis, timerInterval])
 
   // complete the expedition and record user responses if the expedition has not been completed
   // before the timer runs out

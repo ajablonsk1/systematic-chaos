@@ -13,7 +13,7 @@ export const StudentRoutes = {
       QUESTION_SELECTION: '/game-map/expedition/doors-selection',
       QUESTION_CONTENT: '/game-map/expedition/question',
       SUMMARY: '/game-map/expedition/summary',
-      EXPEDITION_WRAPPER: '/game-map/expedition/wrapper'
+      EXPEDITION_WRAPPER: '/game-map/expedition/test'
     },
     COMBAT_TASK: '/game-map/combat-task',
     SURVEY_TASK: '/game-map/survey-task',

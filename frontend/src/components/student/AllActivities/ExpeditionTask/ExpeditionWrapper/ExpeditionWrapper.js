@@ -7,15 +7,18 @@ import ExpeditionService from '../../../../../services/expedition.service'
 import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor'
 import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions'
 import Timer from '../Timer/Timer'
-// wrapped elements should be:
 
-// -- in ANSWER
-// QuestionAndOptions
-// ClosedQuestionPage
-// OpenQuestionPage
+/* 
+wrapped elements should be:
 
-// -- in CHOOSE
-// QuestionSelectionDoor
+-- in ANSWER
+QuestionAndOptions
+ClosedQuestionPage
+OpenQuestionPage
+
+-- in CHOOSE
+QuestionSelectionDoor
+*/
 
 export function ExpeditionWrapper() {
   const navigate = useNavigate()
@@ -23,12 +26,6 @@ export function ExpeditionWrapper() {
   const { activityId, alreadyStarted } = location.state
 
   const [expeditionState, setExpeditionState] = useState(undefined)
-
-  const goToSummary = () => {
-    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, {
-      state: { expeditionId: activityId, remainingTime: expeditionState.timeRemaining }
-    })
-  }
 
   // we will pass this function to "lower" components so that we can reload info from endpoint
   // in wrapper on changes
@@ -40,6 +37,14 @@ export function ExpeditionWrapper() {
       }),
     [activityId]
   )
+
+  const goToSummary = useCallback(() => {
+    if (expeditionState) {
+      navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.SUMMARY, {
+        state: { expeditionId: activityId, remainingTime: expeditionState.timeRemaining }
+      })
+    }
+  }, [activityId, expeditionState, navigate])
 
   useEffect(() => {
     if (activityId) {
@@ -55,21 +60,22 @@ export function ExpeditionWrapper() {
     }
   }, [activityId, alreadyStarted, reloadState])
 
+  useEffect(() => {
+    if (
+      expeditionState &&
+      (expeditionState.timeRemaining <= 0 ||
+        (expeditionState.status === EXPEDITION_STATUS.CHOOSE && !expeditionState.questions.length))
+    ) {
+      goToSummary()
+    }
+  }, [expeditionState, goToSummary])
+
   if (expeditionState === undefined) {
     return <Spinner />
   }
 
-  if (expeditionState.remainingTime <= 0) {
-    goToSummary()
-  }
-
   if (expeditionState.status === EXPEDITION_STATUS.CHOOSE) {
     // return changed Question Select screen
-
-    if (expeditionState.questions.length === 0) {
-      //navigate to summary if there are no questions left
-      goToSummary()
-    }
 
     return (
       <Timer activityId={activityId} timeToSolveMillis={expeditionState.timeRemaining} endAction={goToSummary}>
