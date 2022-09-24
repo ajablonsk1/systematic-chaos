@@ -87,6 +87,13 @@ public class QuestionService {
                 // counting current state of points
                 double allPoints = pointsCalculator.calculateAllPoints(result);
                 result.setPointsReceived(allPoints);
+                
+                // if it's the last question, set finished
+                List<Question> nextQuestions = question.getNext();
+                if(nextQuestions.size() == 0){
+                    result.setFinished(true);
+                    log.info("Expedition finished");
+                }
 
                 return timeRemaining;
             }
@@ -112,7 +119,8 @@ public class QuestionService {
                         graphTaskResultService.getTimeRemaining(result),
                         pointsCalculator.calculateAllPoints(result),
                         questionList,
-                        null
+                        null,
+                        result.isFinished()
                 );
             }
             case ANSWER -> {
@@ -122,7 +130,8 @@ public class QuestionService {
                         graphTaskResultService.getTimeRemaining(result),
                         pointsCalculator.calculateAllPoints(result),
                         null,
-                        new QuestionDetails(question)
+                        new QuestionDetails(question),
+                        result.isFinished()
                 );
             }
             default ->

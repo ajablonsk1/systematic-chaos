@@ -16,4 +16,5 @@ public class QuestionInfoResponse {
     private Double actualPointsReceived;
     private List<QuestionList> questions;
     private QuestionDetails questionDetails;
+    private boolean finished;
 }
