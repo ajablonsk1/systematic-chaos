@@ -60,7 +60,7 @@ export default function ExpeditionSummary() {
         .then((response) => setRemainingTime(response ?? 0))
         .catch(() => setRemainingTime(0))
 
-      Promise.allSettled([promise1, promise2, promise3, promise4]).then(() => setLoaded(true))
+      Promise.allSettled([promise1, promise2, promise3, promise4, promise5]).then(() => setLoaded(true))
     }
   }, [expeditionId, navigate, activityScore])
 
