@@ -4,7 +4,7 @@ import { Content } from '../../../../App/AppGeneralStyles'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { ERROR_OCCURRED, EXPEDITION_STATUS } from '../../../../../utils/constants'
 
-function generateDoor(question, expeditionId, noDoors, reloadInfo) {
+function generateDoor(question, noDoors, onDoorClick) {
   return (
     <DoorColumn key={question.id + Date.now()} xl={12 / noDoors} md={12}>
       <Row className='mx-auto'>
@@ -20,19 +20,7 @@ function generateDoor(question, expeditionId, noDoors, reloadInfo) {
       </Row>
 
       <Row className='mx-auto'>
-        <Button
-          onClick={() =>
-            // change state, reloadInfo
-            ExpeditionService.sendAction({
-              status: EXPEDITION_STATUS.CHOOSE,
-              graphTaskId: expeditionId,
-              questionId: question.id,
-              answerForm: null
-            }).then(() => reloadInfo())
-          }
-        >
-          Wybierz
-        </Button>
+        <Button onClick={() => onDoorClick(question.id)}>Wybierz</Button>
       </Row>
     </DoorColumn>
   )
@@ -41,14 +29,21 @@ function generateDoor(question, expeditionId, noDoors, reloadInfo) {
 function QuestionSelectionDoor(props) {
   const { activityId: expeditionId, questions, reloadInfo } = props
 
+  const onDoorClick = (questionId) =>
+    // change state, reloadInfo
+    ExpeditionService.sendAction({
+      status: EXPEDITION_STATUS.CHOOSE,
+      graphTaskId: expeditionId,
+      questionId: questionId,
+      answerForm: null
+    }).then(() => reloadInfo())
+
   return (
     <Content>
       {questions == null ? (
         <p className={'text-center text-danger h3 p-5'}>{ERROR_OCCURRED}</p>
       ) : (
-        <Row className='m-0'>
-          {questions.map((question) => generateDoor(question, expeditionId, questions.length, reloadInfo))}
-        </Row>
+        <Row className='m-0'>{questions.map((question) => generateDoor(question, questions.length, onDoorClick))}</Row>
       )}
     </Content>
   )
