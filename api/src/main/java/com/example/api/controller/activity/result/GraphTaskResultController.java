@@ -47,9 +47,9 @@ public class GraphTaskResultController {
     }
 
     @GetMapping("/points/all")
-    public ResponseEntity<Double> getAndSetAllPoints(@RequestParam Long graphTaskResultId)
+    public ResponseEntity<Double> getAllPoints(@RequestParam Long graphTaskResultId)
             throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.getAndSetAllPoints(graphTaskResultId));
+        return ResponseEntity.ok().body(graphTaskResultService.getAllPoints(graphTaskResultId));
     }
 
     @GetMapping("/points/available/opened")
@@ -70,20 +70,10 @@ public class GraphTaskResultController {
         return ResponseEntity.ok().body(graphTaskResultService.getMaxAvailablePoints(graphTaskResultId));
     }
 
-    @PostMapping("/start-date/set")
-    public ResponseEntity<Long> setStartDateMillis(@RequestBody SetStartDateMillisForm form)
-            throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.setStartDateMillis(form));
-    }
-
     @GetMapping("/time-remaining")
     public ResponseEntity<Long> getTimeRemaining(@RequestParam Long resultId)
             throws EntityNotFoundException, EntityRequiredAttributeNullException {
         return ResponseEntity.ok().body(graphTaskResultService.getTimeRemaining(resultId));
     }
 
-    @PostMapping("/send-date/set")
-    public ResponseEntity<Long> setSendDateMillis(@RequestBody SetSendDateMillisForm form) throws EntityNotFoundException {
-        return ResponseEntity.ok().body(graphTaskResultService.setSendDateMillis(form));
-    }
 }

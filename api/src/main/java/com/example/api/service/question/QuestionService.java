@@ -69,6 +69,7 @@ public class QuestionService {
                 Long questionId = form.getQuestionId();
                 Question question = questionRepo.findQuestionById(questionId);
                 questionValidator.validateQuestionIsNotNull(question, questionId);
+                result.setSendDateMillis(System.currentTimeMillis());
                 result.setCurrQuestion(question);
                 result.setStatus(ResultStatus.ANSWER);
                 return timeRemaining;
@@ -79,8 +80,14 @@ public class QuestionService {
                 Answer answer = resultValidator.validateAndCreateAnswer(form.getAnswerForm(), question);
                 answer.setQuestion(question);
                 answerRepo.save(answer);
+                result.setSendDateMillis(System.currentTimeMillis());
                 result.getAnswers().add(answer);
                 result.setStatus(ResultStatus.CHOOSE);
+
+                // counting current state of points
+                double allPoints = pointsCalculator.calculateAllPoints(result);
+                result.setPointsReceived(allPoints);
+
                 return timeRemaining;
             }
             default ->
