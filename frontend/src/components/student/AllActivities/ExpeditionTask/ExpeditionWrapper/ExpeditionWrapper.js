@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Spinner } from 'react-bootstrap'
-import { EXPEDITION_STATUS } from './ExpeditionWrapperHelpers'
+import { EXPEDITION_STATUS } from '../../../../../utils/constants'
 import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import ExpeditionService from '../../../../../services/expedition.service'
 import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor'

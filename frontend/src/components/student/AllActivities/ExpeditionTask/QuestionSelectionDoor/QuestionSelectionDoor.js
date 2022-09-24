@@ -2,7 +2,7 @@ import { Door, DoorColumn } from './QuestionSelectionDoorStyles'
 import { Button, Row } from 'react-bootstrap'
 import { Content } from '../../../../App/AppGeneralStyles'
 import ExpeditionService from '../../../../../services/expedition.service'
-import { ERROR_OCCURRED } from '../../../../../utils/constants'
+import { ERROR_OCCURRED, EXPEDITION_STATUS } from '../../../../../utils/constants'
 
 function generateDoor(question, expeditionId, noDoors, reloadInfo) {
   return (
@@ -24,7 +24,7 @@ function generateDoor(question, expeditionId, noDoors, reloadInfo) {
           onClick={() =>
             // change state, reloadInfo
             ExpeditionService.sendAction({
-              status: 'CHOOSE',
+              status: EXPEDITION_STATUS.CHOOSE,
               graphTaskId: expeditionId,
               questionId: question.id,
               answerForm: null
