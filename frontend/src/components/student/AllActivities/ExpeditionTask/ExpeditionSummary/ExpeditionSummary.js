@@ -104,10 +104,12 @@ export default function ExpeditionSummary() {
               </strong>
             </p>
             {/* if expedition is not finished (the user didn't answer the last possible question) we don't show the time */}
-            {remainingTime > 0 && isFinished && (
+            {remainingTime > 0 && isFinished ? (
               <p style={{ fontSize: 20 }}>
                 Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.
               </p>
+            ) : (
+              <p style={{ fontSize: 20 }}>Aktywność nie została ukończona w całości</p>
             )}
           </Row>
           <Row>
