@@ -76,7 +76,6 @@ export function ExpeditionWrapper() {
 
   const wrapperContent = useMemo(() => {
     if (expeditionState == null) {
-      // nie jestem pewien czy ten if potrzebny, sprawdź sobie
       return <></>
     }
     switch (expeditionState.status) {

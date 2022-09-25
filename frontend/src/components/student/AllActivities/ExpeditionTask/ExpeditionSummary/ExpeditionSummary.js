@@ -103,6 +103,7 @@ export default function ExpeditionSummary() {
                 {scoredPoints - closedQuestionPoints}/{maxPointsOpen}
               </strong>
             </p>
+            {/* if expedition is not finished (the user didn't answer the last possible question) we don't show the time */}
             {remainingTime > 0 && isFinished && (
               <p style={{ fontSize: 20 }}>
                 Ukończono: <strong>{showRemainingTime()}</strong> przed czasem.
