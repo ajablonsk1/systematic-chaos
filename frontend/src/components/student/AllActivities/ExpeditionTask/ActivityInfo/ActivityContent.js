@@ -140,7 +140,6 @@ export default function ActivityContent(props) {
   }, [endDate, props, startDate])
 
   const pointsCard = useMemo(() => {
-    console.log(pointsReceived)
     if (pointsReceived === undefined) {
       return <Spinner animation={'border'} />
     }
