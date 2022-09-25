@@ -21,7 +21,6 @@ export default function ActivityContent(props) {
   const [endDate, setEndDate] = useState(undefined)
   const [pointsReceived, setPointsReceived] = useState(undefined)
   const [isFetching, setIsFetching] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     ExpeditionService.getExpeditionScore(activityId)
@@ -55,10 +54,8 @@ export default function ActivityContent(props) {
   useEffect(() => {
     // if activityScore from endpoint has id value, this task was finished by logged student
     if (activityScore && activityScore !== -1) {
-      console.log(activityScore)
       ExpeditionService.getExpeditionAllPoints(activityScore)
         .then((response) => {
-          console.log(response)
           setPointsReceived(response ?? 0)
         })
         .catch(() => {
@@ -69,37 +66,18 @@ export default function ActivityContent(props) {
     }
   }, [activityScore])
 
-  const navigateTo = (nodeId, taskResultId) =>
-    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.QUESTION_SELECTION, {
+  const navigateToExpeditionWrapper = () =>
+    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.EXPEDITION_WRAPPER, {
       state: {
         activityId: activityId,
-        nodeId: nodeId,
-        taskResultId: taskResultId,
-        timeToSolveMillis: props.activity.timeToSolveMillis
+        alreadyStarted: activityScore !== -1
       }
     })
 
   const startExpedition = () => {
+    //necessary?
     setIsFetching(true)
-    // returns resultId value, very important
-    ExpeditionService.getTaskAnswerId(activityId)
-      .then((response) => {
-        // set startTime in milliseconds
-        ExpeditionService.setStartTime(response?.id, Date.now())
-          .then(() => {
-            setIsFetching(false)
-            // later get the first question on endpoint
-            navigateTo(props.activity.questions[0].id, response?.id)
-          })
-          .catch((error) => {
-            setIsFetching(false)
-            setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
-          })
-      })
-      .catch((error) => {
-        setIsFetching(false)
-        setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
-      })
+    navigateToExpeditionWrapper()
   }
 
   const basicInfoCard = useMemo(() => {
@@ -171,7 +149,7 @@ export default function ActivityContent(props) {
     }
 
     const tableElements = [
-      { name: 'Obecna liczba punktów', value: pointsReceived },
+      { name: 'Obecna liczba punktów', value: pointsReceived !== '' ? pointsReceived : 0 },
       { name: 'Maksymalna liczba punktów do zdobycia', value: props.activity.maxPoints },
       { name: 'Liczba punktów licząca się jako 100%', value: props.activity.maxPoints100 ?? '-' }
     ]
@@ -193,7 +171,7 @@ export default function ActivityContent(props) {
         <Col md={6}>
           <PercentageCircle
             percentageValue={(100 * pointsReceived) / props.activity.maxPoints}
-            points={pointsReceived}
+            points={pointsReceived !== '' ? pointsReceived : 0}
             maxPoints={props.activity.maxPoints} // TODO: replace it with props.activity.maxPoints 100 when backend will be work appropriately
           />
         </Col>
@@ -225,11 +203,11 @@ export default function ActivityContent(props) {
           <Button className={'w-auto'} variant={'secondary'} onClick={() => navigate(StudentRoutes.GAME_MAP.MAIN)}>
             Wstecz
           </Button>
-          <Button className={'w-auto'} variant={'warning'} onClick={startExpedition} disabled={activityScore?.id}>
+          {/* we don't need to disable the button anymore, as we can try to continue with the server-side flow rework */}
+          <Button className={'w-auto'} variant={'warning'} onClick={startExpedition}>
             {isFetching ? <Spinner animation={'border'} /> : <span>Rozpocznij</span>}
           </Button>
         </Row>
-        {!!errorMessage && <p className={'text-center text-danger pt-2 text-truncate'}>{errorMessage}</p>}
       </Col>
     </Row>
   )

@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle'
 import { UserAnswerArea } from './OpenQuestionStyle'
-import { useNavigate } from 'react-router-dom'
 import answerSaver from '../answerSaver'
 
 function fitAreaToContent(text) {
@@ -13,24 +12,15 @@ function fitAreaToContent(text) {
 
 export default function OpenQuestionPage(props) {
   const userAnswer = useRef()
-  const navigate = useNavigate()
-
   const saveAnswer = () => {
-    answerSaver(
-      userAnswer.current.value,
-      props.question.type,
-      props.taskResultId,
-      props.question.id,
-      props.expeditionId,
-      navigate
-    )
+    answerSaver(userAnswer.current.value, props.question.type, props.expeditionId, props.question.id, props.reloadInfo)
   }
 
   return (
     <Row>
       <Col xs={12}>
         <QuestionCard className='h-auto py-5'>
-          <div>{props.question.category}</div>
+          <div>{props.question.hint}</div>
           <div>
             <p>{props.question.content}</p>
           </div>

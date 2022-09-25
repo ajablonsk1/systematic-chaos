@@ -69,6 +69,7 @@ public class QuestionService {
                 Long questionId = form.getQuestionId();
                 Question question = questionRepo.findQuestionById(questionId);
                 questionValidator.validateQuestionIsNotNull(question, questionId);
+                result.setSendDateMillis(System.currentTimeMillis());
                 result.setCurrQuestion(question);
                 result.setStatus(ResultStatus.ANSWER);
                 return timeRemaining;
@@ -79,8 +80,21 @@ public class QuestionService {
                 Answer answer = resultValidator.validateAndCreateAnswer(form.getAnswerForm(), question);
                 answer.setQuestion(question);
                 answerRepo.save(answer);
+                result.setSendDateMillis(System.currentTimeMillis());
                 result.getAnswers().add(answer);
                 result.setStatus(ResultStatus.CHOOSE);
+
+                // counting current state of points
+                double allPoints = pointsCalculator.calculateAllPoints(result);
+                result.setPointsReceived(allPoints);
+                
+                // if it's the last question, set finished
+                List<Question> nextQuestions = question.getNext();
+                if(nextQuestions.size() == 0){
+                    result.setFinished(true);
+                    log.info("Expedition finished");
+                }
+
                 return timeRemaining;
             }
             default ->
@@ -105,7 +119,8 @@ public class QuestionService {
                         graphTaskResultService.getTimeRemaining(result),
                         pointsCalculator.calculateAllPoints(result),
                         questionList,
-                        null
+                        null,
+                        result.isFinished()
                 );
             }
             case ANSWER -> {
@@ -115,7 +130,8 @@ public class QuestionService {
                         graphTaskResultService.getTimeRemaining(result),
                         pointsCalculator.calculateAllPoints(result),
                         null,
-                        new QuestionDetails(question)
+                        new QuestionDetails(question),
+                        result.isFinished()
                 );
             }
             default ->

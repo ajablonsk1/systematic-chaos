@@ -91,13 +91,11 @@ public class GraphTaskResultService {
         return pointsCalculator.calculatePointsForOpenedQuestions(result);
     }
 
-    public Double getAndSetAllPoints(Long id) throws EntityNotFoundException {
-        log.info("Calculating and setting points from all questions for graph task result with id {}", id);
+    public Double getAllPoints(Long id) throws EntityNotFoundException {
+        log.info("Fetching points from graph task result with id {}", id);
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultById(id);
         activityValidator.validateTaskResultIsNotNull(result, id);
-        double allPoints = pointsCalculator.calculateAllPoints(result);
-        result.setPointsReceived(allPoints);
-        return allPoints;
+        return result.getPointsReceived();
     }
 
     public Double getMaxAvailablePoints(Long id) throws EntityNotFoundException {
@@ -121,16 +119,6 @@ public class GraphTaskResultService {
         return pointsCalculator.calculateMaxOpenedPoints(result);
     }
 
-    public Long setStartDateMillis(SetStartDateMillisForm form) throws EntityNotFoundException {
-        Long id = form.getResultId();
-        log.info("Setting start time for graph task result with id {}", id);
-        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(id);
-        activityValidator.validateTaskResultIsNotNull(graphTaskResult, id);
-        graphTaskResult.setStartDateMillis(form.getStartDateMillis());
-        return form.getStartDateMillis();
-    }
-
-
     public Long getTimeRemaining(Long resultId) throws EntityNotFoundException, EntityRequiredAttributeNullException {
         log.info("Calculating time remaining for graph task result with id {}", resultId);
         GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
@@ -139,21 +127,19 @@ public class GraphTaskResultService {
         return timeCalculator.getTimeRemaining(graphTaskResult.getStartDateMillis(), graphTask.getTimeToSolveMillis());
     }
 
+    public Long getTimeLeftAfterEnd(Long resultId) throws EntityNotFoundException, EntityRequiredAttributeNullException {
+        log.info("Calculating how much time left after last action for graph task result with id {}", resultId);
+        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
+        activityValidator.validateGraphTaskResultExistsAndHasStartAndEndDate(graphTaskResult, resultId);
+        GraphTask graphTask = graphTaskResult.getGraphTask();
+        return timeCalculator.getTimeLeftAfterLastAnswer(graphTaskResult.getStartDateMillis(), graphTask.getTimeToSolveMillis(), graphTaskResult.getSendDateMillis());
+    }
+
     public Long getTimeRemaining(GraphTaskResult result) throws EntityNotFoundException, EntityRequiredAttributeNullException {
         log.info("Calculating time remaining for graph task result with id {}", result.getId());
         activityValidator.validateGraphTaskResultExistsAndHasStartDate(result, result.getId());
         GraphTask graphTask = result.getGraphTask();
         return timeCalculator.getTimeRemaining(result.getStartDateMillis(), graphTask.getTimeToSolveMillis());
-    }
-
-    public Long setSendDateMillis(SetSendDateMillisForm form) throws EntityNotFoundException {
-        Long resultId = form.getResultId();
-        log.info("Setting sendDateMillis for graph task result with id {}", resultId);
-        GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultById(resultId);
-        activityValidator.validateTaskResultIsNotNull(graphTaskResult, resultId);
-        graphTaskResult.setMaxPoints100(pointsCalculator.calculateMaxAvailablePoints(graphTaskResult));
-        graphTaskResult.setSendDateMillis(form.getSendDateMillis());
-        return resultId;
     }
 
     public GraphTaskResult getGraphTaskResult(Long graphTaskId, String email)

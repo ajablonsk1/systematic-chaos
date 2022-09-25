@@ -243,3 +243,8 @@ export const requirementValueConverter = (requirement) => {
       return ''
   }
 }
+
+export const EXPEDITION_STATUS = {
+  ANSWER: 'ANSWER',
+  CHOOSE: 'CHOOSE'
+}

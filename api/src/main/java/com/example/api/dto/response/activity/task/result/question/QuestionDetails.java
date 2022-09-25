@@ -1,6 +1,7 @@
 package com.example.api.dto.response.activity.task.result.question;
 
 import com.example.api.model.question.Question;
+import com.example.api.model.question.QuestionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -13,6 +14,8 @@ public class QuestionDetails {
     private String content;
     private Double points;
     private List<OptionInfo> options;
+    private QuestionType type;
+    private String hint;
 
     public QuestionDetails(Question question) {
         this.questionId = question.getId();
@@ -22,5 +25,7 @@ public class QuestionDetails {
                 .stream()
                 .map(OptionInfo::new)
                 .toList();
+        this.type = question.getType();
+        this.hint = question.getHint();
     }
 }
