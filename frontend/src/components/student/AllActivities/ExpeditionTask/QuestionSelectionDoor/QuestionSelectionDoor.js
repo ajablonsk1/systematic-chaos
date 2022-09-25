@@ -29,7 +29,7 @@ function generateDoor(question, noDoors, onDoorClick) {
 function QuestionSelectionDoor(props) {
   const { activityId: expeditionId, questions, reloadInfo } = props
 
-  const onDoorClick = (questionId) =>
+  const onDoorClick = (questionId) => {
     // change state, reloadInfo
     ExpeditionService.sendAction({
       status: EXPEDITION_STATUS.CHOOSE,
@@ -37,6 +37,7 @@ function QuestionSelectionDoor(props) {
       questionId: questionId,
       answerForm: null
     }).then(() => reloadInfo())
+  }
 
   return (
     <Content>
