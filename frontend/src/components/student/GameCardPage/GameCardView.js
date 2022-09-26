@@ -49,7 +49,14 @@ export default function GameCardView() {
           </Row>
           <Row className='m-0 pt-3' style={{ height: '50vh' }}>
             <Col md={5} className={'h-100'}>
-              <GameCard headerText={'Miejsce w rankingu'} content={<PersonalRankingInfoContent />} />
+              <GameCard
+                headerText={'Miejsce w rankingu'}
+                content={
+                  <PersonalRankingInfoContent
+                    stats={{ ...dashboardStats.heroTypeStats, userPoints: dashboardStats.generalStats.allPoints }}
+                  />
+                }
+              />
             </Col>
             <Col md={7} className={'h-100'}>
               <GameCard

@@ -2,12 +2,13 @@ import { Col, Row } from 'react-bootstrap'
 import PercentageCircle from '../PointsPage/ChartAndStats/PercentageCircle'
 import React from 'react'
 import { ChartCol, CustomTable } from './gameCardContentsStyle'
-import { getActivityTypeName, HeroImg } from '../../../utils/constants'
-import { HeroType } from '../../../utils/userRole'
+import { convertHeroTypeToPlayerType, getActivityTypeName, getGameCardInfo, HeroImg } from '../../../utils/constants'
+import { PlayerType } from '../../../utils/userRole'
 import { Bar, Pie } from 'react-chartjs-2'
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js'
 import { barConfig, pieConfig } from '../../../utils/chartConfig'
 import moment from 'moment'
+import { colorPalette } from '../../general/chartHelper'
 
 export const GradesStatsContent = (props) => {
   const percentageValue =
@@ -79,36 +80,41 @@ export const HeroStatsContent = (props) => {
   )
 }
 
-export const PersonalRankingInfoContent = () => {
-  const heroType = HeroType.WARRIOR
-  // I know it's stupid now, but I want to show you what it will look like later
-  const rankComment =
-    heroType === HeroType.WARRIOR || heroType === HeroType.ROGUE ? (
-      <span>
-        Gratulacje, zajmujesz <strong>2</strong> miejsce na <strong>125</strong>! Jesteś prawdziwym mistrzem :)
-      </span>
-    ) : (
-      <span>
-        Niesamowite! Jesteś w grupie <strong>5</strong>% najlepszych graczy :O
-      </span>
-    )
+export const PersonalRankingInfoContent = (props) => {
+  const userPointsGroup = Math.ceil((props.stats.rankPosition / props.stats.rankLength) * 100)
+  const playerType = convertHeroTypeToPlayerType(props.stats.heroType)
+  const chartType = playerType === PlayerType.CHALLENGING ? 'BAR' : 'PIE'
 
-  const chartType = heroType === HeroType.WARRIOR || heroType === HeroType.ROGUE ? 'BAR' : 'PIE'
+  const rankComment = getGameCardInfo(playerType, {
+    rankPosition: props.stats.rankPosition,
+    rankLength: props.stats.rankLength,
+    userPoints: userPointsGroup
+  })
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 
-  const { data, options } =
-    chartType === 'BAR'
-      ? barConfig(
-          ['Punkty najlepszego gracza', 'Twój wynik'],
-          [2310, 1950],
-          ['rgba(255, 179, 13, 1)', 'rgba(8, 84, 84, 1)']
-        )
-      : pieConfig(
-          ['Grupa graczy, w której jesteś', 'Pozostali gracze'],
-          [5, 95],
-          ['rgba(255, 179, 13, 1)', 'rgba(8, 84, 84, 1)']
-        )
+  const getChartInfo = () => {
+    if (chartType === 'BAR') {
+      const barLabels = [
+        props.stats.betterPlayerPoints != null ? 'Punkty gracza przed Tobą' : '',
+        'Twój wynik',
+        props.stats.worsePlayerPoints != null ? 'Punkty gracza za Tobą' : ''
+      ].filter((label) => !!label)
+
+      const barPoints = [props.stats.betterPlayerPoints, props.stats.userPoints, props.stats.worsePlayerPoints].filter(
+        (points) => points != null
+      )
+      return barConfig(barLabels, barPoints, colorPalette(barLabels.length))
+    }
+
+    return pieConfig(
+      ['Grupa graczy, w której jesteś', 'Pozostali gracze'],
+      [props.stats.rankPosition, props.stats.rankLength],
+      colorPalette(2)
+    )
+  }
+
+  const { data, options } = getChartInfo()
 
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
