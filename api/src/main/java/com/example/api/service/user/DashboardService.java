@@ -193,10 +193,10 @@ public class DashboardService {
         Double points = activity.getMaxPoints();
         Requirement requirement = activity.getRequirements()
                 .stream()
-                .filter(req -> req.isSelected() && Objects.nonNull(req.getDateFrom()))
+                .filter(req -> req.isSelected() && Objects.nonNull(req.getDateTo()))
                 .findAny()
                 .orElse(null);
-        Long availableUntil = Objects.nonNull(requirement) ? requirement.getDateFrom() : null;
+        Long availableUntil = Objects.nonNull(requirement) ? requirement.getDateTo() : null;
         return new LastAddedActivity(chapterName, activityType, points, availableUntil);
 
     }
