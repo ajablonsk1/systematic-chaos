@@ -75,8 +75,8 @@ public class DashboardService {
         }
         Integer rankPosition = rank.getPosition();
         Long rankLength = (long) ranking.size();
-        Double betterPlayerPoints = rankPosition > 1 ? ranking.get(rankPosition - 1).getPoints() : null;
-        Double worsePlayerPoints = rankPosition < rankLength ? ranking.get(rankPosition + 1).getPoints() : null;
+        Double betterPlayerPoints = rankPosition > 1 ? ranking.get(rankPosition - 2).getPoints() : null;
+        Double worsePlayerPoints = rankPosition < rankLength ? ranking.get(rankPosition).getPoints() : null;
 
         return new HeroTypeStats(heroType, rankPosition, rankLength, betterPlayerPoints, worsePlayerPoints);
     }
