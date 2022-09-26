@@ -39,7 +39,7 @@ public class UserValidator {
     
     public void validateUserAccountType(User user, AccountType type) throws WrongUserTypeException {
         if(user.getAccountType() != type) {
-            throw new WrongUserTypeException("Wrong user type!", AccountType.STUDENT);
+            throw new WrongUserTypeException("Wrong user type!", type);
         }
     }
 
