@@ -65,7 +65,7 @@ public class DashboardService {
     }
 
     private HeroTypeStats getHeroTypeStats(User student) throws EntityNotFoundException {
-        String heroType = student.getHeroType().getPolishTypeName();
+        String heroType = String.valueOf(student.getHeroType());
 
         List<RankingResponse> ranking = rankingService.getRanking();
         RankingResponse rank = getRank(student, ranking);
