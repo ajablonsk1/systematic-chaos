@@ -94,26 +94,19 @@ export const LastActivitiesContent = () => {
   )
 }
 
-export const HeroStatsContent = () => {
-  const stats = {
-    experiencePoints: 500,
-    nextLvlPoints: 750,
-    lvl: 'Uczeń Mistrza',
-    badgesNumber: 5,
-    completedActivities: '35%'
-  }
-
+export const HeroStatsContent = (props) => {
+  console.log(props.stats.heroType)
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
       <Col md={6} className={'h-100'}>
-        <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg.WARRIOR} alt={'Your hero'} />
+        <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg[props.stats.heroType]} alt={'Your hero'} />
       </Col>
       <Col md={6}>
-        <p>Punkty doświadczenia: {stats.experiencePoints}</p>
-        <p>Punkty do kolejnej rangi: {stats.nextLvlPoints}</p>
-        <p>Ranga: {stats.lvl}</p>
-        <p>Zdobytych medali: {stats.badgesNumber}</p>
-        <p>Wykonanych aktywności: {stats.completedActivities}</p>
+        <p>Punkty doświadczenia: {props.stats.experiencePoints}</p>
+        <p>Punkty do kolejnej rangi: {props.stats.nextLvlPoints}</p>
+        <p>Ranga: {props.stats.rankName}</p>
+        <p>Zdobytych medali: {props.stats.badgesNumber}</p>
+        <p>Wykonanych aktywności: {props.stats.completedActivities}</p>
       </Col>
     </Row>
   )

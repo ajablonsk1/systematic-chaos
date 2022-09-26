@@ -4,7 +4,8 @@ import {
   SET_INDEX_NUMBER,
   USER_DATA,
   USER_GROUP,
-  GET_RECEIVED_TOTAL_POINTS
+  GET_RECEIVED_TOTAL_POINTS,
+  GET_STUDENT_DASHBOARD_STATS
 } from './urls'
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
 import { parseJwt } from '../utils/Api'
@@ -50,6 +51,12 @@ class StudentService {
 
   setIndexNumber(newIndexNumber) {
     return axiosApiPost(SET_INDEX_NUMBER, { newIndexNumber: newIndexNumber }).catch((error) => {
+      throw error
+    })
+  }
+
+  getDashboardStats() {
+    return axiosApiGet(GET_STUDENT_DASHBOARD_STATS).catch((error) => {
       throw error
     })
   }
