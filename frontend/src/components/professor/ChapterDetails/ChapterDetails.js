@@ -284,6 +284,7 @@ function ChapterDetails() {
             <strong>{chapterDetails?.name}</strong>?
           </>
         }
+        chapterId={chapterId}
       />
 
       <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
