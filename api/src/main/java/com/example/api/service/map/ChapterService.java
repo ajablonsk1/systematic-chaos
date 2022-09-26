@@ -1,7 +1,6 @@
 package com.example.api.service.map;
 
 import com.example.api.dto.request.map.ChapterForm;
-import com.example.api.dto.request.map.ChapterRemovalForm;
 import com.example.api.dto.response.map.ChapterInfoResponse;
 import com.example.api.dto.response.map.ChapterResponse;
 import com.example.api.dto.response.map.task.MapTask;
@@ -83,17 +82,17 @@ public class ChapterService {
                 .orElse(null);
     }
 
-    public void removeChapter(ChapterRemovalForm form) throws WrongUserTypeException, EntityNotFoundException {
+    public void deleteChapter(Long chapterID) throws WrongUserTypeException, EntityNotFoundException {
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);
         userValidator.validateProfessorAccount(professor, email);
 
-        Chapter chapter = chapterRepo.findChapterById(form.getChapterID());
-        chapterValidator.validateChapterIsNotNull(chapter, form.getChapterID());
+        Chapter chapter = chapterRepo.findChapterById(chapterID);
+        chapterValidator.validateChapterIsNotNull(chapter, chapterID);
 
         Optional<Chapter> prevChapter = chapterRepo.findAll().stream().filter(ch -> chapter.equals(ch.getNextChapter()))
                 .findAny();
         prevChapter.ifPresent(value -> value.setNextChapter(chapter.getNextChapter()));
-        chapterRepo.removeChapterById(form.getChapterID());
+        chapterRepo.deleteChapterById(chapterID);
     }
 }
