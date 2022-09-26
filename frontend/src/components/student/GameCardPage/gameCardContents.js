@@ -2,74 +2,40 @@ import { Col, Row } from 'react-bootstrap'
 import PercentageCircle from '../PointsPage/ChartAndStats/PercentageCircle'
 import React from 'react'
 import { ChartCol, CustomTable } from './gameCardContentsStyle'
-import { HeroImg } from '../../../utils/constants'
+import { getActivityTypeName, HeroImg } from '../../../utils/constants'
 import { HeroType } from '../../../utils/userRole'
 import { Bar, Pie } from 'react-chartjs-2'
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js'
 import { barConfig, pieConfig } from '../../../utils/chartConfig'
+import moment from 'moment'
 
-export const GradesStatsContent = () => {
-  const points = 8000
-  const maxPoints = 9780
-  const percentageValue = Math.round(100 * (points / maxPoints))
-  const exampleData = {
-    avgExpedition: '78%',
-    avgCombatTask: '57%',
-    surveysCounter: 7,
-    expeditionPoints: '5800',
-    combatTaskPoints: '2183'
-  }
+export const GradesStatsContent = (props) => {
+  const percentageValue =
+    props.stats.allPoints && props.stats.maxPoints
+      ? Math.round(100 * (props.stats.allPoints / props.stats.maxPoints))
+      : 0
 
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
       <Col md={7}>
-        <p>Średni wynik z ekspedycji: {exampleData.avgExpedition}</p>
-        <p>Średni wynik z zadań bojowych: {exampleData.avgCombatTask}</p>
-        <p>Ilość wykonanych sondaży: {exampleData.surveysCounter}</p>
-        <p>Punkty zdobyte w ekspedycjach: {exampleData.expeditionPoints}</p>
-        <p>Punkty zdobyte w zadaniach bojowych: {exampleData.combatTaskPoints}</p>
+        <p>Średni wynik z ekspedycji: {props.stats.avgGraphTask ?? 0}%</p>
+        <p>Średni wynik z zadań bojowych: {props.stats.avgFileTask ?? 0}%</p>
+        <p>Ilość wykonanych sondaży: {props.stats.surveysNumber ?? 0}</p>
+        <p>Punkty zdobyte w ekspedycjach: {props.stats.graphTaskPoints ?? 0}</p>
+        <p>Punkty zdobyte w zadaniach bojowych: {props.stats.fileTaskPoints ?? 0}</p>
       </Col>
       <Col md={5}>
-        <PercentageCircle percentageValue={percentageValue} points={points} maxPoints={maxPoints} />
+        <PercentageCircle
+          percentageValue={percentageValue}
+          points={props.stats.allPoints}
+          maxPoints={props.stats.maxPoints}
+        />
       </Col>
     </Row>
   )
 }
 
-export const LastActivitiesContent = () => {
-  const activitiesData = [
-    {
-      chapterName: 'Rozdział 1',
-      activityType: 'Ekspedycja',
-      points: 25,
-      availableUntil: '05.10.2022'
-    },
-    {
-      chapterName: 'Rozdział 1',
-      activityType: 'Zadanie bojowe',
-      points: 15,
-      availableUntil: '14.10.2022'
-    },
-    {
-      chapterName: 'Rozdział 2',
-      activityType: 'Sondaż',
-      points: 2,
-      availableUntil: '22.10.2022'
-    },
-    {
-      chapterName: 'Rozdział 1',
-      activityType: 'Ekspedycja',
-      points: 52,
-      availableUntil: '02.11.2022'
-    },
-    {
-      chapterName: 'Rozdział 3',
-      activityType: 'Wywiad',
-      points: 0,
-      availableUntil: '05.11.2022'
-    }
-  ]
-
+export const LastActivitiesContent = (props) => {
   return (
     <CustomTable>
       <thead>
@@ -81,12 +47,14 @@ export const LastActivitiesContent = () => {
         </tr>
       </thead>
       <tbody>
-        {activitiesData.map((activity, index) => (
+        {props.stats.map((activity, index) => (
           <tr key={index + Date.now()}>
             <td>{activity.chapterName}</td>
-            <td>{activity.activityType}</td>
+            <td>{getActivityTypeName(activity.activityType)}</td>
             <td>{activity.points}</td>
-            <td>{activity.availableUntil}</td>
+            <td>
+              {activity.availableUntil ? moment(activity.availableUntil).format('DD.MM.YYYY') : 'Bez limitu czasowego'}
+            </td>
           </tr>
         ))}
       </tbody>
@@ -95,7 +63,6 @@ export const LastActivitiesContent = () => {
 }
 
 export const HeroStatsContent = (props) => {
-  console.log(props.stats.heroType)
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
       <Col md={6} className={'h-100'}>

@@ -41,7 +41,10 @@ export default function GameCardView() {
               />
             </Col>
             <Col md={7} className={'h-100'}>
-              <GameCard headerText={'Statystyki ocen'} content={<GradesStatsContent />} />
+              <GameCard
+                headerText={'Statystyki ocen'}
+                content={<GradesStatsContent stats={dashboardStats.generalStats} />}
+              />
             </Col>
           </Row>
           <Row className='m-0 pt-3' style={{ height: '50vh' }}>
@@ -49,7 +52,10 @@ export default function GameCardView() {
               <GameCard headerText={'Miejsce w rankingu'} content={<PersonalRankingInfoContent />} />
             </Col>
             <Col md={7} className={'h-100'}>
-              <GameCard headerText={'Ostatnio dodane aktywności'} content={<LastActivitiesContent />} />
+              <GameCard
+                headerText={'Ostatnio dodane aktywności'}
+                content={<LastActivitiesContent stats={dashboardStats.lastAddedActivities} />}
+              />
             </Col>
           </Row>
         </>
