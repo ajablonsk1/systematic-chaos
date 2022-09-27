@@ -4,6 +4,7 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskChapterFo
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
+import com.example.api.dto.response.activity.task.GraphNode;
 import com.example.api.dto.response.activity.task.result.GraphTaskResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -67,5 +68,10 @@ public class GraphTaskController {
             throws RequestValidationException, ParseException {
         graphTaskService.createGraphTask(form);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/map")
+    public ResponseEntity<List<GraphNode>> getGraphMap(@RequestParam Long graphTaskID) throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskService.getGraphMap(graphTaskID));
     }
 }

@@ -4,6 +4,7 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskChapterFo
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
+import com.example.api.dto.response.activity.task.GraphNode;
 import com.example.api.dto.response.activity.task.result.GraphTaskResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -24,6 +25,7 @@ import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
+import com.example.api.service.validator.activity.GraphTaskValidator;
 import com.example.api.util.calculator.TimeParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,10 +34,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -53,6 +52,7 @@ public class GraphTaskService {
     private final TimeParser timeParser;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
+    private final GraphTaskValidator graphTaskValidator;
 
     public GraphTask saveGraphTask(GraphTask graphTask) {
         return graphTaskRepo.save(graphTask);
@@ -61,7 +61,7 @@ public class GraphTaskService {
     public GraphTaskResponse getGraphTaskById(Long id) throws EntityNotFoundException {
         log.info("Fetching graph task with id {}", id);
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(id);
-        activityValidator.validateActivityIsNotNull(graphTask, id);
+        graphTaskValidator.validateGraphTaskIsNotNull(graphTask, id);
         return new GraphTaskResponse(graphTask);
     }
 
@@ -163,5 +163,35 @@ public class GraphTaskService {
             points.add(calculateMaxPoints(nextQuestion, maxPoints + nextQuestion.getPoints()));
         }
         return points.stream().max(Double::compareTo).get();
+    }
+
+    public List<GraphNode> getGraphMap(Long graphTaskID) throws EntityNotFoundException {
+        log.info("Fetching graph nodes for GraphTask with id {}", graphTaskID);
+        GraphTask graphTask = graphTaskRepo.findGraphTaskById(graphTaskID);
+        graphTaskValidator.validateGraphTaskIsNotNull(graphTask, graphTaskID);
+
+        if (graphTask.getQuestions().size() == 0) {
+            return List.of();
+        }
+        LinkedList<GraphNode> graphMap = new LinkedList<>();
+        for (Question question: graphTask.getQuestions().get(0).getNext()) {
+            fillGraphMap(question, graphMap);
+        }
+        return graphMap;
+    }
+
+    private void fillGraphMap(Question question, List<GraphNode> graph) {
+        GraphNode node = new GraphNode(
+                question.getId(),
+                question.getDifficulty().getDifficulty(),
+                question.getNext().stream().map(Question::getId).toList()
+        );
+        if (graph.stream().noneMatch(n -> n.getQuestionID() == question.getId())) {
+            graph.add(node);
+        }
+
+        for (Question q: question.getNext()) {
+            fillGraphMap(q, graph);
+        }
     }
 }
