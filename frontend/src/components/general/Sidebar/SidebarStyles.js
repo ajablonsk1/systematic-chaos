@@ -15,6 +15,7 @@ export const NavBarTextContainer = styled(Container)`
   flex-direction: column;
   position: absolute;
   top: 0;
+  padding: 0;
 
   & #logo:hover {
     color: var(--font-color);
@@ -22,7 +23,7 @@ export const NavBarTextContainer = styled(Container)`
 `
 
 export const NavEdit = styled(Nav)`
-  font-size: 1.5vw;
+  font-size: 1.15vw;
   margin-top: 3vh;
   padding: 10px;
   width: 100%;
@@ -30,9 +31,10 @@ export const NavEdit = styled(Nav)`
 
 export const LogoDiv = styled(Link)`
   color: var(--font-color);
-  font-size: 1.7vw;
+  font-size: 1.5vw;
   margin-top: 10px;
   text-align: center;
+  min-height: 92px;
 `
 
 export const MobileNav = styled.div`

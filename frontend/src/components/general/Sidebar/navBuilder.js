@@ -6,9 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export const NavLinkStyles = styled(Nav.Link)`
   color: white;
   padding: 9px 0;
+  display: flex;
+
   &:hover {
-    background-color: var(--button-green);
+    color: var(--font-color) !important;
   }
+
   &:visited,
   &:link {
     color: white;
@@ -26,14 +29,6 @@ export const NavLinkStylesMobile = styled(Nav.Link)`
     text-decoration: none;
   }
 `
-
-export function buildNavLink(to, content) {
-  return (
-    <NavLinkStyles as={Link} key={to} to={to}>
-      <span>{content}</span>
-    </NavLinkStyles>
-  )
-}
 
 export function buildNavLinkMobile(to, content) {
   return (

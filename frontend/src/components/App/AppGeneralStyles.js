@@ -10,4 +10,5 @@ export const Content = styled.div`
 export const SidebarCol = styled(Col)`
   display: none;
   padding: 0;
+  transition: width 0.15s linear;
 `
