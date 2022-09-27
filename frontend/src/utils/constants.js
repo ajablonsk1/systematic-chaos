@@ -36,7 +36,7 @@ import warrior14 from '../storage/resources/warrior/13.png'
 import warrior15 from '../storage/resources/warrior/14.png'
 import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
-import { HeroType } from './userRole'
+import { HeroType, PlayerType } from './userRole'
 import moment from 'moment'
 import { GeneralRoutes, StudentRoutes, TeacherRoutes } from '../routes/PageRoutes'
 
@@ -247,4 +247,26 @@ export const requirementValueConverter = (requirement) => {
 export const EXPEDITION_STATUS = {
   ANSWER: 'ANSWER',
   CHOOSE: 'CHOOSE'
+}
+
+export const convertHeroTypeToPlayerType = (heroType) => {
+  if (heroType === HeroType.ROGUE || heroType === HeroType.WARRIOR) {
+    return PlayerType.CHALLENGING
+  }
+  return PlayerType.CALM
+}
+
+export const getGameCardInfo = (playerType, data) => {
+  if (playerType === PlayerType.CALM) {
+    return (
+      <span>
+        Zajmujesz <strong>{data.rankPosition}</strong> miejsce na <strong>{data.rankLength}</strong>!
+      </span>
+    )
+  }
+  return (
+    <span>
+      Jesteś w grupie <strong>{data.userPoints}</strong>% najlepszych graczy.
+    </span>
+  )
 }
