@@ -174,7 +174,7 @@ public class GraphTaskService {
             return List.of();
         }
         LinkedList<GraphNode> graphMap = new LinkedList<>();
-        for (Question question: graphTask.getQuestions().get(0).getNext()) {
+        for (Question question: graphTask.getQuestions()) {
             fillGraphMap(question, graphMap);
         }
         return graphMap;
@@ -183,7 +183,7 @@ public class GraphTaskService {
     private void fillGraphMap(Question question, List<GraphNode> graph) {
         GraphNode node = new GraphNode(
                 question.getId(),
-                question.getDifficulty().getDifficulty(),
+                question.getDifficulty() != null ? question.getDifficulty().getDifficulty() : null,
                 question.getNext().stream().map(Question::getId).toList()
         );
         if (graph.stream().noneMatch(n -> n.getQuestionID() == question.getId())) {
