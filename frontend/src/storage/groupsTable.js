@@ -1,5 +1,0 @@
-export const AddGroupResults = {
-  NAME_TAKEN_ERROR: 'NAME_TAKEN',
-  CODE_TAKEN_ERROR: 'CODE_TAKEN',
-  SUCCESS: 'SUCCESS'
-}

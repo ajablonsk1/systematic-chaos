@@ -32,11 +32,11 @@ export default function Timer(props) {
   }, [activityId, remainingTime, timerInterval, endAction])
 
   return (
-    <>
+    <div className={'d-flex justify-content-center'}>
       <TimerContainer time={remainingTime}>{timer}</TimerContainer>
       {React.cloneElement(props.children, {
         remainingTime: remainingTime
       })}
-    </>
+    </div>
   )
 }

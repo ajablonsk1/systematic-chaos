@@ -1,16 +1,3 @@
-import {
-  fa5,
-  faArrowsToEye,
-  faBullseye,
-  faCertificate,
-  faChessBoard,
-  faHouse,
-  faListCheck,
-  faRankingStar,
-  faStar,
-  faUsers,
-  faUser
-} from '@fortawesome/free-solid-svg-icons'
 import priestImg from '../storage/resources/pope.png'
 import rogueImg from '../storage/resources/rogue.png'
 import warriorImg from '../storage/resources/warrior.png'
@@ -38,26 +25,7 @@ import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
 import { HeroType, PlayerType } from './userRole'
 import moment from 'moment'
-import { GeneralRoutes, StudentRoutes, TeacherRoutes } from '../routes/PageRoutes'
-
-export const UserSidebarTitles = {
-  [StudentRoutes.GAME_CARD]: ['Karta gry', faHouse],
-  [StudentRoutes.GAME_MAP.MAIN]: ['Mapa gry', faChessBoard],
-  [StudentRoutes.POINTS]: ['Punkty', faStar],
-  [StudentRoutes.RANKING]: ['Ranking', faRankingStar],
-  [StudentRoutes.BADGES]: ['Rangi i odznaki', faCertificate],
-  [GeneralRoutes.CANVAS]: ['Świat gry', faChessBoard],
-  [StudentRoutes.PROFILE]: ['Profil', faUser]
-}
-
-export const TeacherSidebarTitles = {
-  [TeacherRoutes.GAME_SUMMARY]: ['Podsumowanie gry', faBullseye],
-  [TeacherRoutes.RANKING]: ['Ranking', faRankingStar],
-  [TeacherRoutes.GAME_MANAGEMENT.MAIN]: ['Zarządzanie grą', faListCheck],
-  [TeacherRoutes.PARTICIPANTS]: ['Uczestnicy', faUsers],
-  [TeacherRoutes.ACTIVITY_ASSESSMENT.LIST]: ['Sprawdzanie aktywności', faArrowsToEye],
-  [TeacherRoutes.GRADES]: ['Oceny', fa5]
-}
+import { StudentRoutes } from '../routes/PageRoutes'
 
 export const FIELD_REQUIRED = 'Pole wymagane.'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
