@@ -3,7 +3,7 @@ import PercentageCircle from '../PointsPage/ChartAndStats/PercentageCircle'
 import React from 'react'
 import { ChartCol, CustomTable } from './gameCardContentsStyle'
 import { convertHeroTypeToPlayerType, getActivityTypeName, getGameCardInfo, HeroImg } from '../../../utils/constants'
-import { PlayerType } from '../../../utils/userRole'
+import { HeroType, PlayerType } from '../../../utils/userRole'
 import { Bar, Pie } from 'react-chartjs-2'
 import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip } from 'chart.js'
 import { barConfig, pieConfig } from '../../../utils/chartConfig'
@@ -11,26 +11,28 @@ import moment from 'moment'
 import { colorPalette } from '../../general/chartHelper'
 
 export const GradesStatsContent = (props) => {
-  const percentageValue =
-    props.stats.allPoints && props.stats.maxPoints
-      ? Math.round(100 * (props.stats.allPoints / props.stats.maxPoints))
-      : 0
+  const {
+    allPoints = 0,
+    maxPoints = 0,
+    avgGraphTask = 0,
+    avgFileTask = 0,
+    surveysNumber = 0,
+    graphTaskPoints = 0,
+    fileTaskPoints = 0
+  } = props.stats
+  const percentageValue = allPoints && maxPoints ? Math.round(100 * (allPoints / maxPoints)) : 0
 
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
       <Col md={7}>
-        <p>Średni wynik z ekspedycji: {props.stats.avgGraphTask ?? 0}%</p>
-        <p>Średni wynik z zadań bojowych: {props.stats.avgFileTask ?? 0}%</p>
-        <p>Ilość wykonanych sondaży: {props.stats.surveysNumber ?? 0}</p>
-        <p>Punkty zdobyte w ekspedycjach: {props.stats.graphTaskPoints ?? 0}</p>
-        <p>Punkty zdobyte w zadaniach bojowych: {props.stats.fileTaskPoints ?? 0}</p>
+        <p>Średni wynik z ekspedycji: {avgGraphTask}%</p>
+        <p>Średni wynik z zadań bojowych: {avgFileTask}%</p>
+        <p>Ilość wykonanych sondaży: {surveysNumber}</p>
+        <p>Punkty zdobyte w ekspedycjach: {graphTaskPoints}</p>
+        <p>Punkty zdobyte w zadaniach bojowych: {fileTaskPoints}</p>
       </Col>
       <Col md={5}>
-        <PercentageCircle
-          percentageValue={percentageValue}
-          points={props.stats.allPoints}
-          maxPoints={props.stats.maxPoints}
-        />
+        <PercentageCircle percentageValue={percentageValue} points={allPoints} maxPoints={maxPoints} />
       </Col>
     </Row>
   )
@@ -64,17 +66,26 @@ export const LastActivitiesContent = (props) => {
 }
 
 export const HeroStatsContent = (props) => {
+  const {
+    heroType = '',
+    experiencePoints = 0,
+    nextLvlPoints = 0,
+    rankName = '',
+    badgesNumber = 0,
+    completedActivities = 0
+  } = props.stats
+
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
       <Col md={6} className={'h-100'}>
-        <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg[props.stats.heroType]} alt={'Your hero'} />
+        <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg[heroType]} alt={'Your hero'} />
       </Col>
       <Col md={6}>
-        <p>Punkty doświadczenia: {props.stats.experiencePoints}</p>
-        <p>Punkty do kolejnej rangi: {props.stats.nextLvlPoints}</p>
-        <p>Ranga: {props.stats.rankName}</p>
-        <p>Zdobytych medali: {props.stats.badgesNumber}</p>
-        <p>Wykonanych aktywności: {props.stats.completedActivities}</p>
+        <p>Punkty doświadczenia: {experiencePoints}</p>
+        <p>Punkty do kolejnej rangi: {nextLvlPoints}</p>
+        <p>Ranga: {rankName}</p>
+        <p>Zdobytych medali: {badgesNumber}</p>
+        <p>Wykonanych aktywności: {completedActivities}</p>
       </Col>
     </Row>
   )
