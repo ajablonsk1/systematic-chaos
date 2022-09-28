@@ -1,4 +1,4 @@
-import { Col, Container, Row } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { BrowserRouter } from 'react-router-dom'
 
 import MobileNavbar from '../general/Sidebar/MobileNavbar'
