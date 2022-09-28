@@ -17,4 +17,5 @@ public class QuestionInfoResponse {
     private List<QuestionList> questions;
     private QuestionDetails questionDetails;
     private boolean finished;
+    private List<Long> currentPath;
 }

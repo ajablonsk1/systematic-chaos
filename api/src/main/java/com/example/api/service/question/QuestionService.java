@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.TimeLimitExceededException;
 import javax.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -120,7 +121,8 @@ public class QuestionService {
                         pointsCalculator.calculateAllPoints(result),
                         questionList,
                         null,
-                        result.isFinished()
+                        result.isFinished(),
+                        getGraphTaskResultPath(result)
                 );
             }
             case ANSWER -> {
@@ -131,7 +133,8 @@ public class QuestionService {
                         pointsCalculator.calculateAllPoints(result),
                         null,
                         new QuestionDetails(question),
-                        result.isFinished()
+                        result.isFinished(),
+                        getGraphTaskResultPath(result)
                 );
             }
             default ->
@@ -150,5 +153,17 @@ public class QuestionService {
         return nextQuestions.stream()
                 .map(QuestionList::new)
                 .toList();
+    }
+
+    private List<Long> getGraphTaskResultPath(GraphTaskResult result) {
+        Long startQuestionID = result.getGraphTask().getQuestions().get(0).getId();
+        List<Long> path = result.getAnswers()
+                .stream()
+                .map(answer -> answer.getQuestion().getId())
+                .toList();
+        List<Long> fullPath = new LinkedList<>();
+        fullPath.add(startQuestionID);
+        fullPath.addAll(path);
+        return fullPath;
     }
 }
