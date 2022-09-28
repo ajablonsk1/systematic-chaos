@@ -26,7 +26,7 @@ function GraphPreview(props) {
   }, [props.activityId])
 
   useEffect(() => {
-    setSize(isPreviewOpen ? '90%' : 0)
+    setSize(isPreviewOpen ? '40%' : 0)
   }, [isPreviewOpen])
 
   useEffect(() => {
