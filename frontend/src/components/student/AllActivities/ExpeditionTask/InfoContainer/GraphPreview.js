@@ -10,12 +10,12 @@ function GraphPreview(props) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [graphElements, setGraphElements] = useState([])
   const [size, setSize] = useState(0)
-  const [lastQuestionId, setLastQuestionId] = useState(null)
   const [questionsList, setQuestionsList] = useState([])
+  const lastQuestionId = localStorage.getItem('lastQuestionId')
 
   useEffect(() => {
     if (props.actualQuestionId) {
-      setLastQuestionId(props.actualQuestionId)
+      localStorage.setItem('lastQuestionId', props.actualQuestionId.toString())
     }
   }, [props.actualQuestionId])
 
@@ -34,7 +34,12 @@ function GraphPreview(props) {
       id: question.questionID,
       borderColor: getNodeColor(question.difficulty),
       targetIds: question.nextQuestionsIDs,
-      content: lastQuestionId === question.questionID || (!lastQuestionId && !question.difficulty) ? '★' : ''
+      content: lastQuestionId === question.questionID || (!lastQuestionId && !question.difficulty) ? '★' : '',
+      size: lastQuestionId === question.questionID || (!lastQuestionId && !question.difficulty) ? 40 : 20,
+      backgroundColor:
+        lastQuestionId === question.questionID || (!lastQuestionId && !question.difficulty)
+          ? getNodeColor(question.difficulty)
+          : 'white'
     }))
     setGraphElements(getGraphElements(questions))
   }, [lastQuestionId, questionsList])

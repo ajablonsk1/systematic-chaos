@@ -7,7 +7,7 @@ export const cytoscapeStylesheet = [
   {
     selector: 'node',
     style: {
-      backgroundColor: 'white',
+      backgroundColor: 'data(backgroundColor)',
       borderWidth: 5,
       borderColor: 'data(borderColor)',
       content: 'data(content)',

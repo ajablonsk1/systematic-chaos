@@ -9,7 +9,8 @@ export const getGraphElements = (graphElements) => {
       size: nodeInfo.size ? nodeInfo.size + 'px' : '20px',
       padding: nodeInfo.size ? nodeInfo.size * 1.5 + 'px' : '30px',
       fontSize: nodeInfo.size ? nodeInfo.size * 3.2 + 'px' : '64px',
-      content: nodeInfo.content ?? nodeInfo.id ?? 0
+      content: nodeInfo.content ?? nodeInfo.id ?? 0,
+      backgroundColor: nodeInfo.backgroundColor ?? 'white'
     },
     classes: nodeInfo.nodeClass ?? ''
   }))
