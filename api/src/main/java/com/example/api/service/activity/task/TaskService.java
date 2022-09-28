@@ -100,6 +100,7 @@ public class TaskService {
         if(result.getSendDateMillis() != null){
             Optional<Long> dateTo = task.getRequirements()
                     .stream()
+                    .filter(Requirement::isSelected)
                     .map(Requirement::getDateTo)
                     .filter(Objects::nonNull)
                     .findFirst();
