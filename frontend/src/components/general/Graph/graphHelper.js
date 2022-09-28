@@ -8,7 +8,8 @@ export const getGraphElements = (graphElements) => {
       borderColor: nodeInfo.borderColor ?? 'black',
       size: nodeInfo.size ? nodeInfo.size + 'px' : '20px',
       padding: nodeInfo.size ? nodeInfo.size * 1.5 + 'px' : '30px',
-      fontSize: nodeInfo.size ? nodeInfo.size * 3.2 + 'px' : '64px'
+      fontSize: nodeInfo.size ? nodeInfo.size * 3.2 + 'px' : '64px',
+      content: nodeInfo.content ?? nodeInfo.id ?? 0
     },
     classes: nodeInfo.nodeClass ?? ''
   }))
@@ -82,4 +83,17 @@ export const createLabelsAndNodes = (cy, labels) => {
       nodesDomContainer.appendChild(nodeHtml)
     }
   })
+}
+
+export const getNodeColor = (difficulty) => {
+  switch (difficulty) {
+    case 'EASY':
+      return 'green'
+    case 'MEDIUM':
+      return 'orange'
+    case 'HARD':
+      return 'red'
+    default:
+      return 'gray'
+  }
 }

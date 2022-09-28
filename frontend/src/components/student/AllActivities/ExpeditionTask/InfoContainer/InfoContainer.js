@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { getTimer } from '../../../../../utils/storageManager'
-import { TimerContainer } from './TimerStyle'
+import { PointsProgressBar, TimerContainer } from './InfoContainerStyle'
+import GraphPreview from './GraphPreview'
 
-export default function Timer(props) {
+export default function InfoContainer(props) {
   const { timeToSolveMillis, activityId, endAction } = props
   const [remainingTime, setRemainingTime] = useState(undefined)
   const [timer, setTimer] = useState('')
@@ -34,6 +35,13 @@ export default function Timer(props) {
   return (
     <div className={'d-flex justify-content-center'}>
       <TimerContainer time={remainingTime}>{timer}</TimerContainer>
+      <PointsProgressBar
+        now={props.actualPoints}
+        max={props.maxPoints}
+        label={`${props.actualPoints}/${props.maxPoints}`}
+        variant={'success'}
+      />
+      <GraphPreview activityId={props.activityId} actualQuestionId={props.actualQuestionId} />
       {React.cloneElement(props.children, {
         remainingTime: remainingTime
       })}

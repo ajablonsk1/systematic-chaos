@@ -1,6 +1,7 @@
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
 import {
   GET_CURRENT_EXPEDITION_STATUS,
+  GET_GRAPH_QUESTIONS,
   GET_REMAINING_TIME,
   GRAPH_TASK_GET_ALL_POINTS,
   GRAPH_TASK_GET_CLOSED_POINTS,
@@ -86,6 +87,12 @@ class ExpeditionService {
 
   getCurrentState(activityId) {
     return axiosApiGet(GET_CURRENT_EXPEDITION_STATUS, { graphTaskId: activityId }).catch((error) => {
+      throw error
+    })
+  }
+
+  getQuestionsList(activityId) {
+    return axiosApiGet(GET_GRAPH_QUESTIONS, { graphTaskID: activityId }).catch((error) => {
       throw error
     })
   }

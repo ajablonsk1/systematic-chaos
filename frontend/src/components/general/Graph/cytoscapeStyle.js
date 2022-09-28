@@ -10,7 +10,7 @@ export const cytoscapeStylesheet = [
       backgroundColor: 'white',
       borderWidth: 5,
       borderColor: 'data(borderColor)',
-      content: 'data(id)',
+      content: 'data(content)',
       textValign: 'center',
       textHalign: 'center',
       fontSize: 'data(fontSize)',

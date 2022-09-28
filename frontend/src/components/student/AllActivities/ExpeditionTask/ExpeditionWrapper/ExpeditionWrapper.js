@@ -6,7 +6,7 @@ import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import ExpeditionService from '../../../../../services/expedition.service'
 import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor'
 import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions'
-import Timer from '../Timer/Timer'
+import InfoContainer from '../InfoContainer/InfoContainer'
 
 /* 
 wrapped elements should be:
@@ -23,7 +23,7 @@ QuestionSelectionDoor
 export function ExpeditionWrapper() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { activityId, alreadyStarted } = location.state
+  const { activityId, alreadyStarted, maxPoints } = location.state
 
   const [expeditionState, setExpeditionState] = useState(undefined)
 
@@ -103,8 +103,15 @@ export function ExpeditionWrapper() {
   return expeditionState === undefined ? (
     <Spinner animation={'border'} />
   ) : (
-    <Timer activityId={activityId} timeToSolveMillis={expeditionState.timeRemaining} endAction={goToSummary}>
+    <InfoContainer
+      activityId={activityId}
+      timeToSolveMillis={expeditionState.timeRemaining}
+      endAction={goToSummary}
+      actualPoints={expeditionState.actualPointsReceived}
+      maxPoints={maxPoints}
+      actualQuestionId={expeditionState.questionDetails?.questionId}
+    >
       {wrapperContent}
-    </Timer>
+    </InfoContainer>
   )
 }

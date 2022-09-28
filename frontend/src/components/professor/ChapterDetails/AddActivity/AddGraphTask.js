@@ -3,7 +3,7 @@ import ActivityService from '../../../../services/activity.service'
 import { Button, Spinner, Tab, Tabs } from 'react-bootstrap'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
-import { getGraphElements } from '../../../general/Graph/graphHelper'
+import { getGraphElements, getNodeColor } from '../../../general/Graph/graphHelper'
 import Graph from '../../../general/Graph/Graph'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
@@ -13,19 +13,6 @@ function AddGraphTask(props) {
   const [errorMessage, setErrorMessage] = useState('')
   const [graphElements, setGraphElements] = useState(null)
   const jsonEditorRef = useRef()
-
-  const getNodeColor = (difficulty) => {
-    switch (difficulty) {
-      case 'EASY':
-        return 'green'
-      case 'MEDIUM':
-        return 'orange'
-      case 'HARD':
-        return 'red'
-      default:
-        return 'gray'
-    }
-  }
 
   useEffect(() => {
     if (placeholderJson) {
@@ -81,7 +68,7 @@ function AddGraphTask(props) {
           )}
         </Tab>
         <Tab eventKey={'preview'} title={'Podgląd grafu'}>
-          <Graph elements={graphElements} height={'60vh'} layoutName={'klay'} />
+          <Graph elements={graphElements} height={'60vh'} layoutName={'klay'} onNodeClick={() => {}} />
           <FontAwesomeIcon icon={faRefresh} onClick={refreshGraph} style={{ cursor: 'pointer' }} />
         </Tab>
       </Tabs>
