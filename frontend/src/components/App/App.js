@@ -1,4 +1,4 @@
-import { Col, Container, Row } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { BrowserRouter } from 'react-router-dom'
 
 import MobileNavbar from '../general/Sidebar/MobileNavbar'
@@ -14,28 +14,27 @@ import { ProfessorSidebarTitles, UserSidebarTitles } from '../../utils/sidebarTi
 
 function App(props) {
   const student = isStudent(props.user)
-  const sidebarColsNumber = props.sidebar.isExpanded ? 2 : 1
 
   return (
     <>
       <Container fluid className='p-0'>
-        <Row style={{ minHeight: '100vh', margin: 0 }}>
+        <div className={'d-flex'} style={{ minHeight: '100vh', margin: 0 }}>
           <BrowserRouter>
             <SidebarCol
-              xs={sidebarColsNumber}
+              style={{ width: props.sidebar.isExpanded ? 350 : 60 }}
               className={window.location.pathname === '/' ? 'd-none' : 'd-md-block d-none'}
             >
               <Sidebar link_titles={student ? UserSidebarTitles : ProfessorSidebarTitles} />
             </SidebarCol>
-            <Col md={12 - sidebarColsNumber} xs={12} className='p-0'>
+            <div className='p-0 w-100'>
               <AppRoutes />
-            </Col>
-            <SidebarCol xs={12} className={window.location.pathname === '/' ? 'd-none' : 'd-md-none d-block'}>
+            </div>
+            <SidebarCol className={window.location.pathname === '/' ? 'd-none' : 'd-md-none d-block'}>
               <MobileNavbar link_titles={student ? UserSidebarTitles : ProfessorSidebarTitles} />
             </SidebarCol>
             <AuthVerify />
           </BrowserRouter>
-        </Row>
+        </div>
       </Container>
       <ToastContainer
         position='top-right'
