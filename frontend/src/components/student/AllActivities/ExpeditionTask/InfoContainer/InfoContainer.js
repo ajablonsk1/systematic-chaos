@@ -41,7 +41,11 @@ export default function InfoContainer(props) {
         label={`${props.actualPoints}/${props.maxPoints}`}
         variant={'success'}
       />
-      <GraphPreview activityId={props.activityId} actualQuestionId={props.actualQuestionId} />
+      <GraphPreview
+        activityId={props.activityId}
+        currentQuestionsPath={props.questionsPath}
+        actualQuestionId={props.actualQuestionId}
+      />
       {React.cloneElement(props.children, {
         remainingTime: remainingTime
       })}

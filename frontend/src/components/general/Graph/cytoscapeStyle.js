@@ -23,10 +23,10 @@ export const cytoscapeStylesheet = [
   {
     selector: 'edge',
     style: {
-      width: 8,
-      lineColor: 'black',
+      width: 'data(size)',
+      lineColor: 'data(color)',
       targetArrowShape: 'triangle',
-      targetArrowColor: 'black',
+      targetArrowColor: 'data(color)',
       curveStyle: 'bezier',
       lineStyle: 'solid'
     }

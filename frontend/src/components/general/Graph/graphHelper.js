@@ -20,7 +20,11 @@ export const getGraphElements = (graphElements) => {
       ? nodeInfo.targetIds.map((targetId) => ({
           data: {
             source: nodeInfo.id ?? 0,
-            target: targetId
+            target: targetId,
+            color: nodeInfo.customEdgeColorTargets?.includes(targetId)
+              ? nodeInfo.edgeSpecialColor ?? 'blue'
+              : nodeInfo.edgeStandardColor ?? 'black',
+            size: nodeInfo.useBolderLines && nodeInfo.customEdgeColorTargets.includes(targetId) ? 15 : 8
           },
           classes: nodeInfo.edgeClass ?? ''
         }))

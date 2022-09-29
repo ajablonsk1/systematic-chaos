@@ -11,13 +11,6 @@ function GraphPreview(props) {
   const [graphElements, setGraphElements] = useState([])
   const [size, setSize] = useState(0)
   const [questionsList, setQuestionsList] = useState([])
-  const lastQuestionId = localStorage.getItem('lastQuestionId')
-
-  useEffect(() => {
-    if (props.actualQuestionId) {
-      localStorage.setItem('lastQuestionId', props.actualQuestionId.toString())
-    }
-  }, [props.actualQuestionId])
 
   useEffect(() => {
     ExpeditionService.getQuestionsList(props.activityId).then((response) => {
@@ -30,19 +23,28 @@ function GraphPreview(props) {
   }, [isPreviewOpen])
 
   useEffect(() => {
-    const questions = questionsList.map((question) => ({
-      id: question.questionID,
-      borderColor: getNodeColor(question.difficulty),
-      targetIds: question.nextQuestionsIDs,
-      content: lastQuestionId === question.questionID || (!lastQuestionId && !question.difficulty) ? '★' : '',
-      size: lastQuestionId === question.questionID || (!lastQuestionId && !question.difficulty) ? 40 : 20,
-      backgroundColor:
-        lastQuestionId === question.questionID || (!lastQuestionId && !question.difficulty)
-          ? getNodeColor(question.difficulty)
-          : 'white'
-    }))
+    const questions = questionsList.map((question) => {
+      const isActualVisited =
+        props.currentQuestionsPath[props.currentQuestionsPath.length - 1] === question.questionID ||
+        (!props.currentQuestionsPath.length && !question.difficulty)
+
+      return {
+        id: question.questionID,
+        borderColor: getNodeColor(question.difficulty),
+        targetIds: question.nextQuestionsIDs,
+        content: isActualVisited ? '★' : '',
+        size: isActualVisited ? 40 : 20,
+        backgroundColor: isActualVisited ? getNodeColor(question.difficulty) : 'white',
+        customEdgeColorTargets: props.currentQuestionsPath.includes(question.questionID)
+          ? question.nextQuestionsIDs.filter((q) => props.currentQuestionsPath.includes(q))
+          : [],
+        edgeStandardColor: 'gray',
+        edgeSpecialColor: '#ffb30d',
+        useBolderLines: true
+      }
+    })
     setGraphElements(getGraphElements(questions))
-  }, [lastQuestionId, questionsList])
+  }, [props.currentQuestionsPath, questionsList])
 
   return (
     <>
