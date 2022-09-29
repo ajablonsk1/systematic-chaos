@@ -15,11 +15,9 @@ import com.example.api.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +40,12 @@ public class UserController {
     public ResponseEntity<Long> saveUser(@RequestBody RegisterUserForm form)
             throws RequestValidationException {
         return ResponseEntity.ok().body(userService.registerUser(form));
+    }
+
+    @PutMapping("/password-edition")
+    public ResponseEntity<Long> editUserPassword(@RequestParam String newPassword){
+        userService.editPassword(newPassword);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/user/current")

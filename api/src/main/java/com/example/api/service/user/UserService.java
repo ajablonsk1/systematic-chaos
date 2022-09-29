@@ -64,6 +64,13 @@ public class UserService implements UserDetailsService {
         return user.getId();
     }
 
+    public void editPassword(String newPassword){
+        String email = authService.getAuthentication().getName();
+        User user = getUser(email);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+    }
+
     public User getUser(String email) throws UsernameNotFoundException {
         log.info("Fetching user {}", email);
         User user = userRepo.findUserByEmail(email);
