@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import javax.naming.TimeLimitExceededException;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -164,6 +166,7 @@ public class QuestionService {
         List<Long> fullPath = new LinkedList<>();
         fullPath.add(startQuestionID);
         fullPath.addAll(path);
-        return fullPath;
+        fullPath.add(result.getCurrQuestion().getId());
+        return new ArrayList<>(new HashSet<>(fullPath)); // removing duplicates
     }
 }
