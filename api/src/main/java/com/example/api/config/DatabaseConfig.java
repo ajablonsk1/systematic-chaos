@@ -407,6 +407,7 @@ public class DatabaseConfig {
             fileTask.setProfessor(professor);
             fileTask.setMaxPoints(30.0);
             fileTask.setExperience(10D);
+            fileTask.setRequirements(requirements);
 
             fileTaskService.saveFileTask(fileTask);
 
@@ -416,6 +417,7 @@ public class DatabaseConfig {
             info1.setTitle("Skrętki");
             info1.setDescription("Przewody internetowe da się podzielić także pod względem ich ekranowania.");
             info1.setContent(MessageManager.LOREM_IPSUM);
+            info1.setRequirements(requirements);
 
             Url url1 = new Url();
             Url url2 = new Url();
