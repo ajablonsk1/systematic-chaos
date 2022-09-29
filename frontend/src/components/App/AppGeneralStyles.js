@@ -1,4 +1,3 @@
-import { Col } from 'react-bootstrap'
 import styled from 'styled-components'
 
 export const Content = styled.div`
@@ -7,7 +6,7 @@ export const Content = styled.div`
   width: 100%;
 `
 
-export const SidebarCol = styled(Col)`
+export const SidebarCol = styled.div`
   display: none;
   padding: 0;
   transition: width 0.15s linear;
