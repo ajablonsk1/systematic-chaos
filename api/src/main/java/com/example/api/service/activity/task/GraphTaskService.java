@@ -167,6 +167,6 @@ public class GraphTaskService {
     }
 
     public void editGraphTask(GraphTask graphTask, EditGraphTaskForm form) {
-        if (graphTask.get)
+        return;
     }
 }

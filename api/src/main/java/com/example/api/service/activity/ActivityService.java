@@ -1,5 +1,6 @@
 package com.example.api.service.activity;
 
+import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.edit.*;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -14,11 +15,13 @@ import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.task.GraphTaskService;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
+import com.example.api.util.calculator.TimeParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -57,10 +60,10 @@ public class ActivityService {
         Activity activity = getActivity(form.getActivityID());
         activityValidator.validateActivityIsNotNull(activity, form.getActivityID());
 
-        switch (activity.getActivityType()) {
-            case EXPEDITION -> graphTaskService.editGraphTask((GraphTask) activity, (EditGraphTaskForm) form);
-        }
-        return;
+//        switch (activity.getActivityType()) {
+//            case EXPEDITION -> graphTaskService.editGraphTask((GraphTask) activity, (EditGraphTaskForm) form);
+//        }
+//        return;
     }
 
     private Activity getActivity(Long id) {
