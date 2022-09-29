@@ -8,6 +8,7 @@ import com.example.api.model.activity.task.Activity;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.repo.map.ChapterRepo;
+import com.example.api.repo.util.FileRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class ChapterValidator {
     private final ChapterRepo chapterRepo;
+    private final FileRepo fileRepo;
 
     public void validateChapterIsNotNull(Chapter chapter, Long id) throws EntityNotFoundException {
         if(chapter == null) {
@@ -70,6 +72,13 @@ public class ChapterValidator {
                 !Objects.equals(chapter.getId(), chapter_.getId()))){
             log.error("Two chapters cannot be on the same position!");
             throw new RequestValidationException(ExceptionMessage.TWO_CHAPTERS_ON_THE_SAME_POSITION);
+        }
+    }
+
+    public void validateImageExists(Long newImageId) throws RequestValidationException {
+        if (fileRepo.findFileById(newImageId) == null){
+            log.error("Image with id {} not found in database", newImageId);
+            throw new RequestValidationException(ExceptionMessage.IMAGE_NOT_EXISTS);
         }
     }
 }

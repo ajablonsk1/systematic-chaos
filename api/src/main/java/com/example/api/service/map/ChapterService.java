@@ -103,13 +103,14 @@ public class ChapterService {
         User professor = userRepo.findUserByEmail(email);
         userValidator.validateProfessorAccount(professor, email);
 
+        ChapterForm chapterForm = editChapterForm.getEditionForm();
+
         // chapter validation for given editChapterForm
         Chapter chapter = chapterRepo.findChapterById(editChapterForm.getChapterId());
         chapterValidator.validateChapterIsNotNull(chapter, editChapterForm.getChapterId());
-        chapterValidator.validatePositionTaken(editChapterForm.getEditionForm(), chapter);
-        chapterValidator.validateChapterEdition(editChapterForm.getEditionForm(), chapter);
-
-        ChapterForm chapterForm = editChapterForm.getEditionForm();
+        chapterValidator.validatePositionTaken(chapterForm, chapter);
+        chapterValidator.validateChapterEdition(chapterForm, chapter);
+        chapterValidator.validateImageExists(chapterForm.getImageId());
 
         // edit basic chapter data
         chapter.setName(chapterForm.getName());
