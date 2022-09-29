@@ -22,7 +22,7 @@ public class ActivityController {
         return ResponseEntity.ok().body(activityService.getActivityEditInfo(activityID));
     }
 
-    @PostMapping("/edit/info")
+    @PostMapping("/edit")
     ResponseEntity<?> getActivityEditInfo(@RequestBody EditActivityForm form) throws WrongUserTypeException, EntityNotFoundException {
         activityService.editActivity(form);
         return ResponseEntity.ok().body(null);

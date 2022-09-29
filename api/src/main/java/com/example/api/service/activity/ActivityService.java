@@ -11,6 +11,7 @@ import com.example.api.repo.activity.task.InfoRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.activity.task.GraphTaskService;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class ActivityService {
     private final SurveyRepo surveyRepo;
     private final InfoRepo infoRepo;
     private final ActivityValidator activityValidator;
+    private final GraphTaskService graphTaskService;
 
     public EditActivityForm getActivityEditInfo(Long activityID) throws WrongUserTypeException, EntityNotFoundException {
         String email = authService.getAuthentication().getName();
@@ -54,6 +56,10 @@ public class ActivityService {
 
         Activity activity = getActivity(form.getActivityID());
         activityValidator.validateActivityIsNotNull(activity, form.getActivityID());
+
+        switch (activity.getActivityType()) {
+            case EXPEDITION -> graphTaskService.editGraphTask((GraphTask) activity, (EditGraphTaskForm) form);
+        }
         return;
     }
 

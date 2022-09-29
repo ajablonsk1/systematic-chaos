@@ -4,6 +4,7 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskChapterFo
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
+import com.example.api.dto.request.activity.task.edit.EditGraphTaskForm;
 import com.example.api.dto.response.activity.task.result.GraphTaskResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -163,5 +164,9 @@ public class GraphTaskService {
             points.add(calculateMaxPoints(nextQuestion, maxPoints + nextQuestion.getPoints()));
         }
         return points.stream().max(Double::compareTo).get();
+    }
+
+    public void editGraphTask(GraphTask graphTask, EditGraphTaskForm form) {
+        if (graphTask.get)
     }
 }

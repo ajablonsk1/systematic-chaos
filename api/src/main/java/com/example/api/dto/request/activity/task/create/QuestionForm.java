@@ -1,5 +1,6 @@
 package com.example.api.dto.request.activity.task.create;
 
+import com.example.api.model.question.Question;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +25,9 @@ public class QuestionForm {
     public QuestionForm(int questionNum, List<Integer> nextQuestions) {
         this.questionNum = questionNum;
         this.nextQuestions = nextQuestions;
+    }
+    
+    public QuestionForm(Question question, int questionNum) {
+        this.
     }
 }

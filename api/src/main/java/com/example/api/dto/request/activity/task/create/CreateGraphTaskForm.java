@@ -33,8 +33,8 @@ public class CreateGraphTaskForm extends CreateActivityForm{
 
     public CreateGraphTaskForm(GraphTask graphTask) {
         super(graphTask);
-        this.requiredKnowledge = requiredKnowledge;
-        this.questions = questions;
+        this.requiredKnowledge = graphTask.getRequiredKnowledge();
+        this.questions = graphTask.getQuestions()
         this.timeToSolve = timeToSolve;
     }
 }
