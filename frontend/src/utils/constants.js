@@ -34,6 +34,9 @@ export const ERROR_OCCURRED = 'Wystąpił nieoczekiwany błąd'
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
 export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
 
+export const GRAPH_NODE_BASIC_SIZE = 20
+export const GRAPH_NODE_SPECIAL_SIZE = 40
+
 export const Activity = {
   EXPEDITION: 'EXPEDITION',
   INFO: 'INFO',

@@ -1,4 +1,5 @@
 import { gameNodeChildStyle, gameNodeStyle, nodeLabelChildStyle, nodeLabelStyle } from './cytoscapeStyle'
+import { GRAPH_NODE_BASIC_SIZE } from '../../../utils/constants'
 
 export const getGraphElements = (graphElements) => {
   const nodes = graphElements.map((nodeInfo) => ({
@@ -6,7 +7,7 @@ export const getGraphElements = (graphElements) => {
       id: nodeInfo.id ?? 0,
       position: nodeInfo.position,
       borderColor: nodeInfo.borderColor ?? 'black',
-      size: nodeInfo.size ? nodeInfo.size + 'px' : '20px',
+      size: nodeInfo.size ? nodeInfo.size + 'px' : GRAPH_NODE_BASIC_SIZE + 'px',
       padding: nodeInfo.size ? nodeInfo.size * 1.5 + 'px' : '30px',
       fontSize: nodeInfo.size ? nodeInfo.size * 3.2 + 'px' : '64px',
       content: nodeInfo.content ?? nodeInfo.id ?? 0,

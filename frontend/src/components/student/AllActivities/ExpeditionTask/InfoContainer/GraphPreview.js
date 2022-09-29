@@ -5,11 +5,15 @@ import { faDiagramProject } from '@fortawesome/free-solid-svg-icons'
 import Graph from '../../../../general/Graph/Graph'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { getGraphElements, getNodeColor } from '../../../../general/Graph/graphHelper'
+import { GRAPH_NODE_BASIC_SIZE, GRAPH_NODE_SPECIAL_SIZE } from '../../../../../utils/constants'
+
+const CLOSE_PREVIEW_CONTAINER_SIZE = 0
+const OPEN_PREVIEW_CONTAINER_SIZE = '40%'
 
 function GraphPreview(props) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [graphElements, setGraphElements] = useState([])
-  const [size, setSize] = useState(0)
+  const [size, setSize] = useState(CLOSE_PREVIEW_CONTAINER_SIZE)
   const [questionsList, setQuestionsList] = useState([])
 
   useEffect(() => {
@@ -19,7 +23,7 @@ function GraphPreview(props) {
   }, [props.activityId])
 
   useEffect(() => {
-    setSize(isPreviewOpen ? '40%' : 0)
+    setSize(isPreviewOpen ? OPEN_PREVIEW_CONTAINER_SIZE : CLOSE_PREVIEW_CONTAINER_SIZE)
   }, [isPreviewOpen])
 
   useEffect(() => {
@@ -33,7 +37,7 @@ function GraphPreview(props) {
         borderColor: getNodeColor(question.difficulty),
         targetIds: question.nextQuestionsIDs,
         content: isActualVisited ? '★' : '',
-        size: isActualVisited ? 40 : 20,
+        size: isActualVisited ? GRAPH_NODE_SPECIAL_SIZE : GRAPH_NODE_BASIC_SIZE,
         backgroundColor: isActualVisited ? getNodeColor(question.difficulty) : 'white',
         customEdgeColorTargets: props.currentQuestionsPath.includes(question.questionID)
           ? question.nextQuestionsIDs.filter((q) => props.currentQuestionsPath.includes(q))
