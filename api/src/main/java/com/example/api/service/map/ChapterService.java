@@ -1,6 +1,7 @@
 package com.example.api.service.map;
 
 import com.example.api.dto.request.map.ChapterForm;
+import com.example.api.dto.request.map.EditChapterForm;
 import com.example.api.dto.response.map.ChapterInfoResponse;
 import com.example.api.dto.response.map.ChapterResponse;
 import com.example.api.dto.response.map.task.MapTask;
@@ -94,5 +95,34 @@ public class ChapterService {
                 .findAny();
         prevChapter.ifPresent(value -> value.setNextChapter(chapter.getNextChapter()));
         chapterRepo.deleteChapterById(chapterID);
+    }
+
+    public void editChapter(EditChapterForm editChapterForm) throws RequestValidationException {
+        // user validation
+        String email = authService.getAuthentication().getName();
+        User professor = userRepo.findUserByEmail(email);
+        userValidator.validateProfessorAccount(professor, email);
+
+        ChapterForm chapterForm = editChapterForm.getEditionForm();
+
+        // chapter validation for given editChapterForm
+        Chapter chapter = chapterRepo.findChapterById(editChapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, editChapterForm.getChapterId());
+        chapterValidator.validatePositionTaken(chapterForm, chapter);
+        chapterValidator.validateChapterEdition(chapterForm, chapter);
+        chapterValidator.validateImageExists(chapterForm.getImageId());
+
+        // edit basic chapter data
+        chapter.setName(chapterForm.getName());
+        chapter.setPosX(chapterForm.getPosX());
+        chapter.setPosY(chapterForm.getPosY());
+
+        // edit chapter activity map
+        ActivityMap chapterMap = chapter.getActivityMap();
+        chapterMap.setMapSizeX(chapterForm.getSizeX());
+        chapterMap.setMapSizeY(chapterForm.getSizeY());
+        chapterMap.setImage(fileRepo.findFileById(chapterForm.getImageId()));
+
+        chapter.setActivityMap(chapterMap);
     }
 }
