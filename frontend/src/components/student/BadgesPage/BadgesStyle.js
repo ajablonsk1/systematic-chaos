@@ -148,7 +148,7 @@ export const PercentageBar = styled.div`
   &::before {
     content: '';
     display: block;
-    height: 10px;
+    height: ${(props) => (props.$height ? props.$height + 'px' : '10px')};
     border-radius: 50px;
   }
   &::after {

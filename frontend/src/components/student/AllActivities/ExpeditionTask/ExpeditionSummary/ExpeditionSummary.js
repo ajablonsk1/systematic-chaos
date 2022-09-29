@@ -69,8 +69,23 @@ export default function ExpeditionSummary() {
     navigate(StudentRoutes.GAME_MAP.MAIN)
   }
 
-  const showRemainingTime = () =>
-    remainingTime > 60 ? getTimer(remainingTime / 1000).replace(':', 'min ') + 's' : remainingTime + 's'
+  const showRemainingTime = () => {
+    const timer = getTimer(remainingTime / 1000).split(':')
+    const seconds = timer[2]
+    const minutes = timer[1]
+    const hours = timer[0]
+    let timeString = seconds + 's'
+
+    if (minutes !== '00' || (minutes === '00' && hours !== '00')) {
+      timeString = minutes + 'min, ' + timeString
+    }
+
+    if (hours !== '00') {
+      timeString = hours + 'h, ' + timeString
+    }
+
+    return timeString
+  }
 
   return (
     <Content>
@@ -86,19 +101,19 @@ export default function ExpeditionSummary() {
           </Row>
           <Row className='mx-0 my-5 d-flex flex-column'>
             <p style={{ fontSize: 20 }}>
-              Liczba punktów razem:{' '}
+              Liczba punktów razem na wybranej ścieżce:{' '}
               <strong>
                 {scoredPoints}/{maxPointsClosed + maxPointsOpen}
               </strong>
             </p>
             <p style={{ fontSize: 20 }}>
-              Punkty z pytań zamkniętych: {/* there will be a closed all endpoint later*/}
+              Punkty z pytań zamkniętych na wybranej ścieżce: {/* there will be a closed all endpoint later*/}
               <strong>
                 {closedQuestionPoints}/{maxPointsClosed}
               </strong>
             </p>
             <p style={{ fontSize: 20 }}>
-              Punkty z pytań otwartych: {/* there will be a closed all endpoint later*/}
+              Punkty z pytań otwartych na wybranej ścieżce: {/* there will be a closed all endpoint later*/}
               <strong>
                 {scoredPoints - closedQuestionPoints}/{maxPointsOpen}
               </strong>

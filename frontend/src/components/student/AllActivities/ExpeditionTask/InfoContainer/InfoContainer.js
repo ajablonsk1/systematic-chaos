@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { getTimer } from '../../../../../utils/storageManager'
-import { TimerContainer } from './TimerStyle'
+import { TimerContainer } from './InfoContainerStyle'
+import GraphPreview from './GraphPreview'
+import { PercentageBar } from '../../../BadgesPage/BadgesStyle'
 
-export default function Timer(props) {
+export default function InfoContainer(props) {
   const { timeToSolveMillis, activityId, endAction } = props
   const [remainingTime, setRemainingTime] = useState(undefined)
   const [timer, setTimer] = useState('')
@@ -31,9 +33,32 @@ export default function Timer(props) {
     }
   }, [activityId, remainingTime, timerInterval, endAction])
 
+  const percentageBar = useMemo(() => {
+    const PERCENTAGE_BAR_WIDTH = 300
+    const PERCENTAGE_BAR_HEIGHT = 20
+    const GREEN_BAR_WIDTH = ((props.actualPoints / props.maxPoints) * PERCENTAGE_BAR_WIDTH).toFixed(0)
+
+    return (
+      <PercentageBar
+        $greenBarWidth={GREEN_BAR_WIDTH}
+        $grayBarWidth={PERCENTAGE_BAR_WIDTH}
+        $height={PERCENTAGE_BAR_HEIGHT}
+        style={{ right: '10px', left: 'auto', top: '20px', transform: 'none' }}
+      >
+        <strong className={'d-flex justify-content-center'}>{`${props.actualPoints}/${props.maxPoints}`}</strong>
+      </PercentageBar>
+    )
+  }, [props.actualPoints, props.maxPoints])
+
   return (
     <div className={'d-flex justify-content-center'}>
       <TimerContainer time={remainingTime}>{timer}</TimerContainer>
+      {percentageBar}
+      <GraphPreview
+        activityId={props.activityId}
+        currentQuestionsPath={props.questionsPath}
+        actualQuestionId={props.actualQuestionId}
+      />
       {React.cloneElement(props.children, {
         remainingTime: remainingTime
       })}
