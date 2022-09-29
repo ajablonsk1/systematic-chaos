@@ -4,6 +4,7 @@ import com.example.api.dto.request.map.ChapterForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.repo.map.ChapterRepo;
@@ -11,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
 @Slf4j
@@ -44,12 +47,29 @@ public class ChapterValidator {
         Integer newSizeX = form.getSizeX();
         Integer newSizeY = form.getSizeY();
 
-        if (chapterMap.getSurveys().stream().anyMatch(survey -> survey.getPosX() >= newSizeX || survey.getPosY() >= newSizeY)
-                || chapterMap.getFileTasks().stream().anyMatch(fileTask -> fileTask.getPosX() >= newSizeX || fileTask.getPosY() >= newSizeY)
-                || chapterMap.getGraphTasks().stream().anyMatch(graphTask -> graphTask.getPosX() >= newSizeX || graphTask.getPosY() >= newSizeY)
-                || chapterMap.getInfos().stream().anyMatch(info -> info.getPosY() >= newSizeY || info.getPosX() >= newSizeX)){
-            log.error("New chapter size is too small");
+        List<? extends Activity> activities = Stream.of(chapterMap.getSurveys(),
+                        chapterMap.getInfos(),
+                        chapterMap.getGraphTasks(),
+                        chapterMap.getFileTasks())
+                .flatMap(Collection::stream)
+                .toList();
+
+        // checking that the activities do not go beyond the map
+        if (activities.stream().anyMatch(activity -> activity.getPosX() >= newSizeX || activity.getPosY() >= newSizeY)){
+            log.error("New chapter size is too small for chapter " + chapter.getId());
             throw new RequestValidationException(ExceptionMessage.CHAPTER_MAP_SIZE_TOO_SMALL);
+        }
+    }
+
+    public void validatePositionTaken(ChapterForm form, Chapter chapter) throws RequestValidationException {
+        List<Chapter> chapters = chapterRepo.findAll();
+
+        if (chapters.stream().anyMatch(chapter_ ->
+                Objects.equals(chapter_.getPosX(), form.getPosX()) &&
+                Objects.equals(chapter_.getPosY(), form.getPosY()) &&
+                !Objects.equals(chapter.getId(), chapter_.getId()))){
+            log.error("Two chapters cannot be on the same position!");
+            throw new RequestValidationException(ExceptionMessage.TWO_CHAPTERS_ON_THE_SAME_POSITION);
         }
     }
 }

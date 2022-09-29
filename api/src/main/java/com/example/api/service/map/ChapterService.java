@@ -106,7 +106,7 @@ public class ChapterService {
         // chapter validation for given editChapterForm
         Chapter chapter = chapterRepo.findChapterById(editChapterForm.getChapterId());
         chapterValidator.validateChapterIsNotNull(chapter, editChapterForm.getChapterId());
-        chapterValidator.validateChapterCreation(editChapterForm.getEditionForm());
+        chapterValidator.validatePositionTaken(editChapterForm.getEditionForm(), chapter);
         chapterValidator.validateChapterEdition(editChapterForm.getEditionForm(), chapter);
 
         ChapterForm chapterForm = editChapterForm.getEditionForm();
@@ -122,9 +122,6 @@ public class ChapterService {
         chapterMap.setMapSizeY(chapterForm.getSizeY());
         chapterMap.setImage(fileRepo.findFileById(chapterForm.getImageId()));
 
-        activityMapService.saveActivityMap(chapterMap);
-
         chapter.setActivityMap(chapterMap);
-        chapterRepo.save(chapter);
     }
 }
