@@ -40,5 +40,6 @@ export const TeacherRoutes = {
     LIST: '/assessment/list',
     ACTIVITY: '/assessment/activity-assessment'
   },
-  GRADES: '/grades'
+  GRADES: '/grades',
+  SETTINGS: '/settings'
 }

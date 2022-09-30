@@ -5,11 +5,13 @@ import { ERROR_OCCURRED, getHeroName, HeroImg } from '../../../utils/constants'
 import StudentService from '../../../services/student.service'
 import ProfileCard from './ProfileCard'
 import EditIndexModal from './EditIndexModal'
+import EditPasswordModal from './EditPasswordModal'
 
 function Profile() {
   const [userData, setUserData] = useState(undefined)
   const [isEditIndexModalOpen, setIsEditIndexModalOpen] = useState(false)
   const [indexNumber, setIndexNumber] = useState(undefined)
+  const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
 
   useEffect(() => {
     StudentService.getUserData()
@@ -104,6 +106,7 @@ function Profile() {
             header={'Zmień hasło'}
             body={<p className={'text-center h-75'}>Otwórz formularz do zmiany hasła.</p>}
             showButton
+            buttonCallback={() => setIsEditPasswordModalOpen(true)}
           />
         </Col>
         <Col md={4}>
@@ -121,6 +124,7 @@ function Profile() {
         setModalOpen={setIsEditIndexModalOpen}
         setIndexNumber={setIndexNumber}
       />
+      <EditPasswordModal show={isEditPasswordModalOpen} setModalOpen={setIsEditPasswordModalOpen} />
     </Content>
   )
 }

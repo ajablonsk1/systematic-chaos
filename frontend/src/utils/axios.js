@@ -22,6 +22,16 @@ export function axiosApiGet(url, params) {
     })
 }
 
+export function axiosApiPut(url, body) {
+  return axios
+    .put(url, body, validHeader({}))
+    .then((response) => response.data)
+    .catch((error) => {
+      errorToast(error?.response?.data?.message)
+      throw error
+    })
+}
+
 export function axiosApiDelete(url, params) {
   return axios
     .delete(url, validHeader(params))
