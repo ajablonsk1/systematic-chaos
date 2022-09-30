@@ -32,8 +32,16 @@ import FormikContext from '../../../general/FormikContext/FormikContext'
 
 const MAP_HEIGHT = 500
 const MAP_WIDTH = 1.5 * MAP_HEIGHT
+const EMPTY_INITIAL_VALUES = {
+  name: '',
+  sizeX: '',
+  sizeY: '',
+  posX: '',
+  posY: '',
+  imageId: ''
+}
 
-export function AddChapterModal({ showModal, setShowModal, refetchChapterList, isLoaded }) {
+export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChapterList, chapterDetails }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -43,6 +51,25 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
     label: '',
     size: Math.min(MAP_HEIGHT / 8, MAP_WIDTH / 10) / 5
   })
+
+  const modalTitle = refetchChapterList ? 'Dodaj nowy rozdział' : 'Edytuj rozdział'
+  const actionTitle = refetchChapterList ? 'Dodaj rozdział' : 'Zapisz zmiany'
+  let currentActivityValues = null
+  if (chapterDetails) {
+    const sizes = chapterDetails.mapSize.split(' x ')
+    console.log(sizes)
+    currentActivityValues = {
+      name: chapterDetails.name,
+      sizeX: sizes[0],
+      sizeY: sizes[1],
+      posX: chapterDetails.posX,
+      posY: chapterDetails.posY,
+      //PLACEHOLDER!
+      imageId: 1
+    }
+  }
+
+  console.log({ showModal, setShowModal, isLoaded, refetchChapterList, chapterDetails })
 
   const formikContextRef = useRef()
 
@@ -87,20 +114,13 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
       <>
         <Modal show={showModal} size={'lg'} onHide={() => setShowModal(false)}>
           <ModalHeader>
-            <h4 className={'text-center w-100'}>Dodaj nowy rozdział</h4>
+            <h4 className={'text-center w-100'}>{modalTitle}</h4>
           </ModalHeader>
           <ModalBody>
             <Tabs defaultActiveKey={'form'}>
               <Tab eventKey={'form'} title={'Formularz'} className={'pt-4'}>
                 <Formik
-                  initialValues={{
-                    name: '',
-                    sizeX: '',
-                    sizeY: '',
-                    posX: '',
-                    posY: '',
-                    imageId: ''
-                  }}
+                  initialValues={chapterDetails ? currentActivityValues : EMPTY_INITIAL_VALUES}
                   validate={(values) => {
                     const errors = {}
                     if (!values.name) errors.chapterName = FIELD_REQUIRED
@@ -115,25 +135,29 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                     return errors
                   }}
                   onSubmit={(values, { setSubmitting }) => {
-                    ChapterService.sendNewChapterData({
-                      name: values.name,
-                      sizeX: values.sizeX,
-                      sizeY: values.sizeY,
-                      imageId: values.imageId,
-                      posX: values.posX,
-                      posY: values.posY
-                    })
-                      .then(() => {
-                        setSubmitting(false)
-                        setShowModal(false)
-                        setIsSuccessModalOpen(true)
-                        setErrorMessage('')
-                        refetchChapterList()
+                    if (!chapterDetails) {
+                      ChapterService.sendNewChapterData({
+                        name: values.name,
+                        sizeX: values.sizeX,
+                        sizeY: values.sizeY,
+                        imageId: values.imageId,
+                        posX: values.posX,
+                        posY: values.posY
                       })
-                      .catch((error) => {
-                        setSubmitting(false)
-                        setErrorMessage(error.response.data.message)
-                      })
+                        .then(() => {
+                          setSubmitting(false)
+                          setShowModal(false)
+                          setIsSuccessModalOpen(true)
+                          setErrorMessage('')
+                          if (refetchChapterList) {
+                            refetchChapterList()
+                          }
+                        })
+                        .catch((error) => {
+                          setSubmitting(false)
+                          setErrorMessage(error.response.data.message)
+                        })
+                    }
                   }}
                 >
                   {({ isSubmitting, values, handleSubmit, setFieldValue }) => {
@@ -182,7 +206,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                                 {isSubmitting ? (
                                   <Spinner as='span' animation='border' size='sm' role='status' />
                                 ) : (
-                                  <span>Dodaj rozdział</span>
+                                  <span>{actionTitle}</span>
                                 )}
                               </Button>
                             </Col>
