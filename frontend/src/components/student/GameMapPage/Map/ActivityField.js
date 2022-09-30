@@ -1,16 +1,17 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
+  ERROR_OCCURRED,
   getActivityImg,
   getActivityPath,
   getActivityTypeName,
   requirementValueConverter
 } from '../../../../utils/constants'
 import { ActivityCol, CustomOffcanvas } from './ActivityFieldStyle'
-import { Button, OffcanvasBody, OffcanvasHeader, OffcanvasTitle } from 'react-bootstrap'
+import { Button, OffcanvasBody, OffcanvasHeader, OffcanvasTitle, Spinner } from 'react-bootstrap'
 import moment from 'moment'
-import { getRequirements } from './mockData'
 import { Tooltip } from '../../BadgesPage/BadgesStyle'
+import ActivityService from '../../../../services/activity.service'
 
 export default function ActivityField({
   activity,
@@ -21,7 +22,19 @@ export default function ActivityField({
 }) {
   const navigate = useNavigate()
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false)
-  const requirements = getRequirements()
+  const [requirements, setRequirements] = useState(undefined)
+
+  useEffect(() => {
+    if (activity) {
+      ActivityService.getActivityRequirements(activity.id)
+        .then((response) => {
+          setRequirements(response?.filter((requirement) => requirement.selected))
+        })
+        .catch(() => {
+          setRequirements(null)
+        })
+    }
+  }, [activity])
 
   // TODO, currently goes to the hard-coded expedition activity but it should be OK once we implement a 'real' activity getter in API
   const startActivity = () => {
@@ -38,6 +51,7 @@ export default function ActivityField({
       { name: 'Punkty', value: activity?.points },
       { name: 'Data utworzenia', value: moment(Date.now()).format('DD.MM.YYYY, HH:mm') } // TODO: replace with activity?.creationDate
     ]
+
     return (
       <table>
         <tbody>
@@ -53,12 +67,32 @@ export default function ActivityField({
           <tr>
             <th colSpan={2}>Wymagania odblokowania</th>
           </tr>
-          {requirements.map((requirement, index) => (
-            <tr key={index + Date.now()}>
-              <td>{requirement.name}:</td>
-              <td>{requirementValueConverter(requirement)}</td>
+          {requirements === undefined ? (
+            <tr>
+              <td colSpan={2} className={'text-center'}>
+                <Spinner animation={'border'} />
+              </td>
             </tr>
-          ))}
+          ) : requirements == null ? (
+            <tr>
+              <td colSpan={2} className={'text-center'}>
+                <p>{ERROR_OCCURRED}</p>
+              </td>
+            </tr>
+          ) : !requirements.length ? (
+            <tr>
+              <td colSpan={2} className={'text-center'}>
+                <p>Brak wymagań dla aktywności</p>
+              </td>
+            </tr>
+          ) : (
+            requirements.map((requirement, index) => (
+              <tr key={index + Date.now()}>
+                <td>{requirement.name}:</td>
+                <td>{requirementValueConverter(requirement)}</td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     )

@@ -198,7 +198,7 @@ export const RequirementType = {
 }
 
 export const requirementValueConverter = (requirement) => {
-  switch (requirement.type) {
+  switch (requirement.type.toLowerCase()) {
     case RequirementType.DATE:
       return moment(requirement.value).format('DD.MM.YYYY, HH:mm')
     case RequirementType.SELECT:
