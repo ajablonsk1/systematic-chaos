@@ -10,6 +10,7 @@ import { logout } from '../../../actions/auth'
 import { GeneralRoutes } from '../../../routes/PageRoutes'
 import { SET_EXPANDED } from '../../../actions/types'
 import ProfessorService from '../../../services/professor.service'
+import { isStudent } from '../../../utils/storageManager'
 
 function Sidebar(props) {
   const navigate = useNavigate()
@@ -19,11 +20,13 @@ function Sidebar(props) {
   const isExpanded = props.sidebar.isExpanded
 
   useEffect(() => {
-    ProfessorService.getTasksToEvaluateList().then((response) => {
-      const assignmentsNumber = response.map((task) => task.toGrade).reduce((prev, curr) => prev + curr, 0)
-      setAssignmentsNumber(assignmentsNumber)
-    })
-  }, [])
+    if (props.user && !isStudent(props.user)) {
+      ProfessorService.getTasksToEvaluateList().then((response) => {
+        const assignmentsNumber = response.map((task) => task.toGrade).reduce((prev, curr) => prev + curr, 0)
+        setAssignmentsNumber(assignmentsNumber)
+      })
+    }
+  }, [props.user])
 
   const toggleSidebar = () => {
     props.dispatch({
@@ -101,7 +104,8 @@ function Sidebar(props) {
 
 function mapStateToProps(state) {
   const sidebar = state.sidebar
+  const { user } = state.auth
 
-  return { sidebar }
+  return { sidebar, user }
 }
 export default connect(mapStateToProps)(Sidebar)
