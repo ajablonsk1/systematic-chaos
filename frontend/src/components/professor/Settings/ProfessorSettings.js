@@ -1,10 +1,53 @@
-import React, { useState } from 'react'
-import { Col, Row } from 'react-bootstrap'
+import React, { useState, useEffect, useMemo } from 'react'
+import { Col, Row, Spinner, Table } from 'react-bootstrap'
 import ProfileCard from '../../student/Profile/ProfileCard'
 import EditPasswordModal from '../../student/Profile/EditPasswordModal'
+import UserService from '../../../services/user.service'
+import { ERROR_OCCURRED } from '../../../utils/constants'
 
 function ProfessorSettings(props) {
+  const [userData, setUserData] = useState(undefined)
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
+
+  useEffect(() => {
+    UserService.getUserData()
+      .then((response) => {
+        setUserData(response)
+      })
+      .catch(() => {
+        setUserData(null)
+      })
+  }, [])
+
+  const userInfoBody = useMemo(() => {
+    if (userData === undefined) {
+      return <Spinner animation={'border'} />
+    }
+    if (userData == null) {
+      return <p className={'text-center'}>{ERROR_OCCURRED}</p>
+    }
+
+    const tableHeaders = [
+      { text: 'Imię', value: userData.firstName },
+      { text: 'Nazwisko', value: userData.lastName },
+      { text: 'Email', value: userData.email }
+    ]
+
+    return (
+      <Table>
+        <tbody>
+          {tableHeaders.map((header, index) => (
+            <tr key={index + Date.now()}>
+              <td>
+                <strong>{header.text}</strong>
+              </td>
+              <td>{header.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    )
+  }, [userData])
 
   return (
     <>
@@ -12,7 +55,10 @@ function ProfessorSettings(props) {
         <Col md={12}>
           <h4>Ustawienia konta</h4>
         </Col>
-        <Col md={4}>
+        <Col md={6}>
+          <ProfileCard header={'Informacje o profilu'} body={userInfoBody} />
+        </Col>
+        <Col md={6}>
           <ProfileCard
             header={'Zmień hasło'}
             body={<p className={'text-center h-75'}>Otwórz formularz do zmiany hasła.</p>}
