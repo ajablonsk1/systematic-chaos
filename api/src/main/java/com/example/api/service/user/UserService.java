@@ -12,6 +12,7 @@ import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.user.util.ProfessorRegisterToken;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class UserService implements UserDetailsService {
     private final AuthenticationService authService;
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
+    private final ProfessorRegisterToken professorRegisterToken;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -135,5 +137,13 @@ public class UserService implements UserDetailsService {
         student.setIndexNumber(setStudentIndexForm.getNewIndexNumber());
         userRepo.save(student);
         return student.getIndexNumber();
+    }
+
+    public String getProfessorRegisterToken() throws WrongUserTypeException {
+        User user = getCurrentUser();
+        userValidator.validateProfessorAccount(user, authService.getAuthentication().getName());
+
+        log.info("Professor {} fetch ProfessorRegisterToken", user.getEmail());
+        return professorRegisterToken.getToken();
     }
 }
