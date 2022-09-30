@@ -1,18 +1,26 @@
 package com.example.api.service.activity;
 
+import com.example.api.dto.request.activity.task.create.CreateActivityForm;
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.edit.*;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.task.*;
+import com.example.api.model.map.Chapter;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.InfoRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
+import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.activity.task.FileTaskService;
 import com.example.api.service.activity.task.GraphTaskService;
+import com.example.api.service.activity.task.InfoService;
+import com.example.api.service.activity.task.SurveyService;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import com.example.api.util.calculator.TimeParser;
@@ -40,6 +48,11 @@ public class ActivityService {
     private final InfoRepo infoRepo;
     private final ActivityValidator activityValidator;
     private final GraphTaskService graphTaskService;
+    private final FileTaskService fileTaskService;
+    private final InfoService infoService;
+    private final SurveyService surveyService;
+    private final ChapterRepo chapterRepo;
+    private final ChapterValidator chapterValidator;
 
     public EditActivityForm getActivityEditInfo(Long activityID) throws WrongUserTypeException, EntityNotFoundException {
         String email = authService.getAuthentication().getName();
@@ -52,7 +65,7 @@ public class ActivityService {
         return toEditActivityForm(activity);
     }
 
-    public void editActivity(EditActivityForm form) throws WrongUserTypeException, EntityNotFoundException {
+    public void editActivity(EditActivityForm form) throws RequestValidationException {
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);
         userValidator.validateProfessorAccount(professor, email);
@@ -60,10 +73,13 @@ public class ActivityService {
         Activity activity = getActivity(form.getActivityID());
         activityValidator.validateActivityIsNotNull(activity, form.getActivityID());
 
-//        switch (activity.getActivityType()) {
-//            case EXPEDITION -> graphTaskService.editGraphTask((GraphTask) activity, (EditGraphTaskForm) form);
-//        }
-//        return;
+        switch (activity.getActivityType()) {
+            case EXPEDITION -> graphTaskService.editGraphTask((GraphTask) activity, (EditGraphTaskForm) form);
+            case TASK -> fileTaskService.editFileTask((FileTask) activity, (EditFileTaskForm) form);
+            case INFO -> infoService.editInfo((Info) activity, (EditInfoForm) form);
+            case SURVEY -> surveyService.editSurvey((Survey) activity, (EditSurveyForm) form);
+        }
+        return;
     }
 
     private Activity getActivity(Long id) {
@@ -103,5 +119,22 @@ public class ActivityService {
                 throw new IllegalArgumentException("Cannot create EditActivityForm for given activity with type" + activity.getActivityType());
             }
         }
+    }
+
+    public void editActivity(Activity activity, EditActivityForm form) throws RequestValidationException {
+        CreateActivityForm editForm = form.getActivityBody();
+        activity.setTitle(editForm.getTitle());
+        activity.setDescription(editForm.getDescription());
+
+        if (activity.getPosX().equals(editForm.getPosX()) &&
+            activity.getPosY().equals(editForm.getPosY())) {
+            return;
+        }
+
+        Chapter chapter = chapterRepo.findChapterByActivityMapContaining(activity);
+        chapterValidator.validateChapterIsNotNull(chapter, null);
+        activityValidator.validateActivityPosition(editForm, chapter);
+        activity.setPosX(editForm.getPosX());
+        activity.setPosY(editForm.getPosY());
     }
 }

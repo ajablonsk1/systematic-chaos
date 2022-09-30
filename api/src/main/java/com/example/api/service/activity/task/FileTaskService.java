@@ -2,6 +2,7 @@ package com.example.api.service.activity.task;
 
 import com.example.api.dto.request.activity.task.create.CreateFileTaskChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
+import com.example.api.dto.request.activity.task.edit.EditFileTaskForm;
 import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -118,5 +119,8 @@ public class FileTaskService {
                 .stream()
                 .filter(fileTask -> !requirementService.areRequirementsDefault(fileTask.getRequirements()))
                 .toList();
+    }
+
+    public void editFileTask(FileTask activity, EditFileTaskForm form) {
     }
 }

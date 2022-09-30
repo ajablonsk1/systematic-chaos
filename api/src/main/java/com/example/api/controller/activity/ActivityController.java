@@ -3,6 +3,7 @@ package com.example.api.controller.activity;
 import com.example.api.dto.request.activity.task.edit.EditActivityForm;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.ActivityService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -23,7 +24,7 @@ public class ActivityController {
     }
 
     @PostMapping("/edit")
-    ResponseEntity<?> getActivityEditInfo(@RequestBody EditActivityForm form) throws WrongUserTypeException, EntityNotFoundException {
+    ResponseEntity<?> getActivityEditInfo(@RequestBody EditActivityForm form) throws RequestValidationException {
         activityService.editActivity(form);
         return ResponseEntity.ok().body(null);
     }

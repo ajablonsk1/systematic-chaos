@@ -2,6 +2,7 @@ package com.example.api.service.activity.task;
 
 import com.example.api.dto.request.activity.task.create.CreateInfoChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateInfoForm;
+import com.example.api.dto.request.activity.task.edit.EditInfoForm;
 import com.example.api.dto.response.activity.task.InfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -15,6 +16,7 @@ import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.activity.ActivityService;
 import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
@@ -24,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -40,6 +43,7 @@ public class InfoService {
     private final UrlRepo urlRepo;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
+    private final ActivityService activityService;
 
     public Info saveInfo(Info info){
         return infoRepo.save(info);
@@ -91,4 +95,25 @@ public class InfoService {
                 .filter(info -> !requirementService.areRequirementsDefault(info.getRequirements()))
                 .toList();
     }
+
+    public void editInfo(Info info, EditInfoForm form) throws RequestValidationException {
+        CreateInfoForm infoForm = (CreateInfoForm) form.getActivityBody();
+        activityService.editActivity(info, form);
+        info.setContent(infoForm.getInfoContent());
+        editImageUrls(info, infoForm.getImageUrls());
+    }
+
+    private void editImageUrls(Info info, List<String> newUrls) {
+        List<Url> result = new LinkedList<>();
+        for (String newUrl: newUrls) {
+            if (info.getImageUrls()
+                    .stream()
+                    .anyMatch(oldUrl -> oldUrl.getUrl().equals(newUrl))
+            ) {
+
+            }
+        }
+    }
+
+
 }

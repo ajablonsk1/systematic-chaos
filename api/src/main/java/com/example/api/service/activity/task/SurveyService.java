@@ -2,6 +2,7 @@ package com.example.api.service.activity.task;
 
 import com.example.api.dto.request.activity.task.create.CreateSurveyChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateSurveyForm;
+import com.example.api.dto.request.activity.task.edit.EditSurveyForm;
 import com.example.api.dto.response.activity.task.SurveyInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -76,5 +77,8 @@ public class SurveyService {
                 .stream()
                 .filter(survey -> !requirementService.areRequirementsDefault(survey.getRequirements()))
                 .toList();
+    }
+
+    public void editSurvey(Survey activity, EditSurveyForm form) {
     }
 }
