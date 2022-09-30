@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.api.dto.request.user.EditPasswordForm;
 import com.example.api.dto.request.user.RegisterUserForm;
 import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.request.user.SetStudentIndexForm;
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     @PutMapping("/password-edition")
-    public ResponseEntity<Long> editUserPassword(@RequestParam String newPassword){
-        userService.editPassword(newPassword);
+    public ResponseEntity<Long> editUserPassword(@RequestBody EditPasswordForm form){
+        userService.editPassword(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

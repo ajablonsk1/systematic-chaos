@@ -2,6 +2,7 @@ import axios from 'axios'
 import QueryString from 'qs'
 import { AccountType } from '../utils/userRole'
 import { BASE_URL } from './urls'
+import { axiosApiPut } from '../utils/axios'
 
 class AuthService {
   login({ email, password }) {
@@ -59,6 +60,12 @@ class AuthService {
       .catch((err) => {
         throw err
       })
+  }
+
+  editPassword(newPassword) {
+    return axiosApiPut(BASE_URL + 'password-edition', { newPassword: newPassword }).catch((error) => {
+      throw error
+    })
   }
 }
 

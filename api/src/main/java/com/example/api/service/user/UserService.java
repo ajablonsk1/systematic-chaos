@@ -1,5 +1,6 @@
 package com.example.api.service.user;
 
+import com.example.api.dto.request.user.EditPasswordForm;
 import com.example.api.dto.request.user.RegisterUserForm;
 import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.request.user.SetStudentIndexForm;
@@ -64,10 +65,10 @@ public class UserService implements UserDetailsService {
         return user.getId();
     }
 
-    public void editPassword(String newPassword){
+    public void editPassword(EditPasswordForm form){
         String email = authService.getAuthentication().getName();
         User user = getUser(email);
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(form.getNewPassword()));
     }
 
     public User getUser(String email) throws UsernameNotFoundException {

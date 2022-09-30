@@ -46,7 +46,7 @@ public class ChapterController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<?> editChapter(@RequestBody EditChapterForm editChapterForm) throws EntityNotFoundException, WrongUserTypeException, RequestValidationException {
+    public ResponseEntity<?> editChapter(@RequestBody EditChapterForm editChapterForm) throws RequestValidationException {
         chapterService.editChapter(editChapterForm);
         return new ResponseEntity<>(HttpStatus.OK);
     }

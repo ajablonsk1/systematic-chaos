@@ -4,6 +4,7 @@ import {
   faBullseye,
   faCertificate,
   faChessBoard,
+  faGear,
   faHouse,
   faListCheck,
   faPalette,
@@ -107,6 +108,11 @@ export const ProfessorSidebarTitles = [
     name: 'Oceny',
     icon: fa5,
     navigateTo: TeacherRoutes.GRADES
+  },
+  {
+    name: 'Ustawienia',
+    icon: faGear,
+    navigateTo: TeacherRoutes.SETTINGS
   },
   {
     name: 'Wyloguj',
