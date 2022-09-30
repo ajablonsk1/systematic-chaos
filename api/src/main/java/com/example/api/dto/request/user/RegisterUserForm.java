@@ -19,4 +19,5 @@ public class RegisterUserForm {
     @Schema(required = true) private AccountType accountType;
     @Schema(required = false) private HeroType heroType;
     @Schema(required = false) private Integer indexNumber;
+    @Schema(required = false) private String professorRegistrationToken;
 }
