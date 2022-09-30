@@ -1,20 +1,29 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { faAnglesLeft, faAnglesRight, faFire } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Nav } from 'react-bootstrap'
 import { NavLinkStyles } from './navBuilder'
-import { LogoDiv, NavBarTextContainer, NavEdit, SidebarEdit } from './SidebarStyles'
+import { Badge, LogoDiv, NavBarTextContainer, NavEdit, SidebarEdit } from './SidebarStyles'
 import { connect } from 'react-redux'
 import { logout } from '../../../actions/auth'
 import { GeneralRoutes } from '../../../routes/PageRoutes'
 import { SET_EXPANDED } from '../../../actions/types'
+import ProfessorService from '../../../services/professor.service'
 
 function Sidebar(props) {
   const navigate = useNavigate()
+  const [assignmentsNumber, setAssignmentsNumber] = useState(0)
   const logOut = () => props.dispatch(logout(navigate))
 
   const isExpanded = props.sidebar.isExpanded
+
+  useEffect(() => {
+    ProfessorService.getTasksToEvaluateList().then((response) => {
+      const assignmentsNumber = response.map((task) => task.toGrade).reduce((prev, curr) => prev + curr, 0)
+      setAssignmentsNumber(assignmentsNumber)
+    })
+  }, [])
 
   const toggleSidebar = () => {
     props.dispatch({
@@ -58,6 +67,7 @@ function Sidebar(props) {
                   <FontAwesomeIcon icon={link.icon} />
                 </div>
                 {isExpanded && <span className={'ps-2'}>{link.name}</span>}
+                {link.action === 'BADGE' && <Badge>{assignmentsNumber}</Badge>}
               </NavLinkStyles>
 
               {link.subpages && (

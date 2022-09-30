@@ -47,3 +47,16 @@ export const MobileNav = styled.div`
   transform: translateY(-100%);
   z-index: 3;
 `
+
+export const Badge = styled.div`
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 10px;
+  font-weight: bolder;
+`
