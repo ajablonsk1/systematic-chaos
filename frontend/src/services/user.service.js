@@ -1,6 +1,6 @@
 import { axiosApiGet } from '../utils/axios'
-import { USER_DATA } from './urls'
 import { parseJwt } from '../utils/Api'
+import { GET_USER_CURRENT } from './urls'
 
 class UserService {
   getUser() {
@@ -12,7 +12,7 @@ class UserService {
   }
 
   getUserData() {
-    return axiosApiGet(USER_DATA).catch((error) => {
+    return axiosApiGet(GET_USER_CURRENT).catch((error) => {
       throw error
     })
   }

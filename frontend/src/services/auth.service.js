@@ -1,13 +1,13 @@
 import axios from 'axios'
 import QueryString from 'qs'
 import { AccountType } from '../utils/userRole'
-import { BASE_URL } from './urls'
+import { GET_TOKEN_REFRESH, POST_LOGIN, POST_REGISTER, PUT_PASSWORD_EDITION } from './urls'
 import { axiosApiPut } from '../utils/axios'
 
 class AuthService {
   login({ email, password }) {
     return axios
-      .post(BASE_URL + 'login', QueryString.stringify({ email: email, password: password }), {
+      .post(POST_LOGIN, QueryString.stringify({ email: email, password: password }), {
         'Content-Type': 'application/x-www-form-urlencoded'
       })
       .then((response) => {
@@ -43,7 +43,7 @@ class AuthService {
     }
 
     return axios
-      .post(BASE_URL + 'register', body, {
+      .post(POST_REGISTER, body, {
         'Content-Type': 'application/x-www-form-urlencoded'
       })
       .catch((err) => {
@@ -53,7 +53,7 @@ class AuthService {
 
   refreshToken(refreshToken) {
     return axios
-      .get(BASE_URL + 'token/refresh', {
+      .get(GET_TOKEN_REFRESH, {
         headers: { Authorization: 'Bearer ' + refreshToken }
       })
       .then((response) => {
@@ -65,7 +65,7 @@ class AuthService {
   }
 
   editPassword(newPassword) {
-    return axiosApiPut(BASE_URL + 'password-edition', { newPassword: newPassword }).catch((error) => {
+    return axiosApiPut(PUT_PASSWORD_EDITION, { newPassword: newPassword }).catch((error) => {
       throw error
     })
   }
