@@ -54,17 +54,20 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
 
   const modalTitle = refetchChapterList ? 'Dodaj nowy rozdział' : 'Edytuj rozdział'
   const actionTitle = refetchChapterList ? 'Dodaj rozdział' : 'Zapisz zmiany'
+
   let currentActivityValues = null
+
   if (chapterDetails) {
-    const sizes = chapterDetails.mapSize.split(' x ')
-    console.log(sizes)
+    const { name, mapSize, posX, posY, imageId } = chapterDetails
+    const [sizeX, sizeY] = mapSize.split(' x ')
+
     currentActivityValues = {
-      name: chapterDetails.name,
-      sizeX: sizes[0],
-      sizeY: sizes[1],
-      posX: chapterDetails.posX,
-      posY: chapterDetails.posY,
-      imageId: chapterDetails.imageId
+      name: name,
+      sizeX: sizeX,
+      sizeY: sizeY,
+      posX: posX,
+      posY: posY,
+      imageId: imageId
     }
   }
 
@@ -109,7 +112,8 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
   }
 
   return (
-    images && (
+    images &&
+    currentActivityValues !== undefined && (
       <>
         <Modal show={showModal} size={'lg'} onHide={() => setShowModal(false)}>
           <ModalHeader>
@@ -119,7 +123,7 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
             <Tabs defaultActiveKey={'form'}>
               <Tab eventKey={'form'} title={'Formularz'} className={'pt-4'}>
                 <Formik
-                  initialValues={chapterDetails ? currentActivityValues : EMPTY_INITIAL_VALUES}
+                  initialValues={currentActivityValues ? currentActivityValues : EMPTY_INITIAL_VALUES}
                   validate={(values) => {
                     const errors = {}
                     if (!values.name) errors.chapterName = FIELD_REQUIRED
