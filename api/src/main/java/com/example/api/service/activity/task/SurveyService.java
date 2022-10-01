@@ -14,6 +14,7 @@ import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.activity.ActivityService;
 import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
@@ -38,6 +39,7 @@ public class SurveyService {
     private final AuthenticationService authService;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
+    private final ActivityService activityService;
 
     public Survey saveSurvey(Survey survey){
         return surveyRepo.save(survey);
@@ -79,6 +81,9 @@ public class SurveyService {
                 .toList();
     }
 
-    public void editSurvey(Survey activity, EditSurveyForm form) {
+    public void editSurvey(Survey survey, EditSurveyForm form) throws RequestValidationException {
+        CreateSurveyForm surveyForm = (CreateSurveyForm) form.getActivityBody();
+        activityService.editActivity(survey, form);
+        survey.setPoints(surveyForm.getPoints());
     }
 }
