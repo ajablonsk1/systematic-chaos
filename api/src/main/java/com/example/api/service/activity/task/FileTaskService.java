@@ -20,6 +20,7 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.activity.ActivityService;
 import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
@@ -49,6 +50,7 @@ public class FileTaskService {
     private final TimeParser timeParser;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
+    private final ActivityService activityService;
 
     public FileTask saveFileTask(FileTask fileTask) {
         return fileTaskRepo.save(fileTask);
@@ -121,6 +123,26 @@ public class FileTaskService {
                 .toList();
     }
 
-    public void editFileTask(FileTask activity, EditFileTaskForm form) {
+    public void editFileTask(FileTask fileTask, EditFileTaskForm form) throws RequestValidationException {
+        CreateFileTaskForm fileTaskForm = (CreateFileTaskForm) form.getActivityBody();
+        activityService.editActivity(fileTask, form);
+        fileTask.setRequiredKnowledge(fileTaskForm.getRequiredKnowledge());
+        editMaxPoints(fileTask, fileTaskForm.getMaxPoints());
+    }
+
+    public void editMaxPoints(FileTask fileTask, Double newMaxPoints) {
+        fileTaskResultRepo.findAllByFileTask(fileTask)
+                .stream()
+                .filter(FileTaskResult::isEvaluated)
+                .forEach(fileTaskResult -> {
+                    Double prevPoints = fileTaskResult.getPointsReceived();
+                    Double newPoints = prevPoints * (newMaxPoints / fileTask.getMaxPoints());
+                    ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
+                    if (feedback != null) {
+                        feedback.setPoints(newPoints);
+                    }
+                    fileTaskResult.setPointsReceived(newPoints);
+                });
+        fileTask.setMaxPoints(newMaxPoints);
     }
 }

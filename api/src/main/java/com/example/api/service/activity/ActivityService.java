@@ -73,6 +73,9 @@ public class ActivityService {
         Activity activity = getActivity(form.getActivityID());
         activityValidator.validateActivityIsNotNull(activity, form.getActivityID());
 
+        log.info("Professor {} try to edit activity {} with id {}",
+                email, activity.getActivityType().getActivityType(), activity.getId());
+
         switch (activity.getActivityType()) {
             case EXPEDITION -> graphTaskService.editGraphTask((GraphTask) activity, (EditGraphTaskForm) form);
             case TASK -> fileTaskService.editFileTask((FileTask) activity, (EditFileTaskForm) form);
