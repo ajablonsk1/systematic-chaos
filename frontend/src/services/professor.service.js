@@ -7,7 +7,8 @@ import {
   POST_FEEDBACK_PROFESSOR,
   POST_ADDITIONAL_POINTS,
   GET_POINTS_ALL_LIST_PROFESSOR,
-  GET_SUMMARY
+  GET_SUMMARY,
+  GET_PROFESSOR_REGISTER_TOKEN
 } from './urls'
 
 class ProfessorService {
@@ -68,6 +69,12 @@ class ProfessorService {
 
   getGameSummaryStats() {
     return axiosApiGet(GET_SUMMARY).catch((error) => {
+      throw error
+    })
+  }
+
+  getRegistrationToken() {
+    return axiosApiGet(GET_PROFESSOR_REGISTER_TOKEN).catch((error) => {
       throw error
     })
   }
