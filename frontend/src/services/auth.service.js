@@ -25,7 +25,7 @@ class AuthService {
     localStorage.removeItem('user')
   }
 
-  register({ firstName, lastName, email, password, invitationCode, accountType, heroType, index }) {
+  register({ firstName, lastName, email, password, accountType, heroType, index, token }) {
     const body = {
       firstName: firstName,
       lastName: lastName,
@@ -35,9 +35,11 @@ class AuthService {
     }
 
     if (accountType === AccountType.STUDENT) {
-      body.invitationCode = invitationCode
+      body.invitationCode = token
       body.heroType = heroType
       body.indexNumber = +index
+    } else if (accountType === AccountType.PROFESSOR) {
+      body.professorRegistrationToken = token
     }
 
     return axios
