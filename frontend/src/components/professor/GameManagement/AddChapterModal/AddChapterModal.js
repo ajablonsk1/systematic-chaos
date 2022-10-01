@@ -64,8 +64,7 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
       sizeY: sizes[1],
       posX: chapterDetails.posX,
       posY: chapterDetails.posY,
-      //PLACEHOLDER!
-      imageId: 1
+      imageId: chapterDetails.imageId
     }
   }
 
