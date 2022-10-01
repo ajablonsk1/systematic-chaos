@@ -54,7 +54,7 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
 
   const modalTitle = refetchChapterList ? 'Dodaj nowy rozdział' : 'Edytuj rozdział'
   const actionTitle = refetchChapterList ? 'Dodaj rozdział' : 'Zapisz zmiany'
-
+  const successText = refetchChapterList ? 'Pomyślnie zmieniono dane rozdziału' : 'Pomyślnie dodano nowy rozdział'
   let currentActivityValues = null
 
   if (chapterDetails) {
@@ -138,29 +138,40 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
                     return errors
                   }}
                   onSubmit={(values, { setSubmitting }) => {
+                    const sentValues = {
+                      name: values.name,
+                      sizeX: values.sizeX,
+                      sizeY: values.sizeY,
+                      imageId: values.imageId,
+                      posX: values.posX,
+                      posY: values.posY
+                    }
+
+                    const afterSendActions = () => {
+                      setSubmitting(false)
+                      setShowModal(false)
+                      setIsSuccessModalOpen(true)
+                      setErrorMessage('')
+                      if (refetchChapterList) {
+                        refetchChapterList()
+                      }
+                    }
+
                     if (!chapterDetails) {
-                      ChapterService.sendNewChapterData({
-                        name: values.name,
-                        sizeX: values.sizeX,
-                        sizeY: values.sizeY,
-                        imageId: values.imageId,
-                        posX: values.posX,
-                        posY: values.posY
-                      })
-                        .then(() => {
-                          setSubmitting(false)
-                          setShowModal(false)
-                          setIsSuccessModalOpen(true)
-                          setErrorMessage('')
-                          if (refetchChapterList) {
-                            refetchChapterList()
-                          }
-                        })
+                      ChapterService.sendNewChapterData(sentValues)
+                        .then(() => afterSendActions())
                         .catch((error) => {
                           setSubmitting(false)
                           setErrorMessage(error.response.data.message)
                         })
                     }
+
+                    ChapterService.sendEditChapterData({ chapterId: chapterDetails.id, editionForm: sentValues })
+                      .then(() => afterSendActions())
+                      .catch((error) => {
+                        setSubmitting(false)
+                        setErrorMessage(error.response.data.message)
+                      })
                   }}
                 >
                   {({ isSubmitting, values, handleSubmit, setFieldValue }) => {
@@ -236,7 +247,7 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
         <SuccessModal
           isSuccessModalOpen={isSuccessModalOpen}
           setIsSuccessModalOpen={setIsSuccessModalOpen}
-          text='Pomyślnie dodano nowy rozdział'
+          text={successText}
         />
       </>
     )
