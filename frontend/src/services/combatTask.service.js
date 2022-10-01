@@ -1,9 +1,14 @@
 import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiSendFile } from '../utils/axios'
-import { COMBAT_TASK_GET_INFO, COMBAT_TASK_REMOVE_FILE, COMBAT_TASK_RESULT_FILE, COMBAT_TASK_SEND_ANSWER } from './urls'
+import {
+  GET_TASK_FILE,
+  DELETE_TASK_FILE_RESULT_FILE,
+  GET_TASK_FILE_RESULT_FILE,
+  POST_TASK_FILE_RESULT_FILE
+} from './urls'
 
 class CombatTaskService {
   getCombatTask(taskId) {
-    return axiosApiGet(COMBAT_TASK_GET_INFO, {
+    return axiosApiGet(GET_TASK_FILE, {
       fileTaskId: taskId
     }).catch((error) => {
       throw error
@@ -11,13 +16,13 @@ class CombatTaskService {
   }
 
   getCombatFile(fileApiId) {
-    return axiosApiDownloadFile(COMBAT_TASK_RESULT_FILE, {
+    return axiosApiDownloadFile(GET_TASK_FILE_RESULT_FILE, {
       fileId: fileApiId
     }).catch(() => {})
   }
 
   removeCombatTaskFile(taskId, index) {
-    return axiosApiDelete(COMBAT_TASK_REMOVE_FILE, {
+    return axiosApiDelete(DELETE_TASK_FILE_RESULT_FILE, {
       fileTaskId: taskId,
       index: index
     }).catch((error) => {
@@ -26,7 +31,7 @@ class CombatTaskService {
   }
 
   saveCombatTaskAnswer(taskId, openAnswer, fileName, fileBlob) {
-    return axiosApiSendFile(COMBAT_TASK_SEND_ANSWER, {
+    return axiosApiSendFile(POST_TASK_FILE_RESULT_FILE, {
       fileTaskId: taskId,
       openAnswer: openAnswer,
       fileName: fileName,
