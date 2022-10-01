@@ -4,10 +4,12 @@ import ProfileCard from '../../student/Profile/ProfileCard'
 import EditPasswordModal from '../../student/Profile/EditPasswordModal'
 import UserService from '../../../services/user.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import ProfessorService from '../../../services/professor.service'
 
 function ProfessorSettings(props) {
   const [userData, setUserData] = useState(undefined)
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
+  const [registrationToken, setRegistrationToken] = useState(undefined)
 
   useEffect(() => {
     UserService.getUserData()
@@ -16,6 +18,16 @@ function ProfessorSettings(props) {
       })
       .catch(() => {
         setUserData(null)
+      })
+  }, [])
+
+  useEffect(() => {
+    ProfessorService.getRegistrationToken()
+      .then((response) => {
+        setRegistrationToken(response)
+      })
+      .catch(() => {
+        setRegistrationToken(null)
       })
   }, [])
 
@@ -58,6 +70,7 @@ function ProfessorSettings(props) {
         <Col md={6}>
           <ProfileCard header={'Informacje o profilu'} body={userInfoBody} />
         </Col>
+
         <Col md={6}>
           <ProfileCard
             header={'Zmień hasło'}
@@ -65,6 +78,12 @@ function ProfessorSettings(props) {
             showButton
             buttonCallback={() => setIsEditPasswordModalOpen(true)}
           />
+        </Col>
+      </Row>
+
+      <Row className={'p-0 m-0 py-2'}>
+        <Col>
+          <ProfileCard header={'Kod dostępu dla prowadzącego'} body={<p>{registrationToken}</p>} />
         </Col>
       </Row>
 

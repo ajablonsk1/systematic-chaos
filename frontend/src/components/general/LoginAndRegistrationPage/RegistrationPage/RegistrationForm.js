@@ -17,12 +17,12 @@ function RegistrationForm(props) {
     firstName: '',
     lastName: '',
     email: '',
+    token: '',
     password: '',
     passwordRepeat: ''
   }
   if (props.isStudent) {
     initialValues.index = ''
-    initialValues.invitationCode = ''
     initialValues.heroType = ''
   }
 
@@ -30,7 +30,9 @@ function RegistrationForm(props) {
     setCharacter(event.target.value)
   }
 
-  useEffect(() => setErrorMessage(props.message), [props.message])
+  useEffect(() => {
+    setErrorMessage(props.message)
+  }, [props.message])
 
   return (
     <Formik
@@ -39,13 +41,13 @@ function RegistrationForm(props) {
         const errors = {}
         if (!values.firstName) errors.firstName = FIELD_REQUIRED
         if (!values.lastName) errors.lastName = FIELD_REQUIRED
+        if (!values.token) errors.token = FIELD_REQUIRED
 
         errors.email = validateEmail(values.email)
         errors.password = validatePassword(values.password)
         errors.passwordRepeat = validateConfirmPassword(values.password, values.passwordRepeat)
 
         if (props.isStudent) {
-          if (!values.invitationCode) errors.invitationCode = FIELD_REQUIRED
           errors.index = validateIndex(values.index)
         }
 

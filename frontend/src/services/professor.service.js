@@ -7,7 +7,8 @@ import {
   PROF_FEEDBACK,
   ADD_BONUS_POINTS,
   GET_STUDENT_POINTS_PROFESSOR,
-  GET_GAME_SUMMARY_STATS
+  GET_GAME_SUMMARY_STATS,
+  GET_REGISTRATION_TOKEN
 } from './urls'
 
 class ProfessorService {
@@ -68,6 +69,12 @@ class ProfessorService {
 
   getGameSummaryStats() {
     return axiosApiGet(GET_GAME_SUMMARY_STATS).catch((error) => {
+      throw error
+    })
+  }
+
+  getRegistrationToken() {
+    return axiosApiGet(GET_REGISTRATION_TOKEN).catch((error) => {
       throw error
     })
   }
