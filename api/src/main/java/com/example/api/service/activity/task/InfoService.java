@@ -103,16 +103,24 @@ public class InfoService {
         editImageUrls(info, infoForm.getImageUrls());
     }
 
-    private void editImageUrls(Info info, List<String> newUrls) {
-        List<Url> result = new LinkedList<>();
-        for (String newUrl: newUrls) {
-            if (info.getImageUrls()
-                    .stream()
-                    .anyMatch(oldUrl -> oldUrl.getUrl().equals(newUrl))
-            ) {
+    private void editImageUrls(Info info, List<String> newUrlsString) {
+        List<Url> remainingUrls = info.getImageUrls()
+                .stream()
+                .filter(oldUrl -> newUrlsString.stream().anyMatch(newUrl -> oldUrl.getUrl().equals(newUrl)))
+                .toList();
+        List<Url> newUrls = newUrlsString
+                .stream()
+                .filter(newUrlString -> remainingUrls.stream().noneMatch(remainingUrl -> remainingUrl.getUrl().equals(newUrlString)))
+                .map(newUrlString -> {
+                    Url newUrl = new Url();
+                    newUrl.setUrl(newUrlString);
+                    return newUrl;
+                })
+                .toList();
+        urlRepo.saveAll(newUrls);
+        remainingUrls.addAll(newUrls);
+        info.setImageUrls(remainingUrls);
 
-            }
-        }
     }
 
 
