@@ -3,9 +3,10 @@ import { ExportButton, GradesTable } from './GradeListAndExportStyles'
 import { Form } from 'react-bootstrap'
 import { debounce } from 'lodash/function'
 import ExportModal from './ExportModal'
-import GroupService from '../../../api/services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
+import { useGetStudentsWithGroupAllQuery } from '../../../api/hooks/userController.hooks'
+import { useGetGroupStudentsQuery } from '../../../api/hooks/groupController.hooks'
 
 export default function UsersTable(props) {
   const [usersList, setUsersList] = useState(undefined)
@@ -15,32 +16,28 @@ export default function UsersTable(props) {
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const [isModalVisible, setModalVisible] = useState(false)
 
+  const allStudentsData = useGetStudentsWithGroupAllQuery({ skip: props.groupId && props.groupName })
+  const groupStudentsData = useGetGroupStudentsQuery(props.groupId, { skip: !(props.groupId && props.groupName) })
+
   useEffect(() => {
-    if (props.groupId && props.groupName) {
-      GroupService.getGroupStudents(props.groupId)
-        .then((response) => {
-          const responseWithGroupName = response?.map((student) => {
-            return { ...student, groupName: props.groupName }
-          })
-          setUsersList(responseWithGroupName)
-          setUsers(responseWithGroupName)
-        })
-        .catch(() => {
-          setUsers(null)
-          setUsersList(null)
-        })
-    } else {
-      GroupService.getAllStudents()
-        .then((response) => {
-          setUsersList(response)
-          setUsers([...response])
-        })
-        .catch(() => {
-          setUsers(null)
-          setUsersList(null)
-        })
+    if (allStudentsData.data) {
+      setUsersList(allStudentsData.data)
+      setUsers([...allStudentsData.data])
     }
-  }, [props])
+
+    // eslint-disable-next-line
+  }, [allStudentsData.isSuccess])
+
+  useEffect(() => {
+    if (groupStudentsData.data) {
+      const responseWithGroupName = groupStudentsData.data?.map((student) => {
+        return { ...student, groupName: props.groupName }
+      })
+      setUsersList(responseWithGroupName)
+      setUsers(responseWithGroupName)
+    }
+    // eslint-disable-next-line
+  }, [groupStudentsData.isSuccess])
 
   useEffect(() => {
     setButtonDisabled(usersToExportIds.length === 0)
@@ -104,7 +101,7 @@ export default function UsersTable(props) {
             ) : (
               <tr>
                 <td colSpan='100%' className={'text-center'}>
-                  <p>{users == null ? ERROR_OCCURRED : 'Brak członków'}</p>
+                  <p>{allStudentsData.isError || groupStudentsData.isError ? ERROR_OCCURRED : 'Brak członków'}</p>
                 </td>
               </tr>
             )}

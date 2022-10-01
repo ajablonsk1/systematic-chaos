@@ -3,9 +3,10 @@ import { GameCardOptionPick } from '../../general/GameCardStyles'
 import { TableContainer } from './ParticipantsStyles'
 import ChangeGroupModal from './ChangeGroupModal'
 import { Button } from 'react-bootstrap'
-import GroupService from '../../../api/services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import BonusPointsModal from './BonusPointsModal'
+import { useGetStudentsWithGroupAllQuery } from '../../../api/hooks/userController.hooks'
+import { useGetGroupStudentsQuery } from '../../../api/hooks/groupController.hooks'
 
 function ParticipantsTable(props) {
   const [changeGroupModalOpen, setChangeGroupModalOpen] = useState(false)
@@ -13,30 +14,29 @@ function ParticipantsTable(props) {
   const [chosenStudent, setChosenStudent] = useState()
   const [studentsList, setStudentsList] = useState([])
 
-  // "if (!modalOpen)" is here because this useEffect is triggered
-  // when we have finished group change process and closed this modal
+  const allStudentsData = useGetStudentsWithGroupAllQuery({
+    skip: props.groupId && props.groupName
+  })
+  const groupStudentsData = useGetGroupStudentsQuery(props.groupId, {
+    skip: !(props.groupId && props.groupName)
+  })
+
   useEffect(() => {
-    if (!changeGroupModalOpen) {
-      if (!props.groupId || !props.groupName) {
-        GroupService.getAllStudents()
-          .then((response) => setStudentsList([...response]))
-          .catch(() => {
-            setStudentsList(null)
-          })
-      } else {
-        GroupService.getGroupStudents(props.groupId)
-          .then((response) => {
-            const responseWithGroupName = response?.map((student) => {
-              return { ...student, groupName: props.groupName }
-            })
-            setStudentsList(responseWithGroupName)
-          })
-          .catch(() => {
-            setStudentsList(null)
-          })
-      }
+    if (allStudentsData.data) {
+      setStudentsList([...allStudentsData.data])
     }
-  }, [props, changeGroupModalOpen])
+    // eslint-disable-next-line
+  }, [allStudentsData.isSuccess])
+
+  useEffect(() => {
+    if (groupStudentsData.data) {
+      const responseWithGroupName = groupStudentsData.data?.map((student) => {
+        return { ...student, groupName: props.groupName }
+      })
+      setStudentsList(responseWithGroupName)
+    }
+    // eslint-disable-next-line
+  }, [groupStudentsData.isSuccess])
 
   return (
     <GameCardOptionPick style={{ maxHeight: '90vh', overflowY: 'auto' }}>
@@ -82,7 +82,7 @@ function ParticipantsTable(props) {
           ) : (
             <tr>
               <td colSpan='100%' className={'text-center'}>
-                <p>{studentsList == null ? ERROR_OCCURRED : 'Brak członków'}</p>
+                <p>{allStudentsData.isError || groupStudentsData.isError ? ERROR_OCCURRED : 'Brak członków'}</p>
               </td>
             </tr>
           )}

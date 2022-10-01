@@ -1,9 +1,11 @@
-import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiSendFile } from '../../utils/axios'
+import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiPost, axiosApiSendFile } from '../../utils/axios'
 import {
   GET_TASK_FILE,
   DELETE_TASK_FILE_RESULT_FILE,
   GET_TASK_FILE_RESULT_FILE,
-  POST_TASK_FILE_RESULT_FILE
+  POST_TASK_FILE_RESULT_FILE,
+  GET_TASK_FILE_CREATE,
+  POST_TASK_FILE_CREATE
 } from '../urls'
 
 class CombatTaskService {
@@ -36,6 +38,21 @@ class CombatTaskService {
       openAnswer: openAnswer,
       fileName: fileName,
       file: fileBlob
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getFileTaskJson() {
+    return axiosApiGet(GET_TASK_FILE_CREATE).catch((error) => {
+      throw error
+    })
+  }
+
+  setFileTaskJson(chapterId, form) {
+    return axiosApiPost(POST_TASK_FILE_CREATE, {
+      chapterId: chapterId,
+      form: form
     }).catch((error) => {
       throw error
     })

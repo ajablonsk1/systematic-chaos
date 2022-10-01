@@ -30,7 +30,7 @@ export const useQuery = ({ requestData = undefined, query, options = {} }) => {
     }
 
     // eslint-disable-next-line
-  }, [requestData, options.reload])
+  }, [requestData, options.reload, options.skip])
 
   return { ...queryDetails }
 }

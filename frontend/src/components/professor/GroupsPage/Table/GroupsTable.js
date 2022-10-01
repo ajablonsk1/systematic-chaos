@@ -1,26 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Spinner } from 'react-bootstrap'
-import GroupService from '../../../../api/services/group.service'
 import { TableContainer } from '../../../student/PointsPage/Tables/TableStyle'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
+import { useGetGroupInvitationCodeListQuery } from '../../../../api/hooks/groupController.hooks'
 
 export default function GroupsTable(props) {
-  const [tableContent, setTableContent] = useState(undefined)
-
-  const updateTableContent = () => {
-    GroupService.getGroups()
-      .then((response) => {
-        setTableContent(response)
-      })
-      .catch(() => setTableContent(null))
-  }
-
-  useEffect(() => {
-    updateTableContent()
-    props.setRefreshFunction(() => updateTableContent)
-    // I want this code to run ONLY ONCE, I don't care what this warning says, you are free to change it and see the consequences
-    // eslint-disable-next-line
-  }, [])
+  const groupsData = useGetGroupInvitationCodeListQuery({ reload: props.isGroupAdded })
 
   const TableBody = (tableContent) => {
     return tableContent.map((row, idx) => (
@@ -43,16 +28,21 @@ export default function GroupsTable(props) {
           </tr>
         </thead>
         <tbody>
-          {tableContent == null ? (
+          {groupsData.isFetching ? (
+            <tr>
+              <td colSpan={3}>
+                <Spinner animation={'border'} />
+              </td>
+            </tr>
+          ) : groupsData.isError ? (
             <tr>
               <td colSpan={3}>{ERROR_OCCURRED}</td>
             </tr>
           ) : (
-            TableBody(tableContent)
+            groupsData.isSuccess && TableBody(groupsData.data)
           )}
         </tbody>
       </TableContainer>
-      {tableContent === undefined && <Spinner animation={'border'} />}
     </>
   )
 }

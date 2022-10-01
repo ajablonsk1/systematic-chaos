@@ -3,14 +3,13 @@ import { Col, Row, Spinner, Table } from 'react-bootstrap'
 import ProfileCard from '../../student/Profile/ProfileCard'
 import EditPasswordModal from '../../student/Profile/EditPasswordModal'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import { useGetRegistrationTokenQuery } from '../../../api/hooks/UserController/useGetRegistrationTokenQuery'
-import { useGetUserCurrentQuery } from '../../../api/hooks/UserController/useGetUserCurrentQuery'
+import { useGetRegistrationTokenQuery, useGetUserCurrentQuery } from '../../../api/hooks/userController.hooks'
 
 function ProfessorSettings(props) {
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
 
   const registrationTokenData = useGetRegistrationTokenQuery()
-  const userData = useGetUserCurrentQuery({ skip: isEditPasswordModalOpen })
+  const userData = useGetUserCurrentQuery()
 
   const userInfoBody = useMemo(() => {
     if (userData.isFetching) {

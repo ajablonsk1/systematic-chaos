@@ -10,7 +10,7 @@ import GameLoaderModal from './GameLoader/GameLoaderModal'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { AddChapterModal } from './AddChapterModal/AddChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
-import { useGetChapterQuery } from '../../../api/hooks/ChapterController/useGetChapterQuery'
+import { useGetChapterQuery } from '../../../api/hooks/chapterController.hooks'
 
 export default function GameManagement() {
   const navigate = useNavigate()

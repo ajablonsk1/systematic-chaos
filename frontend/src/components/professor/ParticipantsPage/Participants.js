@@ -1,35 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Tab } from 'react-bootstrap'
 import ParticipantsTable from './ParticipantsTable'
 import { ParticipantsContent, TabsContainer } from './ParticipantsStyles'
-import GroupService from '../../../api/services/group.service'
 import Loader from '../../general/Loader/Loader'
+import { useGetGroupInvitationCodeListQuery } from '../../../api/hooks/groupController.hooks'
 
 function Participants() {
-  const [allGroups, setAllGroups] = useState(undefined)
-
-  useEffect(() => {
-    GroupService.getGroups()
-      .then((response) => setAllGroups(response))
-      .catch(() => setAllGroups(null))
-  }, [])
+  const groupsData = useGetGroupInvitationCodeListQuery()
 
   return (
     <ParticipantsContent>
-      {allGroups === undefined ? (
+      {groupsData.isFetching ? (
         <Loader />
+      ) : groupsData.isError ? (
+        <p>{groupsData.errorInfo}</p>
       ) : (
         <TabsContainer defaultActiveKey={'wszyscy'}>
           <Tab eventKey={'wszyscy'} title={'Wszyscy'}>
             <ParticipantsTable />
           </Tab>
 
-          {allGroups &&
-            allGroups.map((group, index) => (
-              <Tab key={index + group.name} title={group.name} eventKey={group.name}>
-                <ParticipantsTable groupId={group.id} groupName={group.name} />
-              </Tab>
-            ))}
+          {groupsData.data?.map((group, index) => (
+            <Tab key={index + group.name} title={group.name} eventKey={group.name}>
+              <ParticipantsTable groupId={group.id} groupName={group.name} />
+            </Tab>
+          ))}
         </TabsContainer>
       )}
     </ParticipantsContent>

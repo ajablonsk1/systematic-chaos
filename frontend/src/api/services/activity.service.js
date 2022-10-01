@@ -10,10 +10,8 @@ import {
   GET_TASK_GRAPH_CREATE,
   GET_INFO_CREATE,
   POST_TASK_REQUIREMENTS,
-  GET_SURVEY_CREATE,
   POST_TASK_GRAPH_CREATE,
   POST_TASK_FILE_CREATE,
-  POST_SURVEY_CREATE,
   POST_INFO_CREATE
 } from '../urls'
 
@@ -59,51 +57,6 @@ class ActivityService {
 
   setGraphTaskJson(chapterId, form) {
     return axiosApiPost(POST_TASK_GRAPH_CREATE, {
-      chapterId: chapterId,
-      form: form
-    }).catch((error) => {
-      throw error
-    })
-  }
-
-  getFileTaskJson() {
-    return axiosApiGet(GET_TASK_FILE_CREATE).catch((error) => {
-      throw error
-    })
-  }
-
-  setFileTaskJson(chapterId, form) {
-    return axiosApiPost(POST_TASK_FILE_CREATE, {
-      chapterId: chapterId,
-      form: form
-    }).catch((error) => {
-      throw error
-    })
-  }
-
-  getInfoTaskJson() {
-    return axiosApiGet(GET_INFO_CREATE).catch((error) => {
-      throw error
-    })
-  }
-
-  setInfoTaskJson(chapterId, form) {
-    return axiosApiPost(POST_INFO_CREATE, {
-      chapterId: chapterId,
-      form: form
-    }).catch((error) => {
-      throw error
-    })
-  }
-
-  getSurveyTaskJson() {
-    return axiosApiGet(GET_SURVEY_CREATE).catch((error) => {
-      throw error
-    })
-  }
-
-  setSurveyTaskJson(chapterId, form) {
-    return axiosApiPost(POST_SURVEY_CREATE, {
       chapterId: chapterId,
       form: form
     }).catch((error) => {

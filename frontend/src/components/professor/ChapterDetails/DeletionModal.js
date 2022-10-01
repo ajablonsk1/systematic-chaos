@@ -1,23 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Card, Modal } from 'react-bootstrap'
-import ChapterService from '../../../api/services/chapter.service'
 import { useNavigate } from 'react-router-dom'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { successToast } from '../../../utils/toasts'
+import { useDeleteChapterQuery } from '../../../api/hooks/chapterController.hooks'
 
 function DeletionModal(props) {
   const navigate = useNavigate()
-  const [errorMessage, setErrorMessage] = useState('')
+  const [isDeletionCalled, setIsDeletionCalled] = useState(false)
 
-  const deleteChapter = () => {
-    ChapterService.deleteChapter(props.chapterId)
-      .then(() => {
-        successToast('Rozdział usunięty pomyślnie.')
-        props.setModalOpen(false)
-        navigate(TeacherRoutes.GAME_MANAGEMENT.MAIN)
-      })
-      .catch((error) => setErrorMessage(error.response.data.message))
-  }
+  const deleteChapterData = useDeleteChapterQuery(props.chapterId, { skip: !isDeletionCalled })
+
+  useEffect(() => {
+    if (deleteChapterData.isSuccess) {
+      successToast('Rozdział usunięty pomyślnie.')
+      props.setModalOpen(false)
+      navigate(TeacherRoutes.GAME_MANAGEMENT.MAIN)
+      setIsDeletionCalled(false)
+    }
+
+    // eslint-disable-next-line
+  }, [deleteChapterData.isSuccess, props])
 
   return (
     <Modal show={props.showModal} onHide={() => props.setModalOpen(false)}>
@@ -30,10 +33,10 @@ function DeletionModal(props) {
           <Button className={'me-1'} variant={'secondary'} onClick={() => props.setModalOpen(false)}>
             Anuluj
           </Button>
-          <Button variant={'danger'} onClick={deleteChapter}>
+          <Button variant={'danger'} onClick={() => setIsDeletionCalled(true)}>
             Usuń
           </Button>
-          <p className={'text-danger'}>{errorMessage}</p>
+          {deleteChapterData.isError && <p className={'text-danger'}>{deleteChapterData.errorInfo}</p>}
         </Card.Footer>
       </Card>
     </Modal>

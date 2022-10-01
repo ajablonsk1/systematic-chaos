@@ -8,7 +8,7 @@ import {
 } from '../urls'
 
 class GroupService {
-  addGroup(groupName, groupKey) {
+  addGroup({ groupName, groupKey }) {
     return axiosApiPost(POST_GROUP, {
       name: groupName,
       invitationCode: groupKey

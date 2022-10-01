@@ -11,7 +11,7 @@ function GroupAdditionModal(props) {
           <Card.Title className={'text-center'}>Dodaj nową grupę.</Card.Title>
         </CardHeader>
         <Card.Body>
-          <GroupAdditionForm setModalOpen={props.setModalOpen} refreshFunction={props.refreshFunction} />
+          <GroupAdditionForm setModalOpen={props.setModalOpen} onSuccess={props.onSuccess} />
         </Card.Body>
       </Card>
     </Modal>

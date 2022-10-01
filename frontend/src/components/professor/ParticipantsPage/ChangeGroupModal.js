@@ -1,35 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Card, Form, Modal, Spinner } from 'react-bootstrap'
 import CardHeader from 'react-bootstrap/CardHeader'
 import Loader from '../../general/Loader/Loader'
 import GroupService from '../../../api/services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { SuccessModal } from '../SuccessModal'
+import { useGetGroupInvitationCodeListQuery } from '../../../api/hooks/groupController.hooks'
 
 function ChangeGroupModal(props) {
-  const [student, setStudent] = useState()
-  const [groups, setGroups] = useState([])
   const [newGroup, setNewGroup] = useState()
   const [isFetching, setIsFetching] = useState(false)
   const [successModalOpen, setSuccessModalOpen] = useState(false)
 
-  useEffect(() => setStudent(props.student), [props.student])
-  useEffect(() => {
-    GroupService.getGroups()
-      .then((response) => {
-        setGroups([...response])
-        setNewGroup(response?.find((group) => group.name === student?.groupName)) //defaultValue in select list
-      })
-      .catch(() => setGroups(null))
-  }, [student])
+  const groupData = useGetGroupInvitationCodeListQuery()
 
   const selectGroup = (event) => {
-    setNewGroup(groups.find((group) => group.name === event.target.value))
+    setNewGroup(groupData.data?.find((group) => group.name === event.target.value))
   }
 
   const submitChange = () => {
     setIsFetching(true)
-    GroupService.changeStudentGroup(student?.id, newGroup?.id)
+    GroupService.changeStudentGroup(props.student?.id, newGroup?.id)
       .then(() => {
         setIsFetching(false)
         props.setModalOpen(false)
@@ -48,28 +39,28 @@ function ChangeGroupModal(props) {
             <Card.Title>Zmiana grupy</Card.Title>
             <p>Zmień grupę wybranego studenta wybierając jego nową grupę z poniższej listy</p>
           </CardHeader>
-          {!student || groups === undefined ? (
+          {!props.student || groupData.isFetching ? (
             <Loader />
           ) : (
             <>
               <Card.Body>
-                {groups == null ? (
+                {groupData.isError ? (
                   <p className={'text-center text-danger h6'}>{ERROR_OCCURRED}</p>
                 ) : (
                   <>
                     <h6>
-                      Wybrany student: {student?.firstName} {student?.lastName}
+                      Wybrany student: {props.student?.firstName} {props.student?.lastName}
                     </h6>
                     <Form>
                       <span>Przypisz do grupy: </span>
-                      <select defaultValue={student?.groupName} onChange={selectGroup}>
-                        {groups.map((group) => (
+                      <select defaultValue={props.student?.groupName} onChange={selectGroup}>
+                        {groupData.data?.map((group) => (
                           <option key={group.id} value={group.name}>
                             {group.name}
                           </option>
                         ))}
                       </select>
-                    </Form>{' '}
+                    </Form>
                   </>
                 )}
               </Card.Body>
@@ -88,8 +79,8 @@ function ChangeGroupModal(props) {
       <SuccessModal
         isSuccessModalOpen={successModalOpen}
         setIsSuccessModalOpen={setSuccessModalOpen}
-        text={`Grupa studenta ${student?.firstName} ${student?.lastName}
-          została zmieniona pomyślnie z ${student?.groupName} na ${newGroup?.name}`}
+        text={`Grupa studenta ${props.student?.firstName} ${props.student?.lastName}
+          została zmieniona pomyślnie z ${props.student?.groupName} na ${newGroup?.name}`}
         headerText='Zmiana zakończona'
       />
     </>

@@ -7,7 +7,7 @@ import GroupAdditionModal from '../GroupAdditionPage/GroupAdditionModal'
 
 export default function Groups() {
   const [modalOpen, setModalOpen] = useState(false)
-  const [refreshFunction, setRefreshFunction] = useState(() => {})
+  const [isGroupAdded, setIsGroupAdded] = useState(false)
 
   return (
     <>
@@ -16,7 +16,7 @@ export default function Groups() {
           <Title>Grupy</Title>
         </Row>
         <Row className='m-3 w-100 px-3'>
-          <GroupsTable setRefreshFunction={setRefreshFunction} />
+          <GroupsTable isGroupAdded={isGroupAdded} />
         </Row>
         <Button
           style={{ position: 'absolute', top: 'calc(100% - 10px)', transform: 'translateY(-100%)' }}
@@ -27,7 +27,7 @@ export default function Groups() {
           Dodaj grupę
         </Button>
       </Content>
-      <GroupAdditionModal show={modalOpen} setModalOpen={setModalOpen} refreshFunction={refreshFunction} />
+      <GroupAdditionModal show={modalOpen} setModalOpen={setModalOpen} onSuccess={() => setIsGroupAdded(true)} />
     </>
   )
 }

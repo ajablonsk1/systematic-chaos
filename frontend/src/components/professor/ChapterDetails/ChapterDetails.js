@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState, useLayoutEffect } from 'react'
+import React, { useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Content } from '../../App/AppGeneralStyles'
 import {
@@ -21,10 +21,10 @@ import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
 import EditChapterModal from './EditChapterModal'
 import { getConfigJson } from '../GameManagement/GameLoader/mockData'
-import ChapterService from '../../../api/services/chapter.service'
 import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
+import { useGetChapterDetailsQuery } from '../../../api/hooks/chapterController.hooks'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -35,14 +35,16 @@ function ChapterDetails() {
   const [chosenActivityData, setChosenActivityData] = useState(null)
   const [isEditActivityModalOpen, setIsEditActivityModalOpen] = useState(false)
   const [isDeleteActivityModalOpen, setIsDeleteActivityModalOpen] = useState(false)
-  const [chapterDetails, setChapterDetails] = useState(undefined)
   const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false)
   const [mapContainerSize, setMapContainerSize] = useState({ x: 0, y: 0 })
+  const [isActivityAdded, setIsActivityAdded] = useState(false)
 
   const mapCardBody = useRef()
 
   const navigate = useNavigate()
   const location = useLocation()
+
+  const chapterDetailsData = useGetChapterDetailsQuery(chapterId, { reload: isActivityAdded })
 
   useLayoutEffect(() => {
     setMapContainerSize({
@@ -64,20 +66,6 @@ function ChapterDetails() {
       window.removeEventListener('resize', updateContainerSize)
     }
   }, [])
-
-  const getChapterDetails = useCallback(() => {
-    ChapterService.getChapterDetails(chapterId)
-      .then((response) => {
-        setChapterDetails(response)
-      })
-      .catch(() => {
-        setChapterDetails(null)
-      })
-  }, [chapterId])
-
-  useEffect(() => {
-    getChapterDetails()
-  }, [getChapterDetails])
 
   const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
@@ -121,16 +109,16 @@ function ChapterDetails() {
             <SummaryCard className={'h-100'}>
               <Card.Header>Podsumowanie rozdziału</Card.Header>
               <Card.Body className={'p-0'}>
-                {chapterDetails === undefined ? (
+                {chapterDetailsData.isFetching ? (
                   <Spinner animation={'border'}></Spinner>
-                ) : chapterDetails == null ? (
+                ) : chapterDetailsData.isError ? (
                   <p>{ERROR_OCCURRED}</p>
                 ) : (
                   <ListGroup>
-                    <ListGroupItem>Nazwa rozdziału: {chapterDetails.name}</ListGroupItem>
+                    <ListGroupItem>Nazwa rozdziału: {chapterDetailsData.data?.name}</ListGroupItem>
                     <ListGroupItem>
                       <Row className={'d-flex align-items-center'}>
-                        <Col sm={10}>Liczba dodanych aktywności: {chapterDetails.noActivities}</Col>
+                        <Col sm={10}>Liczba dodanych aktywności: {chapterDetailsData.data?.noActivities}</Col>
                         <Col sm={2}>
                           <FontAwesomeIcon
                             icon={openActivitiesDetailsList ? faArrowUp : faArrowDown}
@@ -143,17 +131,17 @@ function ChapterDetails() {
                       </Row>
                       <Collapse in={openActivitiesDetailsList}>
                         <div id='activities'>
-                          <div>Ekspedycje: {chapterDetails.noGraphTasks}</div>
-                          <div>Zadania bojowe: {chapterDetails.noFileTasks}</div>
-                          <div>Wytyczne: {chapterDetails.noInfoTasks}</div>
-                          <div>Wywiady: {chapterDetails.noSurveyTasks}</div>
+                          <div>Ekspedycje: {chapterDetailsData.data?.noGraphTasks}</div>
+                          <div>Zadania bojowe: {chapterDetailsData.data?.noFileTasks}</div>
+                          <div>Wytyczne: {chapterDetailsData.data?.noInfoTasks}</div>
+                          <div>Wywiady: {chapterDetailsData.data?.noSurveyTasks}</div>
                         </div>
                       </Collapse>
                     </ListGroupItem>
                     <ListGroupItem>
-                      Suma punktów możliwych do zdobycia w rozdziale: {chapterDetails.maxPoints}
+                      Suma punktów możliwych do zdobycia w rozdziale: {chapterDetailsData.data?.maxPoints}
                     </ListGroupItem>
-                    <ListGroupItem>Aktualny rozmiar mapy: {chapterDetails.mapSize}</ListGroupItem>
+                    <ListGroupItem>Aktualny rozmiar mapy: {chapterDetailsData.data?.mapSize}</ListGroupItem>
                     <ListGroupItem>
                       <Row className={'d-flex align-items-center'}>
                         <Col sm={10}>Warunki odblokowania kolejnego rozdziału:</Col>
@@ -189,20 +177,20 @@ function ChapterDetails() {
               <Card.Body className={'p-0'}>
                 <Table>
                   <tbody>
-                    {chapterDetails === undefined ? (
+                    {chapterDetailsData.isFetching ? (
                       <tr>
                         <td colSpan='100%' className={'text-center'}>
                           <Spinner animation={'border'} />
                         </td>
                       </tr>
-                    ) : chapterDetails == null || chapterDetails.mapTasks.length === 0 ? (
+                    ) : chapterDetailsData.isError || chapterDetailsData.data?.mapTasks.length === 0 ? (
                       <tr>
                         <td colSpan='100%' className={'text-center'}>
-                          <p>{chapterDetails == null ? ERROR_OCCURRED : 'Lista aktywności jest pusta'}</p>
+                          <p>{chapterDetailsData.isError ? ERROR_OCCURRED : 'Lista aktywności jest pusta'}</p>
                         </td>
                       </tr>
                     ) : (
-                      chapterDetails.mapTasks.map((activity, index) => (
+                      chapterDetailsData.data?.mapTasks.map((activity, index) => (
                         <OverlayTrigger
                           key={activity.title + index}
                           placement='top'
@@ -281,7 +269,7 @@ function ChapterDetails() {
         modalBody={
           <>
             Czy na pewno chcesz usunąć rozdział: <br />
-            <strong>{chapterDetails?.name}</strong>?
+            <strong>{chapterDetailsData.data?.name}</strong>?
           </>
         }
         chapterId={chapterId}
@@ -318,7 +306,7 @@ function ChapterDetails() {
         showModal={isAddActivityModalOpen}
         setShow={setIsAddActivityModalOpen}
         chapterId={chapterId}
-        onSuccess={getChapterDetails}
+        onSuccess={() => setIsActivityAdded(true)}
       />
     </Content>
   )

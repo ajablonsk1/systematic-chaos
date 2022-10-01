@@ -20,15 +20,15 @@ export const POST_REGISTER = BASE_URL + '/register'
 export const GET_USER_GROUP = BASE_URL + '/user/group'
 export const GET_USER_CURRENT = BASE_URL + '/user/current' // DONE
 export const GET_TOKEN_REFRESH = BASE_URL + '/token/refresh'
-export const GET_STUDENTS_WITH_GROUP_ALL = BASE_URL + '/students-with-group/all'
+export const GET_STUDENTS_WITH_GROUP_ALL = BASE_URL + '/students-with-group/all' // DONE
 export const GET_PROFESSOR_REGISTER_TOKEN = BASE_URL + '/professor/register/token' // DONE
 
 // Chapter Controller
 export const GET_CHAPTER = BASE_URL + '/chapter' // DONE
-export const PUT_CHAPTER_EDIT = GET_CHAPTER + '/edit'
+export const PUT_CHAPTER_EDIT = GET_CHAPTER + '/edit' // DONE
 export const POST_CHAPTER_CREATE = GET_CHAPTER + '/create' // DONE
-export const GET_CHAPTER_INFO = GET_CHAPTER + '/info'
-export const DELETE_CHAPTER = GET_CHAPTER + '/delete'
+export const GET_CHAPTER_INFO = GET_CHAPTER + '/info' // DONE
+export const DELETE_CHAPTER = GET_CHAPTER + '/delete' // DONE
 
 // Task Result Controller
 export const TASK_RESULT = BASE_URL + '/task/result'
@@ -72,9 +72,9 @@ export const GET_TASK_FILE_CREATE = GET_TASK_FILE + '/create'
 export const POST_TASK_FILE_CREATE = GET_TASK_FILE + '/create'
 
 // Survey Controller
-export const GET_SURVEY = BASE_URL + '/survey'
+export const GET_SURVEY = BASE_URL + '/survey' //DONE
 export const GET_SURVEY_CREATE = GET_SURVEY + '/create'
-export const POST_SURVEY_CREATE = GET_SURVEY + '/create'
+export const POST_SURVEY_CREATE = GET_SURVEY + '/create' // DONE
 
 // Question Controller
 const GET_QUESTION = BASE_URL + '/question' // TODO: unused endpoint
@@ -82,16 +82,16 @@ export const POST_QUESTION_ACTION = GET_QUESTION + '/action'
 export const GET_QUESTION_INFO = GET_QUESTION + '/get-info'
 
 // Info Controller
-export const GET_INFO = BASE_URL + '/info'
-export const GET_INFO_CREATE = GET_INFO + '/create'
-export const POST_INFO_CREATE = GET_INFO + '/create'
+export const GET_INFO = BASE_URL + '/info' // DONE
+export const GET_INFO_CREATE = GET_INFO + '/create' // DONE
+export const POST_INFO_CREATE = GET_INFO + '/create' // DONE
 
 // Group Controller
-export const POST_GROUP = BASE_URL + '/group'
-export const GET_GROUP_USERS = POST_GROUP + '/users'
-export const GET_GROUP_STUDENTS = POST_GROUP + '/students'
-export const GET_GROUP_PROFESSORS = POST_GROUP + '/professors'
-export const GET_GROUP_INVITATION_CODE_LIST = POST_GROUP + '/invitation-code/list'
+export const POST_GROUP = BASE_URL + '/group' // DONE
+export const GET_GROUP_USERS = POST_GROUP + '/users' // DONE
+export const GET_GROUP_STUDENTS = POST_GROUP + '/students' // DONE
+export const GET_GROUP_PROFESSORS = POST_GROUP + '/professors' // DONE
+export const GET_GROUP_INVITATION_CODE_LIST = POST_GROUP + '/invitation-code/list' // DONE
 
 // User Feedback Controller
 export const POST_FEEDBACK_USER = BASE_URL + '/feedback/user'

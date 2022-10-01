@@ -1,11 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Formik } from 'formik'
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { FIELD_REQUIRED } from '../../../utils/constants'
-import GroupService from '../../../api/services/group.service'
+import { usePostGroupQuery } from '../../../api/hooks/groupController.hooks'
 
 export default function GroupAdditionForm(props) {
+  const [formData, setFormData] = useState(null)
+  const postGroupData = usePostGroupQuery(formData, { skip: !formData })
+
+  useEffect(() => {
+    if (postGroupData.isSuccess) {
+      props.setModalOpen(false)
+      props.onSuccess()
+    }
+  }, [postGroupData.isSuccess, props])
+
   return (
     // todo: think about general Form component that can be extended
     <Formik
@@ -20,11 +30,7 @@ export default function GroupAdditionForm(props) {
         return errors
       }}
       onSubmit={(values, { setSubmitting }) => {
-        GroupService.addGroup(values.name, values.code).then(() => {
-          props.refreshFunction()
-          props.setModalOpen(false)
-        })
-
+        setFormData({ groupName: values.name, groupKey: values.code })
         setSubmitting(false)
       }}
     >

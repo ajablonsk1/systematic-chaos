@@ -5,7 +5,7 @@ import { ERROR_OCCURRED, getHeroName, HeroImg } from '../../../utils/constants'
 import ProfileCard from './ProfileCard'
 import EditIndexModal from './EditIndexModal'
 import EditPasswordModal from './EditPasswordModal'
-import { useGetUserCurrentQuery } from '../../../api/hooks/UserController/useGetUserCurrentQuery'
+import { useGetUserCurrentQuery } from '../../../api/hooks/userController.hooks'
 
 function Profile() {
   const [isEditIndexModalOpen, setIsEditIndexModalOpen] = useState(false)

@@ -5,7 +5,7 @@ import { ERROR_OCCURRED } from '../../../utils/constants'
 import { getGraphElements } from '../../general/Graph/graphHelper'
 import ChapterMapModal from './ChapterMapModal'
 import GameMapContainer from './GameMapContainer'
-import { useGetChapterQuery } from '../../../api/hooks/ChapterController/useGetChapterQuery'
+import { useGetChapterQuery } from '../../../api/hooks/chapterController.hooks'
 
 function GameMap() {
   const [graphElements, setGraphElements] = useState(null)

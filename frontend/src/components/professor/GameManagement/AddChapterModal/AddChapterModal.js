@@ -29,7 +29,7 @@ import { getGraphElements } from '../../../general/Graph/graphHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import FormikContext from '../../../general/FormikContext/FormikContext'
-import { usePostChapterCreateQuery } from '../../../../api/hooks/ChapterController/usePostChapterCreateQuery'
+import { usePostChapterCreateQuery } from '../../../../api/hooks/chapterController.hooks'
 
 const MAP_HEIGHT = 500
 const MAP_WIDTH = 1.5 * MAP_HEIGHT
