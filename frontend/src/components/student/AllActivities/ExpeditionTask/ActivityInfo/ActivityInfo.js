@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { Content } from '../../../../App/AppGeneralStyles'
 import ActivityContent from './ActivityContent'
 import Loader from '../../../../general/Loader/Loader'
-import ExpeditionService from '../../../../../services/expedition.service'
+import ExpeditionService from '../../../../../api/services/expedition.service'
 import { ERROR_OCCURRED } from '../../../../../utils/constants'
 
 export default function ActivityInfo() {

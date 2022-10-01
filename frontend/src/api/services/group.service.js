@@ -1,11 +1,11 @@
-import { axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiGet, axiosApiPost } from '../../utils/axios'
 import {
   POST_GROUP,
   GET_STUDENTS_WITH_GROUP_ALL,
   GET_GROUP_INVITATION_CODE_LIST,
   POST_USER_GROUP,
   GET_GROUP_STUDENTS
-} from './urls'
+} from '../urls'
 
 class GroupService {
   addGroup(groupName, groupKey) {

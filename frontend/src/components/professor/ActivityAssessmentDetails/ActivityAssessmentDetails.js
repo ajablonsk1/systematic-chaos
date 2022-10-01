@@ -10,7 +10,7 @@ import {
 } from './ActivityAssesmentDetailsStyles'
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import ProfessorService from '../../../services/professor.service'
+import ProfessorService from '../../../api/services/professor.service'
 import Loader from '../../general/Loader/Loader'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import ActivityAssessmentStudentFileService from './ActivityAssessmentStudentFileService'

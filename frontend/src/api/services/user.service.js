@@ -1,6 +1,6 @@
-import { axiosApiGet } from '../utils/axios'
-import { GET_USER_CURRENT } from './urls'
-import { parseJwt } from '../utils/Api'
+import { axiosApiGet } from '../../utils/axios'
+import { GET_USER_CURRENT } from '../urls'
+import { parseJwt } from '../../utils/Api'
 
 class UserService {
   getUser() {

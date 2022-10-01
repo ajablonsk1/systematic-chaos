@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { Col } from 'react-bootstrap'
 import ActivityListItem from './ActivityListItem'
-import ProfessorService from '../../../services/professor.service'
+import ProfessorService from '../../../api/services/professor.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 

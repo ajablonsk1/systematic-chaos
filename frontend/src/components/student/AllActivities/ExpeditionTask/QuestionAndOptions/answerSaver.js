@@ -1,5 +1,5 @@
 import { QuestionType } from '../../../../../utils/constants'
-import ExpeditionService from '../../../../../services/expedition.service'
+import ExpeditionService from '../../../../../api/services/expedition.service'
 import { EXPEDITION_STATUS } from '../../../../../utils/constants'
 
 const getAnswerForm = (questionType, userAnswer) => {

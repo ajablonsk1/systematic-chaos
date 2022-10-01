@@ -1,33 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
-import ChapterService from '../../../services/chapter.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { getGraphElements } from '../../general/Graph/graphHelper'
 import ChapterMapModal from './ChapterMapModal'
 import GameMapContainer from './GameMapContainer'
+import { useGetChapterQuery } from '../../../api/hooks/ChapterController/useGetChapterQuery'
 
 function GameMap() {
-  const [chaptersList, setChaptersList] = useState(undefined)
   const [graphElements, setGraphElements] = useState(null)
   const [isChapterMapOpen, setIsChapterMapOpen] = useState(false)
   const [chosenChapterId, setChosenChapterId] = useState(null)
 
-  useEffect(() => {
-    ChapterService.getChaptersList()
-      .then((response) => {
-        setChaptersList(response)
-      })
-      .catch(() => {
-        setChaptersList(null)
-      })
-  }, [])
+  const chapterData = useGetChapterQuery()
 
   useEffect(() => {
-    if (chaptersList) {
-      const graphInfo = chaptersList.map((chapter) => ({
+    if (chapterData.data) {
+      const graphInfo = chapterData.data.map((chapter) => ({
         id: chapter.id,
-        targetIds: chapter.id === Math.max(...chaptersList.map((c) => c.id)) ? [] : [chapter.id + 1],
+        targetIds: chapter.id === Math.max(...chapterData.data.map((c) => c.id)) ? [] : [chapter.id + 1],
         position: { x: chapter.posX, y: chapter.posY },
         edgeClass: 'gameMapEdge',
         nodeClass: 'gameMapNode'
@@ -35,7 +26,7 @@ function GameMap() {
 
       setGraphElements(getGraphElements(graphInfo))
     }
-  }, [chaptersList])
+  }, [chapterData.data])
 
   useEffect(() => {
     if (chosenChapterId) {
@@ -44,21 +35,21 @@ function GameMap() {
   }, [chosenChapterId])
 
   const getNodesLabels = useCallback(() => {
-    if (chaptersList) {
-      return chaptersList.map((chapter) => ({
+    if (chapterData.data) {
+      return chapterData.data.map((chapter) => ({
         id: chapter.id,
         label: chapter.name
       }))
     }
     return null
-  }, [chaptersList])
+  }, [chapterData.data])
 
   return (
     <>
       <Content className={'vh-100'}>
-        {chaptersList === undefined ? (
+        {chapterData.isFetching ? (
           <Loader />
-        ) : chaptersList == null ? (
+        ) : chapterData.isError ? (
           <p>{ERROR_OCCURRED}</p>
         ) : (
           <>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Spinner, Table } from 'react-bootstrap'
 import { ERROR_OCCURRED, getActivityTypeName } from '../../../utils/constants'
-import ActivityService from '../../../services/activity.service'
+import ActivityService from '../../../api/services/activity.service'
 
 function ActivitiesTable(props) {
   const [activitiesList, setActivitiesList] = useState(undefined)

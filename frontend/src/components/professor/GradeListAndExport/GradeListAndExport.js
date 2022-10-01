@@ -3,7 +3,7 @@ import UsersTable from './UsersTable'
 import { GradesContent } from './GradeListAndExportStyles'
 import { TabsContainer } from './GradeListAndExportStyles'
 import { useEffect, useState } from 'react'
-import GroupService from '../../../services/group.service'
+import GroupService from '../../../api/services/group.service'
 import Loader from '../../general/Loader/Loader'
 
 export default function GradeListAndExport() {

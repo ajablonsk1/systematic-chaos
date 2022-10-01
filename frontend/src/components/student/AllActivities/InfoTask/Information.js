@@ -4,7 +4,7 @@ import { Activity, ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '.
 import { Content } from '../../../App/AppGeneralStyles'
 import { InformationTable } from './InformationStyles'
 import Loader from '../../../general/Loader/Loader'
-import InfoTaskService from '../../../../services/infoTask.service'
+import InfoTaskService from '../../../../api/services/infoTask.service'
 import { Card, Col, Row } from 'react-bootstrap'
 import { CustomCard } from '../../GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'

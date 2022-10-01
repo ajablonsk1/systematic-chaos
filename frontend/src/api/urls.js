@@ -18,15 +18,15 @@ export const POST_USER_INDEX = BASE_URL + '/user/index/set'
 export const POST_USER_GROUP = BASE_URL + '/user/group/set'
 export const POST_REGISTER = BASE_URL + '/register'
 export const GET_USER_GROUP = BASE_URL + '/user/group'
-export const GET_USER_CURRENT = BASE_URL + '/user/current'
+export const GET_USER_CURRENT = BASE_URL + '/user/current' // DONE
 export const GET_TOKEN_REFRESH = BASE_URL + '/token/refresh'
 export const GET_STUDENTS_WITH_GROUP_ALL = BASE_URL + '/students-with-group/all'
-export const GET_PROFESSOR_REGISTER_TOKEN = BASE_URL + '/professor/register/token'
+export const GET_PROFESSOR_REGISTER_TOKEN = BASE_URL + '/professor/register/token' // DONE
 
 // Chapter Controller
-export const GET_CHAPTER = BASE_URL + '/chapter'
+export const GET_CHAPTER = BASE_URL + '/chapter' // DONE
 export const PUT_CHAPTER_EDIT = GET_CHAPTER + '/edit'
-export const POST_CHAPTER_CREATE = GET_CHAPTER + '/create'
+export const POST_CHAPTER_CREATE = GET_CHAPTER + '/create' // DONE
 export const GET_CHAPTER_INFO = GET_CHAPTER + '/info'
 export const DELETE_CHAPTER = GET_CHAPTER + '/delete'
 

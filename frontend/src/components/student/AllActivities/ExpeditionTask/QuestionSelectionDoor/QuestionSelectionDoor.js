@@ -1,7 +1,7 @@
 import { Door, DoorColumn } from './QuestionSelectionDoorStyles'
 import { Button, Row } from 'react-bootstrap'
 import { Content } from '../../../../App/AppGeneralStyles'
-import ExpeditionService from '../../../../../services/expedition.service'
+import ExpeditionService from '../../../../../api/services/expedition.service'
 import { ERROR_OCCURRED, EXPEDITION_STATUS } from '../../../../../utils/constants'
 
 function generateDoor(question, noDoors, onDoorClick) {

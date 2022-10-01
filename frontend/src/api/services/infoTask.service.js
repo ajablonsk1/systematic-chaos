@@ -1,5 +1,5 @@
-import { axiosApiGet } from '../utils/axios'
-import { GET_INFO } from './urls'
+import { axiosApiGet } from '../../utils/axios'
+import { GET_INFO } from '../urls'
 
 class InfoTaskService {
   getInformation(infoId) {

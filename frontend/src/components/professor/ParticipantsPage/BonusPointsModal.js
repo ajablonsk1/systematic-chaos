@@ -3,7 +3,7 @@ import { Button, Col, Container, Form, Modal, ModalBody, ModalFooter, ModalHeade
 import { FIELD_REQUIRED, NUMBER_FROM_RANGE } from '../../../utils/constants'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { Formik } from 'formik'
-import ProfessorService from '../../../services/professor.service'
+import ProfessorService from '../../../api/services/professor.service'
 
 function BonusPointsModal(props) {
   const [isFinishModalOpen, setIsFinishModalOpen] = useState(false)

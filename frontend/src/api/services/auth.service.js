@@ -1,8 +1,8 @@
 import axios from 'axios'
 import QueryString from 'qs'
-import { AccountType } from '../utils/userRole'
-import { GET_TOKEN_REFRESH, POST_LOGIN, POST_REGISTER, PUT_PASSWORD_EDITION } from './urls'
-import { axiosApiPut } from '../utils/axios'
+import { AccountType } from '../../utils/userRole'
+import { GET_TOKEN_REFRESH, POST_LOGIN, POST_REGISTER, PUT_PASSWORD_EDITION } from '../urls'
+import { axiosApiPut } from '../../utils/axios'
 
 class AuthService {
   login({ email, password }) {

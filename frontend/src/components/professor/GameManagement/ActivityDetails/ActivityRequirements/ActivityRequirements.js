@@ -8,7 +8,7 @@ import { onInputChange, onMultiSelectChange } from './formHelpers'
 import 'react-datepicker/dist/react-datepicker.css'
 import pl from 'date-fns/locale/pl'
 import CreatableInput from '../../../../general/CreatableInput/CreatableInput'
-import ActivityService from '../../../../../services/activity.service'
+import ActivityService from '../../../../../api/services/activity.service'
 import { successToast } from '../../../../../utils/toasts'
 
 registerLocale('pl', pl)

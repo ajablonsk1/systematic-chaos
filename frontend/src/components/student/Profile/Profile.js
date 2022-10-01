@@ -5,72 +5,69 @@ import { ERROR_OCCURRED, getHeroName, HeroImg } from '../../../utils/constants'
 import ProfileCard from './ProfileCard'
 import EditIndexModal from './EditIndexModal'
 import EditPasswordModal from './EditPasswordModal'
-import UserService from '../../../services/user.service'
+import { useGetUserCurrentQuery } from '../../../api/hooks/UserController/useGetUserCurrentQuery'
 
 function Profile() {
-  const [userData, setUserData] = useState(undefined)
   const [isEditIndexModalOpen, setIsEditIndexModalOpen] = useState(false)
   const [indexNumber, setIndexNumber] = useState(undefined)
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
 
+  const userData = useGetUserCurrentQuery()
+
   useEffect(() => {
-    UserService.getUserData()
-      .then((response) => {
-        setUserData(response)
-        setIndexNumber(response.indexNumber)
-      })
-      .catch(() => {
-        setUserData(null)
-      })
-  }, [])
+    setIndexNumber(userData.data?.indexNumber)
+  }, [userData.data])
 
   const userInfoBody = useMemo(() => {
-    if (userData === undefined) {
+    if (userData.isFetching) {
       return <Spinner animation={'border'} />
     }
-    if (userData == null) {
+
+    if (userData.isError) {
       return <p className={'text-center'}>{ERROR_OCCURRED}</p>
     }
 
-    const tableHeaders = [
-      { text: 'Imię', value: userData.firstName },
-      { text: 'Nazwisko', value: userData.lastName },
-      { text: 'Email', value: userData.email },
-      { text: 'Numer indeksu', value: indexNumber },
-      { text: 'Grupa zajęciowa', value: userData.group.name },
-      { text: 'Typ bohatera', value: getHeroName(userData.heroType) }
-    ]
-    return (
-      <Table>
-        <tbody>
-          {tableHeaders.map((header, index) => (
-            <tr key={index + Date.now()}>
-              <td>
-                <strong>{header.text}</strong>
-              </td>
-              <td>{header.value}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    )
-  }, [userData, indexNumber])
+    if (userData.data) {
+      const tableHeaders = [
+        { text: 'Imię', value: userData.data.firstName },
+        { text: 'Nazwisko', value: userData.data.lastName },
+        { text: 'Email', value: userData.data.email },
+        { text: 'Numer indeksu', value: indexNumber },
+        { text: 'Grupa zajęciowa', value: userData.data.group.name },
+        { text: 'Typ bohatera', value: getHeroName(userData.data.heroType) }
+      ]
+      return (
+        <Table>
+          <tbody>
+            {tableHeaders.map((header, index) => (
+              <tr key={index + Date.now()}>
+                <td>
+                  <strong>{header.text}</strong>
+                </td>
+                <td>{header.value}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )
+    }
+  }, [indexNumber, userData])
 
   const heroInfoCard = useMemo(() => {
-    const cardBody =
-      userData === undefined ? (
-        <Spinner animation={'border'} />
-      ) : userData == null ? (
-        <p>{ERROR_OCCURRED}</p>
-      ) : (
-        <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg[userData.heroType]} alt={'Your hero'} />
-      )
+    const cardBody = userData.isFetching ? (
+      <Spinner animation={'border'} />
+    ) : userData.isError ? (
+      <p>{ERROR_OCCURRED}</p>
+    ) : (
+      <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg[userData.data?.heroType]} alt={'Your hero'} />
+    )
+
     return (
       <ProfileCard
         header={
           <>
             <span>Wybrana postać: </span>
-            <strong>{userData && getHeroName(userData.heroType)}</strong>
+            <strong>{userData.data && getHeroName(userData.data.heroType)}</strong>
           </>
         }
         body={cardBody}

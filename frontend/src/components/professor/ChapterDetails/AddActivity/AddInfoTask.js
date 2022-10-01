@@ -1,5 +1,5 @@
 import React from 'react'
-import ActivityService from '../../../../services/activity.service'
+import ActivityService from '../../../../api/services/activity.service'
 import AddActivity from './AddActivity'
 
 function AddInfoTask(props) {

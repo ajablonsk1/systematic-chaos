@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { TableContainer } from './TableStyle'
-import StudentService from '../../../../services/student.service'
+import StudentService from '../../../../api/services/student.service'
 import { Spinner } from 'react-bootstrap'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import moment from 'moment'

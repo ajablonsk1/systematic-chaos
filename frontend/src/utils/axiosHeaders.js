@@ -1,4 +1,4 @@
-import authHeader from '../services/auth-header'
+import authHeader from '../api/auth-header'
 
 export const validHeader = (params) => ({
   headers: {

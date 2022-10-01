@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Card, Form, Modal, Spinner } from 'react-bootstrap'
 import CardHeader from 'react-bootstrap/CardHeader'
 import Loader from '../../general/Loader/Loader'
-import GroupService from '../../../services/group.service'
+import GroupService from '../../../api/services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { SuccessModal } from '../SuccessModal'
 

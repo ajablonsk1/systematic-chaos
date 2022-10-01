@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import authService from '../services/auth.service'
+import authService from '../api/services/auth.service'
 import { logout } from '../actions/auth'
 import { Button } from 'react-bootstrap'
 

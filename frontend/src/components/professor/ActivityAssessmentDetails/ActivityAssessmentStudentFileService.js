@@ -2,7 +2,7 @@ import { Col, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
 import download from 'downloadjs'
-import CombatTaskService from '../../../services/combatTask.service'
+import CombatTaskService from '../../../api/services/combatTask.service'
 import { ActivityAssessmentStudentFileRow } from './ActivityAssesmentDetailsStyles'
 
 export default function ActivityAssessmentStudentFileService({ activityResponseInfo }) {

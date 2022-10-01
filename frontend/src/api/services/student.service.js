@@ -5,8 +5,8 @@ import {
   GET_USER_GROUP,
   GET_POINTS_ALL_TOTAL,
   GET_DASHBOARD
-} from './urls'
-import { axiosApiGet, axiosApiPost } from '../utils/axios'
+} from '../urls'
+import { axiosApiGet, axiosApiPost } from '../../utils/axios'
 
 class StudentService {
   getUserGroup() {

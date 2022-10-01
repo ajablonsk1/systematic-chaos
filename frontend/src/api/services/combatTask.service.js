@@ -1,10 +1,10 @@
-import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiSendFile } from '../utils/axios'
+import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiSendFile } from '../../utils/axios'
 import {
   GET_TASK_FILE,
   DELETE_TASK_FILE_RESULT_FILE,
   GET_TASK_FILE_RESULT_FILE,
   POST_TASK_FILE_RESULT_FILE
-} from './urls'
+} from '../urls'
 
 class CombatTaskService {
   getCombatTask(taskId) {

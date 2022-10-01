@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Spinner } from 'react-bootstrap'
-import GroupService from '../../../../services/group.service'
+import GroupService from '../../../../api/services/group.service'
 import { TableContainer } from '../../../student/PointsPage/Tables/TableStyle'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 

@@ -25,7 +25,7 @@ import { faFaceMeh, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg
 import { IconColumn } from './IconColumn'
 import { FormButton, FormikRange, FormikTextarea } from './SurveyTaskStyle'
 import { useEffect, useState } from 'react'
-import SurveyTaskService from '../../../../services/surveyTask.service'
+import SurveyTaskService from '../../../../api/services/surveyTask.service'
 
 export default function FeedbackTask() {
   const location = useLocation()

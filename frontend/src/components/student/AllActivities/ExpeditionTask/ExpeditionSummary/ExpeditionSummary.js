@@ -7,7 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Loader from '../../../../general/Loader/Loader'
 
 import { Content } from '../../../../App/AppGeneralStyles'
-import ExpeditionService from '../../../../../services/expedition.service'
+import ExpeditionService from '../../../../../api/services/expedition.service'
 import { getTimer } from '../../../../../utils/storageManager'
 import { GeneralRoutes, StudentRoutes } from '../../../../../routes/PageRoutes'
 

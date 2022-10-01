@@ -1,4 +1,4 @@
-import { axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiGet, axiosApiPost } from '../../utils/axios'
 import {
   GET_QUESTION_INFO,
   GET_TASK_GRAPH_MAP,
@@ -11,7 +11,7 @@ import {
   GET_TASK_GRAPH_RESULT_POINTS_CLOSED,
   GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_CLOSED,
   GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_OPENED
-} from './urls'
+} from '../urls'
 
 class ExpeditionService {
   // returns all info about activity

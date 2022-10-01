@@ -3,7 +3,7 @@ import { ExportButton, GradesTable } from './GradeListAndExportStyles'
 import { Form } from 'react-bootstrap'
 import { debounce } from 'lodash/function'
 import ExportModal from './ExportModal'
-import GroupService from '../../../services/group.service'
+import GroupService from '../../../api/services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
 

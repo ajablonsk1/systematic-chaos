@@ -1,4 +1,4 @@
-import AuthService from '../services/auth.service'
+import AuthService from '../api/services/auth.service'
 import { LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT, REGISTER_FAIL, REGISTER_SUCCESS, SET_MESSAGE } from './types'
 import { GeneralRoutes } from '../routes/PageRoutes'
 

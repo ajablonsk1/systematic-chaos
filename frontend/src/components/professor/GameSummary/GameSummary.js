@@ -22,7 +22,7 @@ import {
   Tooltip
 } from 'chart.js'
 import { lineChartConfig } from './lineChartHelper'
-import ProfessorService from '../../../services/professor.service'
+import ProfessorService from '../../../api/services/professor.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED, getActivityTypeName } from '../../../utils/constants'
 

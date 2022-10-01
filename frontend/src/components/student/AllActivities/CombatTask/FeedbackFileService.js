@@ -2,7 +2,7 @@ import download from 'downloadjs'
 import { Row, Col, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
-import CombatTaskService from '../../../../services/combatTask.service'
+import CombatTaskService from '../../../../api/services/combatTask.service'
 
 export default function FeedbackFileService({ feedbackFile }) {
   const downloadFile = () => {

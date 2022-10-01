@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Card, Modal, Spinner } from 'react-bootstrap'
 import CardHeader from 'react-bootstrap/CardHeader'
-import ProfessorService from '../../../services/professor.service'
+import ProfessorService from '../../../api/services/professor.service'
 import download from 'downloadjs'
 import moment from 'moment'
 import ActivitiesTable from './ActivitiesTable'

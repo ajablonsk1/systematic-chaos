@@ -9,7 +9,7 @@ import { getChartConfig, getChartDetails } from '../../../general/chartHelper'
 import StatsCard from './StatsCard'
 import { Activity, ERROR_OCCURRED } from '../../../../utils/constants'
 import PercentageCircle from '../../../student/PointsPage/ChartAndStats/PercentageCircle'
-import ActivityService from '../../../../services/activity.service'
+import ActivityService from '../../../../api/services/activity.service'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 

@@ -21,7 +21,7 @@ import {
   SANE_MAP_FIELDCOUNT_LIMIT
 } from '../../../../utils/constants'
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
-import ChapterService from '../../../../services/chapter.service'
+import ChapterService from '../../../../api/services/chapter.service'
 import { SuccessModal } from '../../SuccessModal'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import GameMapContainer from '../../../student/GameMapPage/GameMapContainer'
@@ -29,13 +29,13 @@ import { getGraphElements } from '../../../general/Graph/graphHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import FormikContext from '../../../general/FormikContext/FormikContext'
+import { usePostChapterCreateQuery } from '../../../../api/hooks/ChapterController/usePostChapterCreateQuery'
 
 const MAP_HEIGHT = 500
 const MAP_WIDTH = 1.5 * MAP_HEIGHT
 
-export function AddChapterModal({ showModal, setShowModal, refetchChapterList, isLoaded }) {
+export function AddChapterModal({ showModal, setShowModal, isLoaded, setIsChapterAdded }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
   const [graphPreviewNode, setGraphPreviewNode] = useState({
     id: 0,
@@ -43,8 +43,20 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
     label: '',
     size: Math.min(MAP_HEIGHT / 8, MAP_WIDTH / 10) / 5
   })
+  const [formData, setFormData] = useState(null)
 
   const formikContextRef = useRef()
+
+  const postChapterData = usePostChapterCreateQuery(formData, { skip: !formData })
+
+  useEffect(() => {
+    if (postChapterData.isSuccess && !!formData) {
+      setShowModal(false)
+      setIsSuccessModalOpen(true)
+      setFormData(null)
+      setIsChapterAdded(true)
+    }
+  }, [formData, postChapterData.isSuccess, setIsChapterAdded, setShowModal])
 
   // we need this memo to avoid re-rendering the layout too many times
   //
@@ -114,8 +126,8 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                     if (!values.posY || values.posY <= 0 || values.posY > 8) errors.posY = NUMBER_FROM_RANGE(1, 8)
                     return errors
                   }}
-                  onSubmit={(values, { setSubmitting }) => {
-                    ChapterService.sendNewChapterData({
+                  onSubmit={(values) => {
+                    setFormData({
                       name: values.name,
                       sizeX: values.sizeX,
                       sizeY: values.sizeY,
@@ -123,20 +135,9 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                       posX: values.posX,
                       posY: values.posY
                     })
-                      .then(() => {
-                        setSubmitting(false)
-                        setShowModal(false)
-                        setIsSuccessModalOpen(true)
-                        setErrorMessage('')
-                        refetchChapterList()
-                      })
-                      .catch((error) => {
-                        setSubmitting(false)
-                        setErrorMessage(error.response.data.message)
-                      })
                   }}
                 >
-                  {({ isSubmitting, values, handleSubmit, setFieldValue }) => {
+                  {({ values, handleSubmit, setFieldValue }) => {
                     return (
                       <Form onSubmit={handleSubmit}>
                         <FormikContext ref={formikContextRef} />
@@ -173,13 +174,13 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                               </Button>
                               <Button
                                 type='submit'
-                                disabled={isSubmitting}
+                                disabled={postChapterData.isFetching}
                                 style={{
                                   backgroundColor: 'var(--button-green)',
                                   borderColor: 'var(--button-green)'
                                 }}
                               >
-                                {isSubmitting ? (
+                                {postChapterData.isFetching ? (
                                   <Spinner as='span' animation='border' size='sm' role='status' />
                                 ) : (
                                   <span>Dodaj rozdział</span>
@@ -192,7 +193,9 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                     )
                   }}
                 </Formik>
-                {errorMessage && <p className={'text-center text-danger mt-2'}>{errorMessage}</p>}
+                {postChapterData.isError && (
+                  <p className={'text-center text-danger mt-2'}>{postChapterData.errorInfo}</p>
+                )}
               </Tab>
               <Tab eventKey={'preview'} title={'Podgląd mapy gry'}>
                 <GameMapContainer

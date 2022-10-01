@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { FIELD_REQUIRED } from '../../../utils/constants'
-import GroupService from '../../../services/group.service'
+import GroupService from '../../../api/services/group.service'
 
 export default function GroupAdditionForm(props) {
   return (

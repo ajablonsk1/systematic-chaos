@@ -3,7 +3,7 @@ import { GraphContainer, GraphTrigger } from './InfoContainerStyle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDiagramProject } from '@fortawesome/free-solid-svg-icons'
 import Graph from '../../../../general/Graph/Graph'
-import ExpeditionService from '../../../../../services/expedition.service'
+import ExpeditionService from '../../../../../api/services/expedition.service'
 import { getGraphElements, getNodeColor } from '../../../../general/Graph/graphHelper'
 import { GRAPH_NODE_BASIC_SIZE, GRAPH_NODE_SPECIAL_SIZE } from '../../../../../utils/constants'
 

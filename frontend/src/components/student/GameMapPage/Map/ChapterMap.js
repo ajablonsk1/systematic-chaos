@@ -3,7 +3,7 @@ import { Row } from 'react-bootstrap'
 import Loader from '../../../general/Loader/Loader'
 import { Map } from '../GameMapStyles'
 import ActivityField from './ActivityField'
-import ActivityService from '../../../../services/activity.service'
+import ActivityService from '../../../../api/services/activity.service'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 
 function getActivity(map, x, y) {

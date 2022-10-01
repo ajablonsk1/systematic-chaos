@@ -3,7 +3,7 @@ import { GameCardOptionPick } from '../../general/GameCardStyles'
 import { TableContainer } from './ParticipantsStyles'
 import ChangeGroupModal from './ChangeGroupModal'
 import { Button } from 'react-bootstrap'
-import GroupService from '../../../services/group.service'
+import GroupService from '../../../api/services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import BonusPointsModal from './BonusPointsModal'
 

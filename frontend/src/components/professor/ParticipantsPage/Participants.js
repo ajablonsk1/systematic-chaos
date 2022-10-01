@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Tab } from 'react-bootstrap'
 import ParticipantsTable from './ParticipantsTable'
 import { ParticipantsContent, TabsContainer } from './ParticipantsStyles'
-import GroupService from '../../../services/group.service'
+import GroupService from '../../../api/services/group.service'
 import Loader from '../../general/Loader/Loader'
 
 function Participants() {

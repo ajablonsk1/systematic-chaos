@@ -4,7 +4,7 @@ import { SmallDivider } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import download from 'downloadjs'
-import CombatTaskService from '../../../../services/combatTask.service'
+import CombatTaskService from '../../../../api/services/combatTask.service'
 
 export default function FileService({ task, setFile, setFileName, setIsFetching, isFetching, isRevieved }) {
   const fileInput = useRef(null)

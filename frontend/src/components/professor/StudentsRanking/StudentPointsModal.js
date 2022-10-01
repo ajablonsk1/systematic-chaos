@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import LastPointsTable from '../../student/PointsPage/Tables/LastPointsTable'
-import ProfessorService from '../../../services/professor.service'
+import ProfessorService from '../../../api/services/professor.service'
 
 function StudentPointsModal(props) {
   const [studentPoints, setStudentPoints] = useState(undefined)

@@ -1,5 +1,5 @@
-import { parseJwt } from '../utils/Api'
-import { axiosApiGet, axiosApiGetFile, axiosApiPost, axiosApiSendFile } from '../utils/axios'
+import { parseJwt } from '../../utils/Api'
+import { axiosApiGet, axiosApiGetFile, axiosApiPost, axiosApiSendFile } from '../../utils/axios'
 import {
   POST_TASK_RESULT_CSV,
   GET_TASK_EVALUATE_ALL,
@@ -9,7 +9,7 @@ import {
   GET_POINTS_ALL_LIST_PROFESSOR,
   GET_SUMMARY,
   GET_PROFESSOR_REGISTER_TOKEN
-} from './urls'
+} from '../urls'
 
 class ProfessorService {
   getUser() {

@@ -11,7 +11,7 @@ import { ActivityCol, CustomOffcanvas } from './ActivityFieldStyle'
 import { Button, OffcanvasBody, OffcanvasHeader, OffcanvasTitle, Spinner } from 'react-bootstrap'
 import moment from 'moment'
 import { Tooltip } from '../../BadgesPage/BadgesStyle'
-import ActivityService from '../../../../services/activity.service'
+import ActivityService from '../../../../api/services/activity.service'
 
 export default function ActivityField({
   activity,

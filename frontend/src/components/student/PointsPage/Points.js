@@ -5,7 +5,7 @@ import PercentageCircle from './ChartAndStats/PercentageCircle'
 import LastPointsTable from './Tables/LastPointsTable'
 import { TabsContainer } from './PointsPageStyle'
 import BonusPointsTable from './Tables/BonusPointsTable'
-import StudentService from '../../../services/student.service'
+import StudentService from '../../../api/services/student.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 
 export default function Points() {

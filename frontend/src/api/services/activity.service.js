@@ -1,4 +1,4 @@
-import { axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiGet, axiosApiPost } from '../../utils/axios'
 import {
   GET_MAP,
   GET_TASK_FILE_CREATE,
@@ -15,7 +15,7 @@ import {
   POST_TASK_FILE_CREATE,
   POST_SURVEY_CREATE,
   POST_INFO_CREATE
-} from './urls'
+} from '../urls'
 
 class ActivityService {
   getActivityMap(mapId) {

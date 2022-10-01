@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Card, Modal } from 'react-bootstrap'
-import ChapterService from '../../../services/chapter.service'
+import ChapterService from '../../../api/services/chapter.service'
 import { useNavigate } from 'react-router-dom'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { successToast } from '../../../utils/toasts'

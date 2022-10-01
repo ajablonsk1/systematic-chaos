@@ -1,4 +1,4 @@
-import { axiosApiDelete, axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiDelete, axiosApiGet, axiosApiPost } from '../../utils/axios'
 import {
   GET_CHAPTER_INFO,
   GET_CHAPTER,
@@ -6,7 +6,7 @@ import {
   GET_FILE_CHAPTER_IMAGES,
   GET_FILE,
   DELETE_CHAPTER
-} from './urls'
+} from '../urls'
 
 class ChapterService {
   getChaptersList() {

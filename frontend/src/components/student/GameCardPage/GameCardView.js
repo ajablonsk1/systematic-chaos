@@ -8,7 +8,7 @@ import {
   LastActivitiesContent,
   PersonalRankingInfoContent
 } from './gameCardContents'
-import StudentService from '../../../services/student.service'
+import StudentService from '../../../api/services/student.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 

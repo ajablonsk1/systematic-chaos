@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { Col, Container, Row, Spinner, Table } from 'react-bootstrap'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
@@ -6,33 +7,20 @@ import ManagementCard from './ManagementCard'
 import { useNavigate } from 'react-router-dom'
 import { TableBodyRow } from './TableStyles'
 import GameLoaderModal from './GameLoader/GameLoaderModal'
-import { useEffect, useState } from 'react'
-import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { AddChapterModal } from './AddChapterModal/AddChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
+import { useGetChapterQuery } from '../../../api/hooks/ChapterController/useGetChapterQuery'
 
 export default function GameManagement() {
   const navigate = useNavigate()
 
   const [showConfigModal, setShowConfigModal] = useState(false)
   const [showAddChapterModal, setShowAddChapterModal] = useState(false)
-  const [chapterList, setChapterList] = useState(undefined)
   const [shouldLoadAddChapterModal, setShouldLoadAddChapterModal] = useState(false)
+  const [isChapterAdded, setIsChapterAdded] = useState(false)
 
-  useEffect(() => {
-    fetchChaptersList()
-  }, [])
-
-  const fetchChaptersList = () => {
-    ChapterService.getChaptersList()
-      .then((response) => {
-        setChapterList(response)
-      })
-      .catch(() => {
-        setChapterList(null)
-      })
-  }
+  const chapterData = useGetChapterQuery({ reload: isChapterAdded })
 
   const goToChapterDetailsView = (chapterName, chapterId) => {
     navigate(TeacherRoutes.GAME_MANAGEMENT.CHAPTER + `/${chapterName}/${chapterId}`)
@@ -68,20 +56,20 @@ export default function GameManagement() {
                   </tr>
                 </thead>
                 <tbody>
-                  {chapterList === undefined ? (
+                  {chapterData.isFetching ? (
                     <tr>
                       <td colSpan='100%' className={'text-center'}>
                         <Spinner animation={'border'} />
                       </td>
                     </tr>
-                  ) : chapterList == null || chapterList.length === 0 ? (
+                  ) : chapterData.isError || chapterData.data?.length === 0 ? (
                     <tr>
                       <td colSpan='100%' className={'text-center'}>
-                        <p>{chapterList == null ? ERROR_OCCURRED : 'Lista rozdziałów jest pusta'}</p>
+                        <p>{chapterData.isError ? ERROR_OCCURRED : 'Lista rozdziałów jest pusta'}</p>
                       </td>
                     </tr>
                   ) : (
-                    chapterList.map((chapter, index) => (
+                    chapterData.data?.map((chapter, index) => (
                       <TableBodyRow key={index} onClick={() => goToChapterDetailsView(chapter.name, chapter.id)}>
                         <td>{chapter.name}</td>
                         <td className='text-center'>{chapter.noActivities}</td>
@@ -152,8 +140,8 @@ export default function GameManagement() {
       <AddChapterModal
         showModal={showAddChapterModal}
         setShowModal={setShowAddChapterModal}
-        refetchChapterList={fetchChaptersList}
         isLoaded={shouldLoadAddChapterModal}
+        setIsChapterAdded={setIsChapterAdded}
       />
     </Content>
   )

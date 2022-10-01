@@ -1,5 +1,5 @@
-import { axiosApiGet } from '../utils/axios'
-import { GET_SURVEY } from './urls'
+import { axiosApiGet } from '../../utils/axios'
+import { GET_SURVEY } from '../urls'
 
 class SurveyTaskService {
   getSurveyTask(taskId) {

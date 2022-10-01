@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap'
 import { validateIndex } from '../../general/LoginAndRegistrationPage/RegistrationPage/validators'
 import { debounce } from 'lodash/function'
-import StudentService from '../../../services/student.service'
+import StudentService from '../../../api/services/student.service'
 
 function EditIndexModal(props) {
   const [validatorMessage, setValidatorMessage] = useState(null)

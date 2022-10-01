@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { logout } from '../../../actions/auth'
 import { GeneralRoutes } from '../../../routes/PageRoutes'
 import { SET_EXPANDED } from '../../../actions/types'
-import ProfessorService from '../../../services/professor.service'
+import ProfessorService from '../../../api/services/professor.service'
 import { isStudent } from '../../../utils/storageManager'
 
 function Sidebar(props) {

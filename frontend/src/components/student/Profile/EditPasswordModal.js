@@ -6,7 +6,7 @@ import {
   validatePassword
 } from '../../general/LoginAndRegistrationPage/RegistrationPage/validators'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
-import AuthService from '../../../services/auth.service'
+import AuthService from '../../../api/services/auth.service'
 
 function EditPasswordModal(props) {
   const [errorMessage, setErrorMessage] = useState('')

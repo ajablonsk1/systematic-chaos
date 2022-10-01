@@ -3,7 +3,7 @@ import { Content } from '../../App/AppGeneralStyles'
 import Ranking from '../../general/Ranking/Ranking'
 import { debounce } from 'lodash/function'
 import { Form } from 'react-bootstrap'
-import RankingService from '../../../services/ranking.service'
+import RankingService from '../../../api/services/ranking.service'
 import StudentPointsModal from './StudentPointsModal'
 
 function StudentsRanking() {
