@@ -1,9 +1,15 @@
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
-import { GROUP, GET_ALL_STUDENTS, GET_GROUPS, GET_GROUP_STUDENTS, SET_STUDENT_GROUP } from './urls'
+import {
+  POST_GROUP,
+  GET_STUDENTS_WITH_GROUP_ALL,
+  GET_GROUP_INVITATION_CODE_LIST,
+  POST_USER_GROUP,
+  GET_GROUP_STUDENTS
+} from './urls'
 
 class GroupService {
-  addGroup(groupName, groupKey) {
-    return axiosApiPost(GROUP, {
+  addGroup({ groupName, groupKey }) {
+    return axiosApiPost(POST_GROUP, {
       name: groupName,
       invitationCode: groupKey
     }).catch((error) => {
@@ -11,13 +17,13 @@ class GroupService {
     })
   }
   getGroups() {
-    return axiosApiGet(GET_GROUPS).catch((error) => {
+    return axiosApiGet(GET_GROUP_INVITATION_CODE_LIST).catch((error) => {
       throw error
     })
   }
 
   getAllStudents() {
-    return axiosApiGet(GET_ALL_STUDENTS).catch((error) => {
+    return axiosApiGet(GET_STUDENTS_WITH_GROUP_ALL).catch((error) => {
       throw error
     })
   }
@@ -29,7 +35,7 @@ class GroupService {
   }
 
   changeStudentGroup(studentId, newGroupId) {
-    return axiosApiPost(SET_STUDENT_GROUP, {
+    return axiosApiPost(POST_USER_GROUP, {
       studentId: studentId,
       newGroupId: newGroupId
     }).catch((error) => {

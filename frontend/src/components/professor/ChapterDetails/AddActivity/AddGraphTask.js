@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import ActivityService from '../../../../services/activity.service'
 import { Button, Spinner, Tab, Tabs } from 'react-bootstrap'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
@@ -7,6 +6,7 @@ import { getGraphElements, getNodeColor } from '../../../general/Graph/graphHelp
 import Graph from '../../../general/Graph/Graph'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
+import ExpeditionService from '../../../../services/expedition.service'
 
 function AddGraphTask(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
@@ -27,7 +27,7 @@ function AddGraphTask(props) {
   }, [placeholderJson])
 
   useEffect(() => {
-    ActivityService.getGraphTaskJson()
+    ExpeditionService.getGraphTaskJson()
       .then((response) => {
         setPlaceholderJson(response)
       })
@@ -41,7 +41,7 @@ function AddGraphTask(props) {
     const form = jsonEditorRef.current?.getJson()
 
     if (form) {
-      ActivityService.setGraphTaskJson(props.chapterId, form)
+      ExpeditionService.setGraphTaskJson(props.chapterId, form)
         .then(() => {
           props.onSuccess()
         })
