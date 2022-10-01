@@ -61,10 +61,10 @@ export default function FeedbackTask() {
               <div>
                 <h5>{task.description}</h5>
                 <SmallDivider />
-                <h5>Punkty do zdobycia: {task.points}</h5>
+                <h5>Punkty do zdobycia: {task.experience}</h5>
                 <p>
                   Przyznane punkty: <strong>nie</strong> {/*// todo: info from endpoint*/}
-                </p>{' '}
+                </p>
                 <SmallDivider />
               </div>
               <FullDivider />
