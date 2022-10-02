@@ -41,14 +41,7 @@ const EMPTY_INITIAL_VALUES = {
   imageId: ''
 }
 
-export function AddOrEditChapterModal({
-  showModal,
-  setShowModal,
-  isLoaded,
-  refetchChapterList,
-  chapterDetails,
-  chapterMapRef
-}) {
+export function AddOrEditChapterModal({ showModal, setShowModal, isLoaded, afterSuccessfulChange, chapterDetails }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -157,12 +150,8 @@ export function AddOrEditChapterModal({
                       setShowModal(false)
                       setIsSuccessModalOpen(true)
                       setErrorMessage('')
-                      if (refetchChapterList) {
-                        refetchChapterList()
-                      }
-                      if (chapterMapRef) {
-                        console.log('I am here')
-                        chapterMapRef.loadActivityMap()
+                      if (afterSuccessfulChange) {
+                        afterSuccessfulChange()
                       }
                     }
 

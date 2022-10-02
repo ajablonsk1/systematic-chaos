@@ -299,6 +299,7 @@ function ChapterDetails() {
         setShowModal={setEditChapterModalOpen}
         isLoaded={shouldLoadEditChapterModal}
         chapterDetails={chapterDetails}
+        afterSuccessfulChange={getChapterDetails}
       />
 
       <EditActivityModal

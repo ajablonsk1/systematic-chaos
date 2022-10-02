@@ -152,7 +152,7 @@ export default function GameManagement() {
       <AddOrEditChapterModal
         showModal={showAddChapterModal}
         setShowModal={setShowAddChapterModal}
-        refetchChapterList={fetchChaptersList}
+        afterSuccessfulChange={fetchChaptersList}
         isLoaded={shouldLoadAddChapterModal}
       />
     </Content>
