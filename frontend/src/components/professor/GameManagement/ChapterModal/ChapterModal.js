@@ -29,6 +29,7 @@ import { getGraphElements } from '../../../general/Graph/graphHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import FormikContext from '../../../general/FormikContext/FormikContext'
+import { useCallback } from 'react'
 
 const MAP_HEIGHT = 500
 const MAP_WIDTH = 1.5 * MAP_HEIGHT
@@ -51,25 +52,11 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
     label: '',
     size: Math.min(MAP_HEIGHT / 8, MAP_WIDTH / 10) / 5
   })
+  const [activityValues, setActivityValues] = useState(EMPTY_INITIAL_VALUES)
 
   const modalTitle = chapterDetails ? 'Edytuj rozdział' : 'Dodaj nowy rozdział'
   const actionTitle = chapterDetails ? 'Zapisz zmiany' : 'Dodaj rozdział'
   const successText = chapterDetails ? 'Pomyślnie zmieniono dane rozdziału' : 'Pomyślnie dodano nowy rozdział'
-  let currentActivityValues = null
-
-  if (chapterDetails) {
-    const { name, mapSize, posX, posY, imageId } = chapterDetails
-    const [sizeX, sizeY] = mapSize.split(' x ')
-
-    currentActivityValues = {
-      name: name,
-      sizeX: +sizeX,
-      sizeY: +sizeY,
-      posX: posX,
-      posY: posY,
-      imageId: imageId
-    }
-  }
 
   const formikContextRef = useRef()
 
@@ -80,8 +67,55 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
   // updates the component only on shallow comparison dependency change should be enough
   const MemoImagesGallery = React.memo(ImagesGallery)
 
+  const afterSendAction = useCallback(
+    (setSubmitting) => {
+      setSubmitting(false)
+      setShowModal(false)
+      setIsSuccessModalOpen(true)
+      setErrorMessage('')
+      if (onSuccess) {
+        onSuccess()
+      }
+    },
+    [onSuccess, setShowModal]
+  )
+
+  const sendAction = useCallback(
+    (setSubmitting, editedValues, afterSendAction) => {
+      if (!chapterDetails) {
+        ChapterService.sendNewChapterData(editedValues)
+          .then(() => afterSendAction(setSubmitting))
+          .catch((error) => {
+            setSubmitting(false)
+            setErrorMessage(error.response.data.message)
+          })
+      } else {
+        ChapterService.sendEditChapterData({ chapterId: chapterDetails.id, editionForm: editedValues })
+          .then(() => afterSendAction(setSubmitting))
+          .catch((error) => {
+            setSubmitting(false)
+            setErrorMessage(error.response.data.message)
+          })
+      }
+    },
+    [chapterDetails]
+  )
+
   useEffect(() => {
     if (isLoaded) {
+      if (chapterDetails) {
+        const { name, mapSize, posX, posY, imageId } = chapterDetails
+        const [sizeX, sizeY] = mapSize.split(' x ')
+
+        setActivityValues({
+          name: name,
+          sizeX: +sizeX,
+          sizeY: +sizeY,
+          posX: posX,
+          posY: posY,
+          imageId: imageId
+        })
+      }
       ChapterService.getChapterImagesList()
         .then((response) => {
           Promise.all(
@@ -100,7 +134,7 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
         })
         .catch(() => {})
     }
-  }, [isLoaded])
+  }, [isLoaded, chapterDetails])
 
   const updateMap = () => {
     const labelValue = formikContextRef.current?.getValue('name')
@@ -110,8 +144,7 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
   }
 
   return (
-    images &&
-    currentActivityValues !== undefined && (
+    images && (
       <>
         <Modal show={showModal} size={'lg'} onHide={() => setShowModal(false)}>
           <ModalHeader>
@@ -121,7 +154,7 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
             <Tabs defaultActiveKey={'form'}>
               <Tab eventKey={'form'} title={'Formularz'} className={'pt-4'}>
                 <Formik
-                  initialValues={currentActivityValues ? currentActivityValues : EMPTY_INITIAL_VALUES}
+                  initialValues={activityValues}
                   validate={(values) => {
                     const errors = {}
                     if (!values.name) errors.chapterName = FIELD_REQUIRED
@@ -144,32 +177,7 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
                       posX: values.posX,
                       posY: values.posY
                     }
-
-                    const afterSendActions = () => {
-                      setSubmitting(false)
-                      setShowModal(false)
-                      setIsSuccessModalOpen(true)
-                      setErrorMessage('')
-                      if (onSuccess) {
-                        onSuccess()
-                      }
-                    }
-
-                    if (!chapterDetails) {
-                      ChapterService.sendNewChapterData(editedValues)
-                        .then(() => afterSendActions())
-                        .catch((error) => {
-                          setSubmitting(false)
-                          setErrorMessage(error.response.data.message)
-                        })
-                    } else {
-                      ChapterService.sendEditChapterData({ chapterId: chapterDetails.id, editionForm: editedValues })
-                        .then(() => afterSendActions())
-                        .catch((error) => {
-                          setSubmitting(false)
-                          setErrorMessage(error.response.data.message)
-                        })
-                    }
+                    sendAction(setSubmitting, editedValues, afterSendAction)
                   }}
                 >
                   {({ isSubmitting, values, handleSubmit, setFieldValue }) => {
