@@ -19,12 +19,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
-import EditChapterModal from './EditChapterModal'
 import { getConfigJson } from '../GameManagement/GameLoader/mockData'
 import ChapterService from '../../../services/chapter.service'
 import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
+import { ChapterModal } from '../GameManagement/ChapterModal/ChapterModal'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -38,6 +38,7 @@ function ChapterDetails() {
   const [chapterDetails, setChapterDetails] = useState(undefined)
   const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false)
   const [mapContainerSize, setMapContainerSize] = useState({ x: 0, y: 0 })
+  const [shouldLoadEditChapterModal, setShouldLoadEditChapterModal] = useState(false)
 
   const mapCardBody = useRef()
 
@@ -261,7 +262,13 @@ function ChapterDetails() {
             <Link to={TeacherRoutes.GAME_MANAGEMENT.MAIN}>
               <Button variant={'outline-secondary'}>Wyjdź</Button>
             </Link>
-            <Button variant={'outline-primary'} onClick={() => setEditChapterModalOpen(true)}>
+            <Button
+              variant={'outline-primary'}
+              onClick={() => {
+                setEditChapterModalOpen(true)
+                setShouldLoadEditChapterModal(true)
+              }}
+            >
               Edytuj rozdział
             </Button>
             <Button variant={'outline-danger'} onClick={() => setDeletionModalOpen(true)}>
@@ -287,7 +294,13 @@ function ChapterDetails() {
         chapterId={chapterId}
       />
 
-      <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
+      <ChapterModal
+        showModal={isEditChapterModalOpen}
+        setShowModal={setEditChapterModalOpen}
+        isLoaded={shouldLoadEditChapterModal}
+        chapterDetails={chapterDetails}
+        onSuccess={getChapterDetails}
+      />
 
       <EditActivityModal
         setShowModal={setIsEditActivityModalOpen}

@@ -1,11 +1,12 @@
-import { axiosApiDelete, axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiDelete, axiosApiGet, axiosApiPost, axiosApiPut } from '../utils/axios'
 import {
   GET_CHAPTER_INFO,
   GET_CHAPTER,
   POST_CHAPTER_CREATE,
   GET_FILE_CHAPTER_IMAGES,
   GET_FILE,
-  DELETE_CHAPTER
+  DELETE_CHAPTER,
+  PUT_CHAPTER_EDIT
 } from './urls'
 
 class ChapterService {
@@ -29,6 +30,15 @@ class ChapterService {
       imageId: imageId,
       posX: posX,
       posY: posY
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  sendEditChapterData({ chapterId, editionForm }) {
+    return axiosApiPut(PUT_CHAPTER_EDIT, {
+      chapterId,
+      editionForm
     }).catch((error) => {
       throw error
     })
