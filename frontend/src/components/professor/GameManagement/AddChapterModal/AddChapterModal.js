@@ -41,7 +41,7 @@ const EMPTY_INITIAL_VALUES = {
   imageId: ''
 }
 
-export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChapterList, chapterDetails }) {
+export function AddOrEditChapterModal({ showModal, setShowModal, isLoaded, refetchChapterList, chapterDetails }) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -54,7 +54,7 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
 
   const modalTitle = refetchChapterList ? 'Dodaj nowy rozdział' : 'Edytuj rozdział'
   const actionTitle = refetchChapterList ? 'Dodaj rozdział' : 'Zapisz zmiany'
-  const successText = refetchChapterList ? 'Pomyślnie zmieniono dane rozdziału' : 'Pomyślnie dodano nowy rozdział'
+  const successText = refetchChapterList ? 'Pomyślnie dodano nowy rozdział' : 'Pomyślnie zmieniono dane rozdziału'
   let currentActivityValues = null
 
   if (chapterDetails) {
@@ -70,8 +70,6 @@ export function AddChapterModal({ showModal, setShowModal, isLoaded, refetchChap
       imageId: imageId
     }
   }
-
-  console.log({ showModal, setShowModal, isLoaded, refetchChapterList, chapterDetails })
 
   const formikContextRef = useRef()
 

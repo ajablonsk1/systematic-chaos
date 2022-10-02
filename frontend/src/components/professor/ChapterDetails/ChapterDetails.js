@@ -19,13 +19,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
-import EditChapterModal from './EditChapterModal'
 import { getConfigJson } from '../GameManagement/GameLoader/mockData'
 import ChapterService from '../../../services/chapter.service'
 import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
-import { AddChapterModal } from '../GameManagement/AddChapterModal/AddChapterModal'
+import { AddOrEditChapterModal } from '../GameManagement/AddChapterModal/AddChapterModal'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -295,7 +294,7 @@ function ChapterDetails() {
         chapterId={chapterId}
       />
 
-      <AddChapterModal
+      <AddOrEditChapterModal
         showModal={isEditChapterModalOpen}
         setShowModal={setEditChapterModalOpen}
         isLoaded={shouldLoadEditChapterModal}

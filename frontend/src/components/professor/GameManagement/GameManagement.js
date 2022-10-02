@@ -9,7 +9,7 @@ import GameLoaderModal from './GameLoader/GameLoaderModal'
 import { useEffect, useState } from 'react'
 import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import { AddChapterModal } from './AddChapterModal/AddChapterModal'
+import { AddOrEditChapterModal } from './AddChapterModal/AddChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 
 export default function GameManagement() {
@@ -149,7 +149,7 @@ export default function GameManagement() {
         </Row>
       </Container>
       <GameLoaderModal showModal={showConfigModal} setShowModal={setShowConfigModal} />
-      <AddChapterModal
+      <AddOrEditChapterModal
         showModal={showAddChapterModal}
         setShowModal={setShowAddChapterModal}
         refetchChapterList={fetchChaptersList}
