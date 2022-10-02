@@ -52,9 +52,9 @@ export function AddOrEditChapterModal({ showModal, setShowModal, isLoaded, refet
     size: Math.min(MAP_HEIGHT / 8, MAP_WIDTH / 10) / 5
   })
 
-  const modalTitle = refetchChapterList ? 'Dodaj nowy rozdział' : 'Edytuj rozdział'
-  const actionTitle = refetchChapterList ? 'Dodaj rozdział' : 'Zapisz zmiany'
-  const successText = refetchChapterList ? 'Pomyślnie dodano nowy rozdział' : 'Pomyślnie zmieniono dane rozdziału'
+  const modalTitle = chapterDetails ? 'Dodaj nowy rozdział' : 'Edytuj rozdział'
+  const actionTitle = chapterDetails ? 'Dodaj rozdział' : 'Zapisz zmiany'
+  const successText = chapterDetails ? 'Pomyślnie dodano nowy rozdział' : 'Pomyślnie zmieniono dane rozdziału'
   let currentActivityValues = null
 
   if (chapterDetails) {
