@@ -2,10 +2,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { Col, Row, Spinner, Table } from 'react-bootstrap'
 import { ERROR_OCCURRED, getHeroName, HeroImg } from '../../../utils/constants'
-import StudentService from '../../../services/student.service'
 import ProfileCard from './ProfileCard'
 import EditIndexModal from './EditIndexModal'
 import EditPasswordModal from './EditPasswordModal'
+import UserService from '../../../services/user.service'
 
 function Profile() {
   const [userData, setUserData] = useState(undefined)
@@ -14,7 +14,7 @@ function Profile() {
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
 
   useEffect(() => {
-    StudentService.getUserData()
+    UserService.getUserData()
       .then((response) => {
         setUserData(response)
         setIndexNumber(response.indexNumber)

@@ -7,6 +7,7 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
+import com.example.api.service.user.util.ProfessorRegisterToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,6 +23,7 @@ import java.util.List;
 public class UserValidator {
     private final GroupRepo groupRepo;
     private final UserRepo userRepo;
+    private final ProfessorRegisterToken professorRegisterToken;
 
     public void validateUserIsNotNull(User user, String email) throws UsernameNotFoundException {
         if(user == null) {
@@ -116,9 +118,17 @@ public class UserValidator {
             newUser.setIndexNumber(indexNumber);
         } else {
             if(form.getHeroType() != null || form.getInvitationCode() != null || form.getIndexNumber() != null){
-                log.error("Request body for registering professor requires 4 body parameters");
-                throw new WrongBodyParametersNumberException("Request body for registering professor requires 4 body parameters",
-                        List.of("firstName", "lastName", "email", "password"), 1);
+                log.error("Request body for registering professor requires 5 body parameters");
+                throw new WrongBodyParametersNumberException("Request body for registering professor requires 5 body parameters",
+                        List.of("firstName", "lastName", "email", "password", "professorRegisterToken"), 1);
+            }
+            if(form.getProfessorRegistrationToken() == null) {
+                log.error("ProfessorRegisterToken not passed for professor registration");
+                throw new RequestValidationException(ExceptionMessage.PROFESSOR_REGISTER_TOKEN_NOT_PASSED);
+            }
+            if(!professorRegisterToken.isValid(form.getProfessorRegistrationToken())) {
+                log.error("Wrong ProfessorRegisterToken passed");
+                throw new RequestValidationException(ExceptionMessage.WRONG_PROFESSOR_REGISTER_TOKEN);
             }
         }
     }

@@ -102,7 +102,8 @@ export const ProfessorSidebarTitles = [
   {
     name: 'Sprawdzanie aktywności',
     icon: faArrowsToEye,
-    navigateTo: TeacherRoutes.ACTIVITY_ASSESSMENT.LIST
+    navigateTo: TeacherRoutes.ACTIVITY_ASSESSMENT.LIST,
+    action: 'BADGE'
   },
   {
     name: 'Oceny',

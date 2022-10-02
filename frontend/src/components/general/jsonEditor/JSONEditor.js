@@ -52,6 +52,7 @@ const JSONEditor = forwardRef((props, ref) => {
       width={'100%'}
       style={{ body: { fontSize: '15px' }, outerBox: { maxHeight: '60vh', overflowY: 'auto' } }}
       onChange={editJsonObject}
+      waitAfterKeyPress={400}
     />
   )
 })
