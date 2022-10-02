@@ -24,7 +24,7 @@ import ChapterService from '../../../services/chapter.service'
 import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
-import { AddOrEditChapterModal } from '../GameManagement/AddChapterModal/AddChapterModal'
+import { AddOrEditChapterModal } from '../GameManagement/AddChapterModal/AddOrEditChapterModal'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()

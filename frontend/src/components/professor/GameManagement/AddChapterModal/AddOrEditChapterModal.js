@@ -41,7 +41,14 @@ const EMPTY_INITIAL_VALUES = {
   imageId: ''
 }
 
-export function AddOrEditChapterModal({ showModal, setShowModal, isLoaded, refetchChapterList, chapterDetails }) {
+export function AddOrEditChapterModal({
+  showModal,
+  setShowModal,
+  isLoaded,
+  refetchChapterList,
+  chapterDetails,
+  chapterMapRef
+}) {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -52,9 +59,9 @@ export function AddOrEditChapterModal({ showModal, setShowModal, isLoaded, refet
     size: Math.min(MAP_HEIGHT / 8, MAP_WIDTH / 10) / 5
   })
 
-  const modalTitle = chapterDetails ? 'Dodaj nowy rozdział' : 'Edytuj rozdział'
-  const actionTitle = chapterDetails ? 'Dodaj rozdział' : 'Zapisz zmiany'
-  const successText = chapterDetails ? 'Pomyślnie dodano nowy rozdział' : 'Pomyślnie zmieniono dane rozdziału'
+  const modalTitle = chapterDetails ? 'Edytuj rozdział' : 'Dodaj nowy rozdział'
+  const actionTitle = chapterDetails ? 'Zapisz zmiany' : 'Dodaj rozdział'
+  const successText = chapterDetails ? 'Pomyślnie zmieniono dane rozdziału' : 'Pomyślnie dodano nowy rozdział'
   let currentActivityValues = null
 
   if (chapterDetails) {
@@ -152,6 +159,10 @@ export function AddOrEditChapterModal({ showModal, setShowModal, isLoaded, refet
                       setErrorMessage('')
                       if (refetchChapterList) {
                         refetchChapterList()
+                      }
+                      if (chapterMapRef) {
+                        console.log('I am here')
+                        chapterMapRef.loadActivityMap()
                       }
                     }
 

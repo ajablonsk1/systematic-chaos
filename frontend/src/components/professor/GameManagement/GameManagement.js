@@ -9,7 +9,7 @@ import GameLoaderModal from './GameLoader/GameLoaderModal'
 import { useEffect, useState } from 'react'
 import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import { AddOrEditChapterModal } from './AddChapterModal/AddChapterModal'
+import { AddOrEditChapterModal } from './AddChapterModal/AddOrEditChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 
 export default function GameManagement() {
