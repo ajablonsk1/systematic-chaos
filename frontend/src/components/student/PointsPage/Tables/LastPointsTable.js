@@ -32,7 +32,7 @@ export default function LastPointsTable(props) {
         ) : (
           props.pointsList.map((row, idx) => (
             <tr className='w-100' key={idx}>
-              <td className='w-25'>{moment(row.dateInMillis).format('DD.MM.YYYY, HH:mm')}</td>
+              <td className='w-25'>{moment(row.dateMillis).format('DD.MM.YYYY, HH:mm')}</td>
               <td className='w-25'>{row.pointsReceived ?? 'Nieocenione'}</td>
               <td className='w-25'>{getActivityTypeName(row.activityType)}</td>
               <td className='w-25'>{row.activityName}</td>
