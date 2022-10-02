@@ -39,7 +39,6 @@ public class SurveyService {
     private final AuthenticationService authService;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
-    private final ActivityService activityService;
 
     public Survey saveSurvey(Survey survey){
         return surveyRepo.save(survey);
@@ -81,9 +80,8 @@ public class SurveyService {
                 .toList();
     }
 
-    public void editSurvey(Survey survey, EditSurveyForm form) throws RequestValidationException {
+    public void editSurvey(Survey survey, EditSurveyForm form) {
         CreateSurveyForm surveyForm = (CreateSurveyForm) form.getActivityBody();
-        activityService.editActivity(survey, form);
         survey.setPoints(surveyForm.getPoints());
     }
 }

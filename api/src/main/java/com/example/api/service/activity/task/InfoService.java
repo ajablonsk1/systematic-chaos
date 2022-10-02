@@ -43,7 +43,6 @@ public class InfoService {
     private final UrlRepo urlRepo;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
-    private final ActivityService activityService;
 
     public Info saveInfo(Info info){
         return infoRepo.save(info);
@@ -96,9 +95,8 @@ public class InfoService {
                 .toList();
     }
 
-    public void editInfo(Info info, EditInfoForm form) throws RequestValidationException {
+    public void editInfo(Info info, EditInfoForm form) {
         CreateInfoForm infoForm = (CreateInfoForm) form.getActivityBody();
-        activityService.editActivity(info, form);
         info.setContent(infoForm.getInfoContent());
         editImageUrls(info, infoForm.getImageUrls());
     }

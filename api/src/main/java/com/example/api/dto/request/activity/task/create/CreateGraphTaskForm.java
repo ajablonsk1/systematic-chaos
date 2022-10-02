@@ -1,7 +1,9 @@
 package com.example.api.dto.request.activity.task.create;
 
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Question;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,7 +31,7 @@ public class CreateGraphTaskForm extends CreateActivityForm{
                                String requiredKnowledge,
                                List<QuestionForm> questions,
                                String timeToSolve) {
-        super(title, description, posX, posY);
+        super(ActivityType.EXPEDITION, title, description, posX, posY);
         this.requiredKnowledge = requiredKnowledge;
         this.questions = questions;
         this.timeToSolve = timeToSolve;
@@ -42,7 +44,9 @@ public class CreateGraphTaskForm extends CreateActivityForm{
         HashMap<Long, Integer> mapping = getIdToQuestionNumberMapping(graphTask.getQuestions());
         this.questions = graphTask.getQuestions().stream().map(q->new QuestionForm(q, mapping)).toList();
         SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");
-        this.setTimeToSolve(timeToSolveFormat.format(new Date(graphTask.getTimeToSolveMillis())));
+        if (graphTask.getTimeToSolveMillis() != null) {
+            this.timeToSolve = timeToSolveFormat.format(new Date(graphTask.getTimeToSolveMillis()));
+        }
     }
 
     private HashMap<Long, Integer> getIdToQuestionNumberMapping(List<Question> questions) {

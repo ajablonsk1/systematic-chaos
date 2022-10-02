@@ -50,7 +50,6 @@ public class FileTaskService {
     private final TimeParser timeParser;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
-    private final ActivityService activityService;
 
     public FileTask saveFileTask(FileTask fileTask) {
         return fileTaskRepo.save(fileTask);
@@ -123,9 +122,8 @@ public class FileTaskService {
                 .toList();
     }
 
-    public void editFileTask(FileTask fileTask, EditFileTaskForm form) throws RequestValidationException {
+    public void editFileTask(FileTask fileTask, EditFileTaskForm form) {
         CreateFileTaskForm fileTaskForm = (CreateFileTaskForm) form.getActivityBody();
-        activityService.editActivity(fileTask, form);
         fileTask.setRequiredKnowledge(fileTaskForm.getRequiredKnowledge());
         editMaxPoints(fileTask, fileTaskForm.getMaxPoints());
     }

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/activity")
@@ -24,7 +26,7 @@ public class ActivityController {
     }
 
     @PostMapping("/edit")
-    ResponseEntity<?> getActivityEditInfo(@RequestBody EditActivityForm form) throws RequestValidationException {
+    ResponseEntity<?> getActivityEditInfo(@RequestBody EditActivityForm form) throws RequestValidationException, ParseException {
         activityService.editActivity(form);
         return ResponseEntity.ok().body(null);
     }

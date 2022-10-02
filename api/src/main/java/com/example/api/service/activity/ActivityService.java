@@ -1,7 +1,6 @@
 package com.example.api.service.activity;
 
 import com.example.api.dto.request.activity.task.create.CreateActivityForm;
-import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.edit.*;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -29,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -65,7 +64,7 @@ public class ActivityService {
         return toEditActivityForm(activity);
     }
 
-    public void editActivity(EditActivityForm form) throws RequestValidationException {
+    public void editActivity(EditActivityForm form) throws RequestValidationException, ParseException {
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);
         userValidator.validateProfessorAccount(professor, email);
@@ -76,6 +75,7 @@ public class ActivityService {
         log.info("Professor {} try to edit activity {} with id {}",
                 email, activity.getActivityType().getActivityType(), activity.getId());
 
+        editActivity(activity, form);
         switch (activity.getActivityType()) {
             case EXPEDITION -> graphTaskService.editGraphTask((GraphTask) activity, (EditGraphTaskForm) form);
             case TASK -> fileTaskService.editFileTask((FileTask) activity, (EditFileTaskForm) form);
