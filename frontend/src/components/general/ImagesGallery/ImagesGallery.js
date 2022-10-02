@@ -149,7 +149,7 @@ function ImagesGallery(props) {
         <ModalBody className={'d-flex justify-content-center align-items-center'}>
           <FontAwesomeIcon
             icon={faChevronLeft}
-            className={'display-3 me-5'}
+            className={'display-3 me-3'}
             onClick={() => {
               if (!fullPreviewSource.isFirst) {
                 prevImage(fullPreviewSource.id)
@@ -157,10 +157,10 @@ function ImagesGallery(props) {
             }}
             style={{ opacity: fullPreviewSource.isFirst ? 0.5 : 1, cursor: 'pointer' }}
           />
-          <img height={'100%'} src={fullPreviewSource.src} alt={'full-preview'} />
+          <img width={'90%'} height={'90%'} src={fullPreviewSource.src} alt={'full-preview'} />
           <FontAwesomeIcon
             icon={faChevronRight}
-            className={'display-3 ms-5'}
+            className={'display-3 ms-3'}
             onClick={() => {
               if (!fullPreviewSource.isLast) {
                 nextImage(fullPreviewSource.id)

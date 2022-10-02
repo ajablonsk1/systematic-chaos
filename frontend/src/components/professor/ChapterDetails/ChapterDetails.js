@@ -25,6 +25,7 @@ import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { ChapterModal } from '../GameManagement/ChapterModal/ChapterModal'
+import { successToast } from '../../../utils/toasts'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -39,6 +40,7 @@ function ChapterDetails() {
   const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false)
   const [mapContainerSize, setMapContainerSize] = useState({ x: 0, y: 0 })
   const [shouldLoadEditChapterModal, setShouldLoadEditChapterModal] = useState(false)
+  const [deleteChapterError, setDeleteChapterError] = useState(undefined)
 
   const mapCardBody = useRef()
 
@@ -104,6 +106,16 @@ function ChapterDetails() {
       activityName: activity.title
     })
     setIsDeleteActivityModalOpen(true)
+  }
+
+  const deleteChapter = () => {
+    ChapterService.deleteChapter(chapterId)
+      .then(() => {
+        successToast('Rozdział usunięty pomyślnie.')
+        setDeletionModalOpen(false)
+        navigate(TeacherRoutes.GAME_MANAGEMENT.MAIN)
+      })
+      .catch((error) => setDeleteChapterError(error.response.data.message))
   }
 
   return (
@@ -287,11 +299,15 @@ function ChapterDetails() {
         modalTitle={'Usunięcie rozdziału'}
         modalBody={
           <>
-            Czy na pewno chcesz usunąć rozdział: <br />
-            <strong>{chapterDetails?.name}</strong>?
+            <div>
+              Czy na pewno chcesz usunąć rozdział: <br />
+              <strong>{chapterDetails?.name}</strong>?
+            </div>
+            {deleteChapterError && <p className={'text-danger'}>{deleteChapterError}</p>}
           </>
         }
         chapterId={chapterId}
+        onClick={deleteChapter}
       />
 
       <ChapterModal
@@ -325,6 +341,7 @@ function ChapterDetails() {
             <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
           </>
         }
+        onClick={() => {}}
       />
 
       <AddActivityModal

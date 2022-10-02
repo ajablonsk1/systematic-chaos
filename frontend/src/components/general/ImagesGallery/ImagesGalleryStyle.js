@@ -17,4 +17,7 @@ export const ControlPanel = styled(Dropdown)`
   .dropdown-toggle::before {
     display: none !important;
   }
+  .dropdown-menu {
+    min-width: auto;
+  }
 `

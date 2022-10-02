@@ -21,7 +21,7 @@ function App(props) {
         <div className={'d-flex'} style={{ minHeight: '100vh', margin: 0 }}>
           <BrowserRouter>
             <SidebarCol
-              style={{ width: props.sidebar.isExpanded ? 350 : 60 }}
+              style={{ width: props.sidebar.isExpanded ? 400 : 60 }}
               className={window.location.pathname === '/' ? 'd-none' : 'd-md-block d-none'}
             >
               <Sidebar link_titles={student ? UserSidebarTitles : ProfessorSidebarTitles} />
