@@ -24,7 +24,7 @@ import ChapterService from '../../../services/chapter.service'
 import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
-import { AddOrEditChapterModal } from '../GameManagement/AddChapterModal/AddOrEditChapterModal'
+import { ChapterModal } from '../GameManagement/ChapterModal/ChapterModal'
 
 function ChapterDetails() {
   const { id: chapterId } = useParams()
@@ -294,12 +294,12 @@ function ChapterDetails() {
         chapterId={chapterId}
       />
 
-      <AddOrEditChapterModal
+      <ChapterModal
         showModal={isEditChapterModalOpen}
         setShowModal={setEditChapterModalOpen}
         isLoaded={shouldLoadEditChapterModal}
         chapterDetails={chapterDetails}
-        afterSuccessfulChange={getChapterDetails}
+        onSuccess={getChapterDetails}
       />
 
       <EditActivityModal
