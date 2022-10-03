@@ -31,7 +31,6 @@ public class CreateInfoForm extends CreateActivityForm{
         this.infoContent = content;
     }
 
-    @JsonCreator
     public CreateInfoForm(Info info) {
         super(info);
         this.imageUrls = info.getImageUrls().stream().map(Url::getUrl).toList();

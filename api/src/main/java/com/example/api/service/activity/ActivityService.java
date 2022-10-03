@@ -126,16 +126,16 @@ public class ActivityService {
 
     public void editActivity(Activity activity, EditActivityForm form) throws RequestValidationException {
         CreateActivityForm editForm = form.getActivityBody();
+
+        Chapter chapter = chapterRepo.findAll().stream().filter(ch -> ch.getActivityMap().hasActivity(activity)).findFirst().orElse(null);
         activity.setTitle(editForm.getTitle());
         activity.setDescription(editForm.getDescription());
+        chapterValidator.validateChapterIsNotNull(chapter, null);
 
         if (activity.getPosX().equals(editForm.getPosX()) &&
-            activity.getPosY().equals(editForm.getPosY())) {
+                activity.getPosY().equals(editForm.getPosY())) {
             return;
         }
-
-        Chapter chapter = chapterRepo.findChapterByActivityMapContaining(activity);
-        chapterValidator.validateChapterIsNotNull(chapter, null);
         activityValidator.validateActivityPosition(editForm, chapter);
         activity.setPosX(editForm.getPosX());
         activity.setPosY(editForm.getPosY());

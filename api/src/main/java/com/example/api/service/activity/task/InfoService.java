@@ -116,8 +116,10 @@ public class InfoService {
                 })
                 .toList();
         urlRepo.saveAll(newUrls);
-        remainingUrls.addAll(newUrls);
-        info.setImageUrls(remainingUrls);
+        List<Url> updatedUrls = new LinkedList<>();
+        updatedUrls.addAll(remainingUrls);
+        updatedUrls.addAll(newUrls);
+        info.setImageUrls(updatedUrls);
 
     }
 
