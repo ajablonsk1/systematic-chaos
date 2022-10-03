@@ -5,13 +5,14 @@ import { ActivityImg } from '../../student/AllActivities/ExpeditionTask/Activity
 import { useNavigate } from 'react-router-dom'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { Activity } from '../../../utils/constants'
+import { connect } from 'react-redux'
 
 // todo: move it to styles file
 const ActivityListItemRow = styled(Row)`
   margin: 20px auto;
   width: 75%;
-  background-color: var(--dark-blue);
-  color: var(--font-color);
+  background-color: ${(props) => props.$background};
+  color: ${(props) => props.$fontColor};
   padding: 8px;
   padding-right: 10px;
   text-align: center;
@@ -21,10 +22,12 @@ const ActivityListItemRow = styled(Row)`
   }
 `
 
-export default function ActivityListItem(props) {
+function ActivityListItem(props) {
   const navigate = useNavigate()
   return (
     <ActivityListItemRow
+      $background={props.theme.primary}
+      $fontColor={props.theme.font}
       onClick={() => {
         navigate(TeacherRoutes.ACTIVITY_ASSESSMENT.ACTIVITY, {
           state: { activityId: props.activity.fileTaskId }
@@ -37,3 +40,10 @@ export default function ActivityListItem(props) {
     </ActivityListItemRow>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityListItem)

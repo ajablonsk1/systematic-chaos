@@ -14,10 +14,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackFileService from './FeedbackFileService'
 import { Header, VerticalSpacer, HorizontalSpacer, ActivityDetails } from '../../../general/TaskSharedComponents'
 import { Fade } from 'react-awesome-reveal'
+import { connect } from 'react-redux'
 
 const FIELD_DELAY = 600
 
-export default function CombatTask() {
+function CombatTask(props) {
   const location = useLocation()
   const { activityId: taskState } = location.state
 
@@ -129,7 +130,14 @@ export default function CombatTask() {
                           <p>{task.answer}</p>
                         </Col>
                       )}
-                      <RemarksTextArea ref={textAreaRef} disabled={isReviewed()} onChange={handleAnswerChange} />
+                      <RemarksTextArea
+                        $fontColor={props.theme.font}
+                        $background={props.theme.secondary}
+                        $borderColor={props.theme.warning}
+                        ref={textAreaRef}
+                        disabled={isReviewed()}
+                        onChange={handleAnswerChange}
+                      />
                     </>
                   )}
                   <Col className={'text-center'}>
@@ -190,3 +198,10 @@ export default function CombatTask() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(CombatTask)

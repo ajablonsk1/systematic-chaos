@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import { Button, Spinner } from 'react-bootstrap'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
+import { connect } from 'react-redux'
 
-function AddSurveyTask(props) {
+function AddActivity(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
   const [errorMessage, setErrorMessage] = useState('')
   const jsonEditorRef = useRef()
@@ -46,12 +47,22 @@ function AddSurveyTask(props) {
           <JSONEditor ref={jsonEditorRef} jsonConfig={placeholderJson} />
 
           <div className={'d-flex flex-column justify-content-center align-items-center pt-4 gap-2'}>
-            {errorMessage && <p className={'text-danger h6'}>{errorMessage}</p>}
+            {errorMessage && (
+              <p style={{ color: props.theme.danger }} className={'h6'}>
+                {errorMessage}
+              </p>
+            )}
             <div className={'d-flex gap-2'}>
-              <Button variant={'danger'} onClick={props.onCancel}>
+              <Button
+                style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                onClick={props.onCancel}
+              >
                 Anuluj
               </Button>
-              <Button variant={'success'} onClick={() => sendJson()}>
+              <Button
+                style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+                onClick={() => sendJson()}
+              >
                 Dodaj aktywność
               </Button>
             </div>
@@ -62,4 +73,9 @@ function AddSurveyTask(props) {
   )
 }
 
-export default AddSurveyTask
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(AddActivity)

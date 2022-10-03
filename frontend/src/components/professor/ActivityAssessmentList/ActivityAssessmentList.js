@@ -5,12 +5,13 @@ import ActivityListItem from './ActivityListItem'
 import ProfessorService from '../../../services/professor.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import { connect } from 'react-redux'
 
 // note: currently the list assumes we can only manually grade File Tasks - this is due to the way our DB currently works,
 // an ID is unique only in the task group. we might need to add a field that lets us know which task type it is
 // on the backend if we want to check other types of activities in the future
 
-export default function ActivityAssessmentList() {
+function ActivityAssessmentList(props) {
   const [activityList, setActivityList] = useState(undefined)
 
   useEffect(() => {
@@ -49,7 +50,11 @@ export default function ActivityAssessmentList() {
       return <Loader />
     }
     if (activityList === null) {
-      return <p className={'text-center text-danger h4'}>{ERROR_OCCURRED}</p>
+      return (
+        <p className={'text-center h4'} style={{ color: props.theme.danger }}>
+          {ERROR_OCCURRED}
+        </p>
+      )
     }
     if (activityList.length > 0 && activityList.filter((activity) => activity.toGrade > 0)) {
       return activityList.map((activity) => {
@@ -59,7 +64,7 @@ export default function ActivityAssessmentList() {
       })
     }
     return <p className={'text-center'}>Brak aktywności do sprawdzenia!</p>
-  }, [activityList])
+  }, [activityList, props.theme.danger])
 
   return (
     <Content>
@@ -68,3 +73,10 @@ export default function ActivityAssessmentList() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityAssessmentList)

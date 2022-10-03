@@ -49,9 +49,9 @@ export const RemarksTextArea = styled.textarea`
   padding: 3px;
   max-height: 220px;
   margin: 0 auto;
-  color: var(--font-color);
-  border: 1px solid var(--font-color);
-  background-color: var(--light-blue);
+  color: ${(props) => props.$fontColor};
+  border: 1px solid ${(props) => props.$borderColor};
+  background-color: ${(props) => props.$background};
 `
 
 export const ActivityAssessmentStudentFileRow = styled(Row)`
@@ -59,9 +59,9 @@ export const ActivityAssessmentStudentFileRow = styled(Row)`
   width: 80%;
 `
 
-export const ActivityAssesmentProfessorFileCol = styled(Col)`
-  background-color: var(--dark-blue);
-  color: var(--font-color);
+export const ActivityAssessmentProfessorFileCol = styled(Col)`
+  background-color: ${(props) => props.$background};
+  color: ${(props) => props.$fontColor};
   margin: 0 auto;
   width: 80%;
   display: flex;

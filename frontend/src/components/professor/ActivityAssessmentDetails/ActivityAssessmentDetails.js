@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap'
 import {
   AcceptButton,
   RemarksTextArea,
-  ActivityAssesmentProfessorFileCol,
+  ActivityAssessmentProfessorFileCol,
   PointsRow,
   PointsInput,
   PointsMax
@@ -133,9 +133,9 @@ function ActivityAssessmentDetails(props) {
         <HorizontalSpacer height={'3vh'} />
         <Col
           className='m-0 pt-4 mx-auto'
-          style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
+          style={{ height: '94vh', width: '90%', backgroundColor: props.theme.secondary }}
         >
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}>
+          <Row className='p-2 rounded mx-2' style={{ backgroundColor: props.theme.primary, height: '6vh' }}>
             <Header activityName={activityResponseInfo.activityName} activityType={Activity.TASK} />
           </Row>
 
@@ -143,7 +143,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto text-center'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}
+            style={{ backgroundColor: props.theme.primary, height: '6vh' }}
           >
             <UserDetails />
           </Row>
@@ -152,7 +152,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '18vh' }}
+            style={{ backgroundColor: props.theme.primary, height: '18vh' }}
           >
             <ActivityDetails className='overflow-auto' />
           </Row>
@@ -161,7 +161,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '20vh' }}
+            style={{ backgroundColor: props.theme.primary, height: '20vh' }}
           >
             <ResponseDetails />
           </Row>
@@ -170,18 +170,24 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '35vh' }}
+            style={{ backgroundColor: props.theme.primary, height: '35vh' }}
           >
             <Col>
               <h4>Uwagi:</h4>
-              <RemarksTextArea onChange={debounceSetText} ref={textRef} />
-              <ActivityAssesmentProfessorFileCol>
+              <RemarksTextArea
+                $fontColor={props.theme.font}
+                $background={props.theme.secondary}
+                $borderColor={props.theme.warning}
+                onChange={debounceSetText}
+                ref={textRef}
+              />
+              <ActivityAssessmentProfessorFileCol $background={props.theme.primary} $fontColor={props.theme.font}>
                 <ActivityAssessmentProfessorFileService
                   setFile={setFileBlob}
                   setFileName={setFileName}
                   fileRef={fileRef}
                 />
-              </ActivityAssesmentProfessorFileCol>
+              </ActivityAssessmentProfessorFileCol>
               <PointsRow>
                 <p className='m-0'>Punkty: </p>
                 <Row className={'d-flex justify-content-center'}>
@@ -214,7 +220,7 @@ function ActivityAssessmentDetails(props) {
   }
 
   return (
-    <Content style={{ color: 'var(--font-color)' }}>
+    <Content style={{ color: props.theme.font }}>
       {activityResponseInfo === undefined ? <Loader /> : activityResponseInfo == null ? ERROR_OCCURRED : contentBody()}
     </Content>
   )

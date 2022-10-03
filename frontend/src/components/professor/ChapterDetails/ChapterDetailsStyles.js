@@ -2,16 +2,16 @@ import styled from 'styled-components'
 import { Card, Col, Tooltip } from 'react-bootstrap'
 
 const ChapterCard = styled(Card)`
-  color: var(--font-color);
+  color: ${(props) => props.$fontColor};
 
   .card-header {
     font-weight: bold;
     letter-spacing: 1px;
-    background-color: var(--dark-blue);
+    background-color: ${(props) => props.$headerColor};
   }
 
   .card-body {
-    background-color: var(--light-blue);
+    background-color: ${(props) => props.$bodyColor};
   }
 `
 
@@ -27,8 +27,8 @@ export const SummaryCard = styled(ChapterCard)`
   overflow-x: hidden;
 
   .list-group-item {
-    background-color: var(--light-blue);
-    color: var(--font-color);
+    background-color: ${(props) => props.$bodyColor};
+    color: ${(props) => props.$fontColor};
   }
 
   #activities,
@@ -45,7 +45,7 @@ export const ActivitiesCard = styled(ChapterCard)`
   overflow-x: hidden;
 
   .table {
-    color: var(--font-color);
+    color: ${(props) => props.$fontColor};
 
     & td {
       border: 1px solid rgba(0, 0, 0, 0.125);

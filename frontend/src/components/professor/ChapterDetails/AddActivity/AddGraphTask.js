@@ -7,6 +7,7 @@ import Graph from '../../../general/Graph/Graph'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import ExpeditionService from '../../../../services/expedition.service'
+import { connect } from 'react-redux'
 
 function AddGraphTask(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
@@ -75,12 +76,22 @@ function AddGraphTask(props) {
 
       {placeholderJson && (
         <div className={'d-flex flex-column justify-content-center align-items-center pt-4 gap-2'}>
-          {errorMessage && <p className={'text-danger h6'}>{errorMessage}</p>}
+          {errorMessage && (
+            <p style={{ color: props.theme.danger }} className={'h6'}>
+              {errorMessage}
+            </p>
+          )}
           <div className={'d-flex gap-2'}>
-            <Button variant={'danger'} onClick={props.onCancel}>
+            <Button
+              style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+              onClick={props.onCancel}
+            >
               Anuluj
             </Button>
-            <Button variant={'success'} onClick={() => sendJson()}>
+            <Button
+              style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+              onClick={() => sendJson()}
+            >
               Dodaj aktywność
             </Button>
           </div>
@@ -90,4 +101,9 @@ function AddGraphTask(props) {
   )
 }
 
-export default AddGraphTask
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(AddGraphTask)
