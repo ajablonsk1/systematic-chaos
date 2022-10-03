@@ -12,6 +12,7 @@ import { createLabelsAndNodes } from './graphHelper'
  *   - onNodeClick: on node tap callback
  *   - movable: if the value is true or does not exist, the layout can be moved, otherwise moving function is blocked
  *   - labels: labels list for nodes (optional)
+ *   - ungrabify: graph cannot be grabbed (drag&drop disabled)
  * */
 
 function Graph(props) {
@@ -49,6 +50,10 @@ function Graph(props) {
       if (props.movable === false) {
         graph.current.autoungrabify(true)
         graph.current.panningEnabled(false)
+      }
+
+      if (props.ungrabify) {
+        graph.current.autoungrabify(true)
       }
     }
   }, [props])

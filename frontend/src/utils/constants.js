@@ -1,16 +1,3 @@
-import {
-  fa5,
-  faArrowsToEye,
-  faBullseye,
-  faCertificate,
-  faChessBoard,
-  faHouse,
-  faListCheck,
-  faRankingStar,
-  faStar,
-  faUsers,
-  faUser
-} from '@fortawesome/free-solid-svg-icons'
 import priestImg from '../storage/resources/pope.png'
 import rogueImg from '../storage/resources/rogue.png'
 import warriorImg from '../storage/resources/warrior.png'
@@ -36,28 +23,9 @@ import warrior14 from '../storage/resources/warrior/13.png'
 import warrior15 from '../storage/resources/warrior/14.png'
 import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
-import { HeroType } from './userRole'
+import { HeroType, PlayerType } from './userRole'
 import moment from 'moment'
-import { GeneralRoutes, StudentRoutes, TeacherRoutes } from '../routes/PageRoutes'
-
-export const UserSidebarTitles = {
-  [StudentRoutes.GAME_CARD]: ['Karta gry', faHouse],
-  [StudentRoutes.GAME_MAP.MAIN]: ['Mapa gry', faChessBoard],
-  [StudentRoutes.POINTS]: ['Punkty', faStar],
-  [StudentRoutes.RANKING]: ['Ranking', faRankingStar],
-  [StudentRoutes.BADGES]: ['Rangi i odznaki', faCertificate],
-  [GeneralRoutes.CANVAS]: ['Świat gry', faChessBoard],
-  [StudentRoutes.PROFILE]: ['Profil', faUser]
-}
-
-export const TeacherSidebarTitles = {
-  [TeacherRoutes.GAME_SUMMARY]: ['Podsumowanie gry', faBullseye],
-  [TeacherRoutes.RANKING]: ['Ranking', faRankingStar],
-  [TeacherRoutes.GAME_MANAGEMENT.MAIN]: ['Zarządzanie grą', faListCheck],
-  [TeacherRoutes.PARTICIPANTS]: ['Uczestnicy', faUsers],
-  [TeacherRoutes.ACTIVITY_ASSESSMENT.LIST]: ['Sprawdzanie aktywności', faArrowsToEye],
-  [TeacherRoutes.GRADES]: ['Oceny', fa5]
-}
+import { StudentRoutes } from '../routes/PageRoutes'
 
 export const FIELD_REQUIRED = 'Pole wymagane.'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
@@ -65,6 +33,9 @@ export const NOT_LOGGED_IN_ERROR = 'Logowanie nieudane. Niepoprawny login lub ha
 export const ERROR_OCCURRED = 'Wystąpił nieoczekiwany błąd'
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
 export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
+
+export const GRAPH_NODE_BASIC_SIZE = 20
+export const GRAPH_NODE_SPECIAL_SIZE = 40
 
 export const Activity = {
   EXPEDITION: 'EXPEDITION',
@@ -227,7 +198,7 @@ export const RequirementType = {
 }
 
 export const requirementValueConverter = (requirement) => {
-  switch (requirement.type) {
+  switch (requirement.type.toLowerCase()) {
     case RequirementType.DATE:
       return moment(requirement.value).format('DD.MM.YYYY, HH:mm')
     case RequirementType.SELECT:
@@ -247,4 +218,26 @@ export const requirementValueConverter = (requirement) => {
 export const EXPEDITION_STATUS = {
   ANSWER: 'ANSWER',
   CHOOSE: 'CHOOSE'
+}
+
+export const convertHeroTypeToPlayerType = (heroType) => {
+  if (heroType === HeroType.ROGUE || heroType === HeroType.WARRIOR) {
+    return PlayerType.CHALLENGING
+  }
+  return PlayerType.CALM
+}
+
+export const getGameCardInfo = (playerType, data) => {
+  if (playerType === PlayerType.CALM) {
+    return (
+      <span>
+        Zajmujesz <strong>{data.rankPosition}</strong> miejsce na <strong>{data.rankLength}</strong>!
+      </span>
+    )
+  }
+  return (
+    <span>
+      Jesteś w grupie <strong>{data.userPoints}</strong>% najlepszych graczy.
+    </span>
+  )
 }

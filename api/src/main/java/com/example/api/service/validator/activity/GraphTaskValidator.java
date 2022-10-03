@@ -3,8 +3,10 @@ package com.example.api.service.validator.activity;
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;
@@ -19,6 +21,12 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class GraphTaskValidator {
+    public void validateGraphTaskIsNotNull(GraphTask graphTask, Long id) throws EntityNotFoundException {
+        if(graphTask == null) {
+            log.error("GraphTask with id {} not found in database", id);
+            throw new EntityNotFoundException("GraphTask with id" + id + " not found in database");
+        }
+    }
 
     public void validateCreateGraphTaskFormFields(CreateGraphTaskForm form) throws RequestValidationException {
         if (Stream.of(form.getTitle(), form.getDescription(), form.getPosX(), form.getPosY(), form.getRequiredKnowledge(),

@@ -72,7 +72,6 @@ function ActivityRequirements(props) {
           value: getAnswer(r)
         }
       })
-
       ActivityService.setActivityRequirements(props.activityId, requirementsToSend)
         .then(() => {
           successToast()

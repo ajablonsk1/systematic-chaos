@@ -1,6 +1,7 @@
 package com.example.api.controller.map;
 
 import com.example.api.dto.request.map.ChapterForm;
+import com.example.api.dto.request.map.EditChapterForm;
 import com.example.api.dto.response.map.ChapterInfoResponse;
 import com.example.api.dto.response.map.ChapterResponse;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -41,6 +42,12 @@ public class ChapterController {
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteChapter(@RequestParam Long chapterID) throws WrongUserTypeException, EntityNotFoundException {
         chapterService.deleteChapter(chapterID);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/edit")
+    public ResponseEntity<?> editChapter(@RequestBody EditChapterForm editChapterForm) throws RequestValidationException {
+        chapterService.editChapter(editChapterForm);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

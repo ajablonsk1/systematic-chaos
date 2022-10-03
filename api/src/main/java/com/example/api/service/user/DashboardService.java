@@ -65,7 +65,7 @@ public class DashboardService {
     }
 
     private HeroTypeStats getHeroTypeStats(User student) throws EntityNotFoundException {
-        String heroType = student.getHeroType().getPolishTypeName();
+        String heroType = String.valueOf(student.getHeroType());
 
         List<RankingResponse> ranking = rankingService.getRanking();
         RankingResponse rank = getRank(student, ranking);
@@ -75,8 +75,8 @@ public class DashboardService {
         }
         Integer rankPosition = rank.getPosition();
         Long rankLength = (long) ranking.size();
-        Double betterPlayerPoints = rankPosition > 1 ? ranking.get(rankPosition - 1).getPoints() : null;
-        Double worsePlayerPoints = rankPosition < rankLength ? ranking.get(rankPosition + 1).getPoints() : null;
+        Double betterPlayerPoints = rankPosition > 1 ? ranking.get(rankPosition - 2).getPoints() : null;
+        Double worsePlayerPoints = rankPosition < rankLength ? ranking.get(rankPosition).getPoints() : null;
 
         return new HeroTypeStats(heroType, rankPosition, rankLength, betterPlayerPoints, worsePlayerPoints);
     }
@@ -193,10 +193,10 @@ public class DashboardService {
         Double points = activity.getMaxPoints();
         Requirement requirement = activity.getRequirements()
                 .stream()
-                .filter(req -> req.isSelected() && Objects.nonNull(req.getDateFrom()))
+                .filter(req -> req.isSelected() && Objects.nonNull(req.getDateTo()))
                 .findAny()
                 .orElse(null);
-        Long availableUntil = Objects.nonNull(requirement) ? requirement.getDateFrom() : null;
+        Long availableUntil = Objects.nonNull(requirement) ? requirement.getDateTo() : null;
         return new LastAddedActivity(chapterName, activityType, points, availableUntil);
 
     }

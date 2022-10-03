@@ -7,10 +7,10 @@ export const cytoscapeStylesheet = [
   {
     selector: 'node',
     style: {
-      backgroundColor: 'white',
+      backgroundColor: 'data(backgroundColor)',
       borderWidth: 5,
       borderColor: 'data(borderColor)',
-      content: 'data(id)',
+      content: 'data(content)',
       textValign: 'center',
       textHalign: 'center',
       fontSize: 'data(fontSize)',
@@ -23,10 +23,10 @@ export const cytoscapeStylesheet = [
   {
     selector: 'edge',
     style: {
-      width: 8,
-      lineColor: 'black',
+      width: 'data(size)',
+      lineColor: 'data(color)',
       targetArrowShape: 'triangle',
-      targetArrowColor: 'black',
+      targetArrowColor: 'data(color)',
       curveStyle: 'bezier',
       lineStyle: 'solid'
     }

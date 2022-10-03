@@ -16,3 +16,8 @@ export const HeroType = {
   PRIEST: 'PRIEST',
   ROGUE: 'ROGUE'
 }
+
+export const PlayerType = {
+  CALM: 'CALM',
+  CHALLENGING: 'CHALLENGING'
+}

@@ -320,58 +320,6 @@ public class DatabaseConfig {
             accessDateService.saveAccessDate(ac1);
             accessDateService.saveAccessDate(ac2);
 
-            Requirement requirement1 = new Requirement();
-            Requirement requirement2 = new Requirement();
-            Requirement requirement3 = new Requirement();
-            Requirement requirement4 = new Requirement();
-            Requirement requirement5 = new Requirement();
-            Requirement requirement6 = new Requirement();
-            Requirement requirement7 = new Requirement();
-
-            requirement1.setSelected(false);
-            requirement1.setName(MessageManager.DATE_FROM_REQ_NAME);
-            requirement1.setType(RequirementType.DATE_FROM);
-            requirement2.setSelected(false);
-            requirement2.setName(MessageManager.DATE_TO_REQ_NAME);
-            requirement2.setType(RequirementType.DATE_TO);
-            requirement3.setSelected(false);
-            requirement3.setName(MessageManager.MIN_POINTS_REQ_NAME);
-            requirement3.setType(RequirementType.MIN_POINTS);
-            requirement4.setSelected(false);
-            requirement4.setName(MessageManager.GROUPS_REQ_NAME);
-            requirement4.setType(RequirementType.GROUPS);
-            requirement5.setSelected(false);
-            requirement5.setName(MessageManager.STUDENTS_REQ_NAME);
-            requirement5.setType(RequirementType.STUDENTS);
-            requirement6.setSelected(false);
-            requirement6.setName(MessageManager.GRAPH_TASKS_REQ_NAME);
-            requirement6.setType(RequirementType.GRAPH_TASKS);
-            requirement7.setSelected(false);
-            requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
-            requirement7.setType(RequirementType.FILE_TASKS);
-            requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
-
-            requirement1.setDateFrom(System.currentTimeMillis());
-            requirement1.setIsDefault(false);
-            requirement2.setDateTo(System.currentTimeMillis() + 1_000 * 60 * 60);
-            requirement2.setIsDefault(false);
-            requirement3.setMinPoints(100.0);
-            requirement3.setIsDefault(false);
-            requirement4.setAllowedGroups(List.of());
-            requirement5.setAllowedStudents(List.of());
-            requirement6.setFinishedGraphTasks(List.of());
-            requirement7.setFinishedFileTasks(List.of());
-
-            requirementService.saveRequirement(requirement1);
-            requirementService.saveRequirement(requirement2);
-            requirementService.saveRequirement(requirement3);
-            requirementService.saveRequirement(requirement4);
-            requirementService.saveRequirement(requirement5);
-            requirementService.saveRequirement(requirement6);
-            requirementService.saveRequirement(requirement7);
-
-            List<Requirement> requirements = List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7);
-
             GraphTask graphTask = new GraphTask();
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
             graphTask.setTitle("Dżungla kabli");
@@ -380,7 +328,7 @@ public class DatabaseConfig {
             graphTask.setMaxPoints(60.0);
             graphTask.setExperience(20D);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
-            graphTask.setRequirements(requirements);
+            graphTask.setRequirements(createDefaultRequirements(requirementService));
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
@@ -459,6 +407,7 @@ public class DatabaseConfig {
             fileTask.setProfessor(professor);
             fileTask.setMaxPoints(30.0);
             fileTask.setExperience(10D);
+            fileTask.setRequirements(createDefaultRequirements(requirementService));
 
             fileTaskService.saveFileTask(fileTask);
 
@@ -468,6 +417,7 @@ public class DatabaseConfig {
             info1.setTitle("Skrętki");
             info1.setDescription("Przewody internetowe da się podzielić także pod względem ich ekranowania.");
             info1.setContent(MessageManager.LOREM_IPSUM);
+            info1.setRequirements(createDefaultRequirements(requirementService));
 
             Url url1 = new Url();
             Url url2 = new Url();
@@ -489,7 +439,7 @@ public class DatabaseConfig {
             survey.setPosY(3);
             survey.setPoints(10.0);
             survey.setExperience(5D);
-            survey.setRequirements(requirements);
+            survey.setRequirements(createDefaultRequirements(requirementService));
             surveyService.saveSurvey(survey);
 
             BufferedImage image = ImageIO.read(new java.io.File("src/main/resources/images/chapter_image.png"));
@@ -646,5 +596,60 @@ public class DatabaseConfig {
             fileRepo.save(chapterImage5);
 
         };
+    }
+
+    private List<Requirement> createDefaultRequirements(RequirementService requirementService) {
+        Requirement requirement1 = new Requirement();
+        Requirement requirement2 = new Requirement();
+        Requirement requirement3 = new Requirement();
+        Requirement requirement4 = new Requirement();
+        Requirement requirement5 = new Requirement();
+        Requirement requirement6 = new Requirement();
+        Requirement requirement7 = new Requirement();
+
+        requirement1.setSelected(false);
+        requirement1.setName(MessageManager.DATE_FROM_REQ_NAME);
+        requirement1.setType(RequirementType.DATE_FROM);
+        requirement2.setSelected(false);
+        requirement2.setName(MessageManager.DATE_TO_REQ_NAME);
+        requirement2.setType(RequirementType.DATE_TO);
+        requirement3.setSelected(false);
+        requirement3.setName(MessageManager.MIN_POINTS_REQ_NAME);
+        requirement3.setType(RequirementType.MIN_POINTS);
+        requirement4.setSelected(false);
+        requirement4.setName(MessageManager.GROUPS_REQ_NAME);
+        requirement4.setType(RequirementType.GROUPS);
+        requirement5.setSelected(false);
+        requirement5.setName(MessageManager.STUDENTS_REQ_NAME);
+        requirement5.setType(RequirementType.STUDENTS);
+        requirement6.setSelected(false);
+        requirement6.setName(MessageManager.GRAPH_TASKS_REQ_NAME);
+        requirement6.setType(RequirementType.GRAPH_TASKS);
+        requirement7.setSelected(false);
+        requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
+        requirement7.setType(RequirementType.FILE_TASKS);
+        requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
+
+        requirement1.setDateFrom(System.currentTimeMillis());
+        requirement1.setIsDefault(false);
+        requirement2.setDateTo(System.currentTimeMillis() + 1_000 * 60 * 60);
+        requirement2.setIsDefault(false);
+        requirement3.setMinPoints(100.0);
+        requirement3.setIsDefault(false);
+        requirement4.setAllowedGroups(List.of());
+        requirement5.setAllowedStudents(List.of());
+        requirement6.setFinishedGraphTasks(List.of());
+        requirement7.setFinishedFileTasks(List.of());
+
+        requirementService.saveRequirement(requirement1);
+        requirementService.saveRequirement(requirement2);
+        requirementService.saveRequirement(requirement3);
+        requirementService.saveRequirement(requirement4);
+        requirementService.saveRequirement(requirement5);
+        requirementService.saveRequirement(requirement6);
+        requirementService.saveRequirement(requirement7);
+
+        return List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7);
+
     }
 }

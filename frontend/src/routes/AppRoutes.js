@@ -16,6 +16,7 @@ import GradesRoutes from './modules/teacherRoutes/GradesRoutes'
 import TeacherRankingRoutes from './modules/teacherRoutes/RankingRoutes'
 import CanvasMap from '../components/student/CanvasMapPage/CanvasMap'
 import ProfileRoutes from './modules/studentRoutes/ProfileRoutes'
+import SettingsRoutes from './modules/teacherRoutes/SettingsRoutes'
 
 export default function AppRoutes() {
   return (
@@ -63,6 +64,8 @@ export default function AppRoutes() {
       <Route path={'/assessment/*'} element={<ActivityAssessmentRoutes />} />
 
       <Route path={'/grades/*'} element={<GradesRoutes />} />
+
+      <Route path={'/settings/*'} element={<SettingsRoutes />} />
 
       <Route path='*' element={<NotFound />} />
     </Routes>
