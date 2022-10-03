@@ -1,7 +1,8 @@
 package com.example.api.model.util;
 
 public enum ImageType {
-    CHAPTER("CHAPTER");
+    CHAPTER("CHAPTER"),
+    RANK("RANK");
 
     private final String type;
 
