@@ -3,7 +3,7 @@ import { Container, Nav, Navbar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
 export const SidebarEdit = styled(Navbar)`
-  background-color: var(--dark-blue);
+  background-color: ${(props) => props.$backgroundColor};
   position: sticky;
   top: 0;
   padding: 0;
@@ -18,7 +18,7 @@ export const NavBarTextContainer = styled(Container)`
   padding: 0;
 
   & #logo:hover {
-    color: var(--font-color);
+    color: ${(props) => props.$fontColor};
   }
 `
 
@@ -30,7 +30,7 @@ export const NavEdit = styled(Nav)`
 `
 
 export const LogoDiv = styled(Link)`
-  color: var(--font-color);
+  color: ${(props) => props.$logoColor};
   font-size: 1.5vw;
   margin-top: 10px;
   text-align: center;
@@ -38,7 +38,7 @@ export const LogoDiv = styled(Link)`
 `
 
 export const MobileNav = styled.div`
-  background-color: var(--dark-blue);
+  background-color: ${(props) => props.$background};
   width: 100%;
   padding: 10px 0;
   position: fixed;
@@ -52,7 +52,7 @@ export const Badge = styled.div`
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  background-color: red;
+  background-color: ${(props) => props.$badgeColor};
   display: flex;
   justify-content: center;
   align-items: center;

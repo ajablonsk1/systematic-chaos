@@ -11,8 +11,9 @@ import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { ChapterModal } from './ChapterModal/ChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
+import { connect } from 'react-redux'
 
-export default function GameManagement() {
+function GameManagement(props) {
   const navigate = useNavigate()
 
   const [showConfigModal, setShowConfigModal] = useState(false)
@@ -55,7 +56,7 @@ export default function GameManagement() {
       <Container>
         <Row>
           <Col>
-            <GameCardOptionPick>
+            <GameCardOptionPick $background={props.theme.primary} $fontColor={props.theme.font}>
               <h5 className='text-center pt-2'>Rozdziały</h5>
               <p className='text-center'>Edytuj istniejące rozdziały lub dodaj nowy.</p>
               <Table style={{ color: 'var(--font-color)' }}>
@@ -158,3 +159,11 @@ export default function GameManagement() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(GameManagement)

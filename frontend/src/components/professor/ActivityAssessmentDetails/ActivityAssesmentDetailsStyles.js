@@ -1,33 +1,6 @@
 import styled from 'styled-components'
 import { Button, Col, Row } from 'react-bootstrap'
 
-export const ActivityImg = styled.img`
-  height: 40px;
-  width: 40px;
-  margin: 10px;
-
-  @media (max-width: 800px) {
-    height: 20px;
-    width: 20px;
-    margin: 5px;
-  } ;
-`
-
-export const ActivityType = styled.h1`
-  text-align: left;
-  @media (max-width: 800px) {
-    font-size: 1.5rem;
-  } ;
-`
-
-export const ActivityName = styled.h1`
-  text-align: right;
-  margin-left: auto;
-  @media (max-width: 800px) {
-    font-size: 1.5rem;
-  } ;
-`
-
 export const PointsRow = styled(Row)`
   align-items: center;
   justify-content: space-around;
@@ -39,9 +12,9 @@ export const PointsRow = styled(Row)`
 
 export const PointsInput = styled.input`
   width: 50px;
-  color: var(--font-color);
-  border: 1px solid var(--font-color);
-  background-color: var(--dark-blue);
+  color: ${(props) => props.$fontColor};
+  border: 1px solid ${(props) => props.$borderColor};
+  background-color: ${(props) => props.$background};
 `
 
 export const PointsMax = styled.p`
@@ -56,12 +29,18 @@ export const AcceptButton = styled(Button)`
   margin-left: 50%;
   transform: translateX(-50%);
   margin-top: 15px;
-  background-color: var(--button-green);
-  border-color: var(--button-green);
+  background-color: ${(props) => props.$background};
+  border-color: ${(props) => props.$background};
+
   :disabled {
-    background-color: var(--button-green);
-    border-color: var(--button-green);
+    background-color: ${(props) => props.$background};
+    border-color: ${(props) => props.$background};
     opacity: 0.6;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.$background};
+    border-color: ${(props) => props.$background};
   }
 `
 

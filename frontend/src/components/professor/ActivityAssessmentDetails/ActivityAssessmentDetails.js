@@ -19,8 +19,9 @@ import { debounce } from 'lodash'
 import { HorizontalSpacer, VerticalSpacer, Header } from '../../general/TaskSharedComponents'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { Activity } from '../../../utils/constants'
+import { connect } from 'react-redux'
 
-export default function ActivityAssessmentDetails() {
+function ActivityAssessmentDetails(props) {
   const navigate = useNavigate()
   const location = useLocation()
   const { activityId } = location.state
@@ -185,6 +186,9 @@ export default function ActivityAssessmentDetails() {
                 <p className='m-0'>Punkty: </p>
                 <Row className={'d-flex justify-content-center'}>
                   <PointsInput
+                    $fontColor={props.theme.font}
+                    $borderColor={props.theme.warning}
+                    $background={props.theme.primary}
                     type='number'
                     min={0}
                     max={activityResponseInfo.maxPoints}
@@ -195,6 +199,7 @@ export default function ActivityAssessmentDetails() {
                 </Row>
               </PointsRow>
               <AcceptButton
+                $background={props.theme.success}
                 onClick={sendFeedbackAndGetNextIfAble}
                 disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}
               >
@@ -214,3 +219,10 @@ export default function ActivityAssessmentDetails() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityAssessmentDetails)
