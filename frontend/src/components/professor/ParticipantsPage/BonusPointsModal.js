@@ -45,8 +45,10 @@ function BonusPointsModal(props) {
               <Form onSubmit={handleSubmit}>
                 <Container>
                   <Row className='mx-auto'>
-                    {FormCol('Informacja zwrotna (opcjonalnie)', 'textarea', 'reason')}
-                    {FormCol('Punkty', 'number', 'points')}
+                    {FormCol('Informacja zwrotna (opcjonalnie)', 'textarea', 'reason', 12, {
+                      errorColor: props.theme.danger
+                    })}
+                    {FormCol('Punkty', 'number', 'points', 12, { errorColor: props.theme.danger })}
                   </Row>
                   <Row className='mt-4 d-flex justify-content-center'>
                     <Col sm={12} className='d-flex justify-content-center mb-2'>

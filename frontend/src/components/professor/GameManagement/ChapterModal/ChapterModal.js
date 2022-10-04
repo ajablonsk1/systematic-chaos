@@ -188,13 +188,19 @@ function ChapterModal(props) {
                         <FormikContext ref={formikContextRef} />
                         <Container>
                           <Row className='mx-auto'>
-                            {FormCol('Nazwa rozdziału', 'text', 'name', 12)}
+                            {FormCol('Nazwa rozdziału', 'text', 'name', 12, { errorColor: props.theme.danger })}
                             <div className={'m-2'}></div>
-                            {FormCol('Liczba kolumn', 'number', 'sizeX', 6, { min: 1 })}
-                            {FormCol('Liczba wierszy', 'number', 'sizeY', 6, { min: 1 })}
+                            {FormCol('Liczba kolumn', 'number', 'sizeX', 6, {
+                              min: 1,
+                              errorColor: props.theme.danger
+                            })}
+                            {FormCol('Liczba wierszy', 'number', 'sizeY', 6, {
+                              min: 1,
+                              errorColor: props.theme.danger
+                            })}
                             <div className={'m-2'}></div>
-                            {FormCol('Pozycja X', 'number', 'posX', 6)}
-                            {FormCol('Pozycja Y', 'number', 'posY', 6)}
+                            {FormCol('Pozycja X', 'number', 'posX', 6, { errorColor: props.theme.danger })}
+                            {FormCol('Pozycja Y', 'number', 'posY', 6, { errorColor: props.theme.danger })}
                             <div className={'m-2'}></div>
                           </Row>
 

@@ -46,8 +46,8 @@ function EditPasswordModal(props) {
             <Form onSubmit={handleSubmit}>
               <Container>
                 <Row className='mx-auto'>
-                  {FormCol('Nowe hasło', 'password', 'password')}
-                  {FormCol('Powtórz hasło', 'password', 'passwordRepeat')}
+                  {FormCol('Nowe hasło', 'password', 'password', 12, { errorColor: props.theme.danger })}
+                  {FormCol('Powtórz hasło', 'password', 'passwordRepeat', 12, { errorColor: props.theme.danger })}
 
                   {errorMessage && (
                     <p className={'text-center w-100'} style={{ color: 'red' }}>

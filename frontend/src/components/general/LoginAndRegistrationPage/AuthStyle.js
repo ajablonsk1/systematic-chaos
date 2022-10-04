@@ -8,7 +8,7 @@ export const LoginContainer = styled.div`
 `
 
 export const AuthFormContainer = styled(Col)`
-  background-color: var(--dark-blue);
+  background-color: ${(props) => props.$background};
   min-height: 100vh;
   display: flex;
   flex-direction: column;

@@ -38,8 +38,8 @@ function GroupAdditionForm(props) {
                 width: '70%'
               }}
             >
-              {FormCol('Nazwa grupy', 'text', 'name')}
-              {FormCol('Kod grupy', 'text', 'code')}
+              {FormCol('Nazwa grupy', 'text', 'name', 12, { errorColor: props.theme.danger })}
+              {FormCol('Kod grupy', 'text', 'code', 12, { errorColor: props.theme.danger })}
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>

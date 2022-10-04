@@ -33,7 +33,7 @@ export const CustomCarousel = styled(Carousel)`
     margin: 3px;
 
     &.active {
-      background-color: var(--dark-blue);
+      background-color: ${(props) => props.$background};
     }
   }
 `

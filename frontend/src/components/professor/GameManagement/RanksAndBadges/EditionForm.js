@@ -56,7 +56,10 @@ function EditionForm(props) {
           <Row className='mx-auto'>
             {Object.keys(editFormInitialValues).map((key, idx) => (
               <Col className='form-group' md={12} key={idx}>
-                {FormCol(getFormData(1, idx), getFormData(0, idx), key, 12, getAdditionalOptions(key))}
+                {FormCol(getFormData(1, idx), getFormData(0, idx), key, 12, {
+                  ...getAdditionalOptions(key),
+                  errorColor: props.theme.danger
+                })}
               </Col>
             ))}
           </Row>
