@@ -9,6 +9,7 @@ import { getBadgesList } from '../../../student/BadgesPage/mockData'
 import ContentCard from './ContentCard'
 import Table from './Table'
 import EditionForm from './EditionForm'
+import { connect } from 'react-redux'
 
 function RankAndBadgesManagement(props) {
   const ranksData = getRanksData()
@@ -92,10 +93,16 @@ function RankAndBadgesManagement(props) {
         </ModalHeader>
         <ModalBody>Czy na pewno chcesz usunąć ten element? Tej operacji nie można cofnąć.</ModalBody>
         <ModalFooter>
-          <Button variant={'info'} onClick={() => setIsDeleteModalOpen(false)}>
+          <Button
+            style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary }}
+            onClick={() => setIsDeleteModalOpen(false)}
+          >
             Anuluj
           </Button>
-          <Button variant={'danger'} onClick={() => setIsDeleteModalOpen(false)}>
+          <Button
+            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+            onClick={() => setIsDeleteModalOpen(false)}
+          >
             Usuń
           </Button>
         </ModalFooter>
@@ -117,4 +124,9 @@ function RankAndBadgesManagement(props) {
   )
 }
 
-export default RankAndBadgesManagement
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(RankAndBadgesManagement)

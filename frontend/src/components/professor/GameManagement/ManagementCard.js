@@ -1,5 +1,5 @@
 import { GameCardOptionPick } from '../../general/GameCardStyles'
-import { GameButton } from './GameButton'
+import GameButton from './GameButton'
 import { connect } from 'react-redux'
 
 function ManagementCard(props) {

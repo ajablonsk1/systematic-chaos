@@ -10,6 +10,7 @@ import pl from 'date-fns/locale/pl'
 import CreatableInput from '../../../../general/CreatableInput/CreatableInput'
 import ActivityService from '../../../../../services/activity.service'
 import { successToast } from '../../../../../utils/toasts'
+import { connect } from 'react-redux'
 
 registerLocale('pl', pl)
 
@@ -161,7 +162,11 @@ function ActivityRequirements(props) {
           </CustomTable>
         </Row>
       </Row>
-      {onSaveError && <p className={'w-100 text-center text-danger'}>{onSaveError}</p>}
+      {onSaveError && (
+        <p className={'w-100 text-center'} style={{ color: props.theme.danger }}>
+          {onSaveError}
+        </p>
+      )}
       <Button className={'position-relative start-50 translate-middle-x w-auto mt-3'} onClick={saveRequirements}>
         {isSaving ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz zmiany</span>}
       </Button>
@@ -169,4 +174,9 @@ function ActivityRequirements(props) {
   )
 }
 
-export default ActivityRequirements
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityRequirements)

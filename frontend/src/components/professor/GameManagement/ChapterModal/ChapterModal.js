@@ -22,7 +22,7 @@ import {
 } from '../../../../utils/constants'
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
 import ChapterService from '../../../../services/chapter.service'
-import { SuccessModal } from '../../SuccessModal'
+import SuccessModal from '../../SuccessModal'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import GameMapContainer from '../../../student/GameMapPage/GameMapContainer'
 import { getGraphElements } from '../../../general/Graph/graphHelper'
@@ -30,6 +30,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import FormikContext from '../../../general/FormikContext/FormikContext'
 import { useCallback } from 'react'
+import { connect } from 'react-redux'
 
 const MAP_HEIGHT = 500
 const MAP_WIDTH = 1.5 * MAP_HEIGHT
@@ -42,7 +43,8 @@ const EMPTY_INITIAL_VALUES = {
   imageId: ''
 }
 
-export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, chapterDetails }) {
+function ChapterModal(props) {
+  const { showModal, setShowModal, isLoaded, onSuccess, chapterDetails } = props
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -212,15 +214,19 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
 
                           <Row className='mt-4 d-flex justify-content-center'>
                             <Col sm={12} className='d-flex justify-content-center mb-2'>
-                              <Button variant={'danger'} className={'me-2'} onClick={() => setShowModal(false)}>
+                              <Button
+                                style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                                className={'me-2'}
+                                onClick={() => setShowModal(false)}
+                              >
                                 Anuluj
                               </Button>
                               <Button
                                 type='submit'
                                 disabled={isSubmitting}
                                 style={{
-                                  backgroundColor: 'var(--button-green)',
-                                  borderColor: 'var(--button-green)'
+                                  backgroundColor: props.theme.success,
+                                  borderColor: props.theme.success
                                 }}
                               >
                                 {isSubmitting ? (
@@ -236,7 +242,11 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
                     )
                   }}
                 </Formik>
-                {errorMessage && <p className={'text-center text-danger mt-2'}>{errorMessage}</p>}
+                {errorMessage && (
+                  <p className={'text-center mt-2'} style={{ color: props.theme.danger }}>
+                    {errorMessage}
+                  </p>
+                )}
               </Tab>
               <Tab eventKey={'preview'} title={'Podgląd mapy gry'}>
                 <GameMapContainer
@@ -259,3 +269,11 @@ export function ChapterModal({ showModal, setShowModal, isLoaded, onSuccess, cha
     )
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+
+export default connect(mapStateToProps)(ChapterModal)

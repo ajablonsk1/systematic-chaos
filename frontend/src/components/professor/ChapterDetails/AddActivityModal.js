@@ -6,6 +6,7 @@ import AddGraphTask from './AddActivity/AddGraphTask'
 import AddCombatTask from './AddActivity/AddCombatTask'
 import AddInfoTask from './AddActivity/AddInfoTask'
 import AddSurveyTask from './AddActivity/AddSurveyTask'
+import { connect } from 'react-redux'
 
 function AddActivityModal(props) {
   const activities = Object.keys(Activity)
@@ -47,7 +48,12 @@ function AddActivityModal(props) {
           <h5>Dodaj nową aktywność</h5>
         </ModalHeader>
         <ModalBody>
-          <TabsContainer defaultActiveKey={Activity.EXPEDITION}>
+          <TabsContainer
+            $background={props.theme.success}
+            $fontColor={props.theme.background}
+            $linkColor={props.theme.primary}
+            defaultActiveKey={Activity.EXPEDITION}
+          >
             {activities.map(
               (activity, index) =>
                 activity !== Activity.ADDITIONAL && (
@@ -74,4 +80,10 @@ function AddActivityModal(props) {
   )
 }
 
-export default AddActivityModal
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(AddActivityModal)

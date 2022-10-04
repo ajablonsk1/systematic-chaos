@@ -4,8 +4,9 @@ import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { FIELD_REQUIRED } from '../../../utils/constants'
 import GroupService from '../../../services/group.service'
+import { connect } from 'react-redux'
 
-export default function GroupAdditionForm(props) {
+function GroupAdditionForm(props) {
   return (
     // todo: think about general Form component that can be extended
     <Formik
@@ -42,11 +43,15 @@ export default function GroupAdditionForm(props) {
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>
-                <Button variant={'danger'} className='me-3' onClick={() => props.setModalOpen(false)}>
+                <Button
+                  style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                  className='me-3'
+                  onClick={() => props.setModalOpen(false)}
+                >
                   Anuluj
                 </Button>
                 <Button
-                  style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
+                  style={{ backgroundColor: props.theme.success, border: 'none' }}
                   type='submit'
                   disabled={isSubmitting}
                 >
@@ -60,3 +65,11 @@ export default function GroupAdditionForm(props) {
     </Formik>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(GroupAdditionForm)

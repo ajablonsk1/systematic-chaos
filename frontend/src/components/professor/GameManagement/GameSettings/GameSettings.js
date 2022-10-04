@@ -5,8 +5,9 @@ import gameMap from '../../../student/GameMapPage/resources/map1.png'
 import ColorPicker from './ColorPicker'
 import { useNavigate } from 'react-router-dom'
 import { TeacherRoutes } from '../../../../routes/PageRoutes'
+import { connect } from 'react-redux'
 
-function GameSettings() {
+function GameSettings(props) {
   const navigate = useNavigate()
 
   const colorPickerElements = [
@@ -48,7 +49,9 @@ function GameSettings() {
             <Button variant={'secondary'} onClick={() => navigate(TeacherRoutes.GAME_MANAGEMENT.MAIN)}>
               Wstecz
             </Button>
-            <Button variant={'success'}>Zapisz zmiany</Button>
+            <Button style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}>
+              Zapisz zmiany
+            </Button>
           </div>
         </Col>
       </Row>
@@ -56,4 +59,9 @@ function GameSettings() {
   )
 }
 
-export default GameSettings
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(GameSettings)

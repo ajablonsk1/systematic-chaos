@@ -24,7 +24,7 @@ import ChapterService from '../../../services/chapter.service'
 import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
-import { ChapterModal } from '../GameManagement/ChapterModal/ChapterModal'
+import ChapterModal from '../GameManagement/ChapterModal/ChapterModal'
 import { successToast } from '../../../utils/toasts'
 import { connect } from 'react-redux'
 

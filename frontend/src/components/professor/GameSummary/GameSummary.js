@@ -25,10 +25,11 @@ import { lineChartConfig } from './lineChartHelper'
 import ProfessorService from '../../../services/professor.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED, getActivityTypeName } from '../../../utils/constants'
+import { connect } from 'react-redux'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement)
 
-export default function GameSummary() {
+function GameSummary(props) {
   const [summaryDetails, setSummaryDetails] = useState(undefined)
 
   const [barChartActiveChapterId, setBarChartActiveChapterId] = useState(0)
@@ -95,8 +96,8 @@ export default function GameSummary() {
           indicators={false}
           nextLabel={null}
           prevLabel={null}
-          nextIcon={<FontAwesomeIcon icon={faArrowRight} color={'var(--font-color)'} />}
-          prevIcon={<FontAwesomeIcon icon={faArrowLeft} color={'var(--font-color)'} />}
+          nextIcon={<FontAwesomeIcon icon={faArrowRight} color={props.theme.font} />}
+          prevIcon={<FontAwesomeIcon icon={faArrowLeft} color={props.theme.font} />}
           onSelect={onSelectCallback}
         >
           {getChapterNames().map((name, index) => (
@@ -107,7 +108,7 @@ export default function GameSummary() {
         </Carousel>
       )
     },
-    [summaryDetails]
+    [props.theme.font, summaryDetails?.avgGradesList]
   )
 
   return (
@@ -172,7 +173,7 @@ export default function GameSummary() {
                 </CardHeader>
                 <Card.Body style={{ maxHeight: '42vh', overflow: 'auto' }}>
                   <CustomTable>
-                    <thead className={'position-sticky'} style={{ top: '-5%', background: 'var(--light-blue)' }}>
+                    <thead className={'position-sticky'} style={{ top: '-5%', background: props.theme.secondary }}>
                       <tr>
                         <th>Nazwa aktywności</th>
                         <th>Typ aktywności</th>
@@ -198,3 +199,11 @@ export default function GameSummary() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(GameSummary)

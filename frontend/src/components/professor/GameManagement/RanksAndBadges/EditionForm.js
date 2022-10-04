@@ -3,6 +3,7 @@ import { FormikProvider, useFormik } from 'formik'
 import { FIELD_REQUIRED } from '../../../../utils/constants'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
+import { connect } from 'react-redux'
 
 function EditionForm(props) {
   const [editFormInitialValues, setEditFormInitialValues] = useState({})
@@ -61,10 +62,16 @@ function EditionForm(props) {
           </Row>
           <Row className='mt-4 d-flex justify-content-center'>
             <Col sm={12} className='d-flex justify-content-center mb-2'>
-              <Button variant={'secondary'} className={'me-3'} onClick={props.onCancel}>
+              <Button
+                style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                className={'me-3'}
+                onClick={props.onCancel}
+              >
                 Anuluj
               </Button>
-              <Button type='submit'>Zapisz zmiany</Button>
+              <Button type='submit' style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}>
+                Zapisz zmiany
+              </Button>
             </Col>
           </Row>
         </Container>
@@ -73,4 +80,9 @@ function EditionForm(props) {
   )
 }
 
-export default EditionForm
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(EditionForm)

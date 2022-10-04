@@ -6,6 +6,7 @@ import { Button } from 'react-bootstrap'
 import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import BonusPointsModal from './BonusPointsModal'
+import { connect } from 'react-redux'
 
 function ParticipantsTable(props) {
   const [changeGroupModalOpen, setChangeGroupModalOpen] = useState(false)
@@ -40,7 +41,7 @@ function ParticipantsTable(props) {
 
   return (
     <GameCardOptionPick style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-      <TableContainer>
+      <TableContainer $fontColor={props.theme.font} $background={props.theme.primary} $tdColor={props.theme.secondary}>
         <thead>
           <tr>
             <th>Nazwa grupy</th>
@@ -98,4 +99,10 @@ function ParticipantsTable(props) {
   )
 }
 
-export default ParticipantsTable
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(ParticipantsTable)
