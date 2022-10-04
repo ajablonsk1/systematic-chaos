@@ -128,7 +128,11 @@ function ActivityRequirements(props) {
     <>
       <Row className={'m-0 px-3 d-flex flex-column align-items-center'} style={{ height: '85vh', overflowY: 'auto' }}>
         <Row>
-          <CustomTable>
+          <CustomTable
+            $fontColor={props.theme.font}
+            $borderColor={props.theme.primary}
+            $background={props.theme.secondary}
+          >
             <tbody>
               <tr className={'position-sticky top-0'} style={{ zIndex: 100 }}>
                 <th className={'text-center'} colSpan={3}>

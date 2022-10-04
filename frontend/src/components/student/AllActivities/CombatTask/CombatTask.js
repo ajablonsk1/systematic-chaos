@@ -96,20 +96,20 @@ function CombatTask(props) {
         <HorizontalSpacer height={'3vh'} />
         <Col
           className='m-0 pt-4 mx-auto'
-          style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
+          style={{ height: '94vh', width: '90%', backgroundColor: props.theme.secondary }}
         >
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}>
+          <Row className='p-2 rounded mx-2' style={{ backgroundColor: props.theme.primary, height: '6vh' }}>
             <Header activityName={task.name} activityType={Activity.TASK} />
           </Row>
           <VerticalSpacer height={'2vh'} />
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '25vh' }}
+            style={{ backgroundColor: props.theme.primary, height: '25vh' }}
           >
             <ActivityDetails description={task.description} />
           </Row>
           <VerticalSpacer height={'2vh'} />
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '50vh' }}>
+          <Row className='p-2 rounded mx-2' style={{ backgroundColor: props.theme.primary, height: '50vh' }}>
             <Col
               md={task.answer || answerWasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
               className={'h-100 overflow-auto'}
@@ -147,11 +147,15 @@ function CombatTask(props) {
                       setFileName={setFileName}
                       setIsFetching={setIsFetching}
                       isFetching={isFetching}
-                      isRevieved={isReviewed()}
+                      isReviewed={isReviewed()}
                     />
                   </Col>
                   <Col className={'w-100 text-center'}>
-                    <SendTaskButton disabled={task.points != null} onClick={sendAnswer}>
+                    <SendTaskButton
+                      $background={props.theme.success}
+                      disabled={task.points != null}
+                      onClick={sendAnswer}
+                    >
                       {isFetching ? (
                         <Spinner animation={'border'} />
                       ) : isReviewed() ? (
@@ -172,7 +176,10 @@ function CombatTask(props) {
                 <Col className={'border-left border-warning overflow-auto'}>
                   <h4>Aktywność została oceniona</h4>
                   <VerticalSpacer height={'2vh'} />
-                  <Col className={'text-center mx-auto border border-warning p-1 rounded'} style={{ width: '20%' }}>
+                  <Col
+                    className={'text-center mx-auto border p-1 rounded'}
+                    style={{ width: '20%', borderColor: props.theme.warning }}
+                  >
                     <h5>Punkty </h5>
                     <p>{task.points}</p>
                   </Col>
@@ -193,7 +200,7 @@ function CombatTask(props) {
   }
 
   return (
-    <Content style={{ color: 'var(--font-color)' }}>
+    <Content style={{ color: props.theme.font }}>
       {task === undefined ? <Loader /> : task == null ? ERROR_OCCURRED : contentBody()}
     </Content>
   )

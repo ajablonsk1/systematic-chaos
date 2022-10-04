@@ -40,7 +40,7 @@ export const GradesStatsContent = (props) => {
 
 export const LastActivitiesContent = (props) => {
   return (
-    <CustomTable>
+    <CustomTable $fontColor={props.theme.font} $borderColor={props.theme.primary} $background={props.theme.secondary}>
       <thead>
         <tr>
           <th>Rozdział</th>

@@ -7,6 +7,7 @@ import {
 } from '../../general/LoginAndRegistrationPage/RegistrationPage/validators'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import AuthService from '../../../services/auth.service'
+import { connect } from 'react-redux'
 
 function EditPasswordModal(props) {
   const [errorMessage, setErrorMessage] = useState('')
@@ -56,7 +57,10 @@ function EditPasswordModal(props) {
                 </Row>
                 <Row className='mt-4 d-flex justify-content-center'>
                   <Col sm={12} className='d-flex justify-content-center mb-2 gap-2'>
-                    <Button variant={'danger'} onClick={() => props.setModalOpen(false)}>
+                    <Button
+                      style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                      onClick={() => props.setModalOpen(false)}
+                    >
                       Anuluj
                     </Button>
                     <Button type='submit'>Zapisz</Button>
@@ -71,4 +75,9 @@ function EditPasswordModal(props) {
   )
 }
 
-export default EditPasswordModal
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(EditPasswordModal)

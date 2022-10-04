@@ -11,8 +11,9 @@ import moment from 'moment'
 import PercentageCircle from '../../../PointsPage/ChartAndStats/PercentageCircle'
 import ActivityInfoContentCard from './ActivityInfoContentCard'
 import { StudentRoutes } from '../../../../../routes/PageRoutes'
+import { connect } from 'react-redux'
 
-export default function ActivityContent(props) {
+function ActivityContent(props) {
   const navigate = useNavigate()
   const activityId = props.activityId
 
@@ -127,7 +128,7 @@ export default function ActivityContent(props) {
     ]
 
     return (
-      <CustomTable>
+      <CustomTable $fontColor={props.theme.font} $borderColor={props.theme.primary} $background={props.theme.secondary}>
         <tbody>
           {tableElements.map((row, index) => (
             <tr key={index + Date.now()}>
@@ -158,7 +159,11 @@ export default function ActivityContent(props) {
     return (
       <Row className={'h-100 m-0 p-0'}>
         <Col md={6} className={'pt-4'}>
-          <CustomTable>
+          <CustomTable
+            $fontColor={props.theme.font}
+            $borderColor={props.theme.primary}
+            $background={props.theme.secondary}
+          >
             <tbody>
               {tableElements.map((row, index) => (
                 <tr key={index + Date.now()}>
@@ -201,11 +206,19 @@ export default function ActivityContent(props) {
           />
         </Row>
         <Row className={'justify-content-center align-items-start gap-2 py-2 px-2'} style={{ height: '5vh' }}>
-          <Button className={'w-auto'} variant={'secondary'} onClick={() => navigate(StudentRoutes.GAME_MAP.MAIN)}>
+          <Button
+            className={'w-auto'}
+            style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary }}
+            onClick={() => navigate(StudentRoutes.GAME_MAP.MAIN)}
+          >
             Wstecz
           </Button>
           {/* we don't need to disable the button anymore, as we can try to continue with the server-side flow rework */}
-          <Button className={'w-auto'} variant={'warning'} onClick={startExpedition}>
+          <Button
+            className={'w-auto'}
+            style={{ backgroundColor: props.theme.warning, borderColor: props.theme.warning }}
+            onClick={startExpedition}
+          >
             {isFetching ? <Spinner animation={'border'} /> : <span>Rozpocznij</span>}
           </Button>
         </Row>
@@ -213,3 +226,10 @@ export default function ActivityContent(props) {
     </Row>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityContent)

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { Answer, ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle'
 import answerSaver from '../answerSaver'
+import { connect } from 'react-redux'
 
 function ClosedQuestionPage(props) {
   const answersParent = useRef(null)
@@ -30,7 +31,7 @@ function ClosedQuestionPage(props) {
       }}
     >
       <Col lg={8}>
-        <QuestionCard>
+        <QuestionCard $fontColor={props.theme.font} $background={props.theme.primary}>
           <div>{props.question.hint}</div>
           <div>
             <p>{props.question.content}</p>
@@ -64,4 +65,9 @@ function ClosedQuestionPage(props) {
   )
 }
 
-export default ClosedQuestionPage
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ClosedQuestionPage)

@@ -3,6 +3,7 @@ import { ERROR_OCCURRED, QuestionType } from '../../../../../utils/constants'
 import Loader from '../../../../general/Loader/Loader'
 import { ContentWithBackground } from './QuestionAndOptionsStyle'
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage'
+import { connect } from 'react-redux'
 
 // we don't need navigate, we don't need location - props are enough
 
@@ -34,7 +35,9 @@ function QuestionAndOptions(props) {
       {question === undefined ? (
         <Loader />
       ) : question == null ? (
-        <p className={'text-center text-danger h3'}>{ERROR_OCCURRED}</p>
+        <p className={'text-center h3'} style={{ color: props.theme.danger }}>
+          {ERROR_OCCURRED}
+        </p>
       ) : (
         <>
           {question.type === QuestionType.OPEN_QUESTION ? (
@@ -48,4 +51,9 @@ function QuestionAndOptions(props) {
   )
 }
 
-export default QuestionAndOptions
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(QuestionAndOptions)

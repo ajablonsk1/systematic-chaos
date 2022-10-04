@@ -15,8 +15,8 @@ export const ContentWithBackground = styled(Content)`
 export const QuestionCard = styled.div`
   height: 80vh;
 
-  background-color: var(--dark-blue);
-  color: var(--font-color);
+  background-color: ${(props) => props.$background};
+  color: ${(props) => props.$fontColor};
   margin: 0;
   text-align: center;
   /* width: calc(100% - var(--margin)); */
@@ -30,7 +30,7 @@ export const QuestionCard = styled.div`
       width: 80%;
       height: 2px;
       margin: 20px auto;
-      background-color: var(--font-color);
+      background-color: ${(props) => props.$fontColor};
       border-radius: 50px;
     }
   }

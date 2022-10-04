@@ -2,10 +2,11 @@ import React from 'react'
 import { CustomCard } from '../GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
 import { Button, Card } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 function ProfileCard(props) {
   return (
-    <CustomCard>
+    <CustomCard $fontColor={props.theme.font} $background={props.theme.primary} $bodyColor={props.theme.secondary}>
       <CardHeader>
         <h5>{props.header}</h5>
       </CardHeader>
@@ -20,5 +21,9 @@ function ProfileCard(props) {
     </CustomCard>
   )
 }
+function mapStateToProps(state) {
+  const theme = state.theme
 
-export default ProfileCard
+  return { theme }
+}
+export default connect(mapStateToProps)(ProfileCard)

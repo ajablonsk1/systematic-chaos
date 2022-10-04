@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useCallback } from 'react'
 import Graph from '../../general/Graph/Graph'
 import { getNodePosition } from './gameMapHelper'
 import { GameMapContainer as GameMapContainerStyle } from './GameMapStyles'
+import { connect } from 'react-redux'
 
 function GameMapContainer(props) {
   const [mapContainerSize, setMapContainerSize] = useState(null)
@@ -29,7 +30,12 @@ function GameMapContainer(props) {
   }, [mapContainerSize, props])
 
   return (
-    <GameMapContainerStyle className={'mx-auto rounded mt-3'} ref={containerRef} $customHeight={props.customHeight}>
+    <GameMapContainerStyle
+      $borderColor={props.theme.primary}
+      className={'mx-auto rounded mt-3'}
+      ref={containerRef}
+      $customHeight={props.customHeight}
+    >
       <Graph
         elements={props.elements?.map((element) => ({
           classes: element.classes,
@@ -45,4 +51,9 @@ function GameMapContainer(props) {
   )
 }
 
-export default GameMapContainer
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(GameMapContainer)

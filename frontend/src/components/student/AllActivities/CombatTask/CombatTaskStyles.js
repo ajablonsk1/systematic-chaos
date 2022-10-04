@@ -7,5 +7,5 @@ export const SendTaskButton = styled(Button)`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
-  background-color: #085454 !important;
+  background-color: ${(props) => props.$background} !important;
 `

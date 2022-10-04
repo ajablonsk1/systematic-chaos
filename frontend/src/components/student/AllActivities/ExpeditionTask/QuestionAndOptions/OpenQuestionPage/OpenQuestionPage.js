@@ -3,6 +3,7 @@ import { Col, Row } from 'react-bootstrap'
 import { ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle'
 import { UserAnswerArea } from './OpenQuestionStyle'
 import answerSaver from '../answerSaver'
+import { connect } from 'react-redux'
 
 function fitAreaToContent(text) {
   const maxHeight = 300 // px
@@ -10,7 +11,7 @@ function fitAreaToContent(text) {
   text.style.height = Math.min(text.scrollHeight, maxHeight) + 'px'
 }
 
-export default function OpenQuestionPage(props) {
+function OpenQuestionPage(props) {
   const userAnswer = useRef()
   const saveAnswer = () => {
     answerSaver(userAnswer.current.value, props.question.type, props.expeditionId, props.question.id, props.reloadInfo)
@@ -30,6 +31,7 @@ export default function OpenQuestionPage(props) {
       <Col xs={12}>
         <UserAnswerArea
           ref={userAnswer}
+          $borderColor={props.theme.primary}
           placeholder='Twoja odpowiedź...'
           onInput={() => fitAreaToContent(userAnswer.current)}
         ></UserAnswerArea>
@@ -42,3 +44,10 @@ export default function OpenQuestionPage(props) {
     </Row>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(OpenQuestionPage)

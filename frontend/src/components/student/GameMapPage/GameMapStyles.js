@@ -5,7 +5,7 @@ import gameMap from './resources/map1.png'
 export const GameMapContainer = styled.div`
   height: ${(props) => (props.$customHeight ? props.$customHeight + 'px' : '90vh')};
   width: ${(props) => (props.$customHeight ? props.$customHeight * 1.5 + 'px' : '135vh')};
-  border: 10px solid var(--dark-blue);
+  border: 10px solid ${(props) => props.$borderColor};
   background: url('${gameMap}') no-repeat center;
   background-size: cover;
 `

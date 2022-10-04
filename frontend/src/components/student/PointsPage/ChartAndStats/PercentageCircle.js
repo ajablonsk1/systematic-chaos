@@ -1,11 +1,15 @@
 import React from 'react'
 import { Chart, Circle, Percentage } from './PercentageCircleStyle'
+import { connect } from 'react-redux'
 
-export default function PercentageCircle({ percentageValue, points, maxPoints }) {
+function PercentageCircle(props) {
+  const { percentageValue, points, maxPoints } = props
   return (
     <Chart>
       <svg viewBox='0 0 36 36'>
         <Circle
+          $strokeColor={props.theme.warning}
+          $fillColor={props.theme.primary}
           strokeDasharray={`${percentageValue}, 100`}
           d='M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831'
         />
@@ -19,3 +23,10 @@ export default function PercentageCircle({ percentageValue, points, maxPoints })
     </Chart>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(PercentageCircle)

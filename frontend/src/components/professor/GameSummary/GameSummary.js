@@ -135,7 +135,11 @@ function GameSummary(props) {
               </Row>
             </Col>
             <Col md={6} className={'py-2'}>
-              <CustomCard>
+              <CustomCard
+                $fontColor={props.theme.font}
+                $background={props.theme.primary}
+                $bodyColor={props.theme.secondary}
+              >
                 <CardHeader>
                   <h5>Średnia ocen w każdej grupie</h5>
                 </CardHeader>
@@ -150,7 +154,11 @@ function GameSummary(props) {
           </Row>
           <Row className={'m-0'} style={{ height: '50vh' }}>
             <Col md={6} className={'py-2'}>
-              <CustomCard>
+              <CustomCard
+                $fontColor={props.theme.font}
+                $background={props.theme.primary}
+                $bodyColor={props.theme.secondary}
+              >
                 <CardHeader>
                   <h5>Średni wynik z aktywności</h5>
                 </CardHeader>
@@ -167,12 +175,20 @@ function GameSummary(props) {
               </CustomCard>
             </Col>
             <Col md={6} className={'py-2'}>
-              <CustomCard>
+              <CustomCard
+                $fontColor={props.theme.font}
+                $background={props.theme.primary}
+                $bodyColor={props.theme.secondary}
+              >
                 <CardHeader>
                   <h5>Nieocenione aktywności</h5>
                 </CardHeader>
                 <Card.Body style={{ maxHeight: '42vh', overflow: 'auto' }}>
-                  <CustomTable>
+                  <CustomTable
+                    $fontColor={props.theme.font}
+                    $borderColor={props.theme.primary}
+                    $background={props.theme.secondary}
+                  >
                     <thead className={'position-sticky'} style={{ top: '-5%', background: props.theme.secondary }}>
                       <tr>
                         <th>Nazwa aktywności</th>
