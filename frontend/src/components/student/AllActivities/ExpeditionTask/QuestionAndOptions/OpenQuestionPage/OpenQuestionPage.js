@@ -36,7 +36,7 @@ function OpenQuestionPage(props) {
           onInput={() => fitAreaToContent(userAnswer.current)}
         ></UserAnswerArea>
       </Col>
-      <ButtonRow className='w-50'>
+      <ButtonRow className='w-50' $background={props.theme.success}>
         <button style={{ marginBottom: '50px' }} onClick={() => saveAnswer()}>
           Wyślij
         </button>

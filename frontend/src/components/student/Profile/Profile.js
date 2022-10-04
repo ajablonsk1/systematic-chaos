@@ -6,8 +6,9 @@ import ProfileCard from './ProfileCard'
 import EditIndexModal from './EditIndexModal'
 import EditPasswordModal from './EditPasswordModal'
 import UserService from '../../../services/user.service'
+import { connect } from 'react-redux'
 
-function Profile() {
+function Profile(props) {
   const [userData, setUserData] = useState(undefined)
   const [isEditIndexModalOpen, setIsEditIndexModalOpen] = useState(false)
   const [indexNumber, setIndexNumber] = useState(undefined)
@@ -114,7 +115,7 @@ function Profile() {
             header={'Usuń konto'}
             body={<p className={'text-center h-75'}>Pamiętaj, że tego procesu nie możesz cofnąć.</p>}
             showButton
-            customButton={'danger'}
+            customButton={props.theme.danger}
             buttonText={'Usuń'}
           />
         </Col>
@@ -129,4 +130,9 @@ function Profile() {
   )
 }
 
-export default Profile
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(Profile)

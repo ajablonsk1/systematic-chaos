@@ -46,7 +46,10 @@ function GameSettings(props) {
             </div>
           </Row>
           <div className={'gap-2 d-flex justify-content-end'}>
-            <Button variant={'secondary'} onClick={() => navigate(TeacherRoutes.GAME_MANAGEMENT.MAIN)}>
+            <Button
+              style={{ backgroundColor: props.theme.warning, borderColor: props.theme.warning }}
+              onClick={() => navigate(TeacherRoutes.GAME_MANAGEMENT.MAIN)}
+            >
               Wstecz
             </Button>
             <Button style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}>

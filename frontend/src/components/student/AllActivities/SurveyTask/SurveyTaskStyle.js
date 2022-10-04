@@ -11,10 +11,10 @@ export const FormikTextarea = styled(Field)`
 
 export const FormikRange = styled(Field)`
   width: 82%;
-  accent-color: var(--button-green);
+  accent-color: ${(props) => props.$accentColor};
 `
 
 export const FormButton = styled(Button)`
-  background-color: var(--button-green);
-  border-color: var(--button-green);
+  background-color: ${(props) => props.$buttonColor};
+  border-color: ${(props) => props.$buttonColor};
 `

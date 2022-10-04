@@ -59,7 +59,7 @@ function ParticipantsTable(props) {
                 </td>
                 <td className={'py-2 text-center'}>
                   <Button
-                    style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
+                    style={{ backgroundColor: props.theme.success, border: 'none' }}
                     onClick={() => {
                       setChosenStudent(student)
                       setChangeGroupModalOpen(true)
@@ -69,7 +69,7 @@ function ParticipantsTable(props) {
                   </Button>
                   <Button
                     className={'ms-2'}
-                    style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
+                    style={{ backgroundColor: props.theme.success, border: 'none' }}
                     onClick={() => {
                       setChosenStudent(student)
                       setBonusPointsModalOpen(true)

@@ -248,6 +248,7 @@ function ChapterDetails(props) {
                           }
                         >
                           <TableRow
+                            $background={props.theme.primary}
                             onClick={() => goToChapterDetails(activity.title, activity.id, activity.type)}
                             style={{ opacity: activity.areRequirementsAdded ? 1 : 0.4 }}
                           >

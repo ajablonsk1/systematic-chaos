@@ -65,7 +65,7 @@ export const ButtonsCol = styled(Col)`
 
 export const TableRow = styled.tr`
   &:hover {
-    background-color: var(--dark-blue);
+    background-color: ${(props) => props.$background};
     cursor: pointer;
   }
 

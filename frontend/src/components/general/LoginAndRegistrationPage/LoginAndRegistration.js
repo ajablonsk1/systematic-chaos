@@ -14,7 +14,7 @@ function LoginAndRegistration(props) {
       <Row className='w-100 h-100 align-items-center m-0'>
         <Carousel />
         <AuthFormContainer $background={props.theme.primary} md={6} className='p-0'>
-          <Logo>
+          <Logo $logoColor={props.theme.font}>
             <FontAwesomeIcon icon={faFire} />
             <br />
             Systematic Chaos

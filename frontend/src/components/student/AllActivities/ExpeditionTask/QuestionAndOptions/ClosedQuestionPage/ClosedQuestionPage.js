@@ -41,7 +41,12 @@ function ClosedQuestionPage(props) {
       </Col>
       <Col lg={4} className='py-lg-0 py-3' ref={answersParent}>
         {props.question.options.map((answer) => (
-          <Answer key={answer.id} className='mx-lg-0 mx-auto'>
+          <Answer
+            $background={props.theme.primary}
+            $fontColor={props.theme.font}
+            key={answer.id}
+            className='mx-lg-0 mx-auto'
+          >
             <Col xxl={1} xs={2} onChange={() => updateUserAnswers()}>
               <input
                 name='answer'
@@ -55,7 +60,7 @@ function ClosedQuestionPage(props) {
             </Col>
           </Answer>
         ))}
-        <ButtonRow>
+        <ButtonRow $background={props.theme.success}>
           <button style={{ marginBottom: '50px' }} onClick={() => saveAnswer()}>
             Wyślij
           </button>

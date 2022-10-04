@@ -106,12 +106,18 @@ function FeedbackTask(props) {
                         <IconColumn icons={[faThumbsUp, faThumbsUp]} />
                       </Row>
                       <Row className='mt-4 justify-content-center'>
-                        <FormikRange type='range' min={1} max={5} name='score'></FormikRange>
+                        <FormikRange
+                          $accentColor={props.theme.success}
+                          type='range'
+                          min={1}
+                          max={5}
+                          name='score'
+                        ></FormikRange>
                       </Row>
 
                       <Row className='mt-4 d-flex justify-content-center'>
                         <Col sm={12} className='d-flex justify-content-center mb-2'>
-                          <FormButton type='submit' disabled={isSubmitting}>
+                          <FormButton $buttonColor={props.theme.success} type='submit' disabled={isSubmitting}>
                             {isSubmitting ? (
                               <Spinner as='span' animation='border' size='sm' role='status' />
                             ) : (

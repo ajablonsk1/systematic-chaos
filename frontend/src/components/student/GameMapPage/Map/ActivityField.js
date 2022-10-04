@@ -126,7 +126,7 @@ function ActivityField(props) {
           {offcanvasContent}
           {colClickable && (
             <Button
-              variant={'outline-warning'}
+              style={{ backgroundColor: 'transparent', borderColor: props.theme.warning, color: props.theme.warning }}
               disabled={!activity?.isFulfilled}
               className={'position-relative start-50 translate-middle-x mt-3'}
               onClick={startActivity}

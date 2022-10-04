@@ -7,11 +7,12 @@ import ContentCard from './ContentCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import Fade, { Bounce, Slide } from 'react-awesome-reveal'
+import { connect } from 'react-redux'
 
 const LATER_ITEM_DELAY = 1200
 const BADGE_LIST_STEP = 200
 
-function BadgesPage() {
+function BadgesPage(props) {
   const studentRankInfo = getRankInfo()
   const [studentPoints, missingPoints] = getStudentPoints()
   const [studentBadgesNumber, allBadgesNumber] = getBadgesInfo()
@@ -69,7 +70,7 @@ function BadgesPage() {
       </Slide>
       <Row className={'m-0'}>
         <Col md={12}>
-          <HorizontalPointsLine>
+          <HorizontalPointsLine $pointsColor={props.theme.success} $background={props.theme.secondary}>
             <ul>
               {studentRankInfo.map((rankInfo, index) => (
                 <li key={index + Date.now()}>
@@ -174,4 +175,9 @@ function BadgesPage() {
   )
 }
 
-export default BadgesPage
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(BadgesPage)
