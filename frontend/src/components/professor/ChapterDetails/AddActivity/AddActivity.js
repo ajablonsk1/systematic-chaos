@@ -25,7 +25,7 @@ function AddSurveyTask(props) {
 
     if (form) {
       props
-        .setActivityJson(props.chapterId, form)
+        .setActivityJson({ chapterId: props.chapterId, form: form })
         .then(() => {
           props.onSuccess()
         })
