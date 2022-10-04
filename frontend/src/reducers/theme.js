@@ -13,7 +13,7 @@ const initialState = {
   background: '#FFFBFF',
   warning: '#FFB30D',
   danger: '#FF4000',
-  success: '#6A8D73',
+  success: '#085454',
   font: '#FFB30D'
 }
 
