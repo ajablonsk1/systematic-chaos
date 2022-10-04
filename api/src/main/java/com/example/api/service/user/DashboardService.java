@@ -1,5 +1,6 @@
 package com.example.api.service.user;
 
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.dto.response.ranking.RankingResponse;
 import com.example.api.dto.response.user.dashboard.*;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -189,8 +190,12 @@ public class DashboardService {
     private LastAddedActivity toLastAddedActivity(Activity activity) {
         Chapter chapter = chapterService.getChapterWithActivity(activity);
         String chapterName = Objects.nonNull(chapter) ? chapter.getName() : null;
-        String activityType = activity.getActivityType().getActivityType();
+        String activityType = activity.getActivityType().toString();
         Double points = activity.getMaxPoints();
+        if (activity.getActivityType().equals(ActivityType.INFO)) {
+            points = 0D;
+        }
+
         Requirement requirement = activity.getRequirements()
                 .stream()
                 .filter(req -> req.isSelected() && Objects.nonNull(req.getDateTo()))
