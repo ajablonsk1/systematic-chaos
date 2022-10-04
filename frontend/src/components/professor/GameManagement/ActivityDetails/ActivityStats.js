@@ -99,7 +99,7 @@ function ActivityStats(props) {
         </tbody>
       </CustomTable>
     )
-  }, [isInfoTask, isSurvey, statsData])
+  }, [isInfoTask, isSurvey, props.theme.font, props.theme.primary, props.theme.secondary, statsData])
 
   const chartCard = useCallback((chartType, data, options, header) => {
     if (!data || !options) {

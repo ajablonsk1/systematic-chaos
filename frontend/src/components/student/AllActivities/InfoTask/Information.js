@@ -55,7 +55,7 @@ function Information(props) {
         </tbody>
       </InformationTable>
     )
-  }, [information])
+  }, [information, props.theme.font])
 
   const imagesGridLayout = useMemo(() => {
     if (information === undefined) {
