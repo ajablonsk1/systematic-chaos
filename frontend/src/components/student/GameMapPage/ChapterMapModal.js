@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import ChapterMap from './Map/ChapterMap'
+import { connect } from 'react-redux'
 
 function ChapterMapModal(props) {
   const [mapContainerSize, setMapContainerSize] = useState({ x: 0, y: 0 })
@@ -36,10 +37,19 @@ function ChapterMapModal(props) {
         )}
       </ModalBody>
       <ModalFooter>
-        <Button onClick={() => props.setModalOpen(false)}>Zamknij</Button>
+        <Button
+          onClick={() => props.setModalOpen(false)}
+          style={{ borderColor: props.theme.success, backgroundColor: props.theme.success }}
+        >
+          Zamknij
+        </Button>
       </ModalFooter>
     </Modal>
   )
 }
+function mapStateToProps(state) {
+  const theme = state.theme
 
-export default ChapterMapModal
+  return { theme }
+}
+export default connect(mapStateToProps)(ChapterMapModal)

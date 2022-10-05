@@ -5,7 +5,7 @@ import ExpeditionService from '../../../../../services/expedition.service'
 import { ERROR_OCCURRED, EXPEDITION_STATUS } from '../../../../../utils/constants'
 import { connect } from 'react-redux'
 
-function generateDoor(question, noDoors, onDoorClick) {
+function generateDoor(question, noDoors, onDoorClick, buttonColor) {
   return (
     <DoorColumn key={question.id + Date.now()} xl={12 / noDoors} md={12}>
       <Row className='mx-auto'>
@@ -21,7 +21,12 @@ function generateDoor(question, noDoors, onDoorClick) {
       </Row>
 
       <Row className='mx-auto'>
-        <Button onClick={() => onDoorClick(question.id)}>Wybierz</Button>
+        <Button
+          onClick={() => onDoorClick(question.id)}
+          style={{ backgroundColor: buttonColor, borderColor: buttonColor }}
+        >
+          Wybierz
+        </Button>
       </Row>
     </DoorColumn>
   )
@@ -47,7 +52,9 @@ function QuestionSelectionDoor(props) {
           {ERROR_OCCURRED}
         </p>
       ) : (
-        <Row className='m-0'>{questions.map((question) => generateDoor(question, questions.length, onDoorClick))}</Row>
+        <Row className='m-0'>
+          {questions.map((question) => generateDoor(question, questions.length, onDoorClick, props.theme.success))}
+        </Row>
       )}
     </Content>
   )

@@ -63,7 +63,12 @@ function EditPasswordModal(props) {
                     >
                       Anuluj
                     </Button>
-                    <Button type='submit'>Zapisz</Button>
+                    <Button
+                      type='submit'
+                      style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+                    >
+                      Zapisz
+                    </Button>
                   </Col>
                 </Row>
               </Container>

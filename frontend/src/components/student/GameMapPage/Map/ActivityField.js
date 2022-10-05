@@ -119,7 +119,7 @@ function ActivityField(props) {
         show={isOffcanvasOpen}
         onHide={() => setIsOffcanvasOpen(false)}
       >
-        <OffcanvasHeader closeButton>
+        <OffcanvasHeader /*closeButton*/>
           <OffcanvasTitle>Szczegóły aktywności</OffcanvasTitle>
         </OffcanvasHeader>
         <OffcanvasBody>

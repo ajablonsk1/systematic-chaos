@@ -5,6 +5,7 @@ import { Button, Card } from 'react-bootstrap'
 import { connect } from 'react-redux'
 
 function ProfileCard(props) {
+  const buttonColor = props.customButton ?? props.theme.warning
   return (
     <CustomCard $fontColor={props.theme.font} $background={props.theme.primary} $bodyColor={props.theme.secondary}>
       <CardHeader>
@@ -13,7 +14,7 @@ function ProfileCard(props) {
       <Card.Body className={'d-flex align-items-center justify-content-center flex-column'}>
         <>{props.body}</>
         {props.showButton && (
-          <Button variant={props.customButton ?? props.theme.warning} onClick={props.buttonCallback}>
+          <Button style={{ backgroundColor: buttonColor, borderColor: buttonColor }} onClick={props.buttonCallback}>
             {props.buttonText ?? <span>Przejdź</span>}
           </Button>
         )}
