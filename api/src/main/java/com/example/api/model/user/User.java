@@ -44,7 +44,6 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    @JsonManagedReference
     private Group group;
 
     public synchronized void changePoints(Double diff) {

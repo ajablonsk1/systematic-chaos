@@ -9,7 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class    GraphTask extends Task {
+public class GraphTask extends Task {
     private ActivityType activityType = ActivityType.EXPEDITION;
     @OneToMany
     private List<Question> questions = new LinkedList<>();
