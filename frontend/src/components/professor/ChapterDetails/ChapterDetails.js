@@ -27,6 +27,7 @@ import { TeacherRoutes } from '../../../routes/PageRoutes'
 import ChapterModal from '../GameManagement/ChapterModal/ChapterModal'
 import { successToast } from '../../../utils/toasts'
 import { connect } from 'react-redux'
+import ActivityService from '../../../services/activity.service'
 
 function ChapterDetails(props) {
   const { id: chapterId } = useParams()
@@ -83,6 +84,22 @@ function ChapterDetails(props) {
     getChapterDetails()
   }, [getChapterDetails])
 
+  useEffect(() => {
+    if (chosenActivityData?.jsonConfig) {
+      setIsEditActivityModalOpen(true)
+    }
+  }, [chosenActivityData?.jsonConfig])
+
+  const getActivityInfo = useCallback((activityId) => {
+    ActivityService.getActivityInfo(activityId)
+      .then((response) => {
+        return setChosenActivityData((prevState) => ({ ...prevState, jsonConfig: response.activityBody }))
+      })
+      .catch(() => {
+        setChosenActivityData((prevState) => ({ ...prevState, jsonConfig: null }))
+      })
+  }, [])
+
   const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
       state: { activityId: activityId, activityType: activityType }
@@ -90,14 +107,18 @@ function ChapterDetails(props) {
   }
 
   const startActivityEdition = (activity) => {
-    // TODO: depending on the type of activity, we will use a different endpoint
+    // Avoiding unnecessary use of the endpoint to download the same data several times
+    if (activity.id === chosenActivityData?.activityId) {
+      setIsEditActivityModalOpen(true)
+      return
+    }
+
     setChosenActivityData({
       activityId: activity.id,
       activityType: getActivityTypeName(activity.type),
-      activityName: activity.title,
-      jsonConfig: getConfigJson() // TODO: endpoint response
+      activityName: activity.title
     })
-    setIsEditActivityModalOpen(true)
+    getActivityInfo(activity.id)
   }
 
   const deleteActivity = (activity) => {
