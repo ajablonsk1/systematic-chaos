@@ -43,6 +43,7 @@ function ChapterDetails(props) {
   const [mapContainerSize, setMapContainerSize] = useState({ x: 0, y: 0 })
   const [shouldLoadEditChapterModal, setShouldLoadEditChapterModal] = useState(false)
   const [deleteChapterError, setDeleteChapterError] = useState(undefined)
+  const [reloadMapNeeded, setReloadMapNeeded] = useState(false)
 
   const mapCardBody = useRef()
 
@@ -107,15 +108,10 @@ function ChapterDetails(props) {
   }
 
   const startActivityEdition = (activity) => {
-    // Avoiding unnecessary use of the endpoint to download the same data several times
-    if (activity.id === chosenActivityData?.activityId) {
-      setIsEditActivityModalOpen(true)
-      return
-    }
-
+    setReloadMapNeeded(false)
     setChosenActivityData({
       activityId: activity.id,
-      activityType: getActivityTypeName(activity.type),
+      activityType: activity.type,
       activityName: activity.title
     })
     getActivityInfo(activity.id)
@@ -153,7 +149,7 @@ function ChapterDetails(props) {
             >
               <Card.Header>Mapa rozdziału</Card.Header>
               <Card.Body ref={mapCardBody}>
-                <ChapterMap chapterId={chapterId} marginNeeded parentSize={mapContainerSize} />
+                <ChapterMap chapterId={chapterId} marginNeeded parentSize={mapContainerSize} reload={reloadMapNeeded} />
               </Card.Body>
             </MapCard>
           </Col>
@@ -366,14 +362,21 @@ function ChapterDetails(props) {
       <EditActivityModal
         setShowModal={setIsEditActivityModalOpen}
         showModal={isEditActivityModalOpen}
+        activityId={chosenActivityData?.activityId}
+        activityType={chosenActivityData?.activityType}
         jsonConfig={chosenActivityData?.jsonConfig}
         modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
         successModalBody={
           <p>
-            Twoje zmiany wprowadzone dla aktywności typu: <strong>{chosenActivityData?.activityType}</strong>
+            Twoje zmiany wprowadzone dla aktywności typu:{' '}
+            <strong>{getActivityTypeName(chosenActivityData?.activityType)}</strong>
             <br /> o nazwie: <strong>{chosenActivityData?.activityName}</strong> zakończyła się pomyślnie.
           </p>
         }
+        onSuccess={() => {
+          getChapterDetails()
+          setReloadMapNeeded(true)
+        }}
       />
 
       <DeletionModal
