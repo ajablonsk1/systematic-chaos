@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RankRepo extends JpaRepository<Rank, Long> {
+    Rank findRankById(Long id);
 }

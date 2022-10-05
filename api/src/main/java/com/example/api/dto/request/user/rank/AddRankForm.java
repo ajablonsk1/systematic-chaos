@@ -1,4 +1,4 @@
-package com.example.api.dto.request.user;
+package com.example.api.dto.request.user.rank;
 
 import com.example.api.model.user.HeroType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class AddRankForm {
     @Schema(required = true) private String name;
     @Schema(required = true) private Double minPoints;
-    @Schema(required = true) private Double maxPoints;
     @Schema(required = true) private MultipartFile image;
     @Schema(required = true) private HeroType type;
 }

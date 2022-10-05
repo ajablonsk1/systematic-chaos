@@ -719,29 +719,29 @@ public class DatabaseConfig {
         Image rogueImage5 = new Image("Rogue rank image 5", rogueImageBytes5, ImageType.RANK);
         fileRepo.save(rogueImage5);
 
-        Rank warriorRank1 = new Rank(null, HeroType.WARRIOR, "Chłop", 0.0, 100.0, warriorImage1);
-        Rank warriorRank2 = new Rank(null, HeroType.WARRIOR, "Giermek", 101.0, 200.0, warriorImage2);
-        Rank warriorRank3 = new Rank(null, HeroType.WARRIOR, "Wojownik", 201.0, 300.0, warriorImage3);
-        Rank warriorRank4 = new Rank(null, HeroType.WARRIOR, "Rycerz", 301.0, 400.0, warriorImage4);
-        Rank warriorRank5 = new Rank(null, HeroType.WARRIOR, "Paladyn", 401.0, 500.0, warriorImage5);
+        Rank warriorRank1 = new Rank(null, HeroType.WARRIOR, "Chłop", 0.0, warriorImage1);
+        Rank warriorRank2 = new Rank(null, HeroType.WARRIOR, "Giermek", 100.0, warriorImage2);
+        Rank warriorRank3 = new Rank(null, HeroType.WARRIOR, "Wojownik", 200.0, warriorImage3);
+        Rank warriorRank4 = new Rank(null, HeroType.WARRIOR, "Rycerz", 300.0, warriorImage4);
+        Rank warriorRank5 = new Rank(null, HeroType.WARRIOR, "Paladyn", 400.0, warriorImage5);
 
-        Rank wizardRank1 = new Rank(null, HeroType.WIZARD, "Adept magii", 0.0, 100.0, wizardImage1);
-        Rank wizardRank2 = new Rank(null, HeroType.WIZARD, "Początkujący czarnoksiężnik", 101.0, 200.0, wizardImage2);
-        Rank wizardRank3 = new Rank(null, HeroType.WIZARD, "Czarnoksiężnik", 201.0, 300.0, wizardImage3);
-        Rank wizardRank4 = new Rank(null, HeroType.WIZARD, "Mistrz magii", 301.0, 400.0, wizardImage4);
-        Rank wizardRank5 = new Rank(null, HeroType.WIZARD, "Arcymistrz magii", 401.0, 500.0, wizardImage5);
+        Rank wizardRank1 = new Rank(null, HeroType.WIZARD, "Adept magii", 0.0, wizardImage1);
+        Rank wizardRank2 = new Rank(null, HeroType.WIZARD, "Początkujący czarnoksiężnik", 100.0, wizardImage2);
+        Rank wizardRank3 = new Rank(null, HeroType.WIZARD, "Czarnoksiężnik", 200.0, wizardImage3);
+        Rank wizardRank4 = new Rank(null, HeroType.WIZARD, "Mistrz magii", 300.0,wizardImage4);
+        Rank wizardRank5 = new Rank(null, HeroType.WIZARD, "Arcymistrz magii", 400.0, wizardImage5);
 
-        Rank priestRank1 = new Rank(null, HeroType.PRIEST, "Duchowny", 0.0, 100.0, priestImage1);
-        Rank priestRank2 = new Rank(null, HeroType.PRIEST, "Mnich", 101.0, 200.0, priestImage2);
-        Rank priestRank3 = new Rank(null, HeroType.PRIEST, "Inkwizytor", 201.0, 300.0, priestImage3);
-        Rank priestRank4 = new Rank(null, HeroType.PRIEST, "Kapłan", 301.0, 400.0, priestImage4);
-        Rank priestRank5 = new Rank(null, HeroType.PRIEST, "Arcykapłan", 401.0, 500.0, priestImage5);
+        Rank priestRank1 = new Rank(null, HeroType.PRIEST, "Duchowny", 0.0, priestImage1);
+        Rank priestRank2 = new Rank(null, HeroType.PRIEST, "Mnich", 100.0, priestImage2);
+        Rank priestRank3 = new Rank(null, HeroType.PRIEST, "Inkwizytor", 200.0, priestImage3);
+        Rank priestRank4 = new Rank(null, HeroType.PRIEST, "Kapłan", 300.0, priestImage4);
+        Rank priestRank5 = new Rank(null, HeroType.PRIEST, "Arcykapłan", 400.0, priestImage5);
 
-        Rank rogueRank1 = new Rank(null, HeroType.ROGUE, "Złodziej", 0.0, 100.0, rogueImage1);
-        Rank rogueRank2 = new Rank(null, HeroType.ROGUE, "Zwiadowca", 101.0, 200.0, rogueImage2);
-        Rank rogueRank3 = new Rank(null, HeroType.ROGUE, "Zabójca", 201.0, 300.0, rogueImage3);
-        Rank rogueRank4 = new Rank(null, HeroType.ROGUE, "Skrytobójca", 301.0, 400.0, rogueImage4);
-        Rank rogueRank5 = new Rank(null, HeroType.ROGUE, "Przywódca bractwa", 401.0, 500.0, rogueImage5);
+        Rank rogueRank1 = new Rank(null, HeroType.ROGUE, "Złodziej", 0.0, rogueImage1);
+        Rank rogueRank2 = new Rank(null, HeroType.ROGUE, "Zwiadowca", 100.0, rogueImage2);
+        Rank rogueRank3 = new Rank(null, HeroType.ROGUE, "Zabójca", 200.0, rogueImage3);
+        Rank rogueRank4 = new Rank(null, HeroType.ROGUE, "Skrytobójca", 300.0, rogueImage4);
+        Rank rogueRank5 = new Rank(null, HeroType.ROGUE, "Przywódca bractwa", 400.0, rogueImage5);
 
         rankRepo.saveAll(List.of(warriorRank1, warriorRank2, warriorRank3, warriorRank4, warriorRank5));
         rankRepo.saveAll(List.of(wizardRank1, wizardRank2, wizardRank3, wizardRank4, wizardRank5));

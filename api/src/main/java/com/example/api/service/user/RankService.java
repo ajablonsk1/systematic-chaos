@@ -1,16 +1,24 @@
 package com.example.api.service.user;
 
-import com.example.api.dto.request.user.AddRankForm;
+import com.example.api.dto.request.user.rank.AddRankForm;
+import com.example.api.dto.request.user.rank.EditRankForm;
+import com.example.api.dto.response.user.rank.CurrentRankResponse;
 import com.example.api.dto.response.user.rank.RankResponse;
 import com.example.api.dto.response.user.rank.RanksForHeroTypeResponse;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.user.HeroType;
 import com.example.api.model.user.Rank;
+import com.example.api.model.user.User;
 import com.example.api.model.util.Image;
 import com.example.api.model.util.ImageType;
 import com.example.api.repo.user.RankRepo;
+import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.ImageRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.RankValidator;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,8 +34,11 @@ import java.util.*;
 @Transactional
 public class RankService {
     private final RankRepo rankRepo;
-    private final RankValidator rankValidator;
     private final ImageRepo imageRepo;
+    private final UserRepo userRepo;
+    private final RankValidator rankValidator;
+    private final UserValidator userValidator;
+    private final AuthenticationService authService;
 
     public List<RanksForHeroTypeResponse> getAllRanks() {
         List<RanksForHeroTypeResponse> ranksForHeroTypeResponses = new LinkedList<>();
@@ -39,7 +50,6 @@ public class RankService {
                             rank.getId(),
                             rank.getName(),
                             rank.getMinPoints(),
-                            rank.getMaxPoints(),
                             rank.getImage().getFile())
                     )
                     .toList();
@@ -74,9 +84,85 @@ public class RankService {
                 form.getType(),
                 form.getName(),
                 form.getMinPoints(),
-                form.getMaxPoints(),
                 image
         );
         rankRepo.save(rank);
+    }
+
+    public void editRank(EditRankForm form) throws RequestValidationException, IOException {
+        Long id = form.getRankId();
+        Rank rank = rankRepo.findRankById(id);
+        rankValidator.validateEditRankForm(form, rank, id);
+        if (form.getName() != null) {
+            rank.setName(form.getName());
+        }
+        if (form.getMinPoints() != null) {
+            rank.setMinPoints(form.getMinPoints());
+        }
+        if (form.getImage() != null) {
+            Image image = rank.getImage();
+            image.setFile(form.getImage().getBytes());
+        }
+        if (form.getType() != null) {
+            rank.setHeroType(form.getType());
+        }
+    }
+
+    public CurrentRankResponse getCurrentRank() throws WrongUserTypeException {
+        String email = authService.getAuthentication().getName();
+        User user = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(user, email);
+
+        double points = user.getPoints();
+        HeroType heroType = user.getHeroType();
+        List<Rank> ranks = getHeroTypeToRanks().get(heroType)
+                .stream()
+                .sorted(Comparator.comparingDouble(Rank::getMinPoints))
+                .toList();
+        Rank currentRank = getCurrentRank(ranks, points);
+        if (currentRank == null) {
+            if (ranks.size() == 0) {
+                return new CurrentRankResponse(null, null, null, points);
+            } else {
+                return new CurrentRankResponse(null, null, new RankResponse(ranks.get(0)), points);
+            }
+        }
+
+        Rank previousRank = null;
+        Rank nextRank = null;
+
+        int idx = ranks.indexOf(currentRank);
+        if (idx == 0 && ranks.size() > 1) {
+            nextRank = ranks.get(1);
+        } else if (idx == ranks.size() - 1 && ranks.size() > 1) {
+            previousRank = ranks.get(idx - 1);
+        } else if (ranks.size() > 2) {
+            previousRank = ranks.get(idx - 1);
+            nextRank = ranks.get(idx + 1);
+        }
+
+        return new CurrentRankResponse(
+                previousRank == null ? null : new RankResponse(previousRank),
+                new RankResponse(currentRank),
+                nextRank == null ? null : new RankResponse(nextRank),
+                points
+        );
+    }
+
+    private Rank getCurrentRank(List<Rank> ranks, double points) {
+        Rank currRank = null;
+        for (Rank rank: ranks) {
+            if (rank.getMinPoints() <= points) {
+                currRank = rank;
+            }
+        }
+        return currRank;
+    }
+
+    public void deleteRank(Long id) throws EntityNotFoundException {
+        log.info("Deleting rank with id {}", id);
+        Rank rank = rankRepo.findRankById(id);
+        rankValidator.validateRankIsNotNull(rank, id);
+        rankRepo.delete(rank);
     }
 }

@@ -21,7 +21,6 @@ public class Rank {
     private HeroType heroType;
     private String name;
     private Double minPoints;
-    private Double maxPoints;
 
     @OneToOne
     private Image image;

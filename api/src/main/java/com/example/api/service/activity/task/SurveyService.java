@@ -5,7 +5,6 @@ import com.example.api.dto.request.activity.task.create.CreateSurveyForm;
 import com.example.api.dto.response.activity.task.SurveyInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
-import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.user.User;
