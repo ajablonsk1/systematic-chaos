@@ -44,8 +44,8 @@ function LoginForm(props) {
         <Form onSubmit={handleSubmit}>
           <Container>
             <Row className='mx-auto'>
-              {FormCol('Email', 'email', 'email')}
-              {FormCol('Hasło', 'password', 'password')}
+              {FormCol('Email', 'email', 'email', 12, { errorColor: props.theme.danger })}
+              {FormCol('Hasło', 'password', 'password', 12, { errorColor: props.theme.danger })}
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>
@@ -53,15 +53,19 @@ function LoginForm(props) {
                   type='submit'
                   disabled={isSubmitting}
                   style={{
-                    backgroundColor: 'var(--button-green)',
-                    borderColor: 'var(--button-green)'
+                    backgroundColor: props.theme.success,
+                    borderColor: props.theme.success
                   }}
                 >
                   {isFetching ? <Spinner as='span' animation='border' size='sm' role='status' /> : <span>Zaloguj</span>}
                 </Button>
               </Col>
             </Row>
-            {errorMessage && <p className={'text-center text-danger mt-2'}>{errorMessage}</p>}
+            {errorMessage && (
+              <p className={'text-center mt-2'} style={{ color: props.theme.danger }}>
+                {errorMessage}
+              </p>
+            )}
           </Container>
         </Form>
       )}
@@ -70,6 +74,8 @@ function LoginForm(props) {
 }
 
 function mapStateToProps(state) {
-  return {}
+  const theme = state.theme
+
+  return { theme }
 }
 export default connect(mapStateToProps)(LoginForm)

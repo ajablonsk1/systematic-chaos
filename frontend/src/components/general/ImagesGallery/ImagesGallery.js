@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { Button, Dropdown, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import download from 'downloadjs'
+import { connect } from 'react-redux'
 
 //prop - imagesWithId
 
@@ -109,8 +110,8 @@ function ImagesGallery(props) {
               className={'rounded'}
               style={
                 props.pickedImage && props.pickedImage === image.id
-                  ? { border: '4px solid var(--button-green)', padding: '5px' }
-                  : {}
+                  ? { border: `4px solid ${props.theme.success}`, padding: '5px' }
+                  : { border: `1px solid ${props.theme.secondary}` }
               }
             >
               <img
@@ -125,7 +126,7 @@ function ImagesGallery(props) {
               />
 
               <ControlPanel drop={'start'}>
-                <Dropdown.Toggle variant='warning'>
+                <Dropdown.Toggle style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary }}>
                   <FontAwesomeIcon icon={faEllipsisVertical} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
@@ -177,4 +178,10 @@ function ImagesGallery(props) {
   )
 }
 
-export default ImagesGallery
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(ImagesGallery)

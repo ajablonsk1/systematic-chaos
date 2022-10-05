@@ -2,10 +2,11 @@ import React from 'react'
 import { CustomCard } from '../GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
 import { Card } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 function ContentCard(props) {
   return (
-    <CustomCard>
+    <CustomCard $fontColor={props.theme.font} $background={props.theme.primary} $bodyColor={props.theme.secondary}>
       <CardHeader>
         <h5>{props.header}</h5>
       </CardHeader>
@@ -14,4 +15,9 @@ function ContentCard(props) {
   )
 }
 
-export default ContentCard
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ContentCard)

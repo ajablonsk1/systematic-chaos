@@ -4,8 +4,9 @@ import ParticipantsTable from './ParticipantsTable'
 import { ParticipantsContent, TabsContainer } from './ParticipantsStyles'
 import GroupService from '../../../services/group.service'
 import Loader from '../../general/Loader/Loader'
+import { connect } from 'react-redux'
 
-function Participants() {
+function Participants(props) {
   const [allGroups, setAllGroups] = useState(undefined)
 
   useEffect(() => {
@@ -19,7 +20,12 @@ function Participants() {
       {allGroups === undefined ? (
         <Loader />
       ) : (
-        <TabsContainer defaultActiveKey={'wszyscy'}>
+        <TabsContainer
+          $background={props.theme.success}
+          $fontColor={props.theme.background}
+          $linkColor={props.theme.primary}
+          defaultActiveKey={'wszyscy'}
+        >
           <Tab eventKey={'wszyscy'} title={'Wszyscy'}>
             <ParticipantsTable />
           </Tab>
@@ -36,4 +42,10 @@ function Participants() {
   )
 }
 
-export default Participants
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(Participants)

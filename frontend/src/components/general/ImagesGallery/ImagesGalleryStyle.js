@@ -2,8 +2,6 @@ import styled from 'styled-components'
 import { Dropdown } from 'react-bootstrap'
 
 export const ImageContainer = styled.div`
-  border: 1px solid rgba(255, 179, 16, 0.5);
-
   &:hover {
     cursor: pointer;
   }

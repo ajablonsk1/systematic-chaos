@@ -10,8 +10,9 @@ import { Content } from '../../../../App/AppGeneralStyles'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { getTimer } from '../../../../../utils/storageManager'
 import { GeneralRoutes, StudentRoutes } from '../../../../../routes/PageRoutes'
+import { connect } from 'react-redux'
 
-export default function ExpeditionSummary() {
+function ExpeditionSummary(props) {
   const navigate = useNavigate()
   const [maxPointsOpen, setMaxPointsOpen] = useState(0)
   const [maxPointsClosed, setMaxPointsClosed] = useState(0)
@@ -92,7 +93,7 @@ export default function ExpeditionSummary() {
       {!loaded ? (
         <Loader />
       ) : (
-        <SummaryContainer>
+        <SummaryContainer $background={props.theme.primary} $fontColor={props.theme.font}>
           <Row className='m-0'>
             <h2>Gratulacje, ukończyłeś ekspedycję!</h2>
           </Row>
@@ -128,7 +129,7 @@ export default function ExpeditionSummary() {
             )}
           </Row>
           <Row>
-            <ButtonRow>
+            <ButtonRow $background={props.theme.success}>
               <button className='w-100' onClick={() => finishExpeditionAndGoHome()}>
                 Wróć do strony głównej
               </button>
@@ -139,3 +140,10 @@ export default function ExpeditionSummary() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ExpeditionSummary)

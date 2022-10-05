@@ -12,14 +12,10 @@ import { Button, OffcanvasBody, OffcanvasHeader, OffcanvasTitle, Spinner } from 
 import moment from 'moment'
 import { Tooltip } from '../../BadgesPage/BadgesStyle'
 import ActivityService from '../../../../services/activity.service'
+import { connect } from 'react-redux'
 
-export default function ActivityField({
-  activity,
-  colClickable,
-  colSize,
-  isCompletedActivityAround,
-  allActivitiesCompleted
-}) {
+function ActivityField(props) {
+  const { activity, colClickable, colSize, isCompletedActivityAround, allActivitiesCompleted } = props
   const navigate = useNavigate()
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false)
   const [requirements, setRequirements] = useState(undefined)
@@ -116,15 +112,21 @@ export default function ActivityField({
           />
         )}
       </ActivityCol>
-      <CustomOffcanvas placement={'end'} show={isOffcanvasOpen} onHide={() => setIsOffcanvasOpen(false)}>
-        <OffcanvasHeader closeButton>
+      <CustomOffcanvas
+        $background={props.theme.secondary}
+        $fontColor={props.theme.font}
+        placement={'end'}
+        show={isOffcanvasOpen}
+        onHide={() => setIsOffcanvasOpen(false)}
+      >
+        <OffcanvasHeader /*closeButton*/>
           <OffcanvasTitle>Szczegóły aktywności</OffcanvasTitle>
         </OffcanvasHeader>
         <OffcanvasBody>
           {offcanvasContent}
           {colClickable && (
             <Button
-              variant={'outline-warning'}
+              style={{ backgroundColor: 'transparent', borderColor: props.theme.warning, color: props.theme.warning }}
               disabled={!activity?.isFulfilled}
               className={'position-relative start-50 translate-middle-x mt-3'}
               onClick={startActivity}
@@ -137,3 +139,10 @@ export default function ActivityField({
     </>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityField)

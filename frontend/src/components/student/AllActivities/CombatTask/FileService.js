@@ -5,8 +5,10 @@ import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import download from 'downloadjs'
 import CombatTaskService from '../../../../services/combatTask.service'
+import { connect } from 'react-redux'
 
-export default function FileService({ task, setFile, setFileName, setIsFetching, isFetching, isRevieved }) {
+function FileService(props) {
+  const { task, setFile, setFileName, setIsFetching, isFetching, isReviewed } = props
   const fileInput = useRef(null)
   const [isRemoving, startRemoving] = useTransition()
 
@@ -49,19 +51,27 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
           <Row key={idx} className='mt-4'>
             <Col>{file.name}</Col>
             <Col>
-              <Button variant='danger' disabled={isRevieved} onClick={() => remove(idx)}>
+              <Button
+                style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                disabled={isReviewed}
+                onClick={() => remove(idx)}
+              >
                 {isRemoving ? <Spinner animation={'border'} /> : <FontAwesomeIcon icon={faTrash} />}
               </Button>
-              <Button variant='warning' className='ms-2' onClick={() => downloadFile(idx)}>
+              <Button
+                style={{ backgroundColor: props.theme.warning, borderColor: props.theme.warning }}
+                className='ms-2'
+                onClick={() => downloadFile(idx)}
+              >
                 <FontAwesomeIcon icon={faDownload} />
               </Button>
             </Col>
           </Row>
         ))
       )}
-      {!isRevieved && (
+      {!isReviewed && (
         <>
-          <SmallDivider />
+          <SmallDivider $background={props.theme.warning} />
           <strong>Dodaj pliki:</strong>
           <br />
           <input ref={fileInput} type='file' className='mb-5 mt-3' onChange={saveFile} />
@@ -70,3 +80,10 @@ export default function FileService({ task, setFile, setFileName, setIsFetching,
     </>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(FileService)

@@ -2,24 +2,24 @@ import { Table } from 'react-bootstrap'
 import styled from 'styled-components'
 
 export const TableContainer = styled(Table)`
-  color: var(--font-color);
+  color: ${(props) => props.$fontColor};
 
   tbody tr:hover {
-    background-color: var(--dark-blue);
-    color: var(--font-color);
+    background-color: ${(props) => props.$background};
+    color: ${(props) => props.$fontColor};
   }
 
   thead {
-    background-color: var(--dark-blue);
+    background-color: ${(props) => props.$background};
   }
 
   tbody {
-    background-color: var(--light-blue);
+    background-color: ${(props) => props.$bodyColor};
   }
 
   td,
   th {
-    color: var(--font-color) !important;
-    border: 1px solid var(--dark-blue) !important;
+    color: ${(props) => props.$fontColor} !important;
+    border: 1px solid ${(props) => props.$background} !important;
   }
 `

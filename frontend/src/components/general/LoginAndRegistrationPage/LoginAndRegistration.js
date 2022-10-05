@@ -6,14 +6,15 @@ import { AuthFormContainer, LoginContainer, Logo } from './AuthStyle'
 
 import Carousel from './CharactersCarousel/Carousel'
 import AuthTabs from './AuthTabs'
+import { connect } from 'react-redux'
 
-export default function LoginAndRegistration() {
+function LoginAndRegistration(props) {
   return (
     <LoginContainer>
       <Row className='w-100 h-100 align-items-center m-0'>
         <Carousel />
-        <AuthFormContainer md={6} className='p-0'>
-          <Logo>
+        <AuthFormContainer $background={props.theme.primary} md={6} className='p-0'>
+          <Logo $logoColor={props.theme.font}>
             <FontAwesomeIcon icon={faFire} />
             <br />
             Systematic Chaos
@@ -24,3 +25,10 @@ export default function LoginAndRegistration() {
     </LoginContainer>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(LoginAndRegistration)

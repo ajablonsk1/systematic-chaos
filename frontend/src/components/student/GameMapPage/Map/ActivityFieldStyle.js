@@ -34,17 +34,17 @@ export const ActivityCol = styled(Col)`
 `
 
 export const CustomOffcanvas = styled(Offcanvas)`
-  background-color: var(--light-blue);
-  color: var(--font-color);
+  background-color: ${(props) => props.$background};
+  color: ${(props) => props.$fontColor};
   width: 50vw !important;
   z-index: 2000;
 
-  .btn-close {
-    filter: invert(81%) sepia(21%) saturate(5299%) hue-rotate(351deg) brightness(101%) contrast(101%);
-  }
+  //.btn-close {
+  //  filter: invert(81%) sepia(21%) saturate(5299%) hue-rotate(351deg) brightness(101%) contrast(101%);
+  //}
 
   table {
-    border-top: 1px solid var(--font-color);
+    border-top: 1px solid ${(props) => props.$fontColor};
     border-spacing: 5px;
     width: 100%;
 
@@ -64,11 +64,11 @@ export const CustomOffcanvas = styled(Offcanvas)`
       }
 
       tr:nth-of-type(5) {
-        border-bottom: 1px solid var(--font-color);
+        border-bottom: 1px solid ${(props) => props.$fontColor};
       }
 
       td:nth-child(odd) {
-        color: var(--font-color);
+        color: ${(props) => props.$fontColor};
       }
 
       td:nth-child(even) {
@@ -79,7 +79,7 @@ export const CustomOffcanvas = styled(Offcanvas)`
         padding-top: 15px;
         font-size: 1.1rem;
         font-weight: 700;
-        color: var(--font-color);
+        color: ${(props) => props.$fontColor};
       }
     }
   }

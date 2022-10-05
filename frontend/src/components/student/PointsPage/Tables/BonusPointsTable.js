@@ -4,8 +4,9 @@ import StudentService from '../../../../services/student.service'
 import { Spinner } from 'react-bootstrap'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import moment from 'moment'
+import { connect } from 'react-redux'
 
-function BonusPointsTable() {
+function BonusPointsTable(props) {
   const [bonusPoints, setBonusPoints] = useState(undefined)
 
   useEffect(() => {
@@ -25,7 +26,15 @@ function BonusPointsTable() {
   ))
 
   return (
-    <TableContainer className='mb-md-0 mb-5' striped bordered hover>
+    <TableContainer
+      className='mb-md-0 mb-5'
+      striped
+      bordered
+      hover
+      $fontColor={props.theme.font}
+      $background={props.theme.primary}
+      $bodyColor={props.theme.secondary}
+    >
       <thead>
         <tr className='w-100'>{tableHeaders}</tr>
       </thead>
@@ -39,7 +48,9 @@ function BonusPointsTable() {
         ) : bonusPoints == null || bonusPoints.length === 0 ? (
           <tr>
             <td colSpan='100%'>
-              <p className={'text-center h6 text-warning'}>{bonusPoints ? 'Brak punktów' : ERROR_OCCURRED}</p>
+              <p className={'text-center h6'} style={{ color: props.theme.warning }}>
+                {bonusPoints ? 'Brak punktów' : ERROR_OCCURRED}
+              </p>
             </td>
           </tr>
         ) : (
@@ -57,4 +68,9 @@ function BonusPointsTable() {
   )
 }
 
-export default BonusPointsTable
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(BonusPointsTable)
