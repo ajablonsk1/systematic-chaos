@@ -5,6 +5,7 @@ import ProfessorService from '../../../services/professor.service'
 import download from 'downloadjs'
 import moment from 'moment'
 import ActivitiesTable from './ActivitiesTable'
+import { connect } from 'react-redux'
 
 function ExportModal(props) {
   const [exportButtonDisabled, setExportButtonDisabled] = useState(true)
@@ -49,10 +50,18 @@ function ExportModal(props) {
             <Spinner animation={'border'} />
           ) : (
             <>
-              <Button variant={'danger'} onClick={() => props.setModalVisible(false)}>
+              <Button
+                style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                onClick={() => props.setModalVisible(false)}
+              >
                 Anuluj
               </Button>
-              <Button variant={'success'} className={'ms-2'} onClick={startExporting} disabled={exportButtonDisabled}>
+              <Button
+                style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+                className={'ms-2'}
+                onClick={startExporting}
+                disabled={exportButtonDisabled}
+              >
                 Eksportuj
               </Button>
             </>
@@ -63,4 +72,10 @@ function ExportModal(props) {
   )
 }
 
-export default ExportModal
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(ExportModal)

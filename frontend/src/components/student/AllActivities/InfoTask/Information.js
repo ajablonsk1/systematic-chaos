@@ -9,8 +9,9 @@ import { Card, Col, Row } from 'react-bootstrap'
 import { CustomCard } from '../../GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
+import { connect } from 'react-redux'
 
-export default function Information() {
+function Information(props) {
   const location = useLocation()
   const { activityId: informationId } = location.state
   const [information, setInformation] = useState(undefined)
@@ -37,7 +38,7 @@ export default function Information() {
     ]
 
     return (
-      <InformationTable>
+      <InformationTable $fontColor={props.theme.font}>
         <tbody>
           <tr>
             <td>Ikonka aktywności:</td>
@@ -54,7 +55,7 @@ export default function Information() {
         </tbody>
       </InformationTable>
     )
-  }, [information])
+  }, [information, props.theme.font])
 
   const imagesGridLayout = useMemo(() => {
     if (information === undefined) {
@@ -76,7 +77,12 @@ export default function Information() {
       <Row className={'m-0 vh-100'}>
         <Col md={6} className={'py-2'}>
           <Row className={'m-0 w-100 h-25 pb-2'}>
-            <CustomCard className={'p-0'}>
+            <CustomCard
+              className={'p-0'}
+              $fontColor={props.theme.font}
+              $background={props.theme.primary}
+              $bodyColor={props.theme.secondary}
+            >
               <CardHeader>
                 <h5>Informacje o aktywności</h5>
               </CardHeader>
@@ -84,7 +90,12 @@ export default function Information() {
             </CustomCard>
           </Row>
           <Row className={'m-0 w-100 h-75'}>
-            <CustomCard className={'p-0'}>
+            <CustomCard
+              className={'p-0'}
+              $fontColor={props.theme.font}
+              $background={props.theme.primary}
+              $bodyColor={props.theme.secondary}
+            >
               <CardHeader>
                 <h5>Wytyczne</h5>
               </CardHeader>
@@ -101,7 +112,13 @@ export default function Information() {
           </Row>
         </Col>
         <Col md={6} className={'py-2'}>
-          <CustomCard className={'p-0'} style={{ maxHeight: '98.3vh', overflowY: 'auto' }}>
+          <CustomCard
+            $fontColor={props.theme.font}
+            $background={props.theme.primary}
+            $bodyColor={props.theme.secondary}
+            className={'p-0'}
+            style={{ maxHeight: '98.3vh', overflowY: 'auto' }}
+          >
             <CardHeader className={'position-sticky top-0'} style={{ zIndex: 2 }}>
               <h5>Galeria zdjęć</h5>
             </CardHeader>
@@ -112,3 +129,10 @@ export default function Information() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(Information)

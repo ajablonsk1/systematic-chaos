@@ -1,13 +1,14 @@
 import { parseJwt } from '../utils/Api'
 import { axiosApiGet, axiosApiGetFile, axiosApiPost, axiosApiSendFile } from '../utils/axios'
 import {
-  GET_CSV,
-  GET_TASKS_TO_EVALUATE,
-  GET_FIRST_TASK_TO_EVALUATE,
-  PROF_FEEDBACK,
-  ADD_BONUS_POINTS,
-  GET_STUDENT_POINTS_PROFESSOR,
-  GET_GAME_SUMMARY_STATS
+  POST_TASK_RESULT_CSV,
+  GET_TASK_EVALUATE_ALL,
+  GET_TASK_EVALUATE_FIRST,
+  POST_FEEDBACK_PROFESSOR,
+  POST_ADDITIONAL_POINTS,
+  GET_POINTS_ALL_LIST_PROFESSOR,
+  GET_SUMMARY,
+  GET_PROFESSOR_REGISTER_TOKEN
 } from './urls'
 
 class ProfessorService {
@@ -20,25 +21,25 @@ class ProfessorService {
   }
 
   getCSVGradesFile(studentsId, activitiesId) {
-    return axiosApiGetFile(GET_CSV, { studentIds: studentsId, forms: activitiesId }).catch((error) => {
+    return axiosApiGetFile(POST_TASK_RESULT_CSV, { studentIds: studentsId, forms: activitiesId }).catch((error) => {
       throw error
     })
   }
 
   getTasksToEvaluateList() {
-    return axiosApiGet(GET_TASKS_TO_EVALUATE).catch((error) => {
+    return axiosApiGet(GET_TASK_EVALUATE_ALL).catch((error) => {
       throw error
     })
   }
 
   getFirstTaskToEvaluate(taskId) {
-    return axiosApiGet(GET_FIRST_TASK_TO_EVALUATE, { fileTaskId: taskId }).catch((error) => {
+    return axiosApiGet(GET_TASK_EVALUATE_FIRST, { fileTaskId: taskId }).catch((error) => {
       throw error
     })
   }
 
   sendTaskEvaluation(taskId, remarks, points, file, fileName) {
-    return axiosApiSendFile(PROF_FEEDBACK, {
+    return axiosApiSendFile(POST_FEEDBACK_PROFESSOR, {
       fileTaskResultId: taskId,
       content: remarks,
       points: points,
@@ -50,7 +51,7 @@ class ProfessorService {
   }
 
   sendBonusPoints(studentId, points, description, dateInMillis) {
-    return axiosApiPost(ADD_BONUS_POINTS, {
+    return axiosApiPost(POST_ADDITIONAL_POINTS, {
       studentId,
       points,
       description,
@@ -61,13 +62,19 @@ class ProfessorService {
   }
 
   getStudentPointsList(studentEmail) {
-    return axiosApiGet(GET_STUDENT_POINTS_PROFESSOR, { studentEmail: studentEmail }).catch((error) => {
+    return axiosApiGet(GET_POINTS_ALL_LIST_PROFESSOR, { studentEmail: studentEmail }).catch((error) => {
       throw error
     })
   }
 
   getGameSummaryStats() {
-    return axiosApiGet(GET_GAME_SUMMARY_STATS).catch((error) => {
+    return axiosApiGet(GET_SUMMARY).catch((error) => {
+      throw error
+    })
+  }
+
+  getRegistrationToken() {
+    return axiosApiGet(GET_PROFESSOR_REGISTER_TOKEN).catch((error) => {
       throw error
     })
   }

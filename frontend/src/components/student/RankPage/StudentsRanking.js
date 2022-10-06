@@ -4,8 +4,9 @@ import Ranking from '../../general/Ranking/Ranking'
 import RankingService from '../../../services/ranking.service'
 import { Tab } from 'react-bootstrap'
 import { TabsContainer } from '../../professor/ParticipantsPage/ParticipantsStyles'
+import { connect } from 'react-redux'
 
-function StudentsRanking() {
+function StudentsRanking(props) {
   const [ranking, setRanking] = useState(undefined)
   const [studentGroupRanking, setStudentGroupRanking] = useState(undefined)
   const [studentRankingPosition, setStudentRankingPosition] = useState(undefined)
@@ -47,7 +48,12 @@ function StudentsRanking() {
 
   return (
     <Content>
-      <TabsContainer defaultActiveKey={'global-rank'}>
+      <TabsContainer
+        $background={props.theme.success}
+        $fontColor={props.theme.background}
+        $linkColor={props.theme.primary}
+        defaultActiveKey={'global-rank'}
+      >
         <Tab eventKey={'global-rank'} title={'Ranking ogólny'}>
           <Ranking rankingList={ranking} studentPosition={studentRankingPosition} />
         </Tab>
@@ -59,4 +65,10 @@ function StudentsRanking() {
   )
 }
 
-export default StudentsRanking
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(StudentsRanking)

@@ -17,12 +17,12 @@ function RegistrationForm(props) {
     firstName: '',
     lastName: '',
     email: '',
+    token: '',
     password: '',
     passwordRepeat: ''
   }
   if (props.isStudent) {
     initialValues.index = ''
-    initialValues.invitationCode = ''
     initialValues.heroType = ''
   }
 
@@ -30,7 +30,9 @@ function RegistrationForm(props) {
     setCharacter(event.target.value)
   }
 
-  useEffect(() => setErrorMessage(props.message), [props.message])
+  useEffect(() => {
+    setErrorMessage(props.message)
+  }, [props.message])
 
   return (
     <Formik
@@ -39,13 +41,13 @@ function RegistrationForm(props) {
         const errors = {}
         if (!values.firstName) errors.firstName = FIELD_REQUIRED
         if (!values.lastName) errors.lastName = FIELD_REQUIRED
+        if (!values.token) errors.token = FIELD_REQUIRED
 
         errors.email = validateEmail(values.email)
         errors.password = validatePassword(values.password)
         errors.passwordRepeat = validateConfirmPassword(values.password, values.passwordRepeat)
 
         if (props.isStudent) {
-          if (!values.invitationCode) errors.invitationCode = FIELD_REQUIRED
           errors.index = validateIndex(values.index)
         }
 
@@ -106,8 +108,9 @@ function RegistrationForm(props) {
                             Łotrzyk
                           </option>
                         </Field>
-                        <Info>i</Info>
+                        <Info $buttonColor={props.theme.success}>i</Info>
                         <Description
+                          $background={props.theme.success}
                           ref={description}
                           style={{
                             display: 'none'
@@ -123,12 +126,12 @@ function RegistrationForm(props) {
                   </>
 
                   <ErrorMessage name={key} component='div'>
-                    {(msg) => <div style={{ color: 'var(--font-color)' }}>{msg}</div>}
+                    {(msg) => <div style={{ color: props.theme.warning }}>{msg}</div>}
                   </ErrorMessage>
                 </Col>
               ))}
               {errorMessage && (
-                <p className={'text-center w-100'} style={{ color: 'red' }}>
+                <p className={'text-center w-100'} style={{ color: props.theme.danger }}>
                   {errorMessage}
                 </p>
               )}
@@ -139,8 +142,8 @@ function RegistrationForm(props) {
                   type='submit'
                   disabled={isFetching}
                   style={{
-                    backgroundColor: 'var(--button-green)',
-                    borderColor: 'var(--button-green)',
+                    backgroundColor: props.theme.success,
+                    borderColor: props.theme.success,
                     width: '150px'
                   }}
                 >
@@ -161,7 +164,9 @@ function RegistrationForm(props) {
 
 function mapStateToProps(state) {
   const { message } = state.message
-  return { message }
+  const theme = state.theme
+
+  return { message, theme }
 }
 
 export default connect(mapStateToProps)(RegistrationForm)

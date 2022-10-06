@@ -4,6 +4,7 @@ import { FIELD_REQUIRED, NUMBER_FROM_RANGE } from '../../../utils/constants'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import { Formik } from 'formik'
 import ProfessorService from '../../../services/professor.service'
+import { connect } from 'react-redux'
 
 function BonusPointsModal(props) {
   const [isFinishModalOpen, setIsFinishModalOpen] = useState(false)
@@ -44,20 +45,29 @@ function BonusPointsModal(props) {
               <Form onSubmit={handleSubmit}>
                 <Container>
                   <Row className='mx-auto'>
-                    {FormCol('Informacja zwrotna (opcjonalnie)', 'textarea', 'reason')}
-                    {FormCol('Punkty', 'number', 'points')}
+                    {FormCol('Informacja zwrotna (opcjonalnie)', 'textarea', 'reason', 12, {
+                      errorColor: props.theme.danger
+                    })}
+                    {FormCol('Punkty', 'number', 'points', 12, { errorColor: props.theme.danger })}
                   </Row>
                   <Row className='mt-4 d-flex justify-content-center'>
                     <Col sm={12} className='d-flex justify-content-center mb-2'>
-                      <Button className={'me-2'} variant={'danger'} onClick={() => props.setModalOpen(false)}>
+                      <Button
+                        className={'me-2'}
+                        style={{
+                          backgroundColor: props.theme.danger,
+                          borderColor: props.theme.danger
+                        }}
+                        onClick={() => props.setModalOpen(false)}
+                      >
                         Anuluj
                       </Button>
                       <Button
                         type='submit'
                         disabled={isSubmitting}
                         style={{
-                          backgroundColor: 'var(--button-green)',
-                          borderColor: 'var(--button-green)'
+                          backgroundColor: props.theme.success,
+                          borderColor: props.theme.success
                         }}
                       >
                         Przyznaj punkty
@@ -85,4 +95,10 @@ function BonusPointsModal(props) {
   )
 }
 
-export default BonusPointsModal
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(BonusPointsModal)

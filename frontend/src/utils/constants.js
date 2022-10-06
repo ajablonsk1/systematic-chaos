@@ -103,7 +103,7 @@ export const RegistrationLabelsAndTypes = {
   lastName: ['Nazwisko', 'text'],
   index: ['Nr. indeksu', 'text'],
   email: ['Email', 'email'],
-  invitationCode: ['Klucz dostępu', 'text'],
+  token: ['Klucz dostępu', 'password'],
   heroType: ['Typ osobowości postaci', 'select'],
   password: ['Hasło', 'password'],
   passwordRepeat: ['Powtórz hasło', 'password']

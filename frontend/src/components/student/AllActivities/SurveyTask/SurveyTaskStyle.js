@@ -4,17 +4,17 @@ import styled from 'styled-components'
 
 export const FormikTextarea = styled(Field)`
   width: 80%;
-  color: var(--font-color);
-  border: 1px solid var(--font-color);
-  background-color: var(--dark-blue);
+  color: ${(props) => props.$fontColor};
+  border: 1px solid ${(props) => props.$fontColor};
+  background-color: ${(props) => props.$background};
 `
 
 export const FormikRange = styled(Field)`
   width: 82%;
-  accent-color: var(--button-green);
+  accent-color: ${(props) => props.$accentColor};
 `
 
 export const FormButton = styled(Button)`
-  background-color: var(--button-green);
-  border-color: var(--button-green);
+  background-color: ${(props) => props.$buttonColor};
+  border-color: ${(props) => props.$buttonColor};
 `

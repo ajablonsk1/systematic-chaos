@@ -22,18 +22,29 @@ import {
 } from '../../../../utils/constants'
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
 import ChapterService from '../../../../services/chapter.service'
-import { SuccessModal } from '../../SuccessModal'
+import SuccessModal from '../../SuccessModal'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import GameMapContainer from '../../../student/GameMapPage/GameMapContainer'
 import { getGraphElements } from '../../../general/Graph/graphHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import FormikContext from '../../../general/FormikContext/FormikContext'
+import { useCallback } from 'react'
+import { connect } from 'react-redux'
 
 const MAP_HEIGHT = 500
 const MAP_WIDTH = 1.5 * MAP_HEIGHT
+const EMPTY_INITIAL_VALUES = {
+  name: '',
+  sizeX: '',
+  sizeY: '',
+  posX: '',
+  posY: '',
+  imageId: ''
+}
 
-export function AddChapterModal({ showModal, setShowModal, refetchChapterList, isLoaded }) {
+function ChapterModal(props) {
+  const { showModal, setShowModal, isLoaded, onSuccess, chapterDetails } = props
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [images, setImages] = useState(undefined)
@@ -43,6 +54,11 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
     label: '',
     size: Math.min(MAP_HEIGHT / 8, MAP_WIDTH / 10) / 5
   })
+  const [activityValues, setActivityValues] = useState(EMPTY_INITIAL_VALUES)
+
+  const modalTitle = chapterDetails ? 'Edytuj rozdział' : 'Dodaj nowy rozdział'
+  const actionTitle = chapterDetails ? 'Zapisz zmiany' : 'Dodaj rozdział'
+  const successText = chapterDetails ? 'Pomyślnie zmieniono dane rozdziału' : 'Pomyślnie dodano nowy rozdział'
 
   const formikContextRef = useRef()
 
@@ -53,8 +69,55 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
   // updates the component only on shallow comparison dependency change should be enough
   const MemoImagesGallery = React.memo(ImagesGallery)
 
+  const afterSendAction = useCallback(
+    (setSubmitting) => {
+      setSubmitting(false)
+      setShowModal(false)
+      setIsSuccessModalOpen(true)
+      setErrorMessage('')
+      if (onSuccess) {
+        onSuccess()
+      }
+    },
+    [onSuccess, setShowModal]
+  )
+
+  const sendAction = useCallback(
+    (setSubmitting, editedValues, afterSendAction) => {
+      if (!chapterDetails) {
+        ChapterService.sendNewChapterData(editedValues)
+          .then(() => afterSendAction(setSubmitting))
+          .catch((error) => {
+            setSubmitting(false)
+            setErrorMessage(error.response.data.message)
+          })
+      } else {
+        ChapterService.sendEditChapterData({ chapterId: chapterDetails.id, editionForm: editedValues })
+          .then(() => afterSendAction(setSubmitting))
+          .catch((error) => {
+            setSubmitting(false)
+            setErrorMessage(error.response.data.message)
+          })
+      }
+    },
+    [chapterDetails]
+  )
+
   useEffect(() => {
     if (isLoaded) {
+      if (chapterDetails) {
+        const { name, mapSize, posX, posY, imageId } = chapterDetails
+        const [sizeX, sizeY] = mapSize.split(' x ')
+
+        setActivityValues({
+          name: name,
+          sizeX: +sizeX,
+          sizeY: +sizeY,
+          posX: posX,
+          posY: posY,
+          imageId: imageId
+        })
+      }
       ChapterService.getChapterImagesList()
         .then((response) => {
           Promise.all(
@@ -73,7 +136,7 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
         })
         .catch(() => {})
     }
-  }, [isLoaded])
+  }, [isLoaded, chapterDetails])
 
   const updateMap = () => {
     const labelValue = formikContextRef.current?.getValue('name')
@@ -87,20 +150,13 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
       <>
         <Modal show={showModal} size={'lg'} onHide={() => setShowModal(false)}>
           <ModalHeader>
-            <h4 className={'text-center w-100'}>Dodaj nowy rozdział</h4>
+            <h4 className={'text-center w-100'}>{modalTitle}</h4>
           </ModalHeader>
           <ModalBody>
             <Tabs defaultActiveKey={'form'}>
               <Tab eventKey={'form'} title={'Formularz'} className={'pt-4'}>
                 <Formik
-                  initialValues={{
-                    name: '',
-                    sizeX: '',
-                    sizeY: '',
-                    posX: '',
-                    posY: '',
-                    imageId: ''
-                  }}
+                  initialValues={activityValues}
                   validate={(values) => {
                     const errors = {}
                     if (!values.name) errors.chapterName = FIELD_REQUIRED
@@ -115,25 +171,15 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                     return errors
                   }}
                   onSubmit={(values, { setSubmitting }) => {
-                    ChapterService.sendNewChapterData({
+                    const editedValues = {
                       name: values.name,
                       sizeX: values.sizeX,
                       sizeY: values.sizeY,
                       imageId: values.imageId,
                       posX: values.posX,
                       posY: values.posY
-                    })
-                      .then(() => {
-                        setSubmitting(false)
-                        setShowModal(false)
-                        setIsSuccessModalOpen(true)
-                        setErrorMessage('')
-                        refetchChapterList()
-                      })
-                      .catch((error) => {
-                        setSubmitting(false)
-                        setErrorMessage(error.response.data.message)
-                      })
+                    }
+                    sendAction(setSubmitting, editedValues, afterSendAction)
                   }}
                 >
                   {({ isSubmitting, values, handleSubmit, setFieldValue }) => {
@@ -142,13 +188,19 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                         <FormikContext ref={formikContextRef} />
                         <Container>
                           <Row className='mx-auto'>
-                            {FormCol('Nazwa rozdziału', 'text', 'name', 12)}
+                            {FormCol('Nazwa rozdziału', 'text', 'name', 12, { errorColor: props.theme.danger })}
                             <div className={'m-2'}></div>
-                            {FormCol('Liczba kolumn', 'number', 'sizeX', 6, { min: 1 })}
-                            {FormCol('Liczba wierszy', 'number', 'sizeY', 6, { min: 1 })}
+                            {FormCol('Liczba kolumn', 'number', 'sizeX', 6, {
+                              min: 1,
+                              errorColor: props.theme.danger
+                            })}
+                            {FormCol('Liczba wierszy', 'number', 'sizeY', 6, {
+                              min: 1,
+                              errorColor: props.theme.danger
+                            })}
                             <div className={'m-2'}></div>
-                            {FormCol('Pozycja X', 'number', 'posX', 6)}
-                            {FormCol('Pozycja Y', 'number', 'posY', 6)}
+                            {FormCol('Pozycja X', 'number', 'posX', 6, { errorColor: props.theme.danger })}
+                            {FormCol('Pozycja Y', 'number', 'posY', 6, { errorColor: props.theme.danger })}
                             <div className={'m-2'}></div>
                           </Row>
 
@@ -168,21 +220,25 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
 
                           <Row className='mt-4 d-flex justify-content-center'>
                             <Col sm={12} className='d-flex justify-content-center mb-2'>
-                              <Button variant={'danger'} className={'me-2'} onClick={() => setShowModal(false)}>
+                              <Button
+                                style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                                className={'me-2'}
+                                onClick={() => setShowModal(false)}
+                              >
                                 Anuluj
                               </Button>
                               <Button
                                 type='submit'
                                 disabled={isSubmitting}
                                 style={{
-                                  backgroundColor: 'var(--button-green)',
-                                  borderColor: 'var(--button-green)'
+                                  backgroundColor: props.theme.success,
+                                  borderColor: props.theme.success
                                 }}
                               >
                                 {isSubmitting ? (
                                   <Spinner as='span' animation='border' size='sm' role='status' />
                                 ) : (
-                                  <span>Dodaj rozdział</span>
+                                  <span>{actionTitle}</span>
                                 )}
                               </Button>
                             </Col>
@@ -192,7 +248,11 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
                     )
                   }}
                 </Formik>
-                {errorMessage && <p className={'text-center text-danger mt-2'}>{errorMessage}</p>}
+                {errorMessage && (
+                  <p className={'text-center mt-2'} style={{ color: props.theme.danger }}>
+                    {errorMessage}
+                  </p>
+                )}
               </Tab>
               <Tab eventKey={'preview'} title={'Podgląd mapy gry'}>
                 <GameMapContainer
@@ -209,9 +269,17 @@ export function AddChapterModal({ showModal, setShowModal, refetchChapterList, i
         <SuccessModal
           isSuccessModalOpen={isSuccessModalOpen}
           setIsSuccessModalOpen={setIsSuccessModalOpen}
-          text='Pomyślnie dodano nowy rozdział'
+          text={successText}
         />
       </>
     )
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+
+export default connect(mapStateToProps)(ChapterModal)

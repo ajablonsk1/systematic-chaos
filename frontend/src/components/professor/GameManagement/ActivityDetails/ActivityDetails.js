@@ -8,6 +8,7 @@ import ActivityService from '../../../../services/activity.service'
 import { useLocation } from 'react-router-dom'
 import ActivityStats from './ActivityStats'
 import ActivityRequirements from './ActivityRequirements/ActivityRequirements'
+import { connect } from 'react-redux'
 
 function ActivityDetails(props) {
   const location = useLocation()
@@ -48,7 +49,12 @@ function ActivityDetails(props) {
 
   return (
     <Content>
-      <TabsContainer defaultActiveKey={'results'}>
+      <TabsContainer
+        $background={props.theme.success}
+        $fontColor={props.theme.background}
+        $linkColor={props.theme.primary}
+        defaultActiveKey={'results'}
+      >
         <Tab eventKey={'results'} title={'Wyniki'}>
           <Form.Group className={'py-3 px-4'}>
             <Form.Control
@@ -71,4 +77,10 @@ function ActivityDetails(props) {
   )
 }
 
-export default ActivityDetails
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(ActivityDetails)

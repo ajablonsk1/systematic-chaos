@@ -12,6 +12,6 @@ export const TabsContainer = styled(Tabs)`
   }
 
   .nav-link:not(.active) {
-    color: var(--dark-blue) !important;
+    color: ${(props) => props.$linkColor} !important;
   }
 `

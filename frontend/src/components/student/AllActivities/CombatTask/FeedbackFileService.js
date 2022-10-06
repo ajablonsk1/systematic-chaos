@@ -3,8 +3,10 @@ import { Row, Col, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
 import CombatTaskService from '../../../../services/combatTask.service'
+import { connect } from 'react-redux'
 
-export default function FeedbackFileService({ feedbackFile }) {
+function FeedbackFileService(props) {
+  const feedbackFile = props.feedbackFile
   const downloadFile = () => {
     const fileId = feedbackFile.id
     CombatTaskService.getCombatFile(fileId).then((file) => {
@@ -21,7 +23,11 @@ export default function FeedbackFileService({ feedbackFile }) {
         <Row className='mt-4'>
           <Col>{feedbackFile.name}</Col>
           <Col>
-            <Button variant='warning' className='ms-2' onClick={downloadFile}>
+            <Button
+              style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+              className='ms-2'
+              onClick={downloadFile}
+            >
               <FontAwesomeIcon icon={faDownload} />
             </Button>
           </Col>
@@ -30,3 +36,10 @@ export default function FeedbackFileService({ feedbackFile }) {
     </Col>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(FeedbackFileService)

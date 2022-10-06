@@ -3,13 +3,13 @@ import { Col, Table } from 'react-bootstrap'
 
 export const CustomTable = styled(Table)`
   margin: 0;
-  color: var(--font-color);
+  color: ${(props) => props.$fontColor};
   font-size: 15px;
 
   & th,
   & td {
-    border: 1px solid var(--dark-blue) !important;
-    background-color: var(--light-blue);
+    border: 1px solid ${(props) => props.$borderColor} !important;
+    background-color: ${(props) => props.$background};
   }
 `
 

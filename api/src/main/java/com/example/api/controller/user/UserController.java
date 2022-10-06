@@ -103,4 +103,9 @@ public class UserController {
             throws WrongUserTypeException, EntityAlreadyInDatabaseException {
         return ResponseEntity.ok().body(userService.setIndexNumber(setStudentIndexForm));
     }
+
+    @GetMapping("/professor/register/token")
+    public ResponseEntity<String> getProfessorRegisterToken() throws WrongUserTypeException {
+        return ResponseEntity.ok().body(userService.getProfessorRegisterToken());
+    }
 }

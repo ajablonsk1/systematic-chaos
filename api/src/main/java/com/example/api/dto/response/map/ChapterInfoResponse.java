@@ -22,6 +22,7 @@ public class ChapterInfoResponse {
     private List<MapTask> mapTasks;
     private Integer posX;
     private Integer posY;
+    private Long imageId;
 
     public ChapterInfoResponse(Chapter chapter, List<MapTask> mapTasks) {
         this.id = chapter.getId();
@@ -36,5 +37,6 @@ public class ChapterInfoResponse {
         this.mapTasks = mapTasks;
         this.posX = chapter.getPosX();
         this.posY = chapter.getPosY();
+        this.imageId = chapter.getActivityMap().getImage().getId();
     }
 }

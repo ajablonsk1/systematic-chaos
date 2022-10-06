@@ -25,8 +25,8 @@ export const Percentage = styled.text`
 `
 
 export const Circle = styled.path`
-  stroke: var(--font-color);
-  fill: var(--dark-blue);
+  stroke: ${(props) => props.$strokeColor};
+  fill: ${(props) => props.$fillColor};
   stroke-width: 2.8;
   stroke-linecap: round;
   animation: progress 1s ease-out forwards;

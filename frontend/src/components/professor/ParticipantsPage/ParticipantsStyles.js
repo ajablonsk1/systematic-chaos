@@ -10,30 +10,30 @@ export const TabsContainer = styled(Tabs)`
   margin-bottom: 10px;
 
   & .nav-link.active {
-    background-color: var(--button-green);
-    color: white;
+    background-color: ${(props) => props.$background};
+    color: ${(props) => props.$fontColor};
   }
 
   .nav-link:not(.active) {
-    color: var(--dark-blue) !important;
+    color: ${(props) => props.$linkColor} !important;
   }
 `
 
 export const TableContainer = styled(Table)`
-  color: var(--font-color);
+  color: ${(props) => props.$fontColor};
   margin-bottom: 0;
 
   th {
-    background-color: var(--dark-blue);
-    border: var(--dark-blue) 1px solid;
+    background-color: ${(props) => props.$background};
+    border: ${(props) => props.$background} 1px solid;
   }
 
   tr {
-    border: var(--dark-blue) 1px solid;
+    border: ${(props) => props.$background} 1px solid;
   }
   td {
-    background-color: var(--light-blue);
-    border: var(--dark-blue) 1px solid;
+    background-color: ${(props) => props.$tdColor}; // light
+    border: ${(props) => props.$background} 1px solid;
   }
 
   thead {
