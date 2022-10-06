@@ -31,6 +31,10 @@ export const FIELD_REQUIRED = 'Pole wymagane.'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
 export const NOT_LOGGED_IN_ERROR = 'Logowanie nieudane. Niepoprawny login lub hasło.'
 export const ERROR_OCCURRED = 'Wystąpił nieoczekiwany błąd'
+export const PASSWORD_VALIDATION_ERROR =
+  'Hasło musi zawierać przynajmniej jedną cyfrę i co najmniej jedną małą i jedną wielką literę'
+export const DIFFERENT_PASSWORDS = 'Hasła się różnią.'
+
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
 export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
 

@@ -1,4 +1,4 @@
-import { FIELD_REQUIRED } from '../../../../utils/constants'
+import { DIFFERENT_PASSWORDS, FIELD_REQUIRED, PASSWORD_VALIDATION_ERROR } from '../../../../utils/constants'
 
 export const validatePassword = (values) => {
   let error = ''
@@ -6,18 +6,18 @@ export const validatePassword = (values) => {
   if (!values) {
     error = FIELD_REQUIRED
   } else if (!passwordRegex.test(values)) {
-    error = 'Hasło musi zawierać przynajmniej jedną cyfrę i co najmniej jedną małą i jedną wielką literę'
+    error = PASSWORD_VALIDATION_ERROR
   }
   return error
 }
 
 export const validateConfirmPassword = (pass, value) => {
   let error = ''
-  if (!value) {
+  if (!value || !pass) {
     error = FIELD_REQUIRED
   } else if (pass && value) {
     if (pass !== value) {
-      error = 'Hasła się różnią.'
+      error = DIFFERENT_PASSWORDS
     }
   }
   return error
