@@ -1,6 +1,9 @@
 package com.example.api.dto.response.user.dashboard;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 @AllArgsConstructor

@@ -1,8 +1,6 @@
 package com.example.api.controller.activity.result;
 
 import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
-import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
-import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.EntityRequiredAttributeNullException;

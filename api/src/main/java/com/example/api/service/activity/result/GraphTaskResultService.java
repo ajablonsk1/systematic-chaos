@@ -1,7 +1,5 @@
 package com.example.api.service.activity.result;
 
-import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
-import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
 import com.example.api.error.exception.EntityAlreadyInDatabaseException;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.EntityRequiredAttributeNullException;

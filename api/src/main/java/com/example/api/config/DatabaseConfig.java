@@ -21,6 +21,9 @@ import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;
 import com.example.api.model.user.User;
+import com.example.api.model.user.badge.Badge;
+import com.example.api.model.user.badge.BadgeRequirement;
+import com.example.api.model.user.badge.BadgeType;
 import com.example.api.model.util.File;
 import com.example.api.model.util.Image;
 import com.example.api.model.util.ImageType;
@@ -28,6 +31,7 @@ import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
+import com.example.api.repo.user.BadgeRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
@@ -66,6 +70,7 @@ public class DatabaseConfig {
     private final AdditionalPointsRepo additionalPointsRepo;
     private final SurveyResultRepo surveyResultRepo;
     private final FileRepo fileRepo;
+    private final BadgeRepo badgeRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -595,6 +600,7 @@ public class DatabaseConfig {
             Image chapterImage5 = new Image("Chapter image 5", data5, ImageType.CHAPTER);
             fileRepo.save(chapterImage5);
 
+            initBadges();
         };
     }
 
@@ -651,5 +657,183 @@ public class DatabaseConfig {
 
         return List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7);
 
+    }
+
+    private void initBadges() {
+        Badge badge1 = new Badge(
+                null,
+                "To dopiero początek",
+                "Wykonaj conajmniej jedną aktywność w tygodniu przez okres miesiąca",
+                BadgeType.CONSISTENCY,
+                null,
+                new BadgeRequirement(null, 4, null)
+        );
+
+        Badge badge2 = new Badge(
+                null,
+                "Długo jeszcze?",
+                "Wykonaj conajmniej jedną aktywność w tygodniu przez okres 3 miesięcy",
+                BadgeType.CONSISTENCY,
+                null,
+                new BadgeRequirement(null, 12, null)
+        );
+
+        Badge badge3 = new Badge(
+                null,
+                "To już jest koniec, ale czy na pewno?",
+                "Wykonaj conajmniej jedną aktywność w tygodniu przez okres 6 mięsięcy",
+                BadgeType.CONSISTENCY,
+                null,
+                new BadgeRequirement(null, 24, null)
+        );
+
+        Badge badge4 = new Badge(
+                null,
+                "Topowowa dwudziestka",
+                "Bądź w 20% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                BadgeType.TOP_SCORE,
+                null,
+                new BadgeRequirement(null, null, null)
+        );
+
+
+        Badge badge5 = new Badge(
+                null,
+                "Topowa piątka",
+                "Bądź w 5% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                BadgeType.TOP_SCORE,
+                null,
+                new BadgeRequirement(null, null, null)
+        );
+
+        Badge badge6 = new Badge(
+                null,
+                "Lider grupy",
+                "Bądź najepszym użytkownikiem w swojej grupie (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                BadgeType.TOP_SCORE,
+                null,
+                new BadgeRequirement(null, null, null)
+        );
+
+        Badge badge7 = new Badge(
+                null,
+                "Lider",
+                "Bądź najepszym użytkownikiem (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                BadgeType.TOP_SCORE,
+                null,
+                new BadgeRequirement(null, null, null)
+        );
+
+
+        Badge badge8 = new Badge(
+                null,
+                "Pierwsze kroki w ekspedycji",
+                "Wykonaj swoją pierwszą ekspedycję",
+                BadgeType.GRAPH_TASKS_NUMBER,
+                null,
+                new BadgeRequirement(null, null, 1)
+        );
+
+        Badge badge9 = new Badge(
+                null,
+                "Doświadczony w ekspedycjach",
+                "Wykonaj 10 ekspedycji",
+                BadgeType.GRAPH_TASKS_NUMBER,
+                null,
+                new BadgeRequirement(null, null, 10)
+        );
+
+        Badge badge10 = new Badge(
+                null,
+                "Zaprawiony w ekspedycjach",
+                "Wykonaj 50 ekspedycji",
+                BadgeType.GRAPH_TASKS_NUMBER,
+                null,
+                new BadgeRequirement(null, null, 50)
+        );
+
+        Badge badge11 = new Badge(
+                null,
+                "Pierwsze kroki w zadaniu bojowym",
+                "Wykonaj swoje pierwsze zadanie bojowe",
+                BadgeType.FILE_TASK_NUMBER,
+                null,
+                new BadgeRequirement(null, null, 1)
+        );
+
+        Badge badge12 = new Badge(
+                null,
+                "Doświadczony w zadaniach bojowych",
+                "Wykonaj 10 zadań bojowych",
+                BadgeType.FILE_TASK_NUMBER,
+                null,
+                new BadgeRequirement(null, null, 10)
+        );
+
+        Badge badge13 = new Badge(
+                null,
+                "Zaprawiony w zadaniach bojowych",
+                "Wykonaj 50 zadań bojowych",
+                BadgeType.FILE_TASK_NUMBER,
+                null,
+                new BadgeRequirement(null,  null, 50)
+        );
+
+        Badge badge14 = new Badge(
+                null,
+                "Doświadczony w aktywnościach",
+                "Wykonaj 30 aktywności",
+                BadgeType.ACTIVITY_NUMBER,
+                null,
+                new BadgeRequirement(null, null, 30)
+        );
+
+        Badge badge15 = new Badge(
+                null,
+                "Zaprawiony w aktywnościach",
+                "Wykonaj 100 aktywności",
+                BadgeType.ACTIVITY_NUMBER,
+                null,
+                new BadgeRequirement(null, null, 100)
+        );
+
+        Badge badge16 = new Badge(
+                null,
+                "Marsz ku lepszemu",
+                "Posiadaj ponad 60% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                BadgeType.ACTIVITY_SCORE,
+                null,
+                new BadgeRequirement(60.0,null, null)
+        );
+
+        Badge badge17 = new Badge(
+                null,
+                "Uśmiech prowadzącego",
+                "Posiadaj ponad 80% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                BadgeType.ACTIVITY_SCORE,
+                null,
+                new BadgeRequirement(80.0, null, null)
+        );
+
+        Badge badge18 = new Badge(
+                null,
+                "Uścisk dłoni prowadzącego",
+                "Posiadaj ponad 95% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                BadgeType.ACTIVITY_SCORE,
+                null,
+                new BadgeRequirement(95.0,null, null)
+        );
+
+        Badge badge19 = new Badge(
+                null,
+                "W sam środek tarczy",
+                "Posiadaj 100% z ekspedycji lub zadania bojowego",
+                BadgeType.ACTIVITY_SCORE,
+                null,
+                new BadgeRequirement(100.0, null, 1)
+        );
+
+        badgeRepo.saveAll(List.of(badge1, badge2, badge3, badge4, badge5, badge6, badge7, badge8, badge9, badge10,
+                badge11, badge12, badge13, badge14, badge15, badge16, badge17, badge18, badge19));
     }
 }
