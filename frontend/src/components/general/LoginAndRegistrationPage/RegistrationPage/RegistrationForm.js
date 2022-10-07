@@ -43,7 +43,7 @@ function RegistrationForm(props) {
         if (!values.lastName) errors.lastName = FIELD_REQUIRED
         if (!values.token) errors.token = FIELD_REQUIRED
 
-        errors.email = validateEmail(values.email)
+        errors.email = validateEmail(values.email, props.isStudent ? AccountType.STUDENT : AccountType.PROFESSOR)
         errors.password = validatePassword(values.password)
         errors.passwordRepeat = validateConfirmPassword(values.password, values.passwordRepeat)
 
