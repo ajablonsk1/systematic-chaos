@@ -22,6 +22,8 @@ import java.util.List;
 @Entity
 public class FileTaskResult extends TaskResult {
     @OneToMany
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<File> files = new LinkedList<>();
 
     @Nullable
