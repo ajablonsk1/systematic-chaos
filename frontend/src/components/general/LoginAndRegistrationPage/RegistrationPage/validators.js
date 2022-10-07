@@ -32,8 +32,8 @@ export const validateConfirmPassword = (pass, value) => {
 }
 
 export const validateEmail = (email, accountType) => {
-  const studentEmail = /[a-zA-Z](([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@student\.agh\.edu\.pl$/
-  const professorEmail = /[a-zA-Z](([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@agh\.edu\.pl$/
+  const studentEmail = /[a-zA-Z](([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@student\.agh\.edu\.pl$/
+  const professorEmail = /[a-zA-Z](([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@agh\.edu\.pl$/
 
   let error = ''
 
