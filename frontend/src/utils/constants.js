@@ -34,6 +34,9 @@ export const ERROR_OCCURRED = 'Wystąpił nieoczekiwany błąd'
 export const PASSWORD_VALIDATION_ERROR =
   'Hasło musi zawierać przynajmniej jedną cyfrę i co najmniej jedną małą i jedną wielką literę'
 export const DIFFERENT_PASSWORDS = 'Hasła się różnią.'
+export const INCORRECT_EMAIL = 'Podaj poprawny adres email.'
+export const WRONG_INDEX_LENGTH = 'Nr indeksu musi się składać z sześciu cyfr.'
+export const INDEX_WITH_CHARS = 'Nr indeksu musi składać się z samych cyfr.'
 
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
 export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
