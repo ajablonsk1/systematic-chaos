@@ -115,7 +115,7 @@ describe('Email validator tests:', () => {
   it.each(incorrectEmails)('should return INCORRECT_EMAIL error for %s', (email) => {
     // when
     const validatorMessage1 = validateEmail(email, AccountType.STUDENT)
-    const validatorMessage2 = validateEmail(email, AccountType.STUDENT)
+    const validatorMessage2 = validateEmail(email, AccountType.PROFESSOR)
 
     // then
     expect(validatorMessage1).toBe(INCORRECT_EMAIL)
@@ -128,7 +128,7 @@ describe('Email validator tests:', () => {
     // then
     expect(validatorMessage).toBe('')
   })
-  it.each(correctProfessorEmails)('should validate student email %s correctly', (email) => {
+  it.each(correctProfessorEmails)('should validate professor email %s correctly', (email) => {
     // when
     const validatorMessage = validateEmail(email, AccountType.PROFESSOR)
 
