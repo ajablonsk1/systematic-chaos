@@ -19,7 +19,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
-import { getConfigJson } from '../GameManagement/GameLoader/mockData'
 import ChapterService from '../../../services/chapter.service'
 import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
@@ -27,6 +26,7 @@ import { TeacherRoutes } from '../../../routes/PageRoutes'
 import ChapterModal from '../GameManagement/ChapterModal/ChapterModal'
 import { successToast } from '../../../utils/toasts'
 import { connect } from 'react-redux'
+import ActivityService from '../../../services/activity.service'
 
 function ChapterDetails(props) {
   const { id: chapterId } = useParams()
@@ -42,6 +42,7 @@ function ChapterDetails(props) {
   const [mapContainerSize, setMapContainerSize] = useState({ x: 0, y: 0 })
   const [shouldLoadEditChapterModal, setShouldLoadEditChapterModal] = useState(false)
   const [deleteChapterError, setDeleteChapterError] = useState(undefined)
+  const [reloadMapNeeded, setReloadMapNeeded] = useState(false)
 
   const mapCardBody = useRef()
 
@@ -83,6 +84,22 @@ function ChapterDetails(props) {
     getChapterDetails()
   }, [getChapterDetails])
 
+  useEffect(() => {
+    if (chosenActivityData?.jsonConfig) {
+      setIsEditActivityModalOpen(true)
+    }
+  }, [chosenActivityData?.jsonConfig])
+
+  const getActivityInfo = useCallback((activityId) => {
+    ActivityService.getActivityInfo(activityId)
+      .then((response) => {
+        return setChosenActivityData((prevState) => ({ ...prevState, jsonConfig: response.activityBody }))
+      })
+      .catch(() => {
+        setChosenActivityData((prevState) => ({ ...prevState, jsonConfig: null }))
+      })
+  }, [])
+
   const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
       state: { activityId: activityId, activityType: activityType }
@@ -90,14 +107,13 @@ function ChapterDetails(props) {
   }
 
   const startActivityEdition = (activity) => {
-    // TODO: depending on the type of activity, we will use a different endpoint
+    setReloadMapNeeded(false)
     setChosenActivityData({
       activityId: activity.id,
-      activityType: getActivityTypeName(activity.type),
-      activityName: activity.title,
-      jsonConfig: getConfigJson() // TODO: endpoint response
+      activityType: activity.type,
+      activityName: activity.title
     })
-    setIsEditActivityModalOpen(true)
+    getActivityInfo(activity.id)
   }
 
   const deleteActivity = (activity) => {
@@ -132,7 +148,7 @@ function ChapterDetails(props) {
             >
               <Card.Header>Mapa rozdziału</Card.Header>
               <Card.Body ref={mapCardBody}>
-                <ChapterMap chapterId={chapterId} marginNeeded parentSize={mapContainerSize} />
+                <ChapterMap chapterId={chapterId} marginNeeded parentSize={mapContainerSize} reload={reloadMapNeeded} />
               </Card.Body>
             </MapCard>
           </Col>
@@ -345,14 +361,21 @@ function ChapterDetails(props) {
       <EditActivityModal
         setShowModal={setIsEditActivityModalOpen}
         showModal={isEditActivityModalOpen}
+        activityId={chosenActivityData?.activityId}
+        activityType={chosenActivityData?.activityType}
         jsonConfig={chosenActivityData?.jsonConfig}
         modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
         successModalBody={
           <p>
-            Twoje zmiany wprowadzone dla aktywności typu: <strong>{chosenActivityData?.activityType}</strong>
+            Twoje zmiany wprowadzone dla aktywności typu:{' '}
+            <strong>{getActivityTypeName(chosenActivityData?.activityType)}</strong>
             <br /> o nazwie: <strong>{chosenActivityData?.activityName}</strong> zakończyła się pomyślnie.
           </p>
         }
+        onSuccess={() => {
+          getChapterDetails()
+          setReloadMapNeeded(true)
+        }}
       />
 
       <DeletionModal

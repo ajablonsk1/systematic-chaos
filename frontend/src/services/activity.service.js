@@ -1,11 +1,13 @@
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
 import {
+  GET_ACTIVITY_EDIT_INFO,
   GET_MAP,
   GET_RANKING_ACTIVITY,
   GET_RANKING_ACTIVITY_SEARCH,
   GET_TASK_ACTIVITIES,
   GET_TASK_REQUIREMENTS,
   GET_TASK_RESULT_ACTIVITY_STATISTICS,
+  POST_ACTIVITY_EDIT,
   POST_TASK_REQUIREMENTS
 } from './urls'
 
@@ -55,6 +57,22 @@ class ActivityService {
     return axiosApiPost(POST_TASK_REQUIREMENTS, {
       activityId: activityId,
       requirements: requirements
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  getActivityInfo(activityID) {
+    return axiosApiGet(GET_ACTIVITY_EDIT_INFO, { activityID }).catch((error) => {
+      throw error
+    })
+  }
+
+  setActivityEditData(activityID, activityType, activityBody) {
+    return axiosApiPost(POST_ACTIVITY_EDIT, {
+      activityID,
+      activityType,
+      activityBody
     }).catch((error) => {
       throw error
     })

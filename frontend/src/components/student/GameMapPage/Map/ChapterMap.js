@@ -22,12 +22,31 @@ function createMap(map) {
   return rowsObj
 }
 
-export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapClickable }) {
+export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapClickable, reload }) {
   const [size, setSize] = useState(undefined)
   const [chapterMap, setChapterMap] = useState(undefined)
   const [rows, setRows] = useState(undefined)
 
   useEffect(() => {
+    getActivityMap()
+
+    // eslint-disable-next-line
+  }, [chapterId])
+
+  useEffect(() => {
+    if (reload) {
+      getActivityMap()
+    }
+    // eslint-disable-next-line
+  }, [reload])
+
+  useEffect(() => {
+    if (chapterMap) {
+      setRows(createMap(chapterMap))
+    }
+  }, [chapterMap])
+
+  const getActivityMap = useCallback(() => {
     ActivityService.getActivityMap(chapterId)
       .then((response) => {
         setChapterMap(response)
@@ -36,12 +55,6 @@ export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapCli
         setChapterMap(null)
       })
   }, [chapterId])
-
-  useEffect(() => {
-    if (chapterMap) {
-      setRows(createMap(chapterMap))
-    }
-  }, [chapterMap])
 
   const getParentSize = useCallback(() => {
     if (!rows) {

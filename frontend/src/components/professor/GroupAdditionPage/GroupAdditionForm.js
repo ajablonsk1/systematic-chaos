@@ -21,7 +21,7 @@ function GroupAdditionForm(props) {
         return errors
       }}
       onSubmit={(values, { setSubmitting }) => {
-        GroupService.addGroup(values.name, values.code).then(() => {
+        GroupService.addGroup({ groupName: values.name, groupKey: values.code }).then(() => {
           props.refreshFunction()
           props.setModalOpen(false)
         })

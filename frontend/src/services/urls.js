@@ -132,3 +132,7 @@ export const GET_FILE_CHAPTER_IMAGES = GET_FILE + '/chapter/images'
 
 // Dashboard Controller
 export const GET_DASHBOARD = BASE_URL + '/dashboard'
+
+// Activity Controller
+export const POST_ACTIVITY_EDIT = BASE_URL + '/activity/edit'
+export const GET_ACTIVITY_EDIT_INFO = POST_ACTIVITY_EDIT + '/info'
