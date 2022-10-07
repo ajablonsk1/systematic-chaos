@@ -76,3 +76,7 @@ describe('Confirm password validator tests:', () => {
     expect(validatorMessage2).toBe(DIFFERENT_PASSWORDS)
   })
 })
+
+describe('Email validator tests:', () => {})
+
+describe('Index validator tests:', () => {})
