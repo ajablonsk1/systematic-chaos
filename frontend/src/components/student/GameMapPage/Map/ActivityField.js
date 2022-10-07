@@ -13,6 +13,7 @@ import moment from 'moment'
 import { Tooltip } from '../../BadgesPage/BadgesStyle'
 import ActivityService from '../../../../services/activity.service'
 import { connect } from 'react-redux'
+import { hexToCSSFilter } from 'hex-to-css-filter'
 
 function ActivityField(props) {
   const { activity, colClickable, colSize, isCompletedActivityAround, allActivitiesCompleted } = props
@@ -115,11 +116,12 @@ function ActivityField(props) {
       <CustomOffcanvas
         $background={props.theme.secondary}
         $fontColor={props.theme.font}
+        $filter={hexToCSSFilter(props.theme.font)}
         placement={'end'}
         show={isOffcanvasOpen}
         onHide={() => setIsOffcanvasOpen(false)}
       >
-        <OffcanvasHeader /*closeButton*/>
+        <OffcanvasHeader closeButton>
           <OffcanvasTitle>Szczegóły aktywności</OffcanvasTitle>
         </OffcanvasHeader>
         <OffcanvasBody>

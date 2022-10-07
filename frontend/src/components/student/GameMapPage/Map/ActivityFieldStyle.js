@@ -39,9 +39,9 @@ export const CustomOffcanvas = styled(Offcanvas)`
   width: 50vw !important;
   z-index: 2000;
 
-  //.btn-close {
-  //  filter: invert(81%) sepia(21%) saturate(5299%) hue-rotate(351deg) brightness(101%) contrast(101%);
-  //}
+  .btn-close {
+    filter: ${(props) => props.$filter};
+  }
 
   table {
     border-top: 1px solid ${(props) => props.$fontColor};
