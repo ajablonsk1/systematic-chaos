@@ -10,12 +10,15 @@ import Table from './Table'
 import EditionForm from './EditionForm'
 import { connect } from 'react-redux'
 import RankService from '../../../../services/rank.service'
+import RankCreationForm from './RankCreationForm'
 
 function RankAndBadgesManagement(props) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [editedDataType, setEditedDataType] = useState('')
   const [ranksData, setRanksData] = useState(undefined)
+  const [isRankAdditionModalOpen, setIsRankAdditionModalOpen] = useState(false)
+  const [selectedHeroType, setSelectedHeroType] = useState(HeroType.WARRIOR)
 
   useEffect(() => {
     RankService.getAllRanks()
@@ -50,12 +53,7 @@ function RankAndBadgesManagement(props) {
                 body={rank.ranks.map((listElements, index) => [
                   <img width={100} src={base64Header + listElements.image} alt={'rank-icon'} />,
                   <span>{listElements.name}</span>,
-                  <span>
-                    {/* we don't have maxPoints for rank, so we have to get minPoints from next rank if exist*/}
-                    {index + 1 < rank.ranks.length
-                      ? `${listElements.minPoints} - ${rank.ranks[index + 1].minPoints - 1}`
-                      : `> ${listElements.minPoints}`}
-                  </span>
+                  <span>{`> ${listElements.minPoints}`}</span>
                 ])}
                 deleteIconCallback={() => setIsDeleteModalOpen(true)}
                 editIconCallback={() => {
@@ -64,7 +62,15 @@ function RankAndBadgesManagement(props) {
                 }}
               />
             </div>
-            <Button className={'my-3'}>Dodaj nową rangę</Button>
+            <Button
+              className={'my-3'}
+              onClick={() => {
+                setSelectedHeroType(rank.heroType)
+                setIsRankAdditionModalOpen(true)
+              }}
+            >
+              Dodaj nową rangę
+            </Button>
           </Tab>
         ))}
       </TabsContainer>
@@ -138,6 +144,15 @@ function RankAndBadgesManagement(props) {
             onSubmit={() => setIsEditModalOpen(false)}
             onCancel={() => setIsEditModalOpen(false)}
           />
+        </ModalBody>
+      </Modal>
+
+      <Modal show={isRankAdditionModalOpen} onHide={() => setIsRankAdditionModalOpen(false)}>
+        <ModalHeader>
+          <h5>Dodawanie nowej rangi dla typu: {getHeroName(selectedHeroType)}</h5>
+        </ModalHeader>
+        <ModalBody>
+          <RankCreationForm heroType={selectedHeroType} setModalOpen={setIsRankAdditionModalOpen} />
         </ModalBody>
       </Modal>
     </Content>
