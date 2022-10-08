@@ -40,7 +40,7 @@ describe('Text color getter tests:', () => {
 })
 
 describe('Function tests checking if string is a color:', () => {
-  const correctColors = ['#BDB8FF', '#111', '#1234', 'rgb(11, 142, 12)', 'rgba(45, 11, 89, 0.4)', 'hsv(62, 90, 61)']
+  const correctColors = ['#BDB8FF', '#111', '#1234', 'rgb(11, 142, 12)', 'rgba(45, 11, 89, 0.4)']
   const incorrectColors = ['', '#', '#aaabbbz', 'rgb(12, 41, s)', 'rgb(12, 41)']
 
   it.each(correctColors)('should return true if string is a color: %s', (color) => {
