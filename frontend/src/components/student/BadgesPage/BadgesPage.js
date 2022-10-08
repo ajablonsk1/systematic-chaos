@@ -1,23 +1,35 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { Col, Row } from 'react-bootstrap'
 import { HorizontalPointsLine, PercentageBar, Tooltip } from './BadgesStyle'
-import { getBadgesInfo, getBadgesList, getLastUnlockedBadge, getRankInfo, getStudentPoints } from './mockData'
+import { getBadgesInfo, getBadgesList, getLastUnlockedBadge } from './mockData'
 import ContentCard from './ContentCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
 import Fade, { Bounce, Slide } from 'react-awesome-reveal'
 import { connect } from 'react-redux'
+import RankService from '../../../services/rank.service'
+import Loader from '../../general/Loader/Loader'
+import { base64Header, ERROR_OCCURRED } from '../../../utils/constants'
 
 const LATER_ITEM_DELAY = 1200
 const BADGE_LIST_STEP = 200
 
 function BadgesPage(props) {
-  const studentRankInfo = getRankInfo()
-  const [studentPoints, missingPoints] = getStudentPoints()
   const [studentBadgesNumber, allBadgesNumber] = getBadgesInfo()
   const badgesList = getBadgesList()
   const lastUnlockedBadge = getLastUnlockedBadge()
+  const [rankInfo, setRankInfo] = useState(undefined)
+
+  useEffect(() => {
+    RankService.getCurrentStudentRank()
+      .then((response) => {
+        setRankInfo(response)
+      })
+      .catch(() => {
+        setRankInfo(null)
+      })
+  }, [])
 
   const sortBadges = (a, b) => {
     if (a.unlocked) {
@@ -26,18 +38,24 @@ function BadgesPage(props) {
   }
 
   const additionalContent = useCallback(
-    (rankIndex, rankMaxPoints) => {
-      const PERCENTAGE_BAR_WIDTH = 200
-
-      const getGreenBarWidth = ((studentPoints / rankMaxPoints) * PERCENTAGE_BAR_WIDTH).toFixed(0)
-
-      const getPercentageValue = Math.floor((studentPoints * 100) / rankMaxPoints)
-
+    (rankIndex) => {
       if (rankIndex === 0) {
-        return <FontAwesomeIcon icon={faCircleCheck} />
+        return rankInfo.previousRank ? <FontAwesomeIcon icon={faCircleCheck} /> : null
       }
 
       if (rankIndex === 1) {
+        const PERCENTAGE_BAR_WIDTH = 200
+        const studentPoints = rankInfo.currentPoints
+        const nextRankPoints = rankInfo?.nextRank.minPoints
+
+        if (!nextRankPoints) {
+          return null
+        }
+
+        const getGreenBarWidth = ((studentPoints / nextRankPoints) * PERCENTAGE_BAR_WIDTH).toFixed(0)
+
+        const getPercentageValue = Math.floor((studentPoints * 100) / nextRankPoints)
+
         return (
           <PercentageBar $greenBarWidth={getGreenBarWidth} $grayBarWidth={PERCENTAGE_BAR_WIDTH}>
             <strong>{getPercentageValue}%</strong>
@@ -47,53 +65,64 @@ function BadgesPage(props) {
 
       return <></>
     },
-    [studentPoints]
+    [rankInfo]
   )
 
   return (
     <Content>
-      <Slide delay={LATER_ITEM_DELAY}>
-        <Row className={'m-0 text-center py-3'}>
-          <Col>
-            <strong>Twoja ranga: </strong>
-            <span>{studentRankInfo[1].name}</span>
-          </Col>
-          <Col>
-            <strong>Liczba punktów: </strong>
-            <span>{studentPoints}</span>
-          </Col>
-          <Col>
-            <strong>Do następnej rangi brakuje: </strong>
-            <span>{missingPoints} pkt</span>
-          </Col>
-        </Row>
-      </Slide>
-      <Row className={'m-0'}>
-        <Col md={12}>
-          <HorizontalPointsLine $pointsColor={props.theme.success} $background={props.theme.secondary}>
-            <ul>
-              {studentRankInfo.map((rankInfo, index) => (
-                <li key={index + Date.now()}>
-                  <div>
-                    <div className={'pointsInfo'}>
-                      {rankInfo.minPoints} - {rankInfo.maxPoints} pkt
-                    </div>
-                    <div className={'rankInfo'}>
-                      <div className={'left-arrow'} />
-                      <p>
-                        <strong>{rankInfo.name}</strong>
-                      </p>
-                      <img width={100} src={rankInfo.imgSrc} alt={'rank-profile'} />
-                      {additionalContent(index, rankInfo.maxPoints)}
-                      <div className={'right-arrow'} />
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </HorizontalPointsLine>
-        </Col>
-      </Row>
+      {rankInfo === undefined ? (
+        <Loader />
+      ) : rankInfo == null ? (
+        <p>{ERROR_OCCURRED}</p>
+      ) : (
+        <>
+          <Slide delay={LATER_ITEM_DELAY}>
+            <Row className={'m-0 text-center py-3'}>
+              <Col>
+                <strong>Twoja ranga: </strong>
+                <span>{rankInfo.currentRank.name}</span>
+              </Col>
+              <Col>
+                <strong>Liczba punktów: </strong>
+                <span>{rankInfo.currentPoints}</span>
+              </Col>
+              <Col>
+                <strong>Do następnej rangi brakuje: </strong>
+                <span>{rankInfo.nextRank.minPoints - rankInfo.currentPoints} pkt</span>
+              </Col>
+            </Row>
+          </Slide>
+          <Row className={'m-0'}>
+            <Col md={12}>
+              <HorizontalPointsLine $pointsColor={props.theme.success} $background={props.theme.secondary}>
+                <ul>
+                  {[rankInfo.previousRank, rankInfo.currentRank, rankInfo.nextRank].map((rank, index) => (
+                    <li key={index + Date.now()}>
+                      <div>
+                        <div className={'pointsInfo'}>{rank ? `> ${rank.minPoints} pkt` : '-'}</div>
+                        <div className={'rankInfo'}>
+                          <div className={'left-arrow'} />
+                          <p>
+                            <strong>{rank?.name ?? 'Brak odznaki'}</strong>
+                          </p>
+                          {rank?.image ? (
+                            <img width={100} src={base64Header + rank.image} alt={'rank-profile'} />
+                          ) : (
+                            <p>Brak obrazka</p>
+                          )}
+
+                          {additionalContent(index)}
+                          <div className={'right-arrow'} />
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </HorizontalPointsLine>
+            </Col>
+          </Row>
+        </>
+      )}
       <Row className={'mx-0 my-5'} style={{ maxHeight: '55vh' }}>
         <Col md={9}>
           <ContentCard

@@ -37,12 +37,15 @@ export const DIFFERENT_PASSWORDS = 'Hasła się różnią.'
 export const INCORRECT_EMAIL = 'Podaj poprawny adres email.'
 export const WRONG_INDEX_LENGTH = 'Nr indeksu musi się składać z sześciu cyfr.'
 export const INDEX_WITH_CHARS = 'Nr indeksu musi składać się z samych cyfr.'
+export const FILE_INPUT_REQUIRED = 'Nie wybrano żadnego pliku.'
 
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
 export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
 
 export const GRAPH_NODE_BASIC_SIZE = 20
 export const GRAPH_NODE_SPECIAL_SIZE = 40
+
+export const base64Header = 'data:image/jpeg;base64,'
 
 export const Activity = {
   EXPEDITION: 'EXPEDITION',
