@@ -54,7 +54,7 @@ function RankAndBadgesManagement(props) {
       return <Spinner animation={'border'} />
     }
     if (ranksData == null) {
-      return <p className={'text-danger'}>{ERROR_OCCURRED}</p>
+      return <p style={{ color: props.theme.danger }}>{ERROR_OCCURRED}</p>
     }
 
     return (
@@ -98,7 +98,7 @@ function RankAndBadgesManagement(props) {
         ))}
       </TabsContainer>
     )
-  }, [ranksData])
+  }, [props.theme.danger, ranksData])
 
   const badgesContent = useMemo(() => {
     return (
