@@ -55,16 +55,16 @@ function RankCreationForm(props) {
               {FormCol('Punktowa granica odblokowania', 'number', 'minPoints', 12, {
                 errorColor: props.theme.danger
               })}
-              {/*{FormCol('Ikona rangi', 'file', 'image', 12, {*/}
-              {/*  errorColor: props.theme.danger*/}
-              {/*})}*/}
-              <input
-                name='file'
-                type='file'
-                onChange={(event) => {
-                  setChosenFile(event.currentTarget.files[0])
-                }}
-              />
+              <Col md={12}>
+                <h6>Ikona dla rangi</h6>
+                <input
+                  name='file'
+                  type='file'
+                  onChange={(event) => {
+                    setChosenFile(event.currentTarget.files[0])
+                  }}
+                />
+              </Col>
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>

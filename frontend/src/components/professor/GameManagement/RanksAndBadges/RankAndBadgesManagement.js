@@ -19,6 +19,7 @@ function RankAndBadgesManagement(props) {
   const [ranksData, setRanksData] = useState(undefined)
   const [isRankAdditionModalOpen, setIsRankAdditionModalOpen] = useState(false)
   const [selectedHeroType, setSelectedHeroType] = useState(HeroType.WARRIOR)
+  const [chosenItem, setChosenItem] = useState(undefined)
 
   useEffect(() => {
     RankService.getAllRanks()
@@ -50,15 +51,16 @@ function RankAndBadgesManagement(props) {
             <div className={'text-center'} style={{ maxHeight: '74.5vh', overflow: 'auto' }}>
               <Table
                 headers={['Ikona', 'Nazwa rangi', 'Zakres punktowy']}
-                body={rank.ranks.map((listElements, index) => [
+                body={rank.ranks.map((listElements) => [
                   <img width={100} src={base64Header + listElements.image} alt={'rank-icon'} />,
                   <span>{listElements.name}</span>,
                   <span>{`> ${listElements.minPoints}`}</span>
                 ])}
                 deleteIconCallback={() => setIsDeleteModalOpen(true)}
-                editIconCallback={() => {
+                editIconCallback={(idx) => {
                   setEditedDataType('RANKS')
                   setIsEditModalOpen(true)
+                  setChosenItem({ item: rank.ranks[idx], type: rank.heroType })
                 }}
               />
             </div>
@@ -139,11 +141,7 @@ function RankAndBadgesManagement(props) {
           <h5>Edycja elementu</h5>
         </ModalHeader>
         <ModalBody>
-          <EditionForm
-            formVariant={editedDataType}
-            onSubmit={() => setIsEditModalOpen(false)}
-            onCancel={() => setIsEditModalOpen(false)}
-          />
+          <EditionForm formVariant={editedDataType} setModalOpen={setIsEditModalOpen} item={chosenItem} />
         </ModalBody>
       </Modal>
 
