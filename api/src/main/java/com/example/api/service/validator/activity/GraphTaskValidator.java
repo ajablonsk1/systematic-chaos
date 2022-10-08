@@ -6,7 +6,6 @@ import com.example.api.dto.request.activity.task.create.QuestionForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
-import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;

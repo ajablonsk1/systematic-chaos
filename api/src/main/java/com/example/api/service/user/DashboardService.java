@@ -5,7 +5,10 @@ import com.example.api.dto.response.ranking.RankingResponse;
 import com.example.api.dto.response.user.dashboard.*;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.result.*;
+import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.*;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.map.requirement.Requirement;
@@ -29,7 +32,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.OptionalDouble;
 import java.util.stream.Stream;
 
 @Service
