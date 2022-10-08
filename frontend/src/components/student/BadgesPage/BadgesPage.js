@@ -16,8 +16,6 @@ const LATER_ITEM_DELAY = 1200
 const BADGE_LIST_STEP = 200
 
 function BadgesPage(props) {
-  // const studentRankInfo = getRankInfo()
-  // const [studentPoints, missingPoints] = getStudentPoints()
   const [studentBadgesNumber, allBadgesNumber] = getBadgesInfo()
   const badgesList = getBadgesList()
   const lastUnlockedBadge = getLastUnlockedBadge()

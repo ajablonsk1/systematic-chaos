@@ -11,7 +11,7 @@ function RankCreationForm(props) {
   const [isFetching, startAddition] = useTransition()
   const [errorMessage, setErrorMessage] = useState(undefined)
 
-  // Formik not supports field type inputs, so we have to do it manually
+  // Formik does not support field type input, so we have to do it manually
   const [chosenFile, setChosenFile] = useState(null)
 
   return (
