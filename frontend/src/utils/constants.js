@@ -44,6 +44,8 @@ export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z prze
 export const GRAPH_NODE_BASIC_SIZE = 20
 export const GRAPH_NODE_SPECIAL_SIZE = 40
 
+export const base64Header = 'data:image/jpeg;base64,'
+
 export const Activity = {
   EXPEDITION: 'EXPEDITION',
   INFO: 'INFO',

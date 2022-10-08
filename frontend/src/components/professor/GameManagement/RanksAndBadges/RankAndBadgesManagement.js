@@ -1,23 +1,40 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
-import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Tab } from 'react-bootstrap'
+import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner, Tab } from 'react-bootstrap'
 import { TabsContainer } from '../../../general/LoginAndRegistrationPage/AuthStyle'
-import { getRanksData } from './mockData'
 import { HeroType } from '../../../../utils/userRole'
-import { getHeroName } from '../../../../utils/constants'
+import { base64Header, ERROR_OCCURRED, getHeroName } from '../../../../utils/constants'
 import { getBadgesList } from '../../../student/BadgesPage/mockData'
 import ContentCard from './ContentCard'
 import Table from './Table'
 import EditionForm from './EditionForm'
 import { connect } from 'react-redux'
+import RankService from '../../../../services/rank.service'
 
 function RankAndBadgesManagement(props) {
-  const ranksData = getRanksData()
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [editedDataType, setEditedDataType] = useState('')
+  const [ranksData, setRanksData] = useState(undefined)
+
+  useEffect(() => {
+    RankService.getAllRanks()
+      .then((response) => {
+        setRanksData(response)
+      })
+      .catch(() => {
+        setRanksData(null)
+      })
+  }, [])
 
   const ranksContent = useMemo(() => {
+    if (ranksData === undefined) {
+      return <Spinner animation={'border'} />
+    }
+    if (ranksData == null) {
+      return <p className={'text-danger'}>{ERROR_OCCURRED}</p>
+    }
+
     return (
       <TabsContainer defaultActiveKey={HeroType.WARRIOR} style={{ fontSize: 20 }}>
         {ranksData.map((rank, index) => (
@@ -30,11 +47,14 @@ function RankAndBadgesManagement(props) {
             <div className={'text-center'} style={{ maxHeight: '74.5vh', overflow: 'auto' }}>
               <Table
                 headers={['Ikona', 'Nazwa rangi', 'Zakres punktowy']}
-                body={rank.ranksList.map((listElements) => [
-                  <img width={100} src={listElements.imgSrc} alt={'rank-icon'} />,
+                body={rank.ranks.map((listElements, index) => [
+                  <img width={100} src={base64Header + listElements.image} alt={'rank-icon'} />,
                   <span>{listElements.name}</span>,
                   <span>
-                    {listElements.minPoints} - {listElements.maxPoints}
+                    {/* we don't have maxPoints for rank, so we have to get minPoints from next rank if exist*/}
+                    {index + 1 < rank.ranks.length
+                      ? `${listElements.minPoints} - ${rank.ranks[index + 1].minPoints - 1}`
+                      : `> ${listElements.minPoints}`}
                   </span>
                 ])}
                 deleteIconCallback={() => setIsDeleteModalOpen(true)}
