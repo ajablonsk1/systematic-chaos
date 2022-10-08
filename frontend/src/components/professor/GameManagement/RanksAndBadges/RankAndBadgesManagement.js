@@ -11,6 +11,7 @@ import EditionForm from './EditionForm'
 import { connect } from 'react-redux'
 import RankService from '../../../../services/rank.service'
 import RankCreationForm from './RankCreationForm'
+import { successToast } from '../../../../utils/toasts'
 
 function RankAndBadgesManagement(props) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -20,6 +21,7 @@ function RankAndBadgesManagement(props) {
   const [isRankAdditionModalOpen, setIsRankAdditionModalOpen] = useState(false)
   const [selectedHeroType, setSelectedHeroType] = useState(HeroType.WARRIOR)
   const [chosenItem, setChosenItem] = useState(undefined)
+  const [errorMessage, setErrorMessage] = useState(undefined)
 
   const getRanksList = () => {
     RankService.getAllRanks()
@@ -34,6 +36,18 @@ function RankAndBadgesManagement(props) {
   useEffect(() => {
     getRanksList()
   }, [])
+
+  const deleteRank = () => {
+    RankService.deleteRank(chosenItem.id)
+      .then(() => {
+        successToast('Ranga usunięta pomyślnie')
+        setIsDeleteModalOpen(false)
+        getRanksList()
+      })
+      .catch((error) => {
+        setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
+      })
+  }
 
   const ranksContent = useMemo(() => {
     if (ranksData === undefined) {
@@ -60,7 +74,10 @@ function RankAndBadgesManagement(props) {
                   <span>{listElements.name}</span>,
                   <span>{`> ${listElements.minPoints}`}</span>
                 ])}
-                deleteIconCallback={() => setIsDeleteModalOpen(true)}
+                deleteIconCallback={(idx) => {
+                  setIsDeleteModalOpen(true)
+                  setChosenItem({ id: rank.ranks[idx].rankId })
+                }}
                 editIconCallback={(idx) => {
                   setEditedDataType('RANKS')
                   setIsEditModalOpen(true)
@@ -131,13 +148,15 @@ function RankAndBadgesManagement(props) {
           >
             Anuluj
           </Button>
-          <Button
-            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
-            onClick={() => setIsDeleteModalOpen(false)}
-          >
+          <Button style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }} onClick={deleteRank}>
             Usuń
           </Button>
         </ModalFooter>
+        {errorMessage && (
+          <p className={'text-center mt-2'} style={{ color: props.theme.danger }}>
+            {errorMessage}
+          </p>
+        )}
       </Modal>
 
       <Modal show={isEditModalOpen} onHide={() => setIsEditModalOpen(false)} size={'lg'}>

@@ -31,7 +31,7 @@ function Table(props) {
               <FontAwesomeIcon icon={faEdit} onClick={() => props.editIconCallback(i)} />
             </td>
             <td className={'align-middle'}>
-              <FontAwesomeIcon icon={faTrash} onClick={props.deleteIconCallback} />
+              <FontAwesomeIcon icon={faTrash} onClick={() => props.deleteIconCallback(i)} />
             </td>
           </tr>
         ))}

@@ -38,7 +38,7 @@ function RankCreationForm(props) {
                 props.onSuccess()
               })
               .catch((error) => {
-                setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
+                setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
               })
 
             setSubmitting(false)
