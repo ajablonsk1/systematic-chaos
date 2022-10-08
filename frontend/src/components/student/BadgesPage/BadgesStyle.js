@@ -4,6 +4,7 @@ export const HorizontalPointsLine = styled.div`
   padding-top: 60px;
 
   ul {
+    padding: 0;
     display: grid;
     grid-template-columns: auto auto auto;
     grid-template-rows: auto;
