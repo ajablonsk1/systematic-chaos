@@ -21,7 +21,7 @@ function RankAndBadgesManagement(props) {
   const [selectedHeroType, setSelectedHeroType] = useState(HeroType.WARRIOR)
   const [chosenItem, setChosenItem] = useState(undefined)
 
-  useEffect(() => {
+  const getRanksList = () => {
     RankService.getAllRanks()
       .then((response) => {
         setRanksData(response)
@@ -29,6 +29,10 @@ function RankAndBadgesManagement(props) {
       .catch(() => {
         setRanksData(null)
       })
+  }
+
+  useEffect(() => {
+    getRanksList()
   }, [])
 
   const ranksContent = useMemo(() => {
@@ -141,7 +145,12 @@ function RankAndBadgesManagement(props) {
           <h5>Edycja elementu</h5>
         </ModalHeader>
         <ModalBody>
-          <EditionForm formVariant={editedDataType} setModalOpen={setIsEditModalOpen} item={chosenItem} />
+          <EditionForm
+            onSuccess={getRanksList}
+            formVariant={editedDataType}
+            setModalOpen={setIsEditModalOpen}
+            item={chosenItem}
+          />
         </ModalBody>
       </Modal>
 
@@ -150,7 +159,11 @@ function RankAndBadgesManagement(props) {
           <h5>Dodawanie nowej rangi dla typu: {getHeroName(selectedHeroType)}</h5>
         </ModalHeader>
         <ModalBody>
-          <RankCreationForm heroType={selectedHeroType} setModalOpen={setIsRankAdditionModalOpen} />
+          <RankCreationForm
+            heroType={selectedHeroType}
+            setModalOpen={setIsRankAdditionModalOpen}
+            onSuccess={getRanksList}
+          />
         </ModalBody>
       </Modal>
     </Content>

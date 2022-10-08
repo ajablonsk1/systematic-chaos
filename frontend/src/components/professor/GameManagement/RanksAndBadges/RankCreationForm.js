@@ -35,6 +35,7 @@ function RankCreationForm(props) {
               .then(() => {
                 props.setModalOpen(false)
                 successToast('Nowa ranga została dodana pomyślnie')
+                props.onSuccess()
               })
               .catch((error) => {
                 setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)

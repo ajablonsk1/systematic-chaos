@@ -24,6 +24,7 @@ function EditionForm(props) {
               .then(() => {
                 props.setModalOpen(false)
                 successToast('Ranga została edytowana pomyślnie.')
+                props.onSuccess()
               })
               .catch((error) => {
                 setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
