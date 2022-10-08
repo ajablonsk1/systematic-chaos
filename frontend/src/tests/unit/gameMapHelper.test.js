@@ -1,7 +1,15 @@
 import { getNodePosition } from '../../components/student/GameMapPage/gameMapHelper'
 
 describe('Calculate node position on the map tests:', () => {
-  const exampleIncorrectPositions = [undefined, { x: 0, y: null }, { x: null, y: 0 }]
+  const exampleIncorrectPositions = [
+    undefined,
+    { x: 0, y: null },
+    { x: null, y: 0 },
+    { x: 10, y: null },
+    { x: null, y: 10 },
+    { x: 10.333, y: null },
+    { x: null, y: 0.1 }
+  ]
 
   it.each(exampleIncorrectPositions)('should return "zero" position for missing data: %s', (position) => {
     // given
@@ -36,5 +44,27 @@ describe('Calculate node position on the map tests:', () => {
 
     // then
     expect(position).toEqual({ x: 637, y: 450 })
+  })
+  it('should execute correct node position for integer "x" and float "y"', () => {
+    // given
+    const exampleMapSize = { x: 1333.33, y: 500 }
+    const exampleChartPosition = { x: 9, y: 3 }
+
+    // when
+    const position = getNodePosition(exampleChartPosition, exampleMapSize)
+
+    // then
+    expect(position).toEqual({ x: 1116.33, y: 150 })
+  })
+  it('should execute correct node position for float "x" and integer "y"', () => {
+    // given
+    const exampleMapSize = { x: 800, y: 321.73 }
+    const exampleChapterPosition = { x: 9, y: 2 }
+
+    // when
+    const position = getNodePosition(exampleChapterPosition, exampleMapSize)
+
+    // then
+    expect(position).toEqual({ x: 663, y: 56.57 })
   })
 })
