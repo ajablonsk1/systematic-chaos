@@ -38,7 +38,7 @@ export const onMultiSelectChange = (setRequirementsList, multiSelectLists) => {
   setRequirementsList((prevState) =>
     prevState?.map((requirement) => {
       const multiSelectRequirement = multiSelectLists.find((list) => list.id === requirement.id)
-      return requirement.type.toLowerCase() === RequirementType.MULTI_SELECT
+      return requirement.type?.toLowerCase() === RequirementType.MULTI_SELECT
         ? {
             ...requirement,
             answer: multiSelectRequirement?.list ?? [],

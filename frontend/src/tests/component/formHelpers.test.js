@@ -3,9 +3,11 @@ import { renderHook, act } from '@testing-library/react'
 import {
   onCheckboxChange,
   onInputChange,
+  onMultiSelectChange,
   onSelectChange,
   onSwitchChange
 } from '../../components/professor/GameManagement/ActivityDetails/ActivityRequirements/formHelpers'
+import { RequirementType } from '../../utils/constants'
 
 // global given
 const requirementId = 1
@@ -136,5 +138,97 @@ describe('Select input tests:', () => {
     // then
     expect(result.current[0]).toHaveLength(1)
     expect(result.current[0][0]).toMatchObject({ id: requirementId, answer: value, selected: true })
+  })
+})
+
+describe('Multiselect input tests:', () => {
+  const multiselectList = [
+    { id: 1, list: ['test1', 'test2', 'test3'] },
+    { id: 2, list: ['test4', 'test5', 'test6'] }
+  ]
+
+  it('should return empty answer list and unselected if multiselectList is empty', () => {
+    // given
+    const emptyMultiselectList = []
+    const { result } = renderHook(() =>
+      useState([{ id: requirementId, answer: ['selectTest'], selected: false, type: RequirementType.MULTI_SELECT }])
+    )
+
+    // when
+    act(() => {
+      onMultiSelectChange(result.current[1], emptyMultiselectList)
+    })
+
+    // then
+    expect(result.current[0]).toHaveLength(1)
+    expect(result.current[0][0]).toMatchObject({
+      id: requirementId,
+      answer: [],
+      selected: false,
+      type: RequirementType.MULTI_SELECT
+    })
+  })
+  it('should return empty answer list and unselected if multiselect not contains given requirementId', () => {
+    // given
+    const { result } = renderHook(() =>
+      useState([{ id: requirementId, answer: ['selectTest'], selected: false, type: RequirementType.MULTI_SELECT }])
+    )
+
+    // when
+    act(() => {
+      onMultiSelectChange(result.current[1], [multiselectList[1]])
+    })
+
+    // then
+    expect(result.current[0]).toHaveLength(1)
+    expect(result.current[0][0]).toMatchObject({
+      id: requirementId,
+      answer: [],
+      selected: false,
+      type: RequirementType.MULTI_SELECT
+    })
+  })
+  it('should return new answer list and selected value true if multiselect list contains given requirementId', () => {
+    // given
+    const { result } = renderHook(() =>
+      useState([{ id: requirementId, answer: ['selectTest'], selected: false, type: RequirementType.MULTI_SELECT }])
+    )
+
+    // when
+    act(() => {
+      onMultiSelectChange(result.current[1], multiselectList)
+    })
+
+    // then
+    expect(result.current[0]).toHaveLength(1)
+    expect(result.current[0][0]).toMatchObject({
+      id: requirementId,
+      answer: multiselectList[0].list,
+      selected: true,
+      type: RequirementType.MULTI_SELECT
+    })
+  })
+  it('should return the same requirements list if given requirement type is not "multi_select" or is undefined', () => {
+    // given
+    const exampleRequirement = {
+      id: requirementId,
+      answer: ['selectTest'],
+      selected: false,
+      type: RequirementType.TEXT
+    }
+    const { result: result1 } = renderHook(() => useState([exampleRequirement]))
+    const { result: result2 } = renderHook(() => useState([{ ...exampleRequirement, type: undefined }]))
+
+    // when
+    act(() => {
+      onMultiSelectChange(result1.current[1], multiselectList)
+      onMultiSelectChange(result2.current[1], multiselectList)
+    })
+
+    // then
+    expect(result1.current[0]).toHaveLength(1)
+    expect(result2.current[0]).toHaveLength(1)
+    expect(result1.current[0][0]).toMatchObject(exampleRequirement)
+    expect(result2.current[0][0]).toMatchObject({ ...exampleRequirement, type: undefined })
   })
 })
