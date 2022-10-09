@@ -43,6 +43,7 @@ function ChapterDetails(props) {
   const [shouldLoadEditChapterModal, setShouldLoadEditChapterModal] = useState(false)
   const [deleteChapterError, setDeleteChapterError] = useState(undefined)
   const [reloadMapNeeded, setReloadMapNeeded] = useState(false)
+  const [deleteActivityError, setDeleteActivityError] = useState(undefined)
 
   const mapCardBody = useRef()
 
@@ -116,7 +117,7 @@ function ChapterDetails(props) {
     getActivityInfo(activity.id)
   }
 
-  const deleteActivity = (activity) => {
+  const startActivityDeletion = (activity) => {
     setChosenActivityData({
       activityId: activity.id,
       activityType: getActivityTypeName(activity.type),
@@ -132,7 +133,23 @@ function ChapterDetails(props) {
         setDeletionModalOpen(false)
         navigate(TeacherRoutes.GAME_MANAGEMENT.MAIN)
       })
-      .catch((error) => setDeleteChapterError(error.response.data.message))
+      .catch((error) => setDeleteChapterError(error.response?.data?.message ?? ERROR_OCCURRED))
+  }
+
+  const deleteActivity = () => {
+    ActivityService.deleteActivity(chosenActivityData.activityId)
+      .then(() => {
+        successToast(
+          <p>
+            Aktywność <strong>{chosenActivityData.activityName}</strong> usunięta pomyślnie.
+          </p>
+        )
+        setIsDeleteActivityModalOpen(false)
+        getChapterDetails()
+      })
+      .catch((error) => {
+        setDeleteActivityError(error.response?.data?.message ?? ERROR_OCCURRED)
+      })
   }
 
   return (
@@ -291,7 +308,7 @@ function ChapterDetails(props) {
                                 icon={faTrash}
                                 onClick={(e) => {
                                   e.stopPropagation()
-                                  deleteActivity(activity)
+                                  startActivityDeletion(activity)
                                 }}
                               />
                             </td>
@@ -384,11 +401,14 @@ function ChapterDetails(props) {
         modalTitle={'Usunięcie aktywności'}
         modalBody={
           <>
-            Czy na pewno chcesz usunąć aktywność typu: <strong>{chosenActivityData?.activityType}</strong>
-            <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
+            <div>
+              Czy na pewno chcesz usunąć aktywność typu: <strong>{chosenActivityData?.activityType}</strong>
+              <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
+            </div>
+            {deleteActivityError && <p style={{ color: props.theme.danger }}>{deleteActivityError}</p>}
           </>
         }
-        onClick={() => {}}
+        onClick={deleteActivity}
       />
 
       <AddActivityModal
