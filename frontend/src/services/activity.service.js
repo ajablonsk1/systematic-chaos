@@ -1,5 +1,6 @@
-import { axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiDelete, axiosApiGet, axiosApiPost } from '../utils/axios'
 import {
+  DELETE_ACTIVITY,
   GET_ACTIVITY_EDIT_INFO,
   GET_MAP,
   GET_RANKING_ACTIVITY,
@@ -73,6 +74,14 @@ class ActivityService {
       activityID,
       activityType,
       activityBody
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  deleteActivity(activityId) {
+    return axiosApiDelete(DELETE_ACTIVITY, {
+      activityID: activityId
     }).catch((error) => {
       throw error
     })
