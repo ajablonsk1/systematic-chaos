@@ -61,14 +61,14 @@ describe('isStudent tests', () => {
     const isStudentAccount = isStudent(token)
 
     //then
-    expect(isStudentAccount).toBe(true)
+    expect(isStudentAccount).toBeTruthy()
   })
   it.each(professorTokens)('Returns false for a professor account with token %s', (token) => {
     //when
     const isStudentAccount = isStudent(token)
 
     //then
-    expect(isStudentAccount).toBe(false)
+    expect(isStudentAccount).toBeFalsy()
   })
   it.each(invalidTokens)('Throws a TypeError for an invalid token %s', (token) => {
     //when
