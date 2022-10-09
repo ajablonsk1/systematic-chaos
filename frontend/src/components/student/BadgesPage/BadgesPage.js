@@ -47,14 +47,15 @@ function BadgesPage(props) {
         const PERCENTAGE_BAR_WIDTH = 200
         const studentPoints = rankInfo.currentPoints
         const nextRankPoints = rankInfo?.nextRank.minPoints
+        const currentRankPoints = rankInfo.currentRank.minPoints
 
         if (!nextRankPoints) {
           return null
         }
 
-        const getGreenBarWidth = ((studentPoints / nextRankPoints) * PERCENTAGE_BAR_WIDTH).toFixed(0)
-
-        const getPercentageValue = Math.floor((studentPoints * 100) / nextRankPoints)
+        const progressPercentage = (studentPoints - currentRankPoints) / (nextRankPoints - currentRankPoints)
+        const getGreenBarWidth = (progressPercentage * PERCENTAGE_BAR_WIDTH).toFixed(0)
+        const getPercentageValue = Math.floor(progressPercentage * 100)
 
         return (
           <PercentageBar $greenBarWidth={getGreenBarWidth} $grayBarWidth={PERCENTAGE_BAR_WIDTH}>
