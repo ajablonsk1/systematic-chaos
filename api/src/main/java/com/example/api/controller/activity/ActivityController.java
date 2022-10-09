@@ -1,13 +1,13 @@
 package com.example.api.controller.activity;
 
 import com.example.api.dto.request.activity.task.edit.EditActivityForm;
-import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.ActivityService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +29,12 @@ public class ActivityController {
     ResponseEntity<?> getActivityEditInfo(@RequestBody EditActivityForm form) throws RequestValidationException, ParseException {
         activityService.editActivity(form);
         return ResponseEntity.ok().body(null);
+    }
+
+    @DeleteMapping("/delete")
+    ResponseEntity<?> deleteActivity(@RequestParam Long activityID) throws WrongUserTypeException, EntityNotFoundException {
+        activityService.deleteActivity(activityID);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

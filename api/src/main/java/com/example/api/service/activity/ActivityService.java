@@ -140,4 +140,20 @@ public class ActivityService {
         activity.setPosX(editForm.getPosX());
         activity.setPosY(editForm.getPosY());
     }
+
+    public void deleteActivity(Long activityID) throws WrongUserTypeException, EntityNotFoundException {
+        String email = authService.getAuthentication().getName();
+        User professor = userRepo.findUserByEmail(email);
+        userValidator.validateProfessorAccount(professor, email);
+
+        Activity activity = getActivity(activityID);
+        activityValidator.validateActivityIsNotNull(activity, activityID);
+        switch (activity.getActivityType()) {
+            case EXPEDITION -> graphTaskRepo.delete((GraphTask) activity);
+            case TASK -> fileTaskRepo.delete((FileTask) activity);
+            case INFO -> infoRepo.delete((Info) activity);
+            case SURVEY -> surveyRepo.delete((Survey) activity);
+        }
+
+    }
 }
