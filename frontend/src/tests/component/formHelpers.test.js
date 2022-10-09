@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { renderHook, act } from '@testing-library/react'
+import { renderHook, act, cleanup } from '@testing-library/react'
 import {
   onCheckboxChange,
   onInputChange,
@@ -14,6 +14,10 @@ const requirementId = 1
 const value = 'Test'
 
 describe('Input type field tests:', () => {
+  afterEach(() => {
+    cleanup()
+  })
+
   // The test below works for all helper functions, so I don't repeat it for other test blocks
   it('should return the same list if prevState exists and is not empty, but requirementId is not found', () => {
     // given
