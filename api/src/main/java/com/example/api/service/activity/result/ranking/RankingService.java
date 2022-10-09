@@ -66,7 +66,7 @@ public class RankingService {
         return rankingList;
     }
 
-    public List<RankingResponse> getRankingForLoggedStudentGroup() throws EntityNotFoundException {
+    public List<RankingResponse> getRankingForLoggedStudentGroup() {
         String groupName = userService.getUserGroup().getName();
         List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
@@ -239,11 +239,25 @@ public class RankingService {
                 }).sum();
     }
 
+    private Double getSurveyPoints(User student) {
+        return surveyResultRepo.findAllByUser(student)
+                .stream()
+                .mapToDouble(survey -> {
+                    try {
+                        return survey.getPointsReceived();
+                    } catch (Exception e) {
+                        log.info("SurveyResult with id {} has no points assigned", survey.getId());
+                    }
+                    return 0.0;
+                }).sum();
+    }
+
     private Double getStudentPoints(User student) {
         Double graphTaskPoints = getGraphTaskPoints(student);
         Double fileTaskPoints = getFileTaskPoints(student);
         Double additionalPoints = getAdditionalPoints(student);
-        return DoubleStream.of(graphTaskPoints, fileTaskPoints, additionalPoints).sum();
+        Double surveyPoints = getSurveyPoints(student);
+        return DoubleStream.of(graphTaskPoints, fileTaskPoints, additionalPoints, surveyPoints).sum();
     }
 
 }

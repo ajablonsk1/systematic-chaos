@@ -46,6 +46,7 @@ public class RankService {
         heroTypeToRanks.keySet().forEach(heroType -> {
             List<RankResponse> rankResponses = heroTypeToRanks.get(heroType)
                     .stream()
+                    .sorted(Comparator.comparingDouble(Rank::getMinPoints))
                     .map(rank -> new RankResponse(
                             rank.getId(),
                             rank.getName(),

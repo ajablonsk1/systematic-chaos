@@ -37,7 +37,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
     private Integer level;
-    private Double points = 0.0;
+    private Double points;
 
     @Enumerated(EnumType.STRING)
     private HeroType heroType;

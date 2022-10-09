@@ -63,6 +63,7 @@ public class UserService implements UserDetailsService {
         User user = new User(form.getEmail(), form.getFirstName(), form.getLastName(), form.getAccountType());
         userValidator.validateUserRegistration(dbUser, user, form, email);
         user.setPassword(passwordEncoder.encode(form.getPassword()));
+        user.setPoints(0D);
         userRepo.save(user);
         return user.getId();
     }
