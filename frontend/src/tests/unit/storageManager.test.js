@@ -53,7 +53,7 @@ describe('isStudent tests', () => {
   const invalidTokens = [
     { access_token: '' },
     { access_token: 'incorrectToken' },
-    { access_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1Ni111111111111111111111111111111111111111111111111111' }
+    { access_token: '111111111111111111111111111111111111111111111111111' }
   ]
 
   it.each(studentTokens)('Returns true for a student account with token %s', (token) => {
