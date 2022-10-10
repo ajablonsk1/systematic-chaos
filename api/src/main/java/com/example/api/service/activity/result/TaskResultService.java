@@ -103,6 +103,21 @@ public class TaskResultService {
         return new ByteArrayResource(csvConverter.convertToByteArray(userToResultMap, firstRow));
     }
 
+    public List<? extends TaskResult> getAllResultsForStudent(User student) {
+        List<SurveyResult> surveyResults = surveyResultRepo.findAllByUser(student);
+        return Stream.of(getGraphAndFileResultsForStudent(student), surveyResults)
+                .flatMap(Collection::stream)
+                .toList();
+    }
+
+    public List<? extends TaskResult> getGraphAndFileResultsForStudent(User student) {
+        List<GraphTaskResult> graphTaskResults = graphTaskResultRepo.findAllByUser(student);
+        List<FileTaskResult> fileTaskResults = fileTaskResultRepo.findAllByUser(student);
+        return Stream.of(graphTaskResults, fileTaskResults)
+                .flatMap(Collection::stream)
+                .toList();
+    }
+
     public List<TaskPointsStatisticsResponse> getUserPointsStatistics() throws WrongUserTypeException {
         String email = authService.getAuthentication().getName();
         return getUserPointsStatistics(email);

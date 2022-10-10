@@ -1,4 +1,6 @@
 package com.example.api.model.user.badge;
+import com.example.api.model.util.Image;
+import com.example.api.util.visitor.BadgeVisitor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,19 +13,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Badge {
+public abstract class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private BadgeType badgeType;
+    @OneToOne
+    private Image image;
 
-    @Lob
-    private byte[] image;
-
-    @Embedded
-    private BadgeRequirement requirement;
+    public abstract boolean isGranted(BadgeVisitor visitor);
 }
