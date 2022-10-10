@@ -99,7 +99,7 @@ function RankAndBadgesManagement(props) {
         ))}
       </TabsContainer>
     )
-  }, [props.theme.danger, ranksData])
+  }, [props.theme.danger, props.theme.success, ranksData])
 
   const badgesContent = useMemo(() => {
     return (
@@ -133,7 +133,7 @@ function RankAndBadgesManagement(props) {
         </Button>
       </>
     )
-  }, [])
+  }, [props.theme.success])
 
   return (
     <Content>
