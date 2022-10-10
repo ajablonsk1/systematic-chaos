@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,11 @@ public class ChapterService {
     public List<ChapterResponse> getAllChapters() {
         log.info("Fetching all chapters");
         List<Chapter> chapters = chapterRepo.findAll();
-        return chapters.stream().map(ChapterResponse::new).toList();
+        return chapters
+                .stream()
+                .map(ChapterResponse::new)
+                .sorted(Comparator.comparingLong(ChapterResponse::getId))
+                .toList();
     }
 
     public ChapterInfoResponse getChapterInfo(Long id) throws EntityNotFoundException {
