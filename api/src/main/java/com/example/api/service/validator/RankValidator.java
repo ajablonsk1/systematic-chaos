@@ -3,6 +3,7 @@ package com.example.api.service.validator;
 import com.example.api.dto.request.user.rank.AddRankForm;
 import com.example.api.dto.request.user.rank.EditRankForm;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.user.Rank;
 import com.example.api.repo.user.RankRepo;
@@ -36,7 +37,7 @@ public class RankValidator {
     public void validateAddRankForm(AddRankForm form) throws RequestValidationException {
         if (form.getName().length() > 30) {
             log.error("Rank name cannot have more than 30 characters!");
-            throw new RequestValidationException("Rank name cannot have more than 30 characters!");
+            throw new RequestValidationException(ExceptionMessage.NAME_TO_LONG);
         }
         List<Rank> ranks = rankRepo.findAll()
                 .stream()
@@ -44,7 +45,7 @@ public class RankValidator {
                 .toList();
         if (ranks.stream().anyMatch(rank -> Objects.equals(rank.getMinPoints(), form.getMinPoints()))) {
             log.error("Two ranks cannot have the same minPoint");
-            throw new RequestValidationException("Two ranks cannot have the same minPoint");
+            throw new RequestValidationException(ExceptionMessage.THE_SAME_MIN_POINTS);
         }
     }
 }
