@@ -40,4 +40,6 @@ public class ExceptionMessage {
     public static final String IMAGE_NOT_EXISTS = "Zdjęcia o podanym id nie ma w bazie danych.";
     public static final String PROFESSOR_REGISTER_TOKEN_NOT_PASSED = "Token do rejestracji prowadzącego nie został podanny";
     public static final String WRONG_PROFESSOR_REGISTER_TOKEN = "Token do rejestracji prowadzącego jest niepoprawny";
+    public static final String RANK_NAME_TOO_LONG = "Nazwa nie może przekraczać 30 znaków";
+    public static final String SAME_RANK_MIN_POINTS = "Inna ranga posiada już podaną wartość progu punktowego";
 }

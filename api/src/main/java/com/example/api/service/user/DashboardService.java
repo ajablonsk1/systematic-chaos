@@ -102,8 +102,9 @@ public class DashboardService {
         Long surveysNumber = getSurveysNumber(student);
         Double graphTaskPoints = getGraphTaskPoints(student);
         Double fileTaskPoints = getFileTaskPoints(student);
-        Double additionalPoints=  getAdditionalPoints(student);
-        Double allPoints = graphTaskPoints + fileTaskPoints + additionalPoints;
+        Double additionalPoints =  getAdditionalPoints(student);
+        Double surveyPoints = getSurveyPoints(student);
+        Double allPoints = graphTaskPoints + fileTaskPoints + additionalPoints + surveyPoints;
         Double maxPoints = getMaxPoints(student);
 
         return new GeneralStats(
@@ -150,6 +151,10 @@ public class DashboardService {
 
     private Double getAdditionalPoints(User student) {
         return getTaskPoints(additionalPointsRepo.findAllByUser(student));
+    }
+
+    private Double getSurveyPoints(User student) {
+        return getTaskPoints(surveyResultRepo.findAllByUser(student));
     }
 
     private Double getTaskPoints(List<? extends TaskResult> taskResults) {

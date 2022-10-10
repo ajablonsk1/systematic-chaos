@@ -30,6 +30,7 @@ import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.RankRepo;
+import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
@@ -49,11 +50,13 @@ import com.example.api.service.question.QuestionService;
 import com.example.api.service.user.UserService;
 import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.OnDelete;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.imageio.ImageIO;
+import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -63,6 +66,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
+@Transactional
 public class DatabaseConfig {
     private final UrlRepo urlRepo;
     private final ChapterRepo chapterRepo;
@@ -70,6 +74,7 @@ public class DatabaseConfig {
     private final AdditionalPointsRepo additionalPointsRepo;
     private final SurveyResultRepo surveyResultRepo;
     private final FileRepo fileRepo;
+    private final UserRepo userRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -92,6 +97,7 @@ public class DatabaseConfig {
             student.setPassword("12345");
             student.setIndexNumber(123456);
             student.setHeroType(HeroType.PRIEST);
+            student.setPoints(0D);
 
             User student1 = new User("smazur@student.agh.edu.pl",
                     "Szymon",
@@ -100,6 +106,7 @@ public class DatabaseConfig {
             student1.setPassword("12345");
             student1.setIndexNumber(123457);
             student1.setHeroType(HeroType.PRIEST);
+            student1.setPoints(0D);
 
             User student2 = new User("murbanska@student.agh.edu.pl",
                     "Matylda",
@@ -108,6 +115,7 @@ public class DatabaseConfig {
             student2.setPassword("12345");
             student2.setIndexNumber(123458);
             student2.setHeroType(HeroType.PRIEST);
+            student2.setPoints(0D);
 
             User student3 = new User("pwasilewski@student.agh.edu.pl",
                     "Patryk",
@@ -116,6 +124,7 @@ public class DatabaseConfig {
             student3.setPassword("12345");
             student3.setIndexNumber(123459);
             student3.setHeroType(HeroType.PRIEST);
+            student3.setPoints(0D);
 
             User student4 = new User("awojcik@student.agh.edu.pl",
                     "Amelia",
@@ -124,6 +133,7 @@ public class DatabaseConfig {
             student4.setPassword("12345");
             student4.setIndexNumber(223456);
             student4.setHeroType(HeroType.WARRIOR);
+            student4.setPoints(0D);
 
             User student5 = new User("kkruk@student.agh.edu.pl",
                     "Kornel",
@@ -132,6 +142,7 @@ public class DatabaseConfig {
             student5.setPassword("12345");
             student5.setIndexNumber(323456);
             student5.setHeroType(HeroType.WARRIOR);
+            student5.setPoints(0D);
 
             User student6 = new User("mdabrowska@student.agh.edu.pl",
                     "Maria",
@@ -140,6 +151,7 @@ public class DatabaseConfig {
             student6.setPassword("12345");
             student6.setIndexNumber(423456);
             student6.setHeroType(HeroType.WARRIOR);
+            student6.setPoints(0D);
 
             User student7 = new User("aczajkowski@student.agh.edu.pl",
                     "Antoni",
@@ -148,6 +160,7 @@ public class DatabaseConfig {
             student7.setPassword("12345");
             student7.setIndexNumber(523456);
             student7.setHeroType(HeroType.WIZARD);
+            student7.setPoints(0D);
 
             User student8 = new User("mnowak@student.agh.edu.pl",
                     "Magdalena",
@@ -156,6 +169,7 @@ public class DatabaseConfig {
             student8.setPassword("12345");
             student8.setIndexNumber(623456);
             student8.setHeroType(HeroType.WIZARD);
+            student8.setPoints(0D);
 
             User student9 = new User("jlewandowska@student.agh.edu.pl",
                     "Julia",
@@ -164,6 +178,7 @@ public class DatabaseConfig {
             student9.setPassword("12345");
             student9.setIndexNumber(723456);
             student9.setHeroType(HeroType.WIZARD);
+            student9.setPoints(0D);
 
             User student10 = new User("mwojcik@student.agh.edu.pl",
                     "Milena",
@@ -172,6 +187,7 @@ public class DatabaseConfig {
             student10.setPassword("12345");
             student10.setIndexNumber(823456);
             student10.setHeroType(HeroType.WIZARD);
+            student10.setPoints(0D);
 
             User student11 = new User("kpaluch@student.agh.edu.pl",
                     "Kacper",
@@ -180,6 +196,7 @@ public class DatabaseConfig {
             student11.setPassword("12345");
             student11.setIndexNumber(923456);
             student11.setHeroType(HeroType.WIZARD);
+            student11.setPoints(0D);
 
             User student12 = new User("fzalewski@student.agh.edu.pl",
                     "Filip",
@@ -188,6 +205,7 @@ public class DatabaseConfig {
             student12.setPassword("12345");
             student12.setIndexNumber(133456);
             student12.setHeroType(HeroType.WIZARD);
+            student12.setPoints(0D);
 
             User student13 = new User("jmichalak@student.agh.edu.pl",
                     "Jan",
@@ -196,6 +214,7 @@ public class DatabaseConfig {
             student13.setPassword("12345");
             student13.setIndexNumber(143456);
             student13.setHeroType(HeroType.WIZARD);
+            student13.setPoints(0D);
 
             User student14 = new User("kostrowska@student.agh.edu.pl",
                     "Karina",
@@ -204,6 +223,7 @@ public class DatabaseConfig {
             student14.setPassword("12345");
             student14.setIndexNumber(153456);
             student14.setHeroType(HeroType.ROGUE);
+            student14.setPoints(0D);
 
             User student15 = new User("dkowalska@student.agh.edu.pl",
                     "Dominika",
@@ -212,6 +232,7 @@ public class DatabaseConfig {
             student15.setPassword("12345");
             student15.setIndexNumber(163456);
             student15.setHeroType(HeroType.ROGUE);
+            student15.setPoints(0D);
 
             User student16 = new User("manowak@student.agh.edu.pl",
                     "Małgorzata Anna",
@@ -220,6 +241,7 @@ public class DatabaseConfig {
             student16.setPassword("12345");
             student16.setIndexNumber(163457);
             student16.setHeroType(HeroType.ROGUE);
+            student16.setPoints(0D);
 
             User professor = new User("bmaj@agh.edu.pl",
                     "Bernard",
@@ -227,7 +249,6 @@ public class DatabaseConfig {
                     AccountType.PROFESSOR);
             professor.setPassword("12345");
             professor.setHeroType(HeroType.PRIEST);
-            student.setIndexNumber(123456);
 
             User professor1 = new User("szielinski@agh.edu.pl",
                     "Sławomir",
@@ -235,7 +256,6 @@ public class DatabaseConfig {
                     AccountType.PROFESSOR);
             professor1.setPassword("12345");
             professor1.setHeroType(HeroType.PRIEST);
-            student.setIndexNumber(123456);
 
             List<User> students1 = List.of(student, student1, student2, student3, student4, student5, student6, student7);
             List<User> students2 = List.of(student8, student9, student10, student11, student12, student13, student14, student15, student16);
@@ -520,17 +540,10 @@ public class DatabaseConfig {
             chapter.setPosX(2);
             chapter.setPosY(2);
             chapter.setActivityMap(activityMap1);
-
             chapterRepo.save(chapter);
 
-            AdditionalPoints additionalPoints = new AdditionalPoints();
-            additionalPoints.setId(1L);
-            additionalPoints.setUser(student);
-            additionalPoints.setPointsReceived(100D);
-            additionalPoints.setProfessorEmail(professor.getEmail());
-            additionalPoints.setDescription("Good job");
             calendar.set(2022, Calendar.JUNE, 15);
-            additionalPoints.setSendDateMillis(calendar.getTimeInMillis());
+            AdditionalPoints additionalPoints = new AdditionalPoints(1L, student, 100D, calendar.getTimeInMillis(), professor.getEmail(), "Good job");
             additionalPointsRepo.save(additionalPoints);
 
             SurveyResult surveyResult1 = new SurveyResult();
@@ -579,6 +592,9 @@ public class DatabaseConfig {
             byte[] chapterImageBytes5 = getByteArrayForFile("src/main/resources/images/chapter_image5.png", "png");
             Image chapterImage5 = new Image("Chapter image 5", chapterImageBytes5, ImageType.CHAPTER);
             fileRepo.save(chapterImage5);
+
+            userRepo.saveAll(students1);
+            userRepo.saveAll(students2);
 
             initAllRanks();
         };
@@ -667,55 +683,55 @@ public class DatabaseConfig {
         Image wizardImage2 = new Image("Wizard rank image 2", wizardImageBytes2, ImageType.RANK);
         fileRepo.save(wizardImage2);
 
-        byte[] wizardImageBytes3 = getByteArrayForFile("src/main/resources/images/wizard4.png", "png");
+        byte[] wizardImageBytes3 = getByteArrayForFile("src/main/resources/images/wizard3.png", "png");
         Image wizardImage3 = new Image("Wizard rank image 3", wizardImageBytes3, ImageType.RANK);
         fileRepo.save(wizardImage3);
 
-        byte[] wizardImageBytes4 = getByteArrayForFile("src/main/resources/images/wizard5.png", "png");
+        byte[] wizardImageBytes4 = getByteArrayForFile("src/main/resources/images/wizard4.png", "png");
         Image wizardImage4 = new Image("Wizard rank image 4", wizardImageBytes4, ImageType.RANK);
         fileRepo.save(wizardImage4);
 
-        byte[] wizardImageBytes5 = getByteArrayForFile("src/main/resources/images/priest1.png", "png");
+        byte[] wizardImageBytes5 = getByteArrayForFile("src/main/resources/images/wizard5.png", "png");
         Image wizardImage5 = new Image("Wizard rank image 5", wizardImageBytes5, ImageType.RANK);
         fileRepo.save(wizardImage5);
 
-        byte[] priestImageBytes1 = getByteArrayForFile("src/main/resources/images/priest2.png", "png");
+        byte[] priestImageBytes1 = getByteArrayForFile("src/main/resources/images/priest1.png", "png");
         Image priestImage1 = new Image("Priest rank image 1", priestImageBytes1, ImageType.RANK);
         fileRepo.save(priestImage1);
 
-        byte[] priestImageBytes2 = getByteArrayForFile("src/main/resources/images/priest3.png", "png");
+        byte[] priestImageBytes2 = getByteArrayForFile("src/main/resources/images/priest2.png", "png");
         Image priestImage2 = new Image("Priest rank image 2", priestImageBytes2, ImageType.RANK);
         fileRepo.save(priestImage2);
 
-        byte[] priestImageBytes3 = getByteArrayForFile("src/main/resources/images/priest5.png", "png");
+        byte[] priestImageBytes3 = getByteArrayForFile("src/main/resources/images/priest3.png", "png");
         Image priestImage3 = new Image("Priest rank image 3", priestImageBytes3, ImageType.RANK);
         fileRepo.save(priestImage3);
 
-        byte[] priestImageBytes4 = getByteArrayForFile("src/main/resources/images/rogue1.png", "png");
+        byte[] priestImageBytes4 = getByteArrayForFile("src/main/resources/images/priest4.png", "png");
         Image priestImage4 = new Image("Priest rank image 4", priestImageBytes4, ImageType.RANK);
         fileRepo.save(priestImage4);
 
-        byte[] priestImageBytes5 = getByteArrayForFile("src/main/resources/images/rogue2.png", "png");
+        byte[] priestImageBytes5 = getByteArrayForFile("src/main/resources/images/priest5.png", "png");
         Image priestImage5 = new Image("Priest rank image 5", priestImageBytes5, ImageType.RANK);
         fileRepo.save(priestImage5);
 
-        byte[] rogueImageBytes1 = getByteArrayForFile("src/main/resources/images/rogue3.png", "png");
+        byte[] rogueImageBytes1 = getByteArrayForFile("src/main/resources/images/rogue1.png", "png");
         Image rogueImage1 = new Image("Rogue rank image 1", rogueImageBytes1, ImageType.RANK);
         fileRepo.save(rogueImage1);
 
-        byte[] rogueImageBytes2 = getByteArrayForFile("src/main/resources/images/rogue4.png", "png");
+        byte[] rogueImageBytes2 = getByteArrayForFile("src/main/resources/images/rogue2.png", "png");
         Image rogueImage2 = new Image("Rogue rank image 2", rogueImageBytes2, ImageType.RANK);
         fileRepo.save(rogueImage2);
 
-        byte[] rogueImageBytes3 = getByteArrayForFile("src/main/resources/images/rogue5.png", "png");
+        byte[] rogueImageBytes3 = getByteArrayForFile("src/main/resources/images/rogue3.png", "png");
         Image rogueImage3 = new Image("Rogue rank image 3", rogueImageBytes3, ImageType.RANK);
         fileRepo.save(rogueImage3);
 
-        byte[] rogueImageBytes4 = getByteArrayForFile("src/main/resources/images/chapter_image5.png", "png");
+        byte[] rogueImageBytes4 = getByteArrayForFile("src/main/resources/images/rogue4.png", "png");
         Image rogueImage4 = new Image("Rogue rank image 4", rogueImageBytes4, ImageType.RANK);
         fileRepo.save(rogueImage4);
 
-        byte[] rogueImageBytes5 = getByteArrayForFile("src/main/resources/images/chapter_image5.png", "png");
+        byte[] rogueImageBytes5 = getByteArrayForFile("src/main/resources/images/rogue5.png", "png");
         Image rogueImage5 = new Image("Rogue rank image 5", rogueImageBytes5, ImageType.RANK);
         fileRepo.save(rogueImage5);
 
