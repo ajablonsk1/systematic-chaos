@@ -91,6 +91,7 @@ function RankAndBadgesManagement(props) {
                 setSelectedHeroType(rank.heroType)
                 setIsRankAdditionModalOpen(true)
               }}
+              style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
             >
               Dodaj nową rangę
             </Button>
@@ -118,7 +119,16 @@ function RankAndBadgesManagement(props) {
             }}
           />
         </div>
-        <Button className={'my-3'} style={{ position: 'relative', left: '50%', transform: 'translateX(-50%)' }}>
+        <Button
+          className={'my-3'}
+          style={{
+            position: 'relative',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: props.theme.success,
+            borderColor: props.theme.success
+          }}
+        >
           Dodaj nową odznakę
         </Button>
       </>
