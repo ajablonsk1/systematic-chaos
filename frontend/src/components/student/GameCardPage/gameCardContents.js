@@ -77,10 +77,10 @@ export const HeroStatsContent = (props) => {
 
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
-      <Col md={6} className={'h-100'}>
+      <Col xs={6} className={'h-100'}>
         <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg[heroType]} alt={'Your hero'} />
       </Col>
-      <Col md={6}>
+      <Col xs={6}>
         <p>Punkty doświadczenia: {experiencePoints}</p>
         <p>Punkty do kolejnej rangi: {nextLvlPoints}</p>
         <p>Ranga: {rankName}</p>
