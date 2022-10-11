@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -152,5 +153,9 @@ public class GraphTaskResultService {
         resultValidator.validateResultIsNotNull(result, graphTaskId, email);
 
         return result;
+    }
+
+    public List<GraphTaskResult> getAllGraphTaskResultsForStudent(User student){
+        return graphTaskResultRepo.findAllByUser(student);
     }
 }
