@@ -1,1 +1,1 @@
-export const isMobileView = () => window.innerWidth < 576
+export const isMobileView = () => window.screen.width < 576

@@ -3,6 +3,7 @@ import Graph from '../../general/Graph/Graph'
 import { getNodePosition } from './gameMapHelper'
 import { GameMapContainer as GameMapContainerStyle } from './GameMapStyles'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function GameMapContainer(props) {
   const [mapContainerSize, setMapContainerSize] = useState(null)
@@ -30,24 +31,26 @@ function GameMapContainer(props) {
   }, [mapContainerSize, props])
 
   return (
-    <GameMapContainerStyle
-      $borderColor={props.theme.primary}
-      className={'mx-auto rounded mt-3'}
-      ref={containerRef}
-      $customHeight={props.customHeight}
-    >
-      <Graph
-        elements={props.elements?.map((element) => ({
-          classes: element.classes,
-          data: { ...element.data, position: getNodePosition(element.data.position, mapContainerSize) }
-        }))}
-        layoutName={'preset'}
-        height={getHeight()}
-        onNodeClick={props.nodeClickCallback}
-        movable={false}
-        labels={props.labels}
-      />
-    </GameMapContainerStyle>
+    <div style={{ maxWidth: '100vw', overflowX: 'auto' }}>
+      <GameMapContainerStyle
+        $borderColor={props.theme.primary}
+        className={'mx-auto rounded mt-3'}
+        ref={containerRef}
+        $customHeight={props.customHeight}
+      >
+        <Graph
+          elements={props.elements?.map((element) => ({
+            classes: element.classes,
+            data: { ...element.data, position: getNodePosition(element.data.position, mapContainerSize) }
+          }))}
+          layoutName={'preset'}
+          height={getHeight()}
+          onNodeClick={props.nodeClickCallback}
+          movable={false}
+          labels={props.labels}
+        />
+      </GameMapContainerStyle>
+    </div>
   )
 }
 

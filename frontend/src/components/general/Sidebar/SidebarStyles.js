@@ -40,6 +40,7 @@ export const LogoDiv = styled(Link)`
 export const MobileNav = styled.div`
   background-color: ${(props) => props.$background};
   width: 100%;
+  max-width: 100vw;
   padding: 10px 0;
   position: fixed;
   top: 100%;
