@@ -3,7 +3,6 @@ import Graph from '../../general/Graph/Graph'
 import { getNodePosition } from './gameMapHelper'
 import { GameMapContainer as GameMapContainerStyle } from './GameMapStyles'
 import { connect } from 'react-redux'
-import { isMobileView } from '../../../utils/mobileHelper'
 
 function GameMapContainer(props) {
   const [mapContainerSize, setMapContainerSize] = useState(null)
