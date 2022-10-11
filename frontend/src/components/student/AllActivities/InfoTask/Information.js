@@ -10,6 +10,7 @@ import { CustomCard } from '../../GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 function Information(props) {
   const location = useLocation()
@@ -73,10 +74,10 @@ function Information(props) {
   }, [information])
 
   return (
-    <Content>
-      <Row className={'m-0 vh-100'}>
+    <Content style={{ marginBottom: isMobileView() ? '85px' : 'auto' }}>
+      <Row className={`m-0 ${isMobileView() ? 'h-auto' : 'vh-100'}`}>
         <Col md={6} className={'py-2'}>
-          <Row className={'m-0 w-100 h-25 pb-2'}>
+          <Row className={'m-0 w-100 pb-2'} style={{ height: isMobileView() ? 'auto' : '25%' }}>
             <CustomCard
               className={'p-0'}
               $fontColor={props.theme.font}
@@ -89,7 +90,7 @@ function Information(props) {
               <Card.Body>{activityInfoCardBody}</Card.Body>
             </CustomCard>
           </Row>
-          <Row className={'m-0 w-100 h-75'}>
+          <Row className={'m-0 w-100'} style={{ height: isMobileView() ? 'auto' : '75%' }}>
             <CustomCard
               className={'p-0'}
               $fontColor={props.theme.font}

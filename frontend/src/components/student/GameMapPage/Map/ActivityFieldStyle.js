@@ -36,7 +36,7 @@ export const ActivityCol = styled(Col)`
 export const CustomOffcanvas = styled(Offcanvas)`
   background-color: ${(props) => props.$background};
   color: ${(props) => props.$fontColor};
-  width: 50vw !important;
+  width: ${(props) => props.$width} !important;
   z-index: 2000;
 
   .btn-close {

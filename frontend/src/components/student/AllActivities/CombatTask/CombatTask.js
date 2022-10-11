@@ -15,6 +15,7 @@ import FeedbackFileService from './FeedbackFileService'
 import { Header, VerticalSpacer, HorizontalSpacer, ActivityDetails } from '../../../general/TaskSharedComponents'
 import { Fade } from 'react-awesome-reveal'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 const FIELD_DELAY = 600
 
@@ -95,8 +96,13 @@ function CombatTask(props) {
       <>
         <HorizontalSpacer height={'3vh'} />
         <Col
-          className='m-0 pt-4 mx-auto'
-          style={{ height: '94vh', width: '90%', backgroundColor: props.theme.secondary }}
+          className='pt-4 mx-auto'
+          style={{
+            height: isMobileView() ? 'auto' : '94vh',
+            width: '90%',
+            backgroundColor: props.theme.secondary,
+            margin: isMobileView() ? '0 0 85px 0' : 0
+          }}
         >
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: props.theme.primary, height: '6vh' }}>
             <Header activityName={task.name} activityType={Activity.TASK} />
@@ -109,7 +115,10 @@ function CombatTask(props) {
             <ActivityDetails description={task.description} />
           </Row>
           <VerticalSpacer height={'2vh'} />
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: props.theme.primary, height: '50vh' }}>
+          <Row
+            className='p-2 rounded mx-2'
+            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '50vh' }}
+          >
             <Col
               md={task.answer || answerWasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
               className={'h-100 overflow-auto'}
