@@ -5,6 +5,7 @@ import RankingService from '../../../services/ranking.service'
 import { Tab } from 'react-bootstrap'
 import { TabsContainer } from '../../professor/ParticipantsPage/ParticipantsStyles'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function StudentsRanking(props) {
   const [ranking, setRanking] = useState(undefined)
@@ -54,7 +55,11 @@ function StudentsRanking(props) {
         $linkColor={props.theme.primary}
         defaultActiveKey={'global-rank'}
       >
-        <Tab eventKey={'global-rank'} title={'Ranking ogólny'}>
+        <Tab
+          eventKey={'global-rank'}
+          title={'Ranking ogólny'}
+          style={{ maxHeight: isMobileView() ? '84vh' : 'auto', overflow: isMobileView() ? 'auto' : 'hidden' }}
+        >
           <Ranking rankingList={ranking} studentPosition={studentRankingPosition} />
         </Tab>
         <Tab eventKey={'student-group'} title={'Moja grupa'}>
