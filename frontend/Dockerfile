@@ -1,4 +1,4 @@
-FROM node:16.17.0-alpine as build
+FROM --platform=linux/amd64 node:16.17.0-alpine as build
 
 WORKDIR /app
 
@@ -17,7 +17,3 @@ COPY nginx/nginx.conf /etc/nginx/conf.d
 
 EXPOSE 50
 CMD ["nginx", "-g", "daemon off;"]
-
-# How to run?
-# docker build -f Dockerfile.prod -t frontend .
-# docker run -p 3000:80 frontend
