@@ -68,7 +68,7 @@ function Ranking(props) {
 
   return (
     <TableContainer
-      $customHeight={props.customHeight}
+      $customHeight={isMobileView() ? '80vh' : props.customHeight}
       $fontColor={props.theme.font}
       $backgroundColor={props.theme.primary}
       style={{ margin: isMobileView() ? '0' : '0 25px' }}

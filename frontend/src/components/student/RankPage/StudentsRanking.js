@@ -55,11 +55,7 @@ function StudentsRanking(props) {
         $linkColor={props.theme.primary}
         defaultActiveKey={'global-rank'}
       >
-        <Tab
-          eventKey={'global-rank'}
-          title={'Ranking ogólny'}
-          style={{ maxHeight: isMobileView() ? '84vh' : 'auto', overflow: isMobileView() ? 'auto' : 'hidden' }}
-        >
+        <Tab eventKey={'global-rank'} title={'Ranking ogólny'}>
           <Ranking rankingList={ranking} studentPosition={studentRankingPosition} />
         </Tab>
         <Tab eventKey={'student-group'} title={'Moja grupa'}>
