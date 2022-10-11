@@ -12,6 +12,7 @@ import PercentageCircle from '../../../PointsPage/ChartAndStats/PercentageCircle
 import ActivityInfoContentCard from './ActivityInfoContentCard'
 import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../../utils/mobileHelper'
 
 function ActivityContent(props) {
   const navigate = useNavigate()
@@ -186,20 +187,20 @@ function ActivityContent(props) {
   }, [pointsReceived, props])
 
   return (
-    <Row className={'m-0 vh-100'}>
+    <Row style={{ height: isMobileView() ? 'auto' : '100vh', margin: isMobileView() ? '0 0 85px 0' : 0 }}>
       <Col md={6}>
-        <Row className={'h-50 py-2 px-2'}>
+        <Row className={`${isMobileView() ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Podstawowe informacje'} body={basicInfoCard} />
         </Row>
-        <Row className={'h-50 py-2 px-2'}>
+        <Row className={`${isMobileView() ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Informacje punktowe'} body={pointsCard} />
         </Row>
       </Col>
       <Col md={6}>
-        <Row className={'h-50 py-2 px-2'}>
+        <Row className={`${isMobileView() ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Opis aktywności'} body={<p>{props.activity.description}</p>} />
         </Row>
-        <Row className={'py-2 px-2'} style={{ height: '44vh' }}>
+        <Row className={'py-2 px-2'} style={{ height: isMobileView() ? 'auto' : '44vh' }}>
           <ActivityInfoContentCard
             header={'Wymagana wiedza'}
             body={<p>{props.activity.requiredKnowledge ?? 'Brak wymagań'}</p>}
