@@ -132,3 +132,17 @@ export const GET_FILE_CHAPTER_IMAGES = GET_FILE + '/chapter/images'
 
 // Dashboard Controller
 export const GET_DASHBOARD = BASE_URL + '/dashboard'
+
+// Activity Controller
+const ACTIVITY = BASE_URL + '/activity'
+export const POST_ACTIVITY_EDIT = ACTIVITY + '/edit'
+export const GET_ACTIVITY_EDIT_INFO = ACTIVITY + '/edit/info'
+export const DELETE_ACTIVITY = ACTIVITY + '/delete'
+
+// Ranks Controller
+const RANK = BASE_URL + '/rank'
+export const PUT_RANK = RANK + '/edit'
+export const POST_RANK = RANK + '/add'
+export const GET_RANK_CURRENT = RANK + '/current'
+export const GET_RANK_ALL = RANK + '/all'
+export const DELETE_RANK = RANK + '/delete'

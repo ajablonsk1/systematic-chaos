@@ -5,8 +5,9 @@ import ActivityContent from './ActivityContent'
 import Loader from '../../../../general/Loader/Loader'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { ERROR_OCCURRED } from '../../../../../utils/constants'
+import { connect } from 'react-redux'
 
-export default function ActivityInfo() {
+function ActivityInfo(props) {
   const location = useLocation()
   const { activityId } = location.state
   const [activity, setActivity] = useState(undefined)
@@ -28,10 +29,19 @@ export default function ActivityInfo() {
       {!activity && !errorMessage ? (
         <Loader />
       ) : errorMessage ? (
-        <p className={'text-center text-danger h4'}>{errorMessage}</p>
+        <p className={'text-center h4'} style={{ color: props.theme.danger }}>
+          {errorMessage}
+        </p>
       ) : (
         <ActivityContent activity={activity} activityId={activityId} />
       )}
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityInfo)

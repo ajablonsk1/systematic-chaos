@@ -5,6 +5,7 @@ import {
 } from '../student/AllActivities/ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import { getActivityImg, getActivityTypeName } from '../../utils/constants'
 import { Row, Col } from 'react-bootstrap'
+
 export function Header({ activityName, activityType }) {
   return (
     <div className={'d-flex'}>

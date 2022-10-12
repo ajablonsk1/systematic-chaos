@@ -44,7 +44,7 @@ export const FormCol = (name, type, colName, size = 12, additionalOptions) => {
       )}
 
       <ErrorMessage name={colName} component='div'>
-        {(msg) => <div style={{ color: 'var(--font-color)' }}>{msg}</div>}
+        {(msg) => <div style={{ color: additionalOptions.errorColor }}>{msg}</div>}
       </ErrorMessage>
     </Col>
   )

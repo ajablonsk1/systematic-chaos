@@ -13,6 +13,7 @@ import {
 import { validateIndex } from '../../general/LoginAndRegistrationPage/RegistrationPage/validators'
 import { debounce } from 'lodash/function'
 import StudentService from '../../../services/student.service'
+import { connect } from 'react-redux'
 
 function EditIndexModal(props) {
   const [validatorMessage, setValidatorMessage] = useState(null)
@@ -49,19 +50,39 @@ function EditIndexModal(props) {
           <FormLabel>Podaj nowy numer indeksu</FormLabel>
           <FormControl type={'text'} size={'lg'} onChange={(e) => debounceValidation(e)} />
         </FormGroup>
-        {!!validatorMessage && <p className={'text-danger text-center py-2 my-0'}>{validatorMessage}</p>}
+        {!!validatorMessage && (
+          <p className={'text-center py-2 my-0'} style={{ color: props.theme.danger }}>
+            {validatorMessage}
+          </p>
+        )}
       </ModalBody>
       <ModalFooter>
-        <Button variant={'danger'} onClick={() => props.setModalOpen(false)}>
+        <Button
+          style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+          onClick={() => props.setModalOpen(false)}
+        >
           Anuluj
         </Button>
-        <Button variant={'success'} onClick={onIndexSubmit} disabled={validatorMessage !== ''}>
+        <Button
+          style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+          onClick={onIndexSubmit}
+          disabled={validatorMessage !== ''}
+        >
           {isFetching ? <Spinner animation={'border'} /> : <span>Zapisz</span>}
         </Button>
       </ModalFooter>
-      {errorMessage && <p className={'text-center text-danger'}>{errorMessage}</p>}
+      {errorMessage && (
+        <p className={'text-center'} style={{ color: props.theme.danger }}>
+          {errorMessage}
+        </p>
+      )}
     </Modal>
   )
 }
 
-export default EditIndexModal
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(EditIndexModal)

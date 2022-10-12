@@ -18,7 +18,7 @@ public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
     private final static String department = "Wydział Informatyki, Elektroniki i Telekomunikacji";
 
     @Override
-    public byte[] convertToByteArray(Map<User, List<CSVTaskResult>> data, List<String> firstRow) throws IOException {
+    public byte[] convertToByteArray(Map<User, List<CSVTaskResult>> data, List<String> firstRow) {
         List<List<String>> csv = new ArrayList<>();
         csv.add(firstRow);
         for (User user: data.keySet()) {

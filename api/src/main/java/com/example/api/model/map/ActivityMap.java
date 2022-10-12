@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -24,15 +26,23 @@ public class ActivityMap {
     private Long id;
 
     @OneToMany
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<GraphTask> graphTasks = new LinkedList<>();
 
     @OneToMany
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<FileTask> fileTasks = new LinkedList<>();
 
     @OneToMany
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Info> infos = new LinkedList<>();
 
     @OneToMany
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Survey> surveys = new LinkedList<>();
 
     private Integer mapSizeX;

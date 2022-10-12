@@ -11,8 +11,9 @@ import {
 import StudentService from '../../../services/student.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import { connect } from 'react-redux'
 
-export default function GameCardView() {
+function GameCardView(props) {
   const [dashboardStats, setDashboardStats] = useState(undefined)
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function GameCardView() {
             <Col md={7} className={'h-100'}>
               <GameCard
                 headerText={'Ostatnio dodane aktywności'}
-                content={<LastActivitiesContent stats={dashboardStats.lastAddedActivities} />}
+                content={<LastActivitiesContent theme={props.theme} stats={dashboardStats.lastAddedActivities} />}
               />
             </Col>
           </Row>
@@ -70,3 +71,10 @@ export default function GameCardView() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(GameCardView)

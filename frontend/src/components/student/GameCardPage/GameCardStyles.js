@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Card } from 'react-bootstrap'
 
 export const CustomCard = styled(Card)`
-  color: var(--font-color);
+  color: ${(props) => props.$fontColor};
   height: ${(props) => props.$customHeight ?? '100%'};
   width: 100%;
   border-radius: 10px;
@@ -13,12 +13,12 @@ export const CustomCard = styled(Card)`
   }
 
   & .card-header {
-    background-color: var(--dark-blue);
+    background-color: ${(props) => props.$background};
     border-radius: 10px 10px 0 0;
   }
 
   & .card-body {
-    background-color: var(--light-blue);
+    background-color: ${(props) => props.$bodyColor};
     border-radius: 0 0 10px 10px;
 
     & p {
@@ -26,12 +26,12 @@ export const CustomCard = styled(Card)`
     }
 
     & table {
-      color: var(--font-color);
-      border: 1px solid var(--dark-blue);
+      color: ${(props) => props.$fontColor};
+      border: 1px solid ${(props) => props.$background};
 
       & th,
       & td {
-        border: 1px solid var(--dark-blue);
+        border: 1px solid ${(props) => props.$background};
       }
     }
   }

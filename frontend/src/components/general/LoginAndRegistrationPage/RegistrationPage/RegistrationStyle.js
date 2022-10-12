@@ -4,8 +4,8 @@ export const Info = styled.div`
   justify-content: center;
   align-items: center;
   margin-left: 5px;
-  background-color: var(--button-green);
-  border-color: var(--button-green);
+  background-color: ${(props) => props.$buttonColor};
+  border-color: ${(props) => props.$buttonColor};
   padding: 6px 10px;
   border-radius: 5px;
 
@@ -17,7 +17,7 @@ export const Info = styled.div`
 
 export const Description = styled.div`
   position: absolute;
-  background-color: var(--button-green);
+  background-color: ${(props) => props.$background};
   color: white;
   z-index: 2;
   padding: 25px;

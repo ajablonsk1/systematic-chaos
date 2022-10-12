@@ -1,5 +1,12 @@
 export const getNodePosition = (chapterPosition, mapContainerSize) => {
-  if (!mapContainerSize || !chapterPosition) {
+  if (
+    !mapContainerSize ||
+    !chapterPosition ||
+    !mapContainerSize.x ||
+    !mapContainerSize.y ||
+    !chapterPosition.x ||
+    !chapterPosition.y
+  ) {
     return { x: 0, y: 0 }
   }
 
@@ -11,5 +18,5 @@ export const getNodePosition = (chapterPosition, mapContainerSize) => {
   const x = (mapContainerSizeWithPadding.x / scaleX) * (chapterPosition.x - 0.5)
   const y = (mapContainerSizeWithPadding.y / scaleY) * (chapterPosition.y - 0.5)
 
-  return { x, y }
+  return { x: Math.round(x * 100) / 100, y: Math.round(y * 100) / 100 }
 }

@@ -5,6 +5,7 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
 import com.example.api.dto.response.activity.task.GraphNode;
+import com.example.api.dto.request.activity.task.edit.EditGraphTaskForm;
 import com.example.api.dto.response.activity.task.result.GraphTaskResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -86,8 +87,31 @@ public class GraphTaskService {
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);
         userValidator.validateProfessorAccount(professor, email);
+        List<Question> questions = questionFormsToQuestions(form.getQuestions());
+        questionRepo.saveAll(questions);
 
-        List<QuestionForm> questionForms = form.getQuestions();
+        double maxPoints = calculateMaxPoints(questions.get(0), 0);
+
+        GraphTask graphTask = new GraphTask(form,
+                professor,
+                questions,
+                timeToSolveMillis,
+                maxPoints);
+        graphTask.setRequirements(requirementService.getDefaultRequirements());
+        graphTaskRepo.save(graphTask);
+
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapter.getActivityMap().getGraphTasks().add(graphTask);
+    }
+
+    public List<GraphTask> getStudentGraphTasks(User student) {
+        return graphTaskRepo.findAll()
+                .stream()
+                .filter(graphTask -> !requirementService.areRequirementsDefault(graphTask.getRequirements()))
+                .toList();
+    }
+
+    private List<Question> questionFormsToQuestions(List<QuestionForm> questionForms) throws RequestValidationException {
         Map<Integer, Question> numToQuestion = new HashMap<>();
         for (QuestionForm questionForm: questionForms) {
             if(questionForm.getQuestionType() == null) {
@@ -133,27 +157,7 @@ public class GraphTaskService {
             });
             questions.add(question);
         }
-        questionRepo.saveAll(questions);
-
-        double maxPoints = calculateMaxPoints(questions.get(0), 0);
-
-        GraphTask graphTask = new GraphTask(form,
-                professor,
-                questions,
-                timeToSolveMillis,
-                maxPoints);
-        graphTask.setRequirements(requirementService.getDefaultRequirements());
-        graphTaskRepo.save(graphTask);
-
-        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
-        chapter.getActivityMap().getGraphTasks().add(graphTask);
-    }
-
-    public List<GraphTask> getStudentGraphTasks(User student) {
-        return graphTaskRepo.findAll()
-                .stream()
-                .filter(graphTask -> !requirementService.areRequirementsDefault(graphTask.getRequirements()))
-                .toList();
+        return questions;
     }
 
     private double calculateMaxPoints(Question question, double maxPoints) {
@@ -167,6 +171,46 @@ public class GraphTaskService {
         }
         return points.stream().max(Double::compareTo).get();
     }
+
+    public void editGraphTask(GraphTask graphTask, EditGraphTaskForm form) throws ParseException, RequestValidationException {
+        CreateGraphTaskForm graphTaskForm = (CreateGraphTaskForm) form.getActivityBody();
+        graphTask.setRequiredKnowledge(graphTaskForm.getRequiredKnowledge());
+
+        if (graphTaskForm.getTimeToSolve() == null) {
+            graphTask.setTimeToSolveMillis(null);
+        }
+        else {
+            SimpleDateFormat timeToSolveFormat = new SimpleDateFormat("HH:mm:ss");
+            Long timeToSolveMillis = timeToSolveFormat.parse(graphTaskForm.getTimeToSolve()).getTime();
+            graphTask.setTimeToSolveMillis(timeToSolveMillis);
+        }
+
+        // Checking if there was any update on questions and graph structure
+        if (graphTaskForm.getQuestions().equals(new CreateGraphTaskForm(graphTask).getQuestions())) {
+            return;
+        }
+        List<Question> questions = questionFormsToQuestions(graphTaskForm.getQuestions());
+        questionRepo.saveAll(questions);
+        double newMaxPoints = calculateMaxPoints(questions.get(0), 0);
+        removeOldQuestions(graphTask, questions);
+        addNewQuestions(graphTask, questions);
+        graphTask.setMaxPoints(newMaxPoints);
+    }
+
+    @Transactional
+    public void removeOldQuestions(GraphTask graphTask, List<Question> questions) {
+        graphTask.getQuestions().removeIf(question -> !questions.contains(question));
+    }
+
+    @Transactional
+    public void addNewQuestions(GraphTask graphTask, List<Question> questions) {
+        for (Question q: questions) {
+            if (!graphTask.getQuestions().contains(q)) {
+                graphTask.getQuestions().add(q);
+            }
+        }
+    }
+
 
     public List<GraphNode> getGraphMap(Long graphTaskID) throws EntityNotFoundException {
         log.info("Fetching graph nodes for GraphTask with id {}", graphTaskID);

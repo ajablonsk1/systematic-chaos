@@ -1,15 +1,16 @@
 import { Button, Card } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 // TODO: refactor needed
-export const GameButton = (props) => {
+function GameButton(props) {
   const navigate = useNavigate()
   const centerButton = !props.defaultPosition
 
   const buttonStyle = {
     width: `${props.customWidth ?? '100%'}`,
     textAlign: 'center',
-    backgroundColor: '#085454',
+    backgroundColor: `${props.theme.success}`,
     border: 'none',
     position: 'relative'
   }
@@ -33,3 +34,10 @@ export const GameButton = (props) => {
     </Card.Footer>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(GameButton)

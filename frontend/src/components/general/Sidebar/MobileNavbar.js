@@ -12,10 +12,11 @@ function MobileNavbar(props) {
   const logOut = () => props.dispatch(logout(navigate))
 
   return (
-    <MobileNav>
+    <MobileNav $background={props.theme.primary}>
       <Nav className='justify-content-center'>
         {props.link_titles.map((link) => (
           <NavLinkStylesMobile
+            $fontColor={props.theme.background}
             as={Link}
             key={link.navigateTo}
             to={link.navigateTo}
@@ -34,6 +35,7 @@ function MobileNavbar(props) {
 }
 
 function mapStateToProps(state) {
-  return {}
+  const theme = state.theme
+  return { theme }
 }
 export default connect(mapStateToProps)(MobileNavbar)

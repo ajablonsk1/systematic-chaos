@@ -1,5 +1,6 @@
 package com.example.api.service.user;
 
+import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.dto.response.ranking.RankingResponse;
 import com.example.api.dto.response.user.dashboard.*;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -101,8 +102,9 @@ public class DashboardService {
         Long surveysNumber = getSurveysNumber(student);
         Double graphTaskPoints = getGraphTaskPoints(student);
         Double fileTaskPoints = getFileTaskPoints(student);
-        Double additionalPoints=  getAdditionalPoints(student);
-        Double allPoints = graphTaskPoints + fileTaskPoints + additionalPoints;
+        Double additionalPoints =  getAdditionalPoints(student);
+        Double surveyPoints = getSurveyPoints(student);
+        Double allPoints = graphTaskPoints + fileTaskPoints + additionalPoints + surveyPoints;
         Double maxPoints = getMaxPoints(student);
 
         return new GeneralStats(
@@ -151,6 +153,10 @@ public class DashboardService {
         return getTaskPoints(additionalPointsRepo.findAllByUser(student));
     }
 
+    private Double getSurveyPoints(User student) {
+        return getTaskPoints(surveyResultRepo.findAllByUser(student));
+    }
+
     private Double getTaskPoints(List<? extends TaskResult> taskResults) {
         return taskResults
                 .stream()
@@ -195,8 +201,12 @@ public class DashboardService {
     private LastAddedActivity toLastAddedActivity(Activity activity) {
         Chapter chapter = chapterService.getChapterWithActivity(activity);
         String chapterName = Objects.nonNull(chapter) ? chapter.getName() : null;
-        String activityType = activity.getActivityType().getActivityType();
+        String activityType = activity.getActivityType().toString();
         Double points = activity.getMaxPoints();
+        if (activity.getActivityType().equals(ActivityType.INFO)) {
+            points = 0D;
+        }
+
         Requirement requirement = activity.getRequirements()
                 .stream()
                 .filter(req -> req.isSelected() && Objects.nonNull(req.getDateTo()))

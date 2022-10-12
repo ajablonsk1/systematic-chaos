@@ -26,8 +26,9 @@ import { IconColumn } from './IconColumn'
 import { FormButton, FormikRange, FormikTextarea } from './SurveyTaskStyle'
 import { useEffect, useState } from 'react'
 import SurveyTaskService from '../../../../services/surveyTask.service'
+import { connect } from 'react-redux'
 
-export default function FeedbackTask() {
+function FeedbackTask(props) {
   const location = useLocation()
   const { activityId: taskId } = location.state
   const [task, setTask] = useState(undefined)
@@ -44,30 +45,30 @@ export default function FeedbackTask() {
 
   return (
     <Content>
-      <InfoContainer>
+      <InfoContainer $background={props.theme.primary} $fontColor={props.theme.font}>
         {!task ? (
           <Loader />
         ) : task === ERROR_OCCURRED ? (
           <p>{ERROR_OCCURRED}</p>
         ) : (
           <ActivityCol className='invisible-scroll'>
-            <HeaderCol>
-              <HeaderRow>
+            <HeaderCol $background={props.theme.primary}>
+              <HeaderRow $background={props.theme.primary} $fontColor={props.theme.font}>
                 <ActivityImg src={getActivityImg(Activity.SURVEY)}></ActivityImg>
                 <ActivityType>{getActivityTypeName(Activity.SURVEY)}</ActivityType>
                 <ActivityName>{task.name}</ActivityName>
               </HeaderRow>
-              <FullDivider />
+              <FullDivider $background={props.theme.warning} />
               <div>
                 <h5>{task.description}</h5>
-                <SmallDivider />
+                <SmallDivider $background={props.theme.warning} />
                 <h5>Punkty do zdobycia: {task.experience}</h5>
                 <p>
                   Przyznane punkty: <strong>nie</strong> {/*// todo: info from endpoint*/}
                 </p>
-                <SmallDivider />
+                <SmallDivider $background={props.theme.warning} />
               </div>
-              <FullDivider />
+              <FullDivider $background={props.theme.warning} />
               <Formik
                 initialValues={{
                   opinion: '',
@@ -84,12 +85,18 @@ export default function FeedbackTask() {
                   setSubmitting(false)
                 }}
               >
-                {({ isSubmitting, values, errors, handleSubmit }) => (
+                {({ isSubmitting, handleSubmit }) => (
                   <Form onSubmit={handleSubmit}>
                     <Container>
                       <Row className='mx-auto'></Row>
                       <p>Jakie są Twoje wrażenia z tego rodziału? Co można zmienić, poprawić, a co było w porządku?</p>
-                      <FormikTextarea as='textarea' type='text' name='opinion' />
+                      <FormikTextarea
+                        as='textarea'
+                        type='text'
+                        name='opinion'
+                        $fontColor={props.theme.font}
+                        $background={props.theme.primary}
+                      />
 
                       <Row className='mt-4 w-80'>
                         <IconColumn icons={[faThumbsDown, faThumbsDown]} />
@@ -99,12 +106,18 @@ export default function FeedbackTask() {
                         <IconColumn icons={[faThumbsUp, faThumbsUp]} />
                       </Row>
                       <Row className='mt-4 justify-content-center'>
-                        <FormikRange type='range' min={1} max={5} name='score'></FormikRange>
+                        <FormikRange
+                          $accentColor={props.theme.success}
+                          type='range'
+                          min={1}
+                          max={5}
+                          name='score'
+                        ></FormikRange>
                       </Row>
 
                       <Row className='mt-4 d-flex justify-content-center'>
                         <Col sm={12} className='d-flex justify-content-center mb-2'>
-                          <FormButton type='submit' disabled={isSubmitting}>
+                          <FormButton $buttonColor={props.theme.success} type='submit' disabled={isSubmitting}>
                             {isSubmitting ? (
                               <Spinner as='span' animation='border' size='sm' role='status' />
                             ) : (
@@ -124,3 +137,10 @@ export default function FeedbackTask() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(FeedbackTask)

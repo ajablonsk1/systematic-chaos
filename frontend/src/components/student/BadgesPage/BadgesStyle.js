@@ -4,6 +4,7 @@ export const HorizontalPointsLine = styled.div`
   padding-top: 60px;
 
   ul {
+    padding: 0;
     display: grid;
     grid-template-columns: auto auto auto;
     grid-template-rows: auto;
@@ -46,7 +47,7 @@ export const HorizontalPointsLine = styled.div`
         .left-arrow,
         .right-arrow {
           clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
-          background-color: var(--light-blue);
+          background-color: ${(props) => props.$background};
           opacity: 0.1;
           width: 130px;
           height: 200px;
@@ -95,7 +96,7 @@ export const HorizontalPointsLine = styled.div`
     bottom: 55px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--button-green);
+    background-color: ${(props) => props.$pointsColor};
     width: fit-content;
     padding: 10px;
     color: white;

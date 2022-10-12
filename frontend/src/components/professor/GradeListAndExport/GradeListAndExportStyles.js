@@ -5,30 +5,30 @@ export const GradesContent = styled.div`
 `
 export const TabsContainer = styled(Tabs)`
   & .nav-link.active {
-    background-color: var(--button-green);
-    color: white;
+    background-color: ${(props) => props.$background};
+    color: ${(props) => props.$fontColor};
   }
 
   .nav-link:not(.active) {
-    color: var(--dark-blue) !important;
+    color: ${(props) => props.$linkColor} !important;
   }
 `
 
 export const GradesTable = styled(Table)`
-  color: var(--font-color);
+  color: ${(props) => props.$fontColor};
   margin-bottom: 0;
 
   th {
-    background-color: var(--dark-blue);
-    border-color: var(--dark-blue);
+    background-color: ${(props) => props.$background};
+    border-color: ${(props) => props.$background};
   }
 
   tr {
-    border-color: var(--dark-blue);
+    border-color: ${(props) => props.$background};
   }
   td {
-    background-color: var(--light-blue);
-    border-color: var(--dark-blue);
+    background-color: ${(props) => props.$tdColor};
+    border-color: ${(props) => props.$background};
   }
 
   thead {
@@ -38,7 +38,7 @@ export const GradesTable = styled(Table)`
 `
 
 export const ExportButton = styled(Button)`
-  background-color: var(--button-green);
+  background-color: ${(props) => props.$buttonColor};
   margin: 10px auto 0 auto;
   display: flex;
   border: none;
@@ -47,11 +47,7 @@ export const ExportButton = styled(Button)`
   &:disabled:hover,
   &:focus {
     border: none;
-    background-color: var(--button-green);
+    background-color: ${(props) => props.$buttonColor};
     box-shadow: none;
-  }
-
-  &:hover {
-    background-color: #157e7e;
   }
 `

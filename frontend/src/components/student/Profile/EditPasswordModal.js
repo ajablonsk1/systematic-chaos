@@ -7,6 +7,7 @@ import {
 } from '../../general/LoginAndRegistrationPage/RegistrationPage/validators'
 import { FormCol } from '../../general/LoginAndRegistrationPage/FormCol'
 import AuthService from '../../../services/auth.service'
+import { connect } from 'react-redux'
 
 function EditPasswordModal(props) {
   const [errorMessage, setErrorMessage] = useState('')
@@ -45,8 +46,8 @@ function EditPasswordModal(props) {
             <Form onSubmit={handleSubmit}>
               <Container>
                 <Row className='mx-auto'>
-                  {FormCol('Nowe hasło', 'password', 'password')}
-                  {FormCol('Powtórz hasło', 'password', 'passwordRepeat')}
+                  {FormCol('Nowe hasło', 'password', 'password', 12, { errorColor: props.theme.danger })}
+                  {FormCol('Powtórz hasło', 'password', 'passwordRepeat', 12, { errorColor: props.theme.danger })}
 
                   {errorMessage && (
                     <p className={'text-center w-100'} style={{ color: 'red' }}>
@@ -56,10 +57,18 @@ function EditPasswordModal(props) {
                 </Row>
                 <Row className='mt-4 d-flex justify-content-center'>
                   <Col sm={12} className='d-flex justify-content-center mb-2 gap-2'>
-                    <Button variant={'danger'} onClick={() => props.setModalOpen(false)}>
+                    <Button
+                      style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                      onClick={() => props.setModalOpen(false)}
+                    >
                       Anuluj
                     </Button>
-                    <Button type='submit'>Zapisz</Button>
+                    <Button
+                      type='submit'
+                      style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+                    >
+                      Zapisz
+                    </Button>
                   </Col>
                 </Row>
               </Container>
@@ -71,4 +80,9 @@ function EditPasswordModal(props) {
   )
 }
 
-export default EditPasswordModal
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(EditPasswordModal)

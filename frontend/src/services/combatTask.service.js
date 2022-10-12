@@ -50,7 +50,7 @@ class CombatTaskService {
     })
   }
 
-  setFileTaskJson(chapterId, form) {
+  setFileTaskJson({ chapterId, form }) {
     return axiosApiPost(POST_TASK_FILE_CREATE, {
       chapterId: chapterId,
       form: form

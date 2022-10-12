@@ -43,7 +43,7 @@ function RegistrationForm(props) {
         if (!values.lastName) errors.lastName = FIELD_REQUIRED
         if (!values.token) errors.token = FIELD_REQUIRED
 
-        errors.email = validateEmail(values.email)
+        errors.email = validateEmail(values.email, props.isStudent ? AccountType.STUDENT : AccountType.PROFESSOR)
         errors.password = validatePassword(values.password)
         errors.passwordRepeat = validateConfirmPassword(values.password, values.passwordRepeat)
 
@@ -108,8 +108,9 @@ function RegistrationForm(props) {
                             Łotrzyk
                           </option>
                         </Field>
-                        <Info>i</Info>
+                        <Info $buttonColor={props.theme.success}>i</Info>
                         <Description
+                          $background={props.theme.success}
                           ref={description}
                           style={{
                             display: 'none'
@@ -125,12 +126,12 @@ function RegistrationForm(props) {
                   </>
 
                   <ErrorMessage name={key} component='div'>
-                    {(msg) => <div style={{ color: 'var(--font-color)' }}>{msg}</div>}
+                    {(msg) => <div style={{ color: props.theme.warning }}>{msg}</div>}
                   </ErrorMessage>
                 </Col>
               ))}
               {errorMessage && (
-                <p className={'text-center w-100'} style={{ color: 'red' }}>
+                <p className={'text-center w-100'} style={{ color: props.theme.danger }}>
                   {errorMessage}
                 </p>
               )}
@@ -141,8 +142,8 @@ function RegistrationForm(props) {
                   type='submit'
                   disabled={isFetching}
                   style={{
-                    backgroundColor: 'var(--button-green)',
-                    borderColor: 'var(--button-green)',
+                    backgroundColor: props.theme.success,
+                    borderColor: props.theme.success,
                     width: '150px'
                   }}
                 >
@@ -163,7 +164,9 @@ function RegistrationForm(props) {
 
 function mapStateToProps(state) {
   const { message } = state.message
-  return { message }
+  const theme = state.theme
+
+  return { message, theme }
 }
 
 export default connect(mapStateToProps)(RegistrationForm)

@@ -5,9 +5,10 @@ import warrior from '../../../../storage/resources/warrior-big.png'
 import wizard from '../../../../storage/resources/wizard-big.png'
 import priest from '../../../../storage/resources/pope-big.png'
 import rogue from '../../../../storage/resources/rogue-big.png'
+import { connect } from 'react-redux'
 // import gameMapExample from '../../../../storage/resources/game_example.png'
 
-export default function Carousel() {
+function Carousel(props) {
   const images = [warrior, wizard, priest, rogue] // TODO: use list of images
 
   const ItemsList = images.map((image, index) => (
@@ -18,9 +19,16 @@ export default function Carousel() {
 
   return (
     <Col xs={6} className='p-0 d-none d-md-block'>
-      <CustomCarousel controls={false} autoPlay={true} interval={2500} pause={false}>
+      <CustomCarousel $background={props.theme.primary} controls={false} autoPlay={true} interval={2500} pause={false}>
         {ItemsList}
       </CustomCarousel>
     </Col>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(Carousel)

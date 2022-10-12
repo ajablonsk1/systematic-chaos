@@ -4,7 +4,8 @@ import CardHeader from 'react-bootstrap/CardHeader'
 import Loader from '../../general/Loader/Loader'
 import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import { SuccessModal } from '../SuccessModal'
+import SuccessModal from '../SuccessModal'
+import { connect } from 'react-redux'
 
 function ChangeGroupModal(props) {
   const [student, setStudent] = useState()
@@ -54,7 +55,9 @@ function ChangeGroupModal(props) {
             <>
               <Card.Body>
                 {groups == null ? (
-                  <p className={'text-center text-danger h6'}>{ERROR_OCCURRED}</p>
+                  <p className={'text-center h6'} style={{ color: props.theme.danger }}>
+                    {ERROR_OCCURRED}
+                  </p>
                 ) : (
                   <>
                     <h6>
@@ -69,15 +72,22 @@ function ChangeGroupModal(props) {
                           </option>
                         ))}
                       </select>
-                    </Form>{' '}
+                    </Form>
                   </>
                 )}
               </Card.Body>
               <Card.Footer className={'d-flex justify-content-center align-items-center'}>
-                <Button onClick={() => props.setModalOpen(false)} variant={'danger'}>
+                <Button
+                  onClick={() => props.setModalOpen(false)}
+                  style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+                >
                   Anuluj
                 </Button>
-                <Button style={{ backgroundColor: 'var(--button-green)' }} className={'ms-2'} onClick={submitChange}>
+                <Button
+                  style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+                  className={'ms-2'}
+                  onClick={submitChange}
+                >
                   {isFetching ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz</span>}
                 </Button>
               </Card.Footer>
@@ -96,4 +106,10 @@ function ChangeGroupModal(props) {
   )
 }
 
-export default ChangeGroupModal
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(ChangeGroupModal)

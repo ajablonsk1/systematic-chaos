@@ -8,9 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,9 +20,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class    GraphTask extends Task {
+public class GraphTask extends Task {
     private ActivityType activityType = ActivityType.EXPEDITION;
     @OneToMany
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Question> questions = new LinkedList<>();
     private Long timeToSolveMillis;
 
