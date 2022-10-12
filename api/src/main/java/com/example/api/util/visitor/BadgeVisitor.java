@@ -1,19 +1,26 @@
 package com.example.api.util.visitor;
 
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
+import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.model.user.badge.*;
 import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.activity.result.TaskResultService;
+import com.example.api.service.activity.result.ranking.RankingService;
 import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +29,9 @@ public class BadgeVisitor {
     private final GraphTaskResultService graphTaskResultService;
     private final FileTaskResultService fileTaskResultService;
     private final UserService userService;
+    private final RankingService rankingService;
+
+    private final int UNIX_EPOCH_START_DATE = 1970;
 
     public boolean visitActivityNumberBadge(ActivityNumberBadge badge) {
         User student = userService.getCurrentUser();
@@ -74,7 +84,7 @@ public class BadgeVisitor {
         for (Long diff: differences) {
             calendar.setTimeInMillis(diff);
 
-            if (calendar.get(Calendar.DAY_OF_YEAR) < 7 && calendar.get(Calendar.YEAR) == 1970){
+            if (calendar.get(Calendar.DAY_OF_YEAR) < 7 && calendar.get(Calendar.YEAR) == UNIX_EPOCH_START_DATE){
                 counter++;
             } else {
                 counter = 0;
@@ -107,7 +117,7 @@ public class BadgeVisitor {
         return graphTaskNumber >= badge.getGraphTaskNumber();
     }
 
-    public boolean visitTopScoreBadge(TopScoreBadge badge) {
+    public boolean visitTopScoreBadge(TopScoreBadge badge) throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         User student = userService.getCurrentUser();
         List<? extends TaskResult> results = taskResultService.getGraphAndFileResultsForStudent(student)
                 .stream()
@@ -118,7 +128,26 @@ public class BadgeVisitor {
             return false;
         }
 
-        return false;
+        if (badge.getForGroup()) {
+            long numStudentsInGroup = userService.getUserGroup()
+                    .getUsers()
+                    .stream()
+                    .filter(user -> user.getAccountType() == AccountType.STUDENT)
+                    .count();
+            int rankingInGroupPosition = rankingService.getGroupRankingPosition();
+
+            double topScore = (double) (rankingInGroupPosition / numStudentsInGroup);
+            return topScore <= badge.getTopScore();
+        } else {
+            long numOfStudents = userService.getUsers()
+                    .stream()
+                    .filter(user -> user.getAccountType() == AccountType.STUDENT)
+                    .count();
+            int rankingPosition = rankingService.getRankingPosition();
+
+            double topScore = (double) (rankingPosition / numOfStudents);
+            return topScore <= badge.getTopScore();
+        }
     }
 }
 

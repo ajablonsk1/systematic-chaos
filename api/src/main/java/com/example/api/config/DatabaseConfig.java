@@ -20,6 +20,7 @@ import com.example.api.model.question.Question;
 import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;
+import com.example.api.model.user.Rank;
 import com.example.api.model.user.User;
 import com.example.api.model.user.badge.*;
 import com.example.api.model.util.File;
@@ -30,6 +31,7 @@ import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.BadgeRepo;
+import com.example.api.repo.user.RankRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
@@ -47,10 +49,10 @@ import com.example.api.service.map.ActivityMapService;
 import com.example.api.service.map.RequirementService;
 import com.example.api.service.question.OptionService;
 import com.example.api.service.question.QuestionService;
+import com.example.api.service.user.BadgeService;
 import com.example.api.service.user.UserService;
 import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.OnDelete;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -85,7 +87,7 @@ public class DatabaseConfig {
                                                FileTaskResultService fileTaskResultService, OptionService optionService,
                                                AccessDateService accessDateService, RequirementService requirementService,
                                                FileTaskService fileTaskService, InfoService infoService,
-                                               SurveyService surveyService){
+                                               SurveyService surveyService, BadgeService badgeService){
         return args -> {
 
 
@@ -488,6 +490,7 @@ public class DatabaseConfig {
             result1.setUser(student);
             result1.setMaxPoints100(30.0);
             result1.setPointsReceived(12.0);
+            addReceivedPointsForUser(student, result1.getPointsReceived());
             result1.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 28);
             result1.setStartDateMillis(calendar.getTimeInMillis());
@@ -499,6 +502,7 @@ public class DatabaseConfig {
             result2.setUser(student1);
             result2.setMaxPoints100(10.0);
             result2.setPointsReceived(10.0);
+            addReceivedPointsForUser(student1, result2.getPointsReceived());
             result2.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 13);
             result2.setStartDateMillis(calendar.getTimeInMillis());
@@ -510,6 +514,7 @@ public class DatabaseConfig {
             result3.setUser(student8);
             result3.setMaxPoints100(20.0);
             result3.setPointsReceived(11.0);
+            addReceivedPointsForUser(student8, result3.getPointsReceived());
             result3.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);
             result3.setStartDateMillis(calendar.getTimeInMillis());
@@ -520,6 +525,7 @@ public class DatabaseConfig {
             result4.setGraphTask(graphTaskTwo);
             result4.setUser(student9);
             result4.setPointsReceived(30.5);
+            addReceivedPointsForUser(student9, result4.getPointsReceived());
             result4.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);
             result4.setStartDateMillis(calendar.getTimeInMillis());
@@ -544,7 +550,14 @@ public class DatabaseConfig {
             chapterRepo.save(chapter);
 
             calendar.set(2022, Calendar.JUNE, 15);
-            AdditionalPoints additionalPoints = new AdditionalPoints(1L, student, 100D, calendar.getTimeInMillis(), professor.getEmail(), "Good job", );
+            AdditionalPoints additionalPoints = new AdditionalPoints();
+            additionalPoints.setId(1L);
+            additionalPoints.setUser(student);
+            additionalPoints.setPointsReceived(100D);
+            additionalPoints.setSendDateMillis(calendar.getTimeInMillis());
+            additionalPoints.setProfessorEmail(professor.getEmail());
+            additionalPoints.setDescription("Good job");
+            addReceivedPointsForUser(student, additionalPoints.getPointsReceived());
             additionalPointsRepo.save(additionalPoints);
 
             SurveyResult surveyResult1 = new SurveyResult();
@@ -552,6 +565,7 @@ public class DatabaseConfig {
             surveyResult1.setId(1L);
             surveyResult1.setUser(student);
             surveyResult1.setPointsReceived(1D);
+            addReceivedPointsForUser(student, surveyResult1.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 16);
             surveyResult1.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult1);
@@ -561,6 +575,7 @@ public class DatabaseConfig {
             surveyResult2.setId(2L);
             surveyResult2.setUser(student1);
             surveyResult2.setPointsReceived(3D);
+            addReceivedPointsForUser(student1, surveyResult2.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 18);
             surveyResult2.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult2);
@@ -570,6 +585,7 @@ public class DatabaseConfig {
             surveyResult3.setId(3L);
             surveyResult3.setUser(student10);
             surveyResult3.setPointsReceived(5D);
+            addReceivedPointsForUser(student10, surveyResult3.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 19);
             surveyResult3.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult3);
@@ -935,5 +951,9 @@ public class DatabaseConfig {
 
         badgeRepo.saveAll(List.of(badge1, badge2, badge3, badge4, badge5, badge6, badge7, badge8, badge9, badge10,
                 badge11, badge12, badge13, badge14, badge15, badge16, badge17, badge18, badge19));
+    }
+
+    private void addReceivedPointsForUser(User student, Double points){
+        student.setPoints(student.getPoints() + points);
     }
 }

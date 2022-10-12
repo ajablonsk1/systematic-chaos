@@ -17,6 +17,7 @@ import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.user.BadgeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +36,7 @@ public class FeedbackValidator {
     private final AuthenticationService authService;
     private final FileRepo fileRepo;
     private final UserRepo userRepo;
+    private final BadgeService badgeService;
 
     /**
      * Function creates professor feedback for fileTaskResult. If feedback already exists its attributes
@@ -42,7 +44,7 @@ public class FeedbackValidator {
      * but files are added to list
     */
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException, WrongPointsNumberException, IOException {
+            throws WrongUserTypeException, EntityNotFoundException, WrongPointsNumberException, IOException, MissingAttributeException {
         String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
@@ -75,7 +77,7 @@ public class FeedbackValidator {
                 throw new WrongPointsNumberException("Wrong points number", form.getPoints(), fileTaskResult.getFileTask().getMaxPoints());
             }
             feedback.setPoints(form.getPoints());
-            fileTaskResult.setPointsReceived(form.getPoints());
+            fileTaskResult.setPointsReceivedAndCheckBadges(form.getPoints(), badgeService);
             fileTaskResultRepo.save(fileTaskResult);
         }
 

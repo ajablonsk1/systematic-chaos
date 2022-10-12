@@ -16,6 +16,7 @@ import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.GraphTaskResultService;
+import com.example.api.service.user.BadgeService;
 import com.example.api.service.validator.QuestionValidator;
 import com.example.api.service.validator.ResultValidator;
 import com.example.api.util.calculator.PointsCalculator;
@@ -41,6 +42,7 @@ public class QuestionService {
     private final ResultValidator resultValidator;
     private final AuthenticationService authService;
     private final GraphTaskResultService graphTaskResultService;
+    private final BadgeService badgeService;
     private final PointsCalculator pointsCalculator;
 
     public Question saveQuestion(Question question) {
@@ -89,7 +91,7 @@ public class QuestionService {
 
                 // counting current state of points
                 double allPoints = pointsCalculator.calculateAllPoints(result);
-                result.setPointsReceived(allPoints);
+                result.setPointsReceivedAndCheckBadges(allPoints, badgeService);
                 
                 // if it's the last question, set finished
                 List<Question> nextQuestions = question.getNext();

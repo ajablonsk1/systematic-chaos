@@ -2,12 +2,15 @@ package com.example.api.service.activity.result;
 
 import com.example.api.dto.request.activity.result.AddAdditionalPointsForm;
 import com.example.api.dto.response.activity.task.result.AdditionalPointsResponse;
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.AdditionalPoints;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.user.BadgeService;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +27,11 @@ public class AdditionalPointsService {
     private final AdditionalPointsRepo additionalPointsRepo;
     private final UserRepo userRepo;
     private final AuthenticationService authService;
+    private final BadgeService badgeService;
     private final UserValidator userValidator;
 
-    public void saveAdditionalPoints(AddAdditionalPointsForm form) throws WrongUserTypeException {
+    public void saveAdditionalPoints(AddAdditionalPointsForm form)
+            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         log.info("Saving additional points for student with id {}", form.getStudentId());
         User user = userRepo.findUserById(form.getStudentId());
         userValidator.validateStudentAccount(user, form.getStudentId());
@@ -36,7 +41,8 @@ public class AdditionalPointsService {
                 form.getPoints(),
                 form.getDateInMillis(),
                 professorEmail,
-                "");
+                "",
+                badgeService);
         if (form.getDescription() != null) {
             additionalPoints.setDescription(form.getDescription());
         }

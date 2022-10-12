@@ -1,4 +1,7 @@
 package com.example.api.model.user.badge;
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.util.Image;
 import com.example.api.util.visitor.BadgeVisitor;
 import lombok.AllArgsConstructor;
@@ -23,5 +26,6 @@ public abstract class Badge {
     @OneToOne
     private Image image;
 
-    public abstract boolean isGranted(BadgeVisitor visitor);
+    public abstract boolean isGranted(BadgeVisitor visitor)
+            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException;
 }

@@ -1,6 +1,5 @@
 package com.example.api.model.user.badge;
 
-import com.example.api.model.user.User;
 import com.example.api.model.util.Image;
 import com.example.api.util.visitor.BadgeVisitor;
 import lombok.AllArgsConstructor;

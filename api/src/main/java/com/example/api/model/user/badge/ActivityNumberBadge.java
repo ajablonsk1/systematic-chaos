@@ -2,7 +2,10 @@ package com.example.api.model.user.badge;
 
 import com.example.api.model.util.Image;
 import com.example.api.util.visitor.BadgeVisitor;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 

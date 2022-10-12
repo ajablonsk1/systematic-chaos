@@ -2,7 +2,6 @@ package com.example.api.model.user;
 
 import com.example.api.model.group.Group;
 import com.example.api.model.user.badge.UnlockedBadge;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

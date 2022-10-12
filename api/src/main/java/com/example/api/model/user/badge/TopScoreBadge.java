@@ -1,5 +1,8 @@
 package com.example.api.model.user.badge;
 
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.util.Image;
 import com.example.api.util.visitor.BadgeVisitor;
 import lombok.AllArgsConstructor;
@@ -25,7 +28,7 @@ public class TopScoreBadge extends Badge{
     }
 
     @Override
-    public boolean isGranted(BadgeVisitor visitor) {
+    public boolean isGranted(BadgeVisitor visitor) throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         return visitor.visitTopScoreBadge(this);
     }
 }
