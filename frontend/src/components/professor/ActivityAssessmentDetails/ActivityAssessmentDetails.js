@@ -20,6 +20,7 @@ import { HorizontalSpacer, VerticalSpacer, Header } from '../../general/TaskShar
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { Activity } from '../../../utils/constants'
 import { connect } from 'react-redux'
+import { SET_ASSESSMENT_NUMBERS } from '../../../actions/types'
 
 function ActivityAssessmentDetails(props) {
   const navigate = useNavigate()
@@ -75,6 +76,7 @@ function ActivityAssessmentDetails(props) {
     } else {
       navigate(TeacherRoutes.ACTIVITY_ASSESSMENT.LIST)
     }
+    props.dispatch({ type: SET_ASSESSMENT_NUMBERS, payload: activityResponseInfo?.remaining ?? 0 })
   }
 
   useEffect(() => {
