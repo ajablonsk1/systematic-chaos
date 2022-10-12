@@ -20,7 +20,6 @@ export const NavLinkStyles = styled(Nav.Link)`
 `
 
 export const NavLinkStylesMobile = styled(Nav.Link)`
-  font-size: 26px;
   color: ${(props) => props.$fontColor};
   padding: 5px 13px;
   &:visited,
