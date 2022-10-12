@@ -24,7 +24,7 @@ function StudentPointsModal(props) {
       <ModalHeader>
         <h4>Tabela punktów studenta</h4>
       </ModalHeader>
-      <ModalBody>
+      <ModalBody style={{ overflow: 'auto', padding: '0', margin: '10px' }}>
         <LastPointsTable pointsList={studentPoints} />
       </ModalBody>
       <ModalFooter>

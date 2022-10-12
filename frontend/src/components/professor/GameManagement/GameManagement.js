@@ -12,6 +12,7 @@ import { ERROR_OCCURRED } from '../../../utils/constants'
 import ChapterModal from './ChapterModal/ChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function GameManagement(props) {
   const navigate = useNavigate()
@@ -53,7 +54,7 @@ function GameManagement(props) {
       <p className='text-center'>
         Tutaj możesz dostosować wygląd, fabułę i sposób działania rozgrywki zgodnie ze swoimi potrzebami.
       </p>
-      <Container>
+      <Container style={{ marginBottom: isMobileView() ? 85 : 0 }}>
         <Row>
           <Col>
             <GameCardOptionPick $background={props.theme.primary} $fontColor={props.theme.font}>
