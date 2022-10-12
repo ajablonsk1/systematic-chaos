@@ -84,7 +84,7 @@ public class TaskService {
         return response;
     }
 
-    public TaskToEvaluateResponse getFirstAnswerToEvaluate(Long id) throws EntityNotFoundException, EntityRequiredAttributeNullException {
+    public TaskToEvaluateResponse getFirstAnswerToEvaluate(Long id) throws EntityNotFoundException {
         log.info("Fetching first activity that is needed to be evaluated for file task with id {}", id);
         FileTask task = fileTaskRepo.findFileTaskById(id);
         activityValidator.validateActivityIsNotNull(task, id);

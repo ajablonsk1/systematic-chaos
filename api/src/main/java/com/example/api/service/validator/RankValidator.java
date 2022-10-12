@@ -37,7 +37,7 @@ public class RankValidator {
     public void validateAddRankForm(AddRankForm form) throws RequestValidationException {
         if (form.getName().length() > 30) {
             log.error("Rank name cannot have more than 30 characters!");
-            throw new RequestValidationException(ExceptionMessage.NAME_TO_LONG);
+            throw new RequestValidationException(ExceptionMessage.RANK_NAME_TOO_LONG);
         }
         List<Rank> ranks = rankRepo.findAll()
                 .stream()
@@ -45,7 +45,7 @@ public class RankValidator {
                 .toList();
         if (ranks.stream().anyMatch(rank -> Objects.equals(rank.getMinPoints(), form.getMinPoints()))) {
             log.error("Two ranks cannot have the same minPoint");
-            throw new RequestValidationException(ExceptionMessage.THE_SAME_MIN_POINTS);
+            throw new RequestValidationException(ExceptionMessage.SAME_RANK_MIN_POINTS);
         }
     }
 }
