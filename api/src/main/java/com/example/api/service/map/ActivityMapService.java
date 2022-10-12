@@ -121,7 +121,7 @@ public class ActivityMapService {
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)
-                //.sorted(Comparator.comparingLong(MapTask::getId))
+                .sorted(Comparator.comparingLong(MapTask::getId))
                 .toList();
     }
 
