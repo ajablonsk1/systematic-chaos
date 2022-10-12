@@ -9,7 +9,6 @@ export const ContentWithBackground = styled(Content)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px;
 `
 
 export const QuestionCard = styled.div`

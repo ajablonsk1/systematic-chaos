@@ -22,7 +22,6 @@ export const GraphTrigger = styled.div`
 export const GraphContainer = styled.div`
   position: absolute;
   right: 50px;
-  bottom: 50px;
   border-radius: 20px;
   background-color: white;
   overflow: hidden;
