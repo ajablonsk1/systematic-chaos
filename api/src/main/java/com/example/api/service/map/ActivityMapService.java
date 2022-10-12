@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -120,6 +121,7 @@ public class ActivityMapService {
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)
+                //.sorted(Comparator.comparingLong(MapTask::getId))
                 .toList();
     }
 
