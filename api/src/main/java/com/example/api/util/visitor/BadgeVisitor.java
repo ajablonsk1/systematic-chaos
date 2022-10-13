@@ -18,9 +18,10 @@ import com.example.api.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.LinkedList;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +31,6 @@ public class BadgeVisitor {
     private final FileTaskResultService fileTaskResultService;
     private final UserService userService;
     private final RankingService rankingService;
-
-    private final int UNIX_EPOCH_START_DATE = 1970;
 
     public boolean visitActivityNumberBadge(ActivityNumberBadge badge) {
         User student = userService.getCurrentUser();
@@ -53,15 +52,15 @@ public class BadgeVisitor {
                 .map(TaskResult::getActivity)
                 .toList();
 
-        double currentPoints = results.stream()
+        BigDecimal currentPoints = BigDecimal.valueOf(results.stream()
                 .mapToDouble(TaskResult::getPointsReceived)
-                .sum();
-        double maxPoints = activities.stream()
+                .sum());
+        BigDecimal maxPoints = BigDecimal.valueOf(activities.stream()
                 .mapToDouble(Activity::getMaxPoints)
-                .sum();
+                .sum());
 
-        double score = currentPoints / maxPoints;
-        return score >= badge.getActivityScore();
+        BigDecimal score = currentPoints.divide(maxPoints, 2, RoundingMode.HALF_UP);
+        return score.compareTo(BigDecimal.valueOf(badge.getActivityScore())) >= 0;
     }
 
     public boolean visitConsistencyBadge(ConsistencyBadge badge) {
@@ -73,18 +72,13 @@ public class BadgeVisitor {
                 .sorted()
                 .toArray(Long[]::new);
 
-        List<Long> differences = new LinkedList<>();
-        for (int i=0; i < datesInMillis.length-1; i++) {
-            differences.add(Math.abs(datesInMillis[i] - datesInMillis[i+1]));
-        }
-
         int weeksInRow = badge.getWeeksInRow();
-        int counter = 0;
-        Calendar calendar = Calendar.getInstance();
-        for (Long diff: differences) {
-            calendar.setTimeInMillis(diff);
+        int counter = 1;
+        for (int i=0; i < datesInMillis.length-1; i++) {
+            long diff = Math.abs(datesInMillis[i] - datesInMillis[i + 1]);
+            long daysDiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
 
-            if (calendar.get(Calendar.DAY_OF_YEAR) < 7 && calendar.get(Calendar.YEAR) == UNIX_EPOCH_START_DATE){
+            if (daysDiff < 7) {
                 counter++;
             } else {
                 counter = 0;
@@ -127,26 +121,35 @@ public class BadgeVisitor {
         if (results.size() < 5) {
             return false;
         }
-
         if (badge.getForGroup()) {
-            long numStudentsInGroup = userService.getUserGroup()
+            BigDecimal rankingInGroupPosition = BigDecimal.valueOf(rankingService.getGroupRankingPosition());
+
+            if (badge.getTopScore() == 0) {
+                return rankingInGroupPosition.equals(BigDecimal.ONE);
+            }
+
+            BigDecimal numStudentsInGroup = BigDecimal.valueOf(userService.getUserGroup()
                     .getUsers()
                     .stream()
                     .filter(user -> user.getAccountType() == AccountType.STUDENT)
-                    .count();
-            int rankingInGroupPosition = rankingService.getGroupRankingPosition();
+                    .count());
 
-            double topScore = (double) (rankingInGroupPosition / numStudentsInGroup);
-            return topScore <= badge.getTopScore();
+            BigDecimal topScore = rankingInGroupPosition.divide(numStudentsInGroup, 2, RoundingMode.HALF_UP);
+            return topScore.compareTo(BigDecimal.valueOf(badge.getTopScore())) <= 0;
         } else {
-            long numOfStudents = userService.getUsers()
+            BigDecimal rankingPosition = BigDecimal.valueOf(rankingService.getRankingPosition());
+
+            if (badge.getTopScore() == 0) {
+                return rankingPosition.equals(BigDecimal.ONE);
+            }
+
+            BigDecimal numOfStudents = BigDecimal.valueOf(userService.getUsers()
                     .stream()
                     .filter(user -> user.getAccountType() == AccountType.STUDENT)
-                    .count();
-            int rankingPosition = rankingService.getRankingPosition();
+                    .count());
 
-            double topScore = (double) (rankingPosition / numOfStudents);
-            return topScore <= badge.getTopScore();
+            BigDecimal topScore = rankingPosition.divide(numOfStudents, 2, RoundingMode.HALF_UP);
+            return topScore.compareTo(BigDecimal.valueOf(badge.getTopScore())) <= 0;
         }
     }
 }

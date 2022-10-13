@@ -32,6 +32,7 @@ import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.BadgeRepo;
 import com.example.api.repo.user.RankRepo;
+import com.example.api.repo.user.UnlockedBadgeRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
@@ -78,6 +79,7 @@ public class DatabaseConfig {
     private final FileRepo fileRepo;
     private final UserRepo userRepo;
     private final BadgeRepo badgeRepo;
+    private final UnlockedBadgeRepo unlockedBadgeRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -790,28 +792,32 @@ public class DatabaseConfig {
         return output.toByteArray();
     }
 
-    private void initBadges() {
+    private void initBadges() throws IOException {
+        byte[] topScoreByte = getByteArrayForFile("src/main/resources/images/top_score_badge.png", "png");
+        Image topScoreImage = new Image("Top score image", topScoreByte, ImageType.BADGE);
+        fileRepo.save(topScoreImage);
+
         Badge badge1 = new ConsistencyBadge(
                 null,
                 "To dopiero początek",
-                "Wykonaj conajmniej jedną aktywność w tygodniu przez okres miesiąca",
-                null,
+                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres miesiąca",
+                topScoreImage,
                 4
         );
 
         Badge badge2 = new ConsistencyBadge(
                 null,
                 "Długo jeszcze?",
-                "Wykonaj conajmniej jedną aktywność w tygodniu przez okres 3 miesięcy",
-                null,
+                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres 3 miesięcy",
+                topScoreImage,
                 12
         );
 
         Badge badge3 = new ConsistencyBadge(
                 null,
                 "To już jest koniec, ale czy na pewno?",
-                "Wykonaj conajmniej jedną aktywność w tygodniu przez okres 6 mięsięcy",
-                null,
+                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres 6 mięsięcy",
+                topScoreImage,
                 24
         );
 
@@ -819,7 +825,7 @@ public class DatabaseConfig {
                 null,
                 "Topowowa dwudziestka",
                 "Bądź w 20% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
-                null,
+                topScoreImage,
                 0.2,
                 false
         );
@@ -829,7 +835,7 @@ public class DatabaseConfig {
                 null,
                 "Topowa piątka",
                 "Bądź w 5% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
-                null,
+                topScoreImage,
                 0.05,
                 false
         );
@@ -838,7 +844,7 @@ public class DatabaseConfig {
                 null,
                 "Lider grupy",
                 "Bądź najepszym użytkownikiem w swojej grupie (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
-                null,
+                topScoreImage,
                 0.0,
                 true
         );
@@ -847,7 +853,7 @@ public class DatabaseConfig {
                 null,
                 "Lider",
                 "Bądź najepszym użytkownikiem (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
-                null,
+                topScoreImage,
                 0.0,
                 false
         );
@@ -857,7 +863,7 @@ public class DatabaseConfig {
                 null,
                 "Pierwsze kroki w ekspedycji",
                 "Wykonaj swoją pierwszą ekspedycję",
-                null,
+                topScoreImage,
                 1
         );
 
@@ -865,7 +871,7 @@ public class DatabaseConfig {
                 null,
                 "Doświadczony w ekspedycjach",
                 "Wykonaj 10 ekspedycji",
-                null,
+                topScoreImage,
                 10
         );
 
@@ -873,7 +879,7 @@ public class DatabaseConfig {
                 null,
                 "Zaprawiony w ekspedycjach",
                 "Wykonaj 50 ekspedycji",
-                null,
+                topScoreImage,
                 50
         );
 
@@ -881,7 +887,7 @@ public class DatabaseConfig {
                 null,
                 "Pierwsze kroki w zadaniu bojowym",
                 "Wykonaj swoje pierwsze zadanie bojowe",
-                null,
+                topScoreImage,
                 1
         );
 
@@ -889,7 +895,7 @@ public class DatabaseConfig {
                 null,
                 "Doświadczony w zadaniach bojowych",
                 "Wykonaj 10 zadań bojowych",
-                null,
+                topScoreImage,
                 10
         );
 
@@ -897,7 +903,7 @@ public class DatabaseConfig {
                 null,
                 "Zaprawiony w zadaniach bojowych",
                 "Wykonaj 50 zadań bojowych",
-                null,
+                topScoreImage,
                 50
         );
 
@@ -905,7 +911,7 @@ public class DatabaseConfig {
                 null,
                 "Doświadczony w aktywnościach",
                 "Wykonaj 30 aktywności",
-                null,
+                topScoreImage,
                 30
         );
 
@@ -913,7 +919,7 @@ public class DatabaseConfig {
                 null,
                 "Zaprawiony w aktywnościach",
                 "Wykonaj 100 aktywności",
-                null,
+                topScoreImage,
                 100
         );
 
@@ -921,7 +927,7 @@ public class DatabaseConfig {
                 null,
                 "Marsz ku lepszemu",
                 "Posiadaj ponad 60% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
-                null,
+                topScoreImage,
                 0.6
         );
 
@@ -929,7 +935,7 @@ public class DatabaseConfig {
                 null,
                 "Uśmiech prowadzącego",
                 "Posiadaj ponad 80% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
-                null,
+                topScoreImage,
                 0.8
         );
 
@@ -937,7 +943,7 @@ public class DatabaseConfig {
                 null,
                 "Uścisk dłoni prowadzącego",
                 "Posiadaj ponad 95% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
-                null,
+                topScoreImage,
                 0.95
         );
 
@@ -945,7 +951,7 @@ public class DatabaseConfig {
                 null,
                 "W sam środek tarczy",
                 "Posiadaj 100% z ekspedycji lub zadania bojowego",
-                null,
+                topScoreImage,
                 1.0
         );
 

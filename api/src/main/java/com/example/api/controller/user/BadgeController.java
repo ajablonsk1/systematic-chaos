@@ -1,6 +1,7 @@
 package com.example.api.controller.user;
 
 import com.example.api.dto.response.user.badge.BadgeResponse;
+import com.example.api.dto.response.user.badge.UnlockedBadgeResponse;
 import com.example.api.service.user.BadgeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,10 @@ public class BadgeController {
     @GetMapping("/all")
     public ResponseEntity<List<BadgeResponse>> getAllBadges(){
         return ResponseEntity.ok().body(badgeService.getAllBadges());
+    }
+
+    @GetMapping("/unlocked/all")
+    public ResponseEntity<List<UnlockedBadgeResponse>> getAllUnlockedBadges(){
+        return ResponseEntity.ok().body(badgeService.getAllUnlockedBadges());
     }
 }

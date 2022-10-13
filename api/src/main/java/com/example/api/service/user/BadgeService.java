@@ -1,6 +1,7 @@
 package com.example.api.service.user;
 
 import com.example.api.dto.response.user.badge.BadgeResponse;
+import com.example.api.dto.response.user.badge.UnlockedBadgeResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -31,6 +32,14 @@ public class BadgeService {
         return badgeRepo.findAll()
                 .stream()
                 .map(BadgeResponse::new)
+                .toList();
+    }
+
+    public List<UnlockedBadgeResponse> getAllUnlockedBadges() {
+        User student = userService.getCurrentUser();
+        return student.getUnlockedBadges()
+                .stream()
+                .map(UnlockedBadgeResponse::new)
                 .toList();
     }
 
