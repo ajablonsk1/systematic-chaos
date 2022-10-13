@@ -238,7 +238,7 @@ export const convertHeroTypeToPlayerType = (heroType) => {
 }
 
 export const getGameCardInfo = (playerType, data) => {
-  if (playerType === PlayerType.CALM) {
+  if (playerType === PlayerType.CHALLENGING) {
     return (
       <span>
         Zajmujesz <strong>{data.rankPosition}</strong> miejsce na <strong>{data.rankLength}</strong>!
