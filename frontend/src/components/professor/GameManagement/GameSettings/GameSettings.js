@@ -6,6 +6,7 @@ import ColorPicker from './ColorPicker'
 import { useNavigate } from 'react-router-dom'
 import { TeacherRoutes } from '../../../../routes/PageRoutes'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 function GameSettings(props) {
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ function GameSettings(props) {
 
   return (
     <Content>
-      <Row className={'m-0 vh-100'}>
+      <Row style={{ margin: 0, marginBottom: isMobileView() ? 85 : 0 }}>
         <Col md={6}>
           <h3 className={'pt-4'}>Motywy kolorystyczne</h3>
           <p>Użyte motywy kolorystyczne wpłyną na wygląd aplikacji i wszystkich użytkowników.</p>
