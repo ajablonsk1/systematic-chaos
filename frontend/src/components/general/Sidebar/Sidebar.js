@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { faAnglesLeft, faAnglesRight, faFire } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -8,24 +8,25 @@ import { Badge, LogoDiv, NavBarTextContainer, NavEdit, SidebarEdit } from './Sid
 import { connect } from 'react-redux'
 import { logout } from '../../../actions/auth'
 import { GeneralRoutes } from '../../../routes/PageRoutes'
-import { SET_EXPANDED } from '../../../actions/types'
+import { SET_ASSESSMENT_NUMBERS, SET_EXPANDED } from '../../../actions/types'
 import ProfessorService from '../../../services/professor.service'
 import { isStudent } from '../../../utils/storageManager'
 
 function Sidebar(props) {
   const navigate = useNavigate()
-  const [assignmentsNumber, setAssignmentsNumber] = useState(0)
   const logOut = () => props.dispatch(logout(navigate))
 
   const isExpanded = props.sidebar.isExpanded
+  const assessmentsNumber = props.sidebar.assessments
 
   useEffect(() => {
     if (props.user && !isStudent(props.user)) {
       ProfessorService.getTasksToEvaluateList().then((response) => {
         const assignmentsNumber = response.map((task) => task.toGrade).reduce((prev, curr) => prev + curr, 0)
-        setAssignmentsNumber(assignmentsNumber)
+        props.dispatch({ type: SET_ASSESSMENT_NUMBERS, payload: assignmentsNumber })
       })
     }
+    // eslint-disable-next-line
   }, [props.user])
 
   const toggleSidebar = () => {
@@ -73,7 +74,7 @@ function Sidebar(props) {
                   <FontAwesomeIcon icon={link.icon} />
                 </div>
                 {isExpanded && <span className={'ps-2'}>{link.name}</span>}
-                {link.action === 'BADGE' && <Badge $badgeColor={props.theme.danger}>{assignmentsNumber}</Badge>}
+                {link.action === 'BADGE' && <Badge $badgeColor={props.theme.danger}>{assessmentsNumber}</Badge>}
               </NavLinkStyles>
 
               {link.subpages && (

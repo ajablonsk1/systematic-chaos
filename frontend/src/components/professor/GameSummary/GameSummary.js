@@ -54,7 +54,7 @@ function GameSummary(props) {
   ]
 
   const activityStatsCardTitles = [
-    { text: 'Liczba ocenionych aktywności:', value: summaryDetails?.assessedActivitiesCounter },
+    { text: 'Liczba ocenionych aktywności:', value: summaryDetails?.assessedActivityCounter },
     { text: 'Liczba nieocenionych aktywności:', value: summaryDetails?.notAssessedActivityCounter },
     { text: 'Liczba odpowiedzi oczekujących na sprawdzenie:', value: summaryDetails?.waitingAnswersNumber }
   ]

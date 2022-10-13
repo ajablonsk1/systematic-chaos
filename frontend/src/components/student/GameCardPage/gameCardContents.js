@@ -26,7 +26,7 @@ export const GradesStatsContent = (props) => {
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
       <Col md={7}>
         <p>Średni wynik z ekspedycji: {avgGraphTask ?? 0}%</p>
-        <p>Średni wynik z zadań bojowych: {avgFileTask}%</p>
+        <p>Średni wynik z zadań bojowych: {avgFileTask ?? 0}%</p>
         <p>Ilość wykonanych sondaży: {surveysNumber}</p>
         <p>Punkty zdobyte w ekspedycjach: {graphTaskPoints}</p>
         <p>Punkty zdobyte w zadaniach bojowych: {fileTaskPoints}</p>

@@ -27,6 +27,7 @@ function GameSettings(props) {
           <h3 className={'pt-4'}>Motywy kolorystyczne</h3>
           <p>Użyte motywy kolorystyczne wpłyną na wygląd aplikacji i wszystkich użytkowników.</p>
           <Form.Check className={'mb-3'} label={'Wykorzystaj domyślną kolorystykę'} />
+          <Form.Check className={'mb-3'} label={'Zastosuj poniższe zmiany tylko dla moich grup.'} />
           <div>
             {colorPickerElements.map((pickerSet, index) => (
               <ColorPicker key={index} header={pickerSet.header} colors={pickerSet.colors} selectedColorId={0} />

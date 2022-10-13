@@ -2,9 +2,22 @@
 BEng Thesis for AGH Computer Science studies
 
 ## Backend setup with docker
-If we didn't build project before:
+We go to the "api" folder. If we execute the command for the first time:
+```
+docker-compose up --build
+```
+If we run the backend using the docker again, we can omit the `--build` option.
 
-1. cd /api
-2. docker-compose up --build
+## Frontend setup with docker
+We go to the "frontend" folder. If we execute the command for the first time:
+```
+docker-compose up --build
+```
+If we run the backend using the docker again, we can omit the `--build` option.
 
-If we have 
+## General setup with docker (production version)
+We go to the main folder ("systematic-chaos"). From this folder, execute the following command:
+```
+docker-compose up -d --build
+```
+The above command will run both the backend and the frontend.
