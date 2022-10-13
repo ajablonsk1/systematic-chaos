@@ -5,6 +5,7 @@ import com.example.api.dto.response.group.GroupCode;
 import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.group.GroupService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class GroupController {
     }
 
     @GetMapping("/invitation-code/list")
-    ResponseEntity<List<GroupCode>> getInvitationCodeList() {
+    ResponseEntity<List<GroupCode>> getInvitationCodeList() throws WrongUserTypeException {
         return ResponseEntity.ok().body(groupService.getInvitationCodeList());
     }
 
