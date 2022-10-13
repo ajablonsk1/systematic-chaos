@@ -63,7 +63,7 @@ function ProfessorSettings(props) {
 
   return (
     <>
-      <Row className={'p-0 m-0'}>
+      <Row className={'p-0 m-0 gap-2'}>
         <Col md={12}>
           <h4>Ustawienia konta</h4>
         </Col>
@@ -83,7 +83,10 @@ function ProfessorSettings(props) {
 
       <Row className={'p-0 m-0 py-2'}>
         <Col>
-          <ProfileCard header={'Kod dostępu dla prowadzącego'} body={<p>{registrationToken}</p>} />
+          <ProfileCard
+            header={'Kod dostępu dla prowadzącego'}
+            body={<p style={{ maxWidth: '100%', overflow: 'auto' }}>{registrationToken}</p>}
+          />
         </Col>
       </Row>
 
