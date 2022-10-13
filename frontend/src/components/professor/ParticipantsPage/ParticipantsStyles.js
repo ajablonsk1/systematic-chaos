@@ -17,6 +17,10 @@ export const TabsContainer = styled(Tabs)`
   .nav-link:not(.active) {
     color: ${(props) => props.$linkColor} !important;
   }
+
+  @media (max-width: 575px) {
+    font-size: 12px;
+  }
 `
 
 export const TableContainer = styled(Table)`
