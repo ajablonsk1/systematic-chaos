@@ -39,6 +39,7 @@ function GroupsTable(props) {
         $fontColor={props.theme.font}
         $background={props.theme.primary}
         $bodyColor={props.theme.secondary}
+        className={'mb-0'}
       >
         <thead>
           <tr>
