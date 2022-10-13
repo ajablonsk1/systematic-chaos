@@ -5,7 +5,6 @@ import RankingService from '../../../services/ranking.service'
 import { Tab } from 'react-bootstrap'
 import { TabsContainer } from '../../professor/ParticipantsPage/ParticipantsStyles'
 import { connect } from 'react-redux'
-import { isMobileView } from '../../../utils/mobileHelper'
 
 function StudentsRanking(props) {
   const [ranking, setRanking] = useState(undefined)
