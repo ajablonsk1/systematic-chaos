@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { Activity } from '../../../utils/constants'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 // todo: move it to styles file
 const ActivityListItemRow = styled(Row)`
   margin: 20px auto;
-  width: 75%;
   background-color: ${(props) => props.$background};
   color: ${(props) => props.$fontColor};
   padding: 8px;
@@ -26,6 +26,7 @@ function ActivityListItem(props) {
   const navigate = useNavigate()
   return (
     <ActivityListItemRow
+      style={{ width: isMobileView() ? '95%' : '75%' }}
       $background={props.theme.primary}
       $fontColor={props.theme.font}
       onClick={() => {

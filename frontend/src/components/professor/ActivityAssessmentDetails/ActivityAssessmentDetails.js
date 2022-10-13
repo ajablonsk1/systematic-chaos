@@ -20,6 +20,7 @@ import { HorizontalSpacer, VerticalSpacer, Header } from '../../general/TaskShar
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { Activity } from '../../../utils/constants'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function ActivityAssessmentDetails(props) {
   const navigate = useNavigate()
@@ -133,9 +134,16 @@ function ActivityAssessmentDetails(props) {
         <HorizontalSpacer height={'3vh'} />
         <Col
           className='m-0 pt-4 mx-auto'
-          style={{ height: '94vh', width: '90%', backgroundColor: props.theme.secondary }}
+          style={{
+            height: isMobileView() ? 'auto' : '94vh',
+            width: isMobileView() ? '94%' : '90%',
+            backgroundColor: props.theme.secondary
+          }}
         >
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: props.theme.primary, height: '6vh' }}>
+          <Row
+            className='p-2 rounded mx-2'
+            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '6vh' }}
+          >
             <Header activityName={activityResponseInfo.activityName} activityType={Activity.TASK} />
           </Row>
 
@@ -143,7 +151,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto text-center'
-            style={{ backgroundColor: props.theme.primary, height: '6vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '6vh' }}
           >
             <UserDetails />
           </Row>
@@ -152,7 +160,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: props.theme.primary, height: '18vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '18vh' }}
           >
             <ActivityDetails className='overflow-auto' />
           </Row>
@@ -161,7 +169,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: props.theme.primary, height: '20vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '20vh' }}
           >
             <ResponseDetails />
           </Row>
@@ -169,10 +177,10 @@ function ActivityAssessmentDetails(props) {
           <VerticalSpacer height={'1vh'} />
 
           <Row
-            className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: props.theme.primary, height: '35vh' }}
+            className='pb-3 rounded mx-2 overflow-auto'
+            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '35vh' }}
           >
-            <Col>
+            <Col className={'d-flex flex-column justify-content-center align-items-center'}>
               <h4>Uwagi:</h4>
               <RemarksTextArea
                 $fontColor={props.theme.font}
@@ -220,7 +228,7 @@ function ActivityAssessmentDetails(props) {
   }
 
   return (
-    <Content style={{ color: props.theme.font }}>
+    <Content style={{ color: props.theme.font, marginBottom: isMobileView() ? 85 : 0 }}>
       {activityResponseInfo === undefined ? <Loader /> : activityResponseInfo == null ? ERROR_OCCURRED : contentBody()}
     </Content>
   )

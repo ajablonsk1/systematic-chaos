@@ -21,7 +21,7 @@ export const ActivityType = styled.h1`
   font-size: 1.75rem;
 
   @media (max-width: 800px) {
-    font-size: 0.5rem;
+    font-size: 0.9rem;
   }
 `
 
@@ -29,7 +29,6 @@ export const ActivityName = styled.h1`
   text-align: right;
   align-self: center;
   font-size: 1.75rem;
-  margin-left: auto;
 
   @media (max-width: 800px) {
     font-size: 1.5rem;
