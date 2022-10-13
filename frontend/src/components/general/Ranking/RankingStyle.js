@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export const TableContainer = styled(GameCardOptionPick)`
   position: relative;
   top: 20px;
+  margin: 0 25px;
   max-height: ${(props) => props.$customHeight ?? '90vh'};
   overflow: auto;
 
@@ -27,6 +28,11 @@ export const TableContainer = styled(GameCardOptionPick)`
     td {
       border-color: ${(props) => props.$backgroundColor};
     }
+  }
+
+  @media (max-width: 575px) {
+    max-height: 80vh;
+    margin: 0;
   }
 `
 

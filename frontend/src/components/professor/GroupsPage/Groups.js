@@ -12,11 +12,13 @@ function Groups(props) {
   const [refreshFunction, setRefreshFunction] = useState(() => {})
   const buttonStyle = { backgroundColor: props.theme.success, borderColor: props.theme.success }
 
+  const isMobileDisplay = isMobileView()
+
   return (
     <>
       <Content
         className={'d-flex flex-column align-items-center h-100'}
-        style={{ marginBottom: isMobileView() ? 85 : 0 }}
+        style={{ marginBottom: isMobileDisplay ? 85 : 0 }}
       >
         <Row className='m-3'>
           <Title>Grupy</Title>
@@ -26,7 +28,7 @@ function Groups(props) {
         </Row>
         <Button
           style={
-            isMobileView()
+            isMobileDisplay
               ? { ...buttonStyle }
               : { ...buttonStyle, position: 'absolute', top: 'calc(100% - 10px)', transform: 'translateY(-100%)' }
           }

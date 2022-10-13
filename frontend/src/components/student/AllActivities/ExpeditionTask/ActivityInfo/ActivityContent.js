@@ -15,6 +15,8 @@ import { connect } from 'react-redux'
 import { isMobileView } from '../../../../../utils/mobileHelper'
 
 function ActivityContent(props) {
+  const isMobileDisplay = isMobileView()
+
   const navigate = useNavigate()
   const activityId = props.activityId
 
@@ -187,20 +189,20 @@ function ActivityContent(props) {
   }, [pointsReceived, props])
 
   return (
-    <Row style={{ height: isMobileView() ? 'auto' : '100vh', margin: isMobileView() ? '0 0 85px 0' : 0 }}>
+    <Row style={{ height: isMobileDisplay ? 'auto' : '100vh', margin: isMobileDisplay ? '0 0 85px 0' : 0 }}>
       <Col md={6}>
-        <Row className={`${isMobileView() ? 'h-auto' : 'h-50'} py-2 px-2`}>
+        <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Podstawowe informacje'} body={basicInfoCard} />
         </Row>
-        <Row className={`${isMobileView() ? 'h-auto' : 'h-50'} py-2 px-2`}>
+        <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Informacje punktowe'} body={pointsCard} />
         </Row>
       </Col>
       <Col md={6}>
-        <Row className={`${isMobileView() ? 'h-auto' : 'h-50'} py-2 px-2`}>
+        <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Opis aktywności'} body={<p>{props.activity.description}</p>} />
         </Row>
-        <Row className={'py-2 px-2'} style={{ height: isMobileView() ? 'auto' : '44vh' }}>
+        <Row className={'py-2 px-2'} style={{ height: isMobileDisplay ? 'auto' : '44vh' }}>
           <ActivityInfoContentCard
             header={'Wymagana wiedza'}
             body={<p>{props.activity.requiredKnowledge ?? 'Brak wymagań'}</p>}

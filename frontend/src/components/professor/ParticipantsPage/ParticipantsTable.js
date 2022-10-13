@@ -10,6 +10,8 @@ import { connect } from 'react-redux'
 import { isMobileView } from '../../../utils/mobileHelper'
 
 function ParticipantsTable(props) {
+  const isMobileDisplay = isMobileView()
+
   const [changeGroupModalOpen, setChangeGroupModalOpen] = useState(false)
   const [bonusPointsModalOpen, setBonusPointsModalOpen] = useState(false)
   const [chosenStudent, setChosenStudent] = useState()
@@ -41,9 +43,9 @@ function ParticipantsTable(props) {
   }, [props, changeGroupModalOpen])
 
   return (
-    <GameCardOptionPick style={{ maxHeight: '91vh', overflowY: 'auto', marginBottom: isMobileView() ? 85 : 'auto' }}>
+    <GameCardOptionPick style={{ maxHeight: '91vh', overflowY: 'auto', marginBottom: isMobileDisplay ? 85 : 'auto' }}>
       <TableContainer
-        style={{ width: isMobileView() ? '200%' : '100%' }}
+        style={{ width: isMobileDisplay ? '200%' : '100%' }}
         $fontColor={props.theme.font}
         $background={props.theme.primary}
         $tdColor={props.theme.secondary}

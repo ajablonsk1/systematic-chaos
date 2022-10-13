@@ -6,7 +6,6 @@ import { getSortIcon, nextSortingOrder, sortArray } from './sortHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
-import { isMobileView } from '../../../utils/mobileHelper'
 
 const headersWithSortedInfo = [
   { headerName: 'Pozycja', sortedVar1: 'position' },
@@ -68,10 +67,9 @@ function Ranking(props) {
 
   return (
     <TableContainer
-      $customHeight={isMobileView() ? '80vh' : props.customHeight}
+      $customHeight={props.customHeight}
       $fontColor={props.theme.font}
       $backgroundColor={props.theme.primary}
-      style={{ margin: isMobileView() ? '0' : '0 25px' }}
     >
       <Table className={'my-0'}>
         <thead>{tableHeaders}</thead>

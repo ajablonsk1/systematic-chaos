@@ -20,6 +20,8 @@ import { isMobileView } from '../../../../utils/mobileHelper'
 const FIELD_DELAY = 600
 
 function CombatTask(props) {
+  const isMobileDisplay = isMobileView()
+
   const location = useLocation()
   const { activityId: taskState } = location.state
 
@@ -98,10 +100,10 @@ function CombatTask(props) {
         <Col
           className='pt-4 mx-auto'
           style={{
-            height: isMobileView() ? 'auto' : '94vh',
+            height: isMobileDisplay ? 'auto' : '94vh',
             width: '90%',
             backgroundColor: props.theme.secondary,
-            margin: isMobileView() ? '0 0 85px 0' : 0
+            margin: isMobileDisplay ? '0 0 85px 0' : 0
           }}
         >
           <Row className='p-2 rounded mx-2' style={{ backgroundColor: props.theme.primary, height: '6vh' }}>
@@ -117,7 +119,7 @@ function CombatTask(props) {
           <VerticalSpacer height={'2vh'} />
           <Row
             className='p-2 rounded mx-2'
-            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '50vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '50vh' }}
           >
             <Col
               md={task.answer || answerWasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}

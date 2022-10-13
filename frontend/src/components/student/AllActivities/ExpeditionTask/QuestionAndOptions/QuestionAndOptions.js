@@ -4,7 +4,6 @@ import Loader from '../../../../general/Loader/Loader'
 import { ContentWithBackground } from './QuestionAndOptionsStyle'
 import OpenQuestionPage from './OpenQuestionPage/OpenQuestionPage'
 import { connect } from 'react-redux'
-import { isMobileView } from '../../../../../utils/mobileHelper'
 
 // we don't need navigate, we don't need location - props are enough
 
@@ -32,7 +31,7 @@ function QuestionAndOptions(props) {
   // }, [expeditionId, navigate, remainingTime, taskResultId])
 
   return (
-    <ContentWithBackground style={{ padding: isMobileView() ? '100px 20px 20px 20px' : 20 }}>
+    <ContentWithBackground>
       {question === undefined ? (
         <Loader />
       ) : question == null ? (

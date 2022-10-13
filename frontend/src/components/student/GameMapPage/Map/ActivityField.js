@@ -118,7 +118,6 @@ function ActivityField(props) {
         $background={props.theme.secondary}
         $fontColor={props.theme.font}
         $filter={hexToCSSFilter(props.theme.font)}
-        $width={isMobileView() ? '100vw' : '50vw'}
         placement={'end'}
         show={isOffcanvasOpen}
         onHide={() => setIsOffcanvasOpen(false)}

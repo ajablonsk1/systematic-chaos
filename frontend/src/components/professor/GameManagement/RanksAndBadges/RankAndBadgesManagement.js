@@ -15,6 +15,8 @@ import { successToast } from '../../../../utils/toasts'
 import { isMobileView } from '../../../../utils/mobileHelper'
 
 function RankAndBadgesManagement(props) {
+  const isMobileDisplay = isMobileView()
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [editedDataType, setEditedDataType] = useState('')
@@ -138,11 +140,11 @@ function RankAndBadgesManagement(props) {
 
   return (
     <Content>
-      <Row className={'w-100'} style={{ margin: isMobileView() ? '0 0 85px 0' : 0 }}>
-        <Col md={6} className={'pt-4'} style={{ padding: isMobileView() ? '5px' : 'auto' }}>
+      <Row className={'w-100'} style={{ margin: isMobileDisplay ? '0 0 85px 0' : 0 }}>
+        <Col md={6} className={'pt-4'} style={{ padding: isMobileDisplay ? '5px' : 'auto' }}>
           <ContentCard header={'Rangi'} body={ranksContent} />
         </Col>
-        <Col md={6} className={'pt-4'} style={{ padding: isMobileView() ? '5px' : 'auto' }}>
+        <Col md={6} className={'pt-4'} style={{ padding: isMobileDisplay ? '5px' : 'auto' }}>
           <ContentCard header={'Odznaki'} body={badgesContent} />
         </Col>
       </Row>

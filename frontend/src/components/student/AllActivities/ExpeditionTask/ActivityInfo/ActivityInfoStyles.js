@@ -29,9 +29,14 @@ export const ActivityName = styled.h1`
   text-align: right;
   align-self: center;
   font-size: 1.75rem;
+  margin-left: auto;
 
   @media (max-width: 800px) {
     font-size: 1.5rem;
+  }
+
+  @media (max-width: 575px) {
+    margin-left: 0;
   }
 `
 

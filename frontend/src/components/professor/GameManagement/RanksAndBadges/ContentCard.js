@@ -6,9 +6,11 @@ import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
 
 function ContentCard(props) {
+  const isMobileDisplay = isMobileView()
+
   return (
     <CustomCard
-      $customHeight={isMobileView() ? 'auto' : '95vh'}
+      $customHeight={isMobileDisplay ? 'auto' : '95vh'}
       $fontColor={props.theme.font}
       $background={props.theme.primary}
       $bodyColor={props.theme.secondary}
@@ -16,7 +18,7 @@ function ContentCard(props) {
       <CardHeader>
         <h5>{props.header}</h5>
       </CardHeader>
-      <Card.Body className={`${isMobileView() ? 'auto' : 'h-75'}`} style={{ padding: isMobileView() ? 0 : 'auto' }}>
+      <Card.Body className={`${isMobileDisplay ? 'auto' : 'h-75'}`} style={{ padding: isMobileDisplay ? 0 : 'auto' }}>
         {props.body}
       </Card.Body>
     </CustomCard>

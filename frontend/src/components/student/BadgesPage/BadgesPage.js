@@ -17,6 +17,8 @@ const LATER_ITEM_DELAY = 1200
 const BADGE_LIST_STEP = 200
 
 function BadgesPage(props) {
+  const isMobileDisplay = isMobileView()
+
   const [studentBadgesNumber, allBadgesNumber] = getBadgesInfo()
   const badgesList = getBadgesList()
   const lastUnlockedBadge = getLastUnlockedBadge()
@@ -125,8 +127,8 @@ function BadgesPage(props) {
           </Row>
         </>
       )}
-      <Row className={'mx-0 my-5'} style={{ maxHeight: isMobileView() ? '330vh' : '55vh' }}>
-        <Col md={9} className={isMobileView() ? 'mb-3' : 'm-auto'}>
+      <Row className={'mx-0 my-5'} style={{ maxHeight: isMobileDisplay ? '330vh' : '55vh' }}>
+        <Col md={9} className={isMobileDisplay ? 'mb-3' : 'm-auto'}>
           <ContentCard
             header={'Odznaki'}
             body={
@@ -160,8 +162,8 @@ function BadgesPage(props) {
             }
           />
         </Col>
-        <Col md={3} className={`p-0 ${isMobileView() ? 'mb-5' : 'mb-0'}`}>
-          <Row className={`h-50 pb-2 pr-2 m-0 ${isMobileView() ? 'mb-3' : 'mb-0'}`}>
+        <Col md={3} className={`p-0 ${isMobileDisplay ? 'mb-5' : 'mb-0'}`}>
+          <Row className={`h-50 pb-2 pr-2 m-0 ${isMobileDisplay ? 'mb-3' : 'mb-0'}`}>
             <ContentCard
               header={'Posiadasz'}
               body={

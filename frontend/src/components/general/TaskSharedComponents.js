@@ -15,7 +15,7 @@ export function Header({ activityName, activityType }) {
         <ActivityType className={'m-0 ps-2'}>{getActivityTypeName(activityType)}</ActivityType>
       </div>
 
-      <ActivityName style={{ marginLeft: isMobileView() ? 0 : 'auto' }}>{activityName}</ActivityName>
+      <ActivityName>{activityName}</ActivityName>
     </div>
   )
 }

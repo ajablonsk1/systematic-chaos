@@ -36,6 +36,8 @@ function GameSummary(props) {
   const [barChartActiveChapterId, setBarChartActiveChapterId] = useState(0)
   const [lineChartActiveChapterId, setLineChartActiveChapterId] = useState(0)
 
+  const isMobileDisplay = isMobileView()
+
   useEffect(() => {
     ProfessorService.getGameSummaryStats()
       .then((response) => {
@@ -120,15 +122,15 @@ function GameSummary(props) {
         <p className={'text-center h3'}>{ERROR_OCCURRED}</p>
       ) : (
         <>
-          <Row className={'m-0'} style={{ height: isMobileView() ? 'auto' : '50vh' }}>
+          <Row className={'m-0'} style={{ height: isMobileDisplay ? 'auto' : '50vh' }}>
             <Col md={6}>
-              <Row className={`${isMobileView() ? 'h-auto' : 'h-50'} py-2`}>
+              <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2`}>
                 <GameSummaryCard
                   header={<h5>Statystyki ocen studentów</h5>}
                   body={statsCardBody(gradesStatsCardTitles)}
                 />
               </Row>
-              <Row className={`${isMobileView() ? 'h-auto' : 'h-50'} py-2`}>
+              <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2`}>
                 <GameSummaryCard
                   header={<h5>Statystyki aktywności</h5>}
                   body={statsCardBody(activityStatsCardTitles)}
@@ -153,7 +155,7 @@ function GameSummary(props) {
               </CustomCard>
             </Col>
           </Row>
-          <Row style={{ height: isMobileView() ? 'auto' : '50vh', margin: isMobileView() ? '0 0 85px 0' : 0 }}>
+          <Row style={{ height: isMobileDisplay ? 'auto' : '50vh', margin: isMobileDisplay ? '0 0 85px 0' : 0 }}>
             <Col md={6} className={'py-2'}>
               <CustomCard
                 $fontColor={props.theme.font}

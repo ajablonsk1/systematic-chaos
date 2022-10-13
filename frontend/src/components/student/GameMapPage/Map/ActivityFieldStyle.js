@@ -36,7 +36,7 @@ export const ActivityCol = styled(Col)`
 export const CustomOffcanvas = styled(Offcanvas)`
   background-color: ${(props) => props.$background};
   color: ${(props) => props.$fontColor};
-  width: ${(props) => props.$width} !important;
+  width: 50vw !important;
   z-index: 2000;
 
   .btn-close {
@@ -82,5 +82,9 @@ export const CustomOffcanvas = styled(Offcanvas)`
         color: ${(props) => props.$fontColor};
       }
     }
+  }
+
+  @media (max-width: 575px) {
+    width: 100vw;
   }
 `

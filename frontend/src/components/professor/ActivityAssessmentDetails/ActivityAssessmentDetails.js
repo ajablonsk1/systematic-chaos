@@ -38,6 +38,8 @@ function ActivityAssessmentDetails(props) {
   const [fileBlob, setFileBlob] = useState()
   const [fileName, setFileName] = useState()
 
+  const isMobileDisplay = isMobileView()
+
   const debounceSetGivenPoints = useMemo(
     () =>
       debounce((newPointsNum) => {
@@ -137,14 +139,14 @@ function ActivityAssessmentDetails(props) {
         <Col
           className='m-0 pt-4 mx-auto'
           style={{
-            height: isMobileView() ? 'auto' : '94vh',
-            width: isMobileView() ? '94%' : '90%',
+            height: isMobileDisplay ? 'auto' : '94vh',
+            width: isMobileDisplay ? '94%' : '90%',
             backgroundColor: props.theme.secondary
           }}
         >
           <Row
             className='p-2 rounded mx-2'
-            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '6vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '6vh' }}
           >
             <Header activityName={activityResponseInfo.activityName} activityType={Activity.TASK} />
           </Row>
@@ -153,7 +155,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto text-center'
-            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '6vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '6vh' }}
           >
             <UserDetails />
           </Row>
@@ -162,7 +164,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '18vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '18vh' }}
           >
             <ActivityDetails className='overflow-auto' />
           </Row>
@@ -171,7 +173,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '20vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '20vh' }}
           >
             <ResponseDetails />
           </Row>
@@ -180,7 +182,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='pb-3 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: props.theme.primary, height: isMobileView() ? 'auto' : '35vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '35vh' }}
           >
             <Col className={'d-flex flex-column justify-content-center align-items-center'}>
               <h4>Uwagi:</h4>
@@ -230,7 +232,7 @@ function ActivityAssessmentDetails(props) {
   }
 
   return (
-    <Content style={{ color: props.theme.font, marginBottom: isMobileView() ? 85 : 0 }}>
+    <Content style={{ color: props.theme.font, marginBottom: isMobileDisplay ? 85 : 0 }}>
       {activityResponseInfo === undefined ? <Loader /> : activityResponseInfo == null ? ERROR_OCCURRED : contentBody()}
     </Content>
   )
