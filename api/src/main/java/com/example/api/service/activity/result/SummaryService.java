@@ -272,8 +272,12 @@ public class SummaryService {
 
     private NotAssessedActivity toNotAssessedActivity(Activity activity) {
         NotAssessedActivity notAssessedActivity = new NotAssessedActivity(activity);
-        getAllResultsForActivity(activity)
-                .forEach(notAssessedActivity::add);
+        int waitingAnswersNumber = getAllResultsForActivity(activity)
+                .stream()
+                .filter(task -> !task.isEvaluated())
+                .toList()
+                .size();
+        notAssessedActivity.setWaitingAnswersNumber(waitingAnswersNumber);
         return notAssessedActivity;
     }
 
