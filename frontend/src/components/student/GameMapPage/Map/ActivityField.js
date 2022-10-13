@@ -14,7 +14,6 @@ import { Tooltip } from '../../BadgesPage/BadgesStyle'
 import ActivityService from '../../../../services/activity.service'
 import { connect } from 'react-redux'
 import { hexToCSSFilter } from 'hex-to-css-filter'
-import { isMobileView } from '../../../../utils/mobileHelper'
 
 function ActivityField(props) {
   const { activity, colClickable, colSize, isCompletedActivityAround, allActivitiesCompleted } = props
