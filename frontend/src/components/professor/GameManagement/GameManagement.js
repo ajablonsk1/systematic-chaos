@@ -67,7 +67,7 @@ function GameManagement(props) {
                 <p className='text-center'>Edytuj istniejące rozdziały lub dodaj nowy.</p>
                 <div style={{ overflow: 'auto', maxHeight: '35vh' }}>
                   <Table style={{ color: props.theme.font, maxHeight: '100px' }}>
-                    <thead style={{ border: `1px solid ${props.theme.primary}` }}>
+                    <thead style={{ border: `1px solid ${props.theme.primary}`, backgroundColor: props.theme.primary }}>
                       <tr>
                         <th>Nazwa rozdziału</th>
                         <th className='text-center'>Liczba aktywności</th>
