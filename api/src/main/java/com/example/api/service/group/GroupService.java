@@ -5,10 +5,15 @@ import com.example.api.dto.response.group.GroupCode;
 import com.example.api.dto.response.user.BasicUser;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
+import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
+import com.example.api.repo.user.UserRepo;
+import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.GroupValidator;
+import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,8 +28,11 @@ import java.util.List;
 @Slf4j
 @Transactional
 public class GroupService {
+    private final AuthenticationService authService;
     private final GroupRepo groupRepo;
     private final GroupValidator groupValidator;
+    private final UserRepo userRepo;
+    private final UserValidator userValidator;
 
     public Group saveGroup(Group group) {
         log.info("Saving group to database with name {}", group.getName());
@@ -54,13 +62,24 @@ public class GroupService {
         return group;
     }
 
-    public List<GroupCode> getInvitationCodeList() {
+    public List<GroupCode> getInvitationCodeList() throws WrongUserTypeException {
         log.info("Fetching group code list");
+        String email = authService.getAuthentication().getName();
+        User professor = userRepo.findUserByEmail(email);
+        userValidator.validateProfessorAccount(professor, email);
+
         return groupRepo.findAll()
                 .stream()
-                .map(group -> new GroupCode(group.getId(),
-                                            group.getName(),
-                                            group.getInvitationCode()))
+                .map(group -> new GroupCode(
+                        group.getId(),
+                        group.getName(),
+                        group.getInvitationCode(),
+                        group.getUsers()
+                                .stream()
+                                .filter(user -> user.getAccountType().equals(AccountType.STUDENT))
+                                .count()
+                        )
+                )
                 .toList();
 
     }
