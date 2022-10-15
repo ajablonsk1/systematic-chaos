@@ -11,6 +11,7 @@ public class GroupCode {
     @Schema(required = true) private Long id;
     @Schema(required = true) private String name;
     @Schema(required = true) private String invitationCode;
+    @Schema(required = true) private Long studentsCount;
 
     public GroupCode(Group group) {
         this.id = group.getId();
