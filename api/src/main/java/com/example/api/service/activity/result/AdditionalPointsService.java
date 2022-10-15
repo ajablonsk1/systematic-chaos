@@ -41,12 +41,12 @@ public class AdditionalPointsService {
                 form.getPoints(),
                 form.getDateInMillis(),
                 professorEmail,
-                "",
-                badgeService);
+                "");
         if (form.getDescription() != null) {
             additionalPoints.setDescription(form.getDescription());
         }
         additionalPointsRepo.save(additionalPoints);
+        badgeService.checkAllBadges();
     }
 
     public List<AdditionalPointsResponse> getAdditionalPoints() {

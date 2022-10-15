@@ -81,7 +81,6 @@ public class ActivityService {
             case INFO -> infoService.editInfo((Info) activity, (EditInfoForm) form);
             case SURVEY -> surveyService.editSurvey((Survey) activity, (EditSurveyForm) form);
         }
-        return;
     }
 
     private Activity getActivity(Long id) {

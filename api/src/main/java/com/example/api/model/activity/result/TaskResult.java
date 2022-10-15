@@ -5,7 +5,6 @@ import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.user.User;
-import com.example.api.service.user.BadgeService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,19 +30,17 @@ public abstract class TaskResult {
     public abstract boolean isEvaluated();
     public abstract Activity getActivity();
 
-    public TaskResult(Long id, User user, Double pointsReceived, Long sendDateMillis, BadgeService badgeService)
+    public TaskResult(Long id, User user, Double pointsReceived, Long sendDateMillis)
             throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         this.id = id;
         this.user = user;
-        this.setPointsReceivedAndCheckBadges(pointsReceived, badgeService);
+        this.setPointsReceived(pointsReceived);
         this.sendDateMillis = sendDateMillis;
     }
 
-    public void setPointsReceivedAndCheckBadges(Double newPoints, BadgeService badgeService)
-            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
+    public void setPointsReceived(Double newPoints) {
         if (pointsReceived == null) user.changePoints(newPoints);
         else user.changePoints(newPoints - pointsReceived);
         pointsReceived = newPoints;
-        badgeService.checkAllBadges();
     }
 }

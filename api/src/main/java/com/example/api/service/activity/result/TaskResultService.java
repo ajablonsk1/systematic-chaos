@@ -217,7 +217,7 @@ public class TaskResultService {
             response.setActivity100(((Survey) activity).getPoints());
         }
         else {
-            response.setActivity100(((Task) activity).getMaxPoints());
+            response.setActivity100(activity.getMaxPoints());
         }
 
         AtomicInteger answersNumber = new AtomicInteger(0);
@@ -249,7 +249,7 @@ public class TaskResultService {
         if (answersNumber.get() > 0) {
             response.setAvgPoints(sumPoints.get() / answersNumber.get());
             if (!activityIsSurvey) {
-                response.setAvgPercentageResult(100 * sumPoints.get() / (((Task) activity).getMaxPoints()* answersNumber.get()));
+                response.setAvgPercentageResult(100 * sumPoints.get() / (activity.getMaxPoints() * answersNumber.get()));
             }
         }
         response.setBestScore(bestScore.get());

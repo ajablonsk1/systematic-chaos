@@ -91,13 +91,14 @@ public class QuestionService {
 
                 // counting current state of points
                 double allPoints = pointsCalculator.calculateAllPoints(result);
-                result.setPointsReceivedAndCheckBadges(allPoints, badgeService);
+                result.setPointsReceived(allPoints);
                 
                 // if it's the last question, set finished
                 List<Question> nextQuestions = question.getNext();
                 if(nextQuestions.size() == 0){
                     result.setFinished(true);
                     log.info("Expedition finished");
+                    badgeService.checkAllBadges();
                 }
 
                 return timeRemaining;

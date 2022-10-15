@@ -77,8 +77,9 @@ public class FeedbackValidator {
                 throw new WrongPointsNumberException("Wrong points number", form.getPoints(), fileTaskResult.getFileTask().getMaxPoints());
             }
             feedback.setPoints(form.getPoints());
-            fileTaskResult.setPointsReceivedAndCheckBadges(form.getPoints(), badgeService);
+            fileTaskResult.setPointsReceived(form.getPoints());
             fileTaskResultRepo.save(fileTaskResult);
+            badgeService.checkAllBadges();
         }
 
         // Feedback file can be set only once
