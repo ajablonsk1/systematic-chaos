@@ -43,11 +43,23 @@ export const testStudentTokens = [
 export const testProfessorTokens = [
   {
     access_token:
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJibWFqQGFnaC5lZHUucGwiLCJyb2xlcyI6WyJQUk9GRVNTT1IiXSwiaXNzIjoiL2FwaS9sb2dpbiIsImV4cCI6MTY2NTMzNzA3NX0.M5sSb6c2hUw5Pfu1h1dZ8tnB7S3ESV8s2P0oAkX2zcI'
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJibWFqQGFnaC5lZHUucGwiLCJyb2xlcyI6WyJQUk9GRVNTT1IiXSwiaXNzIjoiL2FwaS9sb2dpbiIsImV4cCI6MTY2NTMzNzA3NX0.M5sSb6c2hUw5Pfu1h1dZ8tnB7S3ESV8s2P0oAkX2zcI',
+    token_data: {
+      exp: 1665337075,
+      iss: '/api/login',
+      roles: ['PROFESSOR'],
+      sub: 'bmaj@agh.edu.pl'
+    }
   },
   {
     access_token:
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzemllbGluc2tpQGFnaC5lZHUucGwiLCJyb2xlcyI6WyJQUk9GRVNTT1IiXSwiaXNzIjoiL2FwaS9sb2dpbiIsImV4cCI6MTY2NTMzNzExNX0.ZKcLZ2ARHtA5Q1TulX9ow0C5KGnV0KxILC8VvJ4P2sk'
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzemllbGluc2tpQGFnaC5lZHUucGwiLCJyb2xlcyI6WyJQUk9GRVNTT1IiXSwiaXNzIjoiL2FwaS9sb2dpbiIsImV4cCI6MTY2NTMzNzExNX0.ZKcLZ2ARHtA5Q1TulX9ow0C5KGnV0KxILC8VvJ4P2sk',
+    token_data: {
+      exp: 1665337115,
+      iss: '/api/login',
+      roles: ['PROFESSOR'],
+      sub: 'szielinski@agh.edu.pl'
+    }
   }
 ]
 export const testInvalidTokens = [
