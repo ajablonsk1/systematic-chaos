@@ -4,6 +4,7 @@ import com.example.api.dto.request.activity.feedback.SaveUserFeedbackForm;
 import com.example.api.dto.response.activity.feedback.UserFeedbackInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.UserFeedback;
 import com.example.api.service.activity.feedback.UserFeedbackService;
@@ -20,8 +21,8 @@ public class UserFeedbackController {
     private final UserFeedbackService feedbackService;
 
     @PostMapping
-    public ResponseEntity<UserFeedback> saveUserFeedback(@RequestBody SaveUserFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
+    public ResponseEntity<UserFeedbackInfoResponse> saveUserFeedback(@RequestBody SaveUserFeedbackForm form)
+            throws RequestValidationException {
         return ResponseEntity.ok().body(feedbackService.saveUserFeedback(form));
     }
 

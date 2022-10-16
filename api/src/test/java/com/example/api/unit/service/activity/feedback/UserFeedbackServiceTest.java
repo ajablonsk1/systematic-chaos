@@ -3,6 +3,7 @@ package com.example.api.unit.service.activity.feedback;
 import com.example.api.dto.request.activity.feedback.SaveUserFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.UserFeedback;
 import com.example.api.model.activity.task.Survey;
@@ -74,7 +75,7 @@ public class UserFeedbackServiceTest {
     }
 
     @Test
-    public void saveUserFeedbackForm() throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
+    public void saveUserFeedbackForm() throws RequestValidationException {
         // given
         SaveUserFeedbackForm form = new SaveUserFeedbackForm(
                 1L,

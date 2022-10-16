@@ -56,7 +56,7 @@ public class SurveyService {
         log.info("Fetching survey info");
 
         SurveyInfoResponse response = new SurveyInfoResponse(survey);
-        UserFeedback feedback = userFeedbackRepo.findUserFeedbackBySurveyAndUser(survey, student);
+        UserFeedback feedback = userFeedbackRepo.findUserFeedbackBySurveyAndFrom(survey, student);
         if (feedback != null) {
             response.setFeedback(new UserFeedbackInfoResponse(feedback));
         }
