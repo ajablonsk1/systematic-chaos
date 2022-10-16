@@ -8,8 +8,9 @@ import { isMobileView } from '../../../../../utils/mobileHelper'
 const mobileViewStyle = {
   right: '50%',
   left: 'auto',
-  top: '50px',
-  transform: 'translateX(50%)'
+  top: '30px',
+  transform: 'translateX(50%)',
+  position: 'absolute'
 }
 
 const desktopViewStyle = {

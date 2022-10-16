@@ -24,7 +24,7 @@ export const GraphTrigger = styled.div`
   }
 `
 export const GraphContainer = styled.div`
-  position: absolute;
+  position: fixed;
   right: 50px;
   bottom: 50px;
   border-radius: 20px;
