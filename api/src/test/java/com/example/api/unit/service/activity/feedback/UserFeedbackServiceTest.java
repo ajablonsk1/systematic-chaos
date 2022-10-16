@@ -2,6 +2,7 @@ package com.example.api.unit.service.activity.feedback;
 
 import com.example.api.dto.request.activity.feedback.SaveUserFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.UserFeedback;
 import com.example.api.model.activity.task.Survey;
@@ -11,7 +12,10 @@ import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.feedback.UserFeedbackService;
+import com.example.api.service.user.BadgeService;
+import com.example.api.service.validator.FeedbackValidator;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -33,6 +37,9 @@ public class UserFeedbackServiceTest {
     @Mock private UserValidator userValidator;
     @Mock private AuthenticationService authService;
     @Mock private Authentication authentication;
+    @Mock private ActivityValidator activityValidator;
+    @Mock private BadgeService badgeService;
+    @Mock private FeedbackValidator feedbackValidator;
     @Captor private ArgumentCaptor<UserFeedback> userFeedbackArgumentCaptor;
     @Captor private ArgumentCaptor<Long> idArgumentCaptor;
     @Captor private ArgumentCaptor<String> stringArgumentCaptor;
@@ -46,7 +53,10 @@ public class UserFeedbackServiceTest {
                 userRepo,
                 surveyRepo,
                 userValidator,
-                authService);
+                authService,
+                activityValidator,
+                badgeService,
+                feedbackValidator);
     }
 
     @Test
@@ -64,12 +74,12 @@ public class UserFeedbackServiceTest {
     }
 
     @Test
-    public void saveUserFeedbackForm() throws WrongUserTypeException, EntityNotFoundException {
+    public void saveUserFeedbackForm() throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         // given
         SaveUserFeedbackForm form = new SaveUserFeedbackForm(
-                "random content",
+                1L,
                 10,
-                1L);
+                "random content");
         User user = new User();
         Survey survey = new Survey();
         String email = "random@email.com";
@@ -94,9 +104,9 @@ public class UserFeedbackServiceTest {
     public void saveUserFeedbackFormThrowEntityNotFoundException() throws WrongUserTypeException, EntityNotFoundException {
         // given
         SaveUserFeedbackForm form = new SaveUserFeedbackForm(
-                "random content",
+                1L,
                 10,
-                1L);
+                "random content");
         given(authService.getAuthentication()).willReturn(authentication);
         given(authentication.getName()).willReturn("random@email.com");
         // when

@@ -1,13 +1,11 @@
 package com.example.api.model.activity.feedback;
 
 import com.example.api.model.activity.task.Survey;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter
@@ -15,6 +13,9 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @Entity
 public class UserFeedback extends Feedback {
+    @NonNull
+    @Min(1)
+    @Max(5)
     private Integer rate;
 
     @ManyToOne

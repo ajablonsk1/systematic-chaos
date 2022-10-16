@@ -2,6 +2,7 @@ package com.example.api.controller.activity.feedback;
 
 import com.example.api.dto.request.activity.feedback.SaveUserFeedbackForm;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.UserFeedback;
 import com.example.api.service.activity.feedback.UserFeedbackService;
@@ -22,7 +23,7 @@ public class UserFeedbackController {
 
     @PostMapping
     public ResponseEntity<UserFeedback> saveUserFeedback(@RequestBody SaveUserFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException {
+            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         return ResponseEntity.ok().body(feedbackService.saveUserFeedback(form));
     }
 }
