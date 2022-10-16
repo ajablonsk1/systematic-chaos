@@ -200,13 +200,21 @@ function GameSummary(props) {
                       </tr>
                     </thead>
                     <tbody>
-                      {summaryDetails.notAssessedActivitiesTable.map((activity, index) => (
-                        <tr key={index + Date.now()}>
-                          <td>{activity.activityName}</td>
-                          <td>{getActivityTypeName(activity.activityType)}</td>
-                          <td>{activity.waitingAnswersNumber}</td>
+                      {summaryDetails.notAssessedActivitiesTable.length > 0 ? (
+                        summaryDetails.notAssessedActivitiesTable.map((activity, index) => (
+                          <tr key={index + Date.now()}>
+                            <td>{activity.activityName}</td>
+                            <td>{getActivityTypeName(activity.activityType)}</td>
+                            <td>{activity.waitingAnswersNumber}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={3} className={'text-center'}>
+                            Brak aktywności
+                          </td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </CustomTable>
                 </Card.Body>
