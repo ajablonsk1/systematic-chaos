@@ -199,8 +199,12 @@ function ChapterModal(props) {
                               errorColor: props.theme.danger
                             })}
                             <div className={'m-2'}></div>
-                            {FormCol('Pozycja X', 'number', 'posX', 6, { errorColor: props.theme.danger })}
-                            {FormCol('Pozycja Y', 'number', 'posY', 6, { errorColor: props.theme.danger })}
+                            {FormCol('Pozycja X (na mapie gry)', 'number', 'posX', 6, {
+                              errorColor: props.theme.danger
+                            })}
+                            {FormCol('Pozycja Y (na mapie gry)', 'number', 'posY', 6, {
+                              errorColor: props.theme.danger
+                            })}
                             <div className={'m-2'}></div>
                           </Row>
 
