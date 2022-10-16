@@ -52,14 +52,14 @@ public class UserFeedbackService {
         UserFeedback feedback = userFeedbackRepo.findUserFeedbackBySurveyAndUser(survey, student);
         if (feedback == null) {
             feedback = new UserFeedback();
+            student.setPoints(survey.getMaxPoints());
+            badgeService.checkAllBadges();
         }
 
         feedback.setContent(form.getFeedback());
         feedback.setFrom(student);
         feedback.setRate(form.getRate());
         feedback.setSurvey(survey);
-        student.setPoints(survey.getMaxPoints());
-        badgeService.checkAllBadges();
         return userFeedbackRepo.save(feedback);
     }
 
