@@ -77,7 +77,7 @@ function BadgesPage(props) {
         <p>{ERROR_OCCURRED}</p>
       ) : (
         <>
-          <Slide delay={LATER_ITEM_DELAY}>
+          <Slide delay={LATER_ITEM_DELAY} direction={'down'}>
             <Row className={'m-0 text-center py-3'}>
               <Col>
                 <strong>Twoja ranga: </strong>
