@@ -2,6 +2,10 @@ import styled from 'styled-components'
 import { Tabs, Button, Table } from 'react-bootstrap'
 export const GradesContent = styled.div`
   padding: 15px;
+
+  @media (max-width: 575px) {
+    margin-bottom: 85px;
+  }
 `
 export const TabsContainer = styled(Tabs)`
   & .nav-link.active {
@@ -34,6 +38,10 @@ export const GradesTable = styled(Table)`
   thead {
     position: sticky;
     top: 0; /* Don't forget this, required for the stickiness */
+  }
+
+  @media (max-width: 575px) {
+    width: 200%;
   }
 `
 

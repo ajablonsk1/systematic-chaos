@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom'
 import ActivityStats from './ActivityStats'
 import ActivityRequirements from './ActivityRequirements/ActivityRequirements'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 function ActivityDetails(props) {
   const location = useLocation()
@@ -48,7 +49,7 @@ function ActivityDetails(props) {
   }, 300)
 
   return (
-    <Content>
+    <Content style={{ marginBottom: isMobileView() ? 70 : 0 }}>
       <TabsContainer
         $background={props.theme.success}
         $fontColor={props.theme.background}

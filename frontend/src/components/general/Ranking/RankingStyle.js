@@ -29,6 +29,11 @@ export const TableContainer = styled(GameCardOptionPick)`
       border-color: ${(props) => props.$backgroundColor};
     }
   }
+
+  @media (max-width: 575px) {
+    max-height: 80vh;
+    margin: 0;
+  }
 `
 
 export const TableRow = styled.tr`

@@ -11,11 +11,14 @@ import { connect } from 'react-redux'
 import RankService from '../../../services/rank.service'
 import Loader from '../../general/Loader/Loader'
 import { base64Header, ERROR_OCCURRED } from '../../../utils/constants'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 const LATER_ITEM_DELAY = 1200
 const BADGE_LIST_STEP = 200
 
 function BadgesPage(props) {
+  const isMobileDisplay = isMobileView()
+
   const [studentBadgesNumber, allBadgesNumber] = getBadgesInfo()
   const badgesList = getBadgesList()
   const lastUnlockedBadge = getLastUnlockedBadge()
@@ -79,15 +82,15 @@ function BadgesPage(props) {
         <>
           <Slide delay={LATER_ITEM_DELAY}>
             <Row className={'m-0 text-center py-3'}>
-              <Col>
+              <Col md={4}>
                 <strong>Twoja ranga: </strong>
                 <span>{rankInfo.currentRank.name}</span>
               </Col>
-              <Col>
+              <Col md={4}>
                 <strong>Liczba punktów: </strong>
                 <span>{rankInfo.currentPoints}</span>
               </Col>
-              <Col>
+              <Col md={4}>
                 <strong>Do następnej rangi brakuje: </strong>
                 <span>{rankInfo.nextRank.minPoints - rankInfo.currentPoints} pkt</span>
               </Col>
@@ -124,8 +127,8 @@ function BadgesPage(props) {
           </Row>
         </>
       )}
-      <Row className={'mx-0 my-5'} style={{ maxHeight: '55vh' }}>
-        <Col md={9}>
+      <Row className={'mx-0 my-5'} style={{ maxHeight: isMobileDisplay ? '330vh' : '55vh' }}>
+        <Col md={9} className={isMobileDisplay ? 'mb-3' : 'm-auto'}>
           <ContentCard
             header={'Odznaki'}
             body={
@@ -159,8 +162,8 @@ function BadgesPage(props) {
             }
           />
         </Col>
-        <Col md={3} className={'p-0'}>
-          <Row className={'m-0 h-50 pb-2 pr-2'}>
+        <Col md={3} className={`p-0 ${isMobileDisplay ? 'mb-5' : 'mb-0'}`}>
+          <Row className={`h-50 pb-2 pr-2 m-0 ${isMobileDisplay ? 'mb-3' : 'mb-0'}`}>
             <ContentCard
               header={'Posiadasz'}
               body={

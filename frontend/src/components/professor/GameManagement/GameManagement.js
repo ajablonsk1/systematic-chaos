@@ -12,6 +12,7 @@ import { ERROR_OCCURRED } from '../../../utils/constants'
 import ChapterModal from './ChapterModal/ChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function GameManagement(props) {
   const navigate = useNavigate()
@@ -53,7 +54,7 @@ function GameManagement(props) {
       <p className='text-center'>
         Tutaj możesz dostosować wygląd, fabułę i sposób działania rozgrywki zgodnie ze swoimi potrzebami.
       </p>
-      <Container>
+      <Container style={{ marginBottom: isMobileView() ? 85 : 0 }}>
         <Row style={{ height: '50vh' }}>
           <Col style={{ maxHeight: '50vh' }}>
             <GameCardOptionPick
@@ -66,7 +67,7 @@ function GameManagement(props) {
                 <p className='text-center'>Edytuj istniejące rozdziały lub dodaj nowy.</p>
                 <div style={{ overflow: 'auto', maxHeight: '35vh' }}>
                   <Table style={{ color: props.theme.font, maxHeight: '100px' }}>
-                    <thead style={{ border: `1px solid ${props.theme.primary}` }}>
+                    <thead style={{ border: `1px solid ${props.theme.primary}`, backgroundColor: props.theme.primary }}>
                       <tr>
                         <th>Nazwa rozdziału</th>
                         <th className='text-center'>Liczba aktywności</th>

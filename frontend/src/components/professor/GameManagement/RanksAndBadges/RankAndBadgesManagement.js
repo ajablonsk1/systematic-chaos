@@ -12,8 +12,11 @@ import { connect } from 'react-redux'
 import RankService from '../../../../services/rank.service'
 import RankCreationForm from './RankCreationForm'
 import { successToast } from '../../../../utils/toasts'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 function RankAndBadgesManagement(props) {
+  const isMobileDisplay = isMobileView()
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [editedDataType, setEditedDataType] = useState('')
@@ -137,11 +140,11 @@ function RankAndBadgesManagement(props) {
 
   return (
     <Content>
-      <Row className={'m-0 vh-100 w-100'}>
-        <Col md={6} className={'pt-4'}>
+      <Row className={'w-100'} style={{ margin: isMobileDisplay ? '0 0 85px 0' : 0 }}>
+        <Col md={6} className={'pt-4'} style={{ padding: isMobileDisplay ? '5px' : 'auto' }}>
           <ContentCard header={'Rangi'} body={ranksContent} />
         </Col>
-        <Col md={6} className={'pt-4'}>
+        <Col md={6} className={'pt-4'} style={{ padding: isMobileDisplay ? '5px' : 'auto' }}>
           <ContentCard header={'Odznaki'} body={badgesContent} />
         </Col>
       </Row>

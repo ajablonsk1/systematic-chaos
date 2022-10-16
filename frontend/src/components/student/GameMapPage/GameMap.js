@@ -6,6 +6,7 @@ import { ERROR_OCCURRED } from '../../../utils/constants'
 import { getGraphElements } from '../../general/Graph/graphHelper'
 import ChapterMapModal from './ChapterMapModal'
 import GameMapContainer from './GameMapContainer'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function GameMap() {
   const [chaptersList, setChaptersList] = useState(undefined)
@@ -67,6 +68,7 @@ function GameMap() {
               elements={graphElements}
               nodeClickCallback={(nodeId) => setChosenChapterId({ id: nodeId })}
               labels={getNodesLabels()}
+              customHeight={isMobileView() ? 700 : null}
             />
           </>
         )}

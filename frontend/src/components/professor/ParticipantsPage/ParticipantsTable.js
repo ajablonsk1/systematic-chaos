@@ -7,8 +7,11 @@ import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import BonusPointsModal from './BonusPointsModal'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function ParticipantsTable(props) {
+  const isMobileDisplay = isMobileView()
+
   const [changeGroupModalOpen, setChangeGroupModalOpen] = useState(false)
   const [bonusPointsModalOpen, setBonusPointsModalOpen] = useState(false)
   const [chosenStudent, setChosenStudent] = useState()
@@ -40,8 +43,13 @@ function ParticipantsTable(props) {
   }, [props, changeGroupModalOpen])
 
   return (
-    <GameCardOptionPick style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-      <TableContainer $fontColor={props.theme.font} $background={props.theme.primary} $tdColor={props.theme.secondary}>
+    <GameCardOptionPick style={{ maxHeight: '91vh', overflowY: 'auto', marginBottom: isMobileDisplay ? 85 : 'auto' }}>
+      <TableContainer
+        style={{ width: isMobileDisplay ? '200%' : '100%' }}
+        $fontColor={props.theme.font}
+        $background={props.theme.primary}
+        $tdColor={props.theme.secondary}
+      >
         <thead>
           <tr>
             <th>Nazwa grupy</th>

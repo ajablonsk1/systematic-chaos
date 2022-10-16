@@ -21,7 +21,7 @@ export const ActivityType = styled.h1`
   font-size: 1.75rem;
 
   @media (max-width: 800px) {
-    font-size: 0.5rem;
+    font-size: 0.9rem;
   }
 `
 
@@ -33,6 +33,10 @@ export const ActivityName = styled.h1`
 
   @media (max-width: 800px) {
     font-size: 1.5rem;
+  }
+
+  @media (max-width: 575px) {
+    margin-left: 0;
   }
 `
 

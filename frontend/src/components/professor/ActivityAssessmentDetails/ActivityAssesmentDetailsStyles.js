@@ -8,6 +8,10 @@ export const PointsRow = styled(Row)`
   margin: 0 auto;
   text-align: center;
   padding: 10px;
+
+  @media (max-width: 575px) {
+    width: 100%;
+  }
 `
 
 export const PointsInput = styled.input`
@@ -26,8 +30,6 @@ export const PointsMax = styled.p`
 `
 
 export const AcceptButton = styled(Button)`
-  margin-left: 50%;
-  transform: translateX(-50%);
   margin-top: 15px;
   background-color: ${(props) => props.$background};
   border-color: ${(props) => props.$background};
@@ -41,6 +43,10 @@ export const AcceptButton = styled(Button)`
   &:hover {
     background-color: ${(props) => props.$background};
     border-color: ${(props) => props.$background};
+  }
+
+  @media (max-width: 575px) {
+    width: 100%;
   }
 `
 
