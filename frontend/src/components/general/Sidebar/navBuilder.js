@@ -27,6 +27,10 @@ export const NavLinkStylesMobile = styled(Nav.Link)`
     color: ${(props) => props.$fontColor};
     text-decoration: none;
   }
+
+  @media (max-width: 575px) {
+    padding: 5px 10px;
+  }
 `
 
 export function buildNavLinkMobile(to, content) {

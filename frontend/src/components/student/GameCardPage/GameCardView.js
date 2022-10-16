@@ -32,7 +32,7 @@ function GameCardView(props) {
         <p className={'text-danger'}>{ERROR_OCCURRED}</p>
       ) : (
         <>
-          <Row className='m-0 pt-4' style={{ height: isMobile ? '125vh' : '50vh' }}>
+          <Row className='m-0 pt-4 gy-2' style={{ height: isMobile ? 'auto' : '50vh' }}>
             <Col md={5} style={{ height: isMobile ? '45%' : '100%' }}>
               <GameCard
                 headerText={'Statystyki bohatera'}

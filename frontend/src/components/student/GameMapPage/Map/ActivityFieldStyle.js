@@ -85,6 +85,6 @@ export const CustomOffcanvas = styled(Offcanvas)`
   }
 
   @media (max-width: 575px) {
-    width: 100vw;
+    width: 100vw !important;
   }
 `

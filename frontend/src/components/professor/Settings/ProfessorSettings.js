@@ -63,7 +63,7 @@ function ProfessorSettings(props) {
 
   return (
     <>
-      <Row className={'p-0 m-0 gap-2'}>
+      <Row className={'p-0 m-0 gy-2'}>
         <Col md={12}>
           <h4>Ustawienia konta</h4>
         </Col>

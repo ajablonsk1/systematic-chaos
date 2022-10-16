@@ -11,6 +11,7 @@ import { Activity, ERROR_OCCURRED } from '../../../../utils/constants'
 import PercentageCircle from '../../../student/PointsPage/ChartAndStats/PercentageCircle'
 import ActivityService from '../../../../services/activity.service'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 
@@ -124,7 +125,7 @@ function ActivityStats(props) {
 
   return (
     <>
-      <Row className={'m-0 mt-3'} style={{ height: '45vh' }}>
+      <Row className={'m-0 mt-3 gy-2'} style={{ height: isMobileView() ? '100vh' : '45vh' }}>
         <Col md={6}>
           <CustomCard
             $fontColor={props.theme.font}
@@ -167,7 +168,7 @@ function ActivityStats(props) {
           )}
         </Col>
       </Row>
-      <Row className={'m-0 mt-3'} style={{ height: '45vh' }}>
+      <Row className={'m-0 mt-3 gy-2'} style={{ height: isMobileView() ? '70vh' : '45vh' }}>
         <Col md={6}>
           {chartCard(
             'BAR',

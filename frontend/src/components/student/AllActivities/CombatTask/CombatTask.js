@@ -106,7 +106,10 @@ function CombatTask(props) {
             margin: isMobileDisplay ? '0 0 85px 0' : 0
           }}
         >
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: props.theme.primary, height: '6vh' }}>
+          <Row
+            className='p-2 rounded mx-2'
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '6vh' }}
+          >
             <Header activityName={task.name} activityType={Activity.TASK} />
           </Row>
           <VerticalSpacer height={'2vh'} />

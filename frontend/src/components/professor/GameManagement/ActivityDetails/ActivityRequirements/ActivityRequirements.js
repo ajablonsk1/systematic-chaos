@@ -11,6 +11,7 @@ import CreatableInput from '../../../../general/CreatableInput/CreatableInput'
 import ActivityService from '../../../../../services/activity.service'
 import { successToast } from '../../../../../utils/toasts'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../../utils/mobileHelper'
 
 registerLocale('pl', pl)
 
@@ -126,7 +127,10 @@ function ActivityRequirements(props) {
 
   return (
     <>
-      <Row className={'m-0 px-3 d-flex flex-column align-items-center'} style={{ height: '85vh', overflowY: 'auto' }}>
+      <Row
+        className={'m-0 d-flex flex-column align-items-center'}
+        style={{ height: '85vh', overflowY: 'auto', padding: isMobileView() ? 0 : '0 1rem' }}
+      >
         <Row>
           <CustomTable
             $fontColor={props.theme.font}

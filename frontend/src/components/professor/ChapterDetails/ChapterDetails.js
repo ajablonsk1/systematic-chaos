@@ -154,7 +154,7 @@ function ChapterDetails(props) {
   }
 
   return (
-    <Content style={{ overflowX: 'hidden' }}>
+    <Content style={{ overflowX: 'hidden', marginBottom: isMobileView() ? 60 : 0 }}>
       <Row className={'px-0 m-0'} style={{ height: '100vh' }}>
         <Col className={'m-0 h-100'} md={6}>
           <Col md={12} className={'h-50'}>
