@@ -18,7 +18,11 @@ export const getRemainingDate = (endDateString) => {
   return moment.duration(endDate.diff(today))
 }
 
-export const convertSecondsToStringInfo = (endDate) => {
+export const convertDateToStringInfo = (endDate) => {
+  if (!(endDate instanceof Date && isFinite(endDate))) {
+    return 'Invalid date object given'
+  }
+
   const duration = getRemainingDate(endDate)
   const days = Math.floor(duration.asDays())
   const stringFormat = moment.utc(duration.asSeconds() * 1000).format('HH:mm:ss')

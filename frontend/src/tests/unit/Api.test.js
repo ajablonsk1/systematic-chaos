@@ -1,4 +1,5 @@
-import { convertSecondsToStringInfo, getRemainingDate, parseJwt } from '../../utils/Api'
+import { convertDateToStringInfo, getRemainingDate, parseJwt } from '../../utils/Api'
+import { commonInvalidObjects } from './storage/commonInvalidObjects'
 import { testEndDates } from './storage/endDates'
 import { testInvalidTokens, testProfessorTokens, testStudentTokens } from './storage/tokens'
 
@@ -47,11 +48,19 @@ describe('getRemainingDate() tests', () => {
 })
 
 describe('convertSecondsToStringInfo() tests', () => {
-  it.each(testEndDates)('returns correct date from seconds %s', (endDate) => {
+  it.each(testEndDates)('returns correct date string from given date %s', (endDate) => {
     //when
-    const stringInfo = convertSecondsToStringInfo(endDate.date)
+    const stringInfo = convertDateToStringInfo(endDate.dateObject)
 
     //then
     expect(stringInfo).toEqual(endDate.expectedStringInfo)
+  })
+
+  it.each(commonInvalidObjects)('returns "Invalid date object given" for invalid objects given', (invalidObject) => {
+    //when
+    const stringInfo = convertDateToStringInfo(invalidObject)
+
+    //then
+    expect(stringInfo).toEqual('Invalid date object given')
   })
 })
