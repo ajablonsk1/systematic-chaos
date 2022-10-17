@@ -50,7 +50,7 @@ public class SurveyResultService {
         SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
         if (surveyResult == null) {
             surveyResult = new SurveyResult();
-            student.setPoints(survey.getMaxPoints());
+            surveyResult.setPointsReceived(survey.getMaxPoints());
             badgeService.checkAllBadges();
         }
 
