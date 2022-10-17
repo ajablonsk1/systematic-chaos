@@ -5,10 +5,9 @@ import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongPointsNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.feedback.Feedback;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
-import com.example.api.model.activity.feedback.UserFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
@@ -95,10 +94,10 @@ public class FeedbackValidator {
         return professorFeedbackRepo.save(feedback);
     }
 
-    public void validateFeedbackIsNotNull(UserFeedback feedback, Long id, String email) throws EntityNotFoundException {
+    public void validateFeedbackIsNotNull(SurveyResult feedback, Long id, String email) throws EntityNotFoundException {
         if(feedback == null) {
-            log.error("UserFeedback for survey with id {} and user {} not found in database", id, email);
-            throw new EntityNotFoundException("UserFeedback for survey with id " + id + " and user " + email + " not found in database");
+            log.error("SurveyResult for survey with id {} and user {} not found in database", id, email);
+            throw new EntityNotFoundException("SurveyResult for survey with id " + id + " and user " + email + " not found in database");
         }
     }
 

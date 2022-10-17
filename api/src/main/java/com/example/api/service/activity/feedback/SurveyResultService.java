@@ -1,12 +1,12 @@
 package com.example.api.service.activity.feedback;
 
-import com.example.api.dto.request.activity.feedback.SaveUserFeedbackForm;
-import com.example.api.dto.response.activity.feedback.UserFeedbackInfoResponse;
+import com.example.api.dto.request.activity.result.SurveyResultForm;
+import com.example.api.dto.response.activity.result.SurveyResultInfoResponse;
 import com.example.api.error.exception.*;
-import com.example.api.model.activity.feedback.UserFeedback;
+import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.Survey;
 import com.example.api.model.user.User;
-import com.example.api.repo.activity.feedback.UserFeedbackRepo;
+import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
@@ -24,8 +24,8 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class UserFeedbackService {
-    private final UserFeedbackRepo userFeedbackRepo;
+public class SurveyResultService {
+    private final SurveyResultRepo surveyResultRepo;
     private final UserRepo userRepo;
     private final SurveyRepo surveyRepo;
     private final UserValidator userValidator;
@@ -34,11 +34,11 @@ public class UserFeedbackService {
     private final BadgeService badgeService;
     private final FeedbackValidator feedbackValidator;
 
-    public UserFeedback saveUserFeedback(UserFeedback feedback) {
-        return userFeedbackRepo.save(feedback);
+    public SurveyResult saveSurveyResult(SurveyResult surveyResult) {
+        return surveyResultRepo.save(surveyResult);
     }
 
-    public UserFeedbackInfoResponse saveUserFeedback(SaveUserFeedbackForm form) throws RequestValidationException {
+    public SurveyResultInfoResponse saveSurveyResult(SurveyResultForm form) throws RequestValidationException {
         String email = authService.getAuthentication().getName();
         log.info("Saving user {} feedback for survey with id {}", email, form.getSurveyId());
         User student = userRepo.findUserByEmail(email);
@@ -47,27 +47,27 @@ public class UserFeedbackService {
         Survey survey = surveyRepo.findSurveyById(id);
         activityValidator.validateActivityIsNotNull(survey, id);
 
-        UserFeedback feedback = userFeedbackRepo.findUserFeedbackBySurveyAndFrom(survey, student);
-        if (feedback == null) {
-            feedback = new UserFeedback();
+        SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
+        if (surveyResult == null) {
+            surveyResult = new SurveyResult();
             student.setPoints(survey.getMaxPoints());
             badgeService.checkAllBadges();
         }
 
-        feedback.setContent(form.getFeedback());
-        feedback.setFrom(student);
+        surveyResult.setFeedback(form.getFeedback());
+        surveyResult.setUser(student);
 
         if (form.getRate() < 1 || form.getRate() > 5) {
-            log.error("UserFeedback rate {} is out of range", form.getRate());
+            log.error("SurveyResult rate {} is out of range", form.getRate());
             throw new RequestValidationException(ExceptionMessage.USER_FEEDBACK_RATE_OUT_OF_RANGE);
         }
-        feedback.setRate(form.getRate());
-        feedback.setSurvey(survey);
-        userFeedbackRepo.save(feedback);
-        return new UserFeedbackInfoResponse(feedback);
+        surveyResult.setRate(form.getRate());
+        surveyResult.setSurvey(survey);
+        surveyResultRepo.save(surveyResult);
+        return new SurveyResultInfoResponse(surveyResult);
     }
 
-    public UserFeedbackInfoResponse getUserFeedback(Long surveyId) throws WrongUserTypeException, EntityNotFoundException {
+    public SurveyResultInfoResponse getSurveyResult(Long surveyId) throws WrongUserTypeException, EntityNotFoundException {
         String email = authService.getAuthentication().getName();
         log.info("Getting user {} feedback for survey with id {}", email, surveyId);
         User student = userRepo.findUserByEmail(email);
@@ -76,10 +76,10 @@ public class UserFeedbackService {
         Survey survey = surveyRepo.findSurveyById(surveyId);
         activityValidator.validateActivityIsNotNull(survey, surveyId);
 
-        UserFeedback feedback = userFeedbackRepo.findUserFeedbackBySurveyAndFrom(survey, student);
-        feedbackValidator.validateFeedbackIsNotNull(feedback, surveyId, email);
+        SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
+        feedbackValidator.validateFeedbackIsNotNull(surveyResult, surveyId, email);
 
-        return new UserFeedbackInfoResponse(feedback);
+        return new SurveyResultInfoResponse(surveyResult);
 
     }
 }

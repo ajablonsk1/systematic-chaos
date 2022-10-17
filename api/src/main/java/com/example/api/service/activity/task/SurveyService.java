@@ -3,16 +3,16 @@ package com.example.api.service.activity.task;
 import com.example.api.dto.request.activity.task.create.CreateSurveyChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateSurveyForm;
 import com.example.api.dto.request.activity.task.edit.EditSurveyForm;
-import com.example.api.dto.response.activity.feedback.UserFeedbackInfoResponse;
+import com.example.api.dto.response.activity.result.SurveyResultInfoResponse;
 import com.example.api.dto.response.activity.task.SurveyInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.feedback.UserFeedback;
+import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.Survey;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.user.User;
-import com.example.api.repo.activity.feedback.UserFeedbackRepo;
+import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
@@ -41,7 +41,7 @@ public class SurveyService {
     private final AuthenticationService authService;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
-    private final UserFeedbackRepo userFeedbackRepo;
+    private final SurveyResultRepo surveyResultRepo;
 
     public Survey saveSurvey(Survey survey){
         return surveyRepo.save(survey);
@@ -56,9 +56,9 @@ public class SurveyService {
         log.info("Fetching survey info");
 
         SurveyInfoResponse response = new SurveyInfoResponse(survey);
-        UserFeedback feedback = userFeedbackRepo.findUserFeedbackBySurveyAndFrom(survey, student);
+        SurveyResult feedback = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
         if (feedback != null) {
-            response.setFeedback(new UserFeedbackInfoResponse(feedback));
+            response.setFeedback(new SurveyResultInfoResponse(feedback));
         }
 
         return response;

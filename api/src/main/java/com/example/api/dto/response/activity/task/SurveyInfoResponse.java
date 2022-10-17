@@ -1,6 +1,6 @@
 package com.example.api.dto.response.activity.task;
 
-import com.example.api.dto.response.activity.feedback.UserFeedbackInfoResponse;
+import com.example.api.dto.response.activity.result.SurveyResultInfoResponse;
 import com.example.api.model.activity.task.Survey;
 import lombok.*;
 
@@ -13,7 +13,7 @@ public class SurveyInfoResponse {
     private String name;
     private String description;
     private Double experience;
-    private UserFeedbackInfoResponse feedback;
+    private SurveyResultInfoResponse feedback;
 
     public SurveyInfoResponse(Survey survey) {
         this.name = survey.getTitle();
