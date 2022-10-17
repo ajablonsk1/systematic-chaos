@@ -4,7 +4,7 @@ import { Activity, ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '.
 import { useEffect, useMemo, useState } from 'react'
 
 import StudentService from '../../../../../services/student.service'
-import { convertSecondsToStringInfo } from '../../../../../utils/Api'
+import { convertDateToStringInfo } from '../../../../../utils/Api'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { CustomTable } from '../../../GameCardPage/gameCardContentsStyle'
 import moment from 'moment'
@@ -123,7 +123,7 @@ function ActivityContent(props) {
       },
       {
         name: 'Pozostały czas na rozwiązanie zadania',
-        value: startDate && endDate ? convertSecondsToStringInfo(endDate) : '-'
+        value: startDate && endDate ? convertDateToStringInfo(endDate) : '-'
       }
     ]
 
