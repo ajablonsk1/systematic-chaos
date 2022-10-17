@@ -1,32 +1,22 @@
-import { getSortIcon } from '../../components/general/Ranking/sortHelper'
-import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
-
-const ASC = 'ASC'
-const DESC = 'DESC'
+import { getSortIcon, nextSortingOrder } from '../../components/general/Ranking/sortHelper'
+import { ICONS_DATA } from './storage/sortIconsData'
 
 describe('Sort icon getter tests', () => {
-  it('should return appropriate icon for ascending sorting', () => {
+  it.each(ICONS_DATA)('should return appropriate icon for given sorting order', (iconData) => {
     // when
-    const icon = getSortIcon(ASC)
+    const icon = getSortIcon(iconData.order)
 
     // then
-    expect(icon).toBe(faArrowUp)
+    expect(icon).toBe(iconData.expectedIcon)
   })
-  it('should return appropriate icon for descending sorting', () => {
+})
+
+describe('Sorting order getter tests', () => {
+  it.each(ICONS_DATA)('should return appropriate next sorting order for given order', (iconData) => {
     // when
-    const icon = getSortIcon(DESC)
+    const nextOrder = nextSortingOrder(iconData.order)
 
     // then
-    expect(icon).toBe(faArrowDown)
-  })
-  it('should return descending sorting icon for wrong string as the default icon', () => {
-    //given
-    const exampleString = 'test'
-
-    // when
-    const icon = getSortIcon(exampleString)
-
-    // then
-    expect(icon).toBe(faArrowDown)
+    expect(nextOrder).toBe(iconData.nextOrder)
   })
 })
