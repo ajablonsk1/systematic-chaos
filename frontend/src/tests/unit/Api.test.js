@@ -2,6 +2,16 @@ import { convertSecondsToStringInfo, getRemainingDate, parseJwt } from '../../ut
 import { testEndDates } from './storage/endDates'
 import { testInvalidTokens, testProfessorTokens, testStudentTokens } from './storage/tokens'
 
+// useFakeTimers does not work in describe-scope so we apply it to all tests in the file
+// it does not change anything in them anyway
+beforeAll(() => {
+  jest.useFakeTimers().setSystemTime(new Date('2022-05-13T12:00:00.000Z'))
+})
+
+afterAll(() => {
+  jest.useRealTimers()
+})
+
 describe('parseJwt() tests', () => {
   it.each(testStudentTokens)('student token %s parsed correctly', (token) => {
     //when
@@ -27,10 +37,6 @@ describe('parseJwt() tests', () => {
 })
 
 describe('getRemainingDate() tests', () => {
-  beforeAll(() => {
-    jest.useFakeTimers().setSystemTime(new Date('2022-05-13T12:00:00.000Z'))
-  })
-
   it.each(testEndDates)('returns correct remaining time to date %s', (endDate) => {
     //when
     const remainingDate = getRemainingDate(endDate.date)
