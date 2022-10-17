@@ -65,7 +65,7 @@ describe('getRemainingDate() tests', () => {
   )
 })
 
-describe('convertSecondsToStringInfo() tests', () => {
+describe('convertDateToStringInfo() tests', () => {
   it.each(testEndDates)('returns correct date string from given date %s', (endDate) => {
     //when
     const stringInfo = convertDateToStringInfo(endDate.dateObject)
