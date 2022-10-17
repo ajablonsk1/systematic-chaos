@@ -11,7 +11,7 @@ export const parseJwt = (token) => {
 }
 
 export const getRemainingDate = (endDateString) => {
-  if (endDateString == undefined) {
+  if (endDateString === undefined) {
     return NaN
   }
 

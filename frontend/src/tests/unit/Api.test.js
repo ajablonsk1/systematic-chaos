@@ -28,9 +28,16 @@ describe('parseJwt() tests', () => {
     //then
     expect(parsedToken).toEqual(token.token_data)
   })
-  it.each(testInvalidTokens)('invalid token %s throws error', (token) => {
+  it.each(testInvalidTokens)('invalid token %s returns null', (token) => {
     //when
     const parsedToken = parseJwt(token.access_token)
+
+    //then
+    expect(parsedToken).toBeNull()
+  })
+  it.each(commonInvalidObjects)('invalid object %s returns null', (invalidObject) => {
+    //when
+    const parsedToken = parseJwt(invalidObject)
 
     //then
     expect(parsedToken).toBeNull()
