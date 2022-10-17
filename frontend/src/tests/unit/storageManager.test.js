@@ -1,5 +1,5 @@
 import { getTimer, isStudent } from '../../utils/storageManager'
-import { testInvalidTokens, testProfessorTokens, testStudentTokens } from './testHelpers/tokens'
+import { testInvalidTokens, testProfessorTokens, testStudentTokens } from './storage/tokens'
 
 describe('timer tests', () => {
   const timeCases = [

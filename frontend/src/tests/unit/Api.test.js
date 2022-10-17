@@ -1,6 +1,6 @@
 import { convertSecondsToStringInfo, getRemainingDate, parseJwt } from '../../utils/Api'
-import { testEndDates } from './testHelpers/endDates'
-import { testInvalidTokens, testProfessorTokens, testStudentTokens } from './testHelpers/tokens'
+import { testEndDates } from './storage/endDates'
+import { testInvalidTokens, testProfessorTokens, testStudentTokens } from './storage/tokens'
 
 describe('parseJwt() tests', () => {
   it.each(testStudentTokens)('student token %s parsed correctly', (token) => {
