@@ -351,6 +351,7 @@ public class DatabaseConfig {
             accessDateService.saveAccessDate(ac2);
 
             GraphTask graphTask = new GraphTask();
+            graphTask.setIsBlocked(false);
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
             graphTask.setTitle("Dżungla kabli");
             graphTask.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
@@ -416,6 +417,7 @@ public class DatabaseConfig {
             List<Requirement> graphTaskTwoReq = requirementService.getDefaultRequirements();
 
             GraphTask graphTaskTwo = new GraphTask();
+            graphTaskTwo.setIsBlocked(false);
             graphTaskTwo.setQuestions(List.of(startQuestionTwo, questionTwo1, questionTwo2, questionTwo3,  questionTwo4, questionTwo5));
             graphTaskTwo.setTitle("Dżungla kabli II");
             graphTaskTwo.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
@@ -430,6 +432,7 @@ public class DatabaseConfig {
             graphTaskService.saveGraphTask(graphTaskTwo);
 
             FileTask fileTask = new FileTask();
+            fileTask.setIsBlocked(false);
             fileTask.setPosX(3);
             fileTask.setPosY(3);
             fileTask.setTitle("Niszczator kabli");
@@ -442,6 +445,7 @@ public class DatabaseConfig {
             fileTaskService.saveFileTask(fileTask);
 
             Info info1 = new Info();
+            info1.setIsBlocked(false);
             info1.setPosX(3);
             info1.setPosY(0);
             info1.setTitle("Skrętki");
@@ -463,6 +467,7 @@ public class DatabaseConfig {
 
 
             Survey survey = new Survey();
+            survey.setIsBlocked(false);
             survey.setTitle("Example map feedback");
             survey.setDescription("Pomóż nam polepszyć kurs dzieląc się swoją opinią!");
             survey.setPosX(7);

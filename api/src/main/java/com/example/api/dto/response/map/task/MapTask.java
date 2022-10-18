@@ -2,17 +2,16 @@ package com.example.api.dto.response.map.task;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class MapTask {
+@NoArgsConstructor
+public abstract class MapTask {
     private Long id;
     private Integer posX;
     private Integer posY;
     private ActivityType type;
     private String title;
     private Double points;
-    private Boolean isFulfilled;
-    private Boolean isCompleted;
-    private Boolean isActivityBlocked;
 }

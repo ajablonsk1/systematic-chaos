@@ -19,12 +19,12 @@ public class ChapterInfoResponse {
     private Integer noFileTasks;
     private Double maxPoints;
     private String mapSize;
-    private List<MapTask> mapTasks;
+    private List<? extends MapTask> mapTasks;
     private Integer posX;
     private Integer posY;
     private Long imageId;
 
-    public ChapterInfoResponse(Chapter chapter, List<MapTask> mapTasks) {
+    public ChapterInfoResponse(Chapter chapter, List<? extends MapTask> mapTasks) {
         this.id = chapter.getId();
         this.name = chapter.getName();
         this.noActivities = chapter.getNoActivities();
