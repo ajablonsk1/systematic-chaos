@@ -107,7 +107,7 @@ public class GraphTaskService {
     public List<GraphTask> getStudentGraphTasks(User student) {
         return graphTaskRepo.findAll()
                 .stream()
-                .filter(graphTask -> !requirementService.areRequirementsDefault(graphTask.getRequirements()))
+                .filter(graphTask -> !graphTask.getIsBlocked())
                 .toList();
     }
 

@@ -8,6 +8,7 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;
@@ -65,8 +66,7 @@ public class ActivityMapService {
         return getMapTasks(activityMap, null); // results for professor
     }
 
-    public List<MapTask> getMapTasks(ActivityMap activityMap, User student) {
-        boolean alwaysFulfilledForProfessor = student != null;
+    public List<MapTask> getMapTasks(ActivityMap activityMap, User user) {
         List<MapTask> graphTasks = activityMap.getGraphTasks()
                 .stream()
                 .map(graphTask -> new MapTask(
@@ -76,8 +76,8 @@ public class ActivityMapService {
                         ActivityType.EXPEDITION,
                         graphTask.getTitle(),
                         graphTask.getMaxPoints(),
-                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, graphTask.getRequirements()),
-                        isGraphTaskCompleted(graphTask, student),
+                        areRequirementsFulfilled(user, graphTask),
+                        isGraphTaskCompleted(graphTask, user),
                         !requirementService.areRequirementsDefault(graphTask.getRequirements())))
                 .toList();
         List<MapTask> fileTasks = activityMap.getFileTasks()
@@ -89,8 +89,8 @@ public class ActivityMapService {
                         ActivityType.TASK,
                         fileTask.getTitle(),
                         fileTask.getMaxPoints(),
-                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, fileTask.getRequirements()),
-                        isFileTaskCompleted(fileTask, student),
+                        areRequirementsFulfilled(user, fileTask),
+                        isFileTaskCompleted(fileTask, user),
                         !requirementService.areRequirementsDefault(fileTask.getRequirements())))
                 .toList();
         List<MapTask> infos = activityMap.getInfos()
@@ -102,8 +102,8 @@ public class ActivityMapService {
                         ActivityType.INFO,
                         info.getTitle(),
                         0.0,
-                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, info.getRequirements()),
-                        isInfoCompleted(student),
+                        areRequirementsFulfilled(user, info),
+                        isInfoCompleted(user),
                         !requirementService.areRequirementsDefault(info.getRequirements())))
                 .toList();
         List<MapTask> surveys = activityMap.getSurveys()
@@ -115,14 +115,21 @@ public class ActivityMapService {
                         ActivityType.SURVEY,
                         survey.getTitle(),
                         survey.getPoints(),
-                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, survey.getRequirements()),
-                        isSurveyCompleted(survey, student),
+                        areRequirementsFulfilled(user, survey),
+                        isSurveyCompleted(survey, user),
                         !requirementService.areRequirementsDefault(survey.getRequirements())))
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)
                 .sorted(Comparator.comparingLong(MapTask::getId))
                 .toList();
+    }
+
+    private boolean areRequirementsFulfilled(User user, Activity activity) {
+        if (user.getAccountType() == AccountType.PROFESSOR) {
+            return true;
+        }
+        return requirementService.areRequirementsFulfilled(activity.getRequirements());
     }
 
     private boolean isGraphTaskCompleted(GraphTask graphTask, User student) {

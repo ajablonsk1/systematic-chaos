@@ -209,7 +209,7 @@ public class DashboardService {
 
         Requirement requirement = activity.getRequirements()
                 .stream()
-                .filter(req -> req.isSelected() && Objects.nonNull(req.getDateTo()))
+                .filter(req -> req.isIsSelected() && Objects.nonNull(req.getDateTo()))
                 .findAny()
                 .orElse(null);
         Long availableUntil = Objects.nonNull(requirement) ? requirement.getDateTo() : null;
