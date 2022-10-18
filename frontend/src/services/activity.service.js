@@ -1,37 +1,38 @@
-import { axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiDelete, axiosApiGet, axiosApiPost } from '../utils/axios'
 import {
-  ACTIVITY_MAP,
-  FILE_TASK_JSON,
-  GET_ACTIVITIES_LIST,
-  GET_ACTIVITY_RESULT_LIST,
-  GET_ACTIVITY_STATS,
-  GET_FILTERED_ACTIVITY_RESULT_LIST,
-  GRAPH_TASK_JSON,
-  INFO_TASK_JSON,
-  SURVEY_TASK_JSON
+  DELETE_ACTIVITY,
+  GET_ACTIVITY_EDIT_INFO,
+  GET_MAP,
+  GET_RANKING_ACTIVITY,
+  GET_RANKING_ACTIVITY_SEARCH,
+  GET_TASK_ACTIVITIES,
+  GET_TASK_REQUIREMENTS,
+  GET_TASK_RESULT_ACTIVITY_STATISTICS,
+  POST_ACTIVITY_EDIT,
+  POST_TASK_REQUIREMENTS
 } from './urls'
 
 class ActivityService {
   getActivityMap(mapId) {
-    return axiosApiGet(ACTIVITY_MAP, { activityMapId: mapId }).catch((error) => {
+    return axiosApiGet(GET_MAP, { activityMapId: mapId }).catch((error) => {
       throw error
     })
   }
 
   getActivitiesList() {
-    return axiosApiGet(GET_ACTIVITIES_LIST).catch((error) => {
+    return axiosApiGet(GET_TASK_ACTIVITIES).catch((error) => {
       throw error
     })
   }
 
   getStudentsResultList(activityId) {
-    return axiosApiGet(GET_ACTIVITY_RESULT_LIST, { activityID: activityId }).catch((error) => {
+    return axiosApiGet(GET_RANKING_ACTIVITY, { activityID: activityId }).catch((error) => {
       throw error
     })
   }
 
   getFilteredStudentsResultList(activityId, query) {
-    return axiosApiGet(GET_FILTERED_ACTIVITY_RESULT_LIST, {
+    return axiosApiGet(GET_RANKING_ACTIVITY_SEARCH, {
       activityID: activityId,
       search: query
     }).catch((error) => {
@@ -40,66 +41,47 @@ class ActivityService {
   }
 
   getActivityStats(activityId) {
-    return axiosApiGet(GET_ACTIVITY_STATS, { activityID: activityId }).catch((error) => {
+    return axiosApiGet(GET_TASK_RESULT_ACTIVITY_STATISTICS, { activityID: activityId }).catch((error) => {
       throw error
     })
   }
 
-  getGraphTaskJson() {
-    return axiosApiGet(GRAPH_TASK_JSON).catch((error) => {
-      throw error
-    })
-  }
-
-  setGraphTaskJson(chapterId, form) {
-    return axiosApiPost(GRAPH_TASK_JSON, {
-      chapterId: chapterId,
-      form: form
+  getActivityRequirements(activityId) {
+    return axiosApiGet(GET_TASK_REQUIREMENTS, {
+      activityId: activityId
     }).catch((error) => {
       throw error
     })
   }
 
-  getFileTaskJson() {
-    return axiosApiGet(FILE_TASK_JSON).catch((error) => {
-      throw error
-    })
-  }
-
-  setFileTaskJson(chapterId, form) {
-    return axiosApiPost(FILE_TASK_JSON, {
-      chapterId: chapterId,
-      form: form
+  setActivityRequirements(activityId, requirements) {
+    return axiosApiPost(POST_TASK_REQUIREMENTS, {
+      activityId: activityId,
+      requirements: requirements
     }).catch((error) => {
       throw error
     })
   }
 
-  getInfoTaskJson() {
-    return axiosApiGet(INFO_TASK_JSON).catch((error) => {
+  getActivityInfo(activityID) {
+    return axiosApiGet(GET_ACTIVITY_EDIT_INFO, { activityID }).catch((error) => {
       throw error
     })
   }
 
-  setInfoTaskJson(chapterId, form) {
-    return axiosApiPost(INFO_TASK_JSON, {
-      chapterId: chapterId,
-      form: form
+  setActivityEditData(activityID, activityType, activityBody) {
+    return axiosApiPost(POST_ACTIVITY_EDIT, {
+      activityID,
+      activityType,
+      activityBody
     }).catch((error) => {
       throw error
     })
   }
 
-  getSurveyTaskJson() {
-    return axiosApiGet(SURVEY_TASK_JSON).catch((error) => {
-      throw error
-    })
-  }
-
-  setSurveyTaskJson(chapterId, form) {
-    return axiosApiPost(SURVEY_TASK_JSON, {
-      chapterId: chapterId,
-      form: form
+  deleteActivity(activityId) {
+    return axiosApiDelete(DELETE_ACTIVITY, {
+      activityID: activityId
     }).catch((error) => {
       throw error
     })

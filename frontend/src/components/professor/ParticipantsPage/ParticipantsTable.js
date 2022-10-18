@@ -6,8 +6,12 @@ import { Button } from 'react-bootstrap'
 import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import BonusPointsModal from './BonusPointsModal'
+import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function ParticipantsTable(props) {
+  const isMobileDisplay = isMobileView()
+
   const [changeGroupModalOpen, setChangeGroupModalOpen] = useState(false)
   const [bonusPointsModalOpen, setBonusPointsModalOpen] = useState(false)
   const [chosenStudent, setChosenStudent] = useState()
@@ -39,8 +43,13 @@ function ParticipantsTable(props) {
   }, [props, changeGroupModalOpen])
 
   return (
-    <GameCardOptionPick style={{ maxHeight: '90vh', overflowY: 'auto' }}>
-      <TableContainer>
+    <GameCardOptionPick style={{ maxHeight: '91vh', overflowY: 'auto', marginBottom: isMobileDisplay ? 85 : 'auto' }}>
+      <TableContainer
+        style={{ width: isMobileDisplay ? '200%' : '100%' }}
+        $fontColor={props.theme.font}
+        $background={props.theme.primary}
+        $tdColor={props.theme.secondary}
+      >
         <thead>
           <tr>
             <th>Nazwa grupy</th>
@@ -58,7 +67,7 @@ function ParticipantsTable(props) {
                 </td>
                 <td className={'py-2 text-center'}>
                   <Button
-                    style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
+                    style={{ backgroundColor: props.theme.success, border: 'none' }}
                     onClick={() => {
                       setChosenStudent(student)
                       setChangeGroupModalOpen(true)
@@ -68,7 +77,7 @@ function ParticipantsTable(props) {
                   </Button>
                   <Button
                     className={'ms-2'}
-                    style={{ backgroundColor: 'var(--button-green)', border: 'none' }}
+                    style={{ backgroundColor: props.theme.success, border: 'none' }}
                     onClick={() => {
                       setChosenStudent(student)
                       setBonusPointsModalOpen(true)
@@ -98,4 +107,10 @@ function ParticipantsTable(props) {
   )
 }
 
-export default ParticipantsTable
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(ParticipantsTable)

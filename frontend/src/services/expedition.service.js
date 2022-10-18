@@ -1,59 +1,38 @@
 import { axiosApiGet, axiosApiPost } from '../utils/axios'
 import {
-  GET_REMAINING_TIME,
-  GRAPH_GET_TASK_ANSWER_ID,
-  GRAPH_QUESTION,
-  GRAPH_QUESTION_NEXT,
-  GRAPH_TASK_GET_ALL_POINTS,
-  GRAPH_TASK_GET_CLOSED_POINTS,
-  GRAPH_TASK_GET_MAX_AVAILABLE_ALL,
-  GRAPH_TASK_GET_MAX_AVAILABLE_CLOSED,
-  GRAPH_TASK_GET_MAX_AVAILABLE_OPEN,
-  GRAPH_TASK_RESULT_URL,
-  GRAPH_TASK_SEND_ANSWER,
-  GRAPH_TASK_URL,
-  SEND_EXPEDITION_FINISHED_TIME,
-  SET_START_TIME
+  GET_QUESTION_INFO,
+  GET_TASK_GRAPH_MAP,
+  GET_TASK_GRAPH_RESULT_TIME_REMAINING,
+  GET_TASK_GRAPH_RESULT,
+  GET_TASK_GRAPH,
+  POST_QUESTION_ACTION,
+  POST_TASK_GRAPH_RESULT_START,
+  GET_TASK_GRAPH_RESULT_POINTS_ALL,
+  GET_TASK_GRAPH_RESULT_POINTS_CLOSED,
+  GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_CLOSED,
+  GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_OPENED,
+  GET_TASK_GRAPH_CREATE,
+  POST_TASK_GRAPH_CREATE
 } from './urls'
 
 class ExpeditionService {
   // returns all info about activity
   getExpedition(activityId) {
-    return axiosApiGet(GRAPH_TASK_URL, { id: activityId }).catch((error) => {
+    return axiosApiGet(GET_TASK_GRAPH, { id: activityId }).catch((error) => {
       throw error
     })
   }
 
   getExpeditionScore(activityId) {
-    return axiosApiGet(GRAPH_TASK_RESULT_URL, {
+    return axiosApiGet(GET_TASK_GRAPH_RESULT, {
       graphTaskId: activityId
-    }).catch((error) => {
-      throw error
-    })
-  }
-
-  saveAnswer(answer) {
-    return axiosApiPost(GRAPH_TASK_SEND_ANSWER, answer).catch((error) => {
-      throw error
-    })
-  }
-
-  getTaskAnswerId(activityId) {
-    return axiosApiPost(GRAPH_GET_TASK_ANSWER_ID, {
-      graphTaskId: activityId
-    }).catch(() => {})
-  }
-
-  getActivityMaxPoints(taskResultId) {
-    return axiosApiGet(GRAPH_TASK_GET_MAX_AVAILABLE_ALL, {
-      graphTaskResultId: taskResultId
     }).catch((error) => {
       throw error
     })
   }
 
   getExpeditionAllPoints(taskResultId) {
-    return axiosApiGet(GRAPH_TASK_GET_ALL_POINTS, {
+    return axiosApiGet(GET_TASK_GRAPH_RESULT_POINTS_ALL, {
       graphTaskResultId: taskResultId
     }).catch((error) => {
       throw error
@@ -61,31 +40,15 @@ class ExpeditionService {
   }
 
   getExpeditionPointsClosed(taskResultId) {
-    return axiosApiGet(GRAPH_TASK_GET_CLOSED_POINTS, {
+    return axiosApiGet(GET_TASK_GRAPH_RESULT_POINTS_CLOSED, {
       graphTaskResultId: taskResultId
     }).catch((error) => {
       throw error
     })
   }
 
-  getQuestion(questionId) {
-    return axiosApiGet(GRAPH_QUESTION, {
-      questionId: questionId
-    }).catch((error) => {
-      throw error
-    })
-  }
-
-  getChildQuestions(parentQuestionId) {
-    return axiosApiGet(GRAPH_QUESTION_NEXT, {
-      questionId: parentQuestionId
-    }).catch((error) => {
-      throw error
-    })
-  }
-
   getExpeditionPointsMaxClosed(taskResultId) {
-    return axiosApiGet(GRAPH_TASK_GET_MAX_AVAILABLE_CLOSED, {
+    return axiosApiGet(GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_CLOSED, {
       graphTaskResultId: taskResultId
     }).catch((error) => {
       throw error
@@ -93,34 +56,59 @@ class ExpeditionService {
   }
 
   getExpeditionPointsMaxOpen(taskResultId) {
-    return axiosApiGet(GRAPH_TASK_GET_MAX_AVAILABLE_OPEN, {
+    return axiosApiGet(GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_OPENED, {
       graphTaskResultId: taskResultId
     }).catch((error) => {
       throw error
     })
   }
 
-  setStartTime(resultId, timeMs) {
-    return axiosApiPost(SET_START_TIME, {
-      resultId: resultId,
-      startDateMillis: timeMs
-    }).catch((error) => {
-      throw error
-    })
-  }
-
   getRemainingTime(resultId) {
-    return axiosApiGet(GET_REMAINING_TIME, {
+    return axiosApiGet(GET_TASK_GRAPH_RESULT_TIME_REMAINING, {
       resultId: resultId
     }).catch((error) => {
       throw error
     })
   }
 
-  setSendTime(resultId, sendDateMillis) {
-    return axiosApiPost(SEND_EXPEDITION_FINISHED_TIME, {
-      resultId: resultId,
-      sendDateMillis: sendDateMillis
+  //reworked flow endpoints
+  setExpeditionStart(activityId) {
+    return axiosApiPost(POST_TASK_GRAPH_RESULT_START, {
+      graphTaskId: activityId
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  // check whether body works correctly
+  sendAction(action) {
+    return axiosApiPost(POST_QUESTION_ACTION, action).catch((error) => {
+      throw error
+    })
+  }
+
+  getCurrentState(activityId) {
+    return axiosApiGet(GET_QUESTION_INFO, { graphTaskId: activityId }).catch((error) => {
+      throw error
+    })
+  }
+
+  getQuestionsList(activityId) {
+    return axiosApiGet(GET_TASK_GRAPH_MAP, { graphTaskID: activityId }).catch((error) => {
+      throw error
+    })
+  }
+
+  getGraphTaskJson() {
+    return axiosApiGet(GET_TASK_GRAPH_CREATE).catch((error) => {
+      throw error
+    })
+  }
+
+  setGraphTaskJson(chapterId, form) {
+    return axiosApiPost(POST_TASK_GRAPH_CREATE, {
+      chapterId: chapterId,
+      form: form
     }).catch((error) => {
       throw error
     })

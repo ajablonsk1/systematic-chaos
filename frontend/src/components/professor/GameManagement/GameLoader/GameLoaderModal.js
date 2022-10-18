@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { getConfigJson } from './mockData'
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from 'react-bootstrap'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
+import { connect } from 'react-redux'
 
 function GameLoaderModal(props) {
   const jsonConfig = getConfigJson()
@@ -28,11 +29,18 @@ function GameLoaderModal(props) {
           <JSONEditor ref={jsonEditorRef} jsonConfig={jsonConfig} />
         </ModalBody>
         <ModalFooter className={'d-flex justify-content-center'}>
-          <Button variant={'danger'} onClick={() => props.setShowModal(false)}>
+          <Button
+            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+            onClick={() => props.setShowModal(false)}
+          >
             Anuluj
           </Button>
 
-          <Button variant={'success'} disabled={isSending} onClick={saveJson}>
+          <Button
+            style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+            disabled={isSending}
+            onClick={saveJson}
+          >
             {isSending ? <Spinner animation={'border'} /> : <span>Zapisz zmiany</span>}
           </Button>
         </ModalFooter>
@@ -43,7 +51,10 @@ function GameLoaderModal(props) {
         </ModalHeader>
         <ModalBody>{props.successModalBody}</ModalBody>
         <ModalFooter className={'d-flex justify-content-center'}>
-          <Button variant={'success'} onClick={() => setSuccessModalVisible(false)}>
+          <Button
+            style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+            onClick={() => setSuccessModalVisible(false)}
+          >
             Zakończ
           </Button>
         </ModalFooter>
@@ -52,4 +63,9 @@ function GameLoaderModal(props) {
   )
 }
 
-export default GameLoaderModal
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(GameLoaderModal)

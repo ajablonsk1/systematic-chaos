@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -20,8 +22,9 @@ import java.util.List;
 @Entity
 public class FileTaskResult extends TaskResult {
     @OneToMany
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<File> files = new LinkedList<>();
-    
 
     @Nullable
     @Lob
@@ -29,6 +32,7 @@ public class FileTaskResult extends TaskResult {
 
     @ManyToOne
     @JoinColumn(name = "fileTask_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private FileTask fileTask;
 
     public boolean isEvaluated;
@@ -36,5 +40,10 @@ public class FileTaskResult extends TaskResult {
     @Override
     public Activity getActivity() {
         return fileTask;
+    }
+
+    @Override
+    public boolean isEvaluated() {
+        return this.getPointsReceived() != null;
     }
 }

@@ -1,21 +1,35 @@
 import React, { useCallback, useEffect, useRef, useState, useLayoutEffect } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Content } from '../../App/AppGeneralStyles'
-import { Button, Card, Col, Collapse, ListGroup, ListGroupItem, Row, Spinner, Table } from 'react-bootstrap'
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  ListGroup,
+  ListGroupItem,
+  OverlayTrigger,
+  Row,
+  Spinner,
+  Table
+} from 'react-bootstrap'
 import { ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../utils/constants'
-import { ActivitiesCard, ButtonsCol, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
+import { ActivitiesCard, ButtonsCol, CustomTooltip, MapCard, SummaryCard, TableRow } from './ChapterDetailsStyles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDown, faArrowUp, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import ChapterMap from '../../student/GameMapPage/Map/ChapterMap'
 import DeletionModal from './DeletionModal'
-import EditChapterModal from './EditChapterModal'
-import { getConfigJson } from '../GameManagement/GameLoader/mockData'
 import ChapterService from '../../../services/chapter.service'
 import EditActivityModal from './EditActivityModal'
 import AddActivityModal from './AddActivityModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
+import ChapterModal from '../GameManagement/ChapterModal/ChapterModal'
+import { successToast } from '../../../utils/toasts'
+import { connect } from 'react-redux'
+import ActivityService from '../../../services/activity.service'
+import { isMobileView } from '../../../utils/mobileHelper'
 
-function ChapterDetails() {
+function ChapterDetails(props) {
   const { id: chapterId } = useParams()
   const [openActivitiesDetailsList, setOpenActivitiesDetailsList] = useState(false)
   const [openConditionsList, setOpenConditionsList] = useState(false)
@@ -27,6 +41,10 @@ function ChapterDetails() {
   const [chapterDetails, setChapterDetails] = useState(undefined)
   const [isAddActivityModalOpen, setIsAddActivityModalOpen] = useState(false)
   const [mapContainerSize, setMapContainerSize] = useState({ x: 0, y: 0 })
+  const [shouldLoadEditChapterModal, setShouldLoadEditChapterModal] = useState(false)
+  const [deleteChapterError, setDeleteChapterError] = useState(undefined)
+  const [reloadMapNeeded, setReloadMapNeeded] = useState(false)
+  const [deleteActivityError, setDeleteActivityError] = useState(undefined)
 
   const mapCardBody = useRef()
 
@@ -68,6 +86,22 @@ function ChapterDetails() {
     getChapterDetails()
   }, [getChapterDetails])
 
+  useEffect(() => {
+    if (chosenActivityData?.jsonConfig) {
+      setIsEditActivityModalOpen(true)
+    }
+  }, [chosenActivityData?.jsonConfig])
+
+  const getActivityInfo = useCallback((activityId) => {
+    ActivityService.getActivityInfo(activityId)
+      .then((response) => {
+        return setChosenActivityData((prevState) => ({ ...prevState, jsonConfig: response.activityBody }))
+      })
+      .catch(() => {
+        setChosenActivityData((prevState) => ({ ...prevState, jsonConfig: null }))
+      })
+  }, [])
+
   const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
       state: { activityId: activityId, activityType: activityType }
@@ -75,17 +109,16 @@ function ChapterDetails() {
   }
 
   const startActivityEdition = (activity) => {
-    // TODO: depending on the type of activity, we will use a different endpoint
+    setReloadMapNeeded(false)
     setChosenActivityData({
       activityId: activity.id,
-      activityType: getActivityTypeName(activity.type),
-      activityName: activity.title,
-      jsonConfig: getConfigJson() // TODO: endpoint response
+      activityType: activity.type,
+      activityName: activity.title
     })
-    setIsEditActivityModalOpen(true)
+    getActivityInfo(activity.id)
   }
 
-  const deleteActivity = (activity) => {
+  const startActivityDeletion = (activity) => {
     setChosenActivityData({
       activityId: activity.id,
       activityType: getActivityTypeName(activity.type),
@@ -94,20 +127,56 @@ function ChapterDetails() {
     setIsDeleteActivityModalOpen(true)
   }
 
+  const deleteChapter = () => {
+    ChapterService.deleteChapter(chapterId)
+      .then(() => {
+        successToast('Rozdział usunięty pomyślnie.')
+        setDeletionModalOpen(false)
+        navigate(TeacherRoutes.GAME_MANAGEMENT.MAIN)
+      })
+      .catch((error) => setDeleteChapterError(error.response?.data?.message ?? ERROR_OCCURRED))
+  }
+
+  const deleteActivity = () => {
+    ActivityService.deleteActivity(chosenActivityData.activityId)
+      .then(() => {
+        successToast(
+          <p>
+            Aktywność <strong>{chosenActivityData.activityName}</strong> usunięta pomyślnie.
+          </p>
+        )
+        setIsDeleteActivityModalOpen(false)
+        getChapterDetails()
+      })
+      .catch((error) => {
+        setDeleteActivityError(error.response?.data?.message ?? ERROR_OCCURRED)
+      })
+  }
+
   return (
-    <Content>
+    <Content style={{ overflowX: 'hidden', marginBottom: isMobileView() ? 60 : 0 }}>
       <Row className={'px-0 m-0'} style={{ height: '100vh' }}>
         <Col className={'m-0 h-100'} md={6}>
           <Col md={12} className={'h-50'}>
-            <MapCard className={'mt-2'}>
+            <MapCard
+              $bodyColor={props.theme.secondary}
+              $headerColor={props.theme.primary}
+              $fontColor={props.theme.font}
+              className={'mt-2'}
+            >
               <Card.Header>Mapa rozdziału</Card.Header>
               <Card.Body ref={mapCardBody}>
-                <ChapterMap chapterId={chapterId} marginNeeded parentSize={mapContainerSize} />
+                <ChapterMap chapterId={chapterId} marginNeeded parentSize={mapContainerSize} reload={reloadMapNeeded} />
               </Card.Body>
             </MapCard>
           </Col>
           <Col md={12} style={{ height: '45%' }}>
-            <SummaryCard className={'h-100'}>
+            <SummaryCard
+              $bodyColor={props.theme.secondary}
+              $headerColor={props.theme.primary}
+              $fontColor={props.theme.font}
+              className={'h-100'}
+            >
               <Card.Header>Podsumowanie rozdziału</Card.Header>
               <Card.Body className={'p-0'}>
                 {chapterDetails === undefined ? (
@@ -119,11 +188,10 @@ function ChapterDetails() {
                     <ListGroupItem>Nazwa rozdziału: {chapterDetails.name}</ListGroupItem>
                     <ListGroupItem>
                       <Row className={'d-flex align-items-center'}>
-                        <Col sm={10}>Liczba dodanych aktywności: {chapterDetails.noActivities}</Col>
-                        <Col sm={2}>
+                        <Col xs={10}>Liczba dodanych aktywności: {chapterDetails.noActivities}</Col>
+                        <Col xs={2} className={'text-end'}>
                           <FontAwesomeIcon
                             icon={openActivitiesDetailsList ? faArrowUp : faArrowDown}
-                            className={'mx-5'}
                             onClick={() => setOpenActivitiesDetailsList(!openActivitiesDetailsList)}
                             aria-controls={'activities'}
                             aria-expanded={openActivitiesDetailsList}
@@ -145,11 +213,10 @@ function ChapterDetails() {
                     <ListGroupItem>Aktualny rozmiar mapy: {chapterDetails.mapSize}</ListGroupItem>
                     <ListGroupItem>
                       <Row className={'d-flex align-items-center'}>
-                        <Col sm={10}>Warunki odblokowania kolejnego rozdziału:</Col>
-                        <Col sm={2}>
+                        <Col xs={10}>Warunki odblokowania kolejnego rozdziału:</Col>
+                        <Col xs={2} className={'text-end'}>
                           <FontAwesomeIcon
                             icon={openConditionsList ? faArrowUp : faArrowDown}
-                            className={'mx-5'}
                             onClick={() => setOpenConditionsList(!openConditionsList)}
                             aria-controls={'conditions'}
                             aria-expanded={openConditionsList}
@@ -173,10 +240,16 @@ function ChapterDetails() {
         </Col>
         <Col className={'m-0 h-100'} md={6}>
           <Col md={12} style={{ height: '85vh' }}>
-            <ActivitiesCard style={{ height: '96.5%' }} className={'mt-2'}>
+            <ActivitiesCard
+              $bodyColor={props.theme.secondary}
+              $headerColor={props.theme.primary}
+              $fontColor={props.theme.font}
+              style={{ height: '96.5%' }}
+              className={'mt-2'}
+            >
               <Card.Header>Lista aktywności</Card.Header>
-              <Card.Body className={'p-0'}>
-                <Table>
+              <Card.Body className={'p-0 mx-100'} style={{ overflow: 'auto' }}>
+                <Table style={{ width: isMobileView() ? '200%' : '100%' }}>
                   <tbody>
                     {chapterDetails === undefined ? (
                       <tr>
@@ -192,38 +265,54 @@ function ChapterDetails() {
                       </tr>
                     ) : (
                       chapterDetails.mapTasks.map((activity, index) => (
-                        <TableRow
+                        <OverlayTrigger
                           key={activity.title + index}
-                          onClick={() => goToChapterDetails(activity.title, activity.id, activity.type)}
+                          placement='top'
+                          overlay={
+                            !activity.areRequirementsAdded ? (
+                              <CustomTooltip style={{ position: 'fixed' }}>
+                                Aktywność nie ma ustawionych wymagań odblokowania. Studenci nie mogą rozwiązywać
+                                aktywności bez ustawionych wymagań.
+                              </CustomTooltip>
+                            ) : (
+                              <></>
+                            )
+                          }
                         >
-                          <td>
-                            <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
-                          </td>
-                          <td>{getActivityTypeName(activity.type)}</td>
-                          <td>{activity.title}</td>
-                          <td>
-                            ({activity.posX}, {activity.posY})
-                          </td>
-                          <td>Pkt: {activity.points}</td>
-                          <td>
-                            <FontAwesomeIcon
-                              icon={faPenToSquare}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                startActivityEdition(activity)
-                              }}
-                            />
-                          </td>
-                          <td>
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                deleteActivity(activity)
-                              }}
-                            />
-                          </td>
-                        </TableRow>
+                          <TableRow
+                            $background={props.theme.primary}
+                            onClick={() => goToChapterDetails(activity.title, activity.id, activity.type)}
+                            style={{ opacity: activity.areRequirementsAdded ? 1 : 0.4 }}
+                          >
+                            <td>
+                              <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />
+                            </td>
+                            <td>{getActivityTypeName(activity.type)}</td>
+                            <td>{activity.title}</td>
+                            <td>
+                              ({activity.posX}, {activity.posY})
+                            </td>
+                            <td>Pkt: {activity.points}</td>
+                            <td>
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  startActivityEdition(activity)
+                                }}
+                              />
+                            </td>
+                            <td>
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  startActivityDeletion(activity)
+                                }}
+                              />
+                            </td>
+                          </TableRow>
+                        </OverlayTrigger>
                       ))
                     )}
                   </tbody>
@@ -233,15 +322,27 @@ function ChapterDetails() {
           </Col>
           <ButtonsCol md={12} style={{ height: '10vh' }}>
             <Link to={TeacherRoutes.GAME_MANAGEMENT.MAIN}>
-              <Button variant={'outline-secondary'}>Wyjdź</Button>
+              <Button style={{ backgroundColor: props.theme.warning, borderColor: props.theme.warning }}>Wyjdź</Button>
             </Link>
-            <Button variant={'outline-primary'} onClick={() => setEditChapterModalOpen(true)}>
+            <Button
+              style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary }}
+              onClick={() => {
+                setEditChapterModalOpen(true)
+                setShouldLoadEditChapterModal(true)
+              }}
+            >
               Edytuj rozdział
             </Button>
-            <Button variant={'outline-danger'} onClick={() => setDeletionModalOpen(true)}>
+            <Button
+              style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+              onClick={() => setDeletionModalOpen(true)}
+            >
               Usuń rozdział
             </Button>
-            <Button variant={'outline-success'} onClick={() => setIsAddActivityModalOpen(true)}>
+            <Button
+              style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+              onClick={() => setIsAddActivityModalOpen(true)}
+            >
               Dodaj aktywność
             </Button>
           </ButtonsCol>
@@ -254,25 +355,43 @@ function ChapterDetails() {
         modalTitle={'Usunięcie rozdziału'}
         modalBody={
           <>
-            Czy na pewno chcesz usunąć rozdział: <br />
-            <strong>{chapterDetails?.name}</strong>?
+            <div>
+              Czy na pewno chcesz usunąć rozdział: <br />
+              <strong>{chapterDetails?.name}</strong>?
+            </div>
+            {deleteChapterError && <p style={{ color: props.theme.danger }}>{deleteChapterError}</p>}
           </>
         }
+        chapterId={chapterId}
+        onClick={deleteChapter}
       />
 
-      <EditChapterModal showModal={isEditChapterModalOpen} setModalOpen={setEditChapterModalOpen} />
+      <ChapterModal
+        showModal={isEditChapterModalOpen}
+        setShowModal={setEditChapterModalOpen}
+        isLoaded={shouldLoadEditChapterModal}
+        chapterDetails={chapterDetails}
+        onSuccess={getChapterDetails}
+      />
 
       <EditActivityModal
         setShowModal={setIsEditActivityModalOpen}
         showModal={isEditActivityModalOpen}
+        activityId={chosenActivityData?.activityId}
+        activityType={chosenActivityData?.activityType}
         jsonConfig={chosenActivityData?.jsonConfig}
         modalHeader={`Edycja aktywności: ${chosenActivityData?.activityName}`}
         successModalBody={
           <p>
-            Twoje zmiany wprowadzone dla aktywności typu: <strong>{chosenActivityData?.activityType}</strong>
+            Twoje zmiany wprowadzone dla aktywności typu:{' '}
+            <strong>{getActivityTypeName(chosenActivityData?.activityType)}</strong>
             <br /> o nazwie: <strong>{chosenActivityData?.activityName}</strong> zakończyła się pomyślnie.
           </p>
         }
+        onSuccess={() => {
+          getChapterDetails()
+          setReloadMapNeeded(true)
+        }}
       />
 
       <DeletionModal
@@ -281,10 +400,14 @@ function ChapterDetails() {
         modalTitle={'Usunięcie aktywności'}
         modalBody={
           <>
-            Czy na pewno chcesz usunąć aktywność typu: <strong>{chosenActivityData?.activityType}</strong>
-            <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
+            <div>
+              Czy na pewno chcesz usunąć aktywność typu: <strong>{chosenActivityData?.activityType}</strong>
+              <br />o nazwie: <strong>{chosenActivityData?.activityName}</strong>?
+            </div>
+            {deleteActivityError && <p style={{ color: props.theme.danger }}>{deleteActivityError}</p>}
           </>
         }
+        onClick={deleteActivity}
       />
 
       <AddActivityModal
@@ -297,4 +420,9 @@ function ChapterDetails() {
   )
 }
 
-export default ChapterDetails
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ChapterDetails)

@@ -7,9 +7,12 @@ import com.example.api.model.util.Url;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -20,7 +23,9 @@ import java.util.List;
 public class Info extends Activity {
     private ActivityType activityType = ActivityType.INFO;
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Url> imageUrls;
 
     @Column(length=1000)

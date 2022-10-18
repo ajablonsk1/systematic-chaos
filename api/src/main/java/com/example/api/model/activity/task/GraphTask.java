@@ -8,8 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,17 +25,18 @@ import java.util.List;
 public class GraphTask extends Task {
     private ActivityType activityType = ActivityType.EXPEDITION;
     @OneToMany
+    @JoinColumn
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Question> questions = new LinkedList<>();
     private Long timeToSolveMillis;
 
     public GraphTask(CreateGraphTaskForm form,
                      User professor,
                      List<Question> questions,
-                     long expireDateMillis,
                      long timeToSolveMillis,
                      double maxPoints){
         super(form.getTitle(), form.getDescription(), form.getPosX(), form.getPosY(), professor,
-                form.getRequiredKnowledge(), maxPoints, expireDateMillis);
+                form.getRequiredKnowledge(), maxPoints);
         this.questions = questions;
         this.timeToSolveMillis = timeToSolveMillis;
         super.setExperience(maxPoints * 10);

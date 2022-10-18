@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import ActivityService from '../../../../services/activity.service'
 import { Button, Spinner, Tab, Tabs } from 'react-bootstrap'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
-import { getGraphElements } from '../../../general/Graph/graphHelper'
+import { getGraphElements, getNodeColor } from '../../../general/Graph/graphHelper'
 import Graph from '../../../general/Graph/Graph'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
+import ExpeditionService from '../../../../services/expedition.service'
+import { connect } from 'react-redux'
 
 function AddGraphTask(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
@@ -14,24 +15,11 @@ function AddGraphTask(props) {
   const [graphElements, setGraphElements] = useState(null)
   const jsonEditorRef = useRef()
 
-  const getNodeColor = (difficulty) => {
-    switch (difficulty) {
-      case 'EASY':
-        return 'green'
-      case 'MEDIUM':
-        return 'orange'
-      case 'HARD':
-        return 'red'
-      default:
-        return 'gray'
-    }
-  }
-
   useEffect(() => {
     if (placeholderJson) {
       const graphInfo = placeholderJson.questions.map((question) => ({
         id: question.questionNum,
-        color: getNodeColor(question.difficulty),
+        borderColor: getNodeColor(question.difficulty),
         targetIds: question.nextQuestions
       }))
 
@@ -40,7 +28,7 @@ function AddGraphTask(props) {
   }, [placeholderJson])
 
   useEffect(() => {
-    ActivityService.getGraphTaskJson()
+    ExpeditionService.getGraphTaskJson()
       .then((response) => {
         setPlaceholderJson(response)
       })
@@ -54,7 +42,7 @@ function AddGraphTask(props) {
     const form = jsonEditorRef.current?.getJson()
 
     if (form) {
-      ActivityService.setGraphTaskJson(props.chapterId, form)
+      ExpeditionService.setGraphTaskJson(props.chapterId, form)
         .then(() => {
           props.onSuccess()
         })
@@ -81,19 +69,29 @@ function AddGraphTask(props) {
           )}
         </Tab>
         <Tab eventKey={'preview'} title={'Podgląd grafu'}>
-          <Graph elements={graphElements} height={'60vh'} />
+          <Graph elements={graphElements} height={'60vh'} layoutName={'klay'} onNodeClick={() => {}} />
           <FontAwesomeIcon icon={faRefresh} onClick={refreshGraph} style={{ cursor: 'pointer' }} />
         </Tab>
       </Tabs>
 
       {placeholderJson && (
         <div className={'d-flex flex-column justify-content-center align-items-center pt-4 gap-2'}>
-          {errorMessage && <p className={'text-danger h6'}>{errorMessage}</p>}
+          {errorMessage && (
+            <p style={{ color: props.theme.danger }} className={'h6'}>
+              {errorMessage}
+            </p>
+          )}
           <div className={'d-flex gap-2'}>
-            <Button variant={'danger'} onClick={props.onCancel}>
+            <Button
+              style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+              onClick={props.onCancel}
+            >
               Anuluj
             </Button>
-            <Button variant={'success'} onClick={() => sendJson()}>
+            <Button
+              style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+              onClick={() => sendJson()}
+            >
               Dodaj aktywność
             </Button>
           </div>
@@ -103,4 +101,9 @@ function AddGraphTask(props) {
   )
 }
 
-export default AddGraphTask
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(AddGraphTask)

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Card, Modal } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
 function DeletionModal(props) {
   return (
@@ -10,14 +11,28 @@ function DeletionModal(props) {
         </Card.Header>
         <Card.Body>{props.modalBody}</Card.Body>
         <Card.Footer className={'text-center'}>
-          <Button className={'me-1'} variant={'secondary'} onClick={() => props.setModalOpen(false)}>
+          <Button
+            className={'me-1'}
+            style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary }}
+            onClick={() => props.setModalOpen(false)}
+          >
             Anuluj
           </Button>
-          <Button variant={'danger'}>Usuń</Button>
+          <Button
+            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+            onClick={props.onClick}
+          >
+            Usuń
+          </Button>
         </Card.Footer>
       </Card>
     </Modal>
   )
 }
 
-export default DeletionModal
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(DeletionModal)

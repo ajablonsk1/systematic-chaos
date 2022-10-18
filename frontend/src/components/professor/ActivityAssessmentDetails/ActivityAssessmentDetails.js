@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap'
 import {
   AcceptButton,
   RemarksTextArea,
-  ActivityAssesmentProfessorFileCol,
+  ActivityAssessmentProfessorFileCol,
   PointsRow,
   PointsInput,
   PointsMax
@@ -19,8 +19,11 @@ import { debounce } from 'lodash'
 import { HorizontalSpacer, VerticalSpacer, Header } from '../../general/TaskSharedComponents'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { Activity } from '../../../utils/constants'
+import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
+import { SET_ASSESSMENT_NUMBERS } from '../../../actions/types'
 
-export default function ActivityAssessmentDetails() {
+function ActivityAssessmentDetails(props) {
   const navigate = useNavigate()
   const location = useLocation()
   const { activityId } = location.state
@@ -34,6 +37,8 @@ export default function ActivityAssessmentDetails() {
   const [givenPoints, setGivenPoints] = useState(0)
   const [fileBlob, setFileBlob] = useState()
   const [fileName, setFileName] = useState()
+
+  const isMobileDisplay = isMobileView()
 
   const debounceSetGivenPoints = useMemo(
     () =>
@@ -74,6 +79,7 @@ export default function ActivityAssessmentDetails() {
     } else {
       navigate(TeacherRoutes.ACTIVITY_ASSESSMENT.LIST)
     }
+    props.dispatch({ type: SET_ASSESSMENT_NUMBERS, payload: activityResponseInfo?.remaining ?? 0 })
   }
 
   useEffect(() => {
@@ -132,9 +138,16 @@ export default function ActivityAssessmentDetails() {
         <HorizontalSpacer height={'3vh'} />
         <Col
           className='m-0 pt-4 mx-auto'
-          style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
+          style={{
+            height: isMobileDisplay ? 'auto' : '94vh',
+            width: isMobileDisplay ? '94%' : '90%',
+            backgroundColor: props.theme.secondary
+          }}
         >
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}>
+          <Row
+            className='p-2 rounded mx-2'
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '6vh' }}
+          >
             <Header activityName={activityResponseInfo.activityName} activityType={Activity.TASK} />
           </Row>
 
@@ -142,7 +155,7 @@ export default function ActivityAssessmentDetails() {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto text-center'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '6vh' }}
           >
             <UserDetails />
           </Row>
@@ -151,7 +164,7 @@ export default function ActivityAssessmentDetails() {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '18vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '18vh' }}
           >
             <ActivityDetails className='overflow-auto' />
           </Row>
@@ -160,7 +173,7 @@ export default function ActivityAssessmentDetails() {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '20vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '20vh' }}
           >
             <ResponseDetails />
           </Row>
@@ -168,23 +181,32 @@ export default function ActivityAssessmentDetails() {
           <VerticalSpacer height={'1vh'} />
 
           <Row
-            className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '35vh' }}
+            className='pb-3 rounded mx-2 overflow-auto'
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '35vh' }}
           >
-            <Col>
+            <Col className={'d-flex flex-column justify-content-center align-items-center'}>
               <h4>Uwagi:</h4>
-              <RemarksTextArea onChange={debounceSetText} ref={textRef} />
-              <ActivityAssesmentProfessorFileCol>
+              <RemarksTextArea
+                $fontColor={props.theme.font}
+                $background={props.theme.secondary}
+                $borderColor={props.theme.warning}
+                onChange={debounceSetText}
+                ref={textRef}
+              />
+              <ActivityAssessmentProfessorFileCol $background={props.theme.primary} $fontColor={props.theme.font}>
                 <ActivityAssessmentProfessorFileService
                   setFile={setFileBlob}
                   setFileName={setFileName}
                   fileRef={fileRef}
                 />
-              </ActivityAssesmentProfessorFileCol>
+              </ActivityAssessmentProfessorFileCol>
               <PointsRow>
                 <p className='m-0'>Punkty: </p>
                 <Row className={'d-flex justify-content-center'}>
                   <PointsInput
+                    $fontColor={props.theme.font}
+                    $borderColor={props.theme.warning}
+                    $background={props.theme.primary}
                     type='number'
                     min={0}
                     max={activityResponseInfo.maxPoints}
@@ -195,6 +217,7 @@ export default function ActivityAssessmentDetails() {
                 </Row>
               </PointsRow>
               <AcceptButton
+                $background={props.theme.success}
                 onClick={sendFeedbackAndGetNextIfAble}
                 disabled={!givenPoints || givenPoints < 0 || givenPoints > activityResponseInfo.maxPoints}
               >
@@ -209,8 +232,15 @@ export default function ActivityAssessmentDetails() {
   }
 
   return (
-    <Content style={{ color: 'var(--font-color)' }}>
+    <Content style={{ color: props.theme.font, marginBottom: isMobileDisplay ? 85 : 0 }}>
       {activityResponseInfo === undefined ? <Loader /> : activityResponseInfo == null ? ERROR_OCCURRED : contentBody()}
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityAssessmentDetails)

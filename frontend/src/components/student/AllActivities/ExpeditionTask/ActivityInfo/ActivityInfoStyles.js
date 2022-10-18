@@ -11,7 +11,7 @@ export const ActivityImg = styled.img`
   @media (max-width: 800px) {
     height: 20px;
     width: 20px;
-    margin: 0px;
+    margin: 0;
   } ;
 `
 
@@ -19,9 +19,10 @@ export const ActivityType = styled.h1`
   text-align: left;
   align-self: center;
   font-size: 1.75rem;
+
   @media (max-width: 800px) {
-    font-size: 0.5rem;
-  } ;
+    font-size: 0.9rem;
+  }
 `
 
 export const ActivityName = styled.h1`
@@ -29,17 +30,22 @@ export const ActivityName = styled.h1`
   align-self: center;
   font-size: 1.75rem;
   margin-left: auto;
+
   @media (max-width: 800px) {
     font-size: 1.5rem;
-  } ;
+  }
+
+  @media (max-width: 575px) {
+    margin-left: 0;
+  }
 `
 
 export const FullDivider = styled.hr`
-  background-color: var(--font-color);
+  background-color: ${(props) => props.$background};
 `
 
 export const SmallDivider = styled.hr`
-  background-color: var(--font-color);
+  background-color: ${(props) => props.$background};
   width: 20%;
   position: relative;
   left: 50%;
@@ -54,8 +60,8 @@ export const ActivityCol = styled(Col)`
 export const HeaderRow = styled(Row)`
   width: 100%;
   margin: 0;
-  background-color: var(--dark-blue);
-  color: var(--font-color);
+  background-color: ${(props) => props.$background};
+  color: ${(props) => props.$fontColor};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,5 +75,5 @@ export const HeaderCol = styled(Col)`
   position: sticky;
   top: 0;
   height: auto;
-  background-color: var(--dark-blue);
+  background-color: ${(props) => props.$background};
 `

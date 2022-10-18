@@ -4,9 +4,10 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskChapterFo
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
+import com.example.api.dto.response.activity.task.GraphNode;
+import com.example.api.dto.response.activity.task.result.GraphTaskResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
-import com.example.api.model.activity.task.GraphTask;
 import com.example.api.service.activity.task.GraphTaskService;
 import com.example.api.util.MessageManager;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,7 +27,7 @@ public class GraphTaskController {
     private final GraphTaskService graphTaskService;
 
     @GetMapping
-    ResponseEntity<GraphTask> getGraphTaskById(@RequestParam Long id) throws EntityNotFoundException {
+    ResponseEntity<GraphTaskResponse> getGraphTaskById(@RequestParam Long id) throws EntityNotFoundException {
         return ResponseEntity.ok().body(graphTaskService.getGraphTaskById(id));
     }
 
@@ -56,7 +57,6 @@ public class GraphTaskController {
                 3,
                 4,
                 MessageManager.REQ_KNOWLEDGE,
-                "28/04/2022 10:00:00",
                 questionForms,
                 "00:30:00"
         );
@@ -68,5 +68,10 @@ public class GraphTaskController {
             throws RequestValidationException, ParseException {
         graphTaskService.createGraphTask(form);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/map")
+    public ResponseEntity<List<GraphNode>> getGraphMap(@RequestParam Long graphTaskID) throws EntityNotFoundException {
+        return ResponseEntity.ok().body(graphTaskService.getGraphMap(graphTaskID));
     }
 }

@@ -5,8 +5,9 @@ import { TabsContainer } from './GradeListAndExportStyles'
 import { useEffect, useState } from 'react'
 import GroupService from '../../../services/group.service'
 import Loader from '../../general/Loader/Loader'
+import { connect } from 'react-redux'
 
-export default function GradeListAndExport() {
+function GradeListAndExport(props) {
   const [allGroups, setAllGroups] = useState(undefined)
 
   useEffect(() => {
@@ -17,7 +18,11 @@ export default function GradeListAndExport() {
 
   return (
     <GradesContent>
-      <TabsContainer>
+      <TabsContainer
+        $background={props.theme.success}
+        $linkColor={props.theme.primary}
+        $fontColor={props.theme.background}
+      >
         <Tab eventKey={'wszyscy'} title={'Wszyscy'}>
           <UsersTable />
         </Tab>
@@ -33,3 +38,11 @@ export default function GradeListAndExport() {
     </GradesContent>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(GradeListAndExport)

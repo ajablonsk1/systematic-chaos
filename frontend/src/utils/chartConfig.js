@@ -31,7 +31,8 @@ export const barConfig = (datasetLabels, datasets, backgroundColors, labels = ['
     datasets: datasetLabels.map((label, index) => ({
       label: label,
       data: typeof datasets[index] === 'number' || !datasets[index] ? [datasets[index]] : [...datasets[index]], // Yes, I know - it's stupid and ugly, so... TODO later
-      backgroundColor: backgroundColors[index]
+      backgroundColor: backgroundColors[index],
+      minBarLength: 7
     }))
   }
 

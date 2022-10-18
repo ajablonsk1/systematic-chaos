@@ -1,16 +1,3 @@
-* {
-  --sidebar-width: 280px;
-  --content-margin-x: 20px;
-  --content-margin-y: 5px;
-  --content-width-with-margin: calc(100vw - var(--sidebar-width) - 2 * var(--content-margin-x));
-  --content-width-without-margin: calc(100vw - var(--sidebar-width));
-
-  --font-color: #ffb30d;
-  --dark-blue: #001542;
-  --button-green: #085454;
-  --light-blue: #223762;
-}
-
 body {
   height: 100vh;
 }

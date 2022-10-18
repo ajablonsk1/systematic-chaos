@@ -1,12 +1,12 @@
 import React from 'react'
-import ActivityService from '../../../../services/activity.service'
 import AddActivity from './AddActivity'
+import InfoTaskService from '../../../../services/infoTask.service'
 
 function AddInfoTask(props) {
   return (
     <AddActivity
-      getActivityJson={ActivityService.getInfoTaskJson}
-      setActivityJson={ActivityService.setInfoTaskJson}
+      getActivityJson={InfoTaskService.getInfoTaskJson}
+      setActivityJson={InfoTaskService.setInfoTaskJson}
       chapterId={props.chapterId}
       onSuccess={props.onSuccess}
       onCancel={props.onCancel}

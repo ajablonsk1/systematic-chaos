@@ -3,8 +3,11 @@ import { Spinner } from 'react-bootstrap'
 import GroupService from '../../../../services/group.service'
 import { TableContainer } from '../../../student/PointsPage/Tables/TableStyle'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
+import { connect } from 'react-redux'
 
-export default function GroupsTable(props) {
+const tableHeaders = ['Nr', 'Nazwa grupy', 'Liczba uczestników', 'Kod']
+
+function GroupsTable(props) {
   const [tableContent, setTableContent] = useState(undefined)
 
   const updateTableContent = () => {
@@ -27,6 +30,7 @@ export default function GroupsTable(props) {
       <tr key={idx}>
         <td>{idx + 1}</td>
         <td>{row.name}</td>
+        <td>{row.studentsCount}</td>
         <td>{row.invitationCode}</td>
       </tr>
     ))
@@ -34,12 +38,17 @@ export default function GroupsTable(props) {
 
   return (
     <>
-      <TableContainer>
+      <TableContainer
+        $fontColor={props.theme.font}
+        $background={props.theme.primary}
+        $bodyColor={props.theme.secondary}
+        className={'mb-0'}
+      >
         <thead>
           <tr>
-            <th>Nr</th>
-            <th>Nazwa grupy</th>
-            <th>Kod</th>
+            {tableHeaders.map((header, index) => (
+              <th key={index}>{header}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -56,3 +65,10 @@ export default function GroupsTable(props) {
     </>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(GroupsTable)

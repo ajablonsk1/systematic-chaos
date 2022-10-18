@@ -6,8 +6,9 @@ import ExportModal from './ExportModal'
 import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
+import { connect } from 'react-redux'
 
-export default function UsersTable(props) {
+function UsersTable(props) {
   const [usersList, setUsersList] = useState(undefined)
 
   const [usersToExportIds, setUsersToExportIds] = useState([])
@@ -75,7 +76,12 @@ export default function UsersTable(props) {
       </Form.Group>
 
       <GameCardOptionPick style={{ maxHeight: '75vh', overflowY: 'auto' }}>
-        <GradesTable bordered>
+        <GradesTable
+          $background={props.theme.primary}
+          $tdColor={props.theme.secondary}
+          $fontColor={props.theme.font}
+          bordered
+        >
           <thead>
             <tr>
               <th>
@@ -112,7 +118,11 @@ export default function UsersTable(props) {
         </GradesTable>
       </GameCardOptionPick>
 
-      <ExportButton disabled={isButtonDisabled} onClick={() => setModalVisible(true)}>
+      <ExportButton
+        $buttonColor={props.theme.success}
+        disabled={isButtonDisabled}
+        onClick={() => setModalVisible(true)}
+      >
         Eksportuj oceny
       </ExportButton>
 
@@ -120,3 +130,11 @@ export default function UsersTable(props) {
     </>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(UsersTable)

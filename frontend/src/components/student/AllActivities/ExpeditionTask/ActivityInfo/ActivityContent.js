@@ -11,8 +11,12 @@ import moment from 'moment'
 import PercentageCircle from '../../../PointsPage/ChartAndStats/PercentageCircle'
 import ActivityInfoContentCard from './ActivityInfoContentCard'
 import { StudentRoutes } from '../../../../../routes/PageRoutes'
+import { connect } from 'react-redux'
+import { isMobileView } from '../../../../../utils/mobileHelper'
 
-export default function ActivityContent(props) {
+function ActivityContent(props) {
+  const isMobileDisplay = isMobileView()
+
   const navigate = useNavigate()
   const activityId = props.activityId
 
@@ -21,12 +25,11 @@ export default function ActivityContent(props) {
   const [endDate, setEndDate] = useState(undefined)
   const [pointsReceived, setPointsReceived] = useState(undefined)
   const [isFetching, setIsFetching] = useState(false)
-  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     ExpeditionService.getExpeditionScore(activityId)
       .then((response) => {
-        setActivityScore(response || {})
+        setActivityScore(response || -1)
       })
       .catch(() => {
         setActivityScore(null)
@@ -54,8 +57,8 @@ export default function ActivityContent(props) {
 
   useEffect(() => {
     // if activityScore from endpoint has id value, this task was finished by logged student
-    if (activityScore?.id) {
-      ExpeditionService.getExpeditionAllPoints(activityScore.id)
+    if (activityScore && activityScore !== -1) {
+      ExpeditionService.getExpeditionAllPoints(activityScore)
         .then((response) => {
           setPointsReceived(response ?? 0)
         })
@@ -67,37 +70,19 @@ export default function ActivityContent(props) {
     }
   }, [activityScore])
 
-  const navigateTo = (nodeId, taskResultId) =>
-    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.QUESTION_SELECTION, {
+  const navigateToExpeditionWrapper = () =>
+    navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.EXPEDITION_WRAPPER, {
       state: {
         activityId: activityId,
-        nodeId: nodeId,
-        taskResultId: taskResultId,
-        timeToSolveMillis: props.activity.timeToSolveMillis
+        alreadyStarted: activityScore !== -1,
+        maxPoints: props.activity.maxPoints
       }
     })
 
   const startExpedition = () => {
+    //necessary?
     setIsFetching(true)
-    // returns resultId value, very important
-    ExpeditionService.getTaskAnswerId(activityId)
-      .then((response) => {
-        // set startTime in milliseconds
-        ExpeditionService.setStartTime(response?.id, Date.now())
-          .then(() => {
-            setIsFetching(false)
-            // later get the first question on endpoint
-            navigateTo(props.activity.questions[0].id, response?.id)
-          })
-          .catch((error) => {
-            setIsFetching(false)
-            setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
-          })
-      })
-      .catch((error) => {
-        setIsFetching(false)
-        setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
-      })
+    navigateToExpeditionWrapper()
   }
 
   const basicInfoCard = useMemo(() => {
@@ -146,7 +131,7 @@ export default function ActivityContent(props) {
     ]
 
     return (
-      <CustomTable>
+      <CustomTable $fontColor={props.theme.font} $borderColor={props.theme.primary} $background={props.theme.secondary}>
         <tbody>
           {tableElements.map((row, index) => (
             <tr key={index + Date.now()}>
@@ -169,7 +154,7 @@ export default function ActivityContent(props) {
     }
 
     const tableElements = [
-      { name: 'Obecna liczba punktów', value: pointsReceived },
+      { name: 'Obecna liczba punktów', value: pointsReceived !== '' ? pointsReceived : 0 },
       { name: 'Maksymalna liczba punktów do zdobycia', value: props.activity.maxPoints },
       { name: 'Liczba punktów licząca się jako 100%', value: props.activity.maxPoints100 ?? '-' }
     ]
@@ -177,7 +162,11 @@ export default function ActivityContent(props) {
     return (
       <Row className={'h-100 m-0 p-0'}>
         <Col md={6} className={'pt-4'}>
-          <CustomTable>
+          <CustomTable
+            $fontColor={props.theme.font}
+            $borderColor={props.theme.primary}
+            $background={props.theme.secondary}
+          >
             <tbody>
               {tableElements.map((row, index) => (
                 <tr key={index + Date.now()}>
@@ -191,7 +180,7 @@ export default function ActivityContent(props) {
         <Col md={6}>
           <PercentageCircle
             percentageValue={(100 * pointsReceived) / props.activity.maxPoints}
-            points={pointsReceived}
+            points={pointsReceived !== '' ? pointsReceived : 0}
             maxPoints={props.activity.maxPoints} // TODO: replace it with props.activity.maxPoints 100 when backend will be work appropriately
           />
         </Col>
@@ -200,35 +189,50 @@ export default function ActivityContent(props) {
   }, [pointsReceived, props])
 
   return (
-    <Row className={'m-0 vh-100'}>
+    <Row style={{ height: isMobileDisplay ? 'auto' : '100vh', margin: isMobileDisplay ? '0 0 85px 0' : 0 }}>
       <Col md={6}>
-        <Row className={'h-50 py-2 px-2'}>
+        <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Podstawowe informacje'} body={basicInfoCard} />
         </Row>
-        <Row className={'h-50 py-2 px-2'}>
+        <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Informacje punktowe'} body={pointsCard} />
         </Row>
       </Col>
       <Col md={6}>
-        <Row className={'h-50 py-2 px-2'}>
+        <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2 px-2`}>
           <ActivityInfoContentCard header={'Opis aktywności'} body={<p>{props.activity.description}</p>} />
         </Row>
-        <Row className={'py-2 px-2'} style={{ height: '44vh' }}>
+        <Row className={'py-2 px-2'} style={{ height: isMobileDisplay ? 'auto' : '44vh' }}>
           <ActivityInfoContentCard
             header={'Wymagana wiedza'}
             body={<p>{props.activity.requiredKnowledge ?? 'Brak wymagań'}</p>}
           />
         </Row>
         <Row className={'justify-content-center align-items-start gap-2 py-2 px-2'} style={{ height: '5vh' }}>
-          <Button className={'w-auto'} variant={'secondary'} onClick={() => navigate(StudentRoutes.GAME_MAP.MAIN)}>
+          <Button
+            className={'w-auto'}
+            style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary }}
+            onClick={() => navigate(StudentRoutes.GAME_MAP.MAIN)}
+          >
             Wstecz
           </Button>
-          <Button className={'w-auto'} variant={'warning'} onClick={startExpedition} disabled={activityScore?.id}>
+          {/* we don't need to disable the button anymore, as we can try to continue with the server-side flow rework */}
+          <Button
+            className={'w-auto'}
+            style={{ backgroundColor: props.theme.warning, borderColor: props.theme.warning }}
+            onClick={startExpedition}
+          >
             {isFetching ? <Spinner animation={'border'} /> : <span>Rozpocznij</span>}
           </Button>
         </Row>
-        {!!errorMessage && <p className={'text-center text-danger pt-2 text-truncate'}>{errorMessage}</p>}
       </Col>
     </Row>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityContent)

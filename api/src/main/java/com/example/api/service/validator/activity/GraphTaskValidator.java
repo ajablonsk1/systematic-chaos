@@ -3,8 +3,10 @@ package com.example.api.service.validator.activity;
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
+import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +20,16 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class GraphTaskValidator {
+    public void validateGraphTaskIsNotNull(GraphTask graphTask, Long id) throws EntityNotFoundException {
+        if(graphTask == null) {
+            log.error("GraphTask with id {} not found in database", id);
+            throw new EntityNotFoundException("GraphTask with id" + id + " not found in database");
+        }
+    }
 
     public void validateCreateGraphTaskFormFields(CreateGraphTaskForm form) throws RequestValidationException {
         if (Stream.of(form.getTitle(), form.getDescription(), form.getPosX(), form.getPosY(), form.getRequiredKnowledge(),
-                form.getActivityExpireDate(), form.getQuestions(), form.getTimeToSolve()).anyMatch(Objects::isNull)) {
+                form.getQuestions(), form.getTimeToSolve()).anyMatch(Objects::isNull)) {
             log.error("All CreateGraphTaskForm fields cannot be null");
             throw new RequestValidationException(ExceptionMessage.GRAPH_TASK_FORM_FIELDS_NOT_NULL);
         }
@@ -127,6 +135,18 @@ public class GraphTaskValidator {
         } catch (IllegalArgumentException e) {
             log.error("Invalid difficulty. [EASY / MEDIUM / HARD]");
             throw new RequestValidationException(ExceptionMessage.INVALID_DIFFICULTY);
+        }
+    }
+
+    public void validateGraphTaskTitle(String title, List<GraphTask> graphTasks) throws RequestValidationException {
+        int idx = title.indexOf(";");
+        if (idx != -1) {
+            log.error("Title cannot have a semicolon!");
+            throw new RequestValidationException(ExceptionMessage.GRAPH_TASK_TITLE_CONTAINS_SEMICOLON);
+        }
+        if (graphTasks.stream().anyMatch(graphTask -> graphTask.getTitle().equals(title))) {
+            log.error("Graph task has to have unique title");
+            throw new RequestValidationException(ExceptionMessage.GRAPH_TASK_TITLE_NOT_UNIQUE);
         }
     }
 }

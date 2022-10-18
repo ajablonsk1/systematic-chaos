@@ -1,5 +1,6 @@
 package com.example.api.service.user;
 
+import com.example.api.dto.request.user.EditPasswordForm;
 import com.example.api.dto.request.user.RegisterUserForm;
 import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.request.user.SetStudentIndexForm;
@@ -11,6 +12,7 @@ import com.example.api.model.user.User;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.user.util.ProfessorRegisterToken;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ public class UserService implements UserDetailsService {
     private final AuthenticationService authService;
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
+    private final ProfessorRegisterToken professorRegisterToken;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -53,15 +56,22 @@ public class UserService implements UserDetailsService {
     }
 
     public Long registerUser(RegisterUserForm form)
-            throws EntityNotFoundException, EntityAlreadyInDatabaseException, WrongBodyParametersNumberException {
+            throws RequestValidationException {
         String email = form.getEmail();
         log.info("Registering user {}", email);
         User dbUser = userRepo.findUserByEmail(email);
         User user = new User(form.getEmail(), form.getFirstName(), form.getLastName(), form.getAccountType());
         userValidator.validateUserRegistration(dbUser, user, form, email);
         user.setPassword(passwordEncoder.encode(form.getPassword()));
+        user.setPoints(0D);
         userRepo.save(user);
         return user.getId();
+    }
+
+    public void editPassword(EditPasswordForm form){
+        String email = authService.getAuthentication().getName();
+        User user = getUser(email);
+        user.setPassword(passwordEncoder.encode(form.getNewPassword()));
     }
 
     public User getUser(String email) throws UsernameNotFoundException {
@@ -128,5 +138,13 @@ public class UserService implements UserDetailsService {
         student.setIndexNumber(setStudentIndexForm.getNewIndexNumber());
         userRepo.save(student);
         return student.getIndexNumber();
+    }
+
+    public String getProfessorRegisterToken() throws WrongUserTypeException {
+        User user = getCurrentUser();
+        userValidator.validateProfessorAccount(user, authService.getAuthentication().getName());
+
+        log.info("Professor {} fetch ProfessorRegisterToken", user.getEmail());
+        return professorRegisterToken.getToken();
     }
 }

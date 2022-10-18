@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
 export const TableBodyRow = styled.tr`
+  border: 1px solid ${(props) => props.$background};
   &:hover {
     cursor: pointer;
-    background-color: var(--light-blue);
+    background-color: ${(props) => props.$background};
   }
 `

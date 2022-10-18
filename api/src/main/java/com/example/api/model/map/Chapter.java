@@ -2,6 +2,7 @@ package com.example.api.model.map;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;
+import com.example.api.model.map.requirement.Requirement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,8 @@ public class Chapter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Integer posX;
+    private Integer posY;
 
     @OneToOne
     private Requirement requirement;
@@ -29,9 +32,11 @@ public class Chapter {
     @OneToOne
     private ActivityMap activityMap;
 
-    public Chapter(String name, ActivityMap activityMap) {
+    public Chapter(String name, ActivityMap activityMap, Integer posX, Integer poxY) {
         this.name = name;
         this.activityMap = activityMap;
+        this.posX = posX;
+        this.posY = poxY;
     }
 
     public int getNoActivities() {

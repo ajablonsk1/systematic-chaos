@@ -11,4 +11,8 @@ public class TimeCalculator {
     public long getTimeRemaining(long timeStartMillis, long timeToSolveMillis) {
         return timeToSolveMillis - getElapsedTime(timeStartMillis);
     }
+
+    public long getTimeLeftAfterLastAnswer(long timeStartMillis, long timeToSolveMillis, long timeSendMillis){
+        return timeToSolveMillis - (timeSendMillis - timeStartMillis);
+    }
 }

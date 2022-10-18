@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface GroupRepo extends JpaRepository<Group, Long> {
     Group findGroupById(Long id);
     Group findGroupByInvitationCode(String invitationCode);
+    Group findGroupByName(String name);
 }

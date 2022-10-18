@@ -1,21 +1,22 @@
 package com.example.api.service.validator.activity;
 
 import com.example.api.dto.request.activity.task.create.*;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.EntityRequiredAttributeNullException;
 import com.example.api.error.exception.ExceptionMessage;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.TaskResult;
-import com.example.api.model.activity.task.*;
+import com.example.api.model.activity.task.Activity;
+import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
+import com.example.api.model.map.requirement.Requirement;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.QuestionType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
-import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -39,6 +40,13 @@ public class ActivityValidator {
         if(activity == null) {
             log.error("Activity with id {} not found in database", id);
             throw new EntityNotFoundException("Activity with id" + id + " not found in database");
+        }
+    }
+
+    public void validateActivityIsNotNullWithMessage(Activity activity, String title, String message) throws EntityNotFoundException {
+        if(activity == null) {
+            log.error("Activity with title {} not found in database", title);
+            throw new EntityNotFoundException(message);
         }
     }
 
@@ -72,6 +80,23 @@ public class ActivityValidator {
         if(result.getStartDateMillis() == null) {
             log.error("Start time not set for graph task with id {}", id);
             throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
+                    "graph task result with id " + id);
+        }
+    }
+
+    public void validateGraphTaskResultExistsAndHasStartAndEndDate(GraphTaskResult result, Long id) throws EntityNotFoundException, EntityRequiredAttributeNullException {
+        if(result == null) {
+            log.error("Graph task result with given id {} does not exist", id);
+            throw new EntityNotFoundException("Graph task result with given id " + id + " does not exist");
+        }
+        if(result.getStartDateMillis() == null) {
+            log.error("Start time not set for graph task with id {}", id);
+            throw new EntityRequiredAttributeNullException("Required attribute startTimeMillis is null for " +
+                    "graph task result with id " + id);
+        }
+        if(result.getSendDateMillis() == null) {
+            log.error("End time not set for graph task with id {}", id);
+            throw new EntityRequiredAttributeNullException("Required attribute sendDateMillis is null for " +
                     "graph task result with id " + id);
         }
     }
@@ -122,6 +147,21 @@ public class ActivityValidator {
                 Objects.equals(point.getY(), Double.valueOf(form.getPosY())))) {
             log.error("Two activities cannot be on the same position!");
             throw new RequestValidationException(ExceptionMessage.TWO_ACTIVITIES_ON_THE_SAME_POSITION);
+        }
+    }
+
+    public void validateGraphTaskTitle(String title, List<GraphTask> graphTasks) throws RequestValidationException {
+        graphTaskValidator.validateGraphTaskTitle(title, graphTasks);
+    }
+
+    public void validateFileTaskTitle(String title, List<FileTask> fileTasks) throws RequestValidationException {
+        fileTaskValidator.validateFileTaskTitle(title, fileTasks);
+    }
+
+    public void validateRequirementsHasDateTo(List<Requirement> requirements) throws EntityRequiredAttributeNullException {
+        if (requirements.size() != 1) {
+            log.error("Requirements should have one requirement with type DATE_TO");
+            throw new EntityRequiredAttributeNullException("Requirements should have one requirement with type DATE_TO");
         }
     }
 }

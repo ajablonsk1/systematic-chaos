@@ -1,41 +1,63 @@
-import { axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiDelete, axiosApiGet, axiosApiPost, axiosApiPut } from '../utils/axios'
 import {
-  GET_CHAPTER_DETAILS,
-  GET_CHAPTER_LIST,
-  ADD_NEW_CHAPTER,
-  GET_CHAPTER_IMAGES_LIST,
-  GET_CHAPTER_IMAGE
+  GET_CHAPTER_INFO,
+  GET_CHAPTER,
+  POST_CHAPTER_CREATE,
+  GET_FILE_CHAPTER_IMAGES,
+  GET_FILE,
+  DELETE_CHAPTER,
+  PUT_CHAPTER_EDIT
 } from './urls'
 
 class ChapterService {
   getChaptersList() {
-    return axiosApiGet(GET_CHAPTER_LIST).catch((error) => {
+    return axiosApiGet(GET_CHAPTER).catch((error) => {
       throw error
     })
   }
 
   getChapterDetails(chapterId) {
-    return axiosApiGet(GET_CHAPTER_DETAILS, { id: chapterId }).catch((error) => {
+    return axiosApiGet(GET_CHAPTER_INFO, { id: chapterId }).catch((error) => {
       throw error
     })
   }
 
-  sendNewChapterData({ name, sizeX, sizeY, imageId }) {
-    return axiosApiPost(ADD_NEW_CHAPTER, { name: name, sizeX: sizeX, sizeY: sizeY, imageId: imageId }).catch(
-      (error) => {
-        throw error
-      }
-    )
+  sendNewChapterData({ name, sizeX, sizeY, imageId, posX, posY }) {
+    return axiosApiPost(POST_CHAPTER_CREATE, {
+      name: name,
+      sizeX: sizeX,
+      sizeY: sizeY,
+      imageId: imageId,
+      posX: posX,
+      posY: posY
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  sendEditChapterData({ chapterId, editionForm }) {
+    return axiosApiPut(PUT_CHAPTER_EDIT, {
+      chapterId,
+      editionForm
+    }).catch((error) => {
+      throw error
+    })
   }
 
   getChapterImagesList() {
-    return axiosApiGet(GET_CHAPTER_IMAGES_LIST, {}).catch((error) => {
+    return axiosApiGet(GET_FILE_CHAPTER_IMAGES, {}).catch((error) => {
       throw error
     })
   }
 
   getChapterImage({ imageId }) {
-    return axiosApiGet(GET_CHAPTER_IMAGE, { id: imageId }).catch((error) => {
+    return axiosApiGet(GET_FILE, { id: imageId }).catch((error) => {
+      throw error
+    })
+  }
+
+  deleteChapter(chapterId) {
+    return axiosApiDelete(DELETE_CHAPTER, { chapterID: chapterId }).catch((error) => {
       throw error
     })
   }

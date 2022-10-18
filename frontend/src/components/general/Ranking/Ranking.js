@@ -5,6 +5,7 @@ import { CustomIcon, TableContainer, TableRow } from './RankingStyle'
 import { getSortIcon, nextSortingOrder, sortArray } from './sortHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo } from '@fortawesome/free-solid-svg-icons'
+import { connect } from 'react-redux'
 
 const headersWithSortedInfo = [
   { headerName: 'Pozycja', sortedVar1: 'position' },
@@ -19,7 +20,7 @@ function Ranking(props) {
   const [sortingOrders, setSortingOrders] = useState(headersWithSortedInfo.map(() => 'DESC'))
 
   const rowColor = (index) =>
-    props.studentPosition && index === props.studentPosition ? 'var(--button-green)' : 'var(--light-blue)'
+    props.studentPosition && index === props.studentPosition ? props.theme.success : props.theme.secondary
 
   useEffect(() => {
     setRanking(props.rankingList)
@@ -65,7 +66,11 @@ function Ranking(props) {
   }, [sortBy, sortingOrders, props])
 
   return (
-    <TableContainer $customHeight={props.customHeight}>
+    <TableContainer
+      $customHeight={props.customHeight}
+      $fontColor={props.theme.font}
+      $backgroundColor={props.theme.primary}
+    >
       <Table className={'my-0'}>
         <thead>{tableHeaders}</thead>
         <tbody>
@@ -83,7 +88,11 @@ function Ranking(props) {
             </tr>
           ) : (
             ranking.map((student, index) => (
-              <TableRow key={index + Date.now()} $backgroundColor={rowColor(index + 1)}>
+              <TableRow
+                key={index + Date.now()}
+                $backgroundColor={rowColor(index + 1)}
+                $hoverColor={props.theme.primary}
+              >
                 <td>{student.position}</td>
                 <td>{student.firstName + ' ' + student.lastName}</td>
                 <td>{student.groupName}</td>
@@ -91,7 +100,7 @@ function Ranking(props) {
                 <td>{student.points ?? props.noPointsMessage ?? 'Brak danych'}</td>
                 {!!props.iconCallback && (
                   <td>
-                    <FontAwesomeIcon icon={faInfo} onClick={() => props.iconCallback(student.email)} />
+                    <FontAwesomeIcon icon={faInfo} onClick={() => props.iconCallback(student)} />
                   </td>
                 )}
               </TableRow>
@@ -103,4 +112,10 @@ function Ranking(props) {
   )
 }
 
-export default Ranking
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(Ranking)

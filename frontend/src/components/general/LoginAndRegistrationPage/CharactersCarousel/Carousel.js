@@ -1,27 +1,34 @@
 import React from 'react'
 import { Col } from 'react-bootstrap'
 import { CarouselItem, CustomCarousel } from './CarouselStyle'
-// import hero1 from '../resources/hero1.png';
-// import hero2 from '../resources/hero2.png';
-// import hero3 from '../resources/hero3.png';
-// import hero4 from '../resources/hero4.png';
-// import hero5 from '../resources/hero5.png';
-import gameMapExample from '../../../../storage/resources/game_example.png'
+import warrior from '../../../../storage/resources/warrior-big.png'
+import wizard from '../../../../storage/resources/wizard-big.png'
+import priest from '../../../../storage/resources/pope-big.png'
+import rogue from '../../../../storage/resources/rogue-big.png'
+import { connect } from 'react-redux'
+// import gameMapExample from '../../../../storage/resources/game_example.png'
 
-export default function Carousel() {
-  const images = [gameMapExample] // TODO: use list of images
+function Carousel(props) {
+  const images = [warrior, wizard, priest, rogue] // TODO: use list of images
 
   const ItemsList = images.map((image, index) => (
     <CarouselItem key={index}>
-      <img src={image} alt={'slide ' + index} />
+      <img src={image} alt={'slide ' + index} height={'100%'} />
     </CarouselItem>
   ))
 
   return (
     <Col xs={6} className='p-0 d-none d-md-block'>
-      <CustomCarousel fade controls={false} autoPlay={true} interval={3000}>
+      <CustomCarousel $background={props.theme.primary} controls={false} autoPlay={true} interval={2500} pause={false}>
         {ItemsList}
       </CustomCarousel>
     </Col>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(Carousel)

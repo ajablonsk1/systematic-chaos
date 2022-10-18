@@ -7,8 +7,9 @@ import { TabsContainer } from './PointsPageStyle'
 import BonusPointsTable from './Tables/BonusPointsTable'
 import StudentService from '../../../services/student.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import { connect } from 'react-redux'
 
-export default function Points() {
+function Points(props) {
   const [pointsData, setPointsData] = useState(undefined)
   const [totalPointsData, setTotalPointsData] = useState(undefined)
   const calculatedPercentageValue = useCallback(() => {
@@ -62,8 +63,9 @@ export default function Points() {
           </Col>
         </Row>
       )}
-      <Row className='m-3'>
+      <Row className='m-0 m-md-3'>
         <TabsContainer
+          $linkColor={props.theme.primary}
           className={'w-100'}
           defaultActiveKey='last-points'
           id='points-tabs'
@@ -80,3 +82,10 @@ export default function Points() {
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(Points)

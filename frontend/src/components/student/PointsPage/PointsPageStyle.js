@@ -4,6 +4,7 @@ import { TabsContainer as Tabs } from '../../professor/GradeListAndExport/GradeL
 export const TabsContainer = styled(Tabs)`
   & + .tab-content {
     width: 100%;
+    padding: 0;
 
     & > * {
       max-height: 55vh;
@@ -12,6 +13,6 @@ export const TabsContainer = styled(Tabs)`
   }
 
   .nav-link:not(.active) {
-    color: var(--dark-blue) !important;
+    color: ${(props) => props.$linkColor} !important;
   }
 `

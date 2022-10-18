@@ -8,7 +8,7 @@ export const LoginContainer = styled.div`
 `
 
 export const AuthFormContainer = styled(Col)`
-  background-color: var(--dark-blue);
+  background-color: ${(props) => props.$background};
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@ export const AuthFormContainer = styled(Col)`
 
 export const Logo = styled.div`
   text-align: center;
-  color: var(--font-color);
+  color: ${(props) => props.$logoColor};
   font-size: 32px;
 
   & > *:first-child {
@@ -49,10 +49,14 @@ export const TabsContainer = styled(Tabs)`
     background-color: transparent;
     color: white;
   }
+
+  @media (max-width: 575px) {
+    font-size: 13px !important;
+  }
 `
 
 export const AccountType = styled(Col)`
-  background-color: var(--button-green);
+  background-color: ${(props) => props.$background};
   display: flex;
   flex-direction: column;
   justify-content: center;

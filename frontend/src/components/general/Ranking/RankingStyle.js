@@ -10,7 +10,7 @@ export const TableContainer = styled(GameCardOptionPick)`
   overflow: auto;
 
   table {
-    color: var(--font-color);
+    color: ${(props) => props.$fontColor};
 
     text-align: left;
     position: relative;
@@ -22,12 +22,17 @@ export const TableContainer = styled(GameCardOptionPick)`
     }
 
     th {
-      background-color: var(--dark-blue);
-      border-color: var(--dark-blue);
+      background-color: ${(props) => props.$backgroundColor};
+      border-color: ${(props) => props.$backgroundColor};
     }
     td {
-      border-color: var(--dark-blue);
+      border-color: ${(props) => props.$backgroundColor};
     }
+  }
+
+  @media (max-width: 575px) {
+    max-height: 80vh;
+    margin: 0;
   }
 `
 
@@ -36,7 +41,7 @@ export const TableRow = styled.tr`
 
   &:hover {
     cursor: default;
-    background-color: var(--dark-blue);
+    background-color: ${(props) => props.$hoverColor};
   }
 
   td > svg {

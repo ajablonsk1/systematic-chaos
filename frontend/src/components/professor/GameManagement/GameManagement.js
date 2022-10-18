@@ -1,7 +1,7 @@
 import { Content } from '../../App/AppGeneralStyles'
 import { Col, Container, Row, Spinner, Table } from 'react-bootstrap'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
-import { GameButton } from './GameButton'
+import GameButton from './GameButton'
 import ManagementCard from './ManagementCard'
 import { useNavigate } from 'react-router-dom'
 import { TableBodyRow } from './TableStyles'
@@ -9,10 +9,12 @@ import GameLoaderModal from './GameLoader/GameLoaderModal'
 import { useEffect, useState } from 'react'
 import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
-import { AddChapterModal } from './AddChapterModal/AddChapterModal'
+import ChapterModal from './ChapterModal/ChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
+import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
-export default function GameManagement() {
+function GameManagement(props) {
   const navigate = useNavigate()
 
   const [showConfigModal, setShowConfigModal] = useState(false)
@@ -52,46 +54,59 @@ export default function GameManagement() {
       <p className='text-center'>
         Tutaj możesz dostosować wygląd, fabułę i sposób działania rozgrywki zgodnie ze swoimi potrzebami.
       </p>
-      <Container>
-        <Row>
-          <Col>
-            <GameCardOptionPick>
-              <h5 className='text-center pt-2'>Rozdziały</h5>
-              <p className='text-center'>Edytuj istniejące rozdziały lub dodaj nowy.</p>
-              <Table style={{ color: 'var(--font-color)' }}>
-                <thead>
-                  <tr>
-                    <th>Nazwa rozdziału</th>
-                    <th className='text-center'>Liczba aktywności</th>
-                    <th className='text-center'>Punkty</th>
-                    <th className='text-center'>Wymiary mapy</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {chapterList === undefined ? (
-                    <tr>
-                      <td colSpan='100%' className={'text-center'}>
-                        <Spinner animation={'border'} />
-                      </td>
-                    </tr>
-                  ) : chapterList == null || chapterList.length === 0 ? (
-                    <tr>
-                      <td colSpan='100%' className={'text-center'}>
-                        <p>{chapterList == null ? ERROR_OCCURRED : 'Lista rozdziałów jest pusta'}</p>
-                      </td>
-                    </tr>
-                  ) : (
-                    chapterList.map((chapter, index) => (
-                      <TableBodyRow key={index} onClick={() => goToChapterDetailsView(chapter.name, chapter.id)}>
-                        <td>{chapter.name}</td>
-                        <td className='text-center'>{chapter.noActivities}</td>
-                        <td className='text-center'>{chapter.maxPoints}</td>
-                        <td className='text-center'>{chapter.mapSize}</td>
-                      </TableBodyRow>
-                    ))
-                  )}
-                </tbody>
-              </Table>
+      <Container style={{ marginBottom: isMobileView() ? 85 : 0 }}>
+        <Row style={{ height: '50vh' }}>
+          <Col style={{ maxHeight: '50vh' }}>
+            <GameCardOptionPick
+              className={'d-flex flex-column justify-content-between'}
+              $background={props.theme.secondary}
+              $fontColor={props.theme.font}
+            >
+              <div>
+                <h5 className='text-center pt-2'>Rozdziały</h5>
+                <p className='text-center'>Edytuj istniejące rozdziały lub dodaj nowy.</p>
+                <div style={{ overflow: 'auto', maxHeight: '35vh' }}>
+                  <Table style={{ color: props.theme.font, maxHeight: '100px' }}>
+                    <thead style={{ border: `1px solid ${props.theme.primary}`, backgroundColor: props.theme.primary }}>
+                      <tr>
+                        <th>Nazwa rozdziału</th>
+                        <th className='text-center'>Liczba aktywności</th>
+                        <th className='text-center'>Punkty</th>
+                        <th className='text-center'>Wymiary mapy</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {chapterList === undefined ? (
+                        <tr>
+                          <td colSpan='100%' className={'text-center'}>
+                            <Spinner animation={'border'} />
+                          </td>
+                        </tr>
+                      ) : chapterList == null || chapterList.length === 0 ? (
+                        <tr>
+                          <td colSpan='100%' className={'text-center'}>
+                            <p>{chapterList == null ? ERROR_OCCURRED : 'Lista rozdziałów jest pusta'}</p>
+                          </td>
+                        </tr>
+                      ) : (
+                        chapterList.map((chapter, index) => (
+                          <TableBodyRow
+                            $background={props.theme.primary}
+                            key={index}
+                            onClick={() => goToChapterDetailsView(chapter.name, chapter.id)}
+                          >
+                            <td>{chapter.name}</td>
+                            <td className='text-center'>{chapter.noActivities}</td>
+                            <td className='text-center'>{chapter.maxPoints}</td>
+                            <td className='text-center'>{chapter.mapSize}</td>
+                          </TableBodyRow>
+                        ))
+                      )}
+                    </tbody>
+                  </Table>
+                </div>
+              </div>
+
               <GameButton
                 text={'Nowy rozdział'}
                 customWidth={'auto'}
@@ -122,6 +137,7 @@ export default function GameManagement() {
             <ManagementCard
               header={'Temat gry'}
               description={'Dopasuj temat fabuły i wygląd całej gry oraz całego systemu.'}
+              routePath={TeacherRoutes.GAME_MANAGEMENT.GAME_SETTINGS}
             />
           </Col>
           <Col md={4} className={'py-2'}>
@@ -148,12 +164,20 @@ export default function GameManagement() {
         </Row>
       </Container>
       <GameLoaderModal showModal={showConfigModal} setShowModal={setShowConfigModal} />
-      <AddChapterModal
+      <ChapterModal
         showModal={showAddChapterModal}
         setShowModal={setShowAddChapterModal}
-        refetchChapterList={fetchChaptersList}
+        onSuccess={fetchChaptersList}
         isLoaded={shouldLoadAddChapterModal}
       />
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(GameManagement)

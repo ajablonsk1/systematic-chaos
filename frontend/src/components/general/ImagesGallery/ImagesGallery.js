@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight, faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
 import { Button, Dropdown, Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap'
 import download from 'downloadjs'
+import { connect } from 'react-redux'
 
 //prop - imagesWithId
 
@@ -109,8 +110,8 @@ function ImagesGallery(props) {
               className={'rounded'}
               style={
                 props.pickedImage && props.pickedImage === image.id
-                  ? { border: '4px solid var(--button-green)', padding: '5px' }
-                  : {}
+                  ? { border: `4px solid ${props.theme.success}`, padding: '5px' }
+                  : { border: `1px solid ${props.theme.secondary}` }
               }
             >
               <img
@@ -125,7 +126,7 @@ function ImagesGallery(props) {
               />
 
               <ControlPanel drop={'start'}>
-                <Dropdown.Toggle variant='warning'>
+                <Dropdown.Toggle style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary }}>
                   <FontAwesomeIcon icon={faEllipsisVertical} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
@@ -149,7 +150,7 @@ function ImagesGallery(props) {
         <ModalBody className={'d-flex justify-content-center align-items-center'}>
           <FontAwesomeIcon
             icon={faChevronLeft}
-            className={'display-3 me-5'}
+            className={'display-3 me-3'}
             onClick={() => {
               if (!fullPreviewSource.isFirst) {
                 prevImage(fullPreviewSource.id)
@@ -157,10 +158,10 @@ function ImagesGallery(props) {
             }}
             style={{ opacity: fullPreviewSource.isFirst ? 0.5 : 1, cursor: 'pointer' }}
           />
-          <img height={'100%'} src={fullPreviewSource.src} alt={'full-preview'} />
+          <img width={'90%'} height={'90%'} src={fullPreviewSource.src} alt={'full-preview'} />
           <FontAwesomeIcon
             icon={faChevronRight}
-            className={'display-3 ms-5'}
+            className={'display-3 ms-3'}
             onClick={() => {
               if (!fullPreviewSource.isLast) {
                 nextImage(fullPreviewSource.id)
@@ -177,4 +178,10 @@ function ImagesGallery(props) {
   )
 }
 
-export default ImagesGallery
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(ImagesGallery)

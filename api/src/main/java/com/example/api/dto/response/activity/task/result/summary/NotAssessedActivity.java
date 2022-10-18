@@ -1,6 +1,5 @@
 package com.example.api.dto.response.activity.task.result.summary;
 
-import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.Activity;
 import lombok.Data;
 
@@ -16,9 +15,4 @@ public class NotAssessedActivity {
         this.waitingAnswersNumber = 0;
     }
 
-    public void add(TaskResult taskResult) {
-        if (taskResult.isEvaluated()) {
-            waitingAnswersNumber += 1;
-        }
-    }
 }

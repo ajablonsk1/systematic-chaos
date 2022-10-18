@@ -2,8 +2,8 @@ import React, { useRef } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle'
 import { UserAnswerArea } from './OpenQuestionStyle'
-import { useNavigate } from 'react-router-dom'
 import answerSaver from '../answerSaver'
+import { connect } from 'react-redux'
 
 function fitAreaToContent(text) {
   const maxHeight = 300 // px
@@ -11,26 +11,17 @@ function fitAreaToContent(text) {
   text.style.height = Math.min(text.scrollHeight, maxHeight) + 'px'
 }
 
-export default function OpenQuestionPage(props) {
+function OpenQuestionPage(props) {
   const userAnswer = useRef()
-  const navigate = useNavigate()
-
   const saveAnswer = () => {
-    answerSaver(
-      userAnswer.current.value,
-      props.question.type,
-      props.taskResultId,
-      props.question.id,
-      props.expeditionId,
-      navigate
-    )
+    answerSaver(userAnswer.current.value, props.question.type, props.expeditionId, props.question.id, props.reloadInfo)
   }
 
   return (
     <Row>
       <Col xs={12}>
-        <QuestionCard className='h-auto py-5'>
-          <div>{props.question.category}</div>
+        <QuestionCard className='h-auto py-5' $background={props.theme.primary} $fontColor={props.theme.font}>
+          <div>{props.question.hint}</div>
           <div>
             <p>{props.question.content}</p>
           </div>
@@ -40,11 +31,12 @@ export default function OpenQuestionPage(props) {
       <Col xs={12}>
         <UserAnswerArea
           ref={userAnswer}
+          $borderColor={props.theme.primary}
           placeholder='Twoja odpowiedź...'
           onInput={() => fitAreaToContent(userAnswer.current)}
         ></UserAnswerArea>
       </Col>
-      <ButtonRow className='w-50'>
+      <ButtonRow className='w-50' $background={props.theme.success}>
         <button style={{ marginBottom: '50px' }} onClick={() => saveAnswer()}>
           Wyślij
         </button>
@@ -52,3 +44,10 @@ export default function OpenQuestionPage(props) {
     </Row>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(OpenQuestionPage)

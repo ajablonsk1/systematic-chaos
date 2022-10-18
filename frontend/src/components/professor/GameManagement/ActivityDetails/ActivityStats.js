@@ -10,6 +10,8 @@ import StatsCard from './StatsCard'
 import { Activity, ERROR_OCCURRED } from '../../../../utils/constants'
 import PercentageCircle from '../../../student/PointsPage/ChartAndStats/PercentageCircle'
 import ActivityService from '../../../../services/activity.service'
+import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement)
 
@@ -87,7 +89,7 @@ function ActivityStats(props) {
     }
 
     return (
-      <CustomTable>
+      <CustomTable $fontColor={props.theme.font} $borderColor={props.theme.primary} $background={props.theme.secondary}>
         <tbody>
           {bodyRows.map((row, index) => (
             <tr key={index + Date.now()}>
@@ -98,7 +100,7 @@ function ActivityStats(props) {
         </tbody>
       </CustomTable>
     )
-  }, [isInfoTask, isSurvey, statsData])
+  }, [isInfoTask, isSurvey, props.theme.font, props.theme.primary, props.theme.secondary, statsData])
 
   const chartCard = useCallback((chartType, data, options, header) => {
     if (!data || !options) {
@@ -123,9 +125,13 @@ function ActivityStats(props) {
 
   return (
     <>
-      <Row className={'m-0 mt-3'} style={{ height: '45vh' }}>
+      <Row className={'m-0 mt-3 gy-2'} style={{ height: isMobileView() ? '100vh' : '45vh' }}>
         <Col md={6}>
-          <CustomCard>
+          <CustomCard
+            $fontColor={props.theme.font}
+            $background={props.theme.primary}
+            $bodyColor={props.theme.secondary}
+          >
             <CardHeader>
               <h5>Statystyki</h5>
             </CardHeader>
@@ -134,7 +140,11 @@ function ActivityStats(props) {
         </Col>
         <Col md={6}>
           {isSurvey ? (
-            <CustomCard>
+            <CustomCard
+              $fontColor={props.theme.font}
+              $background={props.theme.primary}
+              $bodyColor={props.theme.secondary}
+            >
               <CardHeader>
                 <h5>Średnia ocena studentów</h5>
               </CardHeader>
@@ -158,7 +168,7 @@ function ActivityStats(props) {
           )}
         </Col>
       </Row>
-      <Row className={'m-0 mt-3'} style={{ height: '45vh' }}>
+      <Row className={'m-0 mt-3 gy-2'} style={{ height: isMobileView() ? '70vh' : '45vh' }}>
         <Col md={6}>
           {chartCard(
             'BAR',
@@ -182,4 +192,9 @@ function ActivityStats(props) {
   )
 }
 
-export default ActivityStats
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ActivityStats)

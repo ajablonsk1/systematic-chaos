@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { errorToast } from './toasts'
 import { validHeader, multipartFileHeader, fileHeaderWithParams } from './axiosHeaders'
+import { getFormData } from './axiosHelper'
 
 export function axiosApiPost(url, body) {
   return axios
@@ -22,6 +23,16 @@ export function axiosApiGet(url, params) {
     })
 }
 
+export function axiosApiPut(url, body) {
+  return axios
+    .put(url, body, validHeader({}))
+    .then((response) => response.data)
+    .catch((error) => {
+      errorToast(error?.response?.data?.message)
+      throw error
+    })
+}
+
 export function axiosApiDelete(url, params) {
   return axios
     .delete(url, validHeader(params))
@@ -33,15 +44,22 @@ export function axiosApiDelete(url, params) {
 }
 
 export function axiosApiSendFile(url, body) {
-  const formData = new FormData()
-  Object.keys(body).forEach((key) => {
-    if (body[key]) {
-      formData.append(key, body[key])
-    }
-  })
+  const formData = getFormData(body)
 
   return axios
     .post(url, formData, multipartFileHeader({}))
+    .then((response) => response.data)
+    .catch((error) => {
+      errorToast(error?.response?.data?.message)
+      throw error
+    })
+}
+
+export function axiosApiPutFile(url, body) {
+  const formData = getFormData(body)
+
+  return axios
+    .put(url, formData, multipartFileHeader({}))
     .then((response) => response.data)
     .catch((error) => {
       errorToast(error?.response?.data?.message)

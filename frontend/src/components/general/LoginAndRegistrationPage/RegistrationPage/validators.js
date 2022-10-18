@@ -1,4 +1,12 @@
-import { FIELD_REQUIRED } from '../../../../utils/constants'
+import {
+  DIFFERENT_PASSWORDS,
+  FIELD_REQUIRED,
+  INCORRECT_EMAIL,
+  INDEX_WITH_CHARS,
+  PASSWORD_VALIDATION_ERROR,
+  WRONG_INDEX_LENGTH
+} from '../../../../utils/constants'
+import { AccountType } from '../../../../utils/userRole'
 
 export const validatePassword = (values) => {
   let error = ''
@@ -6,32 +14,37 @@ export const validatePassword = (values) => {
   if (!values) {
     error = FIELD_REQUIRED
   } else if (!passwordRegex.test(values)) {
-    error = 'Hasło musi zawierać przynajmniej jedną cyfrę i co najmniej jedną małą i jedną wielką literę'
+    error = PASSWORD_VALIDATION_ERROR
   }
   return error
 }
 
 export const validateConfirmPassword = (pass, value) => {
   let error = ''
-  if (!value) {
+  if (!value || !pass) {
     error = FIELD_REQUIRED
   } else if (pass && value) {
     if (pass !== value) {
-      error = 'Hasła się różnią.'
+      error = DIFFERENT_PASSWORDS
     }
   }
   return error
 }
 
-export const validateEmail = (email) => {
-  const regexEmail =
-    /^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,})$/
+export const validateEmail = (email, accountType) => {
+  const studentEmail = /[a-zA-Z](([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@student\.agh\.edu\.pl$/
+  const professorEmail = /[a-zA-Z](([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@agh\.edu\.pl$/
+
   let error = ''
 
   if (!email) {
     error = FIELD_REQUIRED
-  } else if (!regexEmail.test(email)) {
-    error = 'Podaj poprawny adres email.'
+  } else if (
+    (!studentEmail.test(email) && !professorEmail.test(email)) ||
+    (studentEmail.test(email) && accountType !== AccountType.STUDENT) ||
+    (professorEmail.test(email) && accountType !== AccountType.PROFESSOR)
+  ) {
+    error = INCORRECT_EMAIL
   }
   return error
 }
@@ -39,8 +52,12 @@ export const validateEmail = (email) => {
 // index number may include D in the last position for PhD students, not important for us (I hope so)
 export const validateIndex = (index) => {
   const numbersRegex = /^[0-9]+$/
-  if (!index) return FIELD_REQUIRED
-  else if (index.length !== 6) return 'Nr indeksu musi się składać z sześciu cyfr.'
-  else if (!numbersRegex.test(index)) return 'Nr indeksu musi składać się z samych cyfr.'
+  if (!index) {
+    return FIELD_REQUIRED
+  } else if (index.length !== 6) {
+    return WRONG_INDEX_LENGTH
+  } else if (!numbersRegex.test(index)) {
+    return INDEX_WITH_CHARS
+  }
   return ''
 }

@@ -1,16 +1,3 @@
-import {
-  fa5,
-  faArrowsToEye,
-  faBullseye,
-  faCertificate,
-  faChessBoard,
-  faHouse,
-  faListCheck,
-  faRankingStar,
-  faStar,
-  faUsers,
-  faUser
-} from '@fortawesome/free-solid-svg-icons'
 import priestImg from '../storage/resources/pope.png'
 import rogueImg from '../storage/resources/rogue.png'
 import warriorImg from '../storage/resources/warrior.png'
@@ -36,35 +23,30 @@ import warrior14 from '../storage/resources/warrior/13.png'
 import warrior15 from '../storage/resources/warrior/14.png'
 import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
-import { HeroType } from './userRole'
+import { HeroType, PlayerType } from './userRole'
 import moment from 'moment'
-import { GeneralRoutes, StudentRoutes, TeacherRoutes } from '../routes/PageRoutes'
-
-export const UserSidebarTitles = {
-  [StudentRoutes.GAME_CARD]: ['Karta gry', faHouse],
-  [StudentRoutes.GAME_MAP.MAIN]: ['Mapa gry', faChessBoard],
-  [StudentRoutes.POINTS]: ['Punkty', faStar],
-  [StudentRoutes.RANKING]: ['Ranking', faRankingStar],
-  [StudentRoutes.BADGES]: ['Rangi i odznaki', faCertificate],
-  [GeneralRoutes.CANVAS]: ['Świat gry', faChessBoard],
-  [StudentRoutes.PROFILE]: ['Profil', faUser]
-}
-
-export const TeacherSidebarTitles = {
-  [TeacherRoutes.GAME_SUMMARY]: ['Podsumowanie gry', faBullseye],
-  [TeacherRoutes.RANKING]: ['Ranking', faRankingStar],
-  [TeacherRoutes.GAME_MANAGEMENT.MAIN]: ['Zarządzanie grą', faListCheck],
-  [TeacherRoutes.PARTICIPANTS]: ['Uczestnicy', faUsers],
-  [TeacherRoutes.ACTIVITY_ASSESSMENT.LIST]: ['Sprawdzanie aktywności', faArrowsToEye],
-  [TeacherRoutes.GRADES]: ['Oceny', fa5]
-}
+import { StudentRoutes } from '../routes/PageRoutes'
 
 export const FIELD_REQUIRED = 'Pole wymagane.'
-export const POSITIVE_NUMBER = 'Wymagana liczba z przedziału [1,10]'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
 export const NOT_LOGGED_IN_ERROR = 'Logowanie nieudane. Niepoprawny login lub hasło.'
 export const ERROR_OCCURRED = 'Wystąpił nieoczekiwany błąd'
+export const PASSWORD_VALIDATION_ERROR =
+  'Hasło musi zawierać przynajmniej jedną cyfrę i co najmniej jedną małą i jedną wielką literę'
+export const DIFFERENT_PASSWORDS = 'Hasła się różnią.'
+export const INCORRECT_EMAIL = 'Podaj poprawny adres email.'
+export const WRONG_INDEX_LENGTH = 'Nr indeksu musi się składać z sześciu cyfr.'
+export const INDEX_WITH_CHARS = 'Nr indeksu musi składać się z samych cyfr.'
+export const FILE_INPUT_REQUIRED = 'Nie wybrano żadnego pliku.'
+
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
+export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
+
+export const GRAPH_NODE_BASIC_SIZE = 20
+export const GRAPH_NODE_SPECIAL_SIZE = 40
+
+export const base64Header = 'data:image/jpeg;base64,'
+
 export const Activity = {
   EXPEDITION: 'EXPEDITION',
   INFO: 'INFO',
@@ -131,24 +113,24 @@ export const RegistrationLabelsAndTypes = {
   lastName: ['Nazwisko', 'text'],
   index: ['Nr. indeksu', 'text'],
   email: ['Email', 'email'],
-  invitationCode: ['Klucz dostępu', 'text'],
+  token: ['Klucz dostępu', 'password'],
   heroType: ['Typ osobowości postaci', 'select'],
   password: ['Hasło', 'password'],
   passwordRepeat: ['Powtórz hasło', 'password']
 }
 
 export const HeroDescriptions = {
-  warrior: `Skupiony na zdolnościach walki, całkowicie pozbawiony magicznych zdolności. 
+  [HeroType.WARRIOR]: `Skupiony na zdolnościach walki, całkowicie pozbawiony magicznych zdolności. 
             Łatwiej mu pokonać trudnego przeciwnika (daje raz w miesiącu możliwość podmiany 
             treści pytania trudnego na treść pytania łatwego w ekspedycji bez zmiany ilości puntków za zadanie).
             W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz.`,
-  wizard: `Przejawiający zdolności magiczne, lecz fizycznie słaby. Dzięki swoim czarom może cofnąć się w grafie
+  [HeroType.WIZARD]: `Przejawiający zdolności magiczne, lecz fizycznie słaby. Dzięki swoim czarom może cofnąć się w grafie
             ekspedycji do wyboru pytania (anulować ostatni wybór) i wybrać inne (umiejętność dostępna raz na miesiąc).
             W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz.`,
-  priest: `Specjalizujący się w uzdrawianiu. Dzięki swoim umiejętnościom uzdrawiania może dodać sobie 5pkt po zakończeniu
+  [HeroType.PRIEST]: `Specjalizujący się w uzdrawianiu. Dzięki swoim umiejętnościom uzdrawiania może dodać sobie 5pkt po zakończeniu
             ekspedycji. Umiejętność ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
             lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`,
-  rogue: `Potrafi poruszać się bezszelestnie, skradanie to jego dominująca umiejętność. Dzięki swoim zdolnościom 
+  [HeroType.ROGUE]: `Potrafi poruszać się bezszelestnie, skradanie to jego dominująca umiejętność. Dzięki swoim zdolnościom 
             umożliwi Ci pominąć jedno pytanie w ekspedycji na poziomie łatwym warte nie więcej niż 5pkt. Umiejętność
             ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
             lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`
@@ -220,13 +202,13 @@ export const RequirementType = {
   NUMBER: 'number',
   TEXT: 'text',
   BOOLEAN: 'boolean',
-  DATE: 'date,',
-  MULTI_SELECT: 'email',
+  DATE: 'date',
+  MULTI_SELECT: 'multi_select',
   SELECT: 'select'
 }
 
 export const requirementValueConverter = (requirement) => {
-  switch (requirement.type) {
+  switch (requirement.type.toLowerCase()) {
     case RequirementType.DATE:
       return moment(requirement.value).format('DD.MM.YYYY, HH:mm')
     case RequirementType.SELECT:
@@ -241,4 +223,31 @@ export const requirementValueConverter = (requirement) => {
     default:
       return ''
   }
+}
+
+export const EXPEDITION_STATUS = {
+  ANSWER: 'ANSWER',
+  CHOOSE: 'CHOOSE'
+}
+
+export const convertHeroTypeToPlayerType = (heroType) => {
+  if (heroType === HeroType.ROGUE || heroType === HeroType.WARRIOR) {
+    return PlayerType.CHALLENGING
+  }
+  return PlayerType.CALM
+}
+
+export const getGameCardInfo = (playerType, data) => {
+  if (playerType === PlayerType.CHALLENGING) {
+    return (
+      <span>
+        Zajmujesz <strong>{data.rankPosition}</strong> miejsce na <strong>{data.rankLength}</strong>!
+      </span>
+    )
+  }
+  return (
+    <span>
+      Jesteś w grupie <strong>{data.userPoints}</strong>% najlepszych graczy.
+    </span>
+  )
 }

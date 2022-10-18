@@ -21,7 +21,25 @@ public class ExceptionMessage {
     public static final String OPTION_FORM_FIELDS ="Każde pole w odpowiedzi do pytania powinno miec wartość";
     public static final String INVALID_QUESTION_TYPE ="Pole questionType powinno mieć wartość OPENED / SINGLE_CHOICE / MULTIPLE_CHOICE";
     public static final String INVALID_DIFFICULTY ="Pole difficulty powinno mieć wartość EASY / MEDIUM / HARD";
-    public static final String CONTENT_LEN_TOO_BIG ="Liczba znaków w polu content nie może przekraczać ";
+    public static final String CONTENT_LEN_TOO_BIG ="Liczba znaków w polu content nie może przekraczać 1000";
+    public static final String GRAPH_TASK_TITLE_NOT_UNIQUE ="Tytuł ekspedycji musi byc unikalny";
+    public static final String FILE_TASK_TITLE_NOT_UNIQUE ="Tytuł zadania bojowego musi byc unikalny";
     public static final String TWO_ACTIVITIES_ON_THE_SAME_POSITION ="Dwie aktywności nie mogą być na takiej samej pozycji!";
     public static final String ACTIVITY_OUTSIDE_BOUNDARIES ="Pozycja aktywności musi mieścić się w obszarze mapy!";
+    public static final String TWO_CHAPTERS_ON_THE_SAME_POSITION ="Dwa rozdziały nie mogą być na takiej samej pozycji!";
+    public static final String GROUP_NOT_FOUND ="Grupa o podanej nazwie nie istnieje: ";
+    public static final String STUDENT_NOT_FOUND ="Student o podanym emailu nie istnieje: ";
+    public static final String GRAPH_TASK_NOT_FOUND ="Ekspedycja o podanej nazwie nie istnieje: ";
+    public static final String FILE_TASK_NOT_FOUND ="Zadanie bojowe o podanej nazwie nie istnieje: ";
+    public static final String GROUP_NAME_CONTAINS_SEMICOLON ="Nazwa grupy nie może posiadać średnika";
+    public static final String EMAIL_CONTAINS_SEMICOLON ="Email nie może posiadać średnika";
+    public static final String FILE_TASK_TITLE_CONTAINS_SEMICOLON ="Nazwa zadania bojowego nie może posiadać średnika";
+    public static final String GRAPH_TASK_TITLE_CONTAINS_SEMICOLON ="Nazwa ekspedycji nie może posiadać średnika";
+    public static final String TIME_REMAINING_IS_UP ="Czas na przejście ekspedycji się skończył";
+    public static final String CHAPTER_MAP_SIZE_TOO_SMALL = "Podane wymiary mapy są zbyt małe dla istniejących na niej aktywności";
+    public static final String IMAGE_NOT_EXISTS = "Zdjęcia o podanym id nie ma w bazie danych.";
+    public static final String PROFESSOR_REGISTER_TOKEN_NOT_PASSED = "Token do rejestracji prowadzącego nie został podanny";
+    public static final String WRONG_PROFESSOR_REGISTER_TOKEN = "Token do rejestracji prowadzącego jest niepoprawny";
+    public static final String RANK_NAME_TOO_LONG = "Nazwa nie może przekraczać 30 znaków";
+    public static final String SAME_RANK_MIN_POINTS = "Inna ranga posiada już podaną wartość progu punktowego";
 }

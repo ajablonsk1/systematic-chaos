@@ -1,12 +1,13 @@
 import axios from 'axios'
 import QueryString from 'qs'
 import { AccountType } from '../utils/userRole'
-import { BASE_URL } from './urls'
+import { GET_TOKEN_REFRESH, POST_LOGIN, POST_REGISTER, PUT_PASSWORD_EDITION } from './urls'
+import { axiosApiPut } from '../utils/axios'
 
 class AuthService {
   login({ email, password }) {
     return axios
-      .post(BASE_URL + 'login', QueryString.stringify({ email: email, password: password }), {
+      .post(POST_LOGIN, QueryString.stringify({ email: email, password: password }), {
         'Content-Type': 'application/x-www-form-urlencoded'
       })
       .then((response) => {
@@ -24,7 +25,7 @@ class AuthService {
     localStorage.removeItem('user')
   }
 
-  register({ firstName, lastName, email, password, invitationCode, accountType, heroType, index }) {
+  register({ firstName, lastName, email, password, accountType, heroType, index, token }) {
     const body = {
       firstName: firstName,
       lastName: lastName,
@@ -34,13 +35,15 @@ class AuthService {
     }
 
     if (accountType === AccountType.STUDENT) {
-      body.invitationCode = invitationCode
+      body.invitationCode = token
       body.heroType = heroType
       body.indexNumber = +index
+    } else if (accountType === AccountType.PROFESSOR) {
+      body.professorRegistrationToken = token
     }
 
     return axios
-      .post(BASE_URL + 'register', body, {
+      .post(POST_REGISTER, body, {
         'Content-Type': 'application/x-www-form-urlencoded'
       })
       .catch((err) => {
@@ -50,7 +53,7 @@ class AuthService {
 
   refreshToken(refreshToken) {
     return axios
-      .get(BASE_URL + 'token/refresh', {
+      .get(GET_TOKEN_REFRESH, {
         headers: { Authorization: 'Bearer ' + refreshToken }
       })
       .then((response) => {
@@ -59,6 +62,12 @@ class AuthService {
       .catch((err) => {
         throw err
       })
+  }
+
+  editPassword(newPassword) {
+    return axiosApiPut(PUT_PASSWORD_EDITION, { newPassword: newPassword }).catch((error) => {
+      throw error
+    })
   }
 }
 

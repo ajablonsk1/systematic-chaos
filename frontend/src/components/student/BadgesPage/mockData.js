@@ -1,6 +1,3 @@
-import prevRankImg from './images/warrior1.png'
-import actualRankImg from './images/swordsman.png'
-import nextRankImg from './images/knight.png'
 import helmetBadge from './images/helmet.png'
 import collegeBadge from './images/college.png'
 import badge from './images/badge.png'
@@ -8,29 +5,6 @@ import badge100 from './images/badge100.png'
 import goalBadge from './images/goal.png'
 import centerBadge from './images/center.png'
 
-const prevRank = {
-  name: 'Uczeń mistrza',
-  imgSrc: prevRankImg,
-  minPoints: 0,
-  maxPoints: 100
-}
-
-const actualRank = {
-  name: 'Początkujący wojownik',
-  imgSrc: actualRankImg,
-  minPoints: 101,
-  maxPoints: 300
-}
-
-const nextRank = {
-  name: 'Rycerz bez konia',
-  imgSrc: nextRankImg,
-  minPoints: 301,
-  maxPoints: 600
-}
-
-const studentPoints = 250
-const missingPoints = 50
 const studentBadgesNumber = 6
 const allBadgesNumber = 10
 
@@ -82,14 +56,6 @@ const lastUnlockedBadge = {
   description: 'Za wybranie najkrótszej drogi w aktywności typu "Ekspedycja"',
   unlocked: true,
   unlockedDate: '14.08.2022'
-}
-
-export const getRankInfo = () => {
-  return [prevRank, actualRank, nextRank]
-}
-
-export const getStudentPoints = () => {
-  return [studentPoints, missingPoints]
 }
 
 export const getBadgesInfo = () => {

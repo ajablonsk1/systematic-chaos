@@ -1,9 +1,13 @@
 import { Container } from 'react-bootstrap'
 import styled from 'styled-components'
-import { Content } from '../../App/AppGeneralStyles'
+import gameMap from './resources/map1.png'
 
-export const GameContent = styled(Content)`
-  max-height: 100vh;
+export const GameMapContainer = styled.div`
+  height: ${(props) => (props.$customHeight ? props.$customHeight + 'px' : '90vh')};
+  width: ${(props) => (props.$customHeight ? props.$customHeight * 1.5 + 'px' : '135vh')};
+  border: 10px solid ${(props) => props.$borderColor};
+  background: url('${gameMap}') no-repeat center;
+  background-size: cover;
 `
 
 export const Map = styled(Container)`

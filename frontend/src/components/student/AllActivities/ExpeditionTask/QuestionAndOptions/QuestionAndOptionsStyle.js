@@ -10,13 +10,17 @@ export const ContentWithBackground = styled(Content)`
   flex-direction: column;
   justify-content: center;
   padding: 20px;
+
+  @media (max-width: 575px) {
+    padding: 100px 20px 20px 20px;
+  }
 `
 
 export const QuestionCard = styled.div`
   height: 80vh;
 
-  background-color: var(--dark-blue);
-  color: var(--font-color);
+  background-color: ${(props) => props.$background};
+  color: ${(props) => props.$fontColor};
   margin: 0;
   text-align: center;
   /* width: calc(100% - var(--margin)); */
@@ -30,7 +34,7 @@ export const QuestionCard = styled.div`
       width: 80%;
       height: 2px;
       margin: 20px auto;
-      background-color: var(--font-color);
+      background-color: ${(props) => props.$fontColor};
       border-radius: 50px;
     }
   }
@@ -54,8 +58,8 @@ export const QuestionCard = styled.div`
 export const Answer = styled(Row)`
   padding: 20px 10px;
   font-size: 23px;
-  background-color: var(--dark-blue);
-  color: var(--font-color);
+  background-color: ${(props) => props.$background};
+  color: ${(props) => props.$fontColor};
   max-width: 95%;
   margin: 0 0 10px;
 
@@ -76,7 +80,7 @@ export const ButtonRow = styled(Row)`
   & > button {
     font-size: 23px;
     margin: 0 auto;
-    background-color: var(--button-green);
+    background-color: ${(props) => props.$background};
     border: none;
     width: 50%;
     padding: 10px;
@@ -85,7 +89,7 @@ export const ButtonRow = styled(Row)`
     outline-color: darkgreen;
 
     &:hover {
-      background-color: var(--button-green);
+      background-color: ${(props) => props.$background};
       filter: brightness(85%);
     }
   }

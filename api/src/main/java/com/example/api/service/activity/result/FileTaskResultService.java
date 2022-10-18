@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -84,5 +85,9 @@ public class FileTaskResultService {
         File file = fileRepo.findFileById(fileId);
         activityValidator.validateFileIsNotNull(file, fileId);
         return new ByteArrayResource(file.getFile());
+    }
+
+    public List<FileTaskResult> getAllFileTaskResultsForStudent(User student) {
+        return fileTaskResultRepo.findAllByUser(student);
     }
 }

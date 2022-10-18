@@ -6,5 +6,5 @@ export const UserAnswerArea = styled.textarea`
   padding: 20px;
   font-size: 20px;
   border-radius: 10px;
-  border: 3px solid var(--dark-blue);
+  border: 3px solid ${(props) => props.$borderColor};
 `

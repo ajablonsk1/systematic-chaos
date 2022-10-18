@@ -14,10 +14,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FeedbackFileService from './FeedbackFileService'
 import { Header, VerticalSpacer, HorizontalSpacer, ActivityDetails } from '../../../general/TaskSharedComponents'
 import { Fade } from 'react-awesome-reveal'
+import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 const FIELD_DELAY = 600
 
-export default function CombatTask() {
+function CombatTask(props) {
+  const isMobileDisplay = isMobileView()
+
   const location = useLocation()
   const { activityId: taskState } = location.state
 
@@ -94,21 +98,32 @@ export default function CombatTask() {
       <>
         <HorizontalSpacer height={'3vh'} />
         <Col
-          className='m-0 pt-4 mx-auto'
-          style={{ height: '94vh', width: '90%', backgroundColor: 'var(--light-blue)' }}
+          className='pt-4 mx-auto'
+          style={{
+            height: isMobileDisplay ? 'auto' : '94vh',
+            width: '90%',
+            backgroundColor: props.theme.secondary,
+            margin: isMobileDisplay ? '0 0 85px 0' : 0
+          }}
         >
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '6vh' }}>
+          <Row
+            className='p-2 rounded mx-2'
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '6vh' }}
+          >
             <Header activityName={task.name} activityType={Activity.TASK} />
           </Row>
           <VerticalSpacer height={'2vh'} />
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: 'var(--dark-blue)', height: '25vh' }}
+            style={{ backgroundColor: props.theme.primary, height: '25vh' }}
           >
             <ActivityDetails description={task.description} />
           </Row>
           <VerticalSpacer height={'2vh'} />
-          <Row className='p-2 rounded mx-2' style={{ backgroundColor: 'var(--dark-blue)', height: '50vh' }}>
+          <Row
+            className='p-2 rounded mx-2'
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '50vh' }}
+          >
             <Col
               md={task.answer || answerWasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
               className={'h-100 overflow-auto'}
@@ -129,7 +144,14 @@ export default function CombatTask() {
                           <p>{task.answer}</p>
                         </Col>
                       )}
-                      <RemarksTextArea ref={textAreaRef} disabled={isReviewed()} onChange={handleAnswerChange} />
+                      <RemarksTextArea
+                        $fontColor={props.theme.font}
+                        $background={props.theme.secondary}
+                        $borderColor={props.theme.warning}
+                        ref={textAreaRef}
+                        disabled={isReviewed()}
+                        onChange={handleAnswerChange}
+                      />
                     </>
                   )}
                   <Col className={'text-center'}>
@@ -139,11 +161,15 @@ export default function CombatTask() {
                       setFileName={setFileName}
                       setIsFetching={setIsFetching}
                       isFetching={isFetching}
-                      isRevieved={isReviewed()}
+                      isReviewed={isReviewed()}
                     />
                   </Col>
                   <Col className={'w-100 text-center'}>
-                    <SendTaskButton disabled={task.points != null} onClick={sendAnswer}>
+                    <SendTaskButton
+                      $background={props.theme.success}
+                      disabled={task.points != null}
+                      onClick={sendAnswer}
+                    >
                       {isFetching ? (
                         <Spinner animation={'border'} />
                       ) : isReviewed() ? (
@@ -164,7 +190,10 @@ export default function CombatTask() {
                 <Col className={'border-left border-warning overflow-auto'}>
                   <h4>Aktywność została oceniona</h4>
                   <VerticalSpacer height={'2vh'} />
-                  <Col className={'text-center mx-auto border border-warning p-1 rounded'} style={{ width: '20%' }}>
+                  <Col
+                    className={'text-center mx-auto border p-1 rounded'}
+                    style={{ width: '20%', borderColor: props.theme.warning }}
+                  >
                     <h5>Punkty </h5>
                     <p>{task.points}</p>
                   </Col>
@@ -185,8 +214,15 @@ export default function CombatTask() {
   }
 
   return (
-    <Content style={{ color: 'var(--font-color)' }}>
+    <Content style={{ color: props.theme.font }}>
       {task === undefined ? <Loader /> : task == null ? ERROR_OCCURRED : contentBody()}
     </Content>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(CombatTask)

@@ -20,6 +20,9 @@ public class ChapterInfoResponse {
     private Double maxPoints;
     private String mapSize;
     private List<MapTask> mapTasks;
+    private Integer posX;
+    private Integer posY;
+    private Long imageId;
 
     public ChapterInfoResponse(Chapter chapter, List<MapTask> mapTasks) {
         this.id = chapter.getId();
@@ -32,5 +35,8 @@ public class ChapterInfoResponse {
         this.maxPoints = chapter.getMaxPoints();
         this.mapSize = chapter.getActivityMap().getMapSizeX() + " x " + chapter.getActivityMap().getMapSizeY();
         this.mapTasks = mapTasks;
+        this.posX = chapter.getPosX();
+        this.posY = chapter.getPosY();
+        this.imageId = chapter.getActivityMap().getImage().getId();
     }
 }

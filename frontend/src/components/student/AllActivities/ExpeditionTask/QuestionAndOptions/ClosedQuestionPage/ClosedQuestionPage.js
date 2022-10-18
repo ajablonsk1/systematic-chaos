@@ -2,11 +2,10 @@ import React, { useRef, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { Answer, ButtonRow, QuestionCard } from '../QuestionAndOptionsStyle'
 import answerSaver from '../answerSaver'
-import { useNavigate } from 'react-router-dom'
+import { connect } from 'react-redux'
 
 function ClosedQuestionPage(props) {
   const answersParent = useRef(null)
-  const navigate = useNavigate()
 
   // this array should only have an id
   const [userAnswers, setUserAnswers] = useState([])
@@ -22,7 +21,7 @@ function ClosedQuestionPage(props) {
   }
 
   const saveAnswer = () => {
-    answerSaver(userAnswers, props.question.type, props.taskResultId, props.question.id, props.expeditionId, navigate)
+    answerSaver(userAnswers, props.question.type, props.expeditionId, props.question.id, props.reloadInfo)
   }
 
   return (
@@ -32,7 +31,7 @@ function ClosedQuestionPage(props) {
       }}
     >
       <Col lg={8}>
-        <QuestionCard>
+        <QuestionCard $fontColor={props.theme.font} $background={props.theme.primary}>
           <div>{props.question.hint}</div>
           <div>
             <p>{props.question.content}</p>
@@ -42,7 +41,12 @@ function ClosedQuestionPage(props) {
       </Col>
       <Col lg={4} className='py-lg-0 py-3' ref={answersParent}>
         {props.question.options.map((answer) => (
-          <Answer key={answer.id} className='mx-lg-0 mx-auto'>
+          <Answer
+            $background={props.theme.primary}
+            $fontColor={props.theme.font}
+            key={answer.id}
+            className='mx-lg-0 mx-auto'
+          >
             <Col xxl={1} xs={2} onChange={() => updateUserAnswers()}>
               <input
                 name='answer'
@@ -56,7 +60,7 @@ function ClosedQuestionPage(props) {
             </Col>
           </Answer>
         ))}
-        <ButtonRow>
+        <ButtonRow $background={props.theme.success}>
           <button style={{ marginBottom: '50px' }} onClick={() => saveAnswer()}>
             Wyślij
           </button>
@@ -66,4 +70,9 @@ function ClosedQuestionPage(props) {
   )
 }
 
-export default ClosedQuestionPage
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(ClosedQuestionPage)

@@ -1,6 +1,8 @@
 import { Modal, ModalBody, ModalFooter, Button } from 'react-bootstrap'
+import { connect } from 'react-redux'
 
-export function SuccessModal({ isSuccessModalOpen, setIsSuccessModalOpen, text, headerText }) {
+function SuccessModal(props) {
+  const { isSuccessModalOpen, setIsSuccessModalOpen, text, headerText } = props
   return (
     <Modal show={isSuccessModalOpen}>
       {headerText && (
@@ -10,10 +12,21 @@ export function SuccessModal({ isSuccessModalOpen, setIsSuccessModalOpen, text, 
       )}
       <ModalBody className={'text-center'}>{text}</ModalBody>
       <ModalFooter className={'justify-content-center'}>
-        <Button variant={'success'} onClick={() => setIsSuccessModalOpen(false)}>
+        <Button
+          style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+          onClick={() => setIsSuccessModalOpen(false)}
+        >
           Zakończ
         </Button>
       </ModalFooter>
     </Modal>
   )
 }
+
+function mapStateToProps(state) {
+  const theme = state.theme
+  return {
+    theme
+  }
+}
+export default connect(mapStateToProps)(SuccessModal)

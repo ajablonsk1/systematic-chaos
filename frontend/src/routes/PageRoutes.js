@@ -12,7 +12,8 @@ export const StudentRoutes = {
       INFO: '/game-map/expedition/info',
       QUESTION_SELECTION: '/game-map/expedition/doors-selection',
       QUESTION_CONTENT: '/game-map/expedition/question',
-      SUMMARY: '/game-map/expedition/summary'
+      SUMMARY: '/game-map/expedition/summary',
+      EXPEDITION_WRAPPER: '/game-map/expedition/test'
     },
     COMBAT_TASK: '/game-map/combat-task',
     SURVEY_TASK: '/game-map/survey-task',
@@ -31,12 +32,14 @@ export const TeacherRoutes = {
     MAIN: '/game-management',
     GROUPS: '/game-management/groups',
     CHAPTER: '/game-management/chapter',
-    RANKS_AND_BADGES: '/game-management/ranks-and-badges'
+    RANKS_AND_BADGES: '/game-management/ranks-and-badges',
+    GAME_SETTINGS: '/game-management/game-settings'
   },
   PARTICIPANTS: '/participants',
   ACTIVITY_ASSESSMENT: {
     LIST: '/assessment/list',
     ACTIVITY: '/assessment/activity-assessment'
   },
-  GRADES: '/grades'
+  GRADES: '/grades',
+  SETTINGS: '/settings'
 }

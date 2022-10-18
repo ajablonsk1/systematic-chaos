@@ -2,8 +2,8 @@ package com.example.api.service.activity.task;
 
 import com.example.api.dto.request.activity.task.create.CreateInfoChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateInfoForm;
+import com.example.api.dto.request.activity.task.edit.EditInfoForm;
 import com.example.api.dto.response.activity.task.InfoResponse;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.task.Info;
@@ -15,7 +15,8 @@ import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.validator.MapValidator;
+import com.example.api.service.map.RequirementService;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -36,8 +38,9 @@ public class InfoService {
     private final AuthenticationService authService;
     private final UserRepo userRepo;
     private final UserValidator userValidator;
-    private final MapValidator mapValidator;
     private final UrlRepo urlRepo;
+    private final RequirementService requirementService;
+    private final ChapterValidator chapterValidator;
 
     public Info saveInfo(Info info){
         return infoRepo.save(info);
@@ -59,7 +62,7 @@ public class InfoService {
         CreateInfoForm form = chapterForm.getForm();
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateInfoForm(form);
         activityValidator.validateActivityPosition(form, chapter);
 
@@ -78,7 +81,45 @@ public class InfoService {
                 professor,
                 imageUrls
         );
+        info.setRequirements(requirementService.getDefaultRequirements());
         infoRepo.save(info);
         chapter.getActivityMap().getInfos().add(info);
     }
+
+    public List<Info> getStudentInfos(User student) {
+        return infoRepo.findAll()
+                .stream()
+                .filter(info -> !requirementService.areRequirementsDefault(info.getRequirements()))
+                .toList();
+    }
+
+    public void editInfo(Info info, EditInfoForm form) {
+        CreateInfoForm infoForm = (CreateInfoForm) form.getActivityBody();
+        info.setContent(infoForm.getInfoContent());
+        editImageUrls(info, infoForm.getImageUrls());
+    }
+
+    private void editImageUrls(Info info, List<String> newUrlsString) {
+        List<Url> remainingUrls = info.getImageUrls()
+                .stream()
+                .filter(oldUrl -> newUrlsString.stream().anyMatch(newUrl -> oldUrl.getUrl().equals(newUrl)))
+                .toList();
+        List<Url> newUrls = newUrlsString
+                .stream()
+                .filter(newUrlString -> remainingUrls.stream().noneMatch(remainingUrl -> remainingUrl.getUrl().equals(newUrlString)))
+                .map(newUrlString -> {
+                    Url newUrl = new Url();
+                    newUrl.setUrl(newUrlString);
+                    return newUrl;
+                })
+                .toList();
+        urlRepo.saveAll(newUrls);
+        List<Url> updatedUrls = new LinkedList<>();
+        updatedUrls.addAll(remainingUrls);
+        updatedUrls.addAll(newUrls);
+        info.setImageUrls(updatedUrls);
+
+    }
+
+
 }

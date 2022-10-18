@@ -7,8 +7,6 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.SurveyResult;
-import com.example.api.model.activity.result.TaskResult;
-import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;
@@ -68,7 +66,7 @@ public class RankingService {
         return rankingList;
     }
 
-    public List<RankingResponse> getRankingForLoggedStudentGroup() throws EntityNotFoundException {
+    public List<RankingResponse> getRankingForLoggedStudentGroup() {
         String groupName = userService.getUserGroup().getName();
         List<RankingResponse> rankingList = userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
@@ -121,19 +119,7 @@ public class RankingService {
                             student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                             student.getGroupName().toLowerCase().contains(searchLower)
                 )
-                .sorted(((o1, o2) -> {
-                    try {
-                        return Double.compare(o2.getPoints(), o1.getPoints());
-                    } catch (NullPointerException e) {
-                        if (o1.getPoints() == null && o2.getPoints() == null) {
-                            return 0;
-                        } else if (o1.getPoints() == null) {
-                            return Double.compare(o2.getPoints(), 0);
-                        } else {
-                            return Double.compare(0, o1.getPoints());
-                        }
-                    }
-                }))
+                .sorted(((o1, o2) -> Double.compare(o2.getPoints(), o1.getPoints())))
                 .toList();
         addPositionToRankingList(rankingList);
         return rankingList;
@@ -241,11 +227,25 @@ public class RankingService {
                 }).sum();
     }
 
+    private Double getSurveyPoints(User student) {
+        return surveyResultRepo.findAllByUser(student)
+                .stream()
+                .mapToDouble(survey -> {
+                    try {
+                        return survey.getPointsReceived();
+                    } catch (Exception e) {
+                        log.info("SurveyResult with id {} has no points assigned", survey.getId());
+                    }
+                    return 0.0;
+                }).sum();
+    }
+
     private Double getStudentPoints(User student) {
         Double graphTaskPoints = getGraphTaskPoints(student);
         Double fileTaskPoints = getFileTaskPoints(student);
         Double additionalPoints = getAdditionalPoints(student);
-        return DoubleStream.of(graphTaskPoints, fileTaskPoints, additionalPoints).sum();
+        Double surveyPoints = getSurveyPoints(student);
+        return DoubleStream.of(graphTaskPoints, fileTaskPoints, additionalPoints, surveyPoints).sum();
     }
 
 }

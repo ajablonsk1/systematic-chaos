@@ -2,9 +2,9 @@ package com.example.api.service.activity.task;
 
 import com.example.api.dto.request.activity.task.create.CreateFileTaskChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
+import com.example.api.dto.request.activity.task.edit.EditFileTaskForm;
 import com.example.api.dto.response.activity.task.FileTaskInfoResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -19,7 +19,8 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.validator.MapValidator;
+import com.example.api.service.map.RequirementService;
+import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
 import com.example.api.util.calculator.TimeParser;
@@ -28,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -45,8 +45,9 @@ public class FileTaskService {
     private final UserValidator userValidator;
     private final AuthenticationService authService;
     private final ActivityValidator activityValidator;
-    private final MapValidator mapValidator;
     private final TimeParser timeParser;
+    private final RequirementService requirementService;
+    private final ChapterValidator chapterValidator;
 
     public FileTask saveFileTask(FileTask fileTask) {
         return fileTaskRepo.save(fileTask);
@@ -88,24 +89,56 @@ public class FileTaskService {
         return result;
     }
 
-    public void createFileTask(CreateFileTaskChapterForm chapterForm) throws RequestValidationException, ParseException {
+    public void createFileTask(CreateFileTaskChapterForm chapterForm) throws RequestValidationException {
         log.info("Starting the creation of file task");
         CreateFileTaskForm form = chapterForm.getForm();
         Chapter chapter = chapterRepo.findChapterById(chapterForm.getChapterId());
 
-        mapValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
+        chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());
         activityValidator.validateCreateFileTaskFormFields(form);
         activityValidator.validateActivityPosition(form, chapter);
 
+        List<FileTask> fileTasks = fileTaskRepo.findAll();
+        activityValidator.validateFileTaskTitle(form.getTitle(), fileTasks);
+
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        long expireDateMillis = timeParser.parseAndGetTimeMillisFromDate(format, form.getActivityExpireDate());
 
         String email = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(email);
         userValidator.validateProfessorAccount(professor, email);
 
-        FileTask fileTask = new FileTask(form, professor, expireDateMillis);
+        FileTask fileTask = new FileTask(form, professor);
+        fileTask.setRequirements(requirementService.getDefaultRequirements());
         fileTaskRepo.save(fileTask);
         chapter.getActivityMap().getFileTasks().add(fileTask);
+    }
+
+    public List<FileTask> getStudentFileTasks(User student) {
+        return fileTaskRepo.findAll()
+                .stream()
+                .filter(fileTask -> !requirementService.areRequirementsDefault(fileTask.getRequirements()))
+                .toList();
+    }
+
+    public void editFileTask(FileTask fileTask, EditFileTaskForm form) {
+        CreateFileTaskForm fileTaskForm = (CreateFileTaskForm) form.getActivityBody();
+        fileTask.setRequiredKnowledge(fileTaskForm.getRequiredKnowledge());
+        editMaxPoints(fileTask, fileTaskForm.getMaxPoints());
+    }
+
+    public void editMaxPoints(FileTask fileTask, Double newMaxPoints) {
+        fileTaskResultRepo.findAllByFileTask(fileTask)
+                .stream()
+                .filter(FileTaskResult::isEvaluated)
+                .forEach(fileTaskResult -> {
+                    Double prevPoints = fileTaskResult.getPointsReceived();
+                    Double newPoints = prevPoints * (newMaxPoints / fileTask.getMaxPoints());
+                    ProfessorFeedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
+                    if (feedback != null) {
+                        feedback.setPoints(newPoints);
+                    }
+                    fileTaskResult.setPointsReceived(newPoints);
+                });
+        fileTask.setMaxPoints(newMaxPoints);
     }
 }
