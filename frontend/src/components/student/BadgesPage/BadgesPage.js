@@ -202,7 +202,7 @@ function BadgesPage(props) {
           />
         </Col>
         <Col md={3} className={`p-0 ${isMobileDisplay ? 'mb-5' : 'mb-0'}`}>
-          <Row className={`h-50 pb-2 pr-2 m-0 ${isMobileDisplay ? 'mb-3' : 'mb-0'}`}>
+          <Row className={`pb-2 pr-2 m-0 ${isMobileDisplay ? 'mb-3' : 'mb-0 h-50'}`}>
             <ContentCard
               header={'Posiadasz'}
               body={
@@ -233,7 +233,7 @@ function BadgesPage(props) {
             />
           </Row>
 
-          <Row className={'m-0 h-50 pr-2'}>
+          <Row className={`m-0 pr-2 ${isMobileDisplay ? '' : 'h-50'}`}>
             <ContentCard
               header={'Ostatnio zdobyta'}
               body={
