@@ -21,9 +21,11 @@ class ProfessorService {
   }
 
   getCSVGradesFile(studentsId, activitiesId) {
-    return axiosApiGetFile(POST_TASK_RESULT_CSV, { studentIds: studentsId, forms: activitiesId }).catch((error) => {
-      throw error
-    })
+    return axiosApiGetFile(POST_TASK_RESULT_CSV, { studentIds: studentsId, activityIds: activitiesId }).catch(
+      (error) => {
+        throw error
+      }
+    )
   }
 
   getTasksToEvaluateList() {
