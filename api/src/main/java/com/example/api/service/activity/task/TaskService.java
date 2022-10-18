@@ -96,7 +96,9 @@ public class TaskService {
         if(sendDateMillis != null){
             isLate = task.getRequirements()
                     .stream()
-                    .anyMatch(requirement -> requirement.isLate(sendDateMillis));
+                    .map(Requirement::getDateToMillis)
+                    .filter(Objects::nonNull)
+                    .anyMatch(dateTo -> sendDateMillis > dateTo);
         }
 
         List<FileResponse> filesResponse = result.getFiles().stream().map(FileResponse::new).toList();
@@ -144,12 +146,17 @@ public class TaskService {
 
 
     public void addRequirementToActivity(ActivityRequirementForm form) throws RequestValidationException {
+        Activity activity = getActivity(form.getActivityId());
+        Boolean isBlocked = form.getIsBlocked();
+        if(isBlocked != null) {
+            activity.setIsBlocked(isBlocked);
+        }
         List<RequirementForm> requirementForms = form.getRequirements();
         for (RequirementForm requirementForm: requirementForms) {
             Requirement requirement = requirementRepo.findRequirementById(requirementForm.getId());
             mapValidator.validateRequirementIsNotNull(requirement, requirementForm.getId());
 
-            requirement.setIsSelected(requirementForm.getIsSelected());
+            requirement.setSelected(requirementForm.getIsSelected());
             requirement.setValue(requirementValueVisitor, requirementForm.getValue());
         }
     }

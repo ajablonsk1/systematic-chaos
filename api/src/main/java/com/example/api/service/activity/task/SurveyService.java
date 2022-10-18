@@ -71,10 +71,10 @@ public class SurveyService {
         chapter.getActivityMap().getSurveys().add(survey);
     }
 
-    public List<Survey> getStudentSurvey(User student) {
+    public List<Survey> getStudentSurvey() {
         return surveyRepo.findAll()
                 .stream()
-                .filter(survey -> !requirementService.areRequirementsDefault(survey.getRequirements()))
+                .filter(survey -> !survey.getIsBlocked())
                 .toList();
     }
 

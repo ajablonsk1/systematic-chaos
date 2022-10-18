@@ -104,7 +104,7 @@ public class GraphTaskService {
         chapter.getActivityMap().getGraphTasks().add(graphTask);
     }
 
-    public List<GraphTask> getStudentGraphTasks(User student) {
+    public List<GraphTask> getStudentGraphTasks() {
         return graphTaskRepo.findAll()
                 .stream()
                 .filter(graphTask -> !graphTask.getIsBlocked())

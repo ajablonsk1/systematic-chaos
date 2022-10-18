@@ -41,7 +41,7 @@ public class DateFromRequirement extends Requirement{
                 getName(),
                 dateFromMillis,
                 RequirementValueType.DATE,
-                getIsSelected()
+                getSelected()
         );
     }
 }

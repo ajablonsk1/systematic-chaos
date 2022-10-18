@@ -2,7 +2,6 @@ package com.example.api.model.map.requirement;
 
 import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.error.exception.RequestValidationException;
-import com.example.api.model.activity.result.TaskResult;
 import com.example.api.util.visitor.RequirementFulfilledVisitor;
 import com.example.api.util.visitor.RequirementValueVisitor;
 import lombok.AllArgsConstructor;
@@ -22,52 +21,17 @@ public abstract class Requirement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Boolean isSelected;
+    private Boolean selected;
 
-    public Requirement(String name, boolean isSelected) {
+    public Requirement(String name, boolean selected) {
         this.name = name;
-        this.isSelected = isSelected;
+        this.selected = selected;
     }
 
     public abstract boolean isFulfilled(RequirementFulfilledVisitor visitor);
     public abstract void setValue(RequirementValueVisitor visitor, String value) throws RequestValidationException;
     public abstract RequirementResponse<?> getResponse();
-    public boolean isLate(Long dateMillis) {
-        return false;
+    public Long getDateToMillis() {
+        return null;
     }
-
-//    public boolean isFulfilled(User student, List<GraphTask> graphTasks, List<FileTask> fileTasks) {
-//        if (isDefault) {
-//            return false;
-//        }
-//        if (!isSelected) {
-//            return true;
-//        }
-//        switch (type) {
-//            case DATE_FROM -> {
-//                return System.currentTimeMillis() > dateFrom;
-//            }
-//            case DATE_TO -> {
-//                return System.currentTimeMillis() < dateTo;
-//            }
-//            case MIN_POINTS -> {
-//                return student.getPoints() >= minPoints;
-//            }
-//            case GROUPS -> {
-//                return allowedGroups.contains(student.getGroup());
-//            }
-//            case STUDENTS -> {
-//                return allowedStudents.contains(student);
-//            }
-//            case GRAPH_TASKS -> {
-//                return graphTasks.containsAll(finishedGraphTasks);
-//            }
-//            case FILE_TASKS -> {
-//                return fileTasks.containsAll(finishedFileTasks);
-//            }
-//            default -> {
-//                return false;
-//            }
-//        }
-//    }
 }

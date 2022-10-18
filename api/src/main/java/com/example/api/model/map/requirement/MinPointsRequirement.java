@@ -41,7 +41,7 @@ public class MinPointsRequirement extends Requirement {
                 getName(),
                 minPoints,
                 RequirementValueType.DATE,
-                getIsSelected()
+                getSelected()
         );
     }
 }

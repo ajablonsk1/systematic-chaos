@@ -36,7 +36,7 @@ public class RequirementValueVisitor {
             Long dateFrom = value.equals("") ? null : Long.valueOf(value);
             requirement.setDateFromMillis(dateFrom);
         } catch (NumberFormatException e) {
-            throw new RequestValidationException("");
+            throw new RequestValidationException(ExceptionMessage.DATE_NOT_LONG);
         }
     }
 
@@ -45,7 +45,7 @@ public class RequirementValueVisitor {
             Long dateFrom = value.equals("") ? null : Long.valueOf(value);
             requirement.setDateToMillis(dateFrom);
         } catch (NumberFormatException e) {
-            throw new RequestValidationException("");
+            throw new RequestValidationException(ExceptionMessage.DATE_NOT_LONG);
         }
     }
 
@@ -108,7 +108,7 @@ public class RequirementValueVisitor {
             Double minPoints =  value.equals("") ? null : Double.valueOf(value);
             requirement.setMinPoints(minPoints);
         } catch (NumberFormatException e) {
-            throw new RequestValidationException("");
+            throw new RequestValidationException(ExceptionMessage.MIN_POINTS_NOT_DOUBLE);
         }
     }
 

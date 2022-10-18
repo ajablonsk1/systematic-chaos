@@ -14,5 +14,5 @@ public class MapTask {
     private Double points;
     private Boolean isFulfilled;
     private Boolean isCompleted;
-    private Boolean areRequirementsAdded;
+    private Boolean isActivityBlocked;
 }

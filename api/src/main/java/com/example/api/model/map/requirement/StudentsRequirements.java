@@ -49,7 +49,7 @@ public class StudentsRequirements  extends Requirement{
                 getName(),
                 emails,
                 RequirementValueType.DATE,
-                getIsSelected()
+                getSelected()
         );
     }
 }

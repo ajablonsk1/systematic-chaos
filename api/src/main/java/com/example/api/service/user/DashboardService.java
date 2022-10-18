@@ -66,7 +66,7 @@ public class DashboardService {
         return new DashboardResponse(
                 getHeroTypeStats(student),
                 getGeneralStats(student),
-                getLastAddedActivities(student),
+                getLastAddedActivities(),
                 getHeroStats(student)
         );
     }
@@ -184,11 +184,11 @@ public class DashboardService {
         return maxPointsGraphTask + maxPointsFileTask + maxPointsSurvey;
     }
 
-    private List<LastAddedActivity> getLastAddedActivities(User student) {
-        List<GraphTask> graphTasks = graphTaskService.getStudentGraphTasks(student);
-        List<FileTask> fileTasks = fileTaskService.getStudentFileTasks(student);
-        List<Survey> surveys = surveyService.getStudentSurvey(student);
-        List<Info> infos = infoService.getStudentInfos(student);
+    private List<LastAddedActivity> getLastAddedActivities() {
+        List<GraphTask> graphTasks = graphTaskService.getStudentGraphTasks();
+        List<FileTask> fileTasks = fileTaskService.getStudentFileTasks();
+        List<Survey> surveys = surveyService.getStudentSurvey();
+        List<Info> infos = infoService.getStudentInfos();
 
         return Stream.of(graphTasks, fileTasks, surveys, infos)
                 .flatMap(Collection::stream)
@@ -209,10 +209,10 @@ public class DashboardService {
 
         Requirement requirement = activity.getRequirements()
                 .stream()
-                .filter(req -> req.isIsSelected() && Objects.nonNull(req.getDateTo()))
+                .filter(req -> req.getSelected() && Objects.nonNull(req.getDateToMillis()))
                 .findAny()
                 .orElse(null);
-        Long availableUntil = Objects.nonNull(requirement) ? requirement.getDateTo() : null;
+        Long availableUntil = Objects.nonNull(requirement) ? requirement.getDateToMillis() : null;
         return new LastAddedActivity(chapterName, activityType, points, availableUntil);
 
     }
@@ -243,7 +243,7 @@ public class DashboardService {
         Long fileTasksCompleted = (long) fileTaskResultRepo.findAllByUser(student)
                 .size();
         Long surveysCompleted = (long) surveyResultRepo.findAllByUser(student).size();
-        Long infosCompleted = (long) infoService.getStudentInfos(student).size();
+        Long infosCompleted = (long) infoService.getStudentInfos().size();
         return graphTasksCompleted + fileTasksCompleted + surveysCompleted + infosCompleted;
     }
 }

@@ -49,7 +49,7 @@ public class GroupsRequirement extends Requirement {
                 getName(),
                 groupNames,
                 RequirementValueType.DATE,
-                getIsSelected()
+                getSelected()
         );
     }
 }

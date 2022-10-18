@@ -31,7 +31,7 @@ public class GraphTasksRequirement extends Requirement {
 
     @Override
     public boolean isFulfilled(RequirementFulfilledVisitor visitor) {
-        return visitor.visitDGraphTasksRequirement(this);
+        return visitor.visitGraphTasksRequirement(this);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class GraphTasksRequirement extends Requirement {
                 getName(),
                 titles,
                 RequirementValueType.DATE,
-                getIsSelected()
+                getSelected()
         );
     }
 }

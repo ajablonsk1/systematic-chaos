@@ -76,11 +76,11 @@ public class RequirementService {
         List<Requirement> requirements = List.of(
                 dateFromRequirement,
                 dateToRequirement,
-                fileTasksRequirement,
-                graphTasksRequirement,
-                groupsRequirement,
                 minPointsRequirement,
-                studentsRequirements
+                groupsRequirement,
+                studentsRequirements,
+                graphTasksRequirement,
+                fileTasksRequirement
         );
         requirementRepo.saveAll(requirements);
         return requirements;

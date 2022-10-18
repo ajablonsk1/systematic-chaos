@@ -660,19 +660,14 @@ public class DatabaseConfig {
         List<Requirement> requirements = List.of(
                 dateFromRequirement,
                 dateToRequirement,
-                fileTasksRequirement,
-                graphTasksRequirement,
-                groupsRequirement,
                 minPointsRequirement,
-                studentsRequirements
+                groupsRequirement,
+                studentsRequirements,
+                graphTasksRequirement,
+                fileTasksRequirement
         );
 
-        dateFromRequirement.setDateFromMillis(System.currentTimeMillis());
-        dateToRequirement.setDateToMillis(System.currentTimeMillis() + 1_000 * 60 * 60);
-        minPointsRequirement.setMinPoints(100.0);
-
         requirementRepo.saveAll(requirements);
-
         return requirements;
     }
 

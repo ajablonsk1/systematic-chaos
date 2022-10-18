@@ -25,8 +25,8 @@ public class DateToRequirement extends Requirement {
     }
 
     @Override
-    public boolean isLate(Long dateMillis) {
-        return dateMillis > dateToMillis;
+    public Long getDateToMillis() {
+        return dateToMillis;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class DateToRequirement extends Requirement {
                 getName(),
                 dateToMillis,
                 RequirementValueType.DATE,
-                getIsSelected()
+                getSelected()
         );
     }
 }

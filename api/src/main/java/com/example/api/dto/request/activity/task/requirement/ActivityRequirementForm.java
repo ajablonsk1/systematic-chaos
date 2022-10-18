@@ -11,5 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ActivityRequirementForm {
     private Long activityId;
+    private Boolean isBlocked;
     private List<RequirementForm> requirements;
 }

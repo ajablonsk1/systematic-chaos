@@ -49,7 +49,7 @@ public class FileTasksRequirement extends Requirement {
                 getName(),
                 titles,
                 RequirementValueType.DATE,
-                getIsSelected()
+                getSelected()
         );
     }
 }
