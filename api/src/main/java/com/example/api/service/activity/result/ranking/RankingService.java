@@ -119,19 +119,7 @@ public class RankingService {
                             student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                             student.getGroupName().toLowerCase().contains(searchLower)
                 )
-                .sorted(((o1, o2) -> {
-                    try {
-                        return Double.compare(o2.getPoints(), o1.getPoints());
-                    } catch (NullPointerException e) {
-                        if (o1.getPoints() == null && o2.getPoints() == null) {
-                            return 0;
-                        } else if (o1.getPoints() == null) {
-                            return Double.compare(o2.getPoints(), 0);
-                        } else {
-                            return Double.compare(0, o1.getPoints());
-                        }
-                    }
-                }))
+                .sorted(((o1, o2) -> Double.compare(o2.getPoints(), o1.getPoints())))
                 .toList();
         addPositionToRankingList(rankingList);
         return rankingList;

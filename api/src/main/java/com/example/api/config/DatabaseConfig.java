@@ -22,6 +22,7 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;
 import com.example.api.model.user.Rank;
 import com.example.api.model.user.User;
+import com.example.api.model.user.badge.*;
 import com.example.api.model.util.File;
 import com.example.api.model.util.Image;
 import com.example.api.model.util.ImageType;
@@ -29,7 +30,9 @@ import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
+import com.example.api.repo.user.BadgeRepo;
 import com.example.api.repo.user.RankRepo;
+import com.example.api.repo.user.UnlockedBadgeRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
@@ -47,10 +50,10 @@ import com.example.api.service.map.ActivityMapService;
 import com.example.api.service.map.RequirementService;
 import com.example.api.service.question.OptionService;
 import com.example.api.service.question.QuestionService;
+import com.example.api.service.user.BadgeService;
 import com.example.api.service.user.UserService;
 import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.OnDelete;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -75,6 +78,8 @@ public class DatabaseConfig {
     private final SurveyResultRepo surveyResultRepo;
     private final FileRepo fileRepo;
     private final UserRepo userRepo;
+    private final BadgeRepo badgeRepo;
+    private final UnlockedBadgeRepo unlockedBadgeRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -84,7 +89,7 @@ public class DatabaseConfig {
                                                FileTaskResultService fileTaskResultService, OptionService optionService,
                                                AccessDateService accessDateService, RequirementService requirementService,
                                                FileTaskService fileTaskService, InfoService infoService,
-                                               SurveyService surveyService){
+                                               SurveyService surveyService, BadgeService badgeService){
         return args -> {
 
 
@@ -487,6 +492,7 @@ public class DatabaseConfig {
             result1.setUser(student);
             result1.setMaxPoints100(30.0);
             result1.setPointsReceived(12.0);
+            addReceivedPointsForUser(student, result1.getPointsReceived());
             result1.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 28);
             result1.setStartDateMillis(calendar.getTimeInMillis());
@@ -498,6 +504,7 @@ public class DatabaseConfig {
             result2.setUser(student1);
             result2.setMaxPoints100(10.0);
             result2.setPointsReceived(10.0);
+            addReceivedPointsForUser(student1, result2.getPointsReceived());
             result2.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 13);
             result2.setStartDateMillis(calendar.getTimeInMillis());
@@ -509,6 +516,7 @@ public class DatabaseConfig {
             result3.setUser(student8);
             result3.setMaxPoints100(20.0);
             result3.setPointsReceived(11.0);
+            addReceivedPointsForUser(student8, result3.getPointsReceived());
             result3.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);
             result3.setStartDateMillis(calendar.getTimeInMillis());
@@ -519,6 +527,7 @@ public class DatabaseConfig {
             result4.setGraphTask(graphTaskTwo);
             result4.setUser(student9);
             result4.setPointsReceived(30.5);
+            addReceivedPointsForUser(student9, result4.getPointsReceived());
             result4.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);
             result4.setStartDateMillis(calendar.getTimeInMillis());
@@ -543,7 +552,14 @@ public class DatabaseConfig {
             chapterRepo.save(chapter);
 
             calendar.set(2022, Calendar.JUNE, 15);
-            AdditionalPoints additionalPoints = new AdditionalPoints(1L, student, 100D, calendar.getTimeInMillis(), professor.getEmail(), "Good job");
+            AdditionalPoints additionalPoints = new AdditionalPoints();
+            additionalPoints.setId(1L);
+            additionalPoints.setUser(student);
+            additionalPoints.setPointsReceived(100D);
+            additionalPoints.setSendDateMillis(calendar.getTimeInMillis());
+            additionalPoints.setProfessorEmail(professor.getEmail());
+            additionalPoints.setDescription("Good job");
+            addReceivedPointsForUser(student, additionalPoints.getPointsReceived());
             additionalPointsRepo.save(additionalPoints);
 
             SurveyResult surveyResult1 = new SurveyResult();
@@ -551,6 +567,7 @@ public class DatabaseConfig {
             surveyResult1.setId(1L);
             surveyResult1.setUser(student);
             surveyResult1.setPointsReceived(1D);
+            addReceivedPointsForUser(student, surveyResult1.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 16);
             surveyResult1.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult1);
@@ -560,6 +577,7 @@ public class DatabaseConfig {
             surveyResult2.setId(2L);
             surveyResult2.setUser(student1);
             surveyResult2.setPointsReceived(3D);
+            addReceivedPointsForUser(student1, surveyResult2.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 18);
             surveyResult2.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult2);
@@ -569,6 +587,7 @@ public class DatabaseConfig {
             surveyResult3.setId(3L);
             surveyResult3.setUser(student10);
             surveyResult3.setPointsReceived(5D);
+            addReceivedPointsForUser(student10, surveyResult3.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 19);
             surveyResult3.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult3);
@@ -597,6 +616,7 @@ public class DatabaseConfig {
             userRepo.saveAll(students2);
 
             initAllRanks();
+            initBadges();
         };
     }
 
@@ -770,5 +790,176 @@ public class DatabaseConfig {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "png", output);
         return output.toByteArray();
+    }
+
+    private void initBadges() throws IOException {
+        byte[] topScoreByte = getByteArrayForFile("src/main/resources/images/top_score_badge.png", "png");
+        Image topScoreImage = new Image("Top score image", topScoreByte, ImageType.BADGE);
+        fileRepo.save(topScoreImage);
+
+        Badge badge1 = new ConsistencyBadge(
+                null,
+                "To dopiero początek",
+                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres miesiąca",
+                topScoreImage,
+                4
+        );
+
+        Badge badge2 = new ConsistencyBadge(
+                null,
+                "Długo jeszcze?",
+                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres 3 miesięcy",
+                topScoreImage,
+                12
+        );
+
+        Badge badge3 = new ConsistencyBadge(
+                null,
+                "To już jest koniec, ale czy na pewno?",
+                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres 6 mięsięcy",
+                topScoreImage,
+                24
+        );
+
+        Badge badge4 = new TopScoreBadge(
+                null,
+                "Topowowa dwudziestka",
+                "Bądź w 20% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                topScoreImage,
+                0.2,
+                false
+        );
+
+
+        Badge badge5 = new TopScoreBadge(
+                null,
+                "Topowa piątka",
+                "Bądź w 5% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                topScoreImage,
+                0.05,
+                false
+        );
+
+        Badge badge6 = new TopScoreBadge(
+                null,
+                "Lider grupy",
+                "Bądź najepszym użytkownikiem w swojej grupie (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                topScoreImage,
+                0.0,
+                true
+        );
+
+        Badge badge7 = new TopScoreBadge(
+                null,
+                "Lider",
+                "Bądź najepszym użytkownikiem (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                topScoreImage,
+                0.0,
+                false
+        );
+
+
+        Badge badge8 = new GraphTaskNumberBadge(
+                null,
+                "Pierwsze kroki w ekspedycji",
+                "Wykonaj swoją pierwszą ekspedycję",
+                topScoreImage,
+                1
+        );
+
+        Badge badge9 = new GraphTaskNumberBadge(
+                null,
+                "Doświadczony w ekspedycjach",
+                "Wykonaj 10 ekspedycji",
+                topScoreImage,
+                10
+        );
+
+        Badge badge10 = new GraphTaskNumberBadge(
+                null,
+                "Zaprawiony w ekspedycjach",
+                "Wykonaj 50 ekspedycji",
+                topScoreImage,
+                50
+        );
+
+        Badge badge11 = new FileTaskNumberBadge(
+                null,
+                "Pierwsze kroki w zadaniu bojowym",
+                "Wykonaj swoje pierwsze zadanie bojowe",
+                topScoreImage,
+                1
+        );
+
+        Badge badge12 = new FileTaskNumberBadge(
+                null,
+                "Doświadczony w zadaniach bojowych",
+                "Wykonaj 10 zadań bojowych",
+                topScoreImage,
+                10
+        );
+
+        Badge badge13 = new FileTaskNumberBadge(
+                null,
+                "Zaprawiony w zadaniach bojowych",
+                "Wykonaj 50 zadań bojowych",
+                topScoreImage,
+                50
+        );
+
+        Badge badge14 = new ActivityNumberBadge(
+                null,
+                "Doświadczony w aktywnościach",
+                "Wykonaj 30 aktywności",
+                topScoreImage,
+                30
+        );
+
+        Badge badge15 = new ActivityNumberBadge(
+                null,
+                "Zaprawiony w aktywnościach",
+                "Wykonaj 100 aktywności",
+                topScoreImage,
+                100
+        );
+
+        Badge badge16 = new ActivityScoreBadge(
+                null,
+                "Marsz ku lepszemu",
+                "Posiadaj ponad 60% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                topScoreImage,
+                0.6
+        );
+
+        Badge badge17 = new ActivityScoreBadge(
+                null,
+                "Uśmiech prowadzącego",
+                "Posiadaj ponad 80% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                topScoreImage,
+                0.8
+        );
+
+        Badge badge18 = new ActivityScoreBadge(
+                null,
+                "Uścisk dłoni prowadzącego",
+                "Posiadaj ponad 95% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                topScoreImage,
+                0.95
+        );
+
+        Badge badge19 = new ActivityScoreBadge(
+                null,
+                "W sam środek tarczy",
+                "Posiadaj 100% z ekspedycji lub zadania bojowego",
+                topScoreImage,
+                1.0
+        );
+
+        badgeRepo.saveAll(List.of(badge1, badge2, badge3, badge4, badge5, badge6, badge7, badge8, badge9, badge10,
+                badge11, badge12, badge13, badge14, badge15, badge16, badge17, badge18, badge19));
+    }
+
+    private void addReceivedPointsForUser(User student, Double points){
+        student.setPoints(student.getPoints() + points);
     }
 }

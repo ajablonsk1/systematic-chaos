@@ -3,7 +3,8 @@ package com.example.api.dto.request.activity.task.edit;
 import com.example.api.dto.request.activity.task.create.CreateFileTaskForm;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.activity.task.FileTask;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor

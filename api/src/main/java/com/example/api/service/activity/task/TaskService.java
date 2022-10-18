@@ -316,7 +316,7 @@ public class TaskService {
                         requirement.setFinishedFileTasks(new LinkedList<>());
                         break;
                     }
-                    List<String> titles = Arrays.asList(requirementForm.getValue().split(";"));
+                    String[] titles = requirementForm.getValue().split(";");
                     List<FileTask> fileTasks = new LinkedList<>();
                     for (String title: titles) {
                         FileTask fileTask = fileTaskRepo.findFileTaskByTitle(title);

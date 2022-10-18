@@ -1,5 +1,8 @@
 package com.example.api.model.activity.result;
 
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.user.User;
 import lombok.Getter;
@@ -21,7 +24,8 @@ public class AdditionalPoints extends TaskResult{
                             Double points,
                             Long sendDateMillis,
                             String professorEmail,
-                            String description) {
+                            String description)
+            throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         super(id, student, points, sendDateMillis);
         this.professorEmail = professorEmail;
         this.description = description;

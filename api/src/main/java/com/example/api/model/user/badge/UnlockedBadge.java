@@ -1,5 +1,5 @@
-package com.example.api.model.achievement;
-import com.example.api.model.map.requirement.Requirement;
+package com.example.api.model.user.badge;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,16 +12,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Achievement {
+public class UnlockedBadge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
 
-    @Lob
-    private byte[] image;
-
-    @OneToOne
-    private Requirement requirement;
-
+    @ManyToOne
+    private Badge badge;
+    private Long unlockedDateMillis;
 }
