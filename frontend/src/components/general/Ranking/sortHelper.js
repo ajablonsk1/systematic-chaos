@@ -1,15 +1,14 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 
 export const getArrayValue = (sortedVariables, arrayItem, options = {}) => {
-  if (!sortedVariables || sortedVariables.constructor !== Array) {
-    return null
-  }
-
-  if (!arrayItem || arrayItem.constructor !== Object) {
-    return null
-  }
-
-  if (!options || options.constructor !== Object) {
+  if (
+    !sortedVariables ||
+    sortedVariables.constructor !== Array ||
+    !arrayItem ||
+    arrayItem.constructor !== Object ||
+    !options ||
+    options.constructor !== Object
+  ) {
     return null
   }
 
