@@ -3,6 +3,7 @@ package com.example.api.controller.activity.result;
 import com.example.api.dto.request.activity.result.SurveyResultForm;
 import com.example.api.dto.response.activity.result.SurveyResultInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.feedback.SurveyResultService;
@@ -25,7 +26,7 @@ public class SurveyResultController {
     }
 
     @GetMapping
-    public ResponseEntity<SurveyResultInfoResponse> getSurveyResult(@RequestParam Long surveyId) throws WrongUserTypeException, EntityNotFoundException {
+    public ResponseEntity<SurveyResultInfoResponse> getSurveyResult(@RequestParam Long surveyId) throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         return ResponseEntity.ok().body(surveyResultService.getSurveyResult(surveyId));
     }
 }
