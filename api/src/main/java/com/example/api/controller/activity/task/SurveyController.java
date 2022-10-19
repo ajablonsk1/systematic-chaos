@@ -5,6 +5,7 @@ import com.example.api.dto.request.activity.task.create.CreateSurveyForm;
 import com.example.api.dto.response.activity.task.SurveyInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.task.SurveyService;
 import com.example.api.util.MessageManager;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,7 +23,7 @@ public class SurveyController {
 
     @GetMapping
     ResponseEntity<SurveyInfoResponse> getSurveyInfo(@RequestParam Long surveyId)
-            throws EntityNotFoundException {
+            throws EntityNotFoundException, WrongUserTypeException {
         return ResponseEntity.ok().body(surveyService.getSurveyInfo(surveyId));
     }
 
