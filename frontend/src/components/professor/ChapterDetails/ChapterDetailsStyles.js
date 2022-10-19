@@ -61,6 +61,22 @@ export const ButtonsCol = styled(Col)`
 
   position: relative;
   bottom: 1.5rem;
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+    height: auto !important;
+    padding: 10px;
+
+    & > button,
+    & > a {
+      width: 100%;
+      margin: 5px;
+    }
+
+    & > a > button {
+      width: 100%;
+    }
+  }
 `
 
 export const TableRow = styled.tr`

@@ -26,6 +26,7 @@ import ProfessorService from '../../../services/professor.service'
 import Loader from '../../general/Loader/Loader'
 import { ERROR_OCCURRED, getActivityTypeName } from '../../../utils/constants'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, PointElement, LineElement)
 
@@ -34,6 +35,8 @@ function GameSummary(props) {
 
   const [barChartActiveChapterId, setBarChartActiveChapterId] = useState(0)
   const [lineChartActiveChapterId, setLineChartActiveChapterId] = useState(0)
+
+  const isMobileDisplay = isMobileView()
 
   useEffect(() => {
     ProfessorService.getGameSummaryStats()
@@ -119,15 +122,15 @@ function GameSummary(props) {
         <p className={'text-center h3'}>{ERROR_OCCURRED}</p>
       ) : (
         <>
-          <Row className={'m-0'} style={{ height: '50vh' }}>
+          <Row className={'m-0'} style={{ height: isMobileDisplay ? 'auto' : '50vh' }}>
             <Col md={6}>
-              <Row className={'h-50 py-2'}>
+              <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2`}>
                 <GameSummaryCard
                   header={<h5>Statystyki ocen studentów</h5>}
                   body={statsCardBody(gradesStatsCardTitles)}
                 />
               </Row>
-              <Row className={'h-50 py-2'}>
+              <Row className={`${isMobileDisplay ? 'h-auto' : 'h-50'} py-2`}>
                 <GameSummaryCard
                   header={<h5>Statystyki aktywności</h5>}
                   body={statsCardBody(activityStatsCardTitles)}
@@ -152,7 +155,7 @@ function GameSummary(props) {
               </CustomCard>
             </Col>
           </Row>
-          <Row className={'m-0'} style={{ height: '50vh' }}>
+          <Row style={{ height: isMobileDisplay ? 'auto' : '50vh', margin: isMobileDisplay ? '0 0 85px 0' : 0 }}>
             <Col md={6} className={'py-2'}>
               <CustomCard
                 $fontColor={props.theme.font}
@@ -197,13 +200,21 @@ function GameSummary(props) {
                       </tr>
                     </thead>
                     <tbody>
-                      {summaryDetails.notAssessedActivitiesTable.map((activity, index) => (
-                        <tr key={index + Date.now()}>
-                          <td>{activity.activityName}</td>
-                          <td>{getActivityTypeName(activity.activityType)}</td>
-                          <td>{activity.waitingAnswersNumber}</td>
+                      {summaryDetails.notAssessedActivitiesTable.length > 0 ? (
+                        summaryDetails.notAssessedActivitiesTable.map((activity, index) => (
+                          <tr key={index + Date.now()}>
+                            <td>{activity.activityName}</td>
+                            <td>{getActivityTypeName(activity.activityType)}</td>
+                            <td>{activity.waitingAnswersNumber}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={3} className={'text-center'}>
+                            Brak aktywności
+                          </td>
                         </tr>
-                      ))}
+                      )}
                     </tbody>
                   </CustomTable>
                 </Card.Body>

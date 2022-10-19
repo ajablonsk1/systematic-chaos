@@ -10,8 +10,11 @@ import { CustomCard } from '../../GameCardPage/GameCardStyles'
 import CardHeader from 'react-bootstrap/CardHeader'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 function Information(props) {
+  const isMobileDisplay = isMobileView()
+
   const location = useLocation()
   const { activityId: informationId } = location.state
   const [information, setInformation] = useState(undefined)
@@ -73,10 +76,10 @@ function Information(props) {
   }, [information])
 
   return (
-    <Content>
-      <Row className={'m-0 vh-100'}>
+    <Content style={{ marginBottom: isMobileDisplay ? '85px' : 'auto' }}>
+      <Row className={`m-0 ${isMobileDisplay ? 'h-auto' : 'vh-100'}`}>
         <Col md={6} className={'py-2'}>
-          <Row className={'m-0 w-100 h-25 pb-2'}>
+          <Row className={'m-0 w-100 pb-2'} style={{ height: isMobileDisplay ? 'auto' : '25%' }}>
             <CustomCard
               className={'p-0'}
               $fontColor={props.theme.font}
@@ -89,7 +92,7 @@ function Information(props) {
               <Card.Body>{activityInfoCardBody}</Card.Body>
             </CustomCard>
           </Row>
-          <Row className={'m-0 w-100 h-75'}>
+          <Row className={'m-0 w-100'} style={{ height: isMobileDisplay ? 'auto' : '75%' }}>
             <CustomCard
               className={'p-0'}
               $fontColor={props.theme.font}

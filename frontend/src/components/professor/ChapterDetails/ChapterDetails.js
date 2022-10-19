@@ -27,6 +27,7 @@ import ChapterModal from '../GameManagement/ChapterModal/ChapterModal'
 import { successToast } from '../../../utils/toasts'
 import { connect } from 'react-redux'
 import ActivityService from '../../../services/activity.service'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function ChapterDetails(props) {
   const { id: chapterId } = useParams()
@@ -153,7 +154,7 @@ function ChapterDetails(props) {
   }
 
   return (
-    <Content>
+    <Content style={{ overflowX: 'hidden', marginBottom: isMobileView() ? 60 : 0 }}>
       <Row className={'px-0 m-0'} style={{ height: '100vh' }}>
         <Col className={'m-0 h-100'} md={6}>
           <Col md={12} className={'h-50'}>
@@ -187,11 +188,10 @@ function ChapterDetails(props) {
                     <ListGroupItem>Nazwa rozdziału: {chapterDetails.name}</ListGroupItem>
                     <ListGroupItem>
                       <Row className={'d-flex align-items-center'}>
-                        <Col sm={10}>Liczba dodanych aktywności: {chapterDetails.noActivities}</Col>
-                        <Col sm={2}>
+                        <Col xs={10}>Liczba dodanych aktywności: {chapterDetails.noActivities}</Col>
+                        <Col xs={2} className={'text-end'}>
                           <FontAwesomeIcon
                             icon={openActivitiesDetailsList ? faArrowUp : faArrowDown}
-                            className={'mx-5'}
                             onClick={() => setOpenActivitiesDetailsList(!openActivitiesDetailsList)}
                             aria-controls={'activities'}
                             aria-expanded={openActivitiesDetailsList}
@@ -213,11 +213,10 @@ function ChapterDetails(props) {
                     <ListGroupItem>Aktualny rozmiar mapy: {chapterDetails.mapSize}</ListGroupItem>
                     <ListGroupItem>
                       <Row className={'d-flex align-items-center'}>
-                        <Col sm={10}>Warunki odblokowania kolejnego rozdziału:</Col>
-                        <Col sm={2}>
+                        <Col xs={10}>Warunki odblokowania kolejnego rozdziału:</Col>
+                        <Col xs={2} className={'text-end'}>
                           <FontAwesomeIcon
                             icon={openConditionsList ? faArrowUp : faArrowDown}
-                            className={'mx-5'}
                             onClick={() => setOpenConditionsList(!openConditionsList)}
                             aria-controls={'conditions'}
                             aria-expanded={openConditionsList}
@@ -249,8 +248,8 @@ function ChapterDetails(props) {
               className={'mt-2'}
             >
               <Card.Header>Lista aktywności</Card.Header>
-              <Card.Body className={'p-0'}>
-                <Table>
+              <Card.Body className={'p-0 mx-100'} style={{ overflow: 'auto' }}>
+                <Table style={{ width: isMobileView() ? '200%' : '100%' }}>
                   <tbody>
                     {chapterDetails === undefined ? (
                       <tr>

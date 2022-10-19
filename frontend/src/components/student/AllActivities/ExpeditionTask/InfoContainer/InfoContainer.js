@@ -3,6 +3,22 @@ import { getTimer } from '../../../../../utils/storageManager'
 import { TimerContainer } from './InfoContainerStyle'
 import GraphPreview from './GraphPreview'
 import { PercentageBar } from '../../../BadgesPage/BadgesStyle'
+import { isMobileView } from '../../../../../utils/mobileHelper'
+
+const mobileViewStyle = {
+  right: '50%',
+  left: 'auto',
+  top: '30px',
+  transform: 'translateX(50%)',
+  position: 'absolute'
+}
+
+const desktopViewStyle = {
+  right: '10px',
+  left: 'auto',
+  top: '20px',
+  transform: 'none'
+}
 
 export default function InfoContainer(props) {
   const { timeToSolveMillis, activityId, endAction } = props
@@ -43,7 +59,7 @@ export default function InfoContainer(props) {
         $greenBarWidth={GREEN_BAR_WIDTH}
         $grayBarWidth={PERCENTAGE_BAR_WIDTH}
         $height={PERCENTAGE_BAR_HEIGHT}
-        style={{ right: '10px', left: 'auto', top: '20px', transform: 'none' }}
+        style={isMobileView() ? mobileViewStyle : desktopViewStyle}
       >
         <strong className={'d-flex justify-content-center'}>{`${props.actualPoints}/${props.maxPoints}`}</strong>
       </PercentageBar>

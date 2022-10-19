@@ -49,6 +49,10 @@ export const TabsContainer = styled(Tabs)`
     background-color: transparent;
     color: white;
   }
+
+  @media (max-width: 575px) {
+    font-size: 13px !important;
+  }
 `
 
 export const AccountType = styled(Col)`

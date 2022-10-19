@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
 import { TabsContainer } from '../../ParticipantsPage/ParticipantsStyles'
-import { Form, Tab } from 'react-bootstrap'
+import { Button, Form, Modal, ModalBody, ModalFooter, ModalHeader, Tab } from 'react-bootstrap'
 import Ranking from '../../../general/Ranking/Ranking'
 import { debounce } from 'lodash/function'
 import ActivityService from '../../../../services/activity.service'
@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom'
 import ActivityStats from './ActivityStats'
 import ActivityRequirements from './ActivityRequirements/ActivityRequirements'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 function ActivityDetails(props) {
   const location = useLocation()
@@ -17,6 +18,8 @@ function ActivityDetails(props) {
   const [studentsList, setStudentsList] = useState(undefined)
   const [filteredList, setFilteredList] = useState(undefined)
   const [filterQuery, setFilterQuery] = useState(undefined)
+  const [isStudentAnswerModalOpen, setIsStudentAnswerModalOpen] = useState(false)
+  const [chosenStudent, setChosenStudent] = useState(null)
 
   useEffect(() => {
     ActivityService.getStudentsResultList(activityId)
@@ -48,7 +51,7 @@ function ActivityDetails(props) {
   }, 300)
 
   return (
-    <Content>
+    <Content style={{ marginBottom: isMobileView() ? 70 : 0 }}>
       <TabsContainer
         $background={props.theme.success}
         $fontColor={props.theme.background}
@@ -64,7 +67,15 @@ function ActivityDetails(props) {
             />
           </Form.Group>
 
-          <Ranking rankingList={filteredList} customHeight={'80vh'} noPointsMessage={'Nie wykonano'} />
+          <Ranking
+            rankingList={filteredList}
+            customHeight={'80vh'}
+            noPointsMessage={'Nie wykonano'}
+            iconCallback={(student) => {
+              setIsStudentAnswerModalOpen(true)
+              setChosenStudent(student)
+            }}
+          />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
           <ActivityStats activityId={activityId} activityType={activityType} />
@@ -73,6 +84,32 @@ function ActivityDetails(props) {
           <ActivityRequirements activityId={activityId} />
         </Tab>
       </TabsContainer>
+      <Modal show={isStudentAnswerModalOpen} onHide={() => setIsStudentAnswerModalOpen(false)} size={'lg'}>
+        <ModalHeader>
+          <h5>Odpowiedź studenta{chosenStudent ? `: ${chosenStudent.firstName} ${chosenStudent.lastName}` : ''}</h5>
+        </ModalHeader>
+        <ModalBody style={{ maxHeight: '80vh', overflow: 'auto' }}>
+          <div>
+            <h6>Ocena: </h6>
+            <p>2/5</p>
+          </div>
+          <div>
+            <h6>Odpowiedź:</h6>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio ducimus exercitationem fuga hic, id,
+              ipsa ipsam iure minima, nam nisi odio perspiciatis porro quas quia quisquam recusandae rerum sit ut
+            </p>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+            onClick={() => setIsStudentAnswerModalOpen(false)}
+          >
+            Zamknij
+          </Button>
+        </ModalFooter>
+      </Modal>
     </Content>
   )
 }

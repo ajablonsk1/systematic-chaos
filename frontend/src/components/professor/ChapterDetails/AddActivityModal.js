@@ -7,6 +7,7 @@ import AddCombatTask from './AddActivity/AddCombatTask'
 import AddInfoTask from './AddActivity/AddInfoTask'
 import AddSurveyTask from './AddActivity/AddSurveyTask'
 import { connect } from 'react-redux'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 function AddActivityModal(props) {
   const activities = Object.keys(Activity)
@@ -47,7 +48,7 @@ function AddActivityModal(props) {
         <ModalHeader closeButton>
           <h5>Dodaj nową aktywność</h5>
         </ModalHeader>
-        <ModalBody>
+        <ModalBody style={{ padding: isMobileView() ? '1rem 0' : '1rem' }}>
           <TabsContainer
             $background={props.theme.success}
             $fontColor={props.theme.background}

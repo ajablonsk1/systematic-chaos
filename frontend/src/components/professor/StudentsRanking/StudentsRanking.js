@@ -13,9 +13,9 @@ function StudentsRanking() {
   const [isStudentPointsModalOpen, setIsStudentPointsModalOpen] = useState(false)
   const [chosenStudentEmail, setChosenStudentEmail] = useState(null)
 
-  const onInfoIconClick = useCallback((chosenEmail) => {
+  const onInfoIconClick = useCallback((student) => {
     setIsStudentPointsModalOpen(true)
-    setChosenStudentEmail(chosenEmail)
+    setChosenStudentEmail(student.email)
   }, [])
 
   useEffect(() => {
