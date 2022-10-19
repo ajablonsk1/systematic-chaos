@@ -16,6 +16,7 @@ public class RankingResponse {
     @Schema(required = true) private HeroType heroType;
     @Schema(required = true) private Double points;
     @Schema(required = true) private Integer position;
+    @Schema(required = false) private SurveyAnswerResponse studentAnswer;
 
     public RankingResponse(User user) {
         this.email = user.getEmail();
