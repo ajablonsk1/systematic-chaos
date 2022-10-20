@@ -1,6 +1,6 @@
 package com.example.api.model.map.requirement;
 
-import com.example.api.dto.response.map.RequirementResponse;
+import com.example.api.dto.response.map.RequirementDTO;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.util.visitor.RequirementFulfilledVisitor;
@@ -40,15 +40,15 @@ public class GraphTasksRequirement extends Requirement {
     }
 
     @Override
-    public RequirementResponse<List<String>> getResponse() {
+    public RequirementDTO<List<String>> getResponse() {
         List<String> titles = finishedGraphTasks.stream()
                 .map(GraphTask::getTitle)
                 .toList();
-        return new RequirementResponse<>(
+        return new RequirementDTO<>(
                 getId(),
                 getName(),
                 titles,
-                RequirementValueType.DATE,
+                RequirementValueType.MULTI_SELECT,
                 getSelected()
         );
     }

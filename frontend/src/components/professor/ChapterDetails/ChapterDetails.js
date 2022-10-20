@@ -269,10 +269,10 @@ function ChapterDetails(props) {
                           key={activity.title + index}
                           placement='top'
                           overlay={
-                            !activity.areRequirementsAdded ? (
+                            activity.isActivityBlocked ? (
                               <CustomTooltip style={{ position: 'fixed' }}>
-                                Aktywność nie ma ustawionych wymagań odblokowania. Studenci nie mogą rozwiązywać
-                                aktywności bez ustawionych wymagań.
+                                Aktywność została zablokowana. Studenci nie mogą jej zobaczyć. Żeby była odblokowana
+                                musisz zmienić to w zakładce "Wymagania".
                               </CustomTooltip>
                             ) : (
                               <></>
@@ -282,7 +282,7 @@ function ChapterDetails(props) {
                           <TableRow
                             $background={props.theme.primary}
                             onClick={() => goToChapterDetails(activity.title, activity.id, activity.type)}
-                            style={{ opacity: activity.areRequirementsAdded ? 1 : 0.4 }}
+                            style={{ opacity: activity.isActivityBlocked ? 0.4 : 1 }}
                           >
                             <td>
                               <img src={getActivityImg(activity.type)} width={32} height={32} alt={'activity img'} />

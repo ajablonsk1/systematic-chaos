@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState, useTransition } from 'react'
-import { Row, Button, Spinner } from 'react-bootstrap'
+import React, { useCallback, useEffect, useRef, useState, useTransition } from 'react'
+import { Row, Button, Spinner, Form } from 'react-bootstrap'
 import { ERROR_OCCURRED, RequirementType } from '../../../../../utils/constants'
 import { CustomTable } from '../../../../student/GameCardPage/gameCardContentsStyle'
 import { CheckBox, Input, Select, Switch } from './activityRequirementsForms'
@@ -20,11 +20,15 @@ function ActivityRequirements(props) {
   const [multiSelectLists, setMultiSelectLists] = useState([])
   const [onSaveError, setOnSaveError] = useState('')
   const [isSaving, startSaving] = useTransition()
+  const [isActivityBlocked, setIsActivityBlocked] = useState(false)
+
+  const blockadeRef = useRef()
 
   useEffect(() => {
     ActivityService.getActivityRequirements(props.activityId)
       .then((response) => {
-        setRequirementsList(response.map((requirement) => ({ ...requirement, answer: null })))
+        setRequirementsList(response.requirements.map((requirement) => ({ ...requirement, answer: null })))
+        setIsActivityBlocked(response.isBlocked)
       })
       .catch(() => {
         setRequirementsList(null)
@@ -74,7 +78,11 @@ function ActivityRequirements(props) {
           value: getAnswer(r)
         }
       })
-      ActivityService.setActivityRequirements(props.activityId, requirementsToSend)
+      ActivityService.setActivityRequirements(
+        props.activityId,
+        requirementsToSend,
+        blockadeRef?.current?.checked ?? false
+      )
         .then(() => {
           successToast()
         })
@@ -92,9 +100,11 @@ function ActivityRequirements(props) {
       case RequirementType.SELECT:
         return <Select requirement={requirement} onChangeCallback={setRequirementsList} />
       case RequirementType.DATE:
+        const date = new Date(requirement.answer ?? requirement.value)
+
         return (
           <DatePicker
-            selected={new Date(requirement.answer ?? requirement.value ?? Date.now())}
+            selected={date instanceof Date && !isNaN(date.getTime()) ? date : new Date()}
             onChange={(date) => onInputChange(requirement.id, date, setRequirementsList)}
             showTimeSelect
             timeFormat={'p'}
@@ -168,6 +178,13 @@ function ActivityRequirements(props) {
               )}
             </tbody>
           </CustomTable>
+          <Form.Check
+            ref={blockadeRef}
+            className={'pt-3'}
+            checked={isActivityBlocked}
+            onChange={(e) => setIsActivityBlocked(e.target.checked)}
+            label={'Zablokuj aktywność i ukryj przed studentami'}
+          ></Form.Check>
         </Row>
       </Row>
       {onSaveError && (

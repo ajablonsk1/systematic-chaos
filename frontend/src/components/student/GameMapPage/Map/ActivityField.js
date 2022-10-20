@@ -25,7 +25,7 @@ function ActivityField(props) {
     if (activity) {
       ActivityService.getActivityRequirements(activity.id)
         .then((response) => {
-          setRequirements(response?.filter((requirement) => requirement.selected))
+          setRequirements(response.requirements?.filter((requirement) => requirement.selected))
         })
         .catch(() => {
           setRequirements(null)
@@ -129,7 +129,7 @@ function ActivityField(props) {
           {colClickable && (
             <Button
               style={{ backgroundColor: 'transparent', borderColor: props.theme.warning, color: props.theme.warning }}
-              disabled={!activity?.isFulfilled}
+              disabled={!activity?.isFulfilled && !activity?.isCompleted}
               className={'position-relative start-50 translate-middle-x mt-3'}
               onClick={startActivity}
             >
