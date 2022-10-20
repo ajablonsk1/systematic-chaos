@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RequirementForm {
+public class  RequirementForm {
     private Long id;
-    private Boolean isSelected;
+    private Boolean selected;
     private String value;
 }

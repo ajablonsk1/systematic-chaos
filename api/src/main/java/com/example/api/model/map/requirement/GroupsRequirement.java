@@ -1,6 +1,6 @@
 package com.example.api.model.map.requirement;
 
-import com.example.api.dto.response.map.RequirementResponse;
+import com.example.api.dto.response.map.RequirementDTO;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.group.Group;
 import com.example.api.util.visitor.RequirementFulfilledVisitor;
@@ -40,15 +40,15 @@ public class GroupsRequirement extends Requirement {
     }
 
     @Override
-    public RequirementResponse<List<String>> getResponse() {
+    public RequirementDTO<List<String>> getResponse() {
         List<String> groupNames = allowedGroups.stream()
                 .map(Group::getName)
                 .toList();
-        return new RequirementResponse<>(
+        return new RequirementDTO<>(
                 getId(),
                 getName(),
                 groupNames,
-                RequirementValueType.DATE,
+                RequirementValueType.MULTI_SELECT,
                 getSelected()
         );
     }

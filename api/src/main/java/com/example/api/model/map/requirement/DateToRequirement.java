@@ -1,6 +1,6 @@
 package com.example.api.model.map.requirement;
 
-import com.example.api.dto.response.map.RequirementResponse;
+import com.example.api.dto.response.map.RequirementDTO;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.util.visitor.RequirementFulfilledVisitor;
 import com.example.api.util.visitor.RequirementValueVisitor;
@@ -40,8 +40,8 @@ public class DateToRequirement extends Requirement {
     }
 
     @Override
-    public RequirementResponse<Long> getResponse() {
-        return new RequirementResponse<>(
+    public RequirementDTO<Long> getResponse() {
+        return new RequirementDTO<>(
                 getId(),
                 getName(),
                 dateToMillis,

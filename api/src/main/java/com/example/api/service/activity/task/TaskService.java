@@ -6,6 +6,7 @@ import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
 import com.example.api.dto.response.activity.task.util.FileResponse;
+import com.example.api.dto.response.map.RequirementDTO;
 import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.error.exception.*;
@@ -136,12 +137,13 @@ public class TaskService {
                 .toList();
     }
 
-    public List<? extends RequirementResponse<?>> getRequirementsForActivity(Long id) throws EntityNotFoundException, MissingAttributeException {
+    public RequirementResponse getRequirementsForActivity(Long id) throws EntityNotFoundException, MissingAttributeException {
         Activity activity = getActivity(id);
-        return activity.getRequirements()
+        List<? extends RequirementDTO<?>> requirements = activity.getRequirements()
                 .stream()
                 .map(Requirement::getResponse)
                 .toList();
+        return new RequirementResponse(activity.getIsBlocked(), requirements);
     }
 
 
@@ -156,7 +158,7 @@ public class TaskService {
             Requirement requirement = requirementRepo.findRequirementById(requirementForm.getId());
             mapValidator.validateRequirementIsNotNull(requirement, requirementForm.getId());
 
-            requirement.setSelected(requirementForm.getIsSelected());
+            requirement.setSelected(requirementForm.getSelected());
             requirement.setValue(requirementValueVisitor, requirementForm.getValue());
         }
     }
