@@ -141,17 +141,11 @@ describe('Sort array function tests', () => {
       expect(sortedArray).toMatchObject(array)
     }
   )
-  /* First I wrote: it.each(expectedSortedArray)('should return sorted array if given dataset is correct: %s', (dataset) => ...
-   *  but for some unknown reason it doesn't work ...
-   * This is why test below looks... different ;)
-   * */
-  it('should return sorted array if given dataset is correct', () => {
-    expectedSortedArray.forEach((dataset) => {
-      // when
-      const a = sortArray(arrayToSort, dataset.order, dataset.sortingBy, dataset.options)
+  it.each(expectedSortedArray)('should return sorted array if given dataset is correct', (dataset) => {
+    // when
+    const a = sortArray(arrayToSort, dataset.order, dataset.sortingBy, dataset.options)
 
-      // then
-      expect(a).toStrictEqual(dataset.sortedArray)
-    })
+    // then
+    expect(a).toStrictEqual(dataset.sortedArray)
   })
 })
