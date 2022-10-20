@@ -1,39 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Content } from '../../../App/AppGeneralStyles'
-import {
-  ActivityCol,
-  ActivityImg,
-  ActivityName,
-  ActivityType,
-  FullDivider,
-  HeaderCol,
-  HeaderRow,
-  SmallDivider
-} from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import {
   Activity,
   ALL_REQUIRED_FIELDS_MUST_BE_FULFILLED,
   ANSWER_SAVED,
   ERROR_OCCURRED,
-  FIELD_REQUIRED,
-  getActivityImg,
   getActivityTypeName
 } from '../../../../utils/constants'
 import { useLocation } from 'react-router-dom'
 import Loader from '../../../general/Loader/Loader'
-import { InfoContainer } from '../ExpeditionTask/ActivityInfo/InfoContainer'
-import { ErrorMessage, Formik } from 'formik'
-import { Button, Col, Container, Form, FormControl, FormGroup, FormLabel, Row, Spinner } from 'react-bootstrap'
-import { fa1, fa2, fa3, fa4, fa5, faFaceMeh, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
-import { IconColumn } from './IconColumn'
-import { FormButton, FormikRange, FormikTextarea, RangeSlider } from './SurveyTaskStyle'
+import { Button, Col, Form, FormControl, FormGroup, FormLabel, Row, Spinner } from 'react-bootstrap'
+import { fa1, fa2, fa3, fa4, fa5 } from '@fortawesome/free-solid-svg-icons'
+import { RangeSlider } from './SurveyTaskStyle'
 import SurveyTaskService from '../../../../services/surveyTask.service'
 import { connect } from 'react-redux'
-import { CustomCard } from '../../GameCardPage/GameCardStyles'
 import GameCard from '../../GameCardPage/GameCard'
 import { CustomTable } from '../../GameCardPage/gameCardContentsStyle'
-import { isMobileView } from '../../../../utils/mobileHelper'
-import FormRange from 'react-bootstrap/FormRange'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { successToast } from '../../../../utils/toasts'
 
