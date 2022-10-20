@@ -87,7 +87,7 @@ function BadgesPage(props) {
 
   const badgeContent = useCallback(
     (badge, index) => {
-      const badgeUnlockedDate = unlockedBadgesList.find((b) => {
+      const badgeUnlockedDate = unlockedBadgesList?.find((b) => {
         return b.badge.title === badge.title
       })?.unlockedDateMillis
 
@@ -245,11 +245,11 @@ function BadgesPage(props) {
                       <div className={'d-flex justify-content-center align-items-center flex-column'}>
                         <img
                           width={75}
-                          src={lastUnlockedBadge ? base64Header + lastUnlockedBadge?.badge.file.file : ''}
-                          alt={lastUnlockedBadge?.badge.file.name}
+                          src={base64Header + lastUnlockedBadge?.badge.file.file}
+                          alt={lastUnlockedBadge.badge.file.name}
                         />
-                        <strong>{lastUnlockedBadge?.badge.title}</strong>
-                        <p className={'px-2 '}>{lastUnlockedBadge?.badge.description}</p>
+                        <strong>{lastUnlockedBadge.badge.title}</strong>
+                        <p className={'px-2'}>{lastUnlockedBadge.badge.description}</p>
                       </div>
                     )}
                   </Bounce>
