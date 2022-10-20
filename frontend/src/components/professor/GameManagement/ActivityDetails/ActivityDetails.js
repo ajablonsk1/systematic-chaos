@@ -13,7 +13,7 @@ import { isMobileView } from '../../../../utils/mobileHelper'
 
 function ActivityDetails(props) {
   const location = useLocation()
-  const { activityId, activityType } = location.state
+  const { activityId, activityType, isBlocked } = location.state
 
   const [studentsList, setStudentsList] = useState(undefined)
   const [filteredList, setFilteredList] = useState(undefined)
@@ -81,7 +81,7 @@ function ActivityDetails(props) {
           <ActivityStats activityId={activityId} activityType={activityType} />
         </Tab>
         <Tab eventKey={'requirements'} title={'Wymagania'}>
-          <ActivityRequirements activityId={activityId} />
+          <ActivityRequirements activityId={activityId} isBlocked={isBlocked} />
         </Tab>
       </TabsContainer>
       <Modal show={isStudentAnswerModalOpen} onHide={() => setIsStudentAnswerModalOpen(false)} size={'lg'}>
