@@ -44,4 +44,5 @@ public class ExceptionMessage {
     public static final String SAME_RANK_MIN_POINTS = "Inna ranga posiada już podaną wartość progu punktowego";
     public static final String DATE_NOT_LONG = "Data musi być liczbą całkowitą";
     public static final String MIN_POINTS_NOT_DOUBLE = "Punkty muszą być liczbą zmiennaprzecinkową";
+    public static final String USER_FEEDBACK_RATE_OUT_OF_RANGE = "Ocena w ankiecie musi być w zakresie 1-5";
 }

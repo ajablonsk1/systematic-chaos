@@ -37,7 +37,7 @@ import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
-import com.example.api.service.activity.feedback.UserFeedbackService;
+import com.example.api.service.activity.feedback.SurveyResultService;
 import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.activity.task.FileTaskService;
@@ -84,7 +84,7 @@ public class DatabaseConfig {
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
-                                               UserFeedbackService userFeedbackService, GraphTaskService graphTaskService,
+                                               SurveyResultService surveyResultService, GraphTaskService graphTaskService,
                                                GraphTaskResultService graphTaskResultService, GroupService groupService,
                                                ActivityMapService activityMapService, QuestionService questionService,
                                                FileTaskResultService fileTaskResultService, OptionService optionService,

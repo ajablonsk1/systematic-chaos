@@ -59,6 +59,9 @@ public class BadgeVisitor {
                 .mapToDouble(Activity::getMaxPoints)
                 .sum());
 
+        if (maxPoints.compareTo(BigDecimal.valueOf(0)) == 0) {
+            return badge.getActivityScore() == 0.0;
+        }
         BigDecimal score = currentPoints.divide(maxPoints, 2, RoundingMode.HALF_UP);
         return score.compareTo(BigDecimal.valueOf(badge.getActivityScore())) >= 0;
     }
