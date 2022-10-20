@@ -18,6 +18,8 @@ import { CustomTable } from '../../GameCardPage/gameCardContentsStyle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { successToast } from '../../../../utils/toasts'
 
+const icons = [fa1, fa2, fa3, fa4, fa5]
+
 function FeedbackTask(props) {
   const location = useLocation()
   const { activityId: taskId } = location.state
@@ -140,11 +142,9 @@ function FeedbackTask(props) {
                   <FormGroup className={'my-3'}>
                     <FormLabel>Twoja ocena (wymagane)</FormLabel>
                     <div className={'d-flex justify-content-between w-100 h5 mt-3'}>
-                      <FontAwesomeIcon icon={fa1} />
-                      <FontAwesomeIcon icon={fa2} />
-                      <FontAwesomeIcon icon={fa3} />
-                      <FontAwesomeIcon icon={fa4} />
-                      <FontAwesomeIcon icon={fa5} />
+                      {icons.map((icon, index) => (
+                        <FontAwesomeIcon key={index} icon={icon} />
+                      ))}
                     </div>
                     <RangeSlider
                       ref={rateRef}
