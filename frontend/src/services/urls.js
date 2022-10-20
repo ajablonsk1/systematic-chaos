@@ -76,6 +76,10 @@ export const GET_SURVEY = BASE_URL + '/survey'
 export const GET_SURVEY_CREATE = GET_SURVEY + '/create'
 export const POST_SURVEY_CREATE = GET_SURVEY + '/create'
 
+// Survey Result Controller
+export const GET_SURVEY_RESULT = BASE_URL + '/survey/result'
+export const POST_SURVEY_RESULT = BASE_URL + '/survey/result'
+
 // Question Controller
 const GET_QUESTION = BASE_URL + '/question' // TODO: unused endpoint
 export const POST_QUESTION_ACTION = GET_QUESTION + '/action'

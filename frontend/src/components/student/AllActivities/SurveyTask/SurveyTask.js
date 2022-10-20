@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
 import {
   ActivityCol,
@@ -11,6 +12,8 @@ import {
 } from '../ExpeditionTask/ActivityInfo/ActivityInfoStyles'
 import {
   Activity,
+  ALL_REQUIRED_FIELDS_MUST_BE_FULFILLED,
+  ANSWER_SAVED,
   ERROR_OCCURRED,
   FIELD_REQUIRED,
   getActivityImg,
@@ -19,19 +22,53 @@ import {
 import { useLocation } from 'react-router-dom'
 import Loader from '../../../general/Loader/Loader'
 import { InfoContainer } from '../ExpeditionTask/ActivityInfo/InfoContainer'
-import { Formik } from 'formik'
-import { Col, Container, Form, Row, Spinner } from 'react-bootstrap'
-import { faFaceMeh, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
+import { ErrorMessage, Formik } from 'formik'
+import { Button, Col, Container, Form, FormControl, FormGroup, FormLabel, Row, Spinner } from 'react-bootstrap'
+import { fa1, fa2, fa3, fa4, fa5, faFaceMeh, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import { IconColumn } from './IconColumn'
-import { FormButton, FormikRange, FormikTextarea } from './SurveyTaskStyle'
-import { useEffect, useState } from 'react'
+import { FormButton, FormikRange, FormikTextarea, RangeSlider } from './SurveyTaskStyle'
 import SurveyTaskService from '../../../../services/surveyTask.service'
 import { connect } from 'react-redux'
+import { CustomCard } from '../../GameCardPage/GameCardStyles'
+import GameCard from '../../GameCardPage/GameCard'
+import { CustomTable } from '../../GameCardPage/gameCardContentsStyle'
+import { isMobileView } from '../../../../utils/mobileHelper'
+import FormRange from 'react-bootstrap/FormRange'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { successToast } from '../../../../utils/toasts'
 
 function FeedbackTask(props) {
   const location = useLocation()
   const { activityId: taskId } = location.state
+
   const [task, setTask] = useState(undefined)
+  const [errorMessage, setErrorMessage] = useState(undefined)
+  const [isAnswerSending, setIsAnswerSending] = useState(false)
+
+  const feedbackRef = useRef()
+  const rateRef = useRef()
+
+  const tableContent = useMemo(
+    () => [
+      {
+        header: 'Typ aktywności',
+        body: getActivityTypeName(Activity.SURVEY)
+      },
+      {
+        header: 'Nazwa aktywności',
+        body: task?.name
+      },
+      {
+        header: 'Opis aktywności',
+        body: task?.description
+      },
+      {
+        header: 'Punkty do zdobycia',
+        body: task?.experience
+      }
+    ],
+    [task?.name, task?.description, task?.experience]
+  )
 
   useEffect(() => {
     SurveyTaskService.getSurveyTask(taskId)
@@ -43,98 +80,119 @@ function FeedbackTask(props) {
       })
   }, [taskId])
 
+  const sendAnswer = () => {
+    if (!!rateRef.current?.value && !!feedbackRef.current?.value) {
+      setIsAnswerSending(true)
+      SurveyTaskService.sendSurveyFeedback(taskId, rateRef.current.value, feedbackRef.current.value)
+        .then(() => {
+          setErrorMessage(undefined)
+          successToast(ANSWER_SAVED)
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.message ?? ERROR_OCCURRED)
+        })
+        .finally(() => {
+          setIsAnswerSending(false)
+        })
+    } else {
+      setErrorMessage(ALL_REQUIRED_FIELDS_MUST_BE_FULFILLED)
+    }
+  }
+
   return (
-    <Content>
-      <InfoContainer $background={props.theme.primary} $fontColor={props.theme.font}>
-        {!task ? (
-          <Loader />
-        ) : task === ERROR_OCCURRED ? (
-          <p>{ERROR_OCCURRED}</p>
-        ) : (
-          <ActivityCol className='invisible-scroll'>
-            <HeaderCol $background={props.theme.primary}>
-              <HeaderRow $background={props.theme.primary} $fontColor={props.theme.font}>
-                <ActivityImg src={getActivityImg(Activity.SURVEY)}></ActivityImg>
-                <ActivityType>{getActivityTypeName(Activity.SURVEY)}</ActivityType>
-                <ActivityName>{task.name}</ActivityName>
-              </HeaderRow>
-              <FullDivider $background={props.theme.warning} />
-              <div>
-                <h5>{task.description}</h5>
-                <SmallDivider $background={props.theme.warning} />
-                <h5>Punkty do zdobycia: {task.experience}</h5>
-                <p>
-                  Przyznane punkty: <strong>nie</strong> {/*// todo: info from endpoint*/}
-                </p>
-                <SmallDivider $background={props.theme.warning} />
-              </div>
-              <FullDivider $background={props.theme.warning} />
-              <Formik
-                initialValues={{
-                  opinion: '',
-                  score: '3'
-                }}
-                validate={(values) => {
-                  const errors = {}
-                  if (!values.opinion) errors.opinion = FIELD_REQUIRED
-                  if (!values.score) errors.score = FIELD_REQUIRED
-                  return errors
-                }}
-                onSubmit={(values, { setSubmitting }) => {
-                  alert(JSON.stringify(values, null, 2))
-                  setSubmitting(false)
-                }}
-              >
-                {({ isSubmitting, handleSubmit }) => (
-                  <Form onSubmit={handleSubmit}>
-                    <Container>
-                      <Row className='mx-auto'></Row>
-                      <p>Jakie są Twoje wrażenia z tego rodziału? Co można zmienić, poprawić, a co było w porządku?</p>
-                      <FormikTextarea
-                        as='textarea'
-                        type='text'
-                        name='opinion'
-                        $fontColor={props.theme.font}
-                        $background={props.theme.primary}
-                      />
-
-                      <Row className='mt-4 w-80'>
-                        <IconColumn icons={[faThumbsDown, faThumbsDown]} />
-                        <IconColumn icons={[faThumbsDown]} />
-                        <IconColumn icons={[faFaceMeh]} />
-                        <IconColumn icons={[faThumbsUp]} />
-                        <IconColumn icons={[faThumbsUp, faThumbsUp]} />
-                      </Row>
-                      <Row className='mt-4 justify-content-center'>
-                        <FormikRange
-                          $accentColor={props.theme.success}
-                          type='range'
-                          min={1}
-                          max={5}
-                          name='score'
-                        ></FormikRange>
-                      </Row>
-
-                      <Row className='mt-4 d-flex justify-content-center'>
-                        <Col sm={12} className='d-flex justify-content-center mb-2'>
-                          <FormButton $buttonColor={props.theme.success} type='submit' disabled={isSubmitting}>
-                            {isSubmitting ? (
-                              <Spinner as='span' animation='border' size='sm' role='status' />
-                            ) : (
-                              <span>Wyślij</span>
-                            )}
-                          </FormButton>
-                        </Col>
-                      </Row>
-                    </Container>
-                  </Form>
-                )}
-              </Formik>
-            </HeaderCol>
-          </ActivityCol>
-        )}
-      </InfoContainer>
-    </Content>
+    <>
+      <Row className={'m-0 pt-2'}>
+        <Col>
+          <GameCard
+            headerText={'Informacje o aktywności'}
+            content={
+              task === undefined ? (
+                <Loader />
+              ) : task == null ? (
+                <p>{ERROR_OCCURRED}</p>
+              ) : (
+                <CustomTable
+                  $borderColor={props.theme.secondary}
+                  $background={props.theme.secondary}
+                  $fontColor={props.theme.font}
+                  style={{ border: 'none' }}
+                >
+                  <tbody>
+                    {tableContent.map((row, index) => (
+                      <tr key={index}>
+                        <th width={'25%'}>{row.header}</th>
+                        <td>{row.body}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </CustomTable>
+              )
+            }
+          />
+        </Col>
+      </Row>
+      <Row className={'m-0 pt-2'}>
+        <Col>
+          <GameCard
+            headerText={'Twoja odpowiedź'}
+            content={
+              task === undefined ? (
+                <Loader />
+              ) : task == null ? (
+                <p>{ERROR_OCCURRED}</p>
+              ) : (
+                <Form>
+                  <FormGroup>
+                    <FormLabel>Twoja opinia (wymagane)</FormLabel>
+                    <FormControl
+                      as={'textarea'}
+                      ref={feedbackRef}
+                      rows={3}
+                      defaultValue={task.feedback.feedback}
+                      style={{
+                        color: props.theme.font,
+                        backgroundColor: props.theme.secondary,
+                        borderColor: props.theme.primary
+                      }}
+                    />
+                  </FormGroup>
+                  <FormGroup className={'my-3'}>
+                    <FormLabel>Twoja ocena (wymagane)</FormLabel>
+                    <div className={'d-flex justify-content-between w-100 h5 mt-3'}>
+                      <FontAwesomeIcon icon={fa1} />
+                      <FontAwesomeIcon icon={fa2} />
+                      <FontAwesomeIcon icon={fa3} />
+                      <FontAwesomeIcon icon={fa4} />
+                      <FontAwesomeIcon icon={fa5} />
+                    </div>
+                    <RangeSlider
+                      ref={rateRef}
+                      type={'range'}
+                      min={1}
+                      max={5}
+                      defaultValue={task.feedback.rate}
+                      $accentColor={props.theme.success}
+                    />
+                  </FormGroup>
+                  <Button
+                    onClick={sendAnswer}
+                    className={'position-relative start-50 translate-middle-x mb-3'}
+                    style={{ borderColor: props.theme.success, backgroundColor: props.theme.success }}
+                  >
+                    {isAnswerSending ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
+                  </Button>
+                  {errorMessage ? (
+                    <p style={{ color: props.theme.danger }} className={'text-center'}>
+                      {errorMessage}
+                    </p>
+                  ) : null}
+                </Form>
+              )
+            }
+          />
+        </Col>
+      </Row>
+    </>
   )
 }
 
