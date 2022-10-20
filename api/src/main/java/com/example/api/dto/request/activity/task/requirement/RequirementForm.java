@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RequirementForm {
     private Long id;
-    private Boolean selected;
+    private Boolean isSelected;
     private String value;
 }

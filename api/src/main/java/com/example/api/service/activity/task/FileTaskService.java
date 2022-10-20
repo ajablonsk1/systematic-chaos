@@ -113,10 +113,10 @@ public class FileTaskService {
         chapter.getActivityMap().getFileTasks().add(fileTask);
     }
 
-    public List<FileTask> getStudentFileTasks(User student) {
+    public List<FileTask> getStudentFileTasks() {
         return fileTaskRepo.findAll()
                 .stream()
-                .filter(fileTask -> !requirementService.areRequirementsDefault(fileTask.getRequirements()))
+                .filter(fileTask -> !fileTask.getIsBlocked())
                 .toList();
     }
 

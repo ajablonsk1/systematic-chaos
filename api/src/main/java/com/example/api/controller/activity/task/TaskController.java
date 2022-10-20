@@ -40,9 +40,9 @@ public class TaskController {
     }
 
     @GetMapping("/requirements")
-    ResponseEntity<List<RequirementResponse<?>>> getRequirementsForActivity(@RequestParam Long activityId)
+    ResponseEntity<List<? extends RequirementResponse<?>>> getRequirementsForActivity(@RequestParam Long activityId)
             throws EntityNotFoundException, MissingAttributeException {
-        return ResponseEntity.ok().body(taskService.getRequirementForActivity(activityId));
+        return ResponseEntity.ok().body(taskService.getRequirementsForActivity(activityId));
     }
 
     @PostMapping("/requirements/add")

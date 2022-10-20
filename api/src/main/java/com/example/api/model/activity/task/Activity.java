@@ -31,6 +31,7 @@ public abstract class Activity {
 
     @OneToMany
     private List<Requirement> requirements = new LinkedList<>();
+    private Boolean isBlocked = true;
 
     @OneToOne
     private User professor;

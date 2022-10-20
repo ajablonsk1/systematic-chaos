@@ -86,10 +86,10 @@ public class InfoService {
         chapter.getActivityMap().getInfos().add(info);
     }
 
-    public List<Info> getStudentInfos(User student) {
+    public List<Info> getStudentInfos() {
         return infoRepo.findAll()
                 .stream()
-                .filter(info -> !requirementService.areRequirementsDefault(info.getRequirements()))
+                .filter(info -> !info.getIsBlocked())
                 .toList();
     }
 

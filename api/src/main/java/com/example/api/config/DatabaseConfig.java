@@ -12,8 +12,7 @@ import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
-import com.example.api.model.map.requirement.Requirement;
-import com.example.api.model.map.requirement.RequirementType;
+import com.example.api.model.map.requirement.*;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
@@ -30,6 +29,7 @@ import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
+import com.example.api.repo.map.RequirementRepo;
 import com.example.api.repo.user.BadgeRepo;
 import com.example.api.repo.user.RankRepo;
 import com.example.api.repo.user.UnlockedBadgeRepo;
@@ -80,6 +80,7 @@ public class DatabaseConfig {
     private final UserRepo userRepo;
     private final BadgeRepo badgeRepo;
     private final UnlockedBadgeRepo unlockedBadgeRepo;
+    private final RequirementRepo requirementRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -350,6 +351,7 @@ public class DatabaseConfig {
             accessDateService.saveAccessDate(ac2);
 
             GraphTask graphTask = new GraphTask();
+            graphTask.setIsBlocked(false);
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
             graphTask.setTitle("Dżungla kabli");
             graphTask.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
@@ -415,6 +417,7 @@ public class DatabaseConfig {
             List<Requirement> graphTaskTwoReq = requirementService.getDefaultRequirements();
 
             GraphTask graphTaskTwo = new GraphTask();
+            graphTaskTwo.setIsBlocked(false);
             graphTaskTwo.setQuestions(List.of(startQuestionTwo, questionTwo1, questionTwo2, questionTwo3,  questionTwo4, questionTwo5));
             graphTaskTwo.setTitle("Dżungla kabli II");
             graphTaskTwo.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
@@ -429,6 +432,7 @@ public class DatabaseConfig {
             graphTaskService.saveGraphTask(graphTaskTwo);
 
             FileTask fileTask = new FileTask();
+            fileTask.setIsBlocked(false);
             fileTask.setPosX(3);
             fileTask.setPosY(3);
             fileTask.setTitle("Niszczator kabli");
@@ -441,6 +445,7 @@ public class DatabaseConfig {
             fileTaskService.saveFileTask(fileTask);
 
             Info info1 = new Info();
+            info1.setIsBlocked(false);
             info1.setPosX(3);
             info1.setPosY(0);
             info1.setTitle("Skrętki");
@@ -462,6 +467,7 @@ public class DatabaseConfig {
 
 
             Survey survey = new Survey();
+            survey.setIsBlocked(false);
             survey.setTitle("Example map feedback");
             survey.setDescription("Pomóż nam polepszyć kurs dzieląc się swoją opinią!");
             survey.setPosX(7);
@@ -621,57 +627,53 @@ public class DatabaseConfig {
     }
 
     private List<Requirement> createDefaultRequirements(RequirementService requirementService) {
-        Requirement requirement1 = new Requirement();
-        Requirement requirement2 = new Requirement();
-        Requirement requirement3 = new Requirement();
-        Requirement requirement4 = new Requirement();
-        Requirement requirement5 = new Requirement();
-        Requirement requirement6 = new Requirement();
-        Requirement requirement7 = new Requirement();
+        DateFromRequirement dateFromRequirement = new DateFromRequirement(
+                MessageManager.DATE_FROM_REQ_NAME,
+                false,
+                null
+        );
+        DateToRequirement dateToRequirement = new DateToRequirement(
+                MessageManager.DATE_TO_REQ_NAME,
+                false,
+                null
+        );
+        FileTasksRequirement fileTasksRequirement = new FileTasksRequirement(
+                MessageManager.FILE_TASKS_REQ_NAME,
+                false,
+                new LinkedList<>()
+        );
+        GraphTasksRequirement graphTasksRequirement = new GraphTasksRequirement(
+                MessageManager.GRAPH_TASKS_REQ_NAME,
+                false,
+                new LinkedList<>()
+        );
+        GroupsRequirement groupsRequirement = new GroupsRequirement(
+                MessageManager.GROUPS_REQ_NAME,
+                false,
+                new LinkedList<>()
+        );
+        MinPointsRequirement minPointsRequirement = new MinPointsRequirement(
+                MessageManager.MIN_POINTS_REQ_NAME,
+                false,
+                null
+        );
+        StudentsRequirements studentsRequirements = new StudentsRequirements(
+                MessageManager.STUDENTS_REQ_NAME,
+                false,
+                new LinkedList<>()
+        );
+        List<Requirement> requirements = List.of(
+                dateFromRequirement,
+                dateToRequirement,
+                minPointsRequirement,
+                groupsRequirement,
+                studentsRequirements,
+                graphTasksRequirement,
+                fileTasksRequirement
+        );
 
-        requirement1.setSelected(false);
-        requirement1.setName(MessageManager.DATE_FROM_REQ_NAME);
-        requirement1.setType(RequirementType.DATE_FROM);
-        requirement2.setSelected(false);
-        requirement2.setName(MessageManager.DATE_TO_REQ_NAME);
-        requirement2.setType(RequirementType.DATE_TO);
-        requirement3.setSelected(false);
-        requirement3.setName(MessageManager.MIN_POINTS_REQ_NAME);
-        requirement3.setType(RequirementType.MIN_POINTS);
-        requirement4.setSelected(false);
-        requirement4.setName(MessageManager.GROUPS_REQ_NAME);
-        requirement4.setType(RequirementType.GROUPS);
-        requirement5.setSelected(false);
-        requirement5.setName(MessageManager.STUDENTS_REQ_NAME);
-        requirement5.setType(RequirementType.STUDENTS);
-        requirement6.setSelected(false);
-        requirement6.setName(MessageManager.GRAPH_TASKS_REQ_NAME);
-        requirement6.setType(RequirementType.GRAPH_TASKS);
-        requirement7.setSelected(false);
-        requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
-        requirement7.setType(RequirementType.FILE_TASKS);
-        requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
-
-        requirement1.setDateFrom(System.currentTimeMillis());
-        requirement1.setIsDefault(false);
-        requirement2.setDateTo(System.currentTimeMillis() + 1_000 * 60 * 60);
-        requirement2.setIsDefault(false);
-        requirement3.setMinPoints(100.0);
-        requirement3.setIsDefault(false);
-        requirement4.setAllowedGroups(List.of());
-        requirement5.setAllowedStudents(List.of());
-        requirement6.setFinishedGraphTasks(List.of());
-        requirement7.setFinishedFileTasks(List.of());
-
-        requirementService.saveRequirement(requirement1);
-        requirementService.saveRequirement(requirement2);
-        requirementService.saveRequirement(requirement3);
-        requirementService.saveRequirement(requirement4);
-        requirementService.saveRequirement(requirement5);
-        requirementService.saveRequirement(requirement6);
-        requirementService.saveRequirement(requirement7);
-
-        return List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7);
+        requirementRepo.saveAll(requirements);
+        return requirements;
     }
 
     private void initAllRanks() throws IOException {

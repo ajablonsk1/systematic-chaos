@@ -11,6 +11,7 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
+import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
 import com.example.api.repo.map.ChapterRepo;
@@ -57,7 +58,17 @@ public class ChapterService {
         log.info("Fetching info for chapter with id {}", id);
         Chapter chapter = chapterRepo.findChapterById(id);
         chapterValidator.validateChapterIsNotNull(chapter, id);
-        List<MapTask> allTasks = activityMapService.getMapTasks(chapter.getActivityMap());
+
+        String email = authService.getAuthentication().getName();
+        User user = userRepo.findUserByEmail(email);
+
+        List<? extends MapTask> allTasks;
+        if (user.getAccountType() == AccountType.STUDENT){
+            allTasks = activityMapService.getMapTasksForStudent(chapter.getActivityMap(), user);
+        } else {
+            allTasks = activityMapService.getMapTasksForProfessor(chapter.getActivityMap(), user);
+        }
+
         return new ChapterInfoResponse(chapter, allTasks);
     }
 
