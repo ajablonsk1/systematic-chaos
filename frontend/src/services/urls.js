@@ -150,3 +150,8 @@ export const POST_RANK = RANK + '/add'
 export const GET_RANK_CURRENT = RANK + '/current'
 export const GET_RANK_ALL = RANK + '/all'
 export const DELETE_RANK = RANK + '/delete'
+
+// Badges Controller
+const BADGE = BASE_URL + '/badge'
+export const GET_BADGE_ALL = BADGE + '/all'
+export const GET_BADGE_UNLOCKED_ALL = BADGE + '/unlocked/all'
