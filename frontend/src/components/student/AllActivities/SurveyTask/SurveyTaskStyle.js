@@ -18,3 +18,9 @@ export const FormButton = styled(Button)`
   background-color: ${(props) => props.$buttonColor};
   border-color: ${(props) => props.$buttonColor};
 `
+
+export const RangeSlider = styled.input`
+  accent-color: ${(props) => props.$accentColor};
+  display: block;
+  width: 100%;
+`
