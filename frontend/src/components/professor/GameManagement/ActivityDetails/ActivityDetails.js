@@ -91,11 +91,11 @@ function ActivityDetails(props) {
         <ModalBody style={{ maxHeight: '80vh', overflow: 'auto' }}>
           <div>
             <h6>Ocena: </h6>
-            <p>{chosenStudent.studentAnswer?.studentPoints ?? '-'}/5</p>
+            <p>{chosenStudent?.studentAnswer?.studentPoints ?? '-'}/5</p>
           </div>
           <div>
             <h6>Odpowiedź:</h6>
-            <p>{chosenStudent.studentAnswer?.answer ?? '-'}</p>
+            <p>{chosenStudent?.studentAnswer?.answer ?? '-'}</p>
           </div>
         </ModalBody>
         <ModalFooter>
