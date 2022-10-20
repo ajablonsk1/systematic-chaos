@@ -42,6 +42,6 @@ public class ExceptionMessage {
     public static final String WRONG_PROFESSOR_REGISTER_TOKEN = "Token do rejestracji prowadzącego jest niepoprawny";
     public static final String RANK_NAME_TOO_LONG = "Nazwa nie może przekraczać 30 znaków";
     public static final String SAME_RANK_MIN_POINTS = "Inna ranga posiada już podaną wartość progu punktowego";
-    public static final String DATE_NOT_LONG = "Data musi być liczbą całkowitą (long)";
-    public static final String MIN_POINTS_NOT_DOUBLE = "Punkty muszą być liczbą zmiennaprzecinkową (double)";
+    public static final String DATE_NOT_LONG = "Data musi być liczbą całkowitą";
+    public static final String MIN_POINTS_NOT_DOUBLE = "Punkty muszą być liczbą zmiennaprzecinkową";
 }
