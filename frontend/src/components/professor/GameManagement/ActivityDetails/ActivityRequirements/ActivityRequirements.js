@@ -20,13 +20,15 @@ function ActivityRequirements(props) {
   const [multiSelectLists, setMultiSelectLists] = useState([])
   const [onSaveError, setOnSaveError] = useState('')
   const [isSaving, startSaving] = useTransition()
+  const [isActivityBlocked, setIsActivityBlocked] = useState(false)
 
   const blockadeRef = useRef()
 
   useEffect(() => {
     ActivityService.getActivityRequirements(props.activityId)
       .then((response) => {
-        setRequirementsList(response.map((requirement) => ({ ...requirement, answer: null })))
+        setRequirementsList(response.requirements.map((requirement) => ({ ...requirement, answer: null })))
+        setIsActivityBlocked(response.isBlocked)
       })
       .catch(() => {
         setRequirementsList(null)
@@ -179,7 +181,8 @@ function ActivityRequirements(props) {
           <Form.Check
             ref={blockadeRef}
             className={'pt-3'}
-            defaultChecked={props.isBlocked}
+            checked={isActivityBlocked}
+            onChange={(e) => setIsActivityBlocked(e.target.checked)}
             label={'Zablokuj aktywność i ukryj przed studentami'}
           ></Form.Check>
         </Row>

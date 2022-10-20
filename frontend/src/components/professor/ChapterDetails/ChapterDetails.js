@@ -102,9 +102,9 @@ function ChapterDetails(props) {
       })
   }, [])
 
-  const goToChapterDetails = (activityName, activityId, activityType, isActivityBlocked) => {
+  const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
-      state: { activityId: activityId, activityType: activityType, isBlocked: isActivityBlocked }
+      state: { activityId: activityId, activityType: activityType }
     })
   }
 
@@ -281,9 +281,7 @@ function ChapterDetails(props) {
                         >
                           <TableRow
                             $background={props.theme.primary}
-                            onClick={() =>
-                              goToChapterDetails(activity.title, activity.id, activity.type, activity.isActivityBlocked)
-                            }
+                            onClick={() => goToChapterDetails(activity.title, activity.id, activity.type)}
                             style={{ opacity: activity.isActivityBlocked ? 0.4 : 1 }}
                           >
                             <td>

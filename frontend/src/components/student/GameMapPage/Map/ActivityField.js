@@ -25,7 +25,7 @@ function ActivityField(props) {
     if (activity) {
       ActivityService.getActivityRequirements(activity.id)
         .then((response) => {
-          setRequirements(response?.filter((requirement) => requirement.selected))
+          setRequirements(response.requirements?.filter((requirement) => requirement.selected))
         })
         .catch(() => {
           setRequirements(null)
