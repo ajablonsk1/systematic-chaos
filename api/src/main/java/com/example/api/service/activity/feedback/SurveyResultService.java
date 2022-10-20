@@ -50,24 +50,24 @@ public class SurveyResultService {
         SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
         if (surveyResult == null) {
             surveyResult = new SurveyResult();
+            surveyResult.setSurvey(survey);
+            surveyResult.setUser(student);
             surveyResult.setPointsReceived(survey.getMaxPoints());
             badgeService.checkAllBadges();
         }
 
         surveyResult.setFeedback(form.getFeedback());
-        surveyResult.setUser(student);
 
         if (form.getRate() < 1 || form.getRate() > 5) {
             log.error("SurveyResult rate {} is out of range", form.getRate());
             throw new RequestValidationException(ExceptionMessage.USER_FEEDBACK_RATE_OUT_OF_RANGE);
         }
         surveyResult.setRate(form.getRate());
-        surveyResult.setSurvey(survey);
         surveyResultRepo.save(surveyResult);
         return new SurveyResultInfoResponse(surveyResult);
     }
 
-    public SurveyResultInfoResponse getSurveyResult(Long surveyId) throws WrongUserTypeException, EntityNotFoundException {
+    public SurveyResultInfoResponse getSurveyResult(Long surveyId) throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         String email = authService.getAuthentication().getName();
         log.info("Getting user {} feedback for survey with id {}", email, surveyId);
         User student = userRepo.findUserByEmail(email);
@@ -77,7 +77,17 @@ public class SurveyResultService {
         activityValidator.validateActivityIsNotNull(survey, surveyId);
 
         SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
-        feedbackValidator.validateFeedbackIsNotNull(surveyResult, surveyId, email);
+
+        try {
+            feedbackValidator.validateFeedbackIsNotNull(surveyResult, surveyId, email);
+        }
+        catch (EntityNotFoundException ex) {
+            surveyResult = new SurveyResult(survey, null, null);
+            surveyResult.setUser(student);
+            surveyResult.setPointsReceived(survey.getMaxPoints());
+            surveyResultRepo.save(surveyResult);
+            badgeService.checkAllBadges();
+        }
 
         return new SurveyResultInfoResponse(surveyResult);
 

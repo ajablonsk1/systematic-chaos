@@ -2,10 +2,7 @@ package com.example.api.model.activity.result;
 
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.Survey;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -19,6 +16,7 @@ import javax.validation.constraints.Min;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class SurveyResult extends TaskResult{
     @ManyToOne
@@ -26,7 +24,6 @@ public class SurveyResult extends TaskResult{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Survey survey;
 
-    @NonNull
     @Min(1)
     @Max(5)
     private Integer rate;
