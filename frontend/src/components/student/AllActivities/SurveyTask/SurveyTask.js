@@ -131,7 +131,7 @@ function FeedbackTask(props) {
                       as={'textarea'}
                       ref={feedbackRef}
                       rows={3}
-                      defaultValue={task.feedback.feedback}
+                      defaultValue={task.feedback?.feedback ?? ''}
                       style={{
                         color: props.theme.font,
                         backgroundColor: props.theme.secondary,
@@ -151,7 +151,7 @@ function FeedbackTask(props) {
                       type={'range'}
                       min={1}
                       max={5}
-                      defaultValue={task.feedback.rate}
+                      defaultValue={task.feedback?.rate ?? 1}
                       $accentColor={props.theme.success}
                     />
                   </FormGroup>
