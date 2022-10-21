@@ -1,21 +1,25 @@
 package com.example.api.service.user;
 
+import com.example.api.dto.request.user.BadgeForm;
 import com.example.api.dto.response.user.badge.BadgeResponse;
 import com.example.api.dto.response.user.badge.UnlockedBadgeResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.user.User;
 import com.example.api.model.user.badge.Badge;
 import com.example.api.model.user.badge.UnlockedBadge;
 import com.example.api.repo.user.BadgeRepo;
 import com.example.api.repo.user.UnlockedBadgeRepo;
+import com.example.api.service.validator.BadgeValidator;
 import com.example.api.util.visitor.BadgeVisitor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -26,6 +30,7 @@ public class BadgeService {
     private final BadgeRepo badgeRepo;
     private final UnlockedBadgeRepo unlockedBadgeRepo;
     private final UserService userService;
+    private final BadgeValidator badgeValidator;
     private final BadgeVisitor badgeVisitor;
 
     public List<BadgeResponse> getAllBadges() {
@@ -55,10 +60,23 @@ public class BadgeService {
                 .toList();
         for (Badge badge: badges) {
             if (badge.isGranted(badgeVisitor)) {
-                UnlockedBadge unlockedBadge = new UnlockedBadge(null, badge, System.currentTimeMillis());
+                UnlockedBadge unlockedBadge = new UnlockedBadge(badge, System.currentTimeMillis(), student);
                 unlockedBadgeRepo.save(unlockedBadge);
                 student.getUnlockedBadges().add(unlockedBadge);
             }
         }
+    }
+
+    public void deleteBadge(Long badgeId) {
+        badgeRepo.deleteById(badgeId);
+    }
+
+    public void updateBadge(BadgeForm form) throws RequestValidationException, IOException {
+        Long id = form.getId();
+        Badge badge = badgeRepo.findBadgeById(id);
+        badgeValidator.validateBadgeIsNotNull(badge, id);
+
+        badge.update(form, badgeValidator);
+        badgeRepo.save(badge);
     }
 }
