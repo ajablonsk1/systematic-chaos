@@ -251,3 +251,5 @@ export const getGameCardInfo = (playerType, data) => {
     </span>
   )
 }
+
+export const INVALID_DATE_MESSAGE = 'Invalid date object given'

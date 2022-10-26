@@ -1,5 +1,6 @@
 import moment from 'moment'
 import 'moment/locale/pl'
+import { INVALID_DATE_MESSAGE } from './constants'
 
 export const parseJwt = (token) => {
   try {
@@ -11,7 +12,7 @@ export const parseJwt = (token) => {
 }
 
 export const getRemainingDate = (endDateString) => {
-  if (endDateString === undefined) {
+  if (endDateString === undefined || endDateString === null) {
     return NaN
   }
 
@@ -24,7 +25,7 @@ export const getRemainingDate = (endDateString) => {
 
 export const convertDateToStringInfo = (endDate) => {
   if (!(endDate instanceof Date && isFinite(endDate))) {
-    return 'Invalid date object given'
+    return INVALID_DATE_MESSAGE
   }
 
   const duration = getRemainingDate(endDate)
