@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +57,9 @@ public class SurveyResultService {
             surveyResult.setPointsReceived(survey.getMaxPoints());
             badgeService.checkAllBadges();
         }
+        else if (surveyResult.isEvaluated()) {
+            surveyResult.setPointsReceived(survey.getMaxPoints());
+        }
 
         surveyResult.setFeedback(form.getFeedback());
 
@@ -84,12 +89,18 @@ public class SurveyResultService {
         catch (EntityNotFoundException ex) {
             surveyResult = new SurveyResult(survey, null, null);
             surveyResult.setUser(student);
-            surveyResult.setPointsReceived(survey.getMaxPoints());
             surveyResultRepo.save(surveyResult);
             badgeService.checkAllBadges();
         }
 
         return new SurveyResultInfoResponse(surveyResult);
 
+    }
+
+    public List<SurveyResult> getAllSurveyResultsForStudent(User student) {
+        return surveyResultRepo.findAllByUser(student)
+                .stream()
+                .filter(SurveyResult::isEvaluated)
+                .toList();
     }
 }

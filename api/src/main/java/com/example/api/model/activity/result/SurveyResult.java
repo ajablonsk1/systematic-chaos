@@ -12,6 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -33,7 +34,7 @@ public class SurveyResult extends TaskResult{
 
     @Override
     public boolean isEvaluated() {
-        return this.getPointsReceived() != null;
+        return !Objects.equals(this.getPointsReceived(), survey.getMaxPoints());
     }
 
     @Override

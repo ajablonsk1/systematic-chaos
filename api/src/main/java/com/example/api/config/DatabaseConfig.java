@@ -572,7 +572,7 @@ public class DatabaseConfig {
             surveyResult1.setSurvey(survey);
             surveyResult1.setId(1L);
             surveyResult1.setUser(student);
-            surveyResult1.setPointsReceived(1D);
+            surveyResult1.setPointsReceived(survey.getMaxPoints());
             addReceivedPointsForUser(student, surveyResult1.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 16);
             surveyResult1.setSendDateMillis(calendar.getTimeInMillis());
@@ -582,7 +582,7 @@ public class DatabaseConfig {
             surveyResult2.setSurvey(survey);
             surveyResult2.setId(2L);
             surveyResult2.setUser(student1);
-            surveyResult2.setPointsReceived(3D);
+            surveyResult2.setPointsReceived(survey.getMaxPoints());
             addReceivedPointsForUser(student1, surveyResult2.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 18);
             surveyResult2.setSendDateMillis(calendar.getTimeInMillis());
@@ -592,7 +592,7 @@ public class DatabaseConfig {
             surveyResult3.setSurvey(survey);
             surveyResult3.setId(3L);
             surveyResult3.setUser(student10);
-            surveyResult3.setPointsReceived(5D);
+            surveyResult3.setPointsReceived(survey.getMaxPoints());
             addReceivedPointsForUser(student10, surveyResult3.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 19);
             surveyResult3.setSendDateMillis(calendar.getTimeInMillis());
