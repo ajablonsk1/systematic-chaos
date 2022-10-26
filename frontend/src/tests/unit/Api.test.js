@@ -52,15 +52,12 @@ describe('getRemainingDate() tests', () => {
     //then
     expect(remainingDate.asDays()).toEqual(endDate.remainingDays)
   })
-  it.each(commonInvalidObjects.filter((x) => x !== undefined))(
-    'returns an invalid Duration object for common invalid object %s',
-    (invalidObject) => {
-      //when
-      const remainingDate = getRemainingDate(invalidObject)
-      //then
-      expect(remainingDate.isValid).toBeTruthy()
-    }
-  )
+  it.each(commonInvalidObjects)('returns an invalid Duration object for common invalid object %s', (invalidObject) => {
+    //when
+    const remainingDate = getRemainingDate(invalidObject)
+    //then
+    expect(remainingDate.isValid() && remainingDate.seconds > 0).toBeFalsy()
+  })
 })
 
 describe('convertDateToStringInfo() tests', () => {
