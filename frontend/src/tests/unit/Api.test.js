@@ -1,4 +1,5 @@
 import { convertDateToStringInfo, getRemainingDate, parseJwt } from '../../utils/Api'
+import { INVALID_DATE_MESSAGE } from '../../utils/constants'
 import { commonInvalidObjects } from './storage/commonInvalidObjects'
 import { testEndDates } from './storage/endDates'
 import { testInvalidTokens, testProfessorTokens, testStudentTokens } from './storage/tokens'
@@ -45,28 +46,59 @@ describe('parseJwt() tests', () => {
 })
 
 describe('getRemainingDate() tests', () => {
-  it.each(testEndDates)('returns correct remaining time to date %s', (endDate) => {
+  it.each(testEndDates)('returns correct remaining time for dateMillis %s', (endDate) => {
+    //when
+    const remainingDate = getRemainingDate(endDate.dateMillis)
+
+    //then
+    expect(remainingDate).not.toEqual(INVALID_DATE_MESSAGE)
+    expect(remainingDate.asDays()).toEqual(endDate.remainingDays)
+  })
+  it.each(testEndDates)('returns an INVALID_DATE_MESSAGE for date string %s', (endDate) => {
     //when
     const remainingDate = getRemainingDate(endDate.date)
 
     //then
-    expect(remainingDate.asDays()).toEqual(endDate.remainingDays)
+    expect(remainingDate).toEqual(INVALID_DATE_MESSAGE)
   })
-  it.each(commonInvalidObjects)('returns an invalid Duration object for common invalid object %s', (invalidObject) => {
+  it.each(testEndDates)('returns an INVALID_DATE_MESSAGE for date object %s', (endDate) => {
+    //when
+    const remainingDate = getRemainingDate(endDate.dateObject)
+
+    //then
+    expect(remainingDate).toEqual(INVALID_DATE_MESSAGE)
+  })
+  it.each(commonInvalidObjects)('returns an INVALID_DATE_MESSAGE for common invalid object %s', (invalidObject) => {
     //when
     const remainingDate = getRemainingDate(invalidObject)
+
     //then
-    expect(remainingDate.isValid() && remainingDate.seconds > 0).toBeFalsy()
+    expect(remainingDate).toEqual(INVALID_DATE_MESSAGE)
   })
 })
 
 describe('convertDateToStringInfo() tests', () => {
-  it.each(testEndDates)('returns correct date string from given date %s', (endDate) => {
+  it.each(testEndDates)('returns correct date string from given dateMillis %s', (endDate) => {
+    //when
+    const stringInfo = convertDateToStringInfo(endDate.dateMillis)
+
+    //then
+    expect(stringInfo).not.toEqual(INVALID_DATE_MESSAGE)
+    expect(stringInfo).toEqual(endDate.expectedStringInfo)
+  })
+  it.each(testEndDates)('returns an INVALID_DATE_MESSAGE for date string %s', (endDate) => {
+    //when
+    const stringInfo = convertDateToStringInfo(endDate.date)
+
+    //then
+    expect(stringInfo).toEqual(INVALID_DATE_MESSAGE)
+  })
+  it.each(testEndDates)('returns an INVALID_DATE_MESSAGE for date object %s', (endDate) => {
     //when
     const stringInfo = convertDateToStringInfo(endDate.dateObject)
 
     //then
-    expect(stringInfo).toEqual(endDate.expectedStringInfo)
+    expect(stringInfo).toEqual(INVALID_DATE_MESSAGE)
   })
 
   it.each(commonInvalidObjects)('returns "Invalid date object given" for invalid objects given', (invalidObject) => {
@@ -74,6 +106,6 @@ describe('convertDateToStringInfo() tests', () => {
     const stringInfo = convertDateToStringInfo(invalidObject)
 
     //then
-    expect(stringInfo).toEqual('Invalid date object given')
+    expect(stringInfo).toEqual(INVALID_DATE_MESSAGE)
   })
 })

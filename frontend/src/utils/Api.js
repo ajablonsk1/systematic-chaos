@@ -11,27 +11,31 @@ export const parseJwt = (token) => {
   }
 }
 
-export const getRemainingDate = (endDateString) => {
-  if (endDateString === undefined || endDateString === null) {
-    return moment.invalid()
+export const getRemainingDate = (endDateGiven) => {
+  if (typeof endDateGiven === 'number' && endDateGiven !== INVALID_DATE_MESSAGE) {
+    // duration
+    const today = moment(new Date())
+    const endDate = moment(new Date(endDateGiven))
+    return moment.duration(endDate.diff(today))
   }
-
-  const today = moment(new Date())
-  const endDate = moment(new Date(endDateString))
-
-  // duration
-  return moment.duration(endDate.diff(today))
+  return INVALID_DATE_MESSAGE
 }
 
+// we should ALWAYS get date as millis from back from what there currently is
+// also we need to update the fetch as it relies on old api and will always show '-'
 export const convertDateToStringInfo = (endDate) => {
-  if (!(endDate instanceof Date && isFinite(endDate))) {
+  if (endDate === null) {
     return INVALID_DATE_MESSAGE
   }
 
   const duration = getRemainingDate(endDate)
-  const days = Math.floor(duration.asDays())
-  const stringFormat = moment.utc(duration.asSeconds() * 1000).format('HH:mm:ss')
-  const splitString = stringFormat.split(':')
+  if (duration !== INVALID_DATE_MESSAGE) {
+    const days = Math.floor(duration.asDays())
+    const stringFormat = moment.utc(duration.asSeconds() * 1000).format('HH:mm:ss')
+    const splitString = stringFormat.split(':')
 
-  return `${days} dni, ${splitString[0]} godz, ${splitString[1]} min`
+    return `${days} dni, ${splitString[0]} godz, ${splitString[1]} min`
+  }
+
+  return INVALID_DATE_MESSAGE
 }
