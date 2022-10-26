@@ -12,10 +12,6 @@ export const parseJwt = (token) => {
 }
 
 export const getRemainingDate = (endDateString) => {
-  if (endDateString === undefined || endDateString === null) {
-    return NaN
-  }
-
   const today = moment(new Date())
   const endDate = moment(new Date(endDateString))
 

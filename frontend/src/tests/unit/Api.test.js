@@ -53,13 +53,12 @@ describe('getRemainingDate() tests', () => {
     expect(remainingDate.asDays()).toEqual(endDate.remainingDays)
   })
   it.each(commonInvalidObjects.filter((x) => x !== undefined))(
-    'returns NaN for common invalid object %s',
+    'returns an invalid Duration object for common invalid object %s',
     (invalidObject) => {
       //when
       const remainingDate = getRemainingDate(invalidObject)
-
       //then
-      expect(remainingDate.asDays()).toBeNaN()
+      expect(remainingDate.isValid).toBeTruthy()
     }
   )
 })
