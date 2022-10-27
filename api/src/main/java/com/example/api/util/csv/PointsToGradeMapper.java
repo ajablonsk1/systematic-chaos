@@ -10,7 +10,7 @@ public class PointsToGradeMapper {
         if (maxPoints == 0) return null;
 
         double gradeFraction = receivedPoints / maxPoints;
-        if (gradeFraction < 0 || gradeFraction > 1) {
+        if (gradeFraction < 0) {
             return null;
         }
         if (gradeFraction < 0.5) {

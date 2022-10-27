@@ -4,14 +4,12 @@ import com.example.api.dto.response.user.BasicUser;
 import com.example.api.dto.response.user.grade.GradeResponse;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.*;
-import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.feedback.SurveyResultService;
-import com.example.api.service.activity.result.AdditionalPointsService;
 import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.validator.UserValidator;
@@ -47,6 +45,7 @@ public class GradeService {
         return userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                 .stream()
                 .map(this::getStudentFinalGrade)
+                .sorted(Comparator.comparing(entry -> entry.getStudent().getLastName().toLowerCase() + entry.getStudent().getFirstName().toLowerCase()))
                 .toList();
     }
 
@@ -69,12 +68,27 @@ public class GradeService {
         Double pointsPossibleToGet = Stream.of(graphTaskResults, fileTaskResults, surveyResults)
                 .flatMap(Collection::stream)
                 .filter(TaskResult::isEvaluated)
-                .mapToDouble(TaskResult::getPointsReceived)
+                .mapToDouble(this::getMaxPointsFromTaskResult)
                 .sum();
 
         pointsReceived = pointsReceived + additionalPoints;
         PointsToGradeMapper pointsToGradeMapper = new PointsToGradeMapper();
         Double finalGrade = pointsToGradeMapper.getGrade(pointsReceived, pointsPossibleToGet);
         return new GradeResponse(new BasicUser(student), finalGrade);
+    }
+
+    private Double getMaxPointsFromTaskResult(TaskResult taskResult) {
+        switch (taskResult.getActivity().getActivityType()) {
+            case TASK -> {
+                return ((FileTaskResult) taskResult).getFileTask().getMaxPoints();
+            }
+            case EXPEDITION -> {
+                return ((GraphTaskResult) taskResult).getGraphTask().getMaxPoints();
+            }
+            case SURVEY -> {
+                return ((SurveyResult) taskResult).getSurvey().getMaxPoints();
+            }
+        }
+        return 0.0;
     }
 }
