@@ -12,7 +12,7 @@ export const parseJwt = (token) => {
 }
 
 export const getRemainingDate = (endDateGiven) => {
-  if (typeof endDateGiven === 'number' && endDateGiven !== INVALID_DATE_MESSAGE) {
+  if (typeof endDateGiven === 'number') {
     // duration
     const today = moment(new Date())
     const endDate = moment(new Date(endDateGiven))
@@ -24,10 +24,6 @@ export const getRemainingDate = (endDateGiven) => {
 // we should ALWAYS get date as millis from back from what there currently is
 // also we need to update the fetch as it relies on old api and will always show '-'
 export const convertDateToStringInfo = (endDate) => {
-  if (endDate === null) {
-    return INVALID_DATE_MESSAGE
-  }
-
   const duration = getRemainingDate(endDate)
   if (duration !== INVALID_DATE_MESSAGE) {
     const days = Math.floor(duration.asDays())
