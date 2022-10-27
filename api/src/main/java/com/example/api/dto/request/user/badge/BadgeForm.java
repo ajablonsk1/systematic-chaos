@@ -1,4 +1,4 @@
-package com.example.api.dto.request.user;
+package com.example.api.dto.request.user.badge;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BadgeForm {
-    @Schema(required = true) private Long id;
     @Schema(required = true) private String title;
     @Schema(required = true) private String description;
     @Schema(required = true) private MultipartFile image;

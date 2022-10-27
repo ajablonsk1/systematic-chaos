@@ -1,6 +1,6 @@
 package com.example.api.service.validator;
 
-import com.example.api.dto.request.user.BadgeForm;
+import com.example.api.dto.request.user.badge.BadgeForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.user.badge.Badge;
@@ -29,7 +29,7 @@ public class BadgeValidator {
         }
     }
 
-    public void validateBadgeDefaultAttr(BadgeForm form) throws RequestValidationException {
+    public void validateBadgeForm(BadgeForm form) throws RequestValidationException {
         if (form.getTitle().length() > 32) {
             log.error("");
             throw new RequestValidationException("");

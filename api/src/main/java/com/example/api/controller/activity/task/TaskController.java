@@ -4,7 +4,6 @@ import com.example.api.dto.request.activity.task.requirement.ActivityRequirement
 import com.example.api.dto.response.activity.task.ActivitiesResponse;
 import com.example.api.dto.response.activity.task.ActivityToEvaluateResponse;
 import com.example.api.dto.response.activity.task.TaskToEvaluateResponse;
-import com.example.api.dto.response.map.RequirementDTO;
 import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.error.exception.*;
 import com.example.api.service.activity.task.TaskService;

@@ -1,6 +1,7 @@
 package com.example.api.controller.user;
 
-import com.example.api.dto.request.user.BadgeForm;
+import com.example.api.dto.request.user.badge.BadgeAddForm;
+import com.example.api.dto.request.user.badge.BadgeUpdateForm;
 import com.example.api.dto.response.user.badge.BadgeResponse;
 import com.example.api.dto.response.user.badge.UnlockedBadgeResponse;
 import com.example.api.error.exception.RequestValidationException;
@@ -39,8 +40,14 @@ public class BadgeController {
     }
 
     @PutMapping(path = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> updateBadge(@ModelAttribute BadgeForm form) throws IOException, RequestValidationException {
+    public ResponseEntity<?> updateBadge(@ModelAttribute BadgeUpdateForm form) throws IOException, RequestValidationException {
         badgeService.updateBadge(form);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/add", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> addBadge(@ModelAttribute BadgeAddForm form) throws IOException, RequestValidationException {
+        badgeService.addBadge(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

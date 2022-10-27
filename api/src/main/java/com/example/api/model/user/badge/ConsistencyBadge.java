@@ -1,6 +1,6 @@
 package com.example.api.model.user.badge;
 
-import com.example.api.dto.request.user.BadgeForm;
+import com.example.api.dto.request.user.badge.BadgeUpdateForm;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.util.Image;
 import com.example.api.service.validator.BadgeValidator;
@@ -31,7 +31,7 @@ public class ConsistencyBadge extends Badge{
         return visitor.visitConsistencyBadge(this);
     }
 
-    public void update(BadgeForm form, BadgeValidator validator) throws IOException, RequestValidationException {
+    public void update(BadgeUpdateForm form, BadgeValidator validator) throws IOException, RequestValidationException {
         super.update(form, validator);
         this.weeksInRow = validator.validateAndGetIntegerValue(form.getValue());
     }

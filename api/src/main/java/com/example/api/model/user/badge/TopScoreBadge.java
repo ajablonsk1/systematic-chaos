@@ -1,6 +1,6 @@
 package com.example.api.model.user.badge;
 
-import com.example.api.dto.request.user.BadgeForm;
+import com.example.api.dto.request.user.badge.BadgeUpdateForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.RequestValidationException;
@@ -36,12 +36,12 @@ public class TopScoreBadge extends Badge{
         return visitor.visitTopScoreBadge(this);
     }
 
-    public void update(BadgeForm form, BadgeValidator validator) throws IOException, RequestValidationException {
+    public void update(BadgeUpdateForm form, BadgeValidator validator) throws IOException, RequestValidationException {
         super.update(form, validator);
         this.topScore = validator.validateAndGetDoubleValue(form.getValue());
 
         if (form.getForGroup() != null) {
-            this.forGroup = forGroup;
+            this.forGroup = form.getForGroup();
         }
     }
 }

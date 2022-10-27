@@ -1,5 +1,5 @@
 package com.example.api.model.user.badge;
-import com.example.api.dto.request.user.BadgeForm;
+import com.example.api.dto.request.user.badge.BadgeUpdateForm;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.RequestValidationException;
@@ -44,8 +44,8 @@ public abstract class Badge {
     public abstract boolean isGranted(BadgeVisitor visitor)
             throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException;
 
-    public void update(BadgeForm form, BadgeValidator validator) throws IOException, RequestValidationException {
-        validator.validateBadgeDefaultAttr(form);
+    public void update(BadgeUpdateForm form, BadgeValidator validator) throws IOException, RequestValidationException {
+        validator.validateBadgeForm(form);
         this.title = form.getTitle();
         this.description = form.getDescription();
         this.image.setFile(form.getImage().getBytes());

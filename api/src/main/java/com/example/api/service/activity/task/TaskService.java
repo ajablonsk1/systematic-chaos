@@ -9,7 +9,10 @@ import com.example.api.dto.response.activity.task.util.FileResponse;
 import com.example.api.dto.response.map.RequirementDTO;
 import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.dto.response.map.task.ActivityType;
-import com.example.api.error.exception.*;
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
+import com.example.api.error.exception.RequestValidationException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
@@ -36,7 +39,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
