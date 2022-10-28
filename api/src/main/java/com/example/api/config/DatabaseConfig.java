@@ -822,7 +822,7 @@ public class DatabaseConfig {
         Badge badge1 = new ConsistencyBadge(
                 null,
                 "To dopiero początek",
-                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres miesiąca",
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres miesiąca",
                 itsTheBeginning,
                 4
         );
@@ -830,7 +830,7 @@ public class DatabaseConfig {
         Badge badge2 = new ConsistencyBadge(
                 null,
                 "Długo jeszcze?",
-                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres 3 miesięcy",
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres 3 miesięcy",
                 longA,
                 12
         );
@@ -838,7 +838,7 @@ public class DatabaseConfig {
         Badge badge3 = new ConsistencyBadge(
                 null,
                 "To już jest koniec, ale czy na pewno?",
-                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres 6 mięsięcy",
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres 6 mięsięcy",
                 theEnd,
                 24
         );

@@ -4,7 +4,10 @@ import com.example.api.dto.request.user.badge.BadgeAddForm;
 import com.example.api.dto.request.user.badge.BadgeUpdateForm;
 import com.example.api.dto.response.user.badge.BadgeResponse;
 import com.example.api.dto.response.user.badge.UnlockedBadgeResponse;
+import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.user.BadgeService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +27,12 @@ public class BadgeController {
     private final BadgeService badgeService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<BadgeResponse>> getAllBadges(){
+    public ResponseEntity<List<? extends BadgeResponse<?>>> getAllBadges(){
         return ResponseEntity.ok().body(badgeService.getAllBadges());
     }
 
     @GetMapping("/unlocked/all")
-    public ResponseEntity<List<UnlockedBadgeResponse>> getAllUnlockedBadges(){
+    public ResponseEntity<List<UnlockedBadgeResponse>> getAllUnlockedBadges() throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         return ResponseEntity.ok().body(badgeService.getAllUnlockedBadges());
     }
 

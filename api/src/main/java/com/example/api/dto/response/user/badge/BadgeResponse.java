@@ -7,10 +7,12 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class BadgeResponse {
+public class BadgeResponse<T> {
     private String title;
     private String description;
     private ByteFileResponse file;
+    private T value;
+    private Boolean forGroup;
 
     public BadgeResponse(Badge badge) {
         this.title = badge.getTitle();

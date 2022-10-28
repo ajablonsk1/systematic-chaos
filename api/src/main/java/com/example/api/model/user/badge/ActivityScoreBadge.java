@@ -1,6 +1,7 @@
 package com.example.api.model.user.badge;
 
 import com.example.api.dto.request.user.badge.BadgeUpdateForm;
+import com.example.api.dto.response.user.badge.BadgeResponse;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.util.Image;
 import com.example.api.service.validator.BadgeValidator;
@@ -29,6 +30,13 @@ public class ActivityScoreBadge extends Badge{
     @Override
     public boolean isGranted(BadgeVisitor visitor) {
         return visitor.visitActivityScoreBadge(this);
+    }
+
+    @Override
+    public BadgeResponse<?> getResponse() {
+        BadgeResponse<Double> response = new BadgeResponse<>(this);
+        response.setValue(activityScore);
+        return response;
     }
 
     public void update(BadgeUpdateForm form, BadgeValidator validator) throws IOException, RequestValidationException {

@@ -38,14 +38,15 @@ public class BadgeService {
     private final BadgeValidator badgeValidator;
     private final BadgeVisitor badgeVisitor;
 
-    public List<BadgeResponse> getAllBadges() {
+    public List<? extends BadgeResponse<?>> getAllBadges() {
         return badgeRepo.findAll()
                 .stream()
-                .map(BadgeResponse::new)
+                .map(Badge::getResponse)
                 .toList();
     }
 
-    public List<UnlockedBadgeResponse> getAllUnlockedBadges() {
+    public List<UnlockedBadgeResponse> getAllUnlockedBadges() throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
+        checkAllBadges();
         User student = userService.getCurrentUser();
         return student.getUnlockedBadges()
                 .stream()
@@ -82,10 +83,17 @@ public class BadgeService {
         badgeValidator.validateBadgeIsNotNull(badge, id);
 
         badge.update(form, badgeValidator);
+        checkAllBadges();
         badgeRepo.save(badge);
     }
 
     public void addBadge(BadgeAddForm form) throws IOException, RequestValidationException {
+        badgeValidator.validateBadgeForm(form);
+        Badge badge = getBadgeFromForm(form);
+        badgeRepo.save(badge);
+    }
+
+    private Badge getBadgeFromForm(BadgeAddForm form) throws RequestValidationException, IOException {
         BadgeType type = form.getType();
         String title = form.getTitle();
         String description = form.getDescription();
@@ -93,20 +101,21 @@ public class BadgeService {
         fileRepo.save(image);
         String value = form.getValue();
         Boolean forGroup = form.getForGroup();
-        badgeValidator.validateBadgeForm(form);
+        Badge badge = null;
         switch (type) {
             case ACTIVITY_NUMBER ->
-                    badgeRepo.save(new ActivityNumberBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value)));
+                    badge = new ActivityNumberBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value));
             case ACTIVITY_SCORE ->
-                    badgeRepo.save(new ActivityScoreBadge(null, title, description, image, badgeValidator.validateAndGetDoubleValue(value)));
+                    badge = new ActivityScoreBadge(null, title, description, image, badgeValidator.validateAndGetDoubleValue(value));
             case CONSISTENCY ->
-                    badgeRepo.save(new ConsistencyBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value)));
+                    badge = new ConsistencyBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value));
             case FILE_TASK_NUMBER ->
-                    badgeRepo.save(new FileTaskNumberBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value)));
+                    badge = new FileTaskNumberBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value));
             case GRAPH_TASK_NUMBER ->
-                    badgeRepo.save(new GraphTaskNumberBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value)));
+                    badge = new GraphTaskNumberBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value));
             case TOP_SCORE ->
-                    badgeRepo.save(new TopScoreBadge(null, title, description, image, badgeValidator.validateAndGetDoubleValue(value), forGroup));
+                    badge = new TopScoreBadge(null, title, description, image, badgeValidator.validateAndGetDoubleValue(value), forGroup);
         }
+        return badge;
     }
 }
