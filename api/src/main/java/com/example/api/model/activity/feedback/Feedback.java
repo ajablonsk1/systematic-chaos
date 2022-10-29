@@ -17,6 +17,8 @@ public abstract class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Lob
     private String content;
 
     @ManyToOne

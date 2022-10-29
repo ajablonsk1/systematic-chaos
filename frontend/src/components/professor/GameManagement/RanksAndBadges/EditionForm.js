@@ -13,7 +13,11 @@ function EditionForm(props) {
   const [errorMessage, setErrorMessage] = useState(undefined)
 
   const formik = useFormik({
-    initialValues: { name: props.item.item.name ?? '', minPoints: props.item.item.minPoints ?? '', description: '' },
+    initialValues:
+      props.formVariant === 'RANKS'
+        ? { name: props.item.item.name ?? '', minPoints: props.item.item.minPoints ?? '' }
+        : { title: props.item.item.title, description: props.item.item.description, customValue: '' },
+
     onSubmit: (values) => {
       if (!chosenFile) {
         setErrorMessage(FILE_INPUT_REQUIRED)
@@ -59,8 +63,9 @@ function EditionForm(props) {
       })
     } else if (props.formVariant === 'BADGES') {
       setEditFormInitialValues({
-        name: ['text', 'Nazwa odznaki'],
+        title: ['text', 'Nazwa odznaki'],
         image: ['file', 'Ikona dla odznaki'],
+        customValue: ['text', 'Wartość odblokowania'],
         description: ['textarea', 'Opis']
       })
     }

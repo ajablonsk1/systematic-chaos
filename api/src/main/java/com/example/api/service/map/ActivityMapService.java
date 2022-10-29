@@ -1,13 +1,15 @@
 package com.example.api.service.map;
 
 import com.example.api.dto.response.map.ActivityMapResponse;
-import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.dto.response.map.task.MapTask;
+import com.example.api.dto.response.map.task.MapTaskProfessor;
+import com.example.api.dto.response.map.task.MapTaskStudent;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.SurveyResult;
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.activity.task.Survey;
@@ -21,7 +23,6 @@ import com.example.api.repo.map.MapRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.validator.MapValidator;
-import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,6 @@ public class ActivityMapService {
     private final GraphTaskResultRepo graphTaskResultRepo;
     private final FileTaskResultRepo fileTaskResultRepo;
     private final SurveyResultRepo surveyResultRepo;
-    private final UserValidator userValidator;
 
     public ActivityMap saveActivityMap(ActivityMap activityMap){
         return mapRepo.save(activityMap);
@@ -53,71 +53,59 @@ public class ActivityMapService {
     public ActivityMapResponse getActivityMap(Long id) throws EntityNotFoundException, WrongUserTypeException {
         log.info("Fetching activity map with id {} as ActivityMapResponse", id);
         String studentEmail = authService.getAuthentication().getName();
-        User student = userRepo.findUserByEmail(studentEmail);
+        User user = userRepo.findUserByEmail(studentEmail);
 
         ActivityMap activityMap = mapRepo.findActivityMapById(id);
         mapValidator.validateActivityMapIsNotNull(activityMap, id);
-        List<MapTask> allTasks = getMapTasks(activityMap, student);
+        List<? extends MapTask> allTasks;
+        if (user.getAccountType() == AccountType.STUDENT) {
+            allTasks = getMapTasksForStudent(activityMap, user);
+        } else {
+            allTasks = getMapTasksForProfessor(activityMap, user);
+        }
         return new ActivityMapResponse(activityMap.getId(), allTasks, activityMap.getMapSizeX(), activityMap.getMapSizeY(), activityMap.getImage());
     }
 
-    public List<MapTask> getMapTasks(ActivityMap activityMap) {
-        return getMapTasks(activityMap, null); // results for professor
+    public List<MapTaskProfessor> getMapTasksForProfessor(ActivityMap activityMap, User professor) {
+        return Stream.of(activityMap.getGraphTasks(), activityMap.getFileTasks(), activityMap.getSurveys(), activityMap.getInfos())
+                .flatMap(List::stream)
+                .map(activity -> new MapTaskProfessor(activity, activity.getIsBlocked()))
+                .sorted(Comparator.comparingLong(MapTask::getId))
+                .toList();
     }
 
-    public List<MapTask> getMapTasks(ActivityMap activityMap, User student) {
-        boolean alwaysFulfilledForProfessor = student != null;
-        List<MapTask> graphTasks = activityMap.getGraphTasks()
+    public List<MapTaskStudent> getMapTasksForStudent(ActivityMap activityMap, User student) {
+        List<MapTaskStudent> graphTasks = activityMap.getGraphTasks()
                 .stream()
-                .map(graphTask -> new MapTask(
-                        graphTask.getId(),
-                        graphTask.getPosX(),
-                        graphTask.getPosY(),
-                        ActivityType.EXPEDITION,
-                        graphTask.getTitle(),
-                        graphTask.getMaxPoints(),
-                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, graphTask.getRequirements()),
-                        isGraphTaskCompleted(graphTask, student),
-                        !requirementService.areRequirementsDefault(graphTask.getRequirements())))
+                .filter(graphTask -> !graphTask.getIsBlocked())
+                .map(graphTask -> new MapTaskStudent(
+                        graphTask,
+                        areRequirementsFulfilled(graphTask),
+                        isGraphTaskCompleted(graphTask, student)))
                 .toList();
-        List<MapTask> fileTasks = activityMap.getFileTasks()
+        List<MapTaskStudent> fileTasks = activityMap.getFileTasks()
                 .stream()
-                .map(fileTask -> new MapTask(
-                        fileTask.getId(),
-                        fileTask.getPosX(),
-                        fileTask.getPosY(),
-                        ActivityType.TASK,
-                        fileTask.getTitle(),
-                        fileTask.getMaxPoints(),
-                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, fileTask.getRequirements()),
-                        isFileTaskCompleted(fileTask, student),
-                        !requirementService.areRequirementsDefault(fileTask.getRequirements())))
+                .filter(fileTask -> !fileTask.getIsBlocked())
+                .map(fileTask -> new MapTaskStudent(
+                        fileTask,
+                        areRequirementsFulfilled(fileTask),
+                        isFileTaskCompleted(fileTask, student)))
                 .toList();
-        List<MapTask> infos = activityMap.getInfos()
+        List<MapTaskStudent> infos = activityMap.getInfos()
                 .stream()
-                .map(info -> new MapTask(
-                        info.getId(),
-                        info.getPosX(),
-                        info.getPosY(),
-                        ActivityType.INFO,
-                        info.getTitle(),
-                        0.0,
-                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, info.getRequirements()),
-                        isInfoCompleted(student),
-                        !requirementService.areRequirementsDefault(info.getRequirements())))
+                .filter(info -> !info.getIsBlocked())
+                .map(info -> new MapTaskStudent(
+                        info,
+                        areRequirementsFulfilled(info),
+                        true))
                 .toList();
-        List<MapTask> surveys = activityMap.getSurveys()
+        List<MapTaskStudent> surveys = activityMap.getSurveys()
                 .stream()
-                .map(survey -> new MapTask(
-                        survey.getId(),
-                        survey.getPosX(),
-                        survey.getPosY(),
-                        ActivityType.SURVEY,
-                        survey.getTitle(),
-                        survey.getPoints(),
-                        !alwaysFulfilledForProfessor || requirementService.areRequirementsFulfilled(student, survey.getRequirements()),
-                        isSurveyCompleted(survey, student),
-                        !requirementService.areRequirementsDefault(survey.getRequirements())))
+                .filter(survey -> !survey.getIsBlocked())
+                .map(survey -> new MapTaskStudent(
+                        survey,
+                        areRequirementsFulfilled(survey),
+                        isSurveyCompleted(survey, student)))
                 .toList();
         return Stream.of(graphTasks, fileTasks, infos, surveys)
                 .flatMap(List::stream)
@@ -125,36 +113,22 @@ public class ActivityMapService {
                 .toList();
     }
 
-    private boolean isGraphTaskCompleted(GraphTask graphTask, User student) {
-        if (!isValidStudent(student)) {
-            return false;
-        }
-        GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
+    private Boolean areRequirementsFulfilled(Activity activity) {
+        return requirementService.areRequirementsFulfilled(activity.getRequirements());
+    }
+
+    private Boolean isGraphTaskCompleted(GraphTask graphTask, User user) {
+        GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
         return result != null && result.getSendDateMillis() != null;
     }
 
-    private boolean isInfoCompleted(User student) {
-        return isValidStudent(student);
-    }
-
-    private boolean isFileTaskCompleted(FileTask fileTask, User student) {
-        if (!isValidStudent(student)) {
-            return false;
-        }
-        FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
+    private Boolean isFileTaskCompleted(FileTask fileTask, User user) {
+        FileTaskResult result = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, user);
         return result != null;
     }
 
-    // TODO: after adding survey result it probably should be updated
-    private boolean isSurveyCompleted(Survey survey, User student) {
-        if (!isValidStudent(student)) {
-            return false;
-        }
+    private Boolean isSurveyCompleted(Survey survey, User student) {
         SurveyResult result = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
         return result != null;
-    }
-
-    private boolean isValidStudent(User student) {
-        return student != null && student.getAccountType() == AccountType.STUDENT;
     }
 }

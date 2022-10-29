@@ -4,7 +4,6 @@ import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner, 
 import { TabsContainer } from '../../../general/LoginAndRegistrationPage/AuthStyle'
 import { HeroType } from '../../../../utils/userRole'
 import { base64Header, ERROR_OCCURRED, getHeroName } from '../../../../utils/constants'
-import { getBadgesList } from '../../../student/BadgesPage/mockData'
 import ContentCard from './ContentCard'
 import Table from './Table'
 import EditionForm from './EditionForm'
@@ -13,6 +12,8 @@ import RankService from '../../../../services/rank.service'
 import RankCreationForm from './RankCreationForm'
 import { successToast } from '../../../../utils/toasts'
 import { isMobileView } from '../../../../utils/mobileHelper'
+import UserService from '../../../../services/user.service'
+import Loader from '../../../general/Loader/Loader'
 
 function RankAndBadgesManagement(props) {
   const isMobileDisplay = isMobileView()
@@ -25,6 +26,7 @@ function RankAndBadgesManagement(props) {
   const [selectedHeroType, setSelectedHeroType] = useState(HeroType.WARRIOR)
   const [chosenItem, setChosenItem] = useState(undefined)
   const [errorMessage, setErrorMessage] = useState(undefined)
+  const [badgesList, setBadgesList] = useState(null)
 
   const getRanksList = () => {
     RankService.getAllRanks()
@@ -35,6 +37,16 @@ function RankAndBadgesManagement(props) {
         setRanksData(null)
       })
   }
+
+  useEffect(() => {
+    UserService.getAllBadges()
+      .then((response) => {
+        setBadgesList(response)
+      })
+      .catch(() => {
+        setBadgesList(null)
+      })
+  }, [])
 
   useEffect(() => {
     getRanksList()
@@ -107,36 +119,30 @@ function RankAndBadgesManagement(props) {
   const badgesContent = useMemo(() => {
     return (
       <>
-        <div className={'text-center'} style={{ maxHeight: '93%', overflow: 'auto' }}>
-          <Table
-            headers={['Ikona', 'Nazwa odznaki', 'Opis']}
-            body={getBadgesList().map((badge) => [
-              <img width={100} src={badge.src} alt={'badge-icon'} />,
-              <span>{badge.name}</span>,
-              <span>{badge.description}</span>
-            ])}
-            deleteIconCallback={() => setIsDeleteModalOpen(true)}
-            editIconCallback={() => {
-              setEditedDataType('BADGES')
-              setIsEditModalOpen(true)
-            }}
-          />
+        <div className={'text-center'} style={{ maxHeight: '100%', overflow: 'auto' }}>
+          {badgesList === undefined ? (
+            <Loader />
+          ) : badgesList == null ? (
+            <p>{ERROR_OCCURRED}</p>
+          ) : (
+            <Table
+              headers={['Ikona', 'Nazwa odznaki', 'Opis']}
+              body={badgesList.map((badge) => [
+                <img width={100} src={base64Header + badge.file.file} alt={'badge-icon'} />,
+                <span>{badge.title}</span>,
+                <span>{badge.description}</span>
+              ])}
+              editIconCallback={(idx) => {
+                setEditedDataType('BADGES')
+                setIsEditModalOpen(true)
+                setChosenItem({ item: badgesList[idx] })
+              }}
+            />
+          )}
         </div>
-        <Button
-          className={'my-3'}
-          style={{
-            position: 'relative',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            backgroundColor: props.theme.success,
-            borderColor: props.theme.success
-          }}
-        >
-          Dodaj nową odznakę
-        </Button>
       </>
     )
-  }, [props.theme.success])
+  }, [badgesList])
 
   return (
     <Content>

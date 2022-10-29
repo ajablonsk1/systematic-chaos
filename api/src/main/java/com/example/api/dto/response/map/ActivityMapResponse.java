@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ActivityMapResponse {
     private Long id;
-    private List<MapTask> tasks;
+    private List<? extends MapTask> tasks;
     private Integer mapSizeX;
     private Integer mapSizeY;
     private File image;

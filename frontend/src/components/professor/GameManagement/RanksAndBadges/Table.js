@@ -30,9 +30,11 @@ function Table(props) {
             <td className={'align-middle'}>
               <FontAwesomeIcon icon={faEdit} onClick={() => props.editIconCallback(i)} />
             </td>
-            <td className={'align-middle'}>
-              <FontAwesomeIcon icon={faTrash} onClick={() => props.deleteIconCallback(i)} />
-            </td>
+            {props.deleteIconCallback ? (
+              <td className={'align-middle'}>
+                <FontAwesomeIcon icon={faTrash} onClick={() => props.deleteIconCallback(i)} />
+              </td>
+            ) : null}
           </tr>
         ))}
       </tbody>

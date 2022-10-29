@@ -48,7 +48,7 @@ public class User {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToMany
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<UnlockedBadge> unlockedBadges = new LinkedList<>();
 
     public synchronized void changePoints(Double diff) {

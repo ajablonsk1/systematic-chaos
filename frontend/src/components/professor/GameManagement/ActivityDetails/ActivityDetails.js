@@ -91,14 +91,11 @@ function ActivityDetails(props) {
         <ModalBody style={{ maxHeight: '80vh', overflow: 'auto' }}>
           <div>
             <h6>Ocena: </h6>
-            <p>2/5</p>
+            <p>{chosenStudent?.studentAnswer?.studentPoints ?? '-'}/5</p>
           </div>
           <div>
             <h6>Odpowiedź:</h6>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio ducimus exercitationem fuga hic, id,
-              ipsa ipsam iure minima, nam nisi odio perspiciatis porro quas quia quisquam recusandae rerum sit ut
-            </p>
+            <p>{chosenStudent?.studentAnswer?.answer ?? '-'}</p>
           </div>
         </ModalBody>
         <ModalFooter>
