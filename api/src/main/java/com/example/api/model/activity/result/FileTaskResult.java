@@ -41,4 +41,9 @@ public class FileTaskResult extends TaskResult {
     public Activity getActivity() {
         return fileTask;
     }
+
+    @Override
+    public boolean isEvaluated() {
+        return this.getPointsReceived() != null;
+    }
 }

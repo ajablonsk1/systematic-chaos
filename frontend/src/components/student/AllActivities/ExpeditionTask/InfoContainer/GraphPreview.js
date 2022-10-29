@@ -6,9 +6,10 @@ import Graph from '../../../../general/Graph/Graph'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { getGraphElements, getNodeColor } from '../../../../general/Graph/graphHelper'
 import { GRAPH_NODE_BASIC_SIZE, GRAPH_NODE_SPECIAL_SIZE } from '../../../../../utils/constants'
+import { isMobileView } from '../../../../../utils/mobileHelper'
 
 const CLOSE_PREVIEW_CONTAINER_SIZE = 0
-const OPEN_PREVIEW_CONTAINER_SIZE = '40%'
+const OPEN_PREVIEW_CONTAINER_SIZE = isMobileView() ? '95vw' : '40%'
 
 function GraphPreview(props) {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)

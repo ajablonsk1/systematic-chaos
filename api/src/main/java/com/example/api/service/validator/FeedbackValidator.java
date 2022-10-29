@@ -5,9 +5,9 @@ import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongPointsNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
-import com.example.api.model.activity.feedback.Feedback;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.FileTask;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
@@ -17,6 +17,7 @@ import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.user.BadgeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -35,6 +36,7 @@ public class FeedbackValidator {
     private final AuthenticationService authService;
     private final FileRepo fileRepo;
     private final UserRepo userRepo;
+    private final BadgeService badgeService;
 
     /**
      * Function creates professor feedback for fileTaskResult. If feedback already exists its attributes
@@ -42,7 +44,7 @@ public class FeedbackValidator {
      * but files are added to list
     */
     public ProfessorFeedback validateAndSetProfessorFeedbackTaskForm(SaveProfessorFeedbackForm form)
-            throws WrongUserTypeException, EntityNotFoundException, WrongPointsNumberException, IOException {
+            throws WrongUserTypeException, EntityNotFoundException, WrongPointsNumberException, IOException, MissingAttributeException {
         String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         if(professor == null) {
@@ -77,6 +79,7 @@ public class FeedbackValidator {
             feedback.setPoints(form.getPoints());
             fileTaskResult.setPointsReceived(form.getPoints());
             fileTaskResultRepo.save(fileTaskResult);
+            badgeService.checkAllBadges();
         }
 
         // Feedback file can be set only once
@@ -91,24 +94,10 @@ public class FeedbackValidator {
         return professorFeedbackRepo.save(feedback);
     }
 
-    public void validateFeedbackIsNotNull(Feedback feedback, Long id) throws EntityNotFoundException {
+    public void validateFeedbackIsNotNull(SurveyResult feedback, Long id, String email) throws EntityNotFoundException {
         if(feedback == null) {
-            log.error("Feedback with id {} not found in database", id);
-            throw new EntityNotFoundException("Feedback with id" + id + " not found in database");
-        }
-    }
-
-    public void validateFeedbackIsNotNull(Feedback feedback, FileTaskResult result) throws EntityNotFoundException {
-        if(feedback == null) {
-            log.error("Feedback for graph task result with id {} not found in database", result.getId());
-            throw new EntityNotFoundException("Feedback for graph task result with id " + result.getId() + " not found in database");
-        }
-    }
-
-    public void validateFeedbackIsNotNull(Feedback feedback, Long id, String email) throws EntityNotFoundException {
-        if(feedback == null) {
-            log.error("Feedback for file task with id {} and user {} not found in database", id, email);
-            throw new EntityNotFoundException("Feedback for file task with id " + id + " and user " + email + " not found in database");
+            log.error("SurveyResult for survey with id {} and user {} not found in database", id, email);
+            throw new EntityNotFoundException("SurveyResult for survey with id " + id + " and user " + email + " not found in database");
         }
     }
 

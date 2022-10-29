@@ -20,7 +20,7 @@ function OpenQuestionPage(props) {
   return (
     <Row>
       <Col xs={12}>
-        <QuestionCard className='h-auto py-5'>
+        <QuestionCard className='h-auto py-5' $background={props.theme.primary} $fontColor={props.theme.font}>
           <div>{props.question.hint}</div>
           <div>
             <p>{props.question.content}</p>

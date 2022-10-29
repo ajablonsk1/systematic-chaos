@@ -1,6 +1,17 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 
-const getArrayValue = (sortedVariables, arrayItem, options) => {
+export const getArrayValue = (sortedVariables, arrayItem, options = {}) => {
+  if (
+    !sortedVariables ||
+    sortedVariables.constructor !== Array ||
+    !arrayItem ||
+    arrayItem.constructor !== Object ||
+    !options ||
+    options.constructor !== Object
+  ) {
+    return null
+  }
+
   if (options.isString) {
     return sortedVariables
       .map((variable) => {
@@ -16,6 +27,10 @@ const getArrayValue = (sortedVariables, arrayItem, options) => {
 }
 
 export const sortArray = (array, order, sortedVariables, options = {}) => {
+  if (!array || array.constructor !== Array) {
+    return []
+  }
+
   const arrayCopy = [...array]
   const orderOffset = order === 'DESC' ? -1 : 1
 
@@ -23,6 +38,10 @@ export const sortArray = (array, order, sortedVariables, options = {}) => {
     let result
     const firstValue = getArrayValue(sortedVariables, a, options)
     const secondValue = getArrayValue(sortedVariables, b, options)
+
+    if (!firstValue || !secondValue) {
+      return 0
+    }
 
     // We can compare latin extended chars thanks to localeCompare (pl lang)
     if (options.isString) {

@@ -38,6 +38,8 @@ export const INCORRECT_EMAIL = 'Podaj poprawny adres email.'
 export const WRONG_INDEX_LENGTH = 'Nr indeksu musi się składać z sześciu cyfr.'
 export const INDEX_WITH_CHARS = 'Nr indeksu musi składać się z samych cyfr.'
 export const FILE_INPUT_REQUIRED = 'Nie wybrano żadnego pliku.'
+export const ALL_REQUIRED_FIELDS_MUST_BE_FULFILLED = 'Wszystkie wymagane pola muszą zostać wypełnione'
+export const ANSWER_SAVED = 'Twoja odpowiedź została zapisana'
 
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
 export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
@@ -238,7 +240,7 @@ export const convertHeroTypeToPlayerType = (heroType) => {
 }
 
 export const getGameCardInfo = (playerType, data) => {
-  if (playerType === PlayerType.CALM) {
+  if (playerType === PlayerType.CHALLENGING) {
     return (
       <span>
         Zajmujesz <strong>{data.rankPosition}</strong> miejsce na <strong>{data.rankLength}</strong>!

@@ -7,8 +7,10 @@ import org.springframework.stereotype.Component;
 public class PointsToGradeMapper {
 
     public Double getGrade(double receivedPoints, double maxPoints) {
+        if (maxPoints == 0) return null;
+
         double gradeFraction = receivedPoints / maxPoints;
-        if (gradeFraction < 0 || gradeFraction > 1) {
+        if (gradeFraction < 0) {
             return null;
         }
         if (gradeFraction < 0.5) {

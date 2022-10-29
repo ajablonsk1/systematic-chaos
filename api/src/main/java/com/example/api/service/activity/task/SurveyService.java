@@ -3,17 +3,20 @@ package com.example.api.service.activity.task;
 import com.example.api.dto.request.activity.task.create.CreateSurveyChapterForm;
 import com.example.api.dto.request.activity.task.create.CreateSurveyForm;
 import com.example.api.dto.request.activity.task.edit.EditSurveyForm;
+import com.example.api.dto.response.activity.result.SurveyResultInfoResponse;
 import com.example.api.dto.response.activity.task.SurveyInfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
+import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.model.activity.result.SurveyResult;
 import com.example.api.model.activity.task.Survey;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.user.User;
+import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.activity.ActivityService;
 import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
@@ -38,16 +41,27 @@ public class SurveyService {
     private final AuthenticationService authService;
     private final RequirementService requirementService;
     private final ChapterValidator chapterValidator;
+    private final SurveyResultRepo surveyResultRepo;
 
     public Survey saveSurvey(Survey survey){
         return surveyRepo.save(survey);
     }
 
-    public SurveyInfoResponse getSurveyInfo(Long id) throws EntityNotFoundException {
-        log.info("Fetching survey info");
+    public SurveyInfoResponse getSurveyInfo(Long id) throws EntityNotFoundException, WrongUserTypeException {
+        String email = authService.getAuthentication().getName();
+        User student = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(student, email);
         Survey survey = surveyRepo.findSurveyById(id);
         activityValidator.validateActivityIsNotNull(survey, id);
-        return new SurveyInfoResponse(survey.getTitle(), survey.getDescription(), survey.getExperience());
+        log.info("Fetching survey info");
+
+        SurveyInfoResponse response = new SurveyInfoResponse(survey);
+        SurveyResult feedback = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
+        if (feedback != null) {
+            response.setFeedback(new SurveyResultInfoResponse(feedback));
+        }
+
+        return response;
     }
 
     public void createSurvey(CreateSurveyChapterForm chapterForm) throws RequestValidationException {
@@ -72,10 +86,10 @@ public class SurveyService {
         chapter.getActivityMap().getSurveys().add(survey);
     }
 
-    public List<Survey> getStudentSurvey(User student) {
+    public List<Survey> getStudentSurvey() {
         return surveyRepo.findAll()
                 .stream()
-                .filter(survey -> !requirementService.areRequirementsDefault(survey.getRequirements()))
+                .filter(survey -> !survey.getIsBlocked())
                 .toList();
     }
 

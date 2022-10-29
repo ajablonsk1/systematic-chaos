@@ -77,13 +77,11 @@ public class AllPointsService {
                     totalPointsToReceive.updateAndGet(v -> v + fileTaskResult.getFileTask().getMaxPoints());
                 });
         surveyResultRepo.findAllByUser(student)
-                .stream()
                 .forEach(surveyTaskResult -> {
                     totalPointsReceived.updateAndGet(v -> v + surveyTaskResult.getPointsReceived());
                     totalPointsToReceive.updateAndGet(v -> v + surveyTaskResult.getPointsReceived());
                 });
         additionalPointsRepo.findAllByUser(student)
-                .stream()
                 .forEach(additionalPoints -> {
                     totalPointsReceived.updateAndGet(v -> v + additionalPoints.getPointsReceived());
                 });

@@ -9,6 +9,7 @@ import { ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, Linear
 import { barConfig, pieConfig } from '../../../utils/chartConfig'
 import moment from 'moment'
 import { colorPalette } from '../../general/chartHelper'
+import { isMobileView } from '../../../utils/mobileHelper'
 
 export const GradesStatsContent = (props) => {
   const {
@@ -25,7 +26,7 @@ export const GradesStatsContent = (props) => {
   return (
     <Row className={'h-100 d-flex justify-content-center align-items-center'}>
       <Col md={7}>
-        <p>Średni wynik z ekspedycji: {avgGraphTask}%</p>
+        <p>Średni wynik z ekspedycji: {avgGraphTask ?? 0}%</p>
         <p>Średni wynik z zadań bojowych: {avgFileTask ?? 0}%</p>
         <p>Ilość wykonanych sondaży: {surveysNumber}</p>
         <p>Punkty zdobyte w ekspedycjach: {graphTaskPoints}</p>
@@ -76,7 +77,11 @@ export const HeroStatsContent = (props) => {
   } = props.stats
 
   return (
-    <Row className={'h-100 d-flex justify-content-center align-items-center'}>
+    <Row
+      className={`h-100 d-flex justify-content-center align-items-center ${
+        isMobileView() ? 'flex-column' : 'flex-row'
+      }`}
+    >
       <Col md={6} className={'h-100'}>
         <img style={{ maxWidth: '100%' }} height={'90%'} src={HeroImg[heroType]} alt={'Your hero'} />
       </Col>

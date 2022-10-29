@@ -102,6 +102,65 @@ export const HorizontalPointsLine = styled.div`
     color: white;
     border-radius: 10px;
   }
+
+  @media (max-width: 575px) {
+    li::before {
+      display: none;
+    }
+
+    li {
+      background-color: #919bb1;
+      border-radius: 10px;
+
+      .pointsInfo {
+        bottom: 47px;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 200px;
+      }
+
+      .rankInfo svg {
+        position: relative !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        transform: none !important;
+        padding-top: 10px;
+      }
+
+      .rankInfo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        top: -20px;
+      }
+
+      &:nth-child(2) .rankInfo {
+        .left-arrow {
+          top: -135%;
+          transform: rotate(90deg);
+          left: auto;
+        }
+        .right-arrow {
+          top: 100%;
+          transform: rotate(90deg);
+          right: auto;
+        }
+      }
+    }
+
+    ul {
+      border-top: none;
+      display: flex;
+      flex-direction: column;
+
+      &::before {
+        display: none;
+      }
+    }
+  }
 `
 export const Tooltip = styled.div`
   position: relative;
@@ -165,5 +224,12 @@ export const PercentageBar = styled.div`
     right: 50%;
     transform: translateX(50%);
     background-color: lightgray;
+  }
+
+  @media (max-width: 575px) {
+    position: relative;
+    left: 0;
+    transform: translateX(0);
+    margin-top: 10px;
   }
 `

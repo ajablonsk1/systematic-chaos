@@ -3,7 +3,6 @@ package com.example.api.dto.request.activity.task.create;
 import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Question;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

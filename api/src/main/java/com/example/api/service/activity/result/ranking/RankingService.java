@@ -1,6 +1,7 @@
 package com.example.api.service.activity.result.ranking;
 
 import com.example.api.dto.response.ranking.RankingResponse;
+import com.example.api.dto.response.ranking.SurveyAnswerResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -101,9 +102,14 @@ public class RankingService {
         User professor = userRepo.findUserByEmail(professorEmail);
         userValidator.validateProfessorAccount(professor, professorEmail);
 
+
         List<RankingResponse> rankingList =  userRepo.findAllByAccountTypeEquals(AccountType.STUDENT)
                         .stream()
-                        .map(user -> studentAndPointsToRankingEntry(user, getStudentPointsForActivity(activityID, user)))
+                        .map(user -> {
+                            SurveyAnswerResponse holder = new SurveyAnswerResponse();
+                            Double points = getStudentPointsForActivity(activityID, user, holder);
+                            return studentAndPointsToRankingEntry(user, points, holder);
+                        })
                         .toList();
         addPositionToRankingList(rankingList);
         return rankingList;
@@ -119,26 +125,14 @@ public class RankingService {
                             student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                             student.getGroupName().toLowerCase().contains(searchLower)
                 )
-                .sorted(((o1, o2) -> {
-                    try {
-                        return Double.compare(o2.getPoints(), o1.getPoints());
-                    } catch (NullPointerException e) {
-                        if (o1.getPoints() == null && o2.getPoints() == null) {
-                            return 0;
-                        } else if (o1.getPoints() == null) {
-                            return Double.compare(o2.getPoints(), 0);
-                        } else {
-                            return Double.compare(0, o1.getPoints());
-                        }
-                    }
-                }))
+                .sorted(((o1, o2) -> Double.compare(o2.getPoints(), o1.getPoints())))
                 .toList();
         addPositionToRankingList(rankingList);
         return rankingList;
 
     }
 
-    private Double getStudentPointsForActivity(Long activityID, User user) {
+    private Double getStudentPointsForActivity(Long activityID, User user, SurveyAnswerResponse surveyAnswerHolder) {
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(activityID);
         if (graphTask != null) {
             GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
@@ -152,7 +146,10 @@ public class RankingService {
         Survey survey = surveyRepo.findSurveyById(activityID);
         if (survey != null) {
             SurveyResult result = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, user);
-            return result != null ? result.getPointsReceived() : null;
+            if (result == null) return null;
+            surveyAnswerHolder.setAnswer(result.getFeedback());
+            surveyAnswerHolder.setStudentPoints(result.getRate());
+            return result.getPointsReceived();
         }
         return null;
     }
@@ -193,9 +190,12 @@ public class RankingService {
         return rankingResponse;
     }
 
-    private RankingResponse studentAndPointsToRankingEntry(User student, Double points) {
+    private RankingResponse studentAndPointsToRankingEntry(User student, Double points, SurveyAnswerResponse studentAnswer) {
         RankingResponse rankingResponse = new RankingResponse(student);
         rankingResponse.setPoints(points);
+        if (studentAnswer.getStudentPoints() != null) {
+            rankingResponse.setStudentAnswer(studentAnswer);
+        }
         return rankingResponse;
     }
 

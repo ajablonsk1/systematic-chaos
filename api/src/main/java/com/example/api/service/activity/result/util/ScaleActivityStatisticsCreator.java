@@ -50,8 +50,8 @@ public class ScaleActivityStatisticsCreator {
     }
 
     public void addSurvey(SurveyResult surveyResult) {
-        if (surveyResult.getPointsReceived() != null) {
-            statistics.get(surveyResult.getPointsReceived()).incrementResults();
+        if (surveyResult.getRate() != null) {
+            statistics.get(Double.valueOf(surveyResult.getRate())).incrementResults();
         }
     }
 

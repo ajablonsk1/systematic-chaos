@@ -19,7 +19,6 @@ import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.activity.ActivityService;
 import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.ChapterValidator;
 import com.example.api.service.validator.UserValidator;
@@ -114,10 +113,10 @@ public class FileTaskService {
         chapter.getActivityMap().getFileTasks().add(fileTask);
     }
 
-    public List<FileTask> getStudentFileTasks(User student) {
+    public List<FileTask> getStudentFileTasks() {
         return fileTaskRepo.findAll()
                 .stream()
-                .filter(fileTask -> !requirementService.areRequirementsDefault(fileTask.getRequirements()))
+                .filter(fileTask -> !fileTask.getIsBlocked())
                 .toList();
     }
 

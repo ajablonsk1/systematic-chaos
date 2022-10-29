@@ -12,8 +12,7 @@ import com.example.api.model.group.AccessDate;
 import com.example.api.model.group.Group;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
-import com.example.api.model.map.requirement.Requirement;
-import com.example.api.model.map.requirement.RequirementType;
+import com.example.api.model.map.requirement.*;
 import com.example.api.model.question.Difficulty;
 import com.example.api.model.question.Option;
 import com.example.api.model.question.Question;
@@ -22,6 +21,7 @@ import com.example.api.model.user.AccountType;
 import com.example.api.model.user.HeroType;
 import com.example.api.model.user.Rank;
 import com.example.api.model.user.User;
+import com.example.api.model.user.badge.*;
 import com.example.api.model.util.File;
 import com.example.api.model.util.Image;
 import com.example.api.model.util.ImageType;
@@ -29,12 +29,15 @@ import com.example.api.model.util.Url;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
+import com.example.api.repo.map.RequirementRepo;
+import com.example.api.repo.user.BadgeRepo;
 import com.example.api.repo.user.RankRepo;
+import com.example.api.repo.user.UnlockedBadgeRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
-import com.example.api.service.activity.feedback.UserFeedbackService;
+import com.example.api.service.activity.feedback.SurveyResultService;
 import com.example.api.service.activity.result.FileTaskResultService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.activity.task.FileTaskService;
@@ -47,10 +50,10 @@ import com.example.api.service.map.ActivityMapService;
 import com.example.api.service.map.RequirementService;
 import com.example.api.service.question.OptionService;
 import com.example.api.service.question.QuestionService;
+import com.example.api.service.user.BadgeService;
 import com.example.api.service.user.UserService;
 import com.example.api.util.MessageManager;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.OnDelete;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -75,16 +78,19 @@ public class DatabaseConfig {
     private final SurveyResultRepo surveyResultRepo;
     private final FileRepo fileRepo;
     private final UserRepo userRepo;
+    private final BadgeRepo badgeRepo;
+    private final UnlockedBadgeRepo unlockedBadgeRepo;
+    private final RequirementRepo requirementRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
-                                               UserFeedbackService userFeedbackService, GraphTaskService graphTaskService,
+                                               SurveyResultService surveyResultService, GraphTaskService graphTaskService,
                                                GraphTaskResultService graphTaskResultService, GroupService groupService,
                                                ActivityMapService activityMapService, QuestionService questionService,
                                                FileTaskResultService fileTaskResultService, OptionService optionService,
                                                AccessDateService accessDateService, RequirementService requirementService,
                                                FileTaskService fileTaskService, InfoService infoService,
-                                               SurveyService surveyService){
+                                               SurveyService surveyService, BadgeService badgeService){
         return args -> {
 
 
@@ -345,6 +351,7 @@ public class DatabaseConfig {
             accessDateService.saveAccessDate(ac2);
 
             GraphTask graphTask = new GraphTask();
+            graphTask.setIsBlocked(false);
             graphTask.setQuestions(List.of(startQuestion, question1, question2, question3,  question4, question5));
             graphTask.setTitle("Dżungla kabli");
             graphTask.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
@@ -352,7 +359,7 @@ public class DatabaseConfig {
             graphTask.setMaxPoints(60.0);
             graphTask.setExperience(20D);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
-            graphTask.setRequirements(createDefaultRequirements(requirementService));
+            graphTask.setRequirements(createDefaultRequirements());
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
@@ -410,6 +417,7 @@ public class DatabaseConfig {
             List<Requirement> graphTaskTwoReq = requirementService.getDefaultRequirements();
 
             GraphTask graphTaskTwo = new GraphTask();
+            graphTaskTwo.setIsBlocked(false);
             graphTaskTwo.setQuestions(List.of(startQuestionTwo, questionTwo1, questionTwo2, questionTwo3,  questionTwo4, questionTwo5));
             graphTaskTwo.setTitle("Dżungla kabli II");
             graphTaskTwo.setDescription("Przebij się przez gąszcz pytań związanych z łączeniem urządzeń w lokalnej sieci i odkryj tajemnice łączenia bulbulatorów ze sobą!");
@@ -424,6 +432,7 @@ public class DatabaseConfig {
             graphTaskService.saveGraphTask(graphTaskTwo);
 
             FileTask fileTask = new FileTask();
+            fileTask.setIsBlocked(false);
             fileTask.setPosX(3);
             fileTask.setPosY(3);
             fileTask.setTitle("Niszczator kabli");
@@ -431,17 +440,18 @@ public class DatabaseConfig {
             fileTask.setProfessor(professor);
             fileTask.setMaxPoints(30.0);
             fileTask.setExperience(10D);
-            fileTask.setRequirements(createDefaultRequirements(requirementService));
+            fileTask.setRequirements(createDefaultRequirements());
 
             fileTaskService.saveFileTask(fileTask);
 
             Info info1 = new Info();
+            info1.setIsBlocked(false);
             info1.setPosX(3);
             info1.setPosY(0);
             info1.setTitle("Skrętki");
             info1.setDescription("Przewody internetowe da się podzielić także pod względem ich ekranowania.");
             info1.setContent(MessageManager.LOREM_IPSUM);
-            info1.setRequirements(createDefaultRequirements(requirementService));
+            info1.setRequirements(createDefaultRequirements());
 
             Url url1 = new Url();
             Url url2 = new Url();
@@ -457,13 +467,14 @@ public class DatabaseConfig {
 
 
             Survey survey = new Survey();
+            survey.setIsBlocked(false);
             survey.setTitle("Example map feedback");
             survey.setDescription("Pomóż nam polepszyć kurs dzieląc się swoją opinią!");
             survey.setPosX(7);
             survey.setPosY(3);
             survey.setPoints(10.0);
             survey.setExperience(5D);
-            survey.setRequirements(createDefaultRequirements(requirementService));
+            survey.setRequirements(createDefaultRequirements());
             surveyService.saveSurvey(survey);
 
             byte[] chapterImageBytes = getByteArrayForFile("src/main/resources/images/chapter_image.png", "png");
@@ -487,6 +498,7 @@ public class DatabaseConfig {
             result1.setUser(student);
             result1.setMaxPoints100(30.0);
             result1.setPointsReceived(12.0);
+            addReceivedPointsForUser(student, result1.getPointsReceived());
             result1.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 28);
             result1.setStartDateMillis(calendar.getTimeInMillis());
@@ -498,6 +510,7 @@ public class DatabaseConfig {
             result2.setUser(student1);
             result2.setMaxPoints100(10.0);
             result2.setPointsReceived(10.0);
+            addReceivedPointsForUser(student1, result2.getPointsReceived());
             result2.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 13);
             result2.setStartDateMillis(calendar.getTimeInMillis());
@@ -509,6 +522,7 @@ public class DatabaseConfig {
             result3.setUser(student8);
             result3.setMaxPoints100(20.0);
             result3.setPointsReceived(11.0);
+            addReceivedPointsForUser(student8, result3.getPointsReceived());
             result3.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);
             result3.setStartDateMillis(calendar.getTimeInMillis());
@@ -519,6 +533,7 @@ public class DatabaseConfig {
             result4.setGraphTask(graphTaskTwo);
             result4.setUser(student9);
             result4.setPointsReceived(30.5);
+            addReceivedPointsForUser(student9, result4.getPointsReceived());
             result4.setTimeSpentSec(60 * 10);
             calendar.set(2022, Calendar.APRIL, 14);
             result4.setStartDateMillis(calendar.getTimeInMillis());
@@ -543,14 +558,22 @@ public class DatabaseConfig {
             chapterRepo.save(chapter);
 
             calendar.set(2022, Calendar.JUNE, 15);
-            AdditionalPoints additionalPoints = new AdditionalPoints(1L, student, 100D, calendar.getTimeInMillis(), professor.getEmail(), "Good job");
+            AdditionalPoints additionalPoints = new AdditionalPoints();
+            additionalPoints.setId(1L);
+            additionalPoints.setUser(student);
+            additionalPoints.setPointsReceived(100D);
+            additionalPoints.setSendDateMillis(calendar.getTimeInMillis());
+            additionalPoints.setProfessorEmail(professor.getEmail());
+            additionalPoints.setDescription("Good job");
+            addReceivedPointsForUser(student, additionalPoints.getPointsReceived());
             additionalPointsRepo.save(additionalPoints);
 
             SurveyResult surveyResult1 = new SurveyResult();
             surveyResult1.setSurvey(survey);
             surveyResult1.setId(1L);
             surveyResult1.setUser(student);
-            surveyResult1.setPointsReceived(1D);
+            surveyResult1.setPointsReceived(survey.getMaxPoints());
+            addReceivedPointsForUser(student, surveyResult1.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 16);
             surveyResult1.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult1);
@@ -559,7 +582,8 @@ public class DatabaseConfig {
             surveyResult2.setSurvey(survey);
             surveyResult2.setId(2L);
             surveyResult2.setUser(student1);
-            surveyResult2.setPointsReceived(3D);
+            surveyResult2.setPointsReceived(survey.getMaxPoints());
+            addReceivedPointsForUser(student1, surveyResult2.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 18);
             surveyResult2.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult2);
@@ -568,7 +592,8 @@ public class DatabaseConfig {
             surveyResult3.setSurvey(survey);
             surveyResult3.setId(3L);
             surveyResult3.setUser(student10);
-            surveyResult3.setPointsReceived(5D);
+            surveyResult3.setPointsReceived(survey.getMaxPoints());
+            addReceivedPointsForUser(student10, surveyResult3.getPointsReceived());
             calendar.set(2022, Calendar.JUNE, 19);
             surveyResult3.setSendDateMillis(calendar.getTimeInMillis());
             surveyResultRepo.save(surveyResult3);
@@ -597,61 +622,58 @@ public class DatabaseConfig {
             userRepo.saveAll(students2);
 
             initAllRanks();
+            initBadges();
         };
     }
 
-    private List<Requirement> createDefaultRequirements(RequirementService requirementService) {
-        Requirement requirement1 = new Requirement();
-        Requirement requirement2 = new Requirement();
-        Requirement requirement3 = new Requirement();
-        Requirement requirement4 = new Requirement();
-        Requirement requirement5 = new Requirement();
-        Requirement requirement6 = new Requirement();
-        Requirement requirement7 = new Requirement();
+    private List<Requirement> createDefaultRequirements() {
+        DateFromRequirement dateFromRequirement = new DateFromRequirement(
+                MessageManager.DATE_FROM_REQ_NAME,
+                false,
+                null
+        );
+        DateToRequirement dateToRequirement = new DateToRequirement(
+                MessageManager.DATE_TO_REQ_NAME,
+                false,
+                null
+        );
+        FileTasksRequirement fileTasksRequirement = new FileTasksRequirement(
+                MessageManager.FILE_TASKS_REQ_NAME,
+                false,
+                new LinkedList<>()
+        );
+        GraphTasksRequirement graphTasksRequirement = new GraphTasksRequirement(
+                MessageManager.GRAPH_TASKS_REQ_NAME,
+                false,
+                new LinkedList<>()
+        );
+        GroupsRequirement groupsRequirement = new GroupsRequirement(
+                MessageManager.GROUPS_REQ_NAME,
+                false,
+                new LinkedList<>()
+        );
+        MinPointsRequirement minPointsRequirement = new MinPointsRequirement(
+                MessageManager.MIN_POINTS_REQ_NAME,
+                false,
+                null
+        );
+        StudentsRequirements studentsRequirements = new StudentsRequirements(
+                MessageManager.STUDENTS_REQ_NAME,
+                false,
+                new LinkedList<>()
+        );
+        List<Requirement> requirements = List.of(
+                dateFromRequirement,
+                dateToRequirement,
+                minPointsRequirement,
+                groupsRequirement,
+                studentsRequirements,
+                graphTasksRequirement,
+                fileTasksRequirement
+        );
 
-        requirement1.setSelected(false);
-        requirement1.setName(MessageManager.DATE_FROM_REQ_NAME);
-        requirement1.setType(RequirementType.DATE_FROM);
-        requirement2.setSelected(false);
-        requirement2.setName(MessageManager.DATE_TO_REQ_NAME);
-        requirement2.setType(RequirementType.DATE_TO);
-        requirement3.setSelected(false);
-        requirement3.setName(MessageManager.MIN_POINTS_REQ_NAME);
-        requirement3.setType(RequirementType.MIN_POINTS);
-        requirement4.setSelected(false);
-        requirement4.setName(MessageManager.GROUPS_REQ_NAME);
-        requirement4.setType(RequirementType.GROUPS);
-        requirement5.setSelected(false);
-        requirement5.setName(MessageManager.STUDENTS_REQ_NAME);
-        requirement5.setType(RequirementType.STUDENTS);
-        requirement6.setSelected(false);
-        requirement6.setName(MessageManager.GRAPH_TASKS_REQ_NAME);
-        requirement6.setType(RequirementType.GRAPH_TASKS);
-        requirement7.setSelected(false);
-        requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
-        requirement7.setType(RequirementType.FILE_TASKS);
-        requirement7.setName(MessageManager.FILE_TASKS_REQ_NAME);
-
-        requirement1.setDateFrom(System.currentTimeMillis());
-        requirement1.setIsDefault(false);
-        requirement2.setDateTo(System.currentTimeMillis() + 1_000 * 60 * 60);
-        requirement2.setIsDefault(false);
-        requirement3.setMinPoints(100.0);
-        requirement3.setIsDefault(false);
-        requirement4.setAllowedGroups(List.of());
-        requirement5.setAllowedStudents(List.of());
-        requirement6.setFinishedGraphTasks(List.of());
-        requirement7.setFinishedFileTasks(List.of());
-
-        requirementService.saveRequirement(requirement1);
-        requirementService.saveRequirement(requirement2);
-        requirementService.saveRequirement(requirement3);
-        requirementService.saveRequirement(requirement4);
-        requirementService.saveRequirement(requirement5);
-        requirementService.saveRequirement(requirement6);
-        requirementService.saveRequirement(requirement7);
-
-        return List.of(requirement1, requirement2, requirement3, requirement4, requirement5, requirement6, requirement7);
+        requirementRepo.saveAll(requirements);
+        return requirements;
     }
 
     private void initAllRanks() throws IOException {
@@ -770,5 +792,196 @@ public class DatabaseConfig {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "png", output);
         return output.toByteArray();
+    }
+
+    private void initBadges() throws IOException {
+        Image activityMaster = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/activity_master.png", "png"), ImageType.BADGE);
+        Image activityExperienced = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/activity_experienced.png", "png"), ImageType.BADGE);
+        Image fileTaskExperienced = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/file_task_experienced.png", "png"), ImageType.BADGE);
+        Image fileTaskFirstSteps = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/file_task_first_steps.png", "png"), ImageType.BADGE);
+        Image fileTaskMaster = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/file_task_master.png", "png"), ImageType.BADGE);
+        Image topFive = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/five.png", "png"), ImageType.BADGE);
+        Image graphTaskExperienced = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/graph_task_experienced.png", "png"), ImageType.BADGE);
+        Image graphTaskFirstSteps = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/graph_task_first_steps.png", "png"), ImageType.BADGE);
+        Image graphTaskMaster = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/graph_task_master.png", "png"), ImageType.BADGE);
+        Image groupLeader = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/group_leader.png", "png"), ImageType.BADGE);
+        Image handshake = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/handshake.png", "png"), ImageType.BADGE);
+        Image inTheMiddle = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/in_the_middle.png", "png"), ImageType.BADGE);
+        Image itsTheBeginning = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/its_the_beginning.png", "png"), ImageType.BADGE);
+        Image leader = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/leader.png", "png"), ImageType.BADGE);
+        Image longA = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/long.png", "png"), ImageType.BADGE);
+        Image lookingUp = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/looking_up.png", "png"), ImageType.BADGE);
+        Image smileFromProfessor = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/smile.png", "png"), ImageType.BADGE);
+        Image theEnd = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/the_end.png", "png"), ImageType.BADGE);
+        Image topTwenty = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/twenty.png", "png"), ImageType.BADGE);
+
+        fileRepo.saveAll(List.of(activityMaster, activityExperienced, fileTaskExperienced,fileTaskFirstSteps,
+                fileTaskMaster,topFive,graphTaskExperienced,graphTaskFirstSteps,graphTaskMaster,groupLeader
+                ,handshake,inTheMiddle,itsTheBeginning,leader,longA,lookingUp, smileFromProfessor, theEnd, topTwenty));
+
+        Badge badge1 = new ConsistencyBadge(
+                null,
+                "To dopiero początek",
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres miesiąca",
+                itsTheBeginning,
+                4
+        );
+
+        Badge badge2 = new ConsistencyBadge(
+                null,
+                "Długo jeszcze?",
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres 3 miesięcy",
+                longA,
+                12
+        );
+
+        Badge badge3 = new ConsistencyBadge(
+                null,
+                "To już jest koniec, ale czy na pewno?",
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres 6 mięsięcy",
+                theEnd,
+                24
+        );
+
+        Badge badge4 = new TopScoreBadge(
+                null,
+                "Topowowa dwudziestka",
+                "Bądź w 20% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                topTwenty,
+                0.2,
+                false
+        );
+
+
+        Badge badge5 = new TopScoreBadge(
+                null,
+                "Topowa piątka",
+                "Bądź w 5% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                topFive,
+                0.05,
+                false
+        );
+
+        Badge badge6 = new TopScoreBadge(
+                null,
+                "Lider grupy",
+                "Bądź najepszym użytkownikiem w swojej grupie (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                groupLeader,
+                0.0,
+                true
+        );
+
+        Badge badge7 = new TopScoreBadge(
+                null,
+                "Lider",
+                "Bądź najepszym użytkownikiem (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
+                leader,
+                0.0,
+                false
+        );
+
+
+        Badge badge8 = new GraphTaskNumberBadge(
+                null,
+                "Pierwsze kroki w ekspedycji",
+                "Wykonaj swoją pierwszą ekspedycję",
+                graphTaskFirstSteps,
+                1
+        );
+
+        Badge badge9 = new GraphTaskNumberBadge(
+                null,
+                "Doświadczony w ekspedycjach",
+                "Wykonaj 10 ekspedycji",
+                graphTaskExperienced,
+                10
+        );
+
+        Badge badge10 = new GraphTaskNumberBadge(
+                null,
+                "Zaprawiony w ekspedycjach",
+                "Wykonaj 50 ekspedycji",
+                graphTaskMaster,
+                50
+        );
+
+        Badge badge11 = new FileTaskNumberBadge(
+                null,
+                "Pierwsze kroki w zadaniu bojowym",
+                "Wykonaj swoje pierwsze zadanie bojowe",
+                fileTaskFirstSteps,
+                1
+        );
+
+        Badge badge12 = new FileTaskNumberBadge(
+                null,
+                "Doświadczony w zadaniach bojowych",
+                "Wykonaj 10 zadań bojowych",
+                fileTaskExperienced,
+                10
+        );
+
+        Badge badge13 = new FileTaskNumberBadge(
+                null,
+                "Zaprawiony w zadaniach bojowych",
+                "Wykonaj 50 zadań bojowych",
+                fileTaskMaster,
+                50
+        );
+
+        Badge badge14 = new ActivityNumberBadge(
+                null,
+                "Doświadczony w aktywnościach",
+                "Wykonaj 30 aktywności",
+                activityExperienced,
+                30
+        );
+
+        Badge badge15 = new ActivityNumberBadge(
+                null,
+                "Zaprawiony w aktywnościach",
+                "Wykonaj 100 aktywności",
+                activityMaster,
+                100
+        );
+
+        Badge badge16 = new ActivityScoreBadge(
+                null,
+                "Marsz ku lepszemu",
+                "Posiadaj ponad 60% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                lookingUp,
+                0.6
+        );
+
+        Badge badge17 = new ActivityScoreBadge(
+                null,
+                "Uśmiech prowadzącego",
+                "Posiadaj ponad 80% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                smileFromProfessor,
+                0.8
+        );
+
+        Badge badge18 = new ActivityScoreBadge(
+                null,
+                "Uścisk dłoni prowadzącego",
+                "Posiadaj ponad 95% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
+                handshake,
+                0.95
+        );
+
+        Badge badge19 = new ActivityScoreBadge(
+                null,
+                "W sam środek tarczy",
+                "Posiadaj 100% z ekspedycji lub zadania bojowego",
+                inTheMiddle,
+                1.0
+        );
+
+        badgeRepo.saveAll(List.of(badge1, badge2, badge3, badge4, badge5, badge6, badge7, badge8, badge9, badge10,
+                badge11, badge12, badge13, badge14, badge15, badge16, badge17, badge18, badge19));
+    }
+
+    private void addReceivedPointsForUser(User student, Double points){
+        student.setPoints(student.getPoints() + points);
     }
 }

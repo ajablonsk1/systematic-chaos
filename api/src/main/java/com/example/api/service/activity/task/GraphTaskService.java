@@ -4,8 +4,8 @@ import com.example.api.dto.request.activity.task.create.CreateGraphTaskChapterFo
 import com.example.api.dto.request.activity.task.create.CreateGraphTaskForm;
 import com.example.api.dto.request.activity.task.create.OptionForm;
 import com.example.api.dto.request.activity.task.create.QuestionForm;
-import com.example.api.dto.response.activity.task.GraphNode;
 import com.example.api.dto.request.activity.task.edit.EditGraphTaskForm;
+import com.example.api.dto.response.activity.task.GraphNode;
 import com.example.api.dto.response.activity.task.result.GraphTaskResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -104,10 +104,10 @@ public class GraphTaskService {
         chapter.getActivityMap().getGraphTasks().add(graphTask);
     }
 
-    public List<GraphTask> getStudentGraphTasks(User student) {
+    public List<GraphTask> getStudentGraphTasks() {
         return graphTaskRepo.findAll()
                 .stream()
-                .filter(graphTask -> !requirementService.areRequirementsDefault(graphTask.getRequirements()))
+                .filter(graphTask -> !graphTask.getIsBlocked())
                 .toList();
     }
 

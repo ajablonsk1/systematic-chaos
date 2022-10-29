@@ -20,6 +20,10 @@ const ActivityListItemRow = styled(Row)`
   &:hover {
     cursor: pointer;
   }
+
+  @media (max-width: 575px) {
+    max-width: 95%;
+  }
 `
 
 function ActivityListItem(props) {

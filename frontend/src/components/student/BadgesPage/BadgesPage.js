@@ -1,25 +1,30 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
 import { Col, Row } from 'react-bootstrap'
-import { HorizontalPointsLine, PercentageBar, Tooltip } from './BadgesStyle'
-import { getBadgesInfo, getBadgesList, getLastUnlockedBadge } from './mockData'
+import { HorizontalPointsLine, PercentageBar } from './BadgesStyle'
 import ContentCard from './ContentCard'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons'
-import Fade, { Bounce, Slide } from 'react-awesome-reveal'
+import { Bounce, Slide } from 'react-awesome-reveal'
 import { connect } from 'react-redux'
 import RankService from '../../../services/rank.service'
 import Loader from '../../general/Loader/Loader'
 import { base64Header, ERROR_OCCURRED } from '../../../utils/constants'
+import { isMobileView } from '../../../utils/mobileHelper'
+import UserService from '../../../services/user.service'
+import { sortArray } from '../../general/Ranking/sortHelper'
+import ReactTooltip from 'react-tooltip'
+import moment from 'moment'
 
 const LATER_ITEM_DELAY = 1200
-const BADGE_LIST_STEP = 200
 
 function BadgesPage(props) {
-  const [studentBadgesNumber, allBadgesNumber] = getBadgesInfo()
-  const badgesList = getBadgesList()
-  const lastUnlockedBadge = getLastUnlockedBadge()
+  const isMobileDisplay = isMobileView()
+
   const [rankInfo, setRankInfo] = useState(undefined)
+  const [allBadgesList, setAllBadgesList] = useState(undefined)
+  const [unlockedBadgesList, setUnlockedBadgesList] = useState(undefined)
+  const [lastUnlockedBadge, setLastUnlockedBadge] = useState(null)
 
   useEffect(() => {
     RankService.getCurrentStudentRank()
@@ -29,13 +34,24 @@ function BadgesPage(props) {
       .catch(() => {
         setRankInfo(null)
       })
-  }, [])
 
-  const sortBadges = (a, b) => {
-    if (a.unlocked) {
-      return -1
-    } else return 1
-  }
+    UserService.getAllBadges()
+      .then((response) => {
+        setAllBadgesList(response)
+      })
+      .catch(() => {
+        setAllBadgesList(null)
+      })
+
+    UserService.getUnlockedBadges()
+      .then((response) => {
+        setUnlockedBadgesList(response)
+        setLastUnlockedBadge(sortArray(response, 'DESC', ['unlockedDateMillis'], {})[0])
+      })
+      .catch(() => {
+        setUnlockedBadgesList(null)
+      })
+  }, [])
 
   const additionalContent = useCallback(
     (rankIndex) => {
@@ -69,6 +85,49 @@ function BadgesPage(props) {
     [rankInfo]
   )
 
+  const badgeContent = useCallback(
+    (badge, index) => {
+      const badgeUnlockedDate = unlockedBadgesList?.find((b) => {
+        return b.badge.title === badge.title
+      })?.unlockedDateMillis
+
+      const tooltipText = !!badgeUnlockedDate
+        ? `Odblokowano: ${moment(badgeUnlockedDate).format('DD.MM.YYYY, HH:mm')}`
+        : 'Odznaka nadal nie została zdobyta.'
+
+      return (
+        <Col md={4} className={'text-center d-flex flex-column align-items-center'} key={index + Date.now()}>
+          <img
+            data-for={'badge-' + index}
+            data-tip={tooltipText}
+            style={{ opacity: !!badgeUnlockedDate ? 1 : 0.4 }}
+            width={100}
+            src={base64Header + badge.file.file}
+            alt={'badge-icon'}
+          />
+
+          <p className={'m-0'}>
+            <strong style={{ opacity: !!badgeUnlockedDate ? 1 : 0.4 }}>{badge.title}</strong>
+          </p>
+          <p style={{ opacity: !!badgeUnlockedDate ? 1 : 0.4 }} className={'px-2'}>
+            {badge.description}
+          </p>
+
+          <ReactTooltip
+            id={'badge-' + index}
+            place='top'
+            type='dark'
+            effect='solid'
+            multiline
+            event='mouseover mouseenter'
+            eventOff='mouseleave mouseout scroll mousewheel blur'
+          />
+        </Col>
+      )
+    },
+    [unlockedBadgesList]
+  )
+
   return (
     <Content>
       {rankInfo === undefined ? (
@@ -77,17 +136,17 @@ function BadgesPage(props) {
         <p>{ERROR_OCCURRED}</p>
       ) : (
         <>
-          <Slide delay={LATER_ITEM_DELAY}>
+          <Slide delay={LATER_ITEM_DELAY} direction={'down'}>
             <Row className={'m-0 text-center py-3'}>
-              <Col>
+              <Col md={4}>
                 <strong>Twoja ranga: </strong>
                 <span>{rankInfo.currentRank.name}</span>
               </Col>
-              <Col>
+              <Col md={4}>
                 <strong>Liczba punktów: </strong>
                 <span>{rankInfo.currentPoints}</span>
               </Col>
-              <Col>
+              <Col md={4}>
                 <strong>Do następnej rangi brakuje: </strong>
                 <span>{rankInfo.nextRank.minPoints - rankInfo.currentPoints} pkt</span>
               </Col>
@@ -124,59 +183,48 @@ function BadgesPage(props) {
           </Row>
         </>
       )}
-      <Row className={'mx-0 my-5'} style={{ maxHeight: '55vh' }}>
-        <Col md={9}>
+      <Row className={'mx-0 my-5'} style={{ maxHeight: isMobileDisplay ? '330vh' : '55vh' }}>
+        <Col md={9} className={isMobileDisplay ? 'mb-3' : 'm-auto'}>
           <ContentCard
+            maxHeight={'55vh'}
             header={'Odznaki'}
             body={
-              <Row className={'m-0 w-100 h-100'} style={{ overflow: 'visible' }}>
-                {badgesList.sort(sortBadges).map((badge, index) => (
-                  <Col
-                    md={4}
-                    className={'text-center d-flex flex-column align-items-center justify-content-center'}
-                    key={index + Date.now()}
-                  >
-                    <Fade delay={BADGE_LIST_STEP * index}>
-                      <Tooltip>
-                        <img style={{ opacity: badge.unlocked ? 1 : 0.4 }} src={badge.src} alt={'badge-icon'} />
-                        <div>
-                          {badge.unlocked ? (
-                            <span>Odblokowano: {badge.unlockedDate}</span>
-                          ) : (
-                            <span>Odznaka nadal nie została zdobyta.</span>
-                          )}
-                        </div>
-                      </Tooltip>
-
-                      <strong style={{ opacity: badge.unlocked ? 1 : 0.4 }}>{badge.name}</strong>
-                      <p style={{ opacity: badge.unlocked ? 1 : 0.4 }} className={'px-2'}>
-                        {badge.description}
-                      </p>
-                    </Fade>
-                  </Col>
-                ))}
-              </Row>
+              allBadgesList === undefined ? (
+                <Loader />
+              ) : allBadgesList == null ? (
+                <p>{ERROR_OCCURRED}</p>
+              ) : (
+                <Row className={'m-0 w-100 h-100'} style={{ overflow: 'visible' }}>
+                  {allBadgesList?.map((badge, index) => badgeContent(badge, index))}
+                </Row>
+              )
             }
           />
         </Col>
-        <Col md={3} className={'p-0'}>
-          <Row className={'m-0 h-50 pb-2 pr-2'}>
+        <Col md={3} className={`p-0 ${isMobileDisplay ? 'mb-5' : 'mb-0'}`}>
+          <Row className={`pb-2 pr-2 m-0 ${isMobileDisplay ? 'mb-3' : 'mb-0 h-50'}`}>
             <ContentCard
               header={'Posiadasz'}
               body={
                 <div className={'h-100 w-100'}>
                   <Bounce delay={LATER_ITEM_DELAY}>
                     <p className={'text-center m-0'}>
-                      <span style={{ fontSize: 80 }}>{studentBadgesNumber}</span>
+                      <span style={{ fontSize: 80 }}>{unlockedBadgesList?.length ?? 0}</span>
                       <span className={'pl-5 position-absolute'} style={{ top: '50%' }}>
-                        / {allBadgesNumber}
+                        / {allBadgesList?.length ?? 0}
                       </span>
                       <br />
                       <span>odznak</span>
                     </p>
                     <p className={'text-center m-0'}>
                       Co stanowi
-                      <strong> {Math.floor((studentBadgesNumber * 100) / allBadgesNumber)}% </strong>
+                      <strong>
+                        {' '}
+                        {unlockedBadgesList && allBadgesList && allBadgesList?.length > 0
+                          ? Math.floor((unlockedBadgesList.length * 100) / allBadgesList.length)
+                          : 0}
+                        %{' '}
+                      </strong>
                       wszystkich odznak.
                     </p>
                   </Bounce>
@@ -185,15 +233,25 @@ function BadgesPage(props) {
             />
           </Row>
 
-          <Row className={'m-0 h-50 pr-2'}>
+          <Row className={`m-0 pr-2 ${isMobileDisplay ? '' : 'h-50'}`}>
             <ContentCard
               header={'Ostatnio zdobyta'}
               body={
-                <div className={'h-100 w-100 text-center d-flex justify-content-center align-items-center flex-column'}>
+                <div className={'h-100 w-100 text-center'}>
                   <Bounce delay={LATER_ITEM_DELAY}>
-                    <img width={75} src={lastUnlockedBadge.src} alt={'last unlocked badge'} />
-                    <strong>{lastUnlockedBadge.name}</strong>
-                    <p className={'px-2 '}>{lastUnlockedBadge.description}</p>
+                    {!lastUnlockedBadge ? (
+                      <p>Nie zdobyto jeszcze żadnej odznaki.</p>
+                    ) : (
+                      <div className={'d-flex justify-content-center align-items-center flex-column'}>
+                        <img
+                          width={75}
+                          src={base64Header + lastUnlockedBadge?.badge.file.file}
+                          alt={lastUnlockedBadge.badge.file.name}
+                        />
+                        <strong>{lastUnlockedBadge.badge.title}</strong>
+                        <p className={'px-2'}>{lastUnlockedBadge.badge.description}</p>
+                      </div>
+                    )}
                   </Bounce>
                 </div>
               }

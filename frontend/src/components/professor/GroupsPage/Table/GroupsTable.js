@@ -5,6 +5,8 @@ import { TableContainer } from '../../../student/PointsPage/Tables/TableStyle'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import { connect } from 'react-redux'
 
+const tableHeaders = ['Nr', 'Nazwa grupy', 'Liczba uczestników', 'Kod']
+
 function GroupsTable(props) {
   const [tableContent, setTableContent] = useState(undefined)
 
@@ -28,6 +30,7 @@ function GroupsTable(props) {
       <tr key={idx}>
         <td>{idx + 1}</td>
         <td>{row.name}</td>
+        <td>{row.studentsCount}</td>
         <td>{row.invitationCode}</td>
       </tr>
     ))
@@ -39,12 +42,13 @@ function GroupsTable(props) {
         $fontColor={props.theme.font}
         $background={props.theme.primary}
         $bodyColor={props.theme.secondary}
+        className={'mb-0'}
       >
         <thead>
           <tr>
-            <th>Nr</th>
-            <th>Nazwa grupy</th>
-            <th>Kod</th>
+            {tableHeaders.map((header, index) => (
+              <th key={index}>{header}</th>
+            ))}
           </tr>
         </thead>
         <tbody>

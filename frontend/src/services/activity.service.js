@@ -54,9 +54,10 @@ class ActivityService {
     })
   }
 
-  setActivityRequirements(activityId, requirements) {
+  setActivityRequirements(activityId, requirements, isBlocked) {
     return axiosApiPost(POST_TASK_REQUIREMENTS, {
       activityId: activityId,
+      isBlocked: isBlocked,
       requirements: requirements
     }).catch((error) => {
       throw error

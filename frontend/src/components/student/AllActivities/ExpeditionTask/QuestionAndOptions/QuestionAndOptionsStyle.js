@@ -10,6 +10,10 @@ export const ContentWithBackground = styled(Content)`
   flex-direction: column;
   justify-content: center;
   padding: 20px;
+
+  @media (max-width: 575px) {
+    padding: 100px 20px 20px 20px;
+  }
 `
 
 export const QuestionCard = styled.div`

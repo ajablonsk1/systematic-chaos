@@ -100,7 +100,7 @@ function Ranking(props) {
                 <td>{student.points ?? props.noPointsMessage ?? 'Brak danych'}</td>
                 {!!props.iconCallback && (
                   <td>
-                    <FontAwesomeIcon icon={faInfo} onClick={() => props.iconCallback(student.email)} />
+                    <FontAwesomeIcon icon={faInfo} onClick={() => props.iconCallback(student)} />
                   </td>
                 )}
               </TableRow>

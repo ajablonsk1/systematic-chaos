@@ -42,4 +42,10 @@ public class ExceptionMessage {
     public static final String WRONG_PROFESSOR_REGISTER_TOKEN = "Token do rejestracji prowadzącego jest niepoprawny";
     public static final String RANK_NAME_TOO_LONG = "Nazwa nie może przekraczać 30 znaków";
     public static final String SAME_RANK_MIN_POINTS = "Inna ranga posiada już podaną wartość progu punktowego";
+    public static final String DATE_NOT_LONG = "Data musi być liczbą całkowitą";
+    public static final String MIN_POINTS_NOT_DOUBLE = "Punkty muszą być liczbą zmiennaprzecinkową";
+    public static final String USER_FEEDBACK_RATE_OUT_OF_RANGE = "Ocena w ankiecie musi być w zakresie 1-5";
+    public static final String STRING_VALUE_NOT_PARSABLE_TO_INT = "Wpisana wartość nie jest liczbą całkowitą";
+    public static final String STRING_VALUE_NOT_PARSABLE_TO_DOUBLE = "Wpisana wartość nie jest liczbą zmiennoprzecinkową";
+    public static final String BADGE_TITLE_TOO_LONG = "Tytuł nie może przekraczać 30 znaków";
 }

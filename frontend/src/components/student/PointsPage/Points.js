@@ -63,7 +63,7 @@ function Points(props) {
           </Col>
         </Row>
       )}
-      <Row className='m-3'>
+      <Row className='m-0 m-md-3'>
         <TabsContainer
           $linkColor={props.theme.primary}
           className={'w-100'}

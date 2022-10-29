@@ -103,6 +103,21 @@ public class TaskResultService {
         return new ByteArrayResource(csvConverter.convertToByteArray(userToResultMap, firstRow));
     }
 
+    public List<? extends TaskResult> getAllResultsForStudent(User student) {
+        List<SurveyResult> surveyResults = surveyResultRepo.findAllByUser(student);
+        return Stream.of(getGraphAndFileResultsForStudent(student), surveyResults)
+                .flatMap(Collection::stream)
+                .toList();
+    }
+
+    public List<? extends TaskResult> getGraphAndFileResultsForStudent(User student) {
+        List<GraphTaskResult> graphTaskResults = graphTaskResultRepo.findAllByUser(student);
+        List<FileTaskResult> fileTaskResults = fileTaskResultRepo.findAllByUser(student);
+        return Stream.of(graphTaskResults, fileTaskResults)
+                .flatMap(Collection::stream)
+                .toList();
+    }
+
     public List<TaskPointsStatisticsResponse> getUserPointsStatistics() throws WrongUserTypeException {
         String email = authService.getAuthentication().getName();
         return getUserPointsStatistics(email);
@@ -202,7 +217,7 @@ public class TaskResultService {
             response.setActivity100(((Survey) activity).getPoints());
         }
         else {
-            response.setActivity100(((Task) activity).getMaxPoints());
+            response.setActivity100(activity.getMaxPoints());
         }
 
         AtomicInteger answersNumber = new AtomicInteger(0);
@@ -217,12 +232,18 @@ public class TaskResultService {
         List<? extends TaskResult> results = getActivityResults(activity);
         results.forEach(
                 result -> {
+                    Double points = result.getPointsReceived();
+                    if (activityIsSurvey) {
+                        Integer rate = ((SurveyResult) result).getRate();
+                        if (rate == null) return;
+                        points = Double.valueOf(rate);
+                    }
                     answersNumber.incrementAndGet();
-                    sumPoints.set(sumPoints.get() + result.getPointsReceived());
-                    if (bestScore.get() == null) bestScore.set(result.getPointsReceived());
-                    else bestScore.set(Math.max(bestScore.get(), result.getPointsReceived()));
-                    if (worstScore.get() == null) worstScore.set(result.getPointsReceived());
-                    else worstScore.set(Math.min(worstScore.get(), result.getPointsReceived()));
+                    sumPoints.set(sumPoints.get() + points);
+                    if (bestScore.get() == null) bestScore.set(points);
+                    else bestScore.set(Math.max(bestScore.get(), points));
+                    if (worstScore.get() == null) worstScore.set(points);
+                    else worstScore.set(Math.min(worstScore.get(), points));
 
                     GroupActivityStatisticsCreator creator = avgScoreCreators.get().get(result.getUser().getGroup());
                     if (creator == null) avgScoreCreators.get().put(result.getUser().getGroup(), new GroupActivityStatisticsCreator(activity, result));
@@ -234,7 +255,7 @@ public class TaskResultService {
         if (answersNumber.get() > 0) {
             response.setAvgPoints(sumPoints.get() / answersNumber.get());
             if (!activityIsSurvey) {
-                response.setAvgPercentageResult(100 * sumPoints.get() / (((Task) activity).getMaxPoints()* answersNumber.get()));
+                response.setAvgPercentageResult(100 * sumPoints.get() / (activity.getMaxPoints() * answersNumber.get()));
             }
         }
         response.setBestScore(bestScore.get());

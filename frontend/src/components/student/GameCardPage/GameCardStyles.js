@@ -35,4 +35,10 @@ export const CustomCard = styled(Card)`
       }
     }
   }
+
+  @media (max-width: 575px) {
+    & .card-body {
+      overflow: auto;
+    }
+  }
 `

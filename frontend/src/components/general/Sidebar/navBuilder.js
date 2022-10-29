@@ -20,13 +20,16 @@ export const NavLinkStyles = styled(Nav.Link)`
 `
 
 export const NavLinkStylesMobile = styled(Nav.Link)`
-  font-size: 26px;
   color: ${(props) => props.$fontColor};
   padding: 5px 13px;
   &:visited,
   &:link {
     color: ${(props) => props.$fontColor};
     text-decoration: none;
+  }
+
+  @media (max-width: 575px) {
+    padding: 5px 10px;
   }
 `
 

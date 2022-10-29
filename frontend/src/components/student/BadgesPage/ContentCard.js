@@ -10,7 +10,12 @@ function ContentCard(props) {
       <CardHeader>
         <h5>{props.header}</h5>
       </CardHeader>
-      <Card.Body className={'d-flex align-items-center justify-content-center flex-column'}>{props.body}</Card.Body>
+      <Card.Body
+        className={`d-flex flex-column ${props.maxHeight ? '' : 'align-items-center justify-content-center'}`}
+        style={{ maxHeight: props.maxHeight ?? 'none', overflow: props.maxHeight ? 'auto' : 'visible' }}
+      >
+        {props.body}
+      </Card.Body>
     </CustomCard>
   )
 }
