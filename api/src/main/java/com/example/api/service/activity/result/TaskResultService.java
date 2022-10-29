@@ -70,7 +70,8 @@ public class TaskResultService {
                 .filter(user -> user.getAccountType() == AccountType.STUDENT)
                 .toList();
         Map<User, List<CSVTaskResult>> userToResultMap = new HashMap<>();
-        List<String> firstRow = new LinkedList<>(List.of("Imię", "Nazwisko", "NumerID", "Instytucja", "Wydział", "E-mail"));
+        List<String> firstRow = new LinkedList<>(
+                List.of("Imię", "Nazwisko", "NumerID", "Instytucja", "Wydział", "E-mail"));
         Map<Long, GraphTask> formToGraphTaskMap = new HashMap<>();
         Map<Long, FileTask> formToFileTaskMap = new HashMap<>();
         Map<Long, Survey> formToSurveyMap = new HashMap<>();
@@ -78,25 +79,34 @@ public class TaskResultService {
         students.forEach(student -> {
             List<CSVTaskResult> csvTaskResults = new LinkedList<>();
             activityIds.forEach(activityId -> {
-                
-                GraphTask graphTask = formToGraphTaskMap.get(activityId);
-                if(graphTask != null){
-                    GraphTaskResult graphTaskResult = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, student);
-                    csvTaskResults.add(new CSVTaskResult(graphTaskResult));
-                } else {
-                    FileTask fileTask = formToFileTaskMap.get(activityId);
-                    if(fileTask != null) {
-                        FileTaskResult fileTaskResult = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(fileTask, student);
-                        Feedback feedback = professorFeedbackRepo.findProfessorFeedbackByFileTaskResult(fileTaskResult);
-                        csvTaskResults.add(new CSVTaskResult(fileTaskResult, feedback));
-                    } else {
-                        Survey survey = formToSurveyMap.get(activityId);
-                        if(survey != null){
-                            SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey, student);
+                Activity activity = getActivity(activityId);
+                if (activity != null) {
+                    ActivityType type = activity.getActivityType();
+                    switch (type) {
+                        case EXPEDITION -> {
+                            GraphTask graphTask = formToGraphTaskMap.get(activityId);
+                            GraphTaskResult graphTaskResult = graphTaskResultRepo
+                                    .findGraphTaskResultByGraphTaskAndUser(graphTask, student);
+                            csvTaskResults.add(new CSVTaskResult(graphTaskResult));
+                        }
+                        case TASK -> {
+                            FileTask fileTask = formToFileTaskMap.get(activityId);
+                            FileTaskResult fileTaskResult = fileTaskResultRepo.findFileTaskResultByFileTaskAndUser(
+                                    fileTask,
+                                    student);
+                            Feedback feedback = professorFeedbackRepo
+                                    .findProfessorFeedbackByFileTaskResult(fileTaskResult);
+                            csvTaskResults.add(new CSVTaskResult(fileTaskResult, feedback));
+                        }
+                        case SURVEY -> {
+                            Survey survey = formToSurveyMap.get(activityId);
+                            SurveyResult surveyResult = surveyResultRepo.findSurveyResultBySurveyAndUser(survey,
+                                    student);
                             csvTaskResults.add(new CSVTaskResult(surveyResult));
                         }
                     }
                 }
+
             });
             userToResultMap.put(student, csvTaskResults);
         });
@@ -146,7 +156,8 @@ public class TaskResultService {
                 .toList();
     }
 
-    public ActivityStatisticsResponse getActivityStatistics(Long activityID) throws WrongUserTypeException, EntityNotFoundException {
+    public ActivityStatisticsResponse getActivityStatistics(Long activityID)
+            throws WrongUserTypeException, EntityNotFoundException {
         String professorEmail = authService.getAuthentication().getName();
         User professor = userRepo.findUserByEmail(professorEmail);
         userValidator.validateProfessorAccount(professor, professorEmail);
@@ -157,24 +168,27 @@ public class TaskResultService {
     }
 
     private void fillFirstRowAndAddTasksToMap(List<Long> activityIds,
-                                              Map<Long, GraphTask> formToGraphTaskMap,
-                                              Map<Long, FileTask> formToFileTaskMap,
-                                              Map<Long, Survey> formToSurveyMap,
-                                              List<String> firstRow) {
+            Map<Long, GraphTask> formToGraphTaskMap,
+            Map<Long, FileTask> formToFileTaskMap,
+            Map<Long, Survey> formToSurveyMap,
+            List<String> firstRow) {
         activityIds.forEach(activityId -> {
             GraphTask graphTask = graphTaskRepo.findGraphTaskById(activityId);
-            if(graphTask != null){
-                firstRow.addAll(List.of("Zadanie:" + graphTask.getTitle() + " (Punkty)", "Zadanie:" + graphTask.getTitle() + " (Informacja zwrotna)"));
+            if (graphTask != null) {
+                firstRow.addAll(List.of("Zadanie:" + graphTask.getTitle() + " (Punkty)",
+                        "Zadanie:" + graphTask.getTitle() + " (Informacja zwrotna)"));
                 formToGraphTaskMap.put(graphTask.getId(), graphTask);
             } else {
                 FileTask fileTask = fileTaskRepo.findFileTaskById(activityId);
                 if (fileTask != null) {
-                    firstRow.addAll(List.of("Zadanie:" + fileTask.getTitle() + " (Punkty)", "Zadanie:" + fileTask.getTitle() + " (Informacja zwrotna)"));
+                    firstRow.addAll(List.of("Zadanie:" + fileTask.getTitle() + " (Punkty)",
+                            "Zadanie:" + fileTask.getTitle() + " (Informacja zwrotna)"));
                     formToFileTaskMap.put(fileTask.getId(), fileTask);
                 } else {
                     Survey survey = surveyRepo.findSurveyById(activityId);
-                    if(survey != null){
-                        firstRow.addAll(List.of("Zadanie:" + survey.getTitle() + " (Punkty)", "Zadanie:" + survey.getTitle() + " (Informacja zwrotna)"));
+                    if (survey != null) {
+                        firstRow.addAll(List.of("Zadanie:" + survey.getTitle() + " (Punkty)",
+                                "Zadanie:" + survey.getTitle() + " (Informacja zwrotna)"));
                         formToSurveyMap.put(survey.getId(), survey);
                     }
                 }
@@ -198,10 +212,9 @@ public class TaskResultService {
         if (task.getActivityType().equals(ActivityType.EXPEDITION)) {
             return graphTaskResultRepo.findAllByGraphTask((GraphTask) task)
                     .stream()
-                    .filter(result -> result.getPointsReceived() !=null)
+                    .filter(result -> result.getPointsReceived() != null)
                     .toList();
-        }
-        else if (task.getActivityType().equals(ActivityType.TASK)) {
+        } else if (task.getActivityType().equals(ActivityType.TASK)) {
             return fileTaskResultRepo.findAllByFileTask((FileTask) task)
                     .stream()
                     .filter(FileTaskResult::isEvaluated)
@@ -215,8 +228,7 @@ public class TaskResultService {
         boolean activityIsSurvey = activity.getActivityType().equals(ActivityType.SURVEY);
         if (activityIsSurvey) {
             response.setActivity100(((Survey) activity).getPoints());
-        }
-        else {
+        } else {
             response.setActivity100(activity.getMaxPoints());
         }
 
@@ -224,10 +236,10 @@ public class TaskResultService {
         AtomicReference<Double> sumPoints = new AtomicReference<>(0D);
         AtomicReference<Double> bestScore = new AtomicReference<>(null);
         AtomicReference<Double> worstScore = new AtomicReference<>(null);
-        AtomicReference<HashMap<Group, GroupActivityStatisticsCreator>> avgScoreCreators =
-                new AtomicReference<>(new HashMap<>());
-        AtomicReference<ScaleActivityStatisticsCreator> scaleScores =
-                new AtomicReference<>(new ScaleActivityStatisticsCreator(activity));
+        AtomicReference<HashMap<Group, GroupActivityStatisticsCreator>> avgScoreCreators = new AtomicReference<>(
+                new HashMap<>());
+        AtomicReference<ScaleActivityStatisticsCreator> scaleScores = new AtomicReference<>(
+                new ScaleActivityStatisticsCreator(activity));
 
         List<? extends TaskResult> results = getActivityResults(activity);
         results.forEach(
@@ -235,19 +247,27 @@ public class TaskResultService {
                     Double points = result.getPointsReceived();
                     if (activityIsSurvey) {
                         Integer rate = ((SurveyResult) result).getRate();
-                        if (rate == null) return;
+                        if (rate == null)
+                            return;
                         points = Double.valueOf(rate);
                     }
                     answersNumber.incrementAndGet();
                     sumPoints.set(sumPoints.get() + points);
-                    if (bestScore.get() == null) bestScore.set(points);
-                    else bestScore.set(Math.max(bestScore.get(), points));
-                    if (worstScore.get() == null) worstScore.set(points);
-                    else worstScore.set(Math.min(worstScore.get(), points));
+                    if (bestScore.get() == null)
+                        bestScore.set(points);
+                    else
+                        bestScore.set(Math.max(bestScore.get(), points));
+                    if (worstScore.get() == null)
+                        worstScore.set(points);
+                    else
+                        worstScore.set(Math.min(worstScore.get(), points));
 
                     GroupActivityStatisticsCreator creator = avgScoreCreators.get().get(result.getUser().getGroup());
-                    if (creator == null) avgScoreCreators.get().put(result.getUser().getGroup(), new GroupActivityStatisticsCreator(activity, result));
-                    else creator.add(result);
+                    if (creator == null)
+                        avgScoreCreators.get().put(result.getUser().getGroup(),
+                                new GroupActivityStatisticsCreator(activity, result));
+                    else
+                        creator.add(result);
 
                     scaleScores.get().add(result);
                 });
@@ -255,7 +275,8 @@ public class TaskResultService {
         if (answersNumber.get() > 0) {
             response.setAvgPoints(sumPoints.get() / answersNumber.get());
             if (!activityIsSurvey) {
-                response.setAvgPercentageResult(100 * sumPoints.get() / (activity.getMaxPoints() * answersNumber.get()));
+                response.setAvgPercentageResult(
+                        100 * sumPoints.get() / (activity.getMaxPoints() * answersNumber.get()));
             }
         }
         response.setBestScore(bestScore.get());
@@ -263,8 +284,7 @@ public class TaskResultService {
         response.setAvgScores(avgScoreCreators.get().values()
                 .stream()
                 .map(GroupActivityStatisticsCreator::create)
-                .toList()
-        );
+                .toList());
         response.setScaleScores(scaleScores.get().create());
         return response;
 
