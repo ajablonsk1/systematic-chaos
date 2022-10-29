@@ -14,6 +14,7 @@ import { successToast } from '../../../../utils/toasts'
 import { isMobileView } from '../../../../utils/mobileHelper'
 import UserService from '../../../../services/user.service'
 import Loader from '../../../general/Loader/Loader'
+import BadgeCreationForm from './BadgeCreationForm'
 
 function RankAndBadgesManagement(props) {
   const isMobileDisplay = isMobileView()
@@ -27,6 +28,7 @@ function RankAndBadgesManagement(props) {
   const [chosenItem, setChosenItem] = useState(undefined)
   const [errorMessage, setErrorMessage] = useState(undefined)
   const [badgesList, setBadgesList] = useState(null)
+  const [isBadgeAdditionModalOpen, setIsBadgeAdditionModalOpen] = useState(false)
 
   const getRanksList = () => {
     RankService.getAllRanks()
@@ -159,7 +161,9 @@ function RankAndBadgesManagement(props) {
         </div>
         <Button
           className={'my-3 start-50 translate-middle-x position-relative'}
-          onClick={() => {}}
+          onClick={() => {
+            setIsBadgeAdditionModalOpen(true)
+          }}
           style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
         >
           Dodaj nową odznakę
@@ -229,6 +233,15 @@ function RankAndBadgesManagement(props) {
             setModalOpen={setIsRankAdditionModalOpen}
             onSuccess={getRanksList}
           />
+        </ModalBody>
+      </Modal>
+
+      <Modal show={isBadgeAdditionModalOpen} onHide={() => setIsBadgeAdditionModalOpen(false)}>
+        <ModalHeader>
+          <h5>Dodawanie nowej odznaki</h5>
+        </ModalHeader>
+        <ModalBody>
+          <BadgeCreationForm setModalOpen={setIsBadgeAdditionModalOpen} onSuccess={getBadgesList} />
         </ModalBody>
       </Modal>
     </Content>
