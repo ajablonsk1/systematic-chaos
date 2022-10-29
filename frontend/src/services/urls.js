@@ -155,3 +155,6 @@ export const DELETE_RANK = RANK + '/delete'
 const BADGE = BASE_URL + '/badge'
 export const GET_BADGE_ALL = BADGE + '/all'
 export const GET_BADGE_UNLOCKED_ALL = BADGE + '/unlocked/all'
+
+// Grade Controller
+export const GET_GRADES = BASE_URL + '/grades'
