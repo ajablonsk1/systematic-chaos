@@ -34,7 +34,7 @@ public class SurveyResult extends TaskResult{
 
     @Override
     public boolean isEvaluated() {
-        return !Objects.equals(this.getPointsReceived(), survey.getMaxPoints());
+        return this.getSendDateMillis() != null && this.getPointsReceived() != null;
     }
 
     @Override

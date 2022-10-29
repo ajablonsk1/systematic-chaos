@@ -57,10 +57,11 @@ public class SurveyResultService {
             surveyResult.setPointsReceived(survey.getMaxPoints());
             badgeService.checkAllBadges();
         }
-        else if (surveyResult.isEvaluated()) {
+        else if (!surveyResult.isEvaluated()) {
             surveyResult.setPointsReceived(survey.getMaxPoints());
         }
 
+        surveyResult.setSendDateMillis(System.currentTimeMillis());
         surveyResult.setFeedback(form.getFeedback());
 
         if (form.getRate() < 1 || form.getRate() > 5) {
