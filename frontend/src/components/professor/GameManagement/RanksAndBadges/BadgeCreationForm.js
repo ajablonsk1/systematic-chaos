@@ -48,7 +48,6 @@ function BadgeCreationForm(props) {
         if (!values.title) errors.title = FIELD_REQUIRED
         if (!values.description) errors.description = FIELD_REQUIRED
         if (!values.customValue) errors.customValue = FIELD_REQUIRED
-        console.log(values)
         return errors
       }}
       onSubmit={(values, { setSubmitting }) => {
@@ -62,7 +61,7 @@ function BadgeCreationForm(props) {
         }
       }}
     >
-      {({ isSubmitting, handleSubmit }) => (
+      {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
           <Container>
             <Row className='mx-auto'>
@@ -108,11 +107,11 @@ function BadgeCreationForm(props) {
                 </Button>
               </Col>
             </Row>
-            {errorMessage && (
+            {errorMessage ? (
               <p className={'text-center mt-2'} style={{ color: props.theme.danger }}>
                 {errorMessage}
               </p>
-            )}
+            ) : null}
           </Container>
         </Form>
       )}
