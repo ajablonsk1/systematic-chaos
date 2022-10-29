@@ -38,7 +38,7 @@ function RankAndBadgesManagement(props) {
       })
   }
 
-  useEffect(() => {
+  const getBadgesList = () => {
     UserService.getAllBadges()
       .then((response) => {
         setBadgesList(response)
@@ -46,22 +46,35 @@ function RankAndBadgesManagement(props) {
       .catch(() => {
         setBadgesList(null)
       })
-  }, [])
+  }
 
   useEffect(() => {
     getRanksList()
+    getBadgesList()
   }, [])
 
-  const deleteRank = () => {
-    RankService.deleteRank(chosenItem.id)
-      .then(() => {
-        successToast('Ranga usunięta pomyślnie')
-        setIsDeleteModalOpen(false)
-        getRanksList()
-      })
-      .catch((error) => {
-        setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
-      })
+  const deleteElement = () => {
+    if (chosenItem.type === 'RANK') {
+      RankService.deleteRank(chosenItem.id)
+        .then(() => {
+          successToast('Ranga usunięta pomyślnie')
+          setIsDeleteModalOpen(false)
+          getRanksList()
+        })
+        .catch((error) => {
+          setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
+        })
+    } else if (chosenItem.type === 'BADGE') {
+      UserService.deleteBadge(chosenItem.id)
+        .then(() => {
+          successToast('Odznaka usunięta pomyślnie')
+          setIsDeleteModalOpen(false)
+          getBadgesList()
+        })
+        .catch((error) => {
+          setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
+        })
+    }
   }
 
   const ranksContent = useMemo(() => {
@@ -91,7 +104,7 @@ function RankAndBadgesManagement(props) {
                 ])}
                 deleteIconCallback={(idx) => {
                   setIsDeleteModalOpen(true)
-                  setChosenItem({ id: rank.ranks[idx].rankId })
+                  setChosenItem({ id: rank.ranks[idx].rankId, type: 'RANK' })
                 }}
                 editIconCallback={(idx) => {
                   setEditedDataType('RANKS')
@@ -138,8 +151,8 @@ function RankAndBadgesManagement(props) {
                 setChosenItem({ item: badgesList[idx] })
               }}
               deleteIconCallback={(idx) => {
-                // setIsDeleteModalOpen(true)
-                // setChosenItem({ id: rank.ranks[idx].rankId })
+                setIsDeleteModalOpen(true)
+                setChosenItem({ id: 0 /*TODO*/, type: 'BADGE' })
               }}
             />
           )}
@@ -178,7 +191,10 @@ function RankAndBadgesManagement(props) {
           >
             Anuluj
           </Button>
-          <Button style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }} onClick={deleteRank}>
+          <Button
+            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+            onClick={deleteElement}
+          >
             Usuń
           </Button>
         </ModalFooter>
