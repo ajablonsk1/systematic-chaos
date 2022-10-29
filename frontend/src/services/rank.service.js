@@ -1,9 +1,9 @@
-import { axiosApiDelete, axiosApiGet, axiosApiPutFile, axiosApiSendFile } from '../utils/axios'
+import { axiosApiDelete, axiosApiGet, axiosApiMultipartPut, axiosApiMultipartPost } from '../utils/axios'
 import { DELETE_RANK, GET_RANK_ALL, GET_RANK_CURRENT, POST_RANK, PUT_RANK } from './urls'
 
 class RankService {
   editRank(rankId, rankName, minPoints, image, rankType) {
-    return axiosApiPutFile(PUT_RANK, {
+    return axiosApiMultipartPut(PUT_RANK, {
       name: rankName,
       minPoints,
       image,
@@ -15,7 +15,7 @@ class RankService {
   }
 
   addNewRank(rankName, minPoints, image, rankType) {
-    return axiosApiSendFile(POST_RANK, {
+    return axiosApiMultipartPost(POST_RANK, {
       name: rankName,
       minPoints,
       image,

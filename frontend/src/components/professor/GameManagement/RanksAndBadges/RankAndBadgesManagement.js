@@ -119,7 +119,7 @@ function RankAndBadgesManagement(props) {
   const badgesContent = useMemo(() => {
     return (
       <>
-        <div className={'text-center'} style={{ maxHeight: '100%', overflow: 'auto' }}>
+        <div className={'text-center'} style={{ maxHeight: '90%', overflow: 'auto' }}>
           {badgesList === undefined ? (
             <Loader />
           ) : badgesList == null ? (
@@ -137,12 +137,23 @@ function RankAndBadgesManagement(props) {
                 setIsEditModalOpen(true)
                 setChosenItem({ item: badgesList[idx] })
               }}
+              deleteIconCallback={(idx) => {
+                // setIsDeleteModalOpen(true)
+                // setChosenItem({ id: rank.ranks[idx].rankId })
+              }}
             />
           )}
         </div>
+        <Button
+          className={'my-3 start-50 translate-middle-x position-relative'}
+          onClick={() => {}}
+          style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+        >
+          Dodaj nową odznakę
+        </Button>
       </>
     )
-  }, [badgesList])
+  }, [badgesList, props.theme.success])
 
   return (
     <Content>

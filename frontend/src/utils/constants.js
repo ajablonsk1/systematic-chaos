@@ -253,3 +253,12 @@ export const getGameCardInfo = (playerType, data) => {
     </span>
   )
 }
+
+export const BadgeType = {
+  ACTIVITY_NUMBER: 'ACTIVITY_NUMBER',
+  ACTIVITY_SCORE: 'ACTIVITY_SCORE',
+  CONSISTENCY: 'CONSISTENCY',
+  FILE_TASK_NUMBER: 'FILE_TASK_NUMBER',
+  GRAPH_TASK_NUMBER: 'GRAPH_TASK_NUMBER',
+  TOP_SCORE: 'TOP_SCORE'
+}
