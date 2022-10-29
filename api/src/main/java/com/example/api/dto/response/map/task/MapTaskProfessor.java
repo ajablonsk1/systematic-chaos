@@ -1,7 +1,8 @@
 package com.example.api.dto.response.map.task;
 
 import com.example.api.model.activity.task.Activity;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

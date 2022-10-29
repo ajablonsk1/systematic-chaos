@@ -359,7 +359,7 @@ public class DatabaseConfig {
             graphTask.setMaxPoints(60.0);
             graphTask.setExperience(20D);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
-            graphTask.setRequirements(createDefaultRequirements(requirementService));
+            graphTask.setRequirements(createDefaultRequirements());
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
@@ -440,7 +440,7 @@ public class DatabaseConfig {
             fileTask.setProfessor(professor);
             fileTask.setMaxPoints(30.0);
             fileTask.setExperience(10D);
-            fileTask.setRequirements(createDefaultRequirements(requirementService));
+            fileTask.setRequirements(createDefaultRequirements());
 
             fileTaskService.saveFileTask(fileTask);
 
@@ -451,7 +451,7 @@ public class DatabaseConfig {
             info1.setTitle("Skrętki");
             info1.setDescription("Przewody internetowe da się podzielić także pod względem ich ekranowania.");
             info1.setContent(MessageManager.LOREM_IPSUM);
-            info1.setRequirements(createDefaultRequirements(requirementService));
+            info1.setRequirements(createDefaultRequirements());
 
             Url url1 = new Url();
             Url url2 = new Url();
@@ -474,7 +474,7 @@ public class DatabaseConfig {
             survey.setPosY(3);
             survey.setPoints(10.0);
             survey.setExperience(5D);
-            survey.setRequirements(createDefaultRequirements(requirementService));
+            survey.setRequirements(createDefaultRequirements());
             surveyService.saveSurvey(survey);
 
             byte[] chapterImageBytes = getByteArrayForFile("src/main/resources/images/chapter_image.png", "png");
@@ -626,7 +626,7 @@ public class DatabaseConfig {
         };
     }
 
-    private List<Requirement> createDefaultRequirements(RequirementService requirementService) {
+    private List<Requirement> createDefaultRequirements() {
         DateFromRequirement dateFromRequirement = new DateFromRequirement(
                 MessageManager.DATE_FROM_REQ_NAME,
                 false,
@@ -795,31 +795,51 @@ public class DatabaseConfig {
     }
 
     private void initBadges() throws IOException {
-        byte[] topScoreByte = getByteArrayForFile("src/main/resources/images/top_score_badge.png", "png");
-        Image topScoreImage = new Image("Top score image", topScoreByte, ImageType.BADGE);
-        fileRepo.save(topScoreImage);
+        Image activityMaster = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/activity_master.png", "png"), ImageType.BADGE);
+        Image activityExperienced = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/activity_experienced.png", "png"), ImageType.BADGE);
+        Image fileTaskExperienced = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/file_task_experienced.png", "png"), ImageType.BADGE);
+        Image fileTaskFirstSteps = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/file_task_first_steps.png", "png"), ImageType.BADGE);
+        Image fileTaskMaster = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/file_task_master.png", "png"), ImageType.BADGE);
+        Image topFive = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/five.png", "png"), ImageType.BADGE);
+        Image graphTaskExperienced = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/graph_task_experienced.png", "png"), ImageType.BADGE);
+        Image graphTaskFirstSteps = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/graph_task_first_steps.png", "png"), ImageType.BADGE);
+        Image graphTaskMaster = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/graph_task_master.png", "png"), ImageType.BADGE);
+        Image groupLeader = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/group_leader.png", "png"), ImageType.BADGE);
+        Image handshake = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/handshake.png", "png"), ImageType.BADGE);
+        Image inTheMiddle = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/in_the_middle.png", "png"), ImageType.BADGE);
+        Image itsTheBeginning = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/its_the_beginning.png", "png"), ImageType.BADGE);
+        Image leader = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/leader.png", "png"), ImageType.BADGE);
+        Image longA = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/long.png", "png"), ImageType.BADGE);
+        Image lookingUp = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/looking_up.png", "png"), ImageType.BADGE);
+        Image smileFromProfessor = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/smile.png", "png"), ImageType.BADGE);
+        Image theEnd = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/the_end.png", "png"), ImageType.BADGE);
+        Image topTwenty = new Image("Badge", getByteArrayForFile("src/main/resources/images/badge/twenty.png", "png"), ImageType.BADGE);
+
+        fileRepo.saveAll(List.of(activityMaster, activityExperienced, fileTaskExperienced,fileTaskFirstSteps,
+                fileTaskMaster,topFive,graphTaskExperienced,graphTaskFirstSteps,graphTaskMaster,groupLeader
+                ,handshake,inTheMiddle,itsTheBeginning,leader,longA,lookingUp, smileFromProfessor, theEnd, topTwenty));
 
         Badge badge1 = new ConsistencyBadge(
                 null,
                 "To dopiero początek",
-                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres miesiąca",
-                topScoreImage,
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres miesiąca",
+                itsTheBeginning,
                 4
         );
 
         Badge badge2 = new ConsistencyBadge(
                 null,
                 "Długo jeszcze?",
-                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres 3 miesięcy",
-                topScoreImage,
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres 3 miesięcy",
+                longA,
                 12
         );
 
         Badge badge3 = new ConsistencyBadge(
                 null,
                 "To już jest koniec, ale czy na pewno?",
-                "Wykonaj co najmniej jedną aktywność w przeciegu tygodnia od poprzedniej aktywności (7 dni) przez okres 6 mięsięcy",
-                topScoreImage,
+                "Wykonaj co najmniej jedną aktywność w przeciągu tygodnia od poprzedniej aktywności (7 dni) przez okres 6 mięsięcy",
+                theEnd,
                 24
         );
 
@@ -827,7 +847,7 @@ public class DatabaseConfig {
                 null,
                 "Topowowa dwudziestka",
                 "Bądź w 20% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
-                topScoreImage,
+                topTwenty,
                 0.2,
                 false
         );
@@ -837,7 +857,7 @@ public class DatabaseConfig {
                 null,
                 "Topowa piątka",
                 "Bądź w 5% najepszych użytkowników (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
-                topScoreImage,
+                topFive,
                 0.05,
                 false
         );
@@ -846,7 +866,7 @@ public class DatabaseConfig {
                 null,
                 "Lider grupy",
                 "Bądź najepszym użytkownikiem w swojej grupie (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
-                topScoreImage,
+                groupLeader,
                 0.0,
                 true
         );
@@ -855,7 +875,7 @@ public class DatabaseConfig {
                 null,
                 "Lider",
                 "Bądź najepszym użytkownikiem (liczone po wykonaniu 5 ekspedycji lub zadań bojowych)",
-                topScoreImage,
+                leader,
                 0.0,
                 false
         );
@@ -865,7 +885,7 @@ public class DatabaseConfig {
                 null,
                 "Pierwsze kroki w ekspedycji",
                 "Wykonaj swoją pierwszą ekspedycję",
-                topScoreImage,
+                graphTaskFirstSteps,
                 1
         );
 
@@ -873,7 +893,7 @@ public class DatabaseConfig {
                 null,
                 "Doświadczony w ekspedycjach",
                 "Wykonaj 10 ekspedycji",
-                topScoreImage,
+                graphTaskExperienced,
                 10
         );
 
@@ -881,7 +901,7 @@ public class DatabaseConfig {
                 null,
                 "Zaprawiony w ekspedycjach",
                 "Wykonaj 50 ekspedycji",
-                topScoreImage,
+                graphTaskMaster,
                 50
         );
 
@@ -889,7 +909,7 @@ public class DatabaseConfig {
                 null,
                 "Pierwsze kroki w zadaniu bojowym",
                 "Wykonaj swoje pierwsze zadanie bojowe",
-                topScoreImage,
+                fileTaskFirstSteps,
                 1
         );
 
@@ -897,7 +917,7 @@ public class DatabaseConfig {
                 null,
                 "Doświadczony w zadaniach bojowych",
                 "Wykonaj 10 zadań bojowych",
-                topScoreImage,
+                fileTaskExperienced,
                 10
         );
 
@@ -905,7 +925,7 @@ public class DatabaseConfig {
                 null,
                 "Zaprawiony w zadaniach bojowych",
                 "Wykonaj 50 zadań bojowych",
-                topScoreImage,
+                fileTaskMaster,
                 50
         );
 
@@ -913,7 +933,7 @@ public class DatabaseConfig {
                 null,
                 "Doświadczony w aktywnościach",
                 "Wykonaj 30 aktywności",
-                topScoreImage,
+                activityExperienced,
                 30
         );
 
@@ -921,7 +941,7 @@ public class DatabaseConfig {
                 null,
                 "Zaprawiony w aktywnościach",
                 "Wykonaj 100 aktywności",
-                topScoreImage,
+                activityMaster,
                 100
         );
 
@@ -929,7 +949,7 @@ public class DatabaseConfig {
                 null,
                 "Marsz ku lepszemu",
                 "Posiadaj ponad 60% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
-                topScoreImage,
+                lookingUp,
                 0.6
         );
 
@@ -937,7 +957,7 @@ public class DatabaseConfig {
                 null,
                 "Uśmiech prowadzącego",
                 "Posiadaj ponad 80% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
-                topScoreImage,
+                smileFromProfessor,
                 0.8
         );
 
@@ -945,7 +965,7 @@ public class DatabaseConfig {
                 null,
                 "Uścisk dłoni prowadzącego",
                 "Posiadaj ponad 95% ze wszystkich punktów z ekspedycji oraz zadań bojowych",
-                topScoreImage,
+                handshake,
                 0.95
         );
 
@@ -953,7 +973,7 @@ public class DatabaseConfig {
                 null,
                 "W sam środek tarczy",
                 "Posiadaj 100% z ekspedycji lub zadania bojowego",
-                topScoreImage,
+                inTheMiddle,
                 1.0
         );
 

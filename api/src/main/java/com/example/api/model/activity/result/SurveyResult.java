@@ -2,7 +2,10 @@ package com.example.api.model.activity.result;
 
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.activity.task.Survey;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
