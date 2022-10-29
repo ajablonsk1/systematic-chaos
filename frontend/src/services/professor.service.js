@@ -8,7 +8,8 @@ import {
   POST_ADDITIONAL_POINTS,
   GET_POINTS_ALL_LIST_PROFESSOR,
   GET_SUMMARY,
-  GET_PROFESSOR_REGISTER_TOKEN
+  GET_PROFESSOR_REGISTER_TOKEN,
+  GET_GRADES
 } from './urls'
 
 class ProfessorService {
@@ -75,6 +76,12 @@ class ProfessorService {
 
   getRegistrationToken() {
     return axiosApiGet(GET_PROFESSOR_REGISTER_TOKEN).catch((error) => {
+      throw error
+    })
+  }
+
+  getStudentGrades() {
+    return axiosApiGet(GET_GRADES).catch((error) => {
       throw error
     })
   }

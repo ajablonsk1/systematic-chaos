@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { ExportButton, GradesTable } from './GradeListAndExportStyles'
 import { Form } from 'react-bootstrap'
 import { debounce } from 'lodash/function'
@@ -7,6 +7,7 @@ import GroupService from '../../../services/group.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
 import { connect } from 'react-redux'
+import ProfessorService from '../../../services/professor.service'
 
 function UsersTable(props) {
   const [usersList, setUsersList] = useState(undefined)
@@ -15,6 +16,25 @@ function UsersTable(props) {
   const [users, setUsers] = useState([]) // used to filtering
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const [isModalVisible, setModalVisible] = useState(false)
+  const [gradesList, setGradesList] = useState(null)
+
+  const getStudentGrade = useCallback(
+    (studentId) => {
+      if (!gradesList) {
+        return '-'
+      }
+
+      const studentGrade = gradesList.find((studentGrade) => studentGrade.student.id === studentId)?.grade
+      return studentGrade ? studentGrade.toFixed(1) : '-'
+    },
+    [gradesList]
+  )
+
+  useEffect(() => {
+    ProfessorService.getStudentGrades().then((response) => {
+      setGradesList(response)
+    })
+  }, [])
 
   useEffect(() => {
     if (props.groupId && props.groupName) {
@@ -103,8 +123,7 @@ function UsersTable(props) {
                   <td className={'py-2'}>
                     {user.firstName} {user.lastName}
                   </td>
-                  {/*TODO: we don't have this information*/}
-                  <td className={'py-2'}>3.5</td>
+                  <td className={'py-2'}>{getStudentGrade(user.id)}</td>
                 </tr>
               ))
             ) : (
