@@ -19,7 +19,10 @@ function ExportModal(props) {
 
   const startExporting = () => {
     setIsFetching(true)
-    ProfessorService.getCSVGradesFile(props.data, activitiesToExportIds)
+    ProfessorService.getCSVGradesFile(
+      props.data,
+      activitiesToExportIds.map((activity) => activity.id)
+    )
       .then((response) => {
         const date = moment(new Date()).format('DD-MM-YYYY')
         download(response, `oceny_sc_${date}.csv`, 'text/csv')
