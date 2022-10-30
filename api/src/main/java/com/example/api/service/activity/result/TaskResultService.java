@@ -173,23 +173,26 @@ public class TaskResultService {
             Map<Long, Survey> formToSurveyMap,
             List<String> firstRow) {
         activityIds.forEach(activityId -> {
-            GraphTask graphTask = graphTaskRepo.findGraphTaskById(activityId);
-            if (graphTask != null) {
-                firstRow.addAll(List.of("Zadanie:" + graphTask.getTitle() + " (Punkty)",
-                        "Zadanie:" + graphTask.getTitle() + " (Informacja zwrotna)"));
-                formToGraphTaskMap.put(graphTask.getId(), graphTask);
-            } else {
-                FileTask fileTask = fileTaskRepo.findFileTaskById(activityId);
-                if (fileTask != null) {
-                    firstRow.addAll(List.of("Zadanie:" + fileTask.getTitle() + " (Punkty)",
-                            "Zadanie:" + fileTask.getTitle() + " (Informacja zwrotna)"));
-                    formToFileTaskMap.put(fileTask.getId(), fileTask);
-                } else {
-                    Survey survey = surveyRepo.findSurveyById(activityId);
-                    if (survey != null) {
-                        firstRow.addAll(List.of("Zadanie:" + survey.getTitle() + " (Punkty)",
-                                "Zadanie:" + survey.getTitle() + " (Informacja zwrotna)"));
-                        formToSurveyMap.put(survey.getId(), survey);
+            Activity activity = getActivity(activityId);
+            if (activity != null) {
+                ActivityType type = activity.getActivityType();
+                switch (type) {
+                    case EXPEDITION -> {
+                        firstRow.addAll(List.of("Zadanie:" + activity.getTitle() + " (Punkty)",
+                                "Zadanie:" + activity.getTitle() + " (Informacja zwrotna)"));
+                        formToGraphTaskMap.put(activity.getId(), (GraphTask) activity);
+
+                    }
+                    case TASK -> {
+                        firstRow.addAll(List.of("Zadanie:" + activity.getTitle() + " (Punkty)",
+                                "Zadanie:" + activity.getTitle() + " (Informacja zwrotna)"));
+                        formToFileTaskMap.put(activity.getId(), (FileTask) activity);
+
+                    }
+                    case SURVEY -> {
+                        firstRow.addAll(List.of("Zadanie:" + activity.getTitle() + " (Punkty)",
+                                "Zadanie:" + activity.getTitle() + " (Informacja zwrotna)"));
+                        formToSurveyMap.put(activity.getId(), (Survey) activity);
                     }
                 }
             }
