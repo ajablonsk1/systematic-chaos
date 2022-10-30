@@ -180,6 +180,7 @@ public class TaskResultService {
                 }
             }
         });
+        firstRow.add("Przewidywana ocena końcowa");
     }
 
     private Activity getActivity(Long activityID) {

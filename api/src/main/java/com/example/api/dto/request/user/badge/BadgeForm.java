@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class BadgeForm {
     @Schema(required = true) private String title;
     @Schema(required = true) private String description;
-    @Schema(required = true) private MultipartFile image;
+    @Schema(required = false) private MultipartFile image;
     @Schema(required = true) private String value;
     @Schema(required = false) private Boolean forGroup;
 }

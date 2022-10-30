@@ -1,6 +1,8 @@
 package com.example.api.util.csv;
 
 import com.example.api.model.user.User;
+import com.example.api.service.user.GradeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
@@ -12,7 +14,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
+@RequiredArgsConstructor
 public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
+    private final GradeService gradeService;
+
     private final static String institution = "Akademia Górniczo-Hutnicza";
     private final static String department = "Wydział Informatyki, Elektroniki i Telekomunikacji";
 
@@ -22,6 +27,7 @@ public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
         csv.add(firstRow);
         for (User user: data.keySet()) {
             List<CSVTaskResult> csvTaskResults = data.get(user);
+            Double studentGrade = gradeService.getStudentFinalGrade(user).getGrade();
             List<String> userData = List.of(user.getFirstName(),
                     user.getLastName(),
                     user.getIndexNumber().toString(),
@@ -32,7 +38,9 @@ public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
                     .map(CSVTaskResult::toStringList)
                     .flatMap(List::stream)
                     .toList();
-            row = Stream.of(userData, row).flatMap(List::stream).toList();
+            row = Stream.of(userData, row, List.of(studentGrade.toString()))
+                    .flatMap(List::stream)
+                    .toList();
             csv.add(row);
         }
         ByteArrayOutputStream out = new ByteArrayOutputStream();

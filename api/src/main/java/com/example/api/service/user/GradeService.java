@@ -7,11 +7,11 @@ import com.example.api.model.activity.result.*;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
+import com.example.api.repo.activity.result.FileTaskResultRepo;
+import com.example.api.repo.activity.result.GraphTaskResultRepo;
+import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.activity.feedback.SurveyResultService;
-import com.example.api.service.activity.result.FileTaskResultService;
-import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.util.csv.PointsToGradeMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +32,9 @@ public class GradeService {
     private final UserRepo userRepo;
     private final UserValidator userValidator;
     private final AuthenticationService authService;
-    private final GraphTaskResultService graphTaskResultService;
-    private final FileTaskResultService fileTaskResultService;
-    private final SurveyResultService surveyResultService;
+    private final GraphTaskResultRepo graphTaskResultRepo;
+    private final FileTaskResultRepo fileTaskResultRepo;
+    private final SurveyResultRepo surveyResultRepo;
     private final AdditionalPointsRepo additionalPointsRepo;
 
     public List<GradeResponse> getAllGrades() throws WrongUserTypeException {
@@ -49,10 +49,13 @@ public class GradeService {
                 .toList();
     }
 
-    private GradeResponse getStudentFinalGrade(User student) {
-        List<GraphTaskResult> graphTaskResults = graphTaskResultService.getAllGraphTaskResultsForStudent(student);
-        List<FileTaskResult> fileTaskResults = fileTaskResultService.getAllFileTaskResultsForStudent(student);
-        List<SurveyResult> surveyResults = surveyResultService.getAllSurveyResultsForStudent(student);
+    public GradeResponse getStudentFinalGrade(User student) {
+        List<GraphTaskResult> graphTaskResults = graphTaskResultRepo.findAllByUser(student);
+        List<FileTaskResult> fileTaskResults = fileTaskResultRepo.findAllByUser(student);
+        List<SurveyResult> surveyResults = surveyResultRepo.findAllByUser(student)
+                .stream()
+                .filter(SurveyResult::isEvaluated)
+                .toList();
         List<AdditionalPoints> additionalPointsList = additionalPointsRepo.findAllByUser(student);
 
         Double pointsReceived = Stream.of(graphTaskResults, fileTaskResults, surveyResults)
