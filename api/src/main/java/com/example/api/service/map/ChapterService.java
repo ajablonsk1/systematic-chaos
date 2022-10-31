@@ -4,10 +4,12 @@ import com.example.api.dto.request.activity.task.requirement.RequirementForm;
 import com.example.api.dto.request.map.ChapterForm;
 import com.example.api.dto.request.map.ChapterRequirementForm;
 import com.example.api.dto.request.map.EditChapterForm;
-import com.example.api.dto.response.map.ChapterInfoResponse;
-import com.example.api.dto.response.map.ChapterResponse;
+import com.example.api.dto.response.map.chapter.ChapterInfoResponse;
+import com.example.api.dto.response.map.chapter.ChapterResponse;
 import com.example.api.dto.response.map.RequirementDTO;
 import com.example.api.dto.response.map.RequirementResponse;
+import com.example.api.dto.response.map.chapter.ChapterResponseProfessor;
+import com.example.api.dto.response.map.chapter.ChapterResponseStudent;
 import com.example.api.dto.response.map.task.MapTask;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -50,7 +52,7 @@ public class ChapterService {
     private final UserRepo userRepo;
     private final RequirementService requirementService;
 
-    public List<ChapterResponse> getAllChapters() {
+    public List<? extends ChapterResponse> getAllChapters() {
         log.info("Fetching all chapters");
         List<Chapter> chapters = chapterRepo.findAll();
 
@@ -60,13 +62,18 @@ public class ChapterService {
 
         if (accountType == AccountType.STUDENT) {
             return chapters.stream()
-                    .filter(chapter -> requirementService.areRequirementsFulfilled(chapter.getRequirements()))
-                    .map(ChapterResponse::new)
+                    .filter(chapter -> !chapter.getIsBlocked())
+                    .map(chapter ->
+                            new ChapterResponseStudent(
+                                    chapter,
+                                    requirementService.areRequirementsFulfilled(chapter.getRequirements())
+                            )
+                    )
                     .sorted(Comparator.comparingLong(ChapterResponse::getId))
                     .toList();
         } else {
             return chapters.stream()
-                    .map(ChapterResponse::new)
+                    .map(ChapterResponseProfessor::new)
                     .sorted(Comparator.comparingLong(ChapterResponse::getId))
                     .toList();
         }

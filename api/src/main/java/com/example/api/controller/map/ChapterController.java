@@ -3,8 +3,8 @@ package com.example.api.controller.map;
 import com.example.api.dto.request.map.ChapterForm;
 import com.example.api.dto.request.map.ChapterRequirementForm;
 import com.example.api.dto.request.map.EditChapterForm;
-import com.example.api.dto.response.map.ChapterInfoResponse;
-import com.example.api.dto.response.map.ChapterResponse;
+import com.example.api.dto.response.map.chapter.ChapterInfoResponse;
+import com.example.api.dto.response.map.chapter.ChapterResponse;
 import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -26,7 +26,7 @@ public class ChapterController {
     private final ChapterService chapterService;
 
     @GetMapping
-    public ResponseEntity<List<ChapterResponse>> getAllChapters() {
+    public ResponseEntity<List<? extends ChapterResponse>> getAllChapters() {
         return ResponseEntity.ok().body(chapterService.getAllChapters());
     }
 

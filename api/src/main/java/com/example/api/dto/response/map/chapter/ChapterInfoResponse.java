@@ -1,4 +1,4 @@
-package com.example.api.dto.response.map;
+package com.example.api.dto.response.map.chapter;
 
 import com.example.api.dto.response.map.task.MapTask;
 import com.example.api.model.map.Chapter;
