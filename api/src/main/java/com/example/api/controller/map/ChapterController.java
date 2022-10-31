@@ -1,9 +1,11 @@
 package com.example.api.controller.map;
 
 import com.example.api.dto.request.map.ChapterForm;
+import com.example.api.dto.request.map.ChapterRequirementForm;
 import com.example.api.dto.request.map.EditChapterForm;
 import com.example.api.dto.response.map.ChapterInfoResponse;
 import com.example.api.dto.response.map.ChapterResponse;
+import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -48,6 +50,18 @@ public class ChapterController {
     @PutMapping("/edit")
     public ResponseEntity<?> editChapter(@RequestBody EditChapterForm editChapterForm) throws RequestValidationException {
         chapterService.editChapter(editChapterForm);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/requirements")
+    ResponseEntity<RequirementResponse> getRequirementsForChapter(@RequestParam Long chapterId)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(chapterService.getRequirementsForChapter(chapterId));
+    }
+
+    @PostMapping("/requirements/add")
+    ResponseEntity<?> addRequirementToChapter(@RequestBody ChapterRequirementForm form) throws RequestValidationException {
+        chapterService.addRequirementToChapter(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

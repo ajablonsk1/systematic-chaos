@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,13 +26,14 @@ public class Chapter {
     private Integer posY;
 
     @OneToOne
-    private Requirement requirement;
-
-    @OneToOne
     private Chapter nextChapter;
 
     @OneToOne
     private ActivityMap activityMap;
+
+    @OneToMany
+    private List<Requirement> requirements = new LinkedList<>();
+    private Boolean isBlocked = true;
 
     public Chapter(String name, ActivityMap activityMap, Integer posX, Integer poxY) {
         this.name = name;

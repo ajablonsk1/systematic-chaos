@@ -1,9 +1,13 @@
 package com.example.api.service.map;
 
+import com.example.api.dto.request.activity.task.requirement.RequirementForm;
 import com.example.api.dto.request.map.ChapterForm;
+import com.example.api.dto.request.map.ChapterRequirementForm;
 import com.example.api.dto.request.map.EditChapterForm;
 import com.example.api.dto.response.map.ChapterInfoResponse;
 import com.example.api.dto.response.map.ChapterResponse;
+import com.example.api.dto.response.map.RequirementDTO;
+import com.example.api.dto.response.map.RequirementResponse;
 import com.example.api.dto.response.map.task.MapTask;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
@@ -11,6 +15,7 @@ import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.task.Activity;
 import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
+import com.example.api.model.map.requirement.Requirement;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.model.util.File;
@@ -43,15 +48,28 @@ public class ChapterService {
     private final AuthenticationService authService;
     private final UserValidator userValidator;
     private final UserRepo userRepo;
+    private final RequirementService requirementService;
 
     public List<ChapterResponse> getAllChapters() {
         log.info("Fetching all chapters");
         List<Chapter> chapters = chapterRepo.findAll();
-        return chapters
-                .stream()
-                .map(ChapterResponse::new)
-                .sorted(Comparator.comparingLong(ChapterResponse::getId))
-                .toList();
+
+        String email = authService.getAuthentication().getName();
+        User user = userRepo.findUserByEmail(email);
+        AccountType accountType = user.getAccountType();
+
+        if (accountType == AccountType.STUDENT) {
+            return chapters.stream()
+                    .filter(chapter -> requirementService.areRequirementsFulfilled(chapter.getRequirements()))
+                    .map(ChapterResponse::new)
+                    .sorted(Comparator.comparingLong(ChapterResponse::getId))
+                    .toList();
+        } else {
+            return chapters.stream()
+                    .map(ChapterResponse::new)
+                    .sorted(Comparator.comparingLong(ChapterResponse::getId))
+                    .toList();
+        }
     }
 
     public ChapterInfoResponse getChapterInfo(Long id) throws EntityNotFoundException {
@@ -80,6 +98,7 @@ public class ChapterService {
         ActivityMap activityMap = new ActivityMap(form.getSizeX(), form.getSizeY(), image);
         activityMapService.saveActivityMap(activityMap);
         Chapter chapter = new Chapter(form.getName(), activityMap, form.getPosX(), form.getPosY());
+        chapter.setRequirements(requirementService.getDefaultRequirements());
         List<Chapter> allChapters = chapterRepo.findAll();
         chapterRepo.save(chapter);
         if (!allChapters.isEmpty()) {
@@ -140,5 +159,26 @@ public class ChapterService {
         chapterMap.setImage(fileRepo.findFileById(chapterForm.getImageId()));
 
         chapter.setActivityMap(chapterMap);
+    }
+
+    public RequirementResponse getRequirementsForChapter(Long chapterId) throws EntityNotFoundException {
+        Chapter chapter = chapterRepo.findChapterById(chapterId);
+        chapterValidator.validateChapterIsNotNull(chapter, chapterId);
+
+        List<? extends RequirementDTO<?>> requirements = chapter.getRequirements()
+                .stream()
+                .map(Requirement::getResponse)
+                .toList();
+        return new RequirementResponse(chapter.getIsBlocked(), requirements);
+    }
+
+    public void addRequirementToChapter(ChapterRequirementForm form) throws RequestValidationException {
+        Chapter chapter = chapterRepo.findChapterById(form.getChapterId());
+        Boolean isBlocked = form.getIsBlocked();
+        if(isBlocked != null) {
+            chapter.setIsBlocked(isBlocked);
+        }
+        List<RequirementForm> requirementForms = form.getRequirements();
+        requirementService.updateRequirements(requirementForms);
     }
 }

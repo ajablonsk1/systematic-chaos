@@ -555,6 +555,7 @@ public class DatabaseConfig {
             chapter.setPosX(2);
             chapter.setPosY(2);
             chapter.setActivityMap(activityMap1);
+            chapter.setRequirements(requirementService.getDefaultRequirements());
             chapterRepo.save(chapter);
 
             calendar.set(2022, Calendar.JUNE, 15);

@@ -1,13 +1,13 @@
 package com.example.api.service.map;
 
+import com.example.api.dto.request.activity.task.requirement.RequirementForm;
+import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.map.requirement.*;
-import com.example.api.repo.activity.result.FileTaskResultRepo;
-import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.map.RequirementRepo;
-import com.example.api.repo.user.UserRepo;
-import com.example.api.security.AuthenticationService;
+import com.example.api.service.validator.MapValidator;
 import com.example.api.util.MessageManager;
 import com.example.api.util.visitor.RequirementFulfilledVisitor;
+import com.example.api.util.visitor.RequirementValueVisitor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,11 +22,9 @@ import java.util.List;
 @Transactional
 public class RequirementService {
     private final RequirementRepo requirementRepo;
-    private final UserRepo userRepo;
-    private final GraphTaskResultRepo graphTaskResultRepo;
-    private final FileTaskResultRepo fileTaskResultRepo;
-    private final AuthenticationService authService;
     private final RequirementFulfilledVisitor requirementFulfilledVisitor;
+    private final RequirementValueVisitor requirementValueVisitor;
+    private final MapValidator mapValidator;
 
     public Requirement saveRequirement(Requirement requirement) {
         return requirementRepo.save(requirement);
@@ -84,5 +82,15 @@ public class RequirementService {
     public boolean areRequirementsFulfilled(List<Requirement> requirements) {
         return requirements.stream()
                 .allMatch(requirement -> requirement.isFulfilled(requirementFulfilledVisitor));
+    }
+
+    public void updateRequirements(List<RequirementForm> forms) throws RequestValidationException {
+        for (RequirementForm requirementForm: forms) {
+            Requirement requirement = requirementRepo.findRequirementById(requirementForm.getId());
+            mapValidator.validateRequirementIsNotNull(requirement, requirementForm.getId());
+
+            requirement.setSelected(requirementForm.getSelected());
+            requirement.setValue(requirementValueVisitor, requirementForm.getValue());
+        }
     }
 }
