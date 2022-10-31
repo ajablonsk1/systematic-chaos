@@ -22,7 +22,7 @@ function BadgeCreationForm(props) {
       values.description,
       chosenFile,
       values.customValue,
-      checkboxRef.current?.checked,
+      checkboxRef.current?.checked.toString(),
       values.type
     )
       .then(() => {
