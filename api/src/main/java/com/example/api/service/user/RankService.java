@@ -90,7 +90,7 @@ public class RankService {
         rankRepo.save(rank);
     }
 
-    public void editRank(EditRankForm form) throws RequestValidationException, IOException {
+    public void updateRank(EditRankForm form) throws RequestValidationException, IOException {
         Long id = form.getRankId();
         Rank rank = rankRepo.findRankById(id);
         rankValidator.validateEditRankForm(form, rank, id);

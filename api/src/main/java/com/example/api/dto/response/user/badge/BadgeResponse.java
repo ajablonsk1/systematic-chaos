@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class BadgeResponse<T> {
+    private Long id;
     private String title;
     private String description;
     private ByteFileResponse file;
@@ -15,6 +16,7 @@ public class BadgeResponse<T> {
     private Boolean forGroup;
 
     public BadgeResponse(Badge badge) {
+        this.id = badge.getId();
         this.title = badge.getTitle();
         this.description = badge.getDescription();
         this.file = new ByteFileResponse(badge.getImage());

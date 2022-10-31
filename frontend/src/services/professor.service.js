@@ -8,7 +8,8 @@ import {
   POST_ADDITIONAL_POINTS,
   GET_POINTS_ALL_LIST_PROFESSOR,
   GET_SUMMARY,
-  GET_PROFESSOR_REGISTER_TOKEN
+  GET_PROFESSOR_REGISTER_TOKEN,
+  GET_GRADES
 } from './urls'
 
 class ProfessorService {
@@ -21,9 +22,11 @@ class ProfessorService {
   }
 
   getCSVGradesFile(studentsId, activitiesId) {
-    return axiosApiGetFile(POST_TASK_RESULT_CSV, { studentIds: studentsId, forms: activitiesId }).catch((error) => {
-      throw error
-    })
+    return axiosApiGetFile(POST_TASK_RESULT_CSV, { studentIds: studentsId, activityIds: activitiesId }).catch(
+      (error) => {
+        throw error
+      }
+    )
   }
 
   getTasksToEvaluateList() {
@@ -75,6 +78,12 @@ class ProfessorService {
 
   getRegistrationToken() {
     return axiosApiGet(GET_PROFESSOR_REGISTER_TOKEN).catch((error) => {
+      throw error
+    })
+  }
+
+  getStudentGrades() {
+    return axiosApiGet(GET_GRADES).catch((error) => {
       throw error
     })
   }

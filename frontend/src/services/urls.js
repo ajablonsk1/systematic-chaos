@@ -158,3 +158,6 @@ export const GET_BADGE_UNLOCKED_ALL = BADGE + '/unlocked/all'
 export const DELETE_BADGE = BADGE + '/delete'
 export const ADD_BADGE = BADGE + '/add'
 export const PUT_BADGE_UPDATE = BASE_URL + '/update'
+
+// Grade Controller
+export const GET_GRADES = BASE_URL + '/grades'

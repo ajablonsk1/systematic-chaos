@@ -254,6 +254,8 @@ export const getGameCardInfo = (playerType, data) => {
   )
 }
 
+export const INVALID_DATE_MESSAGE = 'Invalid date object given'
+
 export const BadgeType = {
   ACTIVITY_NUMBER: 'ACTIVITY_NUMBER',
   ACTIVITY_SCORE: 'ACTIVITY_SCORE',
