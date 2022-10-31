@@ -4,7 +4,7 @@ WORKDIR /home/gradle/src
 RUN gradle build --no-daemon -x test
 
 FROM openjdk:17
-EXPOSE 8080
+EXPOSE 443
 RUN mkdir /src
 RUN mkdir /src/main
 RUN mkdir /src/main/resources

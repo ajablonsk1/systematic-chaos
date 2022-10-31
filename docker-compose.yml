@@ -1,13 +1,13 @@
-version: '3.9'
+version: "3.9"
 
 services:
   sc-backend:
-    image: 'sc-backend'
+    image: "sc-backend"
     build:
       context: api/.
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "443:443"
     depends_on:
       - PostgreSQL
     environment:
@@ -15,7 +15,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=sc
       - SPRING_DATASOURCE_PASSWORD=sc
       - SPRING_JPA_HIBERNATE_DDL_AUTO=create-drop
-    container_name: 'sc-backend'
+    container_name: "sc-backend"
 
   PostgreSQL:
     image: postgres
@@ -27,10 +27,10 @@ services:
       - POSTGRES_DB=sc
 
   sc-frontend:
-    image: 'sc-frontend'
+    image: "sc-frontend"
     build:
       context: frontend/.
       dockerfile: Dockerfile
     ports:
       - "3000:50"
-    container_name: 'sc-frontend'
+    container_name: "sc-frontend"

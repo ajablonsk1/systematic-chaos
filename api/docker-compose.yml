@@ -1,11 +1,11 @@
-version: '3.7'
+version: "3.7"
 services:
   API:
-    image: 'systematic-chaos-api'
+    image: "systematic-chaos-api"
     build:
       context: .
     ports:
-      - "8080:8080"
+      - "443:443"
     depends_on:
       - PostgreSQL
     environment:
