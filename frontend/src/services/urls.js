@@ -1,4 +1,4 @@
-export const BASE_URL = 'localhost:443/api'
+export const BASE_URL = 'https://localhost:443/api'
 
 /* Rule of naming URLs:
  *  METHOD_URL_FULL_PATH (excluding keywords like "set", "get", "put", "post", "add")
