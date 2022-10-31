@@ -16,8 +16,8 @@ function ActivityContent(props) {
   const isMobileDisplay = isMobileView()
   const navigate = useNavigate()
   const activityId = props.activityId
-  const startDate = props.activity.requirements.find((el) => el.dateFromMillis).dateFromMillis
-  const endDate = props.activity.requirements.find((el) => el.dateToMillis).dateToMillis
+  const [startDate, setStartDate] = useState(undefined)
+  const [endDate, setEndDate] = useState(undefined)
   const [activityScore, setActivityScore] = useState(undefined)
   const [pointsReceived, setPointsReceived] = useState(undefined)
   const [isFetching, setIsFetching] = useState(false)
@@ -30,6 +30,12 @@ function ActivityContent(props) {
       .catch(() => {
         setActivityScore(null)
       })
+    // if (props.activity.requirements) {
+    const startDateGiven = props.activity.requirements?.find((el) => el.dateFromMillis)
+    setStartDate(startDateGiven?.dateFromMillis ?? null)
+    const endDateGiven = props.activity.requirements?.find((el) => el.dateToMillis) ?? null
+    setEndDate(endDateGiven?.dateToMillis ?? null)
+    // }
   }, [activityId, props])
 
   useEffect(() => {
