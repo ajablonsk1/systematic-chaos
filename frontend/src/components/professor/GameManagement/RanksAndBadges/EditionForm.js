@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { FormikProvider, useFormik } from 'formik'
-import { ERROR_OCCURRED, FIELD_REQUIRED, FILE_INPUT_REQUIRED } from '../../../../utils/constants'
+import { ERROR_OCCURRED, FIELD_REQUIRED } from '../../../../utils/constants'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import { FormCol } from '../../../general/LoginAndRegistrationPage/FormCol'
 import { connect } from 'react-redux'
@@ -27,42 +27,44 @@ function EditionForm(props) {
           },
 
     onSubmit: (values) => {
-      if (!chosenFile) {
-        setErrorMessage(FILE_INPUT_REQUIRED)
-      } else {
-        switch (props.formVariant) {
-          case 'RANKS':
-            RankService.editRank(props.item.item.rankId, values.name, values.minPoints, chosenFile, props.item.type)
-              .then(() => {
-                props.setModalOpen(false)
-                successToast('Ranga została edytowana pomyślnie.')
-                props.onSuccess()
-              })
-              .catch((error) => {
-                setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
-              })
-            break
-          case 'BADGES':
-            UserService.editBadge(
-              values.title,
-              values.description,
-              chosenFile,
-              values.customValue,
-              checkboxRef.current?.checked,
-              0 // ! TODO
-            )
-              .then(() => {
-                props.setModalOpen(false)
-                successToast('Odznaka została edytowana pomyślnie.')
-                props.onSuccess()
-              })
-              .catch((error) => {
-                setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
-              })
-            break
-          default:
-            break
-        }
+      switch (props.formVariant) {
+        case 'RANKS':
+          RankService.editRank(
+            props.item.item.rankId,
+            values.name,
+            values.minPoints,
+            chosenFile ?? undefined,
+            props.item.type
+          )
+            .then(() => {
+              props.setModalOpen(false)
+              successToast('Ranga została edytowana pomyślnie.')
+              props.onSuccess()
+            })
+            .catch((error) => {
+              setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
+            })
+          break
+        case 'BADGES':
+          UserService.editBadge(
+            values.title,
+            values.description,
+            chosenFile ?? undefined,
+            values.customValue,
+            checkboxRef.current?.checked,
+            props.item.item.id
+          )
+            .then(() => {
+              props.setModalOpen(false)
+              successToast('Odznaka została edytowana pomyślnie.')
+              props.onSuccess()
+            })
+            .catch((error) => {
+              setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
+            })
+          break
+        default:
+          break
       }
     },
     validate: (values) => {

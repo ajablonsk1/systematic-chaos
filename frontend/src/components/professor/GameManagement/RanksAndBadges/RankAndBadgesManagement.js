@@ -50,6 +50,11 @@ function RankAndBadgesManagement(props) {
       })
   }
 
+  const updateView = () => {
+    getRanksList()
+    getBadgesList()
+  }
+
   useEffect(() => {
     getRanksList()
     getBadgesList()
@@ -154,7 +159,7 @@ function RankAndBadgesManagement(props) {
               }}
               deleteIconCallback={(idx) => {
                 setIsDeleteModalOpen(true)
-                setChosenItem({ id: 0 /*TODO*/, type: 'BADGE' })
+                setChosenItem({ id: badgesList[idx].id, type: 'BADGE' })
               }}
             />
           )}
@@ -215,7 +220,7 @@ function RankAndBadgesManagement(props) {
         </ModalHeader>
         <ModalBody>
           <EditionForm
-            onSuccess={getRanksList}
+            onSuccess={updateView}
             formVariant={editedDataType}
             setModalOpen={setIsEditModalOpen}
             item={chosenItem}

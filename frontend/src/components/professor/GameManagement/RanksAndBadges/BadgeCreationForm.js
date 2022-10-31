@@ -88,6 +88,14 @@ function BadgeCreationForm(props) {
                   }}
                 />
               </Col>
+              <Col md={12}>
+                <Form.Check
+                  ref={checkboxRef}
+                  className={'my-3'}
+                  label={'Zastosuj tylko dla grupy, do której należy student.'}
+                  name={'forGroup'}
+                />
+              </Col>
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>
