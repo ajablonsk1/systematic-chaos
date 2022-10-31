@@ -118,6 +118,9 @@ function EditionForm(props) {
       }
 
       if (key === 'forGroup') {
+        if (formik.initialValues.forGroup == null) {
+          return null
+        }
         return (
           <Form.Check
             ref={checkboxRef}

@@ -61,7 +61,7 @@ function BadgeCreationForm(props) {
         }
       }}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, values }) => (
         <Form onSubmit={handleSubmit}>
           <Container>
             <Row className='mx-auto'>
@@ -88,14 +88,16 @@ function BadgeCreationForm(props) {
                   }}
                 />
               </Col>
-              <Col md={12}>
-                <Form.Check
-                  ref={checkboxRef}
-                  className={'my-3'}
-                  label={'Zastosuj tylko dla grupy, do której należy student.'}
-                  name={'forGroup'}
-                />
-              </Col>
+              {values.type === BadgeType.TOP_SCORE ? (
+                <Col md={12}>
+                  <Form.Check
+                    ref={checkboxRef}
+                    className={'my-3'}
+                    label={'Zastosuj tylko dla grupy, do której należy student.'}
+                    name={'forGroup'}
+                  />
+                </Col>
+              ) : null}
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>
