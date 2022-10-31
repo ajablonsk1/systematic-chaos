@@ -35,9 +35,9 @@ public class RankController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping(path = "/edit", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> editRank(@ModelAttribute EditRankForm form) throws RequestValidationException, IOException {
-        rankService.editRank(form);
+    @PutMapping(path = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> updateRank(@ModelAttribute EditRankForm form) throws RequestValidationException, IOException {
+        rankService.updateRank(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

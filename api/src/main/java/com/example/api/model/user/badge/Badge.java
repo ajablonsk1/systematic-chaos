@@ -1,4 +1,5 @@
 package com.example.api.model.user.badge;
+
 import com.example.api.dto.request.user.badge.BadgeUpdateForm;
 import com.example.api.dto.response.user.badge.BadgeResponse;
 import com.example.api.error.exception.EntityNotFoundException;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -51,6 +53,10 @@ public abstract class Badge {
         validator.validateBadgeForm(form);
         this.title = form.getTitle();
         this.description = form.getDescription();
-        this.image.setFile(form.getImage().getBytes());
+
+        MultipartFile image = form.getImage();
+        if (image != null) {
+            this.image.setFile(image.getBytes());
+        }
     }
 }
