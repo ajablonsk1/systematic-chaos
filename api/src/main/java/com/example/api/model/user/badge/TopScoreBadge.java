@@ -2,6 +2,7 @@ package com.example.api.model.user.badge;
 
 import com.example.api.dto.request.user.badge.BadgeUpdateForm;
 import com.example.api.dto.response.user.badge.BadgeResponse;
+import com.example.api.dto.response.user.badge.BadgeResponseTopScore;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.RequestValidationException;
@@ -39,9 +40,8 @@ public class TopScoreBadge extends Badge{
 
     @Override
     public BadgeResponse<?> getResponse() {
-        BadgeResponse<Double> response = new BadgeResponse<>(this);
+        BadgeResponse<Double> response = new BadgeResponseTopScore(this);
         response.setValue(topScore);
-        response.setForGroup(forGroup);
         return response;
     }
 
