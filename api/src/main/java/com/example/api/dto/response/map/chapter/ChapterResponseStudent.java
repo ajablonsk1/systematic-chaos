@@ -1,7 +1,8 @@
 package com.example.api.dto.response.map.chapter;
 
 import com.example.api.model.map.Chapter;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

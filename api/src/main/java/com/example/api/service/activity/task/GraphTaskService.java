@@ -97,7 +97,7 @@ public class GraphTaskService {
                 questions,
                 timeToSolveMillis,
                 maxPoints);
-        graphTask.setRequirements(requirementService.getDefaultRequirements());
+        graphTask.setRequirements(requirementService.getDefaultRequirements(true));
         graphTaskRepo.save(graphTask);
 
         chapterValidator.validateChapterIsNotNull(chapter, chapterForm.getChapterId());

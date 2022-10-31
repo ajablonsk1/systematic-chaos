@@ -4,10 +4,10 @@ import com.example.api.dto.request.activity.task.requirement.RequirementForm;
 import com.example.api.dto.request.map.ChapterForm;
 import com.example.api.dto.request.map.ChapterRequirementForm;
 import com.example.api.dto.request.map.EditChapterForm;
-import com.example.api.dto.response.map.chapter.ChapterInfoResponse;
-import com.example.api.dto.response.map.chapter.ChapterResponse;
 import com.example.api.dto.response.map.RequirementDTO;
 import com.example.api.dto.response.map.RequirementResponse;
+import com.example.api.dto.response.map.chapter.ChapterInfoResponse;
+import com.example.api.dto.response.map.chapter.ChapterResponse;
 import com.example.api.dto.response.map.chapter.ChapterResponseProfessor;
 import com.example.api.dto.response.map.chapter.ChapterResponseStudent;
 import com.example.api.dto.response.map.task.MapTask;
@@ -105,7 +105,7 @@ public class ChapterService {
         ActivityMap activityMap = new ActivityMap(form.getSizeX(), form.getSizeY(), image);
         activityMapService.saveActivityMap(activityMap);
         Chapter chapter = new Chapter(form.getName(), activityMap, form.getPosX(), form.getPosY());
-        chapter.setRequirements(requirementService.getDefaultRequirements());
+        chapter.setRequirements(requirementService.getDefaultRequirements(false));
         List<Chapter> allChapters = chapterRepo.findAll();
         chapterRepo.save(chapter);
         if (!allChapters.isEmpty()) {

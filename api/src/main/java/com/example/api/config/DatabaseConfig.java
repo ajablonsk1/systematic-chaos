@@ -414,7 +414,7 @@ public class DatabaseConfig {
 
             optionService.saveAll(List.of(optionTwo, optionTwo1, optionTwo2, optionTwo3, optionTwo4, optionTwo5));
 
-            List<Requirement> graphTaskTwoReq = requirementService.getDefaultRequirements();
+            List<Requirement> graphTaskTwoReq = requirementService.getDefaultRequirements(true);
 
             GraphTask graphTaskTwo = new GraphTask();
             graphTaskTwo.setIsBlocked(false);
@@ -555,7 +555,7 @@ public class DatabaseConfig {
             chapter.setPosX(2);
             chapter.setPosY(2);
             chapter.setActivityMap(activityMap1);
-            chapter.setRequirements(requirementService.getDefaultRequirements());
+            chapter.setRequirements(requirementService.getDefaultRequirements(false));
             chapter.setIsBlocked(true);
             chapterRepo.save(chapter);
 

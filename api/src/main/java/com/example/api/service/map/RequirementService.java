@@ -30,14 +30,14 @@ public class RequirementService {
         return requirementRepo.save(requirement);
     }
 
-    public List<Requirement> getDefaultRequirements() {
+    public List<Requirement> getDefaultRequirements(boolean forActivity) {
         Requirement dateFromRequirement = new DateFromRequirement(
-                MessageManager.DATE_FROM_REQ_NAME,
+                forActivity ? MessageManager.DATE_FROM_REQ_NAME : MessageManager.DATE_FROM_REQ_NAME_CHAPTER,
                 false,
                 null
         );
         Requirement dateToRequirement = new DateToRequirement(
-                MessageManager.DATE_TO_REQ_NAME,
+                forActivity ? MessageManager.DATE_TO_REQ_NAME : MessageManager.DATE_TO_REQ_NAME_CHAPTER,
                 false,
                 null
         );
@@ -52,7 +52,7 @@ public class RequirementService {
                 new LinkedList<>()
         );
         Requirement groupsRequirement = new GroupsRequirement(
-                MessageManager.GROUPS_REQ_NAME,
+                forActivity ? MessageManager.GROUPS_REQ_NAME : MessageManager.GROUPS_REQ_NAME_CHAPTER,
                 false,
                 new LinkedList<>()
         );
@@ -62,7 +62,7 @@ public class RequirementService {
                 null
         );
         Requirement studentsRequirements = new StudentsRequirements(
-                MessageManager.STUDENTS_REQ_NAME,
+                forActivity ? MessageManager.STUDENTS_REQ_NAME : MessageManager.STUDENTS_REQ_NAME_CHAPTER,
                 false,
                 new LinkedList<>()
         );
