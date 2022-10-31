@@ -197,7 +197,7 @@ public class TaskResultService {
                 }
             }
         });
-        firstRow.add("Przewidywana ocena końcowa");
+        firstRow.add("Zadanie:Proponowane oceny");
     }
 
     private Activity getActivity(Long activityID) {
