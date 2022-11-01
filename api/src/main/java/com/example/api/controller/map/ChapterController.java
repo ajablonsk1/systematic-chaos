@@ -1,9 +1,11 @@
 package com.example.api.controller.map;
 
 import com.example.api.dto.request.map.ChapterForm;
+import com.example.api.dto.request.map.ChapterRequirementForm;
 import com.example.api.dto.request.map.EditChapterForm;
-import com.example.api.dto.response.map.ChapterInfoResponse;
-import com.example.api.dto.response.map.ChapterResponse;
+import com.example.api.dto.response.map.RequirementResponse;
+import com.example.api.dto.response.map.chapter.ChapterInfoResponse;
+import com.example.api.dto.response.map.chapter.ChapterResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
@@ -24,7 +26,7 @@ public class ChapterController {
     private final ChapterService chapterService;
 
     @GetMapping
-    public ResponseEntity<List<ChapterResponse>> getAllChapters() {
+    public ResponseEntity<List<? extends ChapterResponse>> getAllChapters() {
         return ResponseEntity.ok().body(chapterService.getAllChapters());
     }
 
@@ -48,6 +50,18 @@ public class ChapterController {
     @PutMapping("/edit")
     public ResponseEntity<?> editChapter(@RequestBody EditChapterForm editChapterForm) throws RequestValidationException {
         chapterService.editChapter(editChapterForm);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/requirements")
+    ResponseEntity<RequirementResponse> getRequirementsForChapter(@RequestParam Long chapterId)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok().body(chapterService.getRequirementsForChapter(chapterId));
+    }
+
+    @PostMapping("/requirements/update")
+    ResponseEntity<?> updateRequirementForChapter(@RequestBody ChapterRequirementForm form) throws RequestValidationException {
+        chapterService.updateRequirementForChapter(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

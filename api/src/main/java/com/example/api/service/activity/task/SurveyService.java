@@ -81,7 +81,7 @@ public class SurveyService {
                 form,
                 professor
         );
-        survey.setRequirements(requirementService.getDefaultRequirements());
+        survey.setRequirements(requirementService.getDefaultRequirements(true));
         surveyRepo.save(survey);
         chapter.getActivityMap().getSurveys().add(survey);
     }

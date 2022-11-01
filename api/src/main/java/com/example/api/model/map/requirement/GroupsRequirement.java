@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class GroupsRequirement extends Requirement {
-    @OneToMany
+    @ManyToMany
     private List<Group> allowedGroups = new LinkedList<>();
 
     public GroupsRequirement(String name, Boolean isSelected, List<Group> allowedGroups) {

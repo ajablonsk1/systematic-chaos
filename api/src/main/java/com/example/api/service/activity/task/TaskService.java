@@ -26,13 +26,11 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.InfoRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.map.ChapterRepo;
-import com.example.api.repo.map.RequirementRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.validator.MapValidator;
+import com.example.api.service.map.RequirementService;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
-import com.example.api.util.visitor.RequirementValueVisitor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -57,12 +55,10 @@ public class TaskService {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final UserRepo userRepo;
     private final ChapterRepo chapterRepo;
-    private final RequirementRepo requirementRepo;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
     private final ActivityValidator activityValidator;
-    private final MapValidator mapValidator;
-    private final RequirementValueVisitor requirementValueVisitor;
+    private final RequirementService requirementService;
 
     public List<ActivityToEvaluateResponse> getAllActivitiesToEvaluate()
             throws WrongUserTypeException, UsernameNotFoundException {
@@ -153,20 +149,14 @@ public class TaskService {
     }
 
 
-    public void addRequirementToActivity(ActivityRequirementForm form) throws RequestValidationException {
+    public void updateRequirementForActivity(ActivityRequirementForm form) throws RequestValidationException {
         Activity activity = getActivity(form.getActivityId());
         Boolean isBlocked = form.getIsBlocked();
         if(isBlocked != null) {
             activity.setIsBlocked(isBlocked);
         }
         List<RequirementForm> requirementForms = form.getRequirements();
-        for (RequirementForm requirementForm: requirementForms) {
-            Requirement requirement = requirementRepo.findRequirementById(requirementForm.getId());
-            mapValidator.validateRequirementIsNotNull(requirement, requirementForm.getId());
-
-            requirement.setSelected(requirementForm.getSelected());
-            requirement.setValue(requirementValueVisitor, requirementForm.getValue());
-        }
+        requirementService.updateRequirements(requirementForms);
     }
 
     public Activity getActivity(Long id) throws EntityNotFoundException {

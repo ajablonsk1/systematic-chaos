@@ -81,7 +81,7 @@ public class InfoService {
                 professor,
                 imageUrls
         );
-        info.setRequirements(requirementService.getDefaultRequirements());
+        info.setRequirements(requirementService.getDefaultRequirements(true));
         infoRepo.save(info);
         chapter.getActivityMap().getInfos().add(info);
     }

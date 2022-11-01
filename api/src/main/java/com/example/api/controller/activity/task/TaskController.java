@@ -45,9 +45,9 @@ public class TaskController {
         return ResponseEntity.ok().body(taskService.getRequirementsForActivity(activityId));
     }
 
-    @PostMapping("/requirements/add")
-    ResponseEntity<?> addRequirementToActivity(@RequestBody ActivityRequirementForm form) throws RequestValidationException {
-        taskService.addRequirementToActivity(form);
+    @PostMapping("/requirements/update")
+    ResponseEntity<?> updateRequirementForActivity(@RequestBody ActivityRequirementForm form) throws RequestValidationException {
+        taskService.updateRequirementForActivity(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

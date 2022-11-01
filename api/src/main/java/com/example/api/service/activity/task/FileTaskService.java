@@ -108,7 +108,7 @@ public class FileTaskService {
         userValidator.validateProfessorAccount(professor, email);
 
         FileTask fileTask = new FileTask(form, professor);
-        fileTask.setRequirements(requirementService.getDefaultRequirements());
+        fileTask.setRequirements(requirementService.getDefaultRequirements(true));
         fileTaskRepo.save(fileTask);
         chapter.getActivityMap().getFileTasks().add(fileTask);
     }
