@@ -14,6 +14,7 @@ import { successToast } from '../../../../utils/toasts'
 import { isMobileView } from '../../../../utils/mobileHelper'
 import UserService from '../../../../services/user.service'
 import Loader from '../../../general/Loader/Loader'
+import BadgeCreationForm from './BadgeCreationForm'
 
 function RankAndBadgesManagement(props) {
   const isMobileDisplay = isMobileView()
@@ -27,6 +28,7 @@ function RankAndBadgesManagement(props) {
   const [chosenItem, setChosenItem] = useState(undefined)
   const [errorMessage, setErrorMessage] = useState(undefined)
   const [badgesList, setBadgesList] = useState(null)
+  const [isBadgeAdditionModalOpen, setIsBadgeAdditionModalOpen] = useState(false)
 
   const getRanksList = () => {
     RankService.getAllRanks()
@@ -38,7 +40,7 @@ function RankAndBadgesManagement(props) {
       })
   }
 
-  useEffect(() => {
+  const getBadgesList = () => {
     UserService.getAllBadges()
       .then((response) => {
         setBadgesList(response)
@@ -46,22 +48,40 @@ function RankAndBadgesManagement(props) {
       .catch(() => {
         setBadgesList(null)
       })
-  }, [])
+  }
+
+  const updateView = () => {
+    getRanksList()
+    getBadgesList()
+  }
 
   useEffect(() => {
     getRanksList()
+    getBadgesList()
   }, [])
 
-  const deleteRank = () => {
-    RankService.deleteRank(chosenItem.id)
-      .then(() => {
-        successToast('Ranga usunięta pomyślnie')
-        setIsDeleteModalOpen(false)
-        getRanksList()
-      })
-      .catch((error) => {
-        setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
-      })
+  const deleteElement = () => {
+    if (chosenItem.type === 'RANK') {
+      RankService.deleteRank(chosenItem.id)
+        .then(() => {
+          successToast('Ranga usunięta pomyślnie')
+          setIsDeleteModalOpen(false)
+          getRanksList()
+        })
+        .catch((error) => {
+          setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
+        })
+    } else if (chosenItem.type === 'BADGE') {
+      UserService.deleteBadge(chosenItem.id)
+        .then(() => {
+          successToast('Odznaka usunięta pomyślnie')
+          setIsDeleteModalOpen(false)
+          getBadgesList()
+        })
+        .catch((error) => {
+          setErrorMessage(error.response?.data?.message ?? ERROR_OCCURRED)
+        })
+    }
   }
 
   const ranksContent = useMemo(() => {
@@ -91,7 +111,7 @@ function RankAndBadgesManagement(props) {
                 ])}
                 deleteIconCallback={(idx) => {
                   setIsDeleteModalOpen(true)
-                  setChosenItem({ id: rank.ranks[idx].rankId })
+                  setChosenItem({ id: rank.ranks[idx].rankId, type: 'RANK' })
                 }}
                 editIconCallback={(idx) => {
                   setEditedDataType('RANKS')
@@ -119,7 +139,7 @@ function RankAndBadgesManagement(props) {
   const badgesContent = useMemo(() => {
     return (
       <>
-        <div className={'text-center'} style={{ maxHeight: '100%', overflow: 'auto' }}>
+        <div className={'text-center'} style={{ maxHeight: '90%', overflow: 'auto' }}>
           {badgesList === undefined ? (
             <Loader />
           ) : badgesList == null ? (
@@ -137,12 +157,25 @@ function RankAndBadgesManagement(props) {
                 setIsEditModalOpen(true)
                 setChosenItem({ item: badgesList[idx] })
               }}
+              deleteIconCallback={(idx) => {
+                setIsDeleteModalOpen(true)
+                setChosenItem({ id: badgesList[idx].id, type: 'BADGE' })
+              }}
             />
           )}
         </div>
+        <Button
+          className={'my-3 start-50 translate-middle-x position-relative'}
+          onClick={() => {
+            setIsBadgeAdditionModalOpen(true)
+          }}
+          style={{ backgroundColor: props.theme.success, borderColor: props.theme.success }}
+        >
+          Dodaj nową odznakę
+        </Button>
       </>
     )
-  }, [badgesList])
+  }, [badgesList, props.theme.success])
 
   return (
     <Content>
@@ -167,7 +200,10 @@ function RankAndBadgesManagement(props) {
           >
             Anuluj
           </Button>
-          <Button style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }} onClick={deleteRank}>
+          <Button
+            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger }}
+            onClick={deleteElement}
+          >
             Usuń
           </Button>
         </ModalFooter>
@@ -184,7 +220,7 @@ function RankAndBadgesManagement(props) {
         </ModalHeader>
         <ModalBody>
           <EditionForm
-            onSuccess={getRanksList}
+            onSuccess={updateView}
             formVariant={editedDataType}
             setModalOpen={setIsEditModalOpen}
             item={chosenItem}
@@ -202,6 +238,15 @@ function RankAndBadgesManagement(props) {
             setModalOpen={setIsRankAdditionModalOpen}
             onSuccess={getRanksList}
           />
+        </ModalBody>
+      </Modal>
+
+      <Modal show={isBadgeAdditionModalOpen} onHide={() => setIsBadgeAdditionModalOpen(false)}>
+        <ModalHeader>
+          <h5>Dodawanie nowej odznaki</h5>
+        </ModalHeader>
+        <ModalBody>
+          <BadgeCreationForm setModalOpen={setIsBadgeAdditionModalOpen} onSuccess={getBadgesList} />
         </ModalBody>
       </Modal>
     </Content>

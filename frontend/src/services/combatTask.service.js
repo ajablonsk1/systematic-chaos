@@ -1,4 +1,4 @@
-import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiPost, axiosApiSendFile } from '../utils/axios'
+import { axiosApiDelete, axiosApiDownloadFile, axiosApiGet, axiosApiPost, axiosApiMultipartPost } from '../utils/axios'
 
 import {
   GET_TASK_FILE,
@@ -34,7 +34,7 @@ class CombatTaskService {
   }
 
   saveCombatTaskAnswer(taskId, openAnswer, fileName, fileBlob) {
-    return axiosApiSendFile(POST_TASK_FILE_RESULT_FILE, {
+    return axiosApiMultipartPost(POST_TASK_FILE_RESULT_FILE, {
       fileTaskId: taskId,
       openAnswer: openAnswer,
       fileName: fileName,

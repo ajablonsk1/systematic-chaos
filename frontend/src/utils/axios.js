@@ -43,7 +43,7 @@ export function axiosApiDelete(url, params) {
     })
 }
 
-export function axiosApiSendFile(url, body) {
+export function axiosApiMultipartPost(url, body) {
   const formData = getFormData(body)
 
   return axios
@@ -55,7 +55,7 @@ export function axiosApiSendFile(url, body) {
     })
 }
 
-export function axiosApiPutFile(url, body) {
+export function axiosApiMultipartPut(url, body) {
   const formData = getFormData(body)
 
   return axios

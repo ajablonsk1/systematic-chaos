@@ -38,7 +38,7 @@ public class CSVConverter implements Converter<Map<User, List<CSVTaskResult>>> {
                     .map(CSVTaskResult::toStringList)
                     .flatMap(List::stream)
                     .toList();
-            row = Stream.of(userData, row, List.of(studentGrade.toString()))
+            row = Stream.of(userData, row, studentGrade == null ? List.of("-") : List.of(studentGrade.toString()))
                     .flatMap(List::stream)
                     .toList();
             csv.add(row);

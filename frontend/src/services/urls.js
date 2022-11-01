@@ -145,7 +145,7 @@ export const DELETE_ACTIVITY = ACTIVITY + '/delete'
 
 // Ranks Controller
 const RANK = BASE_URL + '/rank'
-export const PUT_RANK = RANK + '/edit'
+export const PUT_RANK_UPDATE = RANK + '/update'
 export const POST_RANK = RANK + '/add'
 export const GET_RANK_CURRENT = RANK + '/current'
 export const GET_RANK_ALL = RANK + '/all'
@@ -155,6 +155,9 @@ export const DELETE_RANK = RANK + '/delete'
 const BADGE = BASE_URL + '/badge'
 export const GET_BADGE_ALL = BADGE + '/all'
 export const GET_BADGE_UNLOCKED_ALL = BADGE + '/unlocked/all'
+export const DELETE_BADGE = BADGE + '/delete'
+export const ADD_BADGE = BADGE + '/add'
+export const PUT_BADGE_UPDATE = BADGE + '/update'
 
 // Grade Controller
 export const GET_GRADES = BASE_URL + '/grades'
