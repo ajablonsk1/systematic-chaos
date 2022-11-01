@@ -17,6 +17,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import java.io.IOException;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -50,8 +51,6 @@ public class TopScoreBadge extends Badge{
         this.topScore = validator.validateAndGetDoubleValue(form.getValue());
 
         Boolean forGroup = form.getForGroup();
-        if (forGroup != null) {
-            this.forGroup = forGroup;
-        }
+        this.forGroup = Objects.requireNonNullElse(forGroup, false);
     }
 }
