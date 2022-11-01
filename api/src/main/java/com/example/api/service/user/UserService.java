@@ -196,4 +196,13 @@ public class UserService implements UserDetailsService {
                 .filter(additionalPoint -> additionalPoint.getProfessorEmail().equals(from.getEmail()))
                 .forEach(additionalPoint -> additionalPoint.setProfessorEmail(to.getEmail()));
     }
+
+    public List<String> getAllProfEmails() {
+        User user = getCurrentUser();
+        return userRepo.findAllByAccountTypeEquals(AccountType.PROFESSOR)
+                .stream()
+                .map(User::getEmail)
+                .filter(email -> !email.equals(user.getEmail()))
+                .toList();
+    }
 }

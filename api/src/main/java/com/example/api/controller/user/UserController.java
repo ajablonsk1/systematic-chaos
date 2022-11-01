@@ -120,4 +120,9 @@ public class UserController {
         userService.deleteStudentAccount();
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/user/professor/emails")
+    public ResponseEntity<List<String>> getAllProfEmails() {
+        return ResponseEntity.ok().body(userService.getAllProfEmails());
+    }
 }
