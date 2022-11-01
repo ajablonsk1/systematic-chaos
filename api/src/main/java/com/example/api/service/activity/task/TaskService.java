@@ -20,6 +20,7 @@ import com.example.api.model.map.ActivityMap;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.map.requirement.Requirement;
 import com.example.api.model.user.User;
+import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
@@ -55,6 +56,7 @@ public class TaskService {
     private final FileTaskResultRepo fileTaskResultRepo;
     private final UserRepo userRepo;
     private final ChapterRepo chapterRepo;
+    private final AdditionalPointsRepo additionalPointsRepo;
     private final AuthenticationService authService;
     private final UserValidator userValidator;
     private final ActivityValidator activityValidator;
@@ -162,7 +164,7 @@ public class TaskService {
     public Activity getActivity(Long id) throws EntityNotFoundException {
         if (graphTaskRepo.existsById(id)) {
             return graphTaskRepo.findGraphTaskById(id);
-        } else if (fileTaskRepo.existsById(id)){
+        } else if (fileTaskRepo.existsById(id)) {
             return fileTaskRepo.findFileTaskById(id);
         } else if (surveyRepo.existsById(id)) {
             return surveyRepo.findSurveyById(id);

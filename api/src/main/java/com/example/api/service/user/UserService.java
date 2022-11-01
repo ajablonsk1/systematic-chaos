@@ -6,10 +6,10 @@ import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.request.user.SetStudentIndexForm;
 import com.example.api.dto.response.user.BasicStudent;
 import com.example.api.error.exception.*;
-import com.example.api.model.activity.task.Info;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
+import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.InfoRepo;
@@ -17,8 +17,6 @@ import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
-import com.example.api.service.activity.result.TaskResultService;
-import com.example.api.service.activity.task.TaskService;
 import com.example.api.service.user.util.ProfessorRegisterToken;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +40,11 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final GroupRepo groupRepo;
-    private final TaskService taskService;
+    private final GraphTaskRepo graphTaskRepo;
+    private final FileTaskRepo fileTaskRepo;
+    private final SurveyRepo surveyRepo;
+    private final InfoRepo infoRepo;
+    private final AdditionalPointsRepo additionalPointsRepo;
     private final AuthenticationService authService;
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
@@ -156,13 +158,42 @@ public class UserService implements UserDetailsService {
         return professorRegisterToken.getToken();
     }
 
-    public void deleteUserAccount() {
+    public void deleteProfessorAccount(String email) throws WrongUserTypeException {
         User user = getCurrentUser();
+        User professor = userRepo.findUserByEmail(email);
+        userValidator.validateProfessorAccount(professor, email);
+        userValidator.validateProfessorAccount(user, user.getEmail());
 
-        if (user.getAccountType() == AccountType.PROFESSOR) {
-            List<GRa>
-        }
-
+        changeUserForActivitiesAndAdditionalPoints(user, professor);
         userRepo.delete(user);
+    }
+
+    public void deleteStudentAccount() throws WrongUserTypeException {
+        User user = getCurrentUser();
+        userValidator.validateStudentAccount(user, user.getEmail());
+        userRepo.delete(user);
+    }
+
+    private void changeUserForActivitiesAndAdditionalPoints(User from, User to){
+        graphTaskRepo.findAll()
+                .stream()
+                .filter(graphTask -> graphTask.getProfessor() == from)
+                .forEach(graphTask -> graphTask.setProfessor(to));
+        fileTaskRepo.findAll()
+                .stream()
+                .filter(fileTask -> fileTask.getProfessor() == from)
+                .forEach(fileTask -> fileTask.setProfessor(to));
+        surveyRepo.findAll()
+                .stream()
+                .filter(survey -> survey.getProfessor() == from)
+                .forEach(survey -> survey.setProfessor(to));
+        infoRepo.findAll()
+                .stream()
+                .filter(info -> info.getProfessor() == from)
+                .forEach(info -> info.setProfessor(to));
+        additionalPointsRepo.findAll()
+                .stream()
+                .filter(additionalPoint -> additionalPoint.getProfessorEmail().equals(from.getEmail()))
+                .forEach(additionalPoint -> additionalPoint.setProfessorEmail(to.getEmail()));
     }
 }
