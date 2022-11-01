@@ -16,6 +16,7 @@ import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
+import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.result.GraphTaskResultRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;

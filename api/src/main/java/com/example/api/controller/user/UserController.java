@@ -108,4 +108,10 @@ public class UserController {
     public ResponseEntity<String> getProfessorRegisterToken() throws WrongUserTypeException {
         return ResponseEntity.ok().body(userService.getProfessorRegisterToken());
     }
+
+    @DeleteMapping("/user/delete")
+    public ResponseEntity<?> deleteUserAccount() {
+        userService.deleteUserAccount();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

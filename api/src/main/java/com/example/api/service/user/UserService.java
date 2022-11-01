@@ -6,12 +6,19 @@ import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.request.user.SetStudentIndexForm;
 import com.example.api.dto.response.user.BasicStudent;
 import com.example.api.error.exception.*;
+import com.example.api.model.activity.task.Info;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
+import com.example.api.repo.activity.task.FileTaskRepo;
+import com.example.api.repo.activity.task.GraphTaskRepo;
+import com.example.api.repo.activity.task.InfoRepo;
+import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.activity.result.TaskResultService;
+import com.example.api.service.activity.task.TaskService;
 import com.example.api.service.user.util.ProfessorRegisterToken;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +42,7 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final GroupRepo groupRepo;
+    private final TaskService taskService;
     private final AuthenticationService authService;
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
@@ -146,5 +154,15 @@ public class UserService implements UserDetailsService {
 
         log.info("Professor {} fetch ProfessorRegisterToken", user.getEmail());
         return professorRegisterToken.getToken();
+    }
+
+    public void deleteUserAccount() {
+        User user = getCurrentUser();
+
+        if (user.getAccountType() == AccountType.PROFESSOR) {
+            List<GRa>
+        }
+
+        userRepo.delete(user);
     }
 }

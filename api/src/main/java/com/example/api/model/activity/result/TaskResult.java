@@ -8,6 +8,8 @@ import com.example.api.model.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -22,6 +24,7 @@ public abstract class TaskResult {
     private Long id;
 
     @OneToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     private Double pointsReceived;

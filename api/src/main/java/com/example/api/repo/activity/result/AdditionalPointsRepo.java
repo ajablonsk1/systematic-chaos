@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface AdditionalPointsRepo extends JpaRepository<AdditionalPoints, Long> {
     List<AdditionalPoints> findAllByUser(User user);
+    void deleteAllByUser(User user);
 }

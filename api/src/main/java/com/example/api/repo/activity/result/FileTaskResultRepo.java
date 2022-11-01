@@ -14,4 +14,5 @@ public interface FileTaskResultRepo extends JpaRepository<FileTaskResult, Long> 
     FileTaskResult findFileTaskResultByFileTaskAndUser(FileTask fileTask, User user);
     List<FileTaskResult> findAllByUser(User user);
     List<FileTaskResult> findAllByFileTask(FileTask fileTask);
+    void deleteAllByUser(User user);
 }
