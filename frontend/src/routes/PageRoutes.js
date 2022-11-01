@@ -31,7 +31,10 @@ export const TeacherRoutes = {
   GAME_MANAGEMENT: {
     MAIN: '/game-management',
     GROUPS: '/game-management/groups',
-    CHAPTER: '/game-management/chapter',
+    CHAPTER: {
+      MAIN: '/game-management/chapter',
+      REQUIREMENTS: '/game-management/chapter/:name/:id/requirements'
+    },
     RANKS_AND_BADGES: '/game-management/ranks-and-badges',
     GAME_SETTINGS: '/game-management/game-settings'
   },

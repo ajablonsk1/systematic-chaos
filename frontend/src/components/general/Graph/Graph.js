@@ -4,6 +4,7 @@ import klay from 'cytoscape-klay'
 import { cytoscapeStylesheet } from './cytoscapeStyle'
 import { getLayoutConfig } from './layoutConfigs'
 import { createLabelsAndNodes } from './graphHelper'
+import { errorToast } from '../../../utils/toasts'
 
 /* @props
  *   - elements: list of edges and nodes
@@ -44,7 +45,11 @@ function Graph(props) {
       })
 
       graph.current.on('tap', 'node', (e) => {
-        props.onNodeClick(e.target.id())
+        if (!e.target.data().isBlocked) {
+          props.onNodeClick(e.target.id())
+        } else {
+          errorToast('Nie spełniasz wymagań potrzebnych do odblokowania rozdziału.', false, 'top-center')
+        }
       })
 
       if (props.movable === false) {

@@ -7,9 +7,9 @@ import { debounce } from 'lodash/function'
 import ActivityService from '../../../../services/activity.service'
 import { useLocation } from 'react-router-dom'
 import ActivityStats from './ActivityStats'
-import ActivityRequirements from './ActivityRequirements/ActivityRequirements'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
+import Requirements from '../Requirements/Requirements'
 
 function ActivityDetails(props) {
   const location = useLocation()
@@ -81,7 +81,14 @@ function ActivityDetails(props) {
           <ActivityStats activityId={activityId} activityType={activityType} />
         </Tab>
         <Tab eventKey={'requirements'} title={'Wymagania'}>
-          <ActivityRequirements activityId={activityId} />
+          <Requirements
+            id={activityId}
+            getRequirementsCallback={ActivityService.getActivityRequirements}
+            updateRequirementsCallback={ActivityService.setActivityRequirements}
+            tableTitle={
+              'Lista wymagań, które student musi spełnić, żeby odblokować możliwość wykonania tej aktywności:'
+            }
+          />
         </Tab>
       </TabsContainer>
       <Modal show={isStudentAnswerModalOpen} onHide={() => setIsStudentAnswerModalOpen(false)} size={'lg'}>

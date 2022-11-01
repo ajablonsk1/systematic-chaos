@@ -1,19 +1,22 @@
+import { useEffect, useState } from 'react'
 import { Content } from '../../App/AppGeneralStyles'
-import { Col, Container, Row, Spinner, Table } from 'react-bootstrap'
+import { Col, Container, OverlayTrigger, Row, Spinner, Table } from 'react-bootstrap'
 import { GameCardOptionPick } from '../../general/GameCardStyles'
 import GameButton from './GameButton'
 import ManagementCard from './ManagementCard'
 import { useNavigate } from 'react-router-dom'
 import { TableBodyRow } from './TableStyles'
 import GameLoaderModal from './GameLoader/GameLoaderModal'
-import { useEffect, useState } from 'react'
 import ChapterService from '../../../services/chapter.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import ChapterModal from './ChapterModal/ChapterModal'
 import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../utils/mobileHelper'
+import { CustomTooltip } from '../ChapterDetails/ChapterDetailsStyles'
 
+const chapterBlockedInfo =
+  'Ten rozdział został ukryty dla studentów i nie mogą go zobaczyć. Aby przywrócić widoczność, przejdź do ustawień wymagań dla rozdziału.'
 function GameManagement(props) {
   const navigate = useNavigate()
 
@@ -37,7 +40,7 @@ function GameManagement(props) {
   }
 
   const goToChapterDetailsView = (chapterName, chapterId) => {
-    navigate(TeacherRoutes.GAME_MANAGEMENT.CHAPTER + `/${chapterName}/${chapterId}`)
+    navigate(TeacherRoutes.GAME_MANAGEMENT.CHAPTER.MAIN + `/${chapterName}/${chapterId}`)
   }
 
   const downloadBackupFile = () => {
@@ -90,16 +93,28 @@ function GameManagement(props) {
                         </tr>
                       ) : (
                         chapterList.map((chapter, index) => (
-                          <TableBodyRow
-                            $background={props.theme.primary}
+                          <OverlayTrigger
                             key={index}
-                            onClick={() => goToChapterDetailsView(chapter.name, chapter.id)}
+                            placement='top'
+                            overlay={
+                              chapter.isBlocked ? (
+                                <CustomTooltip style={{ position: 'fixed' }}>{chapterBlockedInfo}</CustomTooltip>
+                              ) : (
+                                <></>
+                              )
+                            }
                           >
-                            <td>{chapter.name}</td>
-                            <td className='text-center'>{chapter.noActivities}</td>
-                            <td className='text-center'>{chapter.maxPoints}</td>
-                            <td className='text-center'>{chapter.mapSize}</td>
-                          </TableBodyRow>
+                            <TableBodyRow
+                              $background={props.theme.primary}
+                              onClick={() => goToChapterDetailsView(chapter.name, chapter.id)}
+                              style={{ opacity: chapter.isBlocked ? 0.4 : 1 }}
+                            >
+                              <td>{chapter.name}</td>
+                              <td className='text-center'>{chapter.noActivities}</td>
+                              <td className='text-center'>{chapter.maxPoints}</td>
+                              <td className='text-center'>{chapter.mapSize}</td>
+                            </TableBodyRow>
+                          </OverlayTrigger>
                         ))
                       )}
                     </tbody>

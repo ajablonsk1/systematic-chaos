@@ -90,7 +90,8 @@ export const gameNodeStyle = (node) => {
     width: parseFloat(node.data().size) * 5 + 'px',
     height: parseFloat(node.data().size) * 5 + 'px',
     zIndex: 10,
-    fontFamily: FONT_FAMILY
+    fontFamily: FONT_FAMILY,
+    opacity: node.data().isBlocked ? 0.5 : 1
   }
 }
 

@@ -153,6 +153,10 @@ function ChapterDetails(props) {
       })
   }
 
+  const goToRequirements = () => {
+    navigate(TeacherRoutes.GAME_MANAGEMENT.CHAPTER.REQUIREMENTS, { state: { chapterId: chapterId } })
+  }
+
   return (
     <Content style={{ overflowX: 'hidden', marginBottom: isMobileView() ? 60 : 0 }}>
       <Row className={'px-0 m-0'} style={{ height: '100vh' }}>
@@ -213,7 +217,7 @@ function ChapterDetails(props) {
                     <ListGroupItem>Aktualny rozmiar mapy: {chapterDetails.mapSize}</ListGroupItem>
                     <ListGroupItem>
                       <Row className={'d-flex align-items-center'}>
-                        <Col xs={10}>Warunki odblokowania kolejnego rozdziału:</Col>
+                        <Col xs={10}>Wymagania odblokowania rozdziału:</Col>
                         <Col xs={2} className={'text-end'}>
                           <FontAwesomeIcon
                             icon={openConditionsList ? faArrowUp : faArrowDown}
@@ -224,11 +228,8 @@ function ChapterDetails(props) {
                         </Col>
                       </Row>
                       <Collapse in={openConditionsList}>
-                        <div id='conditions'>
-                          <ol>
-                            <li>uczestnik musi zdobyć 300 pkt</li>
-                            <li>data po 15.10.2022</li>
-                          </ol>
+                        <div id='conditions' onClick={goToRequirements} style={{ cursor: 'pointer' }}>
+                          Przejdź do ustawień
                         </div>
                       </Collapse>
                     </ListGroupItem>

@@ -8,6 +8,7 @@ import ChapterDetails from '../../../components/professor/ChapterDetails/Chapter
 import RankAndBadgesManagement from '../../../components/professor/GameManagement/RanksAndBadges/RankAndBadgesManagement'
 import ActivityDetails from '../../../components/professor/GameManagement/ActivityDetails/ActivityDetails'
 import GameSettings from '../../../components/professor/GameManagement/GameSettings/GameSettings'
+import ChapterRequirements from '../../../components/professor/ChapterDetails/ChapterRequirements/ChapterRequirements'
 
 export default function GameManagementRoutes() {
   return (
@@ -35,6 +36,15 @@ export default function GameManagementRoutes() {
         element={
           <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <ChapterDetails />
+          </PageGuard>
+        }
+      />
+
+      <Route
+        path={'chapter/:name/:id/requirements'}
+        element={
+          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
+            <ChapterRequirements />
           </PageGuard>
         }
       />

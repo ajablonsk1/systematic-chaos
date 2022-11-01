@@ -1,39 +1,40 @@
 import React, { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 import { Row, Button, Spinner, Form } from 'react-bootstrap'
-import { ERROR_OCCURRED, RequirementType } from '../../../../../utils/constants'
-import { CustomTable } from '../../../../student/GameCardPage/gameCardContentsStyle'
-import { CheckBox, Input, Select, Switch } from './activityRequirementsForms'
+import { ERROR_OCCURRED, RequirementType } from '../../../../utils/constants'
+import { CustomTable } from '../../../student/GameCardPage/gameCardContentsStyle'
+import { CheckBox, Input, Select, Switch } from './requirementsForms'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import { onInputChange, onMultiSelectChange } from './formHelpers'
 import 'react-datepicker/dist/react-datepicker.css'
 import pl from 'date-fns/locale/pl'
-import CreatableInput from '../../../../general/CreatableInput/CreatableInput'
-import ActivityService from '../../../../../services/activity.service'
-import { successToast } from '../../../../../utils/toasts'
+import CreatableInput from '../../../general/CreatableInput/CreatableInput'
+import { successToast } from '../../../../utils/toasts'
 import { connect } from 'react-redux'
-import { isMobileView } from '../../../../../utils/mobileHelper'
+import { isMobileView } from '../../../../utils/mobileHelper'
 
 registerLocale('pl', pl)
 
-function ActivityRequirements(props) {
+function Requirements(props) {
   const [requirementsList, setRequirementsList] = useState(undefined)
   const [multiSelectLists, setMultiSelectLists] = useState([])
   const [onSaveError, setOnSaveError] = useState('')
   const [isSaving, startSaving] = useTransition()
-  const [isActivityBlocked, setIsActivityBlocked] = useState(false)
+  const [isElementBlocked, setIsElementBlocked] = useState(false)
 
   const blockadeRef = useRef()
 
   useEffect(() => {
-    ActivityService.getActivityRequirements(props.activityId)
+    props
+      .getRequirementsCallback(props.id)
       .then((response) => {
         setRequirementsList(response.requirements.map((requirement) => ({ ...requirement, answer: null })))
-        setIsActivityBlocked(response.isBlocked)
+        setIsElementBlocked(response.isBlocked)
       })
       .catch(() => {
         setRequirementsList(null)
       })
-  }, [props.activityId])
+    // eslint-disable-next-line
+  }, [props.id])
 
   useEffect(() => {
     onMultiSelectChange(setRequirementsList, multiSelectLists)
@@ -78,11 +79,8 @@ function ActivityRequirements(props) {
           value: getAnswer(r)
         }
       })
-      ActivityService.setActivityRequirements(
-        props.activityId,
-        requirementsToSend,
-        blockadeRef?.current?.checked ?? false
-      )
+      props
+        .updateRequirementsCallback(props.id, requirementsToSend, blockadeRef?.current?.checked ?? false)
         .then(() => {
           successToast()
         })
@@ -150,7 +148,7 @@ function ActivityRequirements(props) {
             <tbody>
               <tr className={'position-sticky top-0'} style={{ zIndex: 100 }}>
                 <th className={'text-center'} colSpan={3}>
-                  Lista wymagań, które student musi spełnić, żeby odblokować możliwość wykonania tej aktywności:
+                  {props.tableTitle}
                 </th>
               </tr>
               {requirementsList === undefined ? (
@@ -181,9 +179,9 @@ function ActivityRequirements(props) {
           <Form.Check
             ref={blockadeRef}
             className={'pt-3'}
-            checked={isActivityBlocked}
-            onChange={(e) => setIsActivityBlocked(e.target.checked)}
-            label={'Zablokuj aktywność i ukryj przed studentami'}
+            checked={isElementBlocked}
+            onChange={(e) => setIsElementBlocked(e.target.checked)}
+            label={'Zablokuj dostęp studentom'}
           ></Form.Check>
         </Row>
       </Row>
@@ -204,4 +202,4 @@ function mapStateToProps(state) {
 
   return { theme }
 }
-export default connect(mapStateToProps)(ActivityRequirements)
+export default connect(mapStateToProps)(Requirements)
