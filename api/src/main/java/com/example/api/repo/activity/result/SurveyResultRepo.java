@@ -14,5 +14,4 @@ public interface SurveyResultRepo extends JpaRepository<SurveyResult, Long> {
     SurveyResult findSurveyResultById(Long id);
     SurveyResult findSurveyResultBySurveyAndUser(Survey survey, User user);
     List<SurveyResult> findAllBySurvey(Survey survey);
-    void deleteAllByUser(User user);
 }
