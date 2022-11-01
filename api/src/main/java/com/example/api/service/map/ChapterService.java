@@ -179,7 +179,7 @@ public class ChapterService {
         return new RequirementResponse(chapter.getIsBlocked(), requirements);
     }
 
-    public void addRequirementToChapter(ChapterRequirementForm form) throws RequestValidationException {
+    public void updateRequirementForChapter(ChapterRequirementForm form) throws RequestValidationException {
         Chapter chapter = chapterRepo.findChapterById(form.getChapterId());
         Boolean isBlocked = form.getIsBlocked();
         if(isBlocked != null) {

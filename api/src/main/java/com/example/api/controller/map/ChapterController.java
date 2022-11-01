@@ -59,9 +59,9 @@ public class ChapterController {
         return ResponseEntity.ok().body(chapterService.getRequirementsForChapter(chapterId));
     }
 
-    @PostMapping("/requirements/add")
-    ResponseEntity<?> addRequirementToChapter(@RequestBody ChapterRequirementForm form) throws RequestValidationException {
-        chapterService.addRequirementToChapter(form);
+    @PostMapping("/requirements/update")
+    ResponseEntity<?> updateRequirementForChapter(@RequestBody ChapterRequirementForm form) throws RequestValidationException {
+        chapterService.updateRequirementForChapter(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

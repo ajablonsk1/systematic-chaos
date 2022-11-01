@@ -149,7 +149,7 @@ public class TaskService {
     }
 
 
-    public void addRequirementToActivity(ActivityRequirementForm form) throws RequestValidationException {
+    public void updateRequirementForActivity(ActivityRequirementForm form) throws RequestValidationException {
         Activity activity = getActivity(form.getActivityId());
         Boolean isBlocked = form.getIsBlocked();
         if(isBlocked != null) {
