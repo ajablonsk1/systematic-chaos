@@ -1,5 +1,6 @@
 package com.example.api.dto.request.user.badge;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BadgeAddForm extends BadgeForm{
-    private BadgeType type;
+    @Schema(required = true) private BadgeType type;
 }

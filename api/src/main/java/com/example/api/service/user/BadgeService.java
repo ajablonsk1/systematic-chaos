@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -41,6 +42,7 @@ public class BadgeService {
     public List<? extends BadgeResponse<?>> getAllBadges() {
         return badgeRepo.findAll()
                 .stream()
+                .sorted(Comparator.comparingLong(Badge::getId))
                 .map(Badge::getResponse)
                 .toList();
     }

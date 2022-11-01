@@ -2,6 +2,7 @@ package com.example.api.model.user.badge;
 
 import com.example.api.dto.request.user.badge.BadgeUpdateForm;
 import com.example.api.dto.response.user.badge.BadgeResponse;
+import com.example.api.dto.response.user.badge.BadgeResponseTopScore;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.RequestValidationException;
@@ -16,6 +17,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import java.io.IOException;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -39,9 +41,8 @@ public class TopScoreBadge extends Badge{
 
     @Override
     public BadgeResponse<?> getResponse() {
-        BadgeResponse<Double> response = new BadgeResponse<>(this);
+        BadgeResponse<Double> response = new BadgeResponseTopScore(this);
         response.setValue(topScore);
-        response.setForGroup(forGroup);
         return response;
     }
 
@@ -50,8 +51,6 @@ public class TopScoreBadge extends Badge{
         this.topScore = validator.validateAndGetDoubleValue(form.getValue());
 
         Boolean forGroup = form.getForGroup();
-        if (forGroup != null) {
-            this.forGroup = forGroup;
-        }
+        this.forGroup = Objects.requireNonNullElse(forGroup, false);
     }
 }

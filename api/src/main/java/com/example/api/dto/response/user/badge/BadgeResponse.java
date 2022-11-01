@@ -13,7 +13,6 @@ public class BadgeResponse<T> {
     private String description;
     private ByteFileResponse file;
     private T value;
-    private Boolean forGroup;
 
     public BadgeResponse(Badge badge) {
         this.id = badge.getId();
