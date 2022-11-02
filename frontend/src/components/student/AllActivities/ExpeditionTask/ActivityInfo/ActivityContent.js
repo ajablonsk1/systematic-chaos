@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Col, Row, Spinner } from 'react-bootstrap'
 import { Activity, ERROR_OCCURRED, getActivityImg, getActivityTypeName } from '../../../../../utils/constants'
 import { useEffect, useMemo, useState } from 'react'
-
-import StudentService from '../../../../../services/student.service'
 import { convertDateToStringInfo } from '../../../../../utils/Api'
 import ExpeditionService from '../../../../../services/expedition.service'
 import { CustomTable } from '../../../GameCardPage/gameCardContentsStyle'
@@ -16,13 +14,11 @@ import { isMobileView } from '../../../../../utils/mobileHelper'
 
 function ActivityContent(props) {
   const isMobileDisplay = isMobileView()
-
   const navigate = useNavigate()
   const activityId = props.activityId
-
-  const [activityScore, setActivityScore] = useState(undefined)
   const [startDate, setStartDate] = useState(undefined)
   const [endDate, setEndDate] = useState(undefined)
+  const [activityScore, setActivityScore] = useState(undefined)
   const [pointsReceived, setPointsReceived] = useState(undefined)
   const [isFetching, setIsFetching] = useState(false)
 
@@ -34,25 +30,10 @@ function ActivityContent(props) {
       .catch(() => {
         setActivityScore(null)
       })
-
-    StudentService.getUserGroup()
-      .then((activityGroup) => {
-        const givenTimeData = props.activity.requirement?.accessDates.find((el) =>
-          el.group.find((el) => el.name === activityGroup.name)
-        )
-
-        if (givenTimeData) {
-          setStartDate(new Date(givenTimeData.dateFrom))
-          setEndDate(new Date(givenTimeData.dateTo))
-        } else {
-          setStartDate('')
-          setEndDate('')
-        }
-      })
-      .catch(() => {
-        setStartDate(null)
-        setEndDate(null)
-      })
+    const startDateGiven = props.activity.requirements?.find((el) => el.dateFromMillis)
+    setStartDate(startDateGiven?.dateFromMillis ?? null)
+    const endDateGiven = props.activity.requirements?.find((el) => el.dateToMillis) ?? null
+    setEndDate(endDateGiven?.dateToMillis ?? null)
   }, [activityId, props])
 
   useEffect(() => {
@@ -88,10 +69,6 @@ function ActivityContent(props) {
   const basicInfoCard = useMemo(() => {
     if (startDate === undefined && endDate === undefined) {
       return <Spinner animation={'border'} />
-    }
-
-    if (startDate == null || endDate == null) {
-      return <p>{ERROR_OCCURRED}</p>
     }
 
     const tableElements = [
