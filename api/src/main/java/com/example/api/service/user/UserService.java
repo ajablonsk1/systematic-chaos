@@ -6,6 +6,7 @@ import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.request.user.SetStudentIndexForm;
 import com.example.api.dto.response.user.BasicStudent;
 import com.example.api.error.exception.*;
+import com.example.api.model.activity.task.Activity;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
@@ -32,6 +33,7 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -158,14 +160,14 @@ public class UserService implements UserDetailsService {
         return professorRegisterToken.getToken();
     }
 
-    public void deleteProfessorAccount(String email) throws WrongUserTypeException {
-        User user = getCurrentUser();
-        User professor = userRepo.findUserByEmail(email);
-        userValidator.validateProfessorAccount(professor, email);
-        userValidator.validateProfessorAccount(user, user.getEmail());
+    public void deleteProfessorAccount(String professorEmail) throws WrongUserTypeException {
+        User professor = getCurrentUser();
+        User newProfessor = userRepo.findUserByEmail(professorEmail);
+        userValidator.validateProfessorAccount(professor, professorEmail);
+        userValidator.validateProfessorAccount(newProfessor, newProfessor.getEmail());
 
-        changeUserForActivitiesAndAdditionalPoints(user, professor);
-        userRepo.delete(user);
+        changeUserForActivitiesAndAdditionalPoints(professor, newProfessor);
+        userRepo.delete(professor);
     }
 
     public void deleteStudentAccount() throws WrongUserTypeException {
@@ -175,34 +177,26 @@ public class UserService implements UserDetailsService {
     }
 
     private void changeUserForActivitiesAndAdditionalPoints(User from, User to){
-        graphTaskRepo.findAll()
-                .stream()
-                .filter(graphTask -> graphTask.getProfessor() == from)
-                .forEach(graphTask -> graphTask.setProfessor(to));
-        fileTaskRepo.findAll()
-                .stream()
-                .filter(fileTask -> fileTask.getProfessor() == from)
-                .forEach(fileTask -> fileTask.setProfessor(to));
-        surveyRepo.findAll()
-                .stream()
-                .filter(survey -> survey.getProfessor() == from)
-                .forEach(survey -> survey.setProfessor(to));
-        infoRepo.findAll()
-                .stream()
-                .filter(info -> info.getProfessor() == from)
-                .forEach(info -> info.setProfessor(to));
+        Stream.of(graphTaskRepo.findAll(),
+                        fileTaskRepo.findAll(),
+                        surveyRepo.findAll(),
+                        infoRepo.findAll())
+                .flatMap(Collection::stream)
+                .filter(activity -> activity.getProfessor() == from)
+                .forEach(activity -> activity.setProfessor(to));
         additionalPointsRepo.findAll()
                 .stream()
                 .filter(additionalPoint -> additionalPoint.getProfessorEmail().equals(from.getEmail()))
                 .forEach(additionalPoint -> additionalPoint.setProfessorEmail(to.getEmail()));
     }
 
-    public List<String> getAllProfEmails() {
+    public List<String> getAllProfessorEmails() {
         User user = getCurrentUser();
+        String professorEmail = user.getEmail();
         return userRepo.findAllByAccountTypeEquals(AccountType.PROFESSOR)
                 .stream()
                 .map(User::getEmail)
-                .filter(email -> !email.equals(user.getEmail()))
+                .filter(email -> !email.equals(professorEmail))
                 .toList();
     }
 }

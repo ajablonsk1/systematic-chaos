@@ -110,8 +110,8 @@ public class UserController {
     }
 
     @DeleteMapping("/user/delete-professor")
-    public ResponseEntity<?> deleteProfessorAccount(@RequestParam String email) throws WrongUserTypeException {
-        userService.deleteProfessorAccount(email);
+    public ResponseEntity<?> deleteProfessorAccount(@RequestParam String professorEmail) throws WrongUserTypeException {
+        userService.deleteProfessorAccount(professorEmail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -123,6 +123,6 @@ public class UserController {
 
     @GetMapping("/user/professor/emails")
     public ResponseEntity<List<String>> getAllProfEmails() {
-        return ResponseEntity.ok().body(userService.getAllProfEmails());
+        return ResponseEntity.ok().body(userService.getAllProfessorEmails());
     }
 }
