@@ -30,12 +30,10 @@ function ActivityContent(props) {
       .catch(() => {
         setActivityScore(null)
       })
-    // if (props.activity.requirements) {
     const startDateGiven = props.activity.requirements?.find((el) => el.dateFromMillis)
     setStartDate(startDateGiven?.dateFromMillis ?? null)
     const endDateGiven = props.activity.requirements?.find((el) => el.dateToMillis) ?? null
     setEndDate(endDateGiven?.dateToMillis ?? null)
-    // }
   }, [activityId, props])
 
   useEffect(() => {
