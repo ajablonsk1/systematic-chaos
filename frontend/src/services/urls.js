@@ -29,6 +29,8 @@ export const PUT_CHAPTER_EDIT = GET_CHAPTER + '/edit'
 export const POST_CHAPTER_CREATE = GET_CHAPTER + '/create'
 export const GET_CHAPTER_INFO = GET_CHAPTER + '/info'
 export const DELETE_CHAPTER = GET_CHAPTER + '/delete'
+export const GET_CHAPTER_REQUIREMENTS = GET_CHAPTER + '/requirements'
+export const POST_CHAPTER_REQUIREMENTS_UPDATE = GET_CHAPTER_REQUIREMENTS + '/update'
 
 // Task Result Controller
 export const TASK_RESULT = BASE_URL + '/task/result'
@@ -38,7 +40,7 @@ export const GET_TASK_RESULT_ACTIVITY_STATISTICS = TASK_RESULT + '/activity/stat
 
 // Task Controller
 export const TASK = BASE_URL + '/task'
-export const POST_TASK_REQUIREMENTS = TASK + '/requirements/add'
+export const POST_TASK_REQUIREMENTS = TASK + '/requirements/update'
 export const GET_TASK_REQUIREMENTS = TASK + '/requirements'
 export const GET_TASK_EVALUATE_FIRST = TASK + '/evaluate/first'
 export const GET_TASK_EVALUATE_ALL = TASK + '/evaluate/all'

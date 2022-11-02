@@ -26,13 +26,18 @@ function GameMap() {
 
   useEffect(() => {
     if (chaptersList) {
-      const graphInfo = chaptersList.map((chapter) => ({
-        id: chapter.id,
-        targetIds: chapter.id === Math.max(...chaptersList.map((c) => c.id)) ? [] : [chapter.id + 1],
-        position: { x: chapter.posX, y: chapter.posY },
-        edgeClass: 'gameMapEdge',
-        nodeClass: 'gameMapNode'
-      }))
+      const graphInfo = chaptersList.map((chapter) => {
+        const chapterIds = chaptersList.map((c) => c.id).sort((a, b) => a - b)
+        return {
+          id: chapter.id,
+          targetIds:
+            chapter.id === Math.max(...chapterIds) ? [] : [chaptersList[chapterIds.lastIndexOf(chapter.id) + 1]?.id],
+          position: { x: chapter.posX, y: chapter.posY },
+          edgeClass: 'gameMapEdge',
+          nodeClass: 'gameMapNode',
+          isBlocked: !chapter.isFulfilled
+        }
+      })
 
       setGraphElements(getGraphElements(graphInfo))
     }

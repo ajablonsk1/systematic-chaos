@@ -6,7 +6,9 @@ import {
   GET_FILE_CHAPTER_IMAGES,
   GET_FILE,
   DELETE_CHAPTER,
-  PUT_CHAPTER_EDIT
+  PUT_CHAPTER_EDIT,
+  GET_CHAPTER_REQUIREMENTS,
+  POST_CHAPTER_REQUIREMENTS_UPDATE
 } from './urls'
 
 class ChapterService {
@@ -58,6 +60,22 @@ class ChapterService {
 
   deleteChapter(chapterId) {
     return axiosApiDelete(DELETE_CHAPTER, { chapterID: chapterId }).catch((error) => {
+      throw error
+    })
+  }
+
+  getRequirements(chapterId) {
+    return axiosApiGet(GET_CHAPTER_REQUIREMENTS, { chapterId }).catch((error) => {
+      throw error
+    })
+  }
+
+  setRequirements(chapterId, requirements, isBlocked) {
+    return axiosApiPost(POST_CHAPTER_REQUIREMENTS_UPDATE, {
+      chapterId,
+      isBlocked,
+      requirements
+    }).catch((error) => {
       throw error
     })
   }

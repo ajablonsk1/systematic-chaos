@@ -1,4 +1,4 @@
-import { RequirementType } from '../../../../../utils/constants'
+import { RequirementType } from '../../../../utils/constants'
 
 export const onInputChange = (requirementId, value, setRequirementsList) => {
   setRequirementsList((prevState) =>

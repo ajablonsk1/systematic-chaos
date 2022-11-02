@@ -6,7 +6,7 @@ import {
   onMultiSelectChange,
   onSelectChange,
   onSwitchChange
-} from '../../components/professor/GameManagement/ActivityDetails/ActivityRequirements/formHelpers'
+} from '../../components/professor/GameManagement/Requirements/formHelpers'
 import { RequirementType } from '../../utils/constants'
 
 // global given
