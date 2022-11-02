@@ -22,6 +22,9 @@ export const GET_USER_CURRENT = BASE_URL + '/user/current'
 export const GET_TOKEN_REFRESH = BASE_URL + '/token/refresh'
 export const GET_STUDENTS_WITH_GROUP_ALL = BASE_URL + '/students-with-group/all'
 export const GET_PROFESSOR_REGISTER_TOKEN = BASE_URL + '/professor/register/token'
+export const GET_PROFESSOR_EMAILS = BASE_URL + '/user/professor/emails'
+export const DELETE_USER_STUDENT = BASE_URL + '/user/delete-student'
+export const DELETE_USER_PROFESSOR = BASE_URL + '/user/delete-professor'
 
 // Chapter Controller
 export const GET_CHAPTER = BASE_URL + '/chapter'

@@ -5,11 +5,13 @@ import EditPasswordModal from '../../student/Profile/EditPasswordModal'
 import UserService from '../../../services/user.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import ProfessorService from '../../../services/professor.service'
+import DeleteAccountModal from './DeleteAccountModal'
 
-function ProfessorSettings(props) {
+function ProfessorSettings() {
   const [userData, setUserData] = useState(undefined)
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
   const [registrationToken, setRegistrationToken] = useState(undefined)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   useEffect(() => {
     UserService.getUserData()
@@ -71,12 +73,21 @@ function ProfessorSettings(props) {
           <ProfileCard header={'Informacje o profilu'} body={userInfoBody} />
         </Col>
 
-        <Col md={6}>
+        <Col md={3}>
           <ProfileCard
             header={'Zmień hasło'}
             body={<p className={'text-center h-75'}>Otwórz formularz do zmiany hasła.</p>}
             showButton
             buttonCallback={() => setIsEditPasswordModalOpen(true)}
+          />
+        </Col>
+
+        <Col md={3}>
+          <ProfileCard
+            header={'Usuń konto'}
+            body={<p className={'text-center h-75'}>Pamiętaj, że tego procesu nie możesz cofnąć.</p>}
+            showButton
+            buttonCallback={() => setIsDeleteModalOpen(true)}
           />
         </Col>
       </Row>
@@ -91,6 +102,7 @@ function ProfessorSettings(props) {
       </Row>
 
       <EditPasswordModal show={isEditPasswordModalOpen} setModalOpen={setIsEditPasswordModalOpen} />
+      <DeleteAccountModal show={isDeleteModalOpen} setModalOpen={setIsDeleteModalOpen} />
     </>
   )
 }

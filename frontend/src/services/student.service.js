@@ -4,9 +4,10 @@ import {
   POST_USER_INDEX,
   GET_USER_GROUP,
   GET_POINTS_ALL_TOTAL,
-  GET_DASHBOARD
+  GET_DASHBOARD,
+  DELETE_USER_STUDENT
 } from './urls'
-import { axiosApiGet, axiosApiPost } from '../utils/axios'
+import { axiosApiDelete, axiosApiGet, axiosApiPost } from '../utils/axios'
 
 class StudentService {
   getUserGroup() {
@@ -41,6 +42,12 @@ class StudentService {
 
   getDashboardStats() {
     return axiosApiGet(GET_DASHBOARD).catch((error) => {
+      throw error
+    })
+  }
+
+  deleteAccount() {
+    return axiosApiDelete(DELETE_USER_STUDENT).catch((error) => {
       throw error
     })
   }

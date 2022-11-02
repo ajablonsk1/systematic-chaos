@@ -556,7 +556,7 @@ public class DatabaseConfig {
             chapter.setPosY(2);
             chapter.setActivityMap(activityMap1);
             chapter.setRequirements(requirementService.getDefaultRequirements(false));
-            chapter.setIsBlocked(true);
+            chapter.setIsBlocked(false);
             chapterRepo.save(chapter);
 
             calendar.set(2022, Calendar.JUNE, 15);
