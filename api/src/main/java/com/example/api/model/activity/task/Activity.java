@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -34,6 +36,7 @@ public abstract class Activity {
     private Boolean isBlocked = true;
 
     @OneToOne
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User professor;
 
     @Enumerated(EnumType.STRING)
