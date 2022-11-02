@@ -8,6 +8,7 @@ import EditPasswordModal from './EditPasswordModal'
 import UserService from '../../../services/user.service'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../utils/mobileHelper'
+import DeleteAccountModal from './DeleteAccountModal'
 
 function Profile(props) {
   const isMobileDisplay = isMobileView()
@@ -16,6 +17,7 @@ function Profile(props) {
   const [isEditIndexModalOpen, setIsEditIndexModalOpen] = useState(false)
   const [indexNumber, setIndexNumber] = useState(undefined)
   const [isEditPasswordModalOpen, setIsEditPasswordModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   useEffect(() => {
     UserService.getUserData()
@@ -122,6 +124,7 @@ function Profile(props) {
             showButton
             customButton={props.theme.danger}
             buttonText={'Usuń'}
+            buttonCallback={() => setIsDeleteModalOpen(true)}
           />
         </Col>
       </Row>
@@ -131,6 +134,7 @@ function Profile(props) {
         setIndexNumber={setIndexNumber}
       />
       <EditPasswordModal show={isEditPasswordModalOpen} setModalOpen={setIsEditPasswordModalOpen} />
+      <DeleteAccountModal show={isDeleteModalOpen} setModalOpen={setIsDeleteModalOpen} />
     </Content>
   )
 }
