@@ -41,8 +41,8 @@ export const validateEmail = (email, accountType) => {
     error = FIELD_REQUIRED
   } else if (
     (!studentEmail.test(email) && !professorEmail.test(email)) ||
-    (studentEmail.test(email) && accountType !== AccountType.STUDENT) ||
-    (professorEmail.test(email) && accountType !== AccountType.PROFESSOR)
+    (studentEmail.test(email) && accountType === AccountType.PROFESSOR) ||
+    (professorEmail.test(email) && accountType === AccountType.STUDENT)
   ) {
     error = INCORRECT_EMAIL
   }

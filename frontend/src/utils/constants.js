@@ -25,7 +25,7 @@ import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
 import { HeroType, PlayerType } from './userRole'
 import moment from 'moment'
-import { StudentRoutes } from '../routes/PageRoutes'
+import { GeneralRoutes, StudentRoutes } from '../routes/PageRoutes'
 
 export const FIELD_REQUIRED = 'Pole wymagane.'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
@@ -264,3 +264,5 @@ export const BadgeType = {
   GRAPH_TASK_NUMBER: 'GRAPH_TASK_NUMBER',
   TOP_SCORE: 'TOP_SCORE'
 }
+
+export const sidebarExcludedPaths = [GeneralRoutes.HOME, GeneralRoutes.PASSWORD_RESET]

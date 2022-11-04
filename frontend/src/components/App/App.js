@@ -11,6 +11,7 @@ import { ToastContainer } from 'react-toastify'
 import { isStudent } from '../../utils/storageManager'
 import AppRoutes from '../../routes/AppRoutes'
 import { ProfessorSidebarTitles, UserSidebarTitles } from '../../utils/sidebarTitles'
+import { sidebarExcludedPaths } from '../../utils/constants'
 
 function App(props) {
   const student = isStudent(props.user)
@@ -22,14 +23,16 @@ function App(props) {
           <BrowserRouter>
             <SidebarCol
               style={{ width: props.sidebar.isExpanded ? 400 : 60 }}
-              className={window.location.pathname === '/' ? 'd-none' : 'd-md-block d-none'}
+              className={sidebarExcludedPaths.includes(window.location.pathname) ? 'd-none' : 'd-md-block d-none'}
             >
               <Sidebar link_titles={student ? UserSidebarTitles : ProfessorSidebarTitles} />
             </SidebarCol>
             <div className='p-0 w-100'>
               <AppRoutes />
             </div>
-            <SidebarCol className={window.location.pathname === '/' ? 'd-none' : 'd-md-none d-block'}>
+            <SidebarCol
+              className={sidebarExcludedPaths.includes(window.location.pathname) ? 'd-none' : 'd-md-none d-block'}
+            >
               <MobileNavbar link_titles={student ? UserSidebarTitles : ProfessorSidebarTitles} />
             </SidebarCol>
             <AuthVerify />
