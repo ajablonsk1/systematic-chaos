@@ -8,15 +8,11 @@ import { debounce } from 'lodash'
 import { validateEmail } from '../RegistrationPage/validators'
 import { AccountType } from '../../../../utils/userRole'
 
-// TODO: walidacja maila funkcją do walidacji
-// TODO: wycentrowanie logo lub reszty - coś jest krzywo
-// TODO: nierówne rozmiary przycisków
-
 function ResetPasswordForm(props) {
   const navigate = useNavigate()
 
-  const [step, setStep] = useState(1)
-  const [emailValue, setEmailValue] = useState(undefined)
+  const [step, setStep] = useState(0)
+  const [emailValue, setEmailValue] = useState('')
   const [error, setError] = useState(undefined)
 
   const firstStepForm = useMemo(() => {
@@ -35,7 +31,7 @@ function ResetPasswordForm(props) {
         <FormLabel className={'fw-bold'} style={{ color: props.theme.font }}>
           Email
         </FormLabel>
-        <FormControl type={'email'} onChange={onInputChange} />
+        <FormControl type={'email'} onChange={onInputChange} defaultValue={emailValue} />
         <FormText style={{ color: props.theme.font, display: 'block' }}>
           Na podany powyżej adres email zostanie wysłany mail umożliwiający reset hasła.
         </FormText>
@@ -56,7 +52,7 @@ function ResetPasswordForm(props) {
           <Button
             style={{ backgroundColor: props.theme.success, borderColor: props.theme.success, width: 100 }}
             disabled={!emailValue || !!error}
-            onClick={() => setStep(2)}
+            onClick={() => setStep(1)}
           >
             Dalej
           </Button>
@@ -65,12 +61,51 @@ function ResetPasswordForm(props) {
     )
   }, [emailValue, error, navigate, props.theme.danger, props.theme.font, props.theme.success])
 
-  const secondStepForm = useMemo(() => {}, [])
+  const secondStepForm = useMemo(() => {
+    return (
+      <>
+        <p
+          style={{ color: props.theme.font }}
+          className={'text-center position-relative translate-middle-x start-50 w-75'}
+        >
+          Twój kod do resetu hasła zostanie wysłany na podany adres email. Jeżeli nie widzisz maila, sprawdź spam.
+          Jeżeli w przeciągu 5min nie otrzymasz maila z kodem, kliknij przycisk "Wyślij ponownie email"
+        </p>
+
+        <div className={'my-4 d-flex justify-content-center gap-2 '}>
+          <Button
+            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger, width: 100 }}
+            onClick={() => setStep(0)}
+          >
+            Wstecz
+          </Button>
+          <Button
+            style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary, width: 200 }}
+            onClick={() => {
+              /*TODO*/
+            }}
+          >
+            Wyślij ponownie email
+          </Button>
+          <Button
+            style={{ backgroundColor: props.theme.success, borderColor: props.theme.success, width: 100 }}
+            onClick={() => setStep(2)}
+          >
+            Dalej
+          </Button>
+        </div>
+      </>
+    )
+  }, [props.theme])
+
+  const thirdStepForm = useMemo(() => {}, [])
+
+  const formContents = [firstStepForm, secondStepForm, thirdStepForm]
 
   return (
     <div>
       <MultiStepProgressBar $step={step} $accentColor={props.theme.font} />
-      {step === 1 ? firstStepForm : step === 2 ? secondStepForm : null}
+      <>{formContents[step]}</>
     </div>
   )
 }
