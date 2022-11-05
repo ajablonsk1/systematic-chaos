@@ -5,23 +5,33 @@ import { useNavigate } from 'react-router-dom'
 import { GeneralRoutes } from '../../../../routes/PageRoutes'
 import { MultiStepProgressBar } from './ResetPasswordFormStyle'
 import { debounce } from 'lodash'
-import { validateEmail } from '../RegistrationPage/validators'
+import { validateConfirmPassword, validateEmail, validatePassword } from '../RegistrationPage/validators'
 import { AccountType } from '../../../../utils/userRole'
+import { ALL_FIELDS_REQUIRED, FIELD_WITH_NAME_REQUIRED } from '../../../../utils/constants'
 
 function ResetPasswordForm(props) {
   const navigate = useNavigate()
 
   const [step, setStep] = useState(0)
   const [emailValue, setEmailValue] = useState('')
+  const [passwordValue, setPasswordValue] = useState('')
+  const [codeValue, setCodeValue] = useState('')
   const [error, setError] = useState(undefined)
 
   const sendResetMail = () => {
-    // TODO
+    // TODO: send email to the appropriate endpoint (#1)
+  }
+
+  const resetPassword = () => {
+    if (!passwordValue || !codeValue) {
+      setError(ALL_FIELDS_REQUIRED)
+    } else {
+      // TODO: send code and password to the appropriate endpoint (#2)
+    }
   }
 
   const FormButton = useCallback(
     ({ text, onClick, color = props.theme.success, width = 100, disabled = false }) => {
-      console.log('test')
       return (
         <Button
           style={{ backgroundColor: color, borderColor: color, width: width }}
@@ -34,6 +44,14 @@ function ResetPasswordForm(props) {
     },
     [props.theme.success]
   )
+
+  const ErrorMessage = useMemo(() => {
+    return error ? (
+      <p className={'py-3 text-center'} style={{ color: props.theme.danger }}>
+        {error}
+      </p>
+    ) : null
+  }, [error, props.theme.danger])
 
   const FirstStepForm = useMemo(() => {
     const onCancel = () => {
@@ -56,19 +74,22 @@ function ResetPasswordForm(props) {
           Na podany powyżej adres email zostanie wysłany mail umożliwiający reset hasła.
         </FormText>
 
-        {error ? (
-          <p className={'py-3 text-center'} style={{ color: props.theme.danger }}>
-            {error}
-          </p>
-        ) : null}
+        {ErrorMessage}
 
         <div className={'my-4 d-flex justify-content-center gap-2 '}>
           {FormButton({ text: 'Anuluj', onClick: onCancel, color: props.theme.danger })}
-          {FormButton({ text: 'Dalej', onClick: () => setStep(1), disabled: !emailValue || !!error })}
+          {FormButton({
+            text: 'Dalej',
+            onClick: () => {
+              setStep(1)
+              sendResetMail()
+            },
+            disabled: !emailValue || !!error
+          })}
         </div>
       </FormGroup>
     )
-  }, [FormButton, emailValue, error, navigate, props.theme.danger, props.theme.font])
+  }, [ErrorMessage, FormButton, emailValue, error, navigate, props.theme.danger, props.theme.font])
 
   const SecondStepForm = useMemo(() => {
     return (
@@ -95,7 +116,62 @@ function ResetPasswordForm(props) {
     )
   }, [FormButton, props.theme.danger, props.theme.font, props.theme.secondary])
 
-  const ThirdStepForm = useMemo(() => {}, [])
+  const ThirdStepForm = useMemo(() => {
+    const onPasswordInputChange = debounce((passwordInput) => {
+      const password = passwordInput.target.value
+      setPasswordValue(password)
+      if (error === ALL_FIELDS_REQUIRED && passwordValue && codeValue) {
+        setError(undefined)
+      } else {
+        setError(validatePassword(password))
+      }
+    }, 200)
+
+    const onConfirmPasswordInputChange = debounce((confirmPasswordInput) => {
+      const confirmPassword = confirmPasswordInput.target.value
+      setError(validateConfirmPassword(passwordValue, confirmPassword))
+    })
+
+    const onCodeInputChange = debounce((codeInput) => {
+      const codeInputValue = codeInput.target.value
+      setCodeValue(codeInputValue)
+      if (!codeInputValue) {
+        setError(FIELD_WITH_NAME_REQUIRED('Kod resetu hasła'))
+      } else if (
+        error === FIELD_WITH_NAME_REQUIRED('Kod resetu hasła') ||
+        (error === ALL_FIELDS_REQUIRED && passwordValue)
+      ) {
+        setError(undefined)
+      }
+    })
+
+    const Input = ({ label, type, onChange = null }) => (
+      <div>
+        <FormLabel className={'fw-bold'} style={{ color: props.theme.font }}>
+          {label}
+        </FormLabel>
+        <FormControl type={type} onChange={onChange} />
+      </div>
+    )
+
+    return (
+      <FormGroup className={'w-75 position-relative translate-middle-x start-50'}>
+        {Input({ label: 'Kod resetu hasła', type: 'text', onChange: onCodeInputChange })}
+        {Input({ label: 'Nowe hasło', type: 'password', onChange: onPasswordInputChange })}
+        {Input({ label: 'Powtórz nowe hasło', type: 'password', onChange: onConfirmPasswordInputChange })}
+        {ErrorMessage}
+        <div className={'my-4 d-flex justify-content-center gap-2 '}>
+          {FormButton({ text: 'Wstecz', onClick: () => setStep(1), color: props.theme.danger })}
+          {FormButton({
+            text: 'Zmień hasło',
+            onClick: resetPassword,
+            width: 150
+          })}
+        </div>
+      </FormGroup>
+    )
+    //eslint-disable-next-line
+  }, [ErrorMessage, FormButton, error, passwordValue, props.theme.danger, props.theme.font])
 
   const formContents = [FirstStepForm, SecondStepForm, ThirdStepForm]
 
