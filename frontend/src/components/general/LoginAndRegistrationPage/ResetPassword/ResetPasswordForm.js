@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, FormControl, FormGroup, FormLabel, FormText } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
@@ -15,7 +15,27 @@ function ResetPasswordForm(props) {
   const [emailValue, setEmailValue] = useState('')
   const [error, setError] = useState(undefined)
 
-  const firstStepForm = useMemo(() => {
+  const sendResetMail = () => {
+    // TODO
+  }
+
+  const FormButton = useCallback(
+    ({ text, onClick, color = props.theme.success, width = 100, disabled = false }) => {
+      console.log('test')
+      return (
+        <Button
+          style={{ backgroundColor: color, borderColor: color, width: width }}
+          disabled={disabled}
+          onClick={onClick}
+        >
+          {text}
+        </Button>
+      )
+    },
+    [props.theme.success]
+  )
+
+  const FirstStepForm = useMemo(() => {
     const onCancel = () => {
       navigate(GeneralRoutes.HOME)
     }
@@ -43,25 +63,14 @@ function ResetPasswordForm(props) {
         ) : null}
 
         <div className={'my-4 d-flex justify-content-center gap-2 '}>
-          <Button
-            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger, width: 100 }}
-            onClick={onCancel}
-          >
-            Anuluj
-          </Button>
-          <Button
-            style={{ backgroundColor: props.theme.success, borderColor: props.theme.success, width: 100 }}
-            disabled={!emailValue || !!error}
-            onClick={() => setStep(1)}
-          >
-            Dalej
-          </Button>
+          {FormButton({ text: 'Anuluj', onClick: onCancel, color: props.theme.danger })}
+          {FormButton({ text: 'Dalej', onClick: () => setStep(1), disabled: !emailValue || !!error })}
         </div>
       </FormGroup>
     )
-  }, [emailValue, error, navigate, props.theme.danger, props.theme.font, props.theme.success])
+  }, [FormButton, emailValue, error, navigate, props.theme.danger, props.theme.font])
 
-  const secondStepForm = useMemo(() => {
+  const SecondStepForm = useMemo(() => {
     return (
       <>
         <p
@@ -73,34 +82,22 @@ function ResetPasswordForm(props) {
         </p>
 
         <div className={'my-4 d-flex justify-content-center gap-2 '}>
-          <Button
-            style={{ backgroundColor: props.theme.danger, borderColor: props.theme.danger, width: 100 }}
-            onClick={() => setStep(0)}
-          >
-            Wstecz
-          </Button>
-          <Button
-            style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary, width: 200 }}
-            onClick={() => {
-              /*TODO*/
-            }}
-          >
-            Wyślij ponownie email
-          </Button>
-          <Button
-            style={{ backgroundColor: props.theme.success, borderColor: props.theme.success, width: 100 }}
-            onClick={() => setStep(2)}
-          >
-            Dalej
-          </Button>
+          {FormButton({ text: 'Wstecz', onClick: () => setStep(0), color: props.theme.danger })}
+          {FormButton({
+            text: 'Wyślij ponownie email',
+            onClick: sendResetMail,
+            color: props.theme.secondary,
+            width: 200
+          })}
+          {FormButton({ text: 'Dalej', onClick: () => setStep(2) })}
         </div>
       </>
     )
-  }, [props.theme])
+  }, [FormButton, props.theme.danger, props.theme.font, props.theme.secondary])
 
-  const thirdStepForm = useMemo(() => {}, [])
+  const ThirdStepForm = useMemo(() => {}, [])
 
-  const formContents = [firstStepForm, secondStepForm, thirdStepForm]
+  const formContents = [FirstStepForm, SecondStepForm, ThirdStepForm]
 
   return (
     <div>

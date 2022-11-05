@@ -19,6 +19,7 @@ export const MultiStepProgressBar = styled.div`
     transform: translateX(-50%);
     top: -8px;
     outline: ${(props) => (props.$step === 1 ? `2px dashed ${props.$accentColor}` : 'none')};
+    outline-offset: 5px;
   }
 
   &::before,
