@@ -4,7 +4,7 @@ export const MultiStepProgressBar = styled.div`
   width: 124px;
   height: 2px;
   padding: 20px 0;
-  border-top: 2px dashed ${(props) => props.$accentColor};
+  //border-top: 2px dashed ${(props) => props.$accentColor};
   position: relative;
   left: 50%;
   transform: translateX(-50%);
@@ -20,6 +20,23 @@ export const MultiStepProgressBar = styled.div`
     top: -8px;
     outline: ${(props) => (props.$step === 1 ? `2px dashed ${props.$accentColor}` : 'none')};
     outline-offset: 5px;
+
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 7px;
+      width: 47px;
+      height: 2px;
+      border-top: 2px dashed ${(props) => props.$accentColor};
+    }
+    &::before {
+      right: 20px;
+    }
+    &::after {
+      left: 20px;
+    }
   }
 
   &::before,
