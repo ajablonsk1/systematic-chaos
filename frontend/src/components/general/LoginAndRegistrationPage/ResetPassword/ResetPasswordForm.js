@@ -104,7 +104,9 @@ function ResetPasswordForm(props) {
 
   return (
     <div>
-      <MultiStepProgressBar $step={step} $accentColor={props.theme.font} />
+      <MultiStepProgressBar $step={step} $accentColor={props.theme.font}>
+        <div /> {/*helper - second circle*/}
+      </MultiStepProgressBar>
       <>{formContents[step]}</>
     </div>
   )
