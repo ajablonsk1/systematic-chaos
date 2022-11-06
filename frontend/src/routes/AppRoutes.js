@@ -17,6 +17,7 @@ import TeacherRankingRoutes from './modules/teacherRoutes/RankingRoutes'
 import CanvasMap from '../components/student/CanvasMapPage/CanvasMap'
 import ProfileRoutes from './modules/studentRoutes/ProfileRoutes'
 import SettingsRoutes from './modules/teacherRoutes/SettingsRoutes'
+import ResetPassword from '../components/general/LoginAndRegistrationPage/ResetPassword/ResetPassword'
 
 export default function AppRoutes() {
   return (
@@ -27,6 +28,16 @@ export default function AppRoutes() {
         element={
           <PageGuard role={Role.NOT_LOGGED_IN}>
             <LoginAndRegistration />
+          </PageGuard>
+        }
+      />
+
+      <Route
+        path='/password-reset'
+        exact
+        element={
+          <PageGuard role={Role.NOT_LOGGED_IN}>
+            <ResetPassword />
           </PageGuard>
         }
       />

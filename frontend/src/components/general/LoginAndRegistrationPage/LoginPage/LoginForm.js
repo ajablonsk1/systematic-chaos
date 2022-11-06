@@ -5,6 +5,7 @@ import { FormCol } from '../FormCol'
 import { login } from '../../../../actions/auth'
 import { connect } from 'react-redux'
 import { FIELD_REQUIRED, NOT_LOGGED_IN_ERROR } from '../../../../utils/constants'
+import { GeneralRoutes } from '../../../../routes/PageRoutes'
 
 function LoginForm(props) {
   const { dispatch } = props
@@ -40,12 +41,15 @@ function LoginForm(props) {
         setSubmitting(false)
       }}
     >
-      {({ isSubmitting, values, errors, handleSubmit }) => (
+      {({ isSubmitting, handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
           <Container>
             <Row className='mx-auto'>
               {FormCol('Email', 'email', 'email', 12, { errorColor: props.theme.danger })}
               {FormCol('Hasło', 'password', 'password', 12, { errorColor: props.theme.danger })}
+              <a className={'text-end pt-2'} style={{ color: props.theme.font }} href={GeneralRoutes.PASSWORD_RESET}>
+                Nie pamiętasz hasła ?
+              </a>
             </Row>
             <Row className='mt-4 d-flex justify-content-center'>
               <Col sm={12} className='d-flex justify-content-center mb-2'>

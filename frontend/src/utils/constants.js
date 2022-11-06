@@ -25,7 +25,7 @@ import warrior16 from '../storage/resources/warrior/15.png'
 import warrior17 from '../storage/resources/warrior/16.png'
 import { HeroType, PlayerType } from './userRole'
 import moment from 'moment'
-import { StudentRoutes } from '../routes/PageRoutes'
+import { GeneralRoutes, StudentRoutes } from '../routes/PageRoutes'
 
 export const FIELD_REQUIRED = 'Pole wymagane.'
 export const NONNEGATIVE_NUMBER = 'Wymagana liczba nieujemna'
@@ -43,6 +43,9 @@ export const ANSWER_SAVED = 'Twoja odpowiedź została zapisana'
 
 export const SANE_MAP_FIELDCOUNT_LIMIT = 10
 export const NUMBER_FROM_RANGE = (rangeMin, rangeMax) => `Wymagana liczba z przedziału [${rangeMin}, ${rangeMax}]`
+
+export const FIELD_WITH_NAME_REQUIRED = (fieldName) => `Pole o nazwie "${fieldName}" jest wymagane.`
+export const ALL_FIELDS_REQUIRED = 'Wszystkie pola są wymagane.'
 
 export const GRAPH_NODE_BASIC_SIZE = 20
 export const GRAPH_NODE_SPECIAL_SIZE = 40
@@ -264,3 +267,5 @@ export const BadgeType = {
   GRAPH_TASK_NUMBER: 'GRAPH_TASK_NUMBER',
   TOP_SCORE: 'TOP_SCORE'
 }
+
+export const sidebarExcludedPaths = [GeneralRoutes.HOME, GeneralRoutes.PASSWORD_RESET]
