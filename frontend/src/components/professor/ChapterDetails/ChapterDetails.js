@@ -293,7 +293,7 @@ function ChapterDetails(props) {
                             <td>
                               ({activity.posX}, {activity.posY})
                             </td>
-                            <td>Pkt: {activity.points}</td>
+                            <td>Pkt: {activity.points ?? 0}</td>
                             <td>
                               <FontAwesomeIcon
                                 icon={faPenToSquare}

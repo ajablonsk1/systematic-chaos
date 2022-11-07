@@ -1,7 +1,7 @@
 import React from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
 import { Button, Col, Form, Row } from 'react-bootstrap'
-import gameMap from '../../../student/GameMapPage/resources/map1.png'
+import gameMap from '../../../../utils/resources/gameMap/map1.png'
 import ColorPicker from './ColorPicker'
 import { useNavigate } from 'react-router-dom'
 import { TeacherRoutes } from '../../../../routes/PageRoutes'

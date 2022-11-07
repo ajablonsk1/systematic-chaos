@@ -15,15 +15,32 @@ const headersWithSortedInfo = [
   { headerName: 'Punkty', sortedVar1: 'points' }
 ]
 
+const getStudentEmailByPosition = (position, ranking) => {
+  return ranking?.find((s) => s.position === position)?.email
+}
+
+const getStudentPositionByEmail = (email, ranking) => {
+  return ranking?.findIndex((s) => s.email === email) + 1
+}
+
 function Ranking(props) {
   const [ranking, setRanking] = useState(props.rankingList)
   const [sortingOrders, setSortingOrders] = useState(headersWithSortedInfo.map(() => 'DESC'))
+  const [student, setStudent] = useState({
+    email: getStudentEmailByPosition(props.studentPosition, props.rankingList),
+    position: props.studentPosition
+  })
 
-  const rowColor = (index) =>
-    props.studentPosition && index === props.studentPosition ? props.theme.success : props.theme.secondary
+  const rowColor = (index) => {
+    return student?.position && index === student?.position ? props.theme.success : props.theme.secondary
+  }
 
   useEffect(() => {
     setRanking(props.rankingList)
+    setStudent({
+      position: props.studentPosition,
+      email: getStudentEmailByPosition(props.studentPosition, props.rankingList)
+    })
     setSortingOrders((prevState) => prevState.map(() => 'DESC'))
   }, [props])
 
@@ -35,7 +52,9 @@ function Ranking(props) {
       }
       options.isString = !sortedVariables.includes('points') && !sortedVariables.includes('position')
 
-      setRanking(sortArray(ranking, sortingOrders[headerId], sortedVariables, options))
+      const rankingAfterSorting = sortArray(ranking, sortingOrders[headerId], sortedVariables, options)
+      setRanking(rankingAfterSorting)
+      setStudent({ ...student, position: getStudentPositionByEmail(student.email, rankingAfterSorting) })
       setSortingOrders((prevState) => {
         return prevState.map((order, index) => {
           if (index === headerId) {
@@ -45,7 +64,7 @@ function Ranking(props) {
         })
       })
     },
-    [ranking, sortingOrders]
+    [ranking, sortingOrders, student]
   )
 
   const tableHeaders = useMemo(() => {

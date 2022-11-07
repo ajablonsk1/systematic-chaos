@@ -10,6 +10,7 @@ import ActivityStats from './ActivityStats'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
 import Requirements from '../Requirements/Requirements'
+import { Activity } from '../../../../utils/constants'
 
 function ActivityDetails(props) {
   const location = useLocation()
@@ -20,6 +21,7 @@ function ActivityDetails(props) {
   const [filterQuery, setFilterQuery] = useState(undefined)
   const [isStudentAnswerModalOpen, setIsStudentAnswerModalOpen] = useState(false)
   const [chosenStudent, setChosenStudent] = useState(null)
+  const [activityStats, setActivityStats] = useState(undefined)
 
   useEffect(() => {
     ActivityService.getStudentsResultList(activityId)
@@ -27,10 +29,21 @@ function ActivityDetails(props) {
         setStudentsList(response)
         setFilteredList(response)
       })
-      .catch(() => {})
-    setStudentsList(null)
-    setFilteredList(null)
-  }, [activityId])
+      .catch(() => {
+        setStudentsList(null)
+        setFilteredList(null)
+      })
+
+    if (activityType !== Activity.INFO) {
+      ActivityService.getActivityStats(activityId)
+        .then((response) => {
+          setActivityStats(response)
+        })
+        .catch(() => {
+          setActivityStats(null)
+        })
+    }
+  }, [activityId, activityType])
 
   useEffect(() => {
     if (filterQuery) {
@@ -71,14 +84,18 @@ function ActivityDetails(props) {
             rankingList={filteredList}
             customHeight={'80vh'}
             noPointsMessage={'Nie wykonano'}
-            iconCallback={(student) => {
-              setIsStudentAnswerModalOpen(true)
-              setChosenStudent(student)
-            }}
+            iconCallback={
+              activityType === Activity.SURVEY
+                ? (student) => {
+                    setIsStudentAnswerModalOpen(true)
+                    setChosenStudent(student)
+                  }
+                : null
+            }
           />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
-          <ActivityStats activityId={activityId} activityType={activityType} />
+          <ActivityStats statsData={activityStats} activityType={activityType} />
         </Tab>
         <Tab eventKey={'requirements'} title={'Wymagania'}>
           <Requirements
@@ -98,7 +115,9 @@ function ActivityDetails(props) {
         <ModalBody style={{ maxHeight: '80vh', overflow: 'auto' }}>
           <div>
             <h6>Ocena: </h6>
-            <p>{chosenStudent?.studentAnswer?.studentPoints ?? '-'}/5</p>
+            <p>
+              {chosenStudent?.studentAnswer?.studentPoints ?? '-'}/{activityStats?.activity100 ?? 0}
+            </p>
           </div>
           <div>
             <h6>Odpowiedź:</h6>
