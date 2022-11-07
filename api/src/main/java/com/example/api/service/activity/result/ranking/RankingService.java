@@ -22,6 +22,7 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.activity.task.SurveyRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.user.RankService;
 import com.example.api.service.user.UserService;
 import com.example.api.service.validator.GroupValidator;
 import com.example.api.service.validator.UserValidator;
@@ -54,6 +55,7 @@ public class RankingService {
     private final UserValidator userValidator;
     private final GroupValidator groupValidator;
     private final UserService userService;
+    private final RankService rankService;
 
 
     public List<RankingResponse> getRanking() {
@@ -125,7 +127,14 @@ public class RankingService {
                             student.getHeroType().getPolishTypeName().toLowerCase().contains(searchLower) ||
                             student.getGroupName().toLowerCase().contains(searchLower)
                 )
-                .sorted(((o1, o2) -> Double.compare(o2.getPoints(), o1.getPoints())))
+                .sorted(((o1, o2) -> {
+                    if (o1.getPoints() == null && o2.getPoints() == null) {
+                        return String.CASE_INSENSITIVE_ORDER.compare(o1.getLastName(), o2.getLastName());
+                    }
+                    else if (o2.getPoints() == null) return 1;
+                    else if (o1.getPoints() == null) return -1;
+                    else return Double.compare(o2.getPoints(), o1.getPoints());
+                }))
                 .toList();
         addPositionToRankingList(rankingList);
         return rankingList;
@@ -185,13 +194,13 @@ public class RankingService {
     }
 
     private RankingResponse studentToRankingEntry(User student) {
-        RankingResponse rankingResponse = new RankingResponse(student);
+        RankingResponse rankingResponse = new RankingResponse(student, rankService);
         rankingResponse.setPoints(getStudentPoints(student));
         return rankingResponse;
     }
 
     private RankingResponse studentAndPointsToRankingEntry(User student, Double points, SurveyAnswerResponse studentAnswer) {
-        RankingResponse rankingResponse = new RankingResponse(student);
+        RankingResponse rankingResponse = new RankingResponse(student, rankService);
         rankingResponse.setPoints(points);
         if (studentAnswer.getStudentPoints() != null) {
             rankingResponse.setStudentAnswer(studentAnswer);
