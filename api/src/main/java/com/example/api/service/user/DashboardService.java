@@ -12,6 +12,7 @@ import com.example.api.model.activity.result.TaskResult;
 import com.example.api.model.activity.task.*;
 import com.example.api.model.map.Chapter;
 import com.example.api.model.map.requirement.Requirement;
+import com.example.api.model.user.Rank;
 import com.example.api.model.user.User;
 import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
@@ -56,6 +57,7 @@ public class DashboardService {
     private final SurveyService surveyService;
     private final InfoService infoService;
     private final ChapterService chapterService;
+    private final RankService rankService;
 
     private final long MAX_LAST_ACTIVITIES_IN_DASHBOARD = 8;
 
@@ -217,12 +219,13 @@ public class DashboardService {
 
     }
 
-    // TODO: Replace mocks
     private HeroStats getHeroStats(User student) {
         Double experiencePoints = student.getPoints();
-        Double nextLvlPoints = 100D; // TODO
-        String rankName = "Nowicjusz"; // TODO
-        Long badgesNumber = 3L; // TODO
+        Double nextLvlPoints = getNexLvlPoints(student);
+
+        Rank rank = rankService.getCurrentRank(student);
+        String rankName = rank != null ? rank.getName() : null;
+        Long badgesNumber = (long) student.getUnlockedBadges().size();
         Long completedActivities = getCompletedActivities(student);
 
         return new HeroStats(
@@ -234,6 +237,17 @@ public class DashboardService {
         );
     }
 
+    private Double getNexLvlPoints(User student) {
+        List<Rank> sortedRanks = rankService.getSortedRanksForHeroType(student.getHeroType());
+        for (int i=sortedRanks.size()-1; i >= 0; i--) {
+            if (student.getPoints() > sortedRanks.get(i).getMinPoints()) {
+                if (i == sortedRanks.size() - 1) return null;
+                else return sortedRanks.get(i+1).getMinPoints();
+            }
+        }
+        return null;
+    }
+
     // Completed means answer was sent (not necessarily rated)
     private Long getCompletedActivities(User student) {
         Long graphTasksCompleted = graphTaskResultRepo.findAllByUser(student)
@@ -243,7 +257,6 @@ public class DashboardService {
         Long fileTasksCompleted = (long) fileTaskResultRepo.findAllByUser(student)
                 .size();
         Long surveysCompleted = (long) surveyResultRepo.findAllByUser(student).size();
-        Long infosCompleted = (long) infoService.getStudentInfos().size();
-        return graphTasksCompleted + fileTasksCompleted + surveysCompleted + infosCompleted;
+        return graphTasksCompleted + fileTasksCompleted + surveysCompleted;
     }
 }
