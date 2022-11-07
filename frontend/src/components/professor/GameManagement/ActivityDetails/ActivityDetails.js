@@ -21,7 +21,6 @@ function ActivityDetails(props) {
   const [filterQuery, setFilterQuery] = useState(undefined)
   const [isStudentAnswerModalOpen, setIsStudentAnswerModalOpen] = useState(false)
   const [chosenStudent, setChosenStudent] = useState(null)
-  const [activityStats, setActivityStats] = useState(undefined)
 
   useEffect(() => {
     ActivityService.getStudentsResultList(activityId)
@@ -33,16 +32,6 @@ function ActivityDetails(props) {
         setStudentsList(null)
         setFilteredList(null)
       })
-
-    if (activityType !== Activity.INFO) {
-      ActivityService.getActivityStats(activityId)
-        .then((response) => {
-          setActivityStats(response)
-        })
-        .catch(() => {
-          setActivityStats(null)
-        })
-    }
   }, [activityId, activityType])
 
   useEffect(() => {
@@ -95,7 +84,7 @@ function ActivityDetails(props) {
           />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
-          <ActivityStats statsData={activityStats} activityType={activityType} />
+          <ActivityStats activityId={activityId} activityType={activityType} />
         </Tab>
         <Tab eventKey={'requirements'} title={'Wymagania'}>
           <Requirements
@@ -114,10 +103,8 @@ function ActivityDetails(props) {
         </ModalHeader>
         <ModalBody style={{ maxHeight: '80vh', overflow: 'auto' }}>
           <div>
-            <h6>Ocena: </h6>
-            <p>
-              {chosenStudent?.studentAnswer?.studentPoints ?? '-'}/{activityStats?.activity100 ?? 0}
-            </p>
+            <h6>Ocena od studenta: </h6>
+            <p>{chosenStudent?.studentAnswer?.studentPoints ?? '-'}/5</p>
           </div>
           <div>
             <h6>Odpowiedź:</h6>

@@ -9,6 +9,7 @@ import { getChartConfig, getChartDetails } from '../../../general/chartHelper'
 import StatsCard from './StatsCard'
 import { Activity, ERROR_OCCURRED } from '../../../../utils/constants'
 import PercentageCircle from '../../../student/PointsPage/ChartAndStats/PercentageCircle'
+import ActivityService from '../../../../services/activity.service'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
 
@@ -17,13 +18,25 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 function ActivityStats(props) {
   const isSurvey = props.activityType === Activity.SURVEY
   const isInfoTask = props.activityType === Activity.INFO
-  const statsData = props.statsData
 
+  const [statsData, setStatsData] = useState(undefined)
   const [pieChartConfig, setPieChartConfig] = useState({})
   const [pointsBarConfig, setPointsBarConfig] = useState({})
   const [percentageBarConfig, setPercentageBarConfig] = useState({})
 
   const rounded = (value) => Math.round(value * 10) / 10
+
+  useEffect(() => {
+    if (!isInfoTask) {
+      ActivityService.getActivityStats(props.activityId)
+        .then((response) => {
+          setStatsData(response)
+        })
+        .catch(() => {
+          setStatsData(null)
+        })
+    }
+  }, [isInfoTask, props])
 
   useEffect(() => {
     if (statsData) {
