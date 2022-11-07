@@ -116,10 +116,7 @@ public class RankService {
 
         double points = user.getPoints();
         HeroType heroType = user.getHeroType();
-        List<Rank> ranks = getHeroTypeToRanks().get(heroType)
-                .stream()
-                .sorted(Comparator.comparingDouble(Rank::getMinPoints))
-                .toList();
+        List<Rank> ranks = getSortedRanksForHeroType(heroType);
         Rank currentRank = getCurrentRank(ranks, points);
         if (currentRank == null) {
             if (ranks.size() == 0) {
@@ -158,6 +155,18 @@ public class RankService {
             }
         }
         return currRank;
+    }
+
+    public List<Rank> getSortedRanksForHeroType(HeroType heroType) {
+        return getHeroTypeToRanks().get(heroType)
+                .stream()
+                .sorted(Comparator.comparingDouble(Rank::getMinPoints))
+                .toList();
+    }
+
+    public Rank getCurrentRank(User user) {
+        List<Rank> ranks = getSortedRanksForHeroType(user.getHeroType());
+        return getCurrentRank(ranks, user.getPoints());
     }
 
     public void deleteRank(Long id) throws EntityNotFoundException {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ExportButton, GradesTable } from './GradeListAndExportStyles'
-import { Form } from 'react-bootstrap'
+import { Form, Spinner } from 'react-bootstrap'
 import { debounce } from 'lodash/function'
 import ExportModal from './ExportModal'
 import GroupService from '../../../services/group.service'
@@ -13,7 +13,7 @@ function UsersTable(props) {
   const [usersList, setUsersList] = useState(undefined)
 
   const [usersToExportIds, setUsersToExportIds] = useState([])
-  const [users, setUsers] = useState([]) // used to filtering
+  const [users, setUsers] = useState(undefined) // used to filtering
   const [isButtonDisabled, setButtonDisabled] = useState(true)
   const [isModalVisible, setModalVisible] = useState(false)
   const [gradesList, setGradesList] = useState(null)
@@ -89,6 +89,41 @@ function UsersTable(props) {
     )
   }, 300)
 
+  const tableBody = () => {
+    let body = null
+
+    if (users === undefined) {
+      body = <Spinner animation={'border'} />
+    } else if (users == null) {
+      body = <p>{ERROR_OCCURRED}</p>
+    } else if (users.length === 0) {
+      body = <p>Brak członków</p>
+    }
+
+    if (body) {
+      return (
+        <tr>
+          <td colSpan='100%' className={'text-center'}>
+            {body}
+          </td>
+        </tr>
+      )
+    }
+
+    return users.map((user, index) => (
+      <tr key={index + user.groupName}>
+        <td>
+          <input type={'checkbox'} onChange={checkRow} value={user.id} checked={inputChecked(user.id)} />
+        </td>
+        <td className={'py-2'}>{user.groupName}</td>
+        <td className={'py-2'}>
+          {user.firstName} {user.lastName}
+        </td>
+        <td className={'py-2'}>{getStudentGrade(user.id)}</td>
+      </tr>
+    ))
+  }
+
   return (
     <>
       <Form.Group className={'my-3'}>
@@ -112,28 +147,7 @@ function UsersTable(props) {
               <th>Przewidywana ocena</th>
             </tr>
           </thead>
-          <tbody>
-            {users?.length > 0 ? (
-              users.map((user, index) => (
-                <tr key={index + user.groupName}>
-                  <td>
-                    <input type={'checkbox'} onChange={checkRow} value={user.id} checked={inputChecked(user.id)} />
-                  </td>
-                  <td className={'py-2'}>{user.groupName}</td>
-                  <td className={'py-2'}>
-                    {user.firstName} {user.lastName}
-                  </td>
-                  <td className={'py-2'}>{getStudentGrade(user.id)}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan='100%' className={'text-center'}>
-                  <p>{users == null ? ERROR_OCCURRED : 'Brak członków'}</p>
-                </td>
-              </tr>
-            )}
-          </tbody>
+          <tbody>{tableBody()}</tbody>
         </GradesTable>
       </GameCardOptionPick>
 

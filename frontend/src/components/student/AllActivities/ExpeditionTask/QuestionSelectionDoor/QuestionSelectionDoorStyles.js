@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import door from '../../../../../utils/resources/door.png'
-import background from '../../../../../utils/resources/background.png'
+import door from '../../../../../utils/resources/graphTask/door.png'
+import background from '../../../../../utils/resources/graphTask/background5.jpg'
 import { Col } from 'react-bootstrap'
 
 export const Door = styled.div`

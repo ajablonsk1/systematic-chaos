@@ -53,6 +53,14 @@ function BadgesPage(props) {
       })
   }, [])
 
+  const calculateMissingPoints = () => {
+    if (!rankInfo.nextRank) {
+      return '-'
+    }
+
+    return `${rankInfo.nextRank.minPoints - rankInfo.currentPoints}pkt`
+  }
+
   const additionalContent = useCallback(
     (rankIndex) => {
       if (rankIndex === 0) {
@@ -62,7 +70,7 @@ function BadgesPage(props) {
       if (rankIndex === 1) {
         const PERCENTAGE_BAR_WIDTH = 200
         const studentPoints = rankInfo.currentPoints
-        const nextRankPoints = rankInfo?.nextRank.minPoints
+        const nextRankPoints = rankInfo.nextRank?.minPoints
         const currentRankPoints = rankInfo.currentRank.minPoints
 
         if (!nextRankPoints) {
@@ -148,7 +156,7 @@ function BadgesPage(props) {
               </Col>
               <Col md={4}>
                 <strong>Do następnej rangi brakuje: </strong>
-                <span>{rankInfo.nextRank.minPoints - rankInfo.currentPoints} pkt</span>
+                <span>{calculateMissingPoints()}</span>
               </Col>
             </Row>
           </Slide>

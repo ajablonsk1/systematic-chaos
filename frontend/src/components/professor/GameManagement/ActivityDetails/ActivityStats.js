@@ -155,8 +155,8 @@ function ActivityStats(props) {
                   <p>{ERROR_OCCURRED}</p>
                 ) : (
                   <PercentageCircle
-                    percentageValue={(100 * statsData.avgPoints) / 5}
-                    points={statsData.avgPoints}
+                    percentageValue={(100 * statsData.avgPoints ?? 0) / 5}
+                    points={statsData.avgPoints ?? 0}
                     maxPoints={5}
                   />
                 )}

@@ -75,7 +75,7 @@ function Profile(props) {
       <ProfileCard
         header={
           <>
-            <span>Wybrana postać: </span>
+            <span>Wybrana postać </span>
             <strong>{userData && getHeroName(userData.heroType)}</strong>
           </>
         }

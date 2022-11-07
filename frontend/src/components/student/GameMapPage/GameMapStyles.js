@@ -1,6 +1,6 @@
 import { Container } from 'react-bootstrap'
 import styled from 'styled-components'
-import gameMap from './resources/map1.png'
+import gameMap from '../../../utils/resources/gameMap/map1.png'
 
 export const GameMapContainer = styled.div`
   height: ${(props) => (props.$customHeight ? props.$customHeight + 'px' : '90vh')};

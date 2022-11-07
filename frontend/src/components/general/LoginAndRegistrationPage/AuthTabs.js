@@ -3,9 +3,9 @@ import { Row, Tab } from 'react-bootstrap'
 import { AccountType, OK, TabsContainer } from './AuthStyle'
 import LoginForm from './LoginPage/LoginForm'
 import RegistrationForm from './RegistrationPage/RegistrationForm'
-import student from './resources/graduated-white.png'
+import student from '../../../utils/resources/registration/graduated-white.png'
 
-import teacher from './resources/teacher-white.png'
+import teacher from '../../../utils/resources/registration/teacher-white.png'
 import { connect } from 'react-redux'
 
 function AuthTabs(props) {

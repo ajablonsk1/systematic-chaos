@@ -134,7 +134,7 @@ function FeedbackTask(props) {
                       defaultValue={task.feedback?.feedback ?? ''}
                       style={{
                         color: props.theme.font,
-                        backgroundColor: props.theme.secondary,
+                        backgroundColor: props.theme.primary,
                         borderColor: props.theme.primary
                       }}
                     />
