@@ -12,8 +12,10 @@ import com.example.api.model.activity.result.GraphTaskResult;
 import com.example.api.model.activity.result.ResultStatus;
 import com.example.api.model.question.Answer;
 import com.example.api.model.question.Question;
+import com.example.api.model.user.User;
 import com.example.api.repo.question.AnswerRepo;
 import com.example.api.repo.question.QuestionRepo;
+import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import com.example.api.service.user.BadgeService;
@@ -38,6 +40,7 @@ import java.util.List;
 public class QuestionService {
     private final QuestionRepo questionRepo;
     private final AnswerRepo answerRepo;
+    private final UserRepo userRepo;
     private final QuestionValidator questionValidator;
     private final ResultValidator resultValidator;
     private final AuthenticationService authService;
@@ -58,6 +61,8 @@ public class QuestionService {
 
     public Long performQuestionAction(QuestionActionForm form) throws RequestValidationException, TimeLimitExceededException {
         String email = authService.getAuthentication().getName();
+        User user = userRepo.findUserByEmail(email);
+
         ResultStatus status = form.getStatus();
         Long graphTaskId = form.getGraphTaskId();
 
@@ -97,6 +102,7 @@ public class QuestionService {
                 List<Question> nextQuestions = question.getNext();
                 if(nextQuestions.size() == 0){
                     result.setFinished(true);
+                    user.getUserHero().setTimesSuperPowerUsedInResult(0);
                     log.info("Expedition finished");
                     badgeService.checkAllBadges();
                 }

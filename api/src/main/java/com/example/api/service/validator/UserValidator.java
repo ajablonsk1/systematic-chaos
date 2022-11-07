@@ -5,7 +5,10 @@ import com.example.api.error.exception.*;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
+import com.example.api.model.user.hero.Hero;
+import com.example.api.model.user.hero.UserHero;
 import com.example.api.repo.group.GroupRepo;
+import com.example.api.repo.user.HeroRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.service.user.util.ProfessorRegisterToken;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,7 @@ import java.util.List;
 public class UserValidator {
     private final GroupRepo groupRepo;
     private final UserRepo userRepo;
+    private final HeroRepo heroRepo;
     private final ProfessorRegisterToken professorRegisterToken;
 
     public void validateUserIsNotNull(User user, String email) throws UsernameNotFoundException {
@@ -108,7 +112,10 @@ public class UserValidator {
                 throw new EntityNotFoundException(ExceptionMessage.GROUP_CODE_NOT_EXIST);
             }
             newUser.setGroup(group);
-            newUser.setHeroType(form.getHeroType());
+
+            Hero hero = heroRepo.findHeroByType(form.getHeroType());
+            UserHero userHero = new UserHero(hero, 0, 0L);
+            newUser.setUserHero(userHero);
             Integer indexNumber = form.getIndexNumber();
 
             if(indexNumber == null || userRepo.existsUserByIndexNumber(indexNumber)) {

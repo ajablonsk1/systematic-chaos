@@ -22,6 +22,7 @@ import com.example.api.model.user.HeroType;
 import com.example.api.model.user.Rank;
 import com.example.api.model.user.User;
 import com.example.api.model.user.badge.*;
+import com.example.api.model.user.hero.*;
 import com.example.api.model.util.File;
 import com.example.api.model.util.Image;
 import com.example.api.model.util.ImageType;
@@ -30,10 +31,7 @@ import com.example.api.repo.activity.result.AdditionalPointsRepo;
 import com.example.api.repo.activity.result.SurveyResultRepo;
 import com.example.api.repo.map.ChapterRepo;
 import com.example.api.repo.map.RequirementRepo;
-import com.example.api.repo.user.BadgeRepo;
-import com.example.api.repo.user.RankRepo;
-import com.example.api.repo.user.UnlockedBadgeRepo;
-import com.example.api.repo.user.UserRepo;
+import com.example.api.repo.user.*;
 import com.example.api.repo.util.FileRepo;
 import com.example.api.repo.util.UrlRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
@@ -52,7 +50,7 @@ import com.example.api.service.question.OptionService;
 import com.example.api.service.question.QuestionService;
 import com.example.api.service.user.BadgeService;
 import com.example.api.service.user.UserService;
-import com.example.api.util.MessageManager;
+import com.example.api.util.message.MessageManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -66,6 +64,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @RequiredArgsConstructor
@@ -81,6 +80,7 @@ public class DatabaseConfig {
     private final BadgeRepo badgeRepo;
     private final UnlockedBadgeRepo unlockedBadgeRepo;
     private final RequirementRepo requirementRepo;
+    private final HeroRepo heroRepo;
 
     @Bean
     public CommandLineRunner commandLineRunner(UserService userService, ProfessorFeedbackService professorFeedbackService,
@@ -93,6 +93,14 @@ public class DatabaseConfig {
                                                SurveyService surveyService, BadgeService badgeService){
         return args -> {
 
+            // HEROES
+
+            long week = TimeUnit.DAYS.toMillis(7);
+            Hero priest = new Priest(HeroType.PRIEST, week);
+            Hero rogue = new Rogue(HeroType.ROGUE, week);
+            Hero warrior = new Warrior(HeroType.WARRIOR, week);
+            Hero wizard = new Wizard(HeroType.WIZARD, week);
+            heroRepo.saveAll(List.of(priest, rogue, wizard, warrior));
 
             // USERS & GROUPS
 
@@ -102,7 +110,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student.setPassword("12345");
             student.setIndexNumber(123456);
-            student.setHeroType(HeroType.PRIEST);
+            student.setUserHero(new UserHero(priest, 0, 0L));
             student.setPoints(0D);
 
             User student1 = new User("smazur@student.agh.edu.pl",
@@ -111,7 +119,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student1.setPassword("12345");
             student1.setIndexNumber(123457);
-            student1.setHeroType(HeroType.PRIEST);
+            student1.setUserHero(new UserHero(rogue, 0, 0L));
             student1.setPoints(0D);
 
             User student2 = new User("murbanska@student.agh.edu.pl",
@@ -120,7 +128,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student2.setPassword("12345");
             student2.setIndexNumber(123458);
-            student2.setHeroType(HeroType.PRIEST);
+            student2.setUserHero(new UserHero(wizard, 0, 0L));
             student2.setPoints(0D);
 
             User student3 = new User("pwasilewski@student.agh.edu.pl",
@@ -129,7 +137,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student3.setPassword("12345");
             student3.setIndexNumber(123459);
-            student3.setHeroType(HeroType.PRIEST);
+            student3.setUserHero(new UserHero(warrior, 0, 0L));
             student3.setPoints(0D);
 
             User student4 = new User("awojcik@student.agh.edu.pl",
@@ -138,7 +146,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student4.setPassword("12345");
             student4.setIndexNumber(223456);
-            student4.setHeroType(HeroType.WARRIOR);
+            student4.setUserHero(new UserHero(priest, 0, 0L));
             student4.setPoints(0D);
 
             User student5 = new User("kkruk@student.agh.edu.pl",
@@ -147,7 +155,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student5.setPassword("12345");
             student5.setIndexNumber(323456);
-            student5.setHeroType(HeroType.WARRIOR);
+            student5.setUserHero(new UserHero(rogue, 0, 0L));
             student5.setPoints(0D);
 
             User student6 = new User("mdabrowska@student.agh.edu.pl",
@@ -156,7 +164,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student6.setPassword("12345");
             student6.setIndexNumber(423456);
-            student6.setHeroType(HeroType.WARRIOR);
+            student6.setUserHero(new UserHero(wizard, 0, 0L));
             student6.setPoints(0D);
 
             User student7 = new User("aczajkowski@student.agh.edu.pl",
@@ -165,7 +173,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student7.setPassword("12345");
             student7.setIndexNumber(523456);
-            student7.setHeroType(HeroType.WIZARD);
+            student7.setUserHero(new UserHero(warrior, 0, 0L));
             student7.setPoints(0D);
 
             User student8 = new User("mnowak@student.agh.edu.pl",
@@ -174,7 +182,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student8.setPassword("12345");
             student8.setIndexNumber(623456);
-            student8.setHeroType(HeroType.WIZARD);
+            student8.setUserHero(new UserHero(priest, 0, 0L));
             student8.setPoints(0D);
 
             User student9 = new User("jlewandowska@student.agh.edu.pl",
@@ -183,7 +191,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student9.setPassword("12345");
             student9.setIndexNumber(723456);
-            student9.setHeroType(HeroType.WIZARD);
+            student9.setUserHero(new UserHero(rogue, 0, 0L));
             student9.setPoints(0D);
 
             User student10 = new User("mwojcik@student.agh.edu.pl",
@@ -192,7 +200,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student10.setPassword("12345");
             student10.setIndexNumber(823456);
-            student10.setHeroType(HeroType.WIZARD);
+            student10.setUserHero(new UserHero(wizard, 0, 0L));
             student10.setPoints(0D);
 
             User student11 = new User("kpaluch@student.agh.edu.pl",
@@ -201,7 +209,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student11.setPassword("12345");
             student11.setIndexNumber(923456);
-            student11.setHeroType(HeroType.WIZARD);
+            student11.setUserHero(new UserHero(warrior, 0, 0L));
             student11.setPoints(0D);
 
             User student12 = new User("fzalewski@student.agh.edu.pl",
@@ -210,7 +218,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student12.setPassword("12345");
             student12.setIndexNumber(133456);
-            student12.setHeroType(HeroType.WIZARD);
+            student12.setUserHero(new UserHero(priest, 0, 0L));
             student12.setPoints(0D);
 
             User student13 = new User("jmichalak@student.agh.edu.pl",
@@ -219,7 +227,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student13.setPassword("12345");
             student13.setIndexNumber(143456);
-            student13.setHeroType(HeroType.WIZARD);
+            student13.setUserHero(new UserHero(rogue, 0, 0L));
             student13.setPoints(0D);
 
             User student14 = new User("kostrowska@student.agh.edu.pl",
@@ -228,7 +236,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student14.setPassword("12345");
             student14.setIndexNumber(153456);
-            student14.setHeroType(HeroType.ROGUE);
+            student14.setUserHero(new UserHero(wizard, 0, 0L));
             student14.setPoints(0D);
 
             User student15 = new User("dkowalska@student.agh.edu.pl",
@@ -237,7 +245,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student15.setPassword("12345");
             student15.setIndexNumber(163456);
-            student15.setHeroType(HeroType.ROGUE);
+            student15.setUserHero(new UserHero(warrior, 0, 0L));
             student15.setPoints(0D);
 
             User student16 = new User("manowak@student.agh.edu.pl",
@@ -246,7 +254,7 @@ public class DatabaseConfig {
                     AccountType.STUDENT);
             student16.setPassword("12345");
             student16.setIndexNumber(163457);
-            student16.setHeroType(HeroType.ROGUE);
+            student16.setUserHero(new UserHero(priest, 0, 0L));
             student16.setPoints(0D);
 
             User professor = new User("bmaj@agh.edu.pl",
@@ -254,14 +262,12 @@ public class DatabaseConfig {
                     "Maj",
                     AccountType.PROFESSOR);
             professor.setPassword("12345");
-            professor.setHeroType(HeroType.PRIEST);
 
             User professor1 = new User("szielinski@agh.edu.pl",
                     "Sławomir",
                     "Zieliński",
                     AccountType.PROFESSOR);
             professor1.setPassword("12345");
-            professor1.setHeroType(HeroType.PRIEST);
 
             List<User> students1 = List.of(student, student1, student2, student3, student4, student5, student6, student7);
             List<User> students2 = List.of(student8, student9, student10, student11, student12, student13, student14, student15, student16);
@@ -279,10 +285,12 @@ public class DatabaseConfig {
             groupService.saveGroup(group1);
 
             for (User user: students1) {
+                user.setLevel(10);
                 user.setGroup(group);
                 userService.saveUser(user);
             }
             for (User user: students2) {
+                user.setLevel(1);
                 user.setGroup(group1);
                 userService.saveUser(user);
             }
@@ -496,7 +504,6 @@ public class DatabaseConfig {
             GraphTaskResult result1 = new GraphTaskResult();
             result1.setGraphTask(graphTask);
             result1.setUser(student);
-            result1.setMaxPoints100(30.0);
             result1.setPointsReceived(12.0);
             addReceivedPointsForUser(student, result1.getPointsReceived());
             result1.setTimeSpentSec(60 * 10);
@@ -508,7 +515,6 @@ public class DatabaseConfig {
             GraphTaskResult result2 = new GraphTaskResult();
             result2.setGraphTask(graphTaskTwo);
             result2.setUser(student1);
-            result2.setMaxPoints100(10.0);
             result2.setPointsReceived(10.0);
             addReceivedPointsForUser(student1, result2.getPointsReceived());
             result2.setTimeSpentSec(60 * 10);
@@ -520,7 +526,6 @@ public class DatabaseConfig {
             GraphTaskResult result3 = new GraphTaskResult();
             result3.setGraphTask(graphTaskTwo);
             result3.setUser(student8);
-            result3.setMaxPoints100(20.0);
             result3.setPointsReceived(11.0);
             addReceivedPointsForUser(student8, result3.getPointsReceived());
             result3.setTimeSpentSec(60 * 10);
