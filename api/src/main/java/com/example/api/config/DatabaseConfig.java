@@ -285,7 +285,7 @@ public class DatabaseConfig {
             groupService.saveGroup(group1);
 
             for (User user: students1) {
-                user.setLevel(10);
+                user.setLevel(1);
                 user.setGroup(group);
                 userService.saveUser(user);
             }
