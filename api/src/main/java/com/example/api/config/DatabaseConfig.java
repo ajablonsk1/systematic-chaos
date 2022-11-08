@@ -950,7 +950,7 @@ public class DatabaseConfig {
         Badge badge16 = new ActivityScoreBadge(
                 null,
                 "Marsz ku lepszemu",
-                "Posiadaj ponad 60% ze wszystkich punktów z ekspedycji oraz zadań bojowych (liczone po wykonaniu 3 ekspedycji lub zadań bojowych)",
+                "Posiadaj ponad 60% ze wszystkich punktów z wykonanych ekspedycji oraz zadań bojowych (liczone po wykonaniu 3 ekspedycji lub zadań bojowych)",
                 lookingUp,
                 0.6,
                 false
@@ -959,7 +959,7 @@ public class DatabaseConfig {
         Badge badge17 = new ActivityScoreBadge(
                 null,
                 "Uśmiech prowadzącego",
-                "Posiadaj ponad 80% ze wszystkich punktów z ekspedycji oraz zadań bojowych (liczone po wykonaniu 3 ekspedycji lub zadań bojowych)",
+                "Posiadaj ponad 80% ze wszystkich punktów z wykonanych ekspedycji oraz zadań bojowych (liczone po wykonaniu 3 ekspedycji lub zadań bojowych)",
                 smileFromProfessor,
                 0.8,
                 false
@@ -968,7 +968,7 @@ public class DatabaseConfig {
         Badge badge18 = new ActivityScoreBadge(
                 null,
                 "Uścisk dłoni prowadzącego",
-                "Posiadaj ponad 95% ze wszystkich punktów z ekspedycji oraz zadań bojowych (liczone po wykonaniu 3 ekspedycji lub zadań bojowych)",
+                "Posiadaj ponad 95% ze wszystkich punktów z wykonanych ekspedycji oraz zadań bojowych (liczone po wykonaniu 3 ekspedycji lub zadań bojowych)",
                 handshake,
                 0.95,
                 false
