@@ -49,7 +49,8 @@ public class BadgeVisitor {
                 .filter(TaskResult::isEvaluated)
                 .toList();
 
-        if (badge.isForOneActivity()) {
+        Boolean forOneActivity = badge.getForOneActivity();
+        if (forOneActivity!= null && forOneActivity) {
             BigDecimal activityScore = BigDecimal.valueOf(badge.getActivityScore());
             return results.stream().anyMatch(result -> {
                 Activity activity = result.getActivity();
@@ -139,7 +140,8 @@ public class BadgeVisitor {
         if (results.size() < 5) {
             return false;
         }
-        if (badge.getForGroup()) {
+        Boolean forGroup = badge.getForGroup();
+        if (forGroup != null && forGroup) {
             BigDecimal rankingInGroupPosition = BigDecimal.valueOf(rankingService.getGroupRankingPosition());
 
             if (badge.getTopScore() == 0) {

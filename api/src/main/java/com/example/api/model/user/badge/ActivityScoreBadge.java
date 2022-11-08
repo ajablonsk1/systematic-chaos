@@ -13,6 +13,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import java.io.IOException;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ import java.io.IOException;
 @Entity
 public class ActivityScoreBadge extends Badge{
     private Double activityScore;
-    private boolean forOneActivity;
+    private Boolean forOneActivity;
 
     public ActivityScoreBadge(Long id,
                               String title,
@@ -49,8 +50,6 @@ public class ActivityScoreBadge extends Badge{
         super.update(form, validator);
         this.activityScore = validator.validateAndGetDoubleValue(form.getValue());
         Boolean forValue = form.getForValue();
-        if(forValue != null) {
-            this.forOneActivity = forValue;
-        }
+        this.forOneActivity = Objects.requireNonNullElse(forValue, false);
     }
 }
