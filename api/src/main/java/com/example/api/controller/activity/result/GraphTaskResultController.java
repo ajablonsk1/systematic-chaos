@@ -82,7 +82,7 @@ public class GraphTaskResultController {
         return ResponseEntity.ok().body(graphTaskResultService.useSuperPower(graphTaskId, questionId));
     }
 
-    @GetMapping("/super-power/use")
+    @GetMapping("/super-power/can-use")
     public ResponseEntity<SuperPowerUsageResponse> canSuperPowerBeUsed(@RequestParam Long graphTaskId)
             throws RequestValidationException {
         return ResponseEntity.ok().body(graphTaskResultService.canSuperPowerBeUsed(graphTaskId));
