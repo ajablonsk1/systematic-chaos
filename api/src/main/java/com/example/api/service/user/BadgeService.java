@@ -102,13 +102,13 @@ public class BadgeService {
         Image image = new Image("badge", form.getImage().getBytes(), ImageType.BADGE);
         fileRepo.save(image);
         String value = form.getValue();
-        Boolean forGroup = form.getForGroup();
+        Boolean forValue = form.getForValue();
         Badge badge = null;
         switch (type) {
             case ACTIVITY_NUMBER ->
                     badge = new ActivityNumberBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value));
             case ACTIVITY_SCORE ->
-                    badge = new ActivityScoreBadge(null, title, description, image, badgeValidator.validateAndGetDoubleValue(value));
+                    badge = new ActivityScoreBadge(null, title, description, image, badgeValidator.validateAndGetDoubleValue(value), forValue);
             case CONSISTENCY ->
                     badge = new ConsistencyBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value));
             case FILE_TASK_NUMBER ->
@@ -116,7 +116,7 @@ public class BadgeService {
             case GRAPH_TASK_NUMBER ->
                     badge = new GraphTaskNumberBadge(null, title, description, image, badgeValidator.validateAndGetIntegerValue(value));
             case TOP_SCORE ->
-                    badge = new TopScoreBadge(null, title, description, image, badgeValidator.validateAndGetDoubleValue(value), forGroup);
+                    badge = new TopScoreBadge(null, title, description, image, badgeValidator.validateAndGetDoubleValue(value), forValue);
         }
         return badge;
     }

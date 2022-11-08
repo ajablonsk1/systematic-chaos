@@ -48,6 +48,21 @@ public class BadgeVisitor {
                 .stream()
                 .filter(TaskResult::isEvaluated)
                 .toList();
+
+        if (badge.isForOneActivity()) {
+            BigDecimal activityScore = BigDecimal.valueOf(badge.getActivityScore());
+            return results.stream().anyMatch(result -> {
+                Activity activity = result.getActivity();
+                BigDecimal maxPoints = BigDecimal.valueOf(activity.getMaxPoints());
+                BigDecimal resultPoints = BigDecimal.valueOf(result.getPointsReceived());
+                BigDecimal score = resultPoints.divide(maxPoints, 2, RoundingMode.HALF_UP);
+                return score.compareTo(activityScore) >= 0;
+            });
+        }
+
+        if (results.size() < 3) {
+            return false;
+        }
         List<Activity> activities = results.stream()
                 .map(TaskResult::getActivity)
                 .toList();

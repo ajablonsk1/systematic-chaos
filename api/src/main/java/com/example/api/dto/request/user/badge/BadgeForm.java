@@ -14,5 +14,5 @@ public class BadgeForm {
     @Schema(required = true) private String description;
     @Schema(required = false) private MultipartFile image;
     @Schema(required = true) private String value;
-    @Schema(required = false) private Boolean forGroup;
+    @Schema(required = false) private Boolean forValue;
 }
