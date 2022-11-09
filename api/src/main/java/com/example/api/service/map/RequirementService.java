@@ -5,7 +5,7 @@ import com.example.api.error.exception.RequestValidationException;
 import com.example.api.model.map.requirement.*;
 import com.example.api.repo.map.RequirementRepo;
 import com.example.api.service.validator.MapValidator;
-import com.example.api.util.MessageManager;
+import com.example.api.util.message.MessageManager;
 import com.example.api.util.visitor.RequirementFulfilledVisitor;
 import com.example.api.util.visitor.RequirementValueVisitor;
 import lombok.RequiredArgsConstructor;

@@ -6,7 +6,6 @@ import com.example.api.dto.request.user.SetStudentGroupForm;
 import com.example.api.dto.request.user.SetStudentIndexForm;
 import com.example.api.dto.response.user.BasicStudent;
 import com.example.api.error.exception.*;
-import com.example.api.model.activity.task.Activity;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.AccountType;
 import com.example.api.model.user.User;
@@ -76,6 +75,7 @@ public class UserService implements UserDetailsService {
         userValidator.validateUserRegistration(dbUser, user, form, email);
         user.setPassword(passwordEncoder.encode(form.getPassword()));
         user.setPoints(0D);
+        user.setLevel(1);
         userRepo.save(user);
         return user.getId();
     }
@@ -198,5 +198,12 @@ public class UserService implements UserDetailsService {
                 .map(User::getEmail)
                 .filter(email -> !email.equals(professorEmail))
                 .toList();
+    }
+
+    public User getCurrentUserAndValidateStudentAccount() throws WrongUserTypeException {
+        String email = authService.getAuthentication().getName();
+        User user = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(user, email);
+        return user;
     }
 }

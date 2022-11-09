@@ -2,6 +2,7 @@ package com.example.api.model.user;
 
 import com.example.api.model.group.Group;
 import com.example.api.model.user.badge.UnlockedBadge;
+import com.example.api.model.user.hero.UserHero;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,8 +43,8 @@ public class User {
     private Integer level;
     private Double points;
 
-    @Enumerated(EnumType.STRING)
-    private HeroType heroType;
+    @Embedded
+    private UserHero userHero;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
@@ -56,5 +57,9 @@ public class User {
     public synchronized void changePoints(Double diff) {
         if (points + diff < 0) return;
         points = points + diff;
+    }
+
+    public HeroType getHeroType() {
+        return userHero.getHero().getType();
     }
 }

@@ -6,7 +6,7 @@ import com.example.api.dto.response.activity.task.InfoResponse;
 import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.service.activity.task.InfoService;
-import com.example.api.util.MessageManager;
+import com.example.api.util.message.MessageManager;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

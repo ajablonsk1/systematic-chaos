@@ -1,4 +1,4 @@
-package com.example.api.util;
+package com.example.api.util.message;
 
 public class MessageManager {
     public static final String QUESTION_1 = "W którym roku odbyła się bitwa pod Grunwaldem?";

@@ -7,7 +7,7 @@ import com.example.api.error.exception.EntityNotFoundException;
 import com.example.api.error.exception.RequestValidationException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.activity.task.SurveyService;
-import com.example.api.util.MessageManager;
+import com.example.api.util.message.MessageManager;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

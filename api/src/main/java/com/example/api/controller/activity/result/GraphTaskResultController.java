@@ -1,15 +1,15 @@
 package com.example.api.controller.activity.result;
 
 import com.example.api.dto.request.activity.result.SaveGraphTaskResultForm;
-import com.example.api.error.exception.EntityAlreadyInDatabaseException;
-import com.example.api.error.exception.EntityNotFoundException;
-import com.example.api.error.exception.EntityRequiredAttributeNullException;
-import com.example.api.error.exception.WrongUserTypeException;
+import com.example.api.dto.response.activity.result.SuperPowerResponse;
+import com.example.api.dto.response.activity.result.SuperPowerUsageResponse;
+import com.example.api.error.exception.*;
 import com.example.api.service.activity.result.GraphTaskResultService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -74,4 +74,17 @@ public class GraphTaskResultController {
         return ResponseEntity.ok().body(graphTaskResultService.getTimeLeftAfterEnd(resultId));
     }
 
+    @GetMapping("/super-power")
+    public ResponseEntity<SuperPowerResponse<?>> useSuperPower(
+            @RequestParam Long graphTaskId,
+            @Nullable @RequestParam Long questionId
+    ) throws RequestValidationException {
+        return ResponseEntity.ok().body(graphTaskResultService.useSuperPower(graphTaskId, questionId));
+    }
+
+    @GetMapping("/super-power/can-use")
+    public ResponseEntity<SuperPowerUsageResponse> canSuperPowerBeUsed(@RequestParam Long graphTaskId)
+            throws RequestValidationException {
+        return ResponseEntity.ok().body(graphTaskResultService.canSuperPowerBeUsed(graphTaskId));
+    }
 }
