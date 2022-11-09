@@ -199,4 +199,11 @@ public class UserService implements UserDetailsService {
                 .filter(email -> !email.equals(professorEmail))
                 .toList();
     }
+
+    public User getCurrentUserAndValidateStudentAccount() throws WrongUserTypeException {
+        String email = authService.getAuthentication().getName();
+        User user = userRepo.findUserByEmail(email);
+        userValidator.validateStudentAccount(user, email);
+        return user;
+    }
 }

@@ -14,6 +14,7 @@ import com.example.api.repo.activity.task.GraphTaskRepo;
 import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
+import com.example.api.service.user.UserService;
 import com.example.api.service.validator.QuestionValidator;
 import com.example.api.service.validator.ResultValidator;
 import com.example.api.service.validator.UserValidator;
@@ -42,8 +43,8 @@ public class GraphTaskResultService {
     private final UserValidator userValidator;
     private final TimeCalculator timeCalculator;
     private final AuthenticationService authService;
+    private final UserService userService;
     private final ActivityValidator activityValidator;
-    private final QuestionValidator questionValidator;
     private final HeroVisitor heroVisitor;
 
     public Long getGraphTaskResultId(Long graphTaskId)
@@ -164,7 +165,7 @@ public class GraphTaskResultService {
     }
 
     public SuperPowerResponse<?> useSuperPower(Long graphTaskId, Long questionId) throws RequestValidationException {
-        User user = getCurrentUserAndValidateStudentAccount();
+        User user = userService.getCurrentUserAndValidateStudentAccount();
         Hero hero = user.getUserHero().getHero();
 
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(graphTaskId);
@@ -175,7 +176,7 @@ public class GraphTaskResultService {
     }
 
     public SuperPowerUsageResponse canSuperPowerBeUsed(Long graphTaskId) throws RequestValidationException {
-        User user = getCurrentUserAndValidateStudentAccount();
+        User user = userService.getCurrentUserAndValidateStudentAccount();
         Hero hero = user.getUserHero().getHero();
 
         GraphTask graphTask = graphTaskRepo.findGraphTaskById(graphTaskId);
@@ -191,12 +192,5 @@ public class GraphTaskResultService {
         GraphTaskResult result = graphTaskResultRepo.findGraphTaskResultByGraphTaskAndUser(graphTask, user);
         resultValidator.validateResultIsNotNull(result, graphTask.getId(), user.getEmail());
         return result;
-    }
-
-    private User getCurrentUserAndValidateStudentAccount() throws WrongUserTypeException {
-        String email = authService.getAuthentication().getName();
-        User user = userRepo.findUserByEmail(email);
-        userValidator.validateStudentAccount(user, email);
-        return user;
     }
 }
