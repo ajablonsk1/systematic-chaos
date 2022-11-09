@@ -13,6 +13,9 @@ function Points(props) {
   const [pointsData, setPointsData] = useState(undefined)
   const [totalPointsData, setTotalPointsData] = useState(undefined)
   const calculatedPercentageValue = useCallback(() => {
+    if (totalPointsData.totalPointsPossibleToReceive === 0) {
+      return 0
+    }
     return Math.round(100 * (totalPointsData.totalPointsReceived / totalPointsData.totalPointsPossibleToReceive))
   }, [totalPointsData])
   const pointsToNextRank = 210

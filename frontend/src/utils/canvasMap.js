@@ -1,4 +1,4 @@
-import map1_img from './resources/map_1_sc.png'
+import map1_img from './resources/heroes/map_1_sc.png'
 
 const Map = {
   background: map1_img,

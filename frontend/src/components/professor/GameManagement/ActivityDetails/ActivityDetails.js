@@ -10,6 +10,7 @@ import ActivityStats from './ActivityStats'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
 import Requirements from '../Requirements/Requirements'
+import { Activity } from '../../../../utils/constants'
 
 function ActivityDetails(props) {
   const location = useLocation()
@@ -27,10 +28,11 @@ function ActivityDetails(props) {
         setStudentsList(response)
         setFilteredList(response)
       })
-      .catch(() => {})
-    setStudentsList(null)
-    setFilteredList(null)
-  }, [activityId])
+      .catch(() => {
+        setStudentsList(null)
+        setFilteredList(null)
+      })
+  }, [activityId, activityType])
 
   useEffect(() => {
     if (filterQuery) {
@@ -71,10 +73,14 @@ function ActivityDetails(props) {
             rankingList={filteredList}
             customHeight={'80vh'}
             noPointsMessage={'Nie wykonano'}
-            iconCallback={(student) => {
-              setIsStudentAnswerModalOpen(true)
-              setChosenStudent(student)
-            }}
+            iconCallback={
+              activityType === Activity.SURVEY
+                ? (student) => {
+                    setIsStudentAnswerModalOpen(true)
+                    setChosenStudent(student)
+                  }
+                : null
+            }
           />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
@@ -97,7 +103,7 @@ function ActivityDetails(props) {
         </ModalHeader>
         <ModalBody style={{ maxHeight: '80vh', overflow: 'auto' }}>
           <div>
-            <h6>Ocena: </h6>
+            <h6>Ocena od studenta: </h6>
             <p>{chosenStudent?.studentAnswer?.studentPoints ?? '-'}/5</p>
           </div>
           <div>

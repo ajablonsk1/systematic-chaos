@@ -3,6 +3,7 @@ package com.example.api.model.user;
 import com.example.api.model.group.Group;
 import com.example.api.model.user.badge.UnlockedBadge;
 import com.example.api.model.user.hero.UserHero;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,6 +50,7 @@ public class User {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<UnlockedBadge> unlockedBadges = new LinkedList<>();
 

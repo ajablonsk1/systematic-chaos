@@ -1,4 +1,4 @@
-import { getMap } from '../../../storage/canvasMap'
+import { getMap } from '../../../utils/canvasMap'
 import { HeroDataset } from '../../../utils/constants'
 
 function createMap() {

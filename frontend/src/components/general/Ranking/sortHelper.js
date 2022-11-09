@@ -39,7 +39,8 @@ export const sortArray = (array, order, sortedVariables, options = {}) => {
     const firstValue = getArrayValue(sortedVariables, a, options)
     const secondValue = getArrayValue(sortedVariables, b, options)
 
-    if (!firstValue || !secondValue) {
+    // WARNING: watch out for 0
+    if (firstValue == null || secondValue == null) {
       return 0
     }
 

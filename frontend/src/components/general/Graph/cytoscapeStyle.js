@@ -1,5 +1,5 @@
-import nodeIcon from './node-edit.png'
-import labelIcon from './label1.png'
+import nodeIcon from '../../../utils/resources/graphElements/node-edit.png'
+import labelIcon from '../../../utils/resources/graphElements/label1.png'
 
 const FONT_FAMILY = 'Patrick Hand'
 

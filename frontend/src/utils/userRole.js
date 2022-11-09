@@ -7,7 +7,8 @@ export const Role = {
 export const AccountType = {
   STUDENT: 'STUDENT',
   PROFESSOR: 'PROFESSOR',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  NOT_LOGGED_IN: 'NOT_LOGGED_IN'
 }
 
 export const HeroType = {
