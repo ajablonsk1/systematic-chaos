@@ -145,7 +145,7 @@ public class BadgeVisitorTest {
         fileTaskResult2.setFileTask(fileTask2);
 
         doReturn(results).when(taskResultService).getGraphAndFileResultsForStudent(user);
-        ActivityScoreBadge activityScoreBadge = new ActivityScoreBadge(0.8);
+        ActivityScoreBadge activityScoreBadge = new ActivityScoreBadge(0.8, false);
 
         //when
         boolean isGranted = badgeVisitor.visitActivityScoreBadge(activityScoreBadge);
@@ -176,7 +176,7 @@ public class BadgeVisitorTest {
         fileTaskResult2.setFileTask(fileTask2);
 
         doReturn(results).when(taskResultService).getGraphAndFileResultsForStudent(user);
-        ActivityScoreBadge activityScoreBadge = new ActivityScoreBadge(0.8);
+        ActivityScoreBadge activityScoreBadge = new ActivityScoreBadge(0.8, false);
 
         //when
         boolean isGranted = badgeVisitor.visitActivityScoreBadge(activityScoreBadge);

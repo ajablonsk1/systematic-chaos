@@ -50,7 +50,7 @@ public class TopScoreBadge extends Badge{
         super.update(form, validator);
         this.topScore = validator.validateAndGetDoubleValue(form.getValue());
 
-        Boolean forGroup = form.getForGroup();
+        Boolean forGroup = form.getForValue();
         this.forGroup = Objects.requireNonNullElse(forGroup, false);
     }
 }
