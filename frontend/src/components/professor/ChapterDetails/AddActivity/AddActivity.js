@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
-import { Button, Spinner } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
 import { connect } from 'react-redux'
 import Loader from '../../../general/Loader/Loader'

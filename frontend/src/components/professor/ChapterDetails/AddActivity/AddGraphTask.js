@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Spinner, Tab, Tabs } from 'react-bootstrap'
+import { Button, Tab, Tabs } from 'react-bootstrap'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
 import { getGraphElements, getNodeColor } from '../../../general/Graph/graphHelper'
