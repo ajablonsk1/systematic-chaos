@@ -46,12 +46,14 @@ function ExpeditionSummary(props) {
       //StudentService.getActivityScore()...
       const promise2 = ExpeditionService.getExpeditionAllPoints(activityScore)
         .then((response) => {
-          setScoredPoints(response !== '' ? response : 0)
+          setScoredPoints(!!response ? response?.toFixed(2) : 0)
         })
         .catch(() => setScoredPoints(0))
 
       const promise3 = ExpeditionService.getExpeditionPointsClosed(activityScore)
-        .then((response) => setClosedQuestionPoints(response ?? 0))
+        .then((response) => {
+          setClosedQuestionPoints(response ? response?.toFixed(2) : 0)
+        })
         .catch(() => setClosedQuestionPoints(0))
 
       const promise4 = ExpeditionService.getExpeditionPointsMaxClosed(activityScore)
