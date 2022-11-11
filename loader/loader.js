@@ -19,6 +19,11 @@ const POST_TASK_GRAPH_CREATE = BASE_URL + "/task/graph" + "/create";
 const POST_SURVEY_CREATE = BASE_URL + "/survey" + "/create";
 const POST_TASK_FILE_CREATE = BASE_URL + "/task" + "/file" + "/create";
 const POST_INFO_CREATE = BASE_URL + "/info" + "/create";
+const GET_TASK_REQUIREMENTS = BASE_URL + "/task" + "/requirements";
+const GET_ACTIVITY_MAP = BASE_URL + "/map";
+const POST_TASK_REQUIREMENTS_UPDATE =
+  BASE_URL + "/task" + "/requirements" + "/update";
+
 //utils
 const readJson = (path) => {
   const file = fs.readFileSync(path);
@@ -66,10 +71,18 @@ function countChapters() {
 
 function countActivitiesForChapter(chapterNum, type) {
   let ACTIVITY_COUNT = 0;
-  ACTIVITY_COUNT = fs.readdirSync(
-    DATA_LOCATION + "/" + type + "/" + chapterNum
-  ).length;
+  ACTIVITY_COUNT =
+    fs.readdirSync(DATA_LOCATION + "/" + type + "/" + chapterNum).length - 1;
   return ACTIVITY_COUNT;
+}
+
+async function getTaskList(chapterId) {
+  const activityMap = await axios.get(
+    GET_ACTIVITY_MAP,
+    validHeader({ activityMapId: chapterId })
+  );
+  const taskList = activityMap.data.tasks;
+  return taskList;
 }
 
 async function createExpedition(chapterNum, chapterId, activityNum) {
@@ -176,6 +189,72 @@ async function addInfoTasksToChapter(chapterNum, chapterId) {
   }
 }
 
+async function addRequirementToSingleActivity(
+  chapterNum,
+  activityNum,
+  activityId,
+  type
+) {
+  const currentRequirementsData = await axios.get(
+    GET_TASK_REQUIREMENTS,
+    validHeader({
+      activityId: activityId.id,
+    })
+  );
+  const newRequirementsData = readJson(
+    DATA_LOCATION +
+      "/" +
+      type +
+      "/" +
+      chapterNum +
+      "/requirements/" +
+      activityNum.toString() +
+      ".json"
+  );
+
+  const newRequirementsDataWithIds = newRequirementsData.requirements.map(
+    (el) => {
+      const attributeId = currentRequirementsData.data.requirements.find(
+        (originalEl) => originalEl.name === el.name
+      ).id;
+      return { id: attributeId, selected: el.selected, value: el.value };
+    }
+  );
+
+  await axios.post(
+    POST_TASK_REQUIREMENTS_UPDATE,
+    {
+      activityId: activityId.id,
+      isBlocked: false,
+      requirements: newRequirementsDataWithIds,
+    },
+    validHeader()
+  );
+}
+
+async function addRequirementsToTypeTasksInChapter(
+  chapterNum,
+  activityIds,
+  type
+) {
+  for (let i = 1; i <= countActivitiesForChapter(chapterNum, type); i++) {
+    addRequirementToSingleActivity(chapterNum, i, activityIds[i - 1], type);
+  }
+}
+
+async function addRequirementsToTasksInChapter(chapterNum, taskList) {
+  //we get an array here with activities added in order as those are created
+  const infoIds = taskList.filter((el) => el.type === "INFO");
+  const expeditionIds = taskList.filter((el) => el.type === "EXPEDITION");
+  const surveyIds = taskList.filter((el) => el.type === "SURVEY");
+  const taskIds = taskList.filter((el) => el.type === "TASK");
+
+  addRequirementsToTypeTasksInChapter(chapterNum, infoIds, "info");
+  addRequirementsToTypeTasksInChapter(chapterNum, expeditionIds, "expedition");
+  addRequirementsToTypeTasksInChapter(chapterNum, surveyIds, "survey");
+  addRequirementsToTypeTasksInChapter(chapterNum, taskIds, "combat");
+}
+
 async function createAll() {
   for (let i = 1; i <= countChapters(); i++) {
     let currentId = await createChapter(i);
@@ -183,6 +262,8 @@ async function createAll() {
     await addExpeditionsInChapter(i, currentId);
     await addSurveysToChapter(i, currentId);
     await addFileTasksToChapter(i, currentId);
+    const taskList = await getTaskList(currentId);
+    await addRequirementsToTasksInChapter(i, taskList);
   }
 }
 
@@ -190,8 +271,6 @@ async function createAll() {
 //read chapter folder and get first (or nth)
 //create chapter and get its id
 //add expeditions for this id
-
-//TODO
 //add surveys for this id
 //add info for this id
 //add combat for this id

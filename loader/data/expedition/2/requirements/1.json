@@ -1,0 +1,47 @@
+{
+  "isBlocked": false,
+  "requirements": [
+    {
+      "name": "Data, od której aktywność będzie dostępna",
+      "value": 1660231800000,
+      "type": "DATE",
+      "selected": true
+    },
+    {
+      "name": "Data, do której aktywność będzie dostępna",
+      "value": 1685719800000,
+      "type": "DATE",
+      "selected": true
+    },
+    {
+      "name": "Minimalna ilość punktów",
+      "value": "0",
+      "type": "NUMBER",
+      "selected": false
+    },
+    {
+      "name": "Nazwy grup, które są dopuszczone do tej aktywności",
+      "value": "",
+      "type": "MULTI_SELECT",
+      "selected": false
+    },
+    {
+      "name": "Emaile studentów, którzy są dopuszczeni do tej aktywności",
+      "value": "",
+      "type": "MULTI_SELECT",
+      "selected": false
+    },
+    {
+      "name": "Nazwy ekpsedycji, które muszą zostać wcześniej ukończone",
+      "value": "",
+      "type": "MULTI_SELECT",
+      "selected": false
+    },
+    {
+      "name": "Nazwy zadań bojowych, które muszą zostać wcześniej ukończone",
+      "value": "",
+      "type": "MULTI_SELECT",
+      "selected": false
+    }
+  ]
+}
