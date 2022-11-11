@@ -1,0 +1,16 @@
+{
+  "groups": [
+    {
+      "name": "groupOne",
+      "invitationCode": "password1"
+    },
+    {
+      "name": "groupTwo",
+      "invitationCode": "password2"
+    },
+    {
+      "name": "groupThree",
+      "invitationCode": "password3"
+    }
+  ]
+}
