@@ -14,13 +14,16 @@ function PriestSuperPower(props) {
       .catch(() => {
         setSuperPowerCanBeUsed(null)
       })
-  }, [props, superPowerInfo])
+
+    // eslint-disable-next-line
+  }, [superPowerInfo])
 
   useEffect(() => {
     if (superPowerInfo?.value) {
       props.setRemainingTime(+superPowerInfo.value / 1000) // ms -> s
     }
-  }, [props, superPowerInfo])
+    //eslint-disable-next-line
+  }, [superPowerInfo])
 
   const startUsingSuperPower = () => {
     if (!superPowerCanBeUsed?.canBeUsed) {

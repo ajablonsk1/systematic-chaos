@@ -27,17 +27,23 @@ export default function InfoContainer(props) {
   const [timer, setTimer] = useState('')
   const [timerInterval, setTimerInterval] = useState(null)
 
+  const setIntervalForTimer = () => {
+    setTimerInterval(
+      setInterval(function () {
+        setRemainingTime((prevState) => prevState - 1)
+      }, 1000)
+    )
+  }
+
   useEffect(() => {
     const timeInSeconds = timeToSolveMillis / 1000
     setRemainingTime(timeInSeconds)
     if (timerInterval == null) {
-      setTimerInterval(
-        setInterval(function () {
-          setRemainingTime((prevState) => prevState - 1)
-        }, 1000)
-      )
+      setIntervalForTimer()
     }
-  }, [timeToSolveMillis, timerInterval])
+
+    // eslint-disable-next-line
+  }, [timeToSolveMillis])
 
   // complete the expedition and record user responses if the expedition has not been completed
   // before the timer runs out
@@ -49,6 +55,12 @@ export default function InfoContainer(props) {
       setTimer(getTimer(remainingTime))
     }
   }, [activityId, remainingTime, timerInterval, endAction])
+
+  const changeRemainingTime = (updatedRemainingTime) => {
+    clearInterval(timerInterval)
+    setRemainingTime(updatedRemainingTime)
+    setIntervalForTimer()
+  }
 
   const percentageBar = useMemo(() => {
     const PERCENTAGE_BAR_WIDTH = 300
@@ -77,7 +89,7 @@ export default function InfoContainer(props) {
         actualQuestionId={props.actualQuestionId}
       />
       <SuperPower
-        setRemainingTime={setRemainingTime}
+        setRemainingTime={changeRemainingTime}
         activityId={activityId}
         questions={props.questions}
         status={props.status}
