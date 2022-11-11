@@ -74,7 +74,9 @@ export default function InfoContainer(props) {
         $height={PERCENTAGE_BAR_HEIGHT}
         style={isMobileView() ? mobileViewStyle : desktopViewStyle}
       >
-        <strong className={'d-flex justify-content-center'}>{`${props.actualPoints}/${props.maxPoints}`}</strong>
+        <strong className={'d-flex justify-content-center'}>{`${props.actualPoints?.toFixed(2)}/${
+          props.maxPoints
+        }`}</strong>
       </PercentageBar>
     )
   }, [props.actualPoints, props.maxPoints])
