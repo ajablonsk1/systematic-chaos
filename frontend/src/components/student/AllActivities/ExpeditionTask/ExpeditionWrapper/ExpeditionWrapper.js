@@ -23,20 +23,33 @@ QuestionSelectionDoor
 export function ExpeditionWrapper() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { activityId, alreadyStarted, maxPoints } = location.state
+  const { activityId, maxPoints } = location.state
 
   const [expeditionState, setExpeditionState] = useState(undefined)
+  const [alreadyStarted, setAlreadyStarted] = useState(undefined)
 
   // we will pass this function to "lower" components so that we can reload info from endpoint
   // in wrapper on changes
   // if it breaks, check whether we don't need to pass activityId in here explicitly
-  const reloadState = useCallback(
-    () =>
-      ExpeditionService.getCurrentState(activityId).then((response) => {
-        setExpeditionState(response)
-      }),
-    [activityId]
-  )
+  const reloadState = useCallback(() => {
+    if (activityId) {
+      ExpeditionService.getCurrentState(activityId)
+        .then((response) => {
+          setExpeditionState(response)
+          setAlreadyStarted(true)
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            setAlreadyStarted(false)
+          }
+        })
+    }
+  }, [activityId])
+
+  // Get current state always on page refresh (rerender)
+  useEffect(() => {
+    reloadState()
+  }, [reloadState])
 
   const goToSummary = useCallback(() => {
     if (expeditionState) {
@@ -51,16 +64,10 @@ export function ExpeditionWrapper() {
   }, [activityId, expeditionState, navigate])
 
   useEffect(() => {
-    if (activityId) {
-      if (alreadyStarted) {
-        // no need to start the expedition again, just do getInfo
+    if (alreadyStarted === false && activityId) {
+      ExpeditionService.setExpeditionStart(activityId).then(() => {
         reloadState()
-      } else {
-        // else start the expedition and do getInfo then
-        ExpeditionService.setExpeditionStart(activityId).then(() => {
-          reloadState()
-        })
-      }
+      })
     }
   }, [activityId, alreadyStarted, reloadState])
 

@@ -55,7 +55,6 @@ function ActivityContent(props) {
     navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.EXPEDITION_WRAPPER, {
       state: {
         activityId: activityId,
-        alreadyStarted: activityScore !== -1,
         maxPoints: props.activity.maxPoints
       }
     })

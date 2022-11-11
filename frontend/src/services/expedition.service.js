@@ -90,7 +90,7 @@ class ExpeditionService {
   }
 
   getCurrentState(activityId) {
-    return axiosApiGet(GET_QUESTION_INFO, { graphTaskId: activityId }).catch((error) => {
+    return axiosApiGet(GET_QUESTION_INFO, { graphTaskId: activityId }, true).catch((error) => {
       throw error
     })
   }
