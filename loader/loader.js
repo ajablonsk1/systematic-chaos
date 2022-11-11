@@ -16,6 +16,7 @@ const POST_LOGIN = BASE_URL + "/login";
 const GET_CHAPTER = BASE_URL + "/chapter";
 const POST_CHAPTER_CREATE = BASE_URL + "/chapter" + "/create";
 const POST_TASK_GRAPH_CREATE = BASE_URL + "/task/graph" + "/create";
+const POST_SURVEY_CREATE = BASE_URL + "/survey" + "/create";
 
 //utils
 const readJson = (path) => {
@@ -45,8 +46,7 @@ async function login() {
 //create a single chapter and return id
 async function createChapter(i) {
   const requestBody = readJson(CHAPTER_LOCATION + "/" + i.toString() + ".json");
-  console.log(requestBody.name);
-  console.log(validHeader());
+
   //create chapter
   await axios.post(POST_CHAPTER_CREATE, requestBody, validHeader());
 
@@ -97,18 +97,46 @@ async function addExpeditionsInChapter(chapterNum, chapterId) {
   }
 }
 
+async function createSurvey(chapterNum, chapterId, surveyNum) {
+  const surveyContent = readJson(
+    DATA_LOCATION +
+      "/survey/" +
+      chapterNum +
+      "/" +
+      surveyNum.toString() +
+      ".json"
+  );
+  await axios.post(
+    POST_SURVEY_CREATE,
+    {
+      chapterId: chapterId,
+      form: surveyContent,
+    },
+    validHeader()
+  );
+}
+
+async function addSurveysToChapter(chapterNum, chapterId) {
+  const ACTIVITY_COUNT = countActivitiesForChapter(chapterNum, "survey");
+  for (let i = 1; i <= ACTIVITY_COUNT; i++) {
+    await createSurvey(chapterNum, chapterId, i);
+  }
+}
+
 async function createAll() {
   for (let i = 1; i <= countChapters(); i++) {
     let currentId = await createChapter(i);
     await addExpeditionsInChapter(i, currentId);
+    await addSurveysToChapter(i, currentId);
   }
 }
 
 //in loop for every chapter
 //read chapter folder and get first (or nth)
-
 //create chapter and get its id
 //add expeditions for this id
+
+//TODO
 //add surveys for this id
 //add info for this id
 //add combat for this id
