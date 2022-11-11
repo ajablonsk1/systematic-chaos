@@ -5,11 +5,16 @@ import ExpeditionService from '../../../../../services/expedition.service'
 import { ERROR_OCCURRED, EXPEDITION_STATUS } from '../../../../../utils/constants'
 import { connect } from 'react-redux'
 
-function generateDoor(question, noDoors, onDoorClick, buttonColor) {
+function generateDoor(question, noDoors, onDoorClick, buttonColor, questionType) {
   return (
     <DoorColumn key={question.id + Date.now()} xl={12 / noDoors} md={12}>
       <Row className='mx-auto'>
-        <h3>{question.difficulty?.toUpperCase()}</h3>
+        <h3 className={'text-center'}>{question.difficulty?.toUpperCase()}</h3>
+        {questionType?.id === question.id ? (
+          <h5 className={'m-0 p-0 text-center'}>{questionType.type} pkt</h5>
+        ) : (
+          <p style={{ margin: '12px 0' }} />
+        )}
       </Row>
 
       <Row>
@@ -34,6 +39,7 @@ function generateDoor(question, noDoors, onDoorClick, buttonColor) {
 
 function QuestionSelectionDoor(props) {
   const { activityId: expeditionId, questions, reloadInfo } = props
+  const questionType = JSON.parse(localStorage.getItem('questionPoints'))
 
   const onDoorClick = (questionId) => {
     // change state, reloadInfo
@@ -53,7 +59,9 @@ function QuestionSelectionDoor(props) {
         </p>
       ) : (
         <Row className='m-0'>
-          {questions.map((question) => generateDoor(question, questions.length, onDoorClick, props.theme.success))}
+          {questions.map((question) =>
+            generateDoor(question, questions.length, onDoorClick, props.theme.success, questionType)
+          )}
         </Row>
       )}
     </Content>

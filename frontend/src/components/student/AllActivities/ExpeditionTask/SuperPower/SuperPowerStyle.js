@@ -32,3 +32,29 @@ export const SuperPowerButton = styled.div`
     bottom: 85px;
   }
 `
+
+export const ShootingPanel = styled.div`
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: ${(props) => (props.$isExpanded ? 'calc(100vw - 330px)' : 'calc(100vw - 55px)')};
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  & svg {
+    font-size: 128px;
+    color: white;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  & button {
+    position: absolute;
+    bottom: 20px;
+  }
+`

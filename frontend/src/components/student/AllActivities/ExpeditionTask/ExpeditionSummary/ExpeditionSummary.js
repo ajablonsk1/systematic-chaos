@@ -67,6 +67,7 @@ function ExpeditionSummary(props) {
   }, [expeditionId, navigate, activityScore])
 
   const finishExpeditionAndGoHome = () => {
+    localStorage.removeItem('questionPoints')
     navigate(StudentRoutes.GAME_MAP.MAIN)
   }
 
