@@ -5,16 +5,28 @@ import ExpeditionService from '../../../../../services/expedition.service'
 import { ERROR_OCCURRED, EXPEDITION_STATUS } from '../../../../../utils/constants'
 import { connect } from 'react-redux'
 
-function generateDoor(question, noDoors, onDoorClick, buttonColor, questionType) {
+const getQuestionDetails = (questionId, questionType, questionPoints) => {
+  if (questionPoints && questionId === questionPoints.id) {
+    return questionPoints.value + 'pkt'
+  }
+
+  if (questionType && questionId === questionType.id) {
+    return questionType.value
+  }
+
+  return null
+}
+
+function generateDoor(question, noDoors, onDoorClick, buttonColor, questionPoints, questionType) {
+  const questionDetails = getQuestionDetails(question.id, questionType, questionPoints)
+
   return (
     <DoorColumn key={question.id + Date.now()} xl={12 / noDoors} md={12}>
       <Row className='mx-auto'>
         <h3 className={'text-center'}>{question.difficulty?.toUpperCase()}</h3>
-        {questionType?.id === question.id ? (
-          <h5 className={'m-0 p-0 text-center'}>{questionType.type} pkt</h5>
-        ) : (
-          <p style={{ margin: '12px 0' }} />
-        )}
+        <h5 className={'p-0 text-center'} style={{ margin: questionDetails ? '0' : '12px 0' }}>
+          {questionDetails}
+        </h5>
       </Row>
 
       <Row>
@@ -39,7 +51,8 @@ function generateDoor(question, noDoors, onDoorClick, buttonColor, questionType)
 
 function QuestionSelectionDoor(props) {
   const { activityId: expeditionId, questions, reloadInfo } = props
-  const questionType = JSON.parse(localStorage.getItem('questionPoints'))
+  const questionPoints = JSON.parse(localStorage.getItem('questionPoints'))
+  const questionType = JSON.parse(localStorage.getItem('questionType'))
 
   const onDoorClick = (questionId) => {
     // change state, reloadInfo
@@ -60,7 +73,7 @@ function QuestionSelectionDoor(props) {
       ) : (
         <Row className='m-0'>
           {questions.map((question) =>
-            generateDoor(question, questions.length, onDoorClick, props.theme.success, questionType)
+            generateDoor(question, questions.length, onDoorClick, props.theme.success, questionPoints, questionType)
           )}
         </Row>
       )}

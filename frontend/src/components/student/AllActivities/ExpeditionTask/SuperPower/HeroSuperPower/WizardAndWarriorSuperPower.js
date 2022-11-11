@@ -8,7 +8,7 @@ import { Button, Col, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 
 // TODO: custom hook for all hero types for checking usage is possible
-function WizardSuperPower(props) {
+function WizardAndWarriorSuperPower(props) {
   const isExpanded = props.sidebar.isExpanded
 
   const [isShootingPanelDisplayed, setIsShootingPanelDisplayed] = useState(false)
@@ -37,7 +37,7 @@ function WizardSuperPower(props) {
        *   - generateDoor function has to display this value
        *   - after refreshing the page, we would lose this value and the power has already been used up
        */
-      localStorage.setItem('questionPoints', JSON.stringify({ id: chosenQuestionId, type: superPowerInfo.value }))
+      localStorage.setItem(props.storageKey, JSON.stringify({ id: chosenQuestionId, value: superPowerInfo.value }))
     }
   }, [chosenQuestionId, props, superPowerInfo])
 
@@ -88,4 +88,4 @@ function mapStateToProps(state) {
     theme
   }
 }
-export default connect(mapStateToProps)(WizardSuperPower)
+export default connect(mapStateToProps)(WizardAndWarriorSuperPower)
