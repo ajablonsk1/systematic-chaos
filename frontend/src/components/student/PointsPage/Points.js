@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Col, Row, Tab, Spinner } from 'react-bootstrap'
+import { Col, Row, Tab } from 'react-bootstrap'
 import { Content } from '../../App/AppGeneralStyles'
 import PercentageCircle from './ChartAndStats/PercentageCircle'
 import LastPointsTable from './Tables/LastPointsTable'

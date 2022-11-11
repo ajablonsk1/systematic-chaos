@@ -28,14 +28,12 @@ import { successToast } from '../../../utils/toasts'
 import { connect } from 'react-redux'
 import ActivityService from '../../../services/activity.service'
 import { isMobileView } from '../../../utils/mobileHelper'
-import ManagementCard from '../GameManagement/ManagementCard'
 import GameCard from '../../student/GameCardPage/GameCard'
 import Loader from '../../general/Loader/Loader'
 
 function ChapterDetails(props) {
   const { id: chapterId } = useParams()
   const [openActivitiesDetailsList, setOpenActivitiesDetailsList] = useState(false)
-  const [openConditionsList, setOpenConditionsList] = useState(false)
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false)
   const [isEditChapterModalOpen, setEditChapterModalOpen] = useState(false)
   const [chosenActivityData, setChosenActivityData] = useState(null)

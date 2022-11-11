@@ -114,7 +114,7 @@ function ActivityField(props) {
         </tbody>
       </table>
     )
-  }, [activity, requirements])
+  }, [activity, requirements, props.theme])
 
   return (
     <>

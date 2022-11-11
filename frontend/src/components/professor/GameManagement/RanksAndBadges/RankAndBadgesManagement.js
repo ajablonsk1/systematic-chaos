@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
-import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner, Tab } from 'react-bootstrap'
+import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Tab } from 'react-bootstrap'
 import { TabsContainer } from '../../../general/LoginAndRegistrationPage/AuthStyle'
 import { HeroType } from '../../../../utils/userRole'
 import { base64Header, ERROR_OCCURRED, getHeroName } from '../../../../utils/constants'
@@ -180,7 +180,7 @@ function RankAndBadgesManagement(props) {
         </Button>
       </>
     )
-  }, [badgesList, props.theme.success])
+  }, [badgesList, props.theme])
 
   return (
     <Content>
