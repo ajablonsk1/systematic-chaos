@@ -18,7 +18,7 @@ const POST_CHAPTER_CREATE = BASE_URL + "/chapter" + "/create";
 const POST_TASK_GRAPH_CREATE = BASE_URL + "/task/graph" + "/create";
 const POST_SURVEY_CREATE = BASE_URL + "/survey" + "/create";
 const POST_TASK_FILE_CREATE = BASE_URL + "/task" + "/file" + "/create";
-
+const POST_INFO_CREATE = BASE_URL + "/info" + "/create";
 //utils
 const readJson = (path) => {
   const file = fs.readFileSync(path);
@@ -150,9 +150,36 @@ async function addFileTasksToChapter(chapterNum, chapterId) {
   }
 }
 
+async function createInfoTask(chapterNum, chapterId, infoTaskNum) {
+  const infoTaskContent = readJson(
+    DATA_LOCATION +
+      "/info/" +
+      chapterNum +
+      "/" +
+      infoTaskNum.toString() +
+      ".json"
+  );
+  await axios.post(
+    POST_INFO_CREATE,
+    {
+      chapterId: chapterId,
+      form: infoTaskContent,
+    },
+    validHeader()
+  );
+}
+
+async function addInfoTasksToChapter(chapterNum, chapterId) {
+  const ACTIVITY_COUNT = countActivitiesForChapter(chapterNum, "info");
+  for (let i = 1; i <= ACTIVITY_COUNT; i++) {
+    await createInfoTask(chapterNum, chapterId, i);
+  }
+}
+
 async function createAll() {
   for (let i = 1; i <= countChapters(); i++) {
     let currentId = await createChapter(i);
+    await addInfoTasksToChapter(i, currentId);
     await addExpeditionsInChapter(i, currentId);
     await addSurveysToChapter(i, currentId);
     await addFileTasksToChapter(i, currentId);

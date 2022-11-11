@@ -1,0 +1,11 @@
+{
+  "activityType": "INFO",
+  "title": "UNIKALNY TYTUŁ",
+  "description": "Przykładowy opis",
+  "posX": 0,
+  "posY": 0,
+  "imageUrls": [
+    "https://upload.wikimedia.org/wikipedia/commons/c/cb/UTP_cable.jpg"
+  ],
+  "infoContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at pharetra nibh. Maecenas ut nisl odio. Sed non nisl quis lorem euismod vestibulum id sit amet lacus. Integer in tortor ante. Nulla eu velit augue. Vestibulum eget lorem ac nibh interdum semper. Duis dictum tortor vitae ex iaculis, hendrerit elementum massa pharetra. Nullam fermentum condimentum lacus. Pellentesque tempus accumsan commodo."
+}
