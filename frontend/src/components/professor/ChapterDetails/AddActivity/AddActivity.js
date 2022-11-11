@@ -3,6 +3,7 @@ import { ERROR_OCCURRED } from '../../../../utils/constants'
 import { Button, Spinner } from 'react-bootstrap'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
 import { connect } from 'react-redux'
+import Loader from '../../../general/Loader/Loader'
 
 function AddActivity(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
@@ -39,7 +40,7 @@ function AddActivity(props) {
   return (
     <div>
       {placeholderJson === undefined ? (
-        <Spinner animation={'border'} />
+        <Loader />
       ) : placeholderJson == null ? (
         <p>{errorMessage}</p>
       ) : (

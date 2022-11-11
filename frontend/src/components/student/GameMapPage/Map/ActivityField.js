@@ -14,12 +14,21 @@ import { Tooltip } from '../../BadgesPage/BadgesStyle'
 import ActivityService from '../../../../services/activity.service'
 import { connect } from 'react-redux'
 import { hexToCSSFilter } from 'hex-to-css-filter'
+import { isStudent } from '../../../../utils/storageManager'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 
 function ActivityField(props) {
   const { activity, colClickable, colSize, isCompletedActivityAround, allActivitiesCompleted } = props
+  const student = isStudent(props.user)
+
   const navigate = useNavigate()
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false)
   const [requirements, setRequirements] = useState(undefined)
+
+  const isActivityBlocked = () => {
+    return (student && !activity.isFulfilled) || (!student && activity.isActivityBlocked)
+  }
 
   useEffect(() => {
     if (activity) {
@@ -46,7 +55,19 @@ function ActivityField(props) {
       { name: 'Nazwa aktywności', value: activity?.title },
       { name: 'Typ aktywności', value: getActivityTypeName(activity?.type) },
       { name: 'Punkty', value: activity?.points },
-      { name: 'Data utworzenia', value: moment(Date.now()).format('DD.MM.YYYY, HH:mm') } // TODO: replace with activity?.creationDate
+      { name: 'Data utworzenia', value: moment(Date.now()).format('DD.MM.YYYY, HH:mm') }, // TODO: replace with activity?.creationDate
+      {
+        name: 'Stan aktywności',
+        value: activity?.isCompleted ? (
+          <span>
+            Ukończona <FontAwesomeIcon icon={faCircleCheck} color={props.theme.success} size={'lg'} />
+          </span>
+        ) : (
+          <span>
+            Nieukończona <FontAwesomeIcon icon={faCircleXmark} color={props.theme.danger} size={'lg'} />
+          </span>
+        )
+      }
     ]
 
     return (
@@ -101,7 +122,12 @@ function ActivityField(props) {
         {activity ? (
           <div style={{ backgroundColor: allActivitiesCompleted || activity?.isCompleted ? 'transparent' : 'white' }}>
             <Tooltip>
-              <img src={getActivityImg(activity.type)} alt='activityImg' onClick={() => setIsOffcanvasOpen(true)} />
+              <img
+                src={getActivityImg(activity.type)}
+                style={{ opacity: isActivityBlocked() ? 0.4 : 1 }}
+                alt='activityImg'
+                onClick={() => setIsOffcanvasOpen(true)}
+              />
               <div style={{ height: 40 }}>{getActivityTypeName(activity.type)}</div>
             </Tooltip>
           </div>
@@ -144,7 +170,8 @@ function ActivityField(props) {
 
 function mapStateToProps(state) {
   const theme = state.theme
+  const { user } = state.auth
 
-  return { theme }
+  return { theme, user }
 }
 export default connect(mapStateToProps)(ActivityField)

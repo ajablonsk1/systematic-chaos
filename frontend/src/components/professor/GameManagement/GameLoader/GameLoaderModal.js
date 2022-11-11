@@ -41,7 +41,7 @@ function GameLoaderModal(props) {
             disabled={isSending}
             onClick={saveJson}
           >
-            {isSending ? <Spinner animation={'border'} /> : <span>Zapisz zmiany</span>}
+            {isSending ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz zmiany</span>}
           </Button>
         </ModalFooter>
       </Modal>

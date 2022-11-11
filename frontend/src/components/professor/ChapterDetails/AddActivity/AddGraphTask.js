@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import ExpeditionService from '../../../../services/expedition.service'
 import { connect } from 'react-redux'
+import Loader from '../../../general/Loader/Loader'
 
 function AddGraphTask(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
@@ -61,7 +62,7 @@ function AddGraphTask(props) {
       <Tabs defaultActiveKey={'editor'}>
         <Tab eventKey={'editor'} title={'Tryb edycji'}>
           {placeholderJson === undefined ? (
-            <Spinner animation={'border'} />
+            <Loader />
           ) : placeholderJson == null ? (
             <p>{errorMessage}</p>
           ) : (

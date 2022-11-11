@@ -194,7 +194,7 @@ function BadgesPage(props) {
       <Row className={'mx-0 my-5'} style={{ maxHeight: isMobileDisplay ? '330vh' : '55vh' }}>
         <Col md={9} className={isMobileDisplay ? 'mb-3' : 'm-auto'}>
           <ContentCard
-            maxHeight={'55vh'}
+            maxHeight={'53vh'}
             header={'Odznaki'}
             body={
               allBadgesList === undefined ? (

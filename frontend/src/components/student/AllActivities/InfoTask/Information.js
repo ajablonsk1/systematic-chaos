@@ -11,6 +11,8 @@ import CardHeader from 'react-bootstrap/CardHeader'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
+import GoBackButton from '../../../general/GoBackButton/GoBackButton'
+import { StudentRoutes } from '../../../../routes/PageRoutes'
 
 function Information(props) {
   const isMobileDisplay = isMobileView()
@@ -92,7 +94,7 @@ function Information(props) {
               <Card.Body>{activityInfoCardBody}</Card.Body>
             </CustomCard>
           </Row>
-          <Row className={'m-0 w-100'} style={{ height: isMobileDisplay ? 'auto' : '75%' }}>
+          <Row className={'m-0 w-100 mt-3'} style={{ height: isMobileDisplay ? 'auto' : '65%' }}>
             <CustomCard
               className={'p-0'}
               $fontColor={props.theme.font}
@@ -112,6 +114,7 @@ function Information(props) {
                 )}
               </Card.Body>
             </CustomCard>
+            <GoBackButton goTo={StudentRoutes.GAME_MAP.MAIN} />
           </Row>
         </Col>
         <Col md={6} className={'py-2'}>

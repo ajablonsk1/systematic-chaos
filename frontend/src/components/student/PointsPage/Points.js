@@ -8,6 +8,7 @@ import BonusPointsTable from './Tables/BonusPointsTable'
 import StudentService from '../../../services/student.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
 import { connect } from 'react-redux'
+import Loader from '../../general/Loader/Loader'
 
 function Points(props) {
   const [pointsData, setPointsData] = useState(undefined)
@@ -40,7 +41,7 @@ function Points(props) {
   return (
     <Content>
       {totalPointsData === undefined ? (
-        <Spinner animation={'border'} />
+        <Loader />
       ) : totalPointsData == null ? (
         ERROR_OCCURRED
       ) : (

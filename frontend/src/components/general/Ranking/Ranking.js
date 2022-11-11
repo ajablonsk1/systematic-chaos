@@ -6,10 +6,11 @@ import { getSortIcon, nextSortingOrder, sortArray } from './sortHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
+import ReactTooltip from 'react-tooltip'
 
 const headersWithSortedInfo = [
   { headerName: 'Pozycja', sortedVar1: 'position' },
-  { headerName: 'Gracz', sortedVar1: 'firstName', sortedVar2: 'lastName' },
+  { headerName: 'Gracz', sortedVar1: 'lastName', sortedVar2: 'firstName' },
   { headerName: 'Grupa zajęciowa', sortedVar1: 'groupName' },
   { headerName: 'Typ bohatera', sortedVar1: 'heroType' },
   { headerName: 'Punkty', sortedVar1: 'points' }
@@ -119,7 +120,22 @@ function Ranking(props) {
                 <td>{student.points ?? props.noPointsMessage ?? 'Brak danych'}</td>
                 {!!props.iconCallback && (
                   <td>
-                    <FontAwesomeIcon icon={faInfo} onClick={() => props.iconCallback(student)} />
+                    <FontAwesomeIcon
+                      icon={faInfo}
+                      onClick={() => props.iconCallback(student)}
+                      data-for={'info-icon'}
+                      data-tip={'Tabela punktów studenta'}
+                    />
+                    {/*TODO: if SC-349 is already merged, replace it with <Tooltip/>*/}
+                    <ReactTooltip
+                      id={'info-icon'}
+                      place='top'
+                      type='dark'
+                      effect='solid'
+                      multiline
+                      event='mouseover mouseenter'
+                      eventOff='mouseleave mouseout scroll mousewheel blur'
+                    />
                   </td>
                 )}
               </TableRow>
