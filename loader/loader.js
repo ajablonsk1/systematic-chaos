@@ -7,6 +7,7 @@ const EMAIL = "bmaj@agh.edu.pl";
 const PASSWORD = "12345";
 
 const CHAPTER_LOCATION = "./data/chapters";
+const DATA_LOCATION = "./data";
 
 let TOKEN = "";
 
@@ -14,6 +15,7 @@ let TOKEN = "";
 const POST_LOGIN = BASE_URL + "/login";
 const GET_CHAPTER = BASE_URL + "/chapter";
 const POST_CHAPTER_CREATE = BASE_URL + "/chapter" + "/create";
+const POST_TASK_GRAPH_CREATE = BASE_URL + "/task/graph" + "/create";
 
 //utils
 const readJson = (path) => {
@@ -61,12 +63,47 @@ function countChapters() {
   return CHAPTER_COUNT;
 }
 
+function countActivitiesForChapter(chapterNum, type) {
+  let ACTIVITY_COUNT = 0;
+  ACTIVITY_COUNT = fs.readdirSync(
+    DATA_LOCATION + "/" + type + "/" + chapterNum
+  ).length;
+  return ACTIVITY_COUNT;
+}
+
+async function createExpedition(chapterNum, chapterId, activityNum) {
+  const expeditionContent = readJson(
+    DATA_LOCATION +
+      "/expedition/" +
+      chapterNum +
+      "/" +
+      activityNum.toString() +
+      ".json"
+  );
+  await axios.post(
+    POST_TASK_GRAPH_CREATE,
+    {
+      chapterId: chapterId,
+      form: expeditionContent,
+    },
+    validHeader()
+  );
+}
+
+async function addExpeditionsInChapter(chapterNum, chapterId) {
+  const ACTIVITY_COUNT = countActivitiesForChapter(chapterNum, "expedition");
+  for (let i = 1; i <= ACTIVITY_COUNT; i++) {
+    await createExpedition(chapterNum, chapterId, i);
+  }
+}
+
 async function createAll() {
   for (let i = 1; i <= countChapters(); i++) {
     let currentId = await createChapter(i);
-    console.log(currentId);
+    await addExpeditionsInChapter(i, currentId);
   }
 }
+
 //in loop for every chapter
 //read chapter folder and get first (or nth)
 
@@ -79,6 +116,4 @@ async function createAll() {
 //manual reqs?
 
 await login();
-//console.log(TOKEN);
-
 await createAll();
