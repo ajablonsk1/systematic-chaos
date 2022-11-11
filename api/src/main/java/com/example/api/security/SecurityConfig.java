@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         security.csrf().disable();
         security.sessionManagement().sessionCreationPolicy(STATELESS);
         security.authorizeHttpRequests(authorize -> authorize
-                .antMatchers("/login", "/register").permitAll()
+                .antMatchers("/login", "/register", "/password/*").permitAll()
                 .antMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                 .anyRequest().authenticated());
         security.addFilter(new AuthenticationFilter(authenticationManager()));

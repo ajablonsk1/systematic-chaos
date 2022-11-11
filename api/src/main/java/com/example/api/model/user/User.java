@@ -46,6 +46,9 @@ public class User {
     @Embedded
     private UserHero userHero;
 
+    @OneToOne
+    PasswordResetToken passwordResetToken;
+
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;

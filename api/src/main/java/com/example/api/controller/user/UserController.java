@@ -48,7 +48,6 @@ public class UserController {
         userService.editPassword(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
     @GetMapping("/user/current")
     public ResponseEntity<User> getCurrentUser() {
         return ResponseEntity.ok().body(userService.getCurrentUser());
@@ -126,9 +125,4 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getAllProfessorEmails());
     }
 
-    @PostMapping("/user/password-reset")
-    public ResponseEntity<?> sendPasswordResetEmail() {
-        userService.sendPasswordResetEmail();
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
 }
