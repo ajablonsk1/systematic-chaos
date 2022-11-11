@@ -122,7 +122,7 @@ class ExpeditionService {
     })
   }
 
-  useSuperPower(graphTaskId, questionId = undefined) {
+  startSuperPower(graphTaskId, questionId = undefined) {
     return axiosApiGet(GET_TASK_GRAPH_RESULT_SUPER_POWER, {
       graphTaskId,
       questionId

@@ -13,8 +13,8 @@ import { base64Header, ERROR_OCCURRED } from '../../../utils/constants'
 import { isMobileView } from '../../../utils/mobileHelper'
 import UserService from '../../../services/user.service'
 import { sortArray } from '../../general/Ranking/sortHelper'
-import ReactTooltip from 'react-tooltip'
 import moment from 'moment'
+import Tooltip from '../../general/Tooltip/Tooltip'
 
 const LATER_ITEM_DELAY = 1200
 
@@ -121,15 +121,7 @@ function BadgesPage(props) {
             {badge.description}
           </p>
 
-          <ReactTooltip
-            id={'badge-' + index}
-            place='top'
-            type='dark'
-            effect='solid'
-            multiline
-            event='mouseover mouseenter'
-            eventOff='mouseleave mouseout scroll mousewheel blur'
-          />
+          <Tooltip id={'badge-' + index} />
         </Col>
       )
     },

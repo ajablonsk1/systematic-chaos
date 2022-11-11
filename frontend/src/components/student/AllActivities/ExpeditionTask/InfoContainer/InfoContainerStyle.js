@@ -14,10 +14,22 @@ export const GraphTrigger = styled.div`
   border-radius: 50%;
   background-color: white;
   z-index: 3;
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  & svg {
+    transition: all 0.2s linear;
+  }
+
+  &:hover svg {
+    transform: scale(1.5);
+    color: darkblue;
+  }
 
   @media (max-width: 575px) {
     bottom: 85px;

@@ -111,6 +111,8 @@ export function ExpeditionWrapper() {
       maxPoints={maxPoints}
       questionsPath={expeditionState.currentPath}
       actualQuestionId={expeditionState.questionDetails?.questionId}
+      questions={expeditionState.questions}
+      status={expeditionState.status}
     >
       {wrapperContent}
     </InfoContainer>
