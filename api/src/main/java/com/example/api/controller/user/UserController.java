@@ -125,4 +125,10 @@ public class UserController {
     public ResponseEntity<List<String>> getAllProfEmails() {
         return ResponseEntity.ok().body(userService.getAllProfessorEmails());
     }
+
+    @PostMapping("/user/password-reset")
+    public ResponseEntity<?> sendPasswordResetEmail() {
+        userService.sendPasswordResetEmail();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
