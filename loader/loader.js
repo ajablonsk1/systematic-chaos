@@ -49,7 +49,6 @@ async function login() {
   TOKEN = loginInfo.data.access_token;
 }
 
-//create a single chapter and return id
 async function createChapter(i) {
   const requestBody = readJson(CHAPTER_LOCATION + "/" + i.toString() + ".json");
 
@@ -266,16 +265,6 @@ async function createAll() {
     await addRequirementsToTasksInChapter(i, taskList);
   }
 }
-
-//in loop for every chapter
-//read chapter folder and get first (or nth)
-//create chapter and get its id
-//add expeditions for this id
-//add surveys for this id
-//add info for this id
-//add combat for this id
-
-//manual reqs?
 
 await login();
 await createAll();
