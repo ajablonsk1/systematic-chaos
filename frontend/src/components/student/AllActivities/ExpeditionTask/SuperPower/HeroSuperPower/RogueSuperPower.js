@@ -1,31 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { EXPEDITION_STATUS } from '../../../../../../utils/constants'
 import SuperPowerTrigger from '../SuperPowerTrigger'
+import { useRogueSuperPowerCheck } from '../../../../../../hooks/useSuperPowerCheck'
 
 function RogueSuperPower(props) {
-  const [superPowerCanBeUsed, setSuperPowerCanBeUsed] = useState(undefined)
   const [superPowerInfo, setSuperPowerInfo] = useState(undefined)
 
-  useEffect(() => {
-    if (props.status === EXPEDITION_STATUS.ANSWER) {
-      props
-        .useCheck()
-        .then((response) => {
-          setSuperPowerCanBeUsed(response)
-        })
-        .catch(() => {
-          setSuperPowerCanBeUsed(null)
-        })
-    } else {
-      setSuperPowerCanBeUsed({ canBeUsed: false, message: 'Moc nie może być użyta w wyborze pytania.' })
-    }
-  }, [props, superPowerInfo])
+  const superPowerCanBeUsed = useRogueSuperPowerCheck(props.useCheck, superPowerInfo, props.status)
 
   useEffect(() => {
     if (superPowerInfo?.value) {
       window.location.reload()
     }
-  }, [props, superPowerInfo])
+  }, [superPowerInfo])
 
   const startUsingSuperPower = () => {
     if (!superPowerCanBeUsed?.canBeUsed) {

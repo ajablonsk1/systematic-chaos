@@ -1,35 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import SuperPowerTrigger from '../SuperPowerTrigger'
-import { EXPEDITION_STATUS } from '../../../../../../utils/constants'
 import { ShootingPanel } from '../SuperPowerStyle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowsToDot } from '@fortawesome/free-solid-svg-icons'
 import { Button, Col, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
+import { useQuestionInfoSuperPowerCheck } from '../../../../../../hooks/useSuperPowerCheck'
 
-// TODO: custom hook for all hero types for checking usage is possible
 function WizardAndWarriorSuperPower(props) {
   const isExpanded = props.sidebar.isExpanded
 
   const [isShootingPanelDisplayed, setIsShootingPanelDisplayed] = useState(false)
   const [chosenQuestionId, setChosenQuestionId] = useState(null)
-  const [superPowerCanBeUsed, setSuperPowerCanBeUsed] = useState(undefined)
   const [superPowerInfo, setSuperPowerInfo] = useState(undefined)
 
-  useEffect(() => {
-    if (props.status === EXPEDITION_STATUS.CHOOSE) {
-      props
-        .useCheck()
-        .then((response) => {
-          setSuperPowerCanBeUsed(response)
-        })
-        .catch(() => {
-          setSuperPowerCanBeUsed(null)
-        })
-    } else {
-      setSuperPowerCanBeUsed({ canBeUsed: false, message: 'Moc może być użyta tylko w wyborze pytania.' })
-    }
-  }, [props, superPowerInfo])
+  const superPowerCanBeUsed = useQuestionInfoSuperPowerCheck(props.useCheck, superPowerInfo, props.status)
 
   useEffect(() => {
     if (superPowerInfo?.value) {
@@ -39,7 +24,7 @@ function WizardAndWarriorSuperPower(props) {
        */
       localStorage.setItem(props.storageKey, JSON.stringify({ id: chosenQuestionId, value: superPowerInfo.value }))
     }
-  }, [chosenQuestionId, props, superPowerInfo])
+  }, [chosenQuestionId, props.storageKey, superPowerInfo])
 
   const startUsingSuperPower = () => {
     if (!superPowerCanBeUsed?.canBeUsed) {

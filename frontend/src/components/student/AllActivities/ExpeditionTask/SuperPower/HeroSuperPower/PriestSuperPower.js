@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import SuperPowerTrigger from '../SuperPowerTrigger'
+import { useSuperPowerCheck } from '../../../../../../hooks/useSuperPowerCheck'
 
 function PriestSuperPower(props) {
-  const [superPowerCanBeUsed, setSuperPowerCanBeUsed] = useState(undefined)
   const [superPowerInfo, setSuperPowerInfo] = useState(undefined)
 
-  useEffect(() => {
-    props
-      .useCheck()
-      .then((response) => {
-        setSuperPowerCanBeUsed(response)
-      })
-      .catch(() => {
-        setSuperPowerCanBeUsed(null)
-      })
-
-    // eslint-disable-next-line
-  }, [superPowerInfo])
+  const superPowerCanBeUsed = useSuperPowerCheck(props.useCheck, superPowerInfo)
 
   useEffect(() => {
     if (superPowerInfo?.value) {
