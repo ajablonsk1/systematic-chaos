@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
-import { Button, Col, Form, Modal, ModalBody, ModalHeader, Row } from 'react-bootstrap'
+import { Button, Col, Form, Row } from 'react-bootstrap'
 import gameMap from '../../../../utils/resources/gameMap/map1.png'
 import ColorPicker from './ColorPicker'
 import { useNavigate } from 'react-router-dom'
