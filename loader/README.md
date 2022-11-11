@@ -1,3 +1,6 @@
+To run:
+`node loader.js`
+
 Structure of the data:
 
 data/expedition, data/info/, data/survey, data/combat
