@@ -2,7 +2,7 @@ import axios from "axios";
 import QueryString from "qs";
 import * as fs from "fs";
 
-const BASE_URL = "http://localhost:8080/api";
+const BASE_URL = "https://systematic-chaos-backend.xyz/api";
 const EMAIL = "bmaj@agh.edu.pl";
 const PASSWORD = "12345";
 
@@ -23,6 +23,7 @@ const GET_TASK_REQUIREMENTS = BASE_URL + "/task" + "/requirements";
 const GET_ACTIVITY_MAP = BASE_URL + "/map";
 const POST_TASK_REQUIREMENTS_UPDATE =
   BASE_URL + "/task" + "/requirements" + "/update";
+const POST_GROUP = BASE_URL + "/group";
 
 //utils
 const readJson = (path) => {
@@ -103,7 +104,7 @@ async function createExpedition(chapterNum, chapterId, activityNum) {
   );
 }
 
-async function addExpeditionsInChapter(chapterNum, chapterId) {
+async function addExpeditionsToChapter(chapterNum, chapterId) {
   const ACTIVITY_COUNT = countActivitiesForChapter(chapterNum, "expedition");
   for (let i = 1; i <= ACTIVITY_COUNT; i++) {
     await createExpedition(chapterNum, chapterId, i);
@@ -254,11 +255,21 @@ async function addRequirementsToTasksInChapter(chapterNum, taskList) {
   addRequirementsToTypeTasksInChapter(chapterNum, taskIds, "combat");
 }
 
+async function addGroups() {
+  const groupInfo = readJson(DATA_LOCATION + "/groups.json");
+  await Promise.all(
+    groupInfo.groups.map((group) => {
+      axios.post(POST_GROUP, group, validHeader());
+    })
+  );
+}
+
 async function createAll() {
+  await addGroups();
   for (let i = 1; i <= countChapters(); i++) {
     let currentId = await createChapter(i);
     await addInfoTasksToChapter(i, currentId);
-    await addExpeditionsInChapter(i, currentId);
+    await addExpeditionsToChapter(i, currentId);
     await addSurveysToChapter(i, currentId);
     await addFileTasksToChapter(i, currentId);
     const taskList = await getTaskList(currentId);
