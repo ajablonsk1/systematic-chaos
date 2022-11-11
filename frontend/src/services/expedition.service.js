@@ -12,7 +12,9 @@ import {
   GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_CLOSED,
   GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_OPENED,
   GET_TASK_GRAPH_CREATE,
-  POST_TASK_GRAPH_CREATE
+  POST_TASK_GRAPH_CREATE,
+  GET_TASK_GRAPH_RESULT_SUPER_POWER_CAN_USE,
+  GET_TASK_GRAPH_RESULT_SUPER_POWER
 } from './urls'
 
 class ExpeditionService {
@@ -109,6 +111,21 @@ class ExpeditionService {
     return axiosApiPost(POST_TASK_GRAPH_CREATE, {
       chapterId: chapterId,
       form: form
+    }).catch((error) => {
+      throw error
+    })
+  }
+
+  checkSuperPowerCanBeUsed(graphTaskId) {
+    return axiosApiGet(GET_TASK_GRAPH_RESULT_SUPER_POWER_CAN_USE, { graphTaskId }).catch((error) => {
+      throw error
+    })
+  }
+
+  useSuperPower(graphTaskId, questionId = undefined) {
+    return axiosApiGet(GET_TASK_GRAPH_RESULT_SUPER_POWER, {
+      graphTaskId,
+      questionId
     }).catch((error) => {
       throw error
     })

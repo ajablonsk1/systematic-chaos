@@ -59,6 +59,8 @@ export const GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_OPENED = GET_TASK_GRAPH_RESU
 export const GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_CLOSED = GET_TASK_GRAPH_RESULT + '/points/available/closed'
 export const GET_TASK_GRAPH_RESULT_POINTS_AVAILABLE_ALL = GET_TASK_GRAPH_RESULT + '/points/available/all'
 export const GET_TASK_GRAPH_RESULT_POINTS_ALL = GET_TASK_GRAPH_RESULT + '/points/all'
+export const GET_TASK_GRAPH_RESULT_SUPER_POWER = GET_TASK_GRAPH_RESULT + '/super-power'
+export const GET_TASK_GRAPH_RESULT_SUPER_POWER_CAN_USE = GET_TASK_GRAPH_RESULT + 'super-power/can-use'
 
 // Graph Task Controller
 export const GET_TASK_GRAPH = BASE_URL + '/task/graph'
@@ -166,3 +168,6 @@ export const PUT_BADGE_UPDATE = BADGE + '/update'
 
 // Grade Controller
 export const GET_GRADES = BASE_URL + '/grades'
+
+// Hero Controller
+export const PUT_HERO = BASE_URL + '/hero'
