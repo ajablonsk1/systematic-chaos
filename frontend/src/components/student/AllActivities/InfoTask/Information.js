@@ -11,6 +11,8 @@ import CardHeader from 'react-bootstrap/CardHeader'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 function Information(props) {
   const isMobileDisplay = isMobileView()
@@ -108,7 +110,7 @@ function Information(props) {
                 ) : information == null ? (
                   <p>{ERROR_OCCURRED}</p>
                 ) : (
-                  <p>{information.content}</p>
+                  <ReactMarkdown children={information.content} remarkPlugins={[remarkGfm]} />
                 )}
               </Card.Body>
             </CustomCard>
