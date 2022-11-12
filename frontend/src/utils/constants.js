@@ -269,3 +269,10 @@ export const BadgeType = {
 }
 
 export const sidebarExcludedPaths = [GeneralRoutes.HOME, GeneralRoutes.PASSWORD_RESET]
+
+export const ActivityFileName = {
+  [Activity.INFO]: 'info-task-configuration.json',
+  [Activity.TASK]: 'combat-task-configuration.json',
+  [Activity.SURVEY]: 'survey-task-configuration.json',
+  [Activity.EXPEDITION]: 'graph-task-configuration.json'
+}

@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faTrash } from '@fortawesome/free-solid-svg-icons'
 import download from 'downloadjs'
+import { ActivityFileName } from '../../../../utils/constants'
 
 function FileUpload(props) {
   const [fileUploadMessage, setFileUploadMessage] = useState(undefined)
@@ -13,7 +14,7 @@ function FileUpload(props) {
     if (props.jsonToDownload) {
       const jsonDataBase = 'data:text/json;charset=utf-8,'
       const jsonData = jsonDataBase + encodeURIComponent(JSON.stringify(props.jsonToDownload, null, 4))
-      download(jsonData, props.fileName)
+      download(jsonData, ActivityFileName[props.activityType])
     }
   }
 

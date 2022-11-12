@@ -1,6 +1,7 @@
 import React from 'react'
 import AddActivity from './AddActivity'
 import InfoTaskService from '../../../../services/infoTask.service'
+import { Activity } from '../../../../utils/constants'
 
 function AddInfoTask(props) {
   return (
@@ -10,7 +11,7 @@ function AddInfoTask(props) {
       chapterId={props.chapterId}
       onSuccess={props.onSuccess}
       onCancel={props.onCancel}
-      fileName={'info-task-configuration.json'}
+      activityType={Activity.INFO}
     />
   )
 }
