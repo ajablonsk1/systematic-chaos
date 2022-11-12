@@ -244,7 +244,7 @@ public class DashboardService {
     private Double getNexLvlPoints(User student) {
         List<Rank> sortedRanks = rankService.getSortedRanksForHeroType(student.getHeroType());
         for (int i=sortedRanks.size()-1; i >= 0; i--) {
-            if (student.getPoints() > sortedRanks.get(i).getMinPoints()) {
+            if (student.getPoints() >= sortedRanks.get(i).getMinPoints()) {
                 if (i == sortedRanks.size() - 1) return null;
                 else return sortedRanks.get(i+1).getMinPoints();
             }
