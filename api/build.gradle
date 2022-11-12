@@ -29,6 +29,7 @@ dependencies {
     implementation 'junit:junit:4.13.2'
     implementation group: 'net.bytebuddy', name: 'byte-buddy', version: '1.12.10'
     implementation 'com.mailjet:mailjet-client:4.2.0'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'

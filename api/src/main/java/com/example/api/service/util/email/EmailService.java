@@ -1,4 +1,4 @@
-package com.example.api.service.util;
+package com.example.api.service.util.email;
 
 import com.example.api.model.user.User;
 import com.mailjet.client.ClientOptions;
@@ -12,6 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,14 +25,13 @@ import javax.transaction.Transactional;
 @Slf4j
 @Transactional
 public class EmailService {
-    private final String API_KEY = "";
-    private final String SECRET_API_KEY = "";
+    private final EmailProperties emailProperties;
 
     public void sendEmail(User user, String subject, String message) {
         MailjetClient client;
         MailjetRequest request;
         MailjetResponse response;
-        client = new MailjetClient(API_KEY, SECRET_API_KEY, new ClientOptions("v3.1"));
+        client = new MailjetClient(emailProperties.getApiKey(), emailProperties.getApiSecretKey(), new ClientOptions("v3.1"));
         request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
                         .put(new JSONObject()

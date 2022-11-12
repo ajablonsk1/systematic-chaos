@@ -6,7 +6,7 @@ import com.example.api.model.user.PasswordResetToken;
 import com.example.api.model.user.User;
 import com.example.api.repo.user.PasswordResetTokenRepo;
 import com.example.api.repo.user.UserRepo;
-import com.example.api.service.util.EmailService;
+import com.example.api.service.util.email.EmailService;
 import com.example.api.service.validator.PasswordResetValidator;
 import com.example.api.service.validator.PasswordValidator;
 import com.example.api.service.validator.UserValidator;
@@ -55,7 +55,7 @@ public class PasswordResetService {
         userRepo.save(user);
 
         log.info("Sending password reset email to {}", email);
-        emailService.sendEmail(user, "Systematic chaos - password reset", getPasswordResetEmailMessage(plainToken));
+        emailService.sendEmail(user, "Systematic Chaos - password reset", getPasswordResetEmailMessage(plainToken));
 
     }
 
@@ -76,6 +76,17 @@ public class PasswordResetService {
     }
 
     private String getPasswordResetEmailMessage(String token) {
-        return String.format("Your password reset token: %s", token);
+        return String.format("Hello,\n" +
+                "\n" +
+                "Systematic Chaos website administration here. You are receiving this email because it was provided for password reset on our website.\n" +
+                "\n" +
+                "Your password change token is: %s\n" +
+                "\n" +
+                "If you have not provided your e-mail address or do not know why you received this message - ignore it.\n" +
+                "\n" +
+                "The message was generated automatically, do not reply to it.\n" +
+                "\n" +
+                "Best regards,\n" +
+                "Systematic Chaos Administration", token);
     }
 }
