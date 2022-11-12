@@ -166,3 +166,7 @@ export const PUT_BADGE_UPDATE = BADGE + '/update'
 
 // Grade Controller
 export const GET_GRADES = BASE_URL + '/grades'
+
+// Password Reset Controller
+export const PUT_PASSWORD_RESET = BASE_URL + '/password/reset'
+export const GET_PASSWORD_RESET_EMAIL = BASE_URL + '/password/reset-email'

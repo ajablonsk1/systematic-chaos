@@ -7,7 +7,9 @@ import { MultiStepProgressBar } from './ResetPasswordFormStyle'
 import { debounce } from 'lodash'
 import { validateConfirmPassword, validateEmail, validatePassword } from '../RegistrationPage/validators'
 import { AccountType } from '../../../../utils/userRole'
-import { ALL_FIELDS_REQUIRED, FIELD_WITH_NAME_REQUIRED } from '../../../../utils/constants'
+import { ALL_FIELDS_REQUIRED, ERROR_OCCURRED, FIELD_WITH_NAME_REQUIRED } from '../../../../utils/constants'
+import UserService from '../../../../services/user.service'
+import { successToast } from '../../../../utils/toasts'
 
 function ResetPasswordForm(props) {
   const navigate = useNavigate()
@@ -19,14 +21,27 @@ function ResetPasswordForm(props) {
   const [error, setError] = useState(undefined)
 
   const sendResetMail = () => {
-    // TODO: send email to the appropriate endpoint (#1)
+    UserService.sendPasswordResetEmail(emailValue)
+      .then(() => {
+        setStep(1)
+      })
+      .catch((errorMsg) => {
+        setError(errorMsg.response?.data?.message ?? ERROR_OCCURRED)
+      })
   }
 
   const resetPassword = () => {
     if (!passwordValue || !codeValue) {
       setError(ALL_FIELDS_REQUIRED)
     } else {
-      // TODO: send code and password to the appropriate endpoint (#2)
+      UserService.sendNewPassword(emailValue, passwordValue, codeValue)
+        .then(() => {
+          navigate(GeneralRoutes.HOME)
+          successToast('Hasło zostało zmienione poprawnie.')
+        })
+        .catch((errorMsg) => {
+          setError(errorMsg.response?.data?.message ?? ERROR_OCCURRED)
+        })
     }
   }
 
@@ -80,15 +95,13 @@ function ResetPasswordForm(props) {
           {FormButton({ text: 'Anuluj', onClick: onCancel, color: props.theme.danger })}
           {FormButton({
             text: 'Dalej',
-            onClick: () => {
-              setStep(1)
-              sendResetMail()
-            },
+            onClick: sendResetMail,
             disabled: !emailValue || !!error
           })}
         </div>
       </FormGroup>
     )
+    // eslint-disable-next-line
   }, [ErrorMessage, FormButton, emailValue, error, navigate, props.theme.danger, props.theme.font])
 
   const SecondStepForm = useMemo(() => {
@@ -114,6 +127,8 @@ function ResetPasswordForm(props) {
         </div>
       </>
     )
+
+    // eslint-disable-next-line
   }, [FormButton, props.theme.danger, props.theme.font, props.theme.secondary])
 
   const ThirdStepForm = useMemo(() => {
