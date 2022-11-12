@@ -117,7 +117,8 @@ public class InfoService {
         List<Url> updatedUrls = new LinkedList<>();
         updatedUrls.addAll(remainingUrls);
         updatedUrls.addAll(newUrls);
-        info.setImageUrls(updatedUrls);
+        info.getImageUrls().clear();
+        info.getImageUrls().addAll(updatedUrls);
 
     }
 
