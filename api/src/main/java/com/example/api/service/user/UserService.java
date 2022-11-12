@@ -18,6 +18,7 @@ import com.example.api.repo.group.GroupRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.user.util.ProfessorRegisterToken;
+import com.example.api.service.validator.PasswordValidator;
 import com.example.api.service.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserValidator userValidator;
     private final ProfessorRegisterToken professorRegisterToken;
+    private final PasswordValidator passwordValidator;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -73,6 +75,7 @@ public class UserService implements UserDetailsService {
         User dbUser = userRepo.findUserByEmail(email);
         User user = new User(form.getEmail(), form.getFirstName(), form.getLastName(), form.getAccountType());
         userValidator.validateUserRegistration(dbUser, user, form, email);
+        passwordValidator.validatePassword(form.getPassword());
         user.setPassword(passwordEncoder.encode(form.getPassword()));
         user.setPoints(0D);
         user.setLevel(1);

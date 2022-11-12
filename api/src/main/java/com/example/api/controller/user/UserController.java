@@ -48,7 +48,6 @@ public class UserController {
         userService.editPassword(form);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
     @GetMapping("/user/current")
     public ResponseEntity<User> getCurrentUser() {
         return ResponseEntity.ok().body(userService.getCurrentUser());
@@ -125,4 +124,5 @@ public class UserController {
     public ResponseEntity<List<String>> getAllProfEmails() {
         return ResponseEntity.ok().body(userService.getAllProfessorEmails());
     }
+
 }

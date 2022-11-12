@@ -48,6 +48,9 @@ public class User {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private UserHero userHero;
 
+    @OneToOne
+    PasswordResetToken passwordResetToken;
+
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
