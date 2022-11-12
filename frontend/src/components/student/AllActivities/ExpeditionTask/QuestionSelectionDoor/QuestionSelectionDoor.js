@@ -5,11 +5,28 @@ import ExpeditionService from '../../../../../services/expedition.service'
 import { ERROR_OCCURRED, EXPEDITION_STATUS } from '../../../../../utils/constants'
 import { connect } from 'react-redux'
 
-function generateDoor(question, noDoors, onDoorClick, buttonColor) {
+const getQuestionDetails = (questionId, questionType, questionPoints) => {
+  if (questionPoints && questionId === questionPoints.id) {
+    return questionPoints.value + 'pkt'
+  }
+
+  if (questionType && questionId === questionType.id) {
+    return questionType.value
+  }
+
+  return null
+}
+
+function generateDoor(question, noDoors, onDoorClick, buttonColor, questionPoints, questionType) {
+  const questionDetails = getQuestionDetails(question.id, questionType, questionPoints)
+
   return (
     <DoorColumn key={question.id + Date.now()} xl={12 / noDoors} md={12}>
       <Row className='mx-auto'>
-        <h3>{question.difficulty?.toUpperCase()}</h3>
+        <h3 className={'text-center'}>{question.difficulty?.toUpperCase()}</h3>
+        <h5 className={'p-0 text-center'} style={{ margin: questionDetails ? '0' : '12px 0' }}>
+          {questionDetails}
+        </h5>
       </Row>
 
       <Row>
@@ -34,6 +51,8 @@ function generateDoor(question, noDoors, onDoorClick, buttonColor) {
 
 function QuestionSelectionDoor(props) {
   const { activityId: expeditionId, questions, reloadInfo } = props
+  const questionPoints = JSON.parse(localStorage.getItem('questionPoints'))
+  const questionType = JSON.parse(localStorage.getItem('questionType'))
 
   const onDoorClick = (questionId) => {
     // change state, reloadInfo
@@ -53,7 +72,9 @@ function QuestionSelectionDoor(props) {
         </p>
       ) : (
         <Row className='m-0'>
-          {questions.map((question) => generateDoor(question, questions.length, onDoorClick, props.theme.success))}
+          {questions.map((question) =>
+            generateDoor(question, questions.length, onDoorClick, props.theme.success, questionPoints, questionType)
+          )}
         </Row>
       )}
     </Content>

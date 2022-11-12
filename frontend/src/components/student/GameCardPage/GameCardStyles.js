@@ -8,18 +8,16 @@ export const CustomCard = styled(Card)`
   border-radius: 10px;
   border: none;
 
-  & h5 {
-    margin: 0;
-  }
-
   & .card-header {
     background-color: ${(props) => props.$background};
-    border-radius: 10px 10px 0 0;
+    font-weight: bold;
+    margin: 0;
+    letter-spacing: 1px;
   }
 
   & .card-body {
     background-color: ${(props) => props.$bodyColor};
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 var(--bs-card-border-radius) var(--bs-card-border-radius);
 
     & p {
       font-size: 18px;

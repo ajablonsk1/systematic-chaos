@@ -22,6 +22,7 @@ import { Activity } from '../../../utils/constants'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../utils/mobileHelper'
 import { SET_ASSESSMENT_NUMBERS } from '../../../actions/types'
+import GoBackButton from '../../general/GoBackButton/GoBackButton'
 
 function ActivityAssessmentDetails(props) {
   const navigate = useNavigate()
@@ -135,11 +136,11 @@ function ActivityAssessmentDetails(props) {
   const contentBody = () => {
     return (
       <>
-        <HorizontalSpacer height={'3vh'} />
+        <HorizontalSpacer height={'1vh'} />
         <Col
           className='m-0 pt-4 mx-auto'
           style={{
-            height: isMobileDisplay ? 'auto' : '94vh',
+            height: isMobileDisplay ? 'auto' : '91vh',
             width: isMobileDisplay ? '94%' : '90%',
             backgroundColor: props.theme.secondary
           }}
@@ -173,7 +174,7 @@ function ActivityAssessmentDetails(props) {
 
           <Row
             className='p-2 rounded mx-2 overflow-auto'
-            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '20vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '18vh' }}
           >
             <ResponseDetails />
           </Row>
@@ -226,7 +227,6 @@ function ActivityAssessmentDetails(props) {
             </Col>
           </Row>
         </Col>
-        <HorizontalSpacer height={'3vh'} />
       </>
     )
   }
@@ -234,6 +234,7 @@ function ActivityAssessmentDetails(props) {
   return (
     <Content style={{ color: props.theme.font, marginBottom: isMobileDisplay ? 85 : 0 }}>
       {activityResponseInfo === undefined ? <Loader /> : activityResponseInfo == null ? ERROR_OCCURRED : contentBody()}
+      <GoBackButton goTo={TeacherRoutes.ACTIVITY_ASSESSMENT.LIST} />
     </Content>
   )
 }

@@ -10,7 +10,7 @@ function ContentCard(props) {
 
   return (
     <CustomCard
-      $customHeight={isMobileDisplay ? 'auto' : '95vh'}
+      $customHeight={isMobileDisplay ? 'auto' : '87vh'}
       $fontColor={props.theme.font}
       $background={props.theme.primary}
       $bodyColor={props.theme.secondary}

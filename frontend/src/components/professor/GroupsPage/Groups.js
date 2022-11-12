@@ -6,6 +6,8 @@ import GroupsTable from './Table/GroupsTable'
 import GroupAdditionModal from '../GroupAdditionPage/GroupAdditionModal'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../utils/mobileHelper'
+import GoBackButton from '../../general/GoBackButton/GoBackButton'
+import { TeacherRoutes } from '../../../routes/PageRoutes'
 
 function Groups(props) {
   const [modalOpen, setModalOpen] = useState(false)
@@ -26,17 +28,20 @@ function Groups(props) {
         <Row className='m-3 w-100 px-3' style={{ maxHeight: '80%', overflow: 'auto' }}>
           <GroupsTable setRefreshFunction={setRefreshFunction} />
         </Row>
-        <Button
-          style={
-            isMobileDisplay
-              ? { ...buttonStyle }
-              : { ...buttonStyle, position: 'absolute', top: 'calc(100% - 10px)', transform: 'translateY(-100%)' }
-          }
-          className={'justify-content-end'}
-          onClick={() => setModalOpen(true)}
+
+        <div
+          className={'d-flex justify-content-center gap-2 position-absolute'}
+          style={isMobileDisplay ? null : { bottom: 10 }}
         >
-          Dodaj grupę
-        </Button>
+          <GoBackButton goTo={TeacherRoutes.GAME_MANAGEMENT.MAIN} customClass={'position-relative'} />
+          <Button
+            style={isMobileDisplay ? { ...buttonStyle } : { ...buttonStyle, position: 'relative' }}
+            className={'justify-content-end'}
+            onClick={() => setModalOpen(true)}
+          >
+            Dodaj grupę
+          </Button>
+        </div>
       </Content>
       <GroupAdditionModal show={modalOpen} setModalOpen={setModalOpen} refreshFunction={refreshFunction} />
     </>

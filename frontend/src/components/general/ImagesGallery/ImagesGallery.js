@@ -126,7 +126,7 @@ function ImagesGallery(props) {
               />
 
               <ControlPanel drop={'start'}>
-                <Dropdown.Toggle style={{ backgroundColor: props.theme.secondary, borderColor: props.theme.secondary }}>
+                <Dropdown.Toggle style={{ backgroundColor: props.theme.primary, borderColor: props.theme.primary }}>
                   <FontAwesomeIcon icon={faEllipsisVertical} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>

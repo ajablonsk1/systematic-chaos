@@ -52,16 +52,23 @@ function GroupsTable(props) {
           </tr>
         </thead>
         <tbody>
-          {tableContent == null ? (
+          {tableContent === undefined ? (
             <tr>
-              <td colSpan={3}>{ERROR_OCCURRED}</td>
+              <td colSpan={4} className={'text-center'}>
+                <Spinner animation={'border'} />
+              </td>
+            </tr>
+          ) : tableContent === null ? (
+            <tr>
+              <td colSpan={4} className={'text-center'}>
+                {ERROR_OCCURRED}
+              </td>
             </tr>
           ) : (
             TableBody(tableContent)
           )}
         </tbody>
       </TableContainer>
-      {tableContent === undefined && <Spinner animation={'border'} />}
     </>
   )
 }

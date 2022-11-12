@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
-import { Button, Spinner } from 'react-bootstrap'
+import { Button, Tab, Tabs } from 'react-bootstrap'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
 import { connect } from 'react-redux'
+import FileUpload from './FileUpload'
+import Loader from '../../../general/Loader/Loader'
 
 function AddActivity(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
   const [errorMessage, setErrorMessage] = useState('')
+
   const jsonEditorRef = useRef()
 
   useEffect(() => {
@@ -39,12 +42,23 @@ function AddActivity(props) {
   return (
     <div>
       {placeholderJson === undefined ? (
-        <Spinner animation={'border'} />
+        <Loader />
       ) : placeholderJson == null ? (
         <p>{errorMessage}</p>
       ) : (
         <>
-          <JSONEditor ref={jsonEditorRef} jsonConfig={placeholderJson} />
+          <Tabs defaultActiveKey={'editor'}>
+            <Tab title={'Tryb edycji'} eventKey={'editor'}>
+              <JSONEditor ref={jsonEditorRef} jsonConfig={placeholderJson} />
+            </Tab>
+            <Tab title={'Dodawanie pliku'} eventKey={'file-upload'}>
+              <FileUpload
+                jsonToDownload={jsonEditorRef.current?.getJson()}
+                setPlaceholderJson={setPlaceholderJson}
+                fileName={props.fileName}
+              />
+            </Tab>
+          </Tabs>
 
           <div className={'d-flex flex-column justify-content-center align-items-center pt-4 gap-2'}>
             {errorMessage && (

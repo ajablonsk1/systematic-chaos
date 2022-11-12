@@ -7,6 +7,7 @@ import ExpeditionService from '../../../../../services/expedition.service'
 import { getGraphElements, getNodeColor } from '../../../../general/Graph/graphHelper'
 import { GRAPH_NODE_BASIC_SIZE, GRAPH_NODE_SPECIAL_SIZE } from '../../../../../utils/constants'
 import { isMobileView } from '../../../../../utils/mobileHelper'
+import { connect } from 'react-redux'
 
 const CLOSE_PREVIEW_CONTAINER_SIZE = 0
 const OPEN_PREVIEW_CONTAINER_SIZE = isMobileView() ? '95vw' : '40%'
@@ -53,7 +54,7 @@ function GraphPreview(props) {
 
   return (
     <>
-      <GraphTrigger onClick={() => setIsPreviewOpen(!isPreviewOpen)}>
+      <GraphTrigger $color={props.theme.success} onClick={() => setIsPreviewOpen(!isPreviewOpen)}>
         <FontAwesomeIcon icon={faDiagramProject} />
       </GraphTrigger>
       <GraphContainer style={{ width: size, height: size }}>
@@ -63,4 +64,9 @@ function GraphPreview(props) {
   )
 }
 
-export default GraphPreview
+function mapStateToProps(state) {
+  const theme = state.theme
+
+  return { theme }
+}
+export default connect(mapStateToProps)(GraphPreview)

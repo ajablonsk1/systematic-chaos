@@ -150,7 +150,7 @@ function GameManagement(props) {
           </Col>
           <Col md={4} className={'py-2'}>
             <ManagementCard
-              header={'Temat gry'}
+              header={'Ustawienia gry'}
               description={'Dopasuj temat fabuły i wygląd całej gry oraz całego systemu.'}
               routePath={TeacherRoutes.GAME_MANAGEMENT.GAME_SETTINGS}
             />
