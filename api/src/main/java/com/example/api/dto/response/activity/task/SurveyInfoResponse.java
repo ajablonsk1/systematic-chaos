@@ -18,6 +18,6 @@ public class SurveyInfoResponse {
     public SurveyInfoResponse(Survey survey) {
         this.name = survey.getTitle();
         this.description = survey.getDescription();
-        this.experience = survey.getExperience();
+        this.experience = survey.getMaxPoints();
     }
 }
