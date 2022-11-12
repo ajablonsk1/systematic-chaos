@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Button, Tab, Tabs } from 'react-bootstrap'
-import { ERROR_OCCURRED } from '../../../../utils/constants'
+import { Activity, ERROR_OCCURRED } from '../../../../utils/constants'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
 import { getGraphElements, getNodeColor } from '../../../general/Graph/graphHelper'
 import Graph from '../../../general/Graph/Graph'
@@ -9,11 +9,13 @@ import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import ExpeditionService from '../../../../services/expedition.service'
 import { connect } from 'react-redux'
 import Loader from '../../../general/Loader/Loader'
+import FileUpload from './FileUpload'
 
 function AddGraphTask(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
   const [errorMessage, setErrorMessage] = useState('')
   const [graphElements, setGraphElements] = useState(null)
+
   const jsonEditorRef = useRef()
 
   useEffect(() => {
@@ -68,6 +70,13 @@ function AddGraphTask(props) {
           ) : (
             <JSONEditor ref={jsonEditorRef} jsonConfig={placeholderJson} />
           )}
+        </Tab>
+        <Tab eventKey={'file-upload'} title={'Dodawanie pliku'}>
+          <FileUpload
+            jsonToDownload={jsonEditorRef.current?.getJson()}
+            setPlaceholderJson={setPlaceholderJson}
+            activityType={Activity.EXPEDITION}
+          />
         </Tab>
         <Tab eventKey={'preview'} title={'Podgląd grafu'}>
           <Graph elements={graphElements} height={'60vh'} layoutName={'klay'} onNodeClick={() => {}} />

@@ -288,3 +288,10 @@ export const getSpecifyDescription = (heroType) => {
 export const coolDownDescription = (heroType) =>
   `Wartość ta (podana w minutach) oznacza po jakim czasie bohater o wybranym typie: ${getHeroName(heroType)} <br/> 
    będzie mógł użyć swojej mocy ponownie w tej samej ekspedycji.`
+
+export const ActivityFileName = {
+  [Activity.INFO]: 'info-task-configuration.json',
+  [Activity.TASK]: 'combat-task-configuration.json',
+  [Activity.SURVEY]: 'survey-task-configuration.json',
+  [Activity.EXPEDITION]: 'graph-task-configuration.json'
+}

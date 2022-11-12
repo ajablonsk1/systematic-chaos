@@ -1,15 +1,22 @@
-import React, { useRef, useState } from 'react'
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Spinner } from 'react-bootstrap'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader, Spinner, Tab, Tabs } from 'react-bootstrap'
 import JSONEditor from '../../general/jsonEditor/JSONEditor'
 import { connect } from 'react-redux'
 import ActivityService from '../../../services/activity.service'
 import { ERROR_OCCURRED } from '../../../utils/constants'
+import FileUpload from './AddActivity/FileUpload'
 
 function EditActivityModal(props) {
+  const [placeholderJson, setPlaceholderJson] = useState(undefined)
   const [isSending, setIsSending] = useState(false)
   const [successModalVisible, setSuccessModalVisible] = useState(false)
   const [errorMessage, setErrorMessage] = useState(undefined)
+
   const jsonEditorRef = useRef()
+
+  useEffect(() => {
+    setPlaceholderJson(props.jsonConfig)
+  }, [props.jsonConfig])
 
   const sendJsonConfig = () => {
     setIsSending(true)
@@ -34,8 +41,19 @@ function EditActivityModal(props) {
           <h4 className={'text-center w-100'}>{props.modalHeader}</h4>
         </ModalHeader>
         <ModalBody>
-          <p className={'fw-bold text-center'}> W polu "infoContent" możesz wpisywać tekst markdown. </p>
-          <JSONEditor ref={jsonEditorRef} jsonConfig={props.jsonConfig} />
+          <Tabs defaultActiveKey={'editor'}>
+            <p className={'fw-bold text-center'}>W polu "infoContent" możesz wpisywać tekst markdown.</p>
+            <Tab eventKey={'editor'} title={'Tryb edycji'}>
+              <JSONEditor ref={jsonEditorRef} jsonConfig={placeholderJson} />
+            </Tab>
+            <Tab eventKey={'file-upload'} title={'Dodawanie pliku'}>
+              <FileUpload
+                jsonToDownload={jsonEditorRef.current?.getJson()}
+                setPlaceholderJson={setPlaceholderJson}
+                activityType={props.activityType}
+              />
+            </Tab>
+          </Tabs>
         </ModalBody>
         <ModalFooter className={'d-flex justify-content-center'}>
           <Button
