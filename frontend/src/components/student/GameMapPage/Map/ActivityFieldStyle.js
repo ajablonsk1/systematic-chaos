@@ -63,7 +63,7 @@ export const CustomOffcanvas = styled(Offcanvas)`
         width: 55%;
       }
 
-      tr:nth-of-type(5) {
+      tr:nth-of-type(6) {
         border-bottom: 1px solid ${(props) => props.$fontColor};
       }
 

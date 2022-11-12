@@ -11,10 +11,14 @@ import CreatableInput from '../../../general/CreatableInput/CreatableInput'
 import { successToast } from '../../../../utils/toasts'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
+import GoBackButton from '../../../general/GoBackButton/GoBackButton'
+import { TeacherRoutes } from '../../../../routes/PageRoutes'
 
 registerLocale('pl', pl)
 
 function Requirements(props) {
+  const { chapterName, chapterId } = props.chapterDetails
+
   const [requirementsList, setRequirementsList] = useState(undefined)
   const [multiSelectLists, setMultiSelectLists] = useState([])
   const [onSaveError, setOnSaveError] = useState('')
@@ -98,7 +102,7 @@ function Requirements(props) {
       case RequirementType.SELECT:
         return <Select requirement={requirement} onChangeCallback={setRequirementsList} />
       case RequirementType.DATE:
-        const date = new Date(requirement.answer ?? requirement.value)
+        const date = new Date(requirement.answer ?? requirement.value ?? Date.now())
 
         return (
           <DatePicker
@@ -106,7 +110,7 @@ function Requirements(props) {
             onChange={(date) => onInputChange(requirement.id, date, setRequirementsList)}
             showTimeSelect
             timeFormat={'p'}
-            dateFormat={'Pp'}
+            dateFormat={'dd.MM.yyyy, HH:mm'}
             locale={'pl'}
           />
         )
@@ -153,7 +157,7 @@ function Requirements(props) {
               </tr>
               {requirementsList === undefined ? (
                 <tr>
-                  <td colSpan={3}>
+                  <td colSpan={3} className={'text-center'}>
                     <Spinner animation={'border'} />
                   </td>
                 </tr>
@@ -190,9 +194,17 @@ function Requirements(props) {
           {onSaveError}
         </p>
       )}
-      <Button className={'position-relative start-50 translate-middle-x w-auto mt-3'} onClick={saveRequirements}>
-        {isSaving ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz zmiany</span>}
-      </Button>
+
+      <div className={'d-flex justify-content-center gap-2'}>
+        <GoBackButton
+          goTo={TeacherRoutes.GAME_MANAGEMENT.CHAPTER.MAIN + `/${chapterName}/${chapterId}`}
+          customClass={'mt-3'}
+        />
+
+        <Button className={'w-auto mt-3'} onClick={saveRequirements}>
+          {isSaving ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz zmiany</span>}
+        </Button>
+      </div>
     </>
   )
 }

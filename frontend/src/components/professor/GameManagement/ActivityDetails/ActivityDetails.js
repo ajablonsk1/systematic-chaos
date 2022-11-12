@@ -11,10 +11,12 @@ import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
 import Requirements from '../Requirements/Requirements'
 import { Activity } from '../../../../utils/constants'
+import GoBackButton from '../../../general/GoBackButton/GoBackButton'
+import { TeacherRoutes } from '../../../../routes/PageRoutes'
 
 function ActivityDetails(props) {
   const location = useLocation()
-  const { activityId, activityType } = location.state
+  const { activityId, activityType, chapterName, chapterId } = location.state
 
   const [studentsList, setStudentsList] = useState(undefined)
   const [filteredList, setFilteredList] = useState(undefined)
@@ -71,7 +73,7 @@ function ActivityDetails(props) {
 
           <Ranking
             rankingList={filteredList}
-            customHeight={'80vh'}
+            customHeight={'75vh'}
             noPointsMessage={'Nie wykonano'}
             iconCallback={
               activityType === Activity.SURVEY
@@ -82,9 +84,11 @@ function ActivityDetails(props) {
                 : null
             }
           />
+          <GoBackButton goTo={TeacherRoutes.GAME_MANAGEMENT.CHAPTER.MAIN + `/${chapterName}/${chapterId}`} />
         </Tab>
         <Tab eventKey={'statistics'} title={'Statystyki'}>
           <ActivityStats activityId={activityId} activityType={activityType} />
+          <GoBackButton goTo={TeacherRoutes.GAME_MANAGEMENT.CHAPTER.MAIN + `/${chapterName}/${chapterId}`} />
         </Tab>
         <Tab eventKey={'requirements'} title={'Wymagania'}>
           <Requirements
@@ -94,6 +98,7 @@ function ActivityDetails(props) {
             tableTitle={
               'Lista wymagań, które student musi spełnić, żeby odblokować możliwość wykonania tej aktywności:'
             }
+            chapterDetails={{ chapterName, chapterId }}
           />
         </Tab>
       </TabsContainer>

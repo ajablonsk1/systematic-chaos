@@ -48,4 +48,9 @@ public class ExceptionMessage {
     public static final String STRING_VALUE_NOT_PARSABLE_TO_INT = "Wpisana wartość nie jest liczbą całkowitą";
     public static final String STRING_VALUE_NOT_PARSABLE_TO_DOUBLE = "Wpisana wartość nie jest liczbą zmiennoprzecinkową";
     public static final String BADGE_TITLE_TOO_LONG = "Tytuł nie może przekraczać 30 znaków";
+    public static final String PASSWORD_RESET_TOKEN_IS_NULL = "Użytkownik nie posiada tokenu do resetu hasła";
+    public static final String PASSWORD_RESET_TOKEN_IS_USED = "Token do resetu hasła został już użyty";
+    public static final String PASSWORD_RESET_TOKEN_EXPIRED = "Ważność tokena do resetu hasła wygasła";
+    public static final String PASSWORD_RESET_TOKEN_INCORRECT = "Podany token do resetu hasła jest nieprawidłowy";
+    public static final String PASSWORD_NOT_MEET_REQUIREMENTS = "Hasło nie spełnia wymagań";
 }

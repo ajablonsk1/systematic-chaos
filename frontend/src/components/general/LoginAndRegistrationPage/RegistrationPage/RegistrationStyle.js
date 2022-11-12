@@ -8,8 +8,10 @@ export const Info = styled.div`
   border-color: ${(props) => props.$buttonColor};
   padding: 6px 10px;
   border-radius: 5px;
+  position: relative;
+  height: 36px;
 
-  &:hover + div {
+  &:hover > div {
     display: flex !important;
     flex-direction: column;
   }
@@ -21,8 +23,8 @@ export const Description = styled.div`
   color: white;
   z-index: 2;
   padding: 25px;
-  bottom: 28%;
-  right: 80px;
+  bottom: 36px;
+  right: 0;
   clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 89% 75%, 94% 100%, 50% 75%, 0% 75%);
   width: 500px;
   height: 400px;

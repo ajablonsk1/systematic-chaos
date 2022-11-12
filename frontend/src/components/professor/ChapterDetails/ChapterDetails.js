@@ -28,11 +28,12 @@ import { successToast } from '../../../utils/toasts'
 import { connect } from 'react-redux'
 import ActivityService from '../../../services/activity.service'
 import { isMobileView } from '../../../utils/mobileHelper'
+import GameCard from '../../student/GameCardPage/GameCard'
+import Loader from '../../general/Loader/Loader'
 
 function ChapterDetails(props) {
   const { id: chapterId } = useParams()
   const [openActivitiesDetailsList, setOpenActivitiesDetailsList] = useState(false)
-  const [openConditionsList, setOpenConditionsList] = useState(false)
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false)
   const [isEditChapterModalOpen, setEditChapterModalOpen] = useState(false)
   const [chosenActivityData, setChosenActivityData] = useState(null)
@@ -73,9 +74,11 @@ function ChapterDetails(props) {
   }, [])
 
   const getChapterDetails = useCallback(() => {
+    setReloadMapNeeded(false)
     ChapterService.getChapterDetails(chapterId)
       .then((response) => {
         setChapterDetails(response)
+        setReloadMapNeeded(true)
       })
       .catch(() => {
         setChapterDetails(null)
@@ -104,7 +107,12 @@ function ChapterDetails(props) {
 
   const goToChapterDetails = (activityName, activityId, activityType) => {
     navigate(location.pathname + `/activity/${activityName}`, {
-      state: { activityId: activityId, activityType: activityType }
+      state: {
+        activityId: activityId,
+        activityType: activityType,
+        chapterName: chapterDetails.name,
+        chapterId: chapterId
+      }
     })
   }
 
@@ -154,7 +162,9 @@ function ChapterDetails(props) {
   }
 
   const goToRequirements = () => {
-    navigate(TeacherRoutes.GAME_MANAGEMENT.CHAPTER.REQUIREMENTS, { state: { chapterId: chapterId } })
+    navigate(TeacherRoutes.GAME_MANAGEMENT.CHAPTER.REQUIREMENTS, {
+      state: { chapterId: chapterId, chapterName: chapterDetails.name }
+    })
   }
 
   return (
@@ -174,7 +184,7 @@ function ChapterDetails(props) {
               </Card.Body>
             </MapCard>
           </Col>
-          <Col md={12} style={{ height: '45%' }}>
+          <Col md={12} style={{ height: '25%' }}>
             <SummaryCard
               $bodyColor={props.theme.secondary}
               $headerColor={props.theme.primary}
@@ -184,7 +194,7 @@ function ChapterDetails(props) {
               <Card.Header>Podsumowanie rozdziału</Card.Header>
               <Card.Body className={'p-0'}>
                 {chapterDetails === undefined ? (
-                  <Spinner animation={'border'}></Spinner>
+                  <Loader />
                 ) : chapterDetails == null ? (
                   <p>{ERROR_OCCURRED}</p>
                 ) : (
@@ -215,28 +225,21 @@ function ChapterDetails(props) {
                       Suma punktów możliwych do zdobycia w rozdziale: {chapterDetails.maxPoints}
                     </ListGroupItem>
                     <ListGroupItem>Aktualny rozmiar mapy: {chapterDetails.mapSize}</ListGroupItem>
-                    <ListGroupItem>
-                      <Row className={'d-flex align-items-center'}>
-                        <Col xs={10}>Wymagania odblokowania rozdziału:</Col>
-                        <Col xs={2} className={'text-end'}>
-                          <FontAwesomeIcon
-                            icon={openConditionsList ? faArrowUp : faArrowDown}
-                            onClick={() => setOpenConditionsList(!openConditionsList)}
-                            aria-controls={'conditions'}
-                            aria-expanded={openConditionsList}
-                          />
-                        </Col>
-                      </Row>
-                      <Collapse in={openConditionsList}>
-                        <div id='conditions' onClick={goToRequirements} style={{ cursor: 'pointer' }}>
-                          Przejdź do ustawień
-                        </div>
-                      </Collapse>
-                    </ListGroupItem>
                   </ListGroup>
                 )}
               </Card.Body>
             </SummaryCard>
+          </Col>
+          <Col md={12} style={{ height: '20%' }} className={'my-2'}>
+            <GameCard
+              onButtonClick={goToRequirements}
+              headerText={'Wymagania'}
+              content={
+                <p className={'text-center'}>
+                  Edycja wymagań rozdziału, które musi spełnić student, aby zobaczyć rozdział na mapie gry.
+                </p>
+              }
+            />
           </Col>
         </Col>
         <Col className={'m-0 h-100'} md={6}>
@@ -293,7 +296,7 @@ function ChapterDetails(props) {
                             <td>
                               ({activity.posX}, {activity.posY})
                             </td>
-                            <td>Pkt: {activity.points ?? 0}</td>
+                            <td>Pkt: {activity.points ?? '-'}</td>
                             <td>
                               <FontAwesomeIcon
                                 icon={faPenToSquare}

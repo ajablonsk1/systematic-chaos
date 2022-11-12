@@ -56,7 +56,7 @@ function FileService(props) {
                 disabled={isReviewed}
                 onClick={() => remove(idx)}
               >
-                {isRemoving ? <Spinner animation={'border'} /> : <FontAwesomeIcon icon={faTrash} />}
+                {isRemoving ? <Spinner animation={'border'} size={'sm'} /> : <FontAwesomeIcon icon={faTrash} />}
               </Button>
               <Button
                 style={{ backgroundColor: props.theme.warning, borderColor: props.theme.warning }}

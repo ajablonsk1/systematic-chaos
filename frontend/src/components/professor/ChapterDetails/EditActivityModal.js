@@ -42,6 +42,7 @@ function EditActivityModal(props) {
         </ModalHeader>
         <ModalBody>
           <Tabs defaultActiveKey={'editor'}>
+            <p className={'fw-bold text-center'}>W polu "infoContent" możesz wpisywać tekst markdown.</p>
             <Tab eventKey={'editor'} title={'Tryb edycji'}>
               <JSONEditor ref={jsonEditorRef} jsonConfig={placeholderJson} />
             </Tab>
@@ -70,7 +71,7 @@ function EditActivityModal(props) {
             disabled={isSending}
             onClick={sendJsonConfig}
           >
-            {isSending ? <Spinner animation={'border'} /> : <span>Zapisz zmiany</span>}
+            {isSending ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz zmiany</span>}
           </Button>
         </ModalFooter>
         {errorMessage && (

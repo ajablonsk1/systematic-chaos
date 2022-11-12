@@ -4,6 +4,7 @@ import com.example.api.model.group.Group;
 import com.example.api.model.user.badge.UnlockedBadge;
 import com.example.api.model.user.hero.UserHero;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,7 +45,11 @@ public class User {
     private Double points;
 
     @Embedded
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private UserHero userHero;
+
+    @OneToOne
+    PasswordResetToken passwordResetToken;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
@@ -60,6 +65,7 @@ public class User {
     }
 
     public HeroType getHeroType() {
-        return userHero.getHero().getType();
+        if (accountType.equals(AccountType.STUDENT)) return userHero.getHero().getType();
+        return null;
     }
 }

@@ -55,7 +55,6 @@ function ActivityContent(props) {
     navigate(StudentRoutes.GAME_MAP.GRAPH_TASK.EXPEDITION_WRAPPER, {
       state: {
         activityId: activityId,
-        alreadyStarted: activityScore !== -1,
         maxPoints: props.activity.maxPoints
       }
     })
@@ -199,7 +198,7 @@ function ActivityContent(props) {
             style={{ backgroundColor: props.theme.warning, borderColor: props.theme.warning }}
             onClick={startExpedition}
           >
-            {isFetching ? <Spinner animation={'border'} /> : <span>Rozpocznij</span>}
+            {isFetching ? <Spinner animation={'border'} size={'sm'} /> : <span>Rozpocznij</span>}
           </Button>
         </Row>
       </Col>
