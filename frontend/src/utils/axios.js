@@ -13,12 +13,14 @@ export function axiosApiPost(url, body) {
     })
 }
 
-export function axiosApiGet(url, params) {
+export function axiosApiGet(url, params, hideToast = false) {
   return axios
     .get(url, validHeader(params))
     .then((response) => response.data)
     .catch((error) => {
-      errorToast(error?.response?.data?.message)
+      if (!hideToast) {
+        errorToast(error?.response?.data?.message)
+      }
       throw error
     })
 }

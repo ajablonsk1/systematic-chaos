@@ -88,7 +88,7 @@ export const ProfessorSidebarTitles = [
         navigateTo: TeacherRoutes.GAME_MANAGEMENT.RANKS_AND_BADGES
       },
       {
-        name: 'Temat gry',
+        name: 'Ustawienia gry',
         icon: faPalette,
         navigateTo: TeacherRoutes.GAME_MANAGEMENT.GAME_SETTINGS
       }

@@ -12,12 +12,24 @@ export const GraphTrigger = styled.div`
   right: 10px;
   bottom: 10px;
   border-radius: 50%;
-  background-color: white;
+  background-color: ${(props) => props.$color};
   z-index: 3;
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  & svg {
+    transition: all 0.2s linear;
+    color: white;
+  }
+
+  &:hover svg {
+    transform: scale(1.5);
+  }
 
   @media (max-width: 575px) {
     bottom: 85px;

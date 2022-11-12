@@ -108,17 +108,19 @@ function RegistrationForm(props) {
                             Łotrzyk
                           </option>
                         </Field>
-                        <Info $buttonColor={props.theme.success}>i</Info>
-                        <Description
-                          $background={props.theme.success}
-                          ref={description}
-                          style={{
-                            display: 'none'
-                          }}
-                        >
-                          {HeroDescriptions[character]}
-                          <img src={HeroImg[character]} alt={character} />
-                        </Description>
+                        <Info $buttonColor={props.theme.success}>
+                          <span>i</span>
+                          <Description
+                            $background={props.theme.success}
+                            ref={description}
+                            style={{
+                              display: 'none'
+                            }}
+                          >
+                            {HeroDescriptions[character]}
+                            <img src={HeroImg[character]} alt={character} />
+                          </Description>
+                        </Info>
                       </div>
                     ) : (
                       <Field className='form-control' name={key} type={RegistrationLabelsAndTypes[key][1]} />
