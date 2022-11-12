@@ -12,6 +12,8 @@ const headersWithSortedInfo = [
   { headerName: 'Gracz', sortedVar1: 'firstName', sortedVar2: 'lastName' },
   { headerName: 'Grupa zajęciowa', sortedVar1: 'groupName' },
   { headerName: 'Typ bohatera', sortedVar1: 'heroType' },
+  { headerName: 'Ranga', sortedVar1: 'rank' },
+  { headerName: 'Odblokowane odznaki', sortedVar1: 'unblockedBadges' },
   { headerName: 'Punkty', sortedVar1: 'points' }
 ]
 
@@ -50,7 +52,10 @@ function Ranking(props) {
       if (sortedVariables.includes('heroType')) {
         options.customComparingFunction = getHeroName
       }
-      options.isString = !sortedVariables.includes('points') && !sortedVariables.includes('position')
+      options.isString =
+        !sortedVariables.includes('points') &&
+        !sortedVariables.includes('position') &&
+        !sortedVariables.includes('unblockedBadges')
 
       const rankingAfterSorting = sortArray(ranking, sortingOrders[headerId], sortedVariables, options)
       setRanking(rankingAfterSorting)
@@ -94,13 +99,13 @@ function Ranking(props) {
         <thead>{tableHeaders}</thead>
         <tbody>
           {ranking === undefined ? (
-            <tr>
+            <tr style={{ backgroundColor: props.theme.secondary }}>
               <td colSpan='100%' className={'text-center'}>
                 <Spinner animation={'border'} />
               </td>
             </tr>
           ) : ranking == null || ranking.length === 0 ? (
-            <tr>
+            <tr style={{ backgroundColor: props.theme.secondary }}>
               <td colSpan='100%' className={'text-center'}>
                 <p>{ranking == null ? ERROR_OCCURRED : 'Brak studentów do wyświetlenia'}</p>
               </td>
@@ -116,6 +121,8 @@ function Ranking(props) {
                 <td>{student.firstName + ' ' + student.lastName}</td>
                 <td>{student.groupName}</td>
                 <td>{getHeroName(student.heroType)}</td>
+                <td>{student.rank}</td>
+                <td>{student.unblockedBadges}</td>
                 <td>{student.points ?? props.noPointsMessage ?? 'Brak danych'}</td>
                 {!!props.iconCallback && (
                   <td>
