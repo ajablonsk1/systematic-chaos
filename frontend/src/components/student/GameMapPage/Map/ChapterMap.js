@@ -98,7 +98,7 @@ export default function ChapterMap({ chapterId, marginNeeded, parentSize, mapCli
   }
 
   const allActivitiesCompleted = () => {
-    if (!chapterMap) return false
+    if (!chapterMap || !chapterMap?.tasks.length) return false
 
     const uncompletedActivity = chapterMap.tasks.find((task) => !task.isCompleted)
 

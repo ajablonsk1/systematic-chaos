@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
-import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Spinner, Tab } from 'react-bootstrap'
+import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row, Tab } from 'react-bootstrap'
 import { TabsContainer } from '../../../general/LoginAndRegistrationPage/AuthStyle'
 import { HeroType } from '../../../../utils/userRole'
 import { base64Header, ERROR_OCCURRED, getHeroName } from '../../../../utils/constants'
@@ -15,6 +15,8 @@ import { isMobileView } from '../../../../utils/mobileHelper'
 import UserService from '../../../../services/user.service'
 import Loader from '../../../general/Loader/Loader'
 import BadgeCreationForm from './BadgeCreationForm'
+import GoBackButton from '../../../general/GoBackButton/GoBackButton'
+import { TeacherRoutes } from '../../../../routes/PageRoutes'
 
 function RankAndBadgesManagement(props) {
   const isMobileDisplay = isMobileView()
@@ -27,7 +29,7 @@ function RankAndBadgesManagement(props) {
   const [selectedHeroType, setSelectedHeroType] = useState(HeroType.WARRIOR)
   const [chosenItem, setChosenItem] = useState(undefined)
   const [errorMessage, setErrorMessage] = useState(undefined)
-  const [badgesList, setBadgesList] = useState(null)
+  const [badgesList, setBadgesList] = useState(undefined)
   const [isBadgeAdditionModalOpen, setIsBadgeAdditionModalOpen] = useState(false)
 
   const getRanksList = () => {
@@ -86,8 +88,9 @@ function RankAndBadgesManagement(props) {
 
   const ranksContent = useMemo(() => {
     if (ranksData === undefined) {
-      return <Spinner animation={'border'} />
+      return <Loader />
     }
+
     if (ranksData == null) {
       return <p style={{ color: props.theme.danger }}>{ERROR_OCCURRED}</p>
     }
@@ -101,7 +104,7 @@ function RankAndBadgesManagement(props) {
             eventKey={rank.heroType}
             title={getHeroName(rank.heroType)}
           >
-            <div className={'text-center'} style={{ maxHeight: '74.5vh', overflow: 'auto' }}>
+            <div className={'text-center'} style={{ maxHeight: '68.5vh', overflow: 'auto' }}>
               <Table
                 headers={['Ikona', 'Nazwa rangi', 'Zakres punktowy']}
                 body={rank.ranks.map((listElements) => [
@@ -137,32 +140,34 @@ function RankAndBadgesManagement(props) {
   }, [props.theme.danger, props.theme.success, ranksData])
 
   const badgesContent = useMemo(() => {
+    if (badgesList === undefined) {
+      return <Loader />
+    }
+
+    if (badgesList == null) {
+      return <p style={{ color: props.theme.danger }}>{ERROR_OCCURRED}</p>
+    }
+
     return (
       <>
         <div className={'text-center'} style={{ maxHeight: '90%', overflow: 'auto' }}>
-          {badgesList === undefined ? (
-            <Loader />
-          ) : badgesList == null ? (
-            <p>{ERROR_OCCURRED}</p>
-          ) : (
-            <Table
-              headers={['Ikona', 'Nazwa odznaki', 'Opis']}
-              body={badgesList.map((badge) => [
-                <img width={100} src={base64Header + badge.file.file} alt={'badge-icon'} />,
-                <span>{badge.title}</span>,
-                <span>{badge.description}</span>
-              ])}
-              editIconCallback={(idx) => {
-                setEditedDataType('BADGES')
-                setIsEditModalOpen(true)
-                setChosenItem({ item: badgesList[idx] })
-              }}
-              deleteIconCallback={(idx) => {
-                setIsDeleteModalOpen(true)
-                setChosenItem({ id: badgesList[idx].id, type: 'BADGE' })
-              }}
-            />
-          )}
+          <Table
+            headers={['Ikona', 'Nazwa odznaki', 'Opis']}
+            body={badgesList.map((badge) => [
+              <img width={100} src={base64Header + badge.file.file} alt={'badge-icon'} />,
+              <span>{badge.title}</span>,
+              <span>{badge.description}</span>
+            ])}
+            editIconCallback={(idx) => {
+              setEditedDataType('BADGES')
+              setIsEditModalOpen(true)
+              setChosenItem({ item: badgesList[idx] })
+            }}
+            deleteIconCallback={(idx) => {
+              setIsDeleteModalOpen(true)
+              setChosenItem({ id: badgesList[idx].id, type: 'BADGE' })
+            }}
+          />
         </div>
         <Button
           className={'my-3 start-50 translate-middle-x position-relative'}
@@ -175,7 +180,7 @@ function RankAndBadgesManagement(props) {
         </Button>
       </>
     )
-  }, [badgesList, props.theme.success])
+  }, [badgesList, props.theme])
 
   return (
     <Content>
@@ -187,6 +192,7 @@ function RankAndBadgesManagement(props) {
           <ContentCard header={'Odznaki'} body={badgesContent} />
         </Col>
       </Row>
+      <GoBackButton goTo={TeacherRoutes.GAME_MANAGEMENT.MAIN} />
 
       <Modal show={isDeleteModalOpen} onHide={() => setIsDeleteModalOpen(false)}>
         <ModalHeader>

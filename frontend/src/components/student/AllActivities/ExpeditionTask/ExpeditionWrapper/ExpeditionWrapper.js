@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Spinner } from 'react-bootstrap'
 import { EXPEDITION_STATUS } from '../../../../../utils/constants'
 import { StudentRoutes } from '../../../../../routes/PageRoutes'
 import ExpeditionService from '../../../../../services/expedition.service'
 import QuestionSelectionDoor from '../QuestionSelectionDoor/QuestionSelectionDoor'
 import QuestionAndOptions from '../QuestionAndOptions/QuestionAndOptions'
 import InfoContainer from '../InfoContainer/InfoContainer'
+import Loader from '../../../../general/Loader/Loader'
 
 /* 
 wrapped elements should be:
@@ -108,7 +108,7 @@ export function ExpeditionWrapper() {
   }, [activityId, expeditionState, reloadState])
 
   return expeditionState === undefined ? (
-    <Spinner animation={'border'} />
+    <Loader />
   ) : (
     <InfoContainer
       activityId={activityId}

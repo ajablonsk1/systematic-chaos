@@ -41,7 +41,7 @@ function BonusPointsTable(props) {
       <tbody>
         {bonusPoints === undefined ? (
           <tr>
-            <td colSpan='100%'>
+            <td colSpan='100%' className={'text-center'}>
               <Spinner animation={'border'} />
             </td>
           </tr>

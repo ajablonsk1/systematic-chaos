@@ -17,6 +17,8 @@ import GameCard from '../../GameCardPage/GameCard'
 import { CustomTable } from '../../GameCardPage/gameCardContentsStyle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { successToast } from '../../../../utils/toasts'
+import GoBackButton from '../../../general/GoBackButton/GoBackButton'
+import { StudentRoutes } from '../../../../routes/PageRoutes'
 
 const icons = [fa1, fa2, fa3, fa4, fa5]
 
@@ -160,7 +162,7 @@ function FeedbackTask(props) {
                     className={'position-relative start-50 translate-middle-x mb-3'}
                     style={{ borderColor: props.theme.success, backgroundColor: props.theme.success }}
                   >
-                    {isAnswerSending ? <Spinner animation={'border'} /> : <span>Wyślij</span>}
+                    {isAnswerSending ? <Spinner animation={'border'} size={'sm'} /> : <span>Wyślij</span>}
                   </Button>
                   {errorMessage ? (
                     <p style={{ color: props.theme.danger }} className={'text-center'}>
@@ -173,6 +175,7 @@ function FeedbackTask(props) {
           />
         </Col>
       </Row>
+      <GoBackButton goTo={StudentRoutes.GAME_MAP.MAIN} />
     </>
   )
 }

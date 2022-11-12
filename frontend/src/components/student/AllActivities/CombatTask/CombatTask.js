@@ -16,6 +16,8 @@ import { Header, VerticalSpacer, HorizontalSpacer, ActivityDetails } from '../..
 import { Fade } from 'react-awesome-reveal'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
+import GoBackButton from '../../../general/GoBackButton/GoBackButton'
+import { StudentRoutes } from '../../../../routes/PageRoutes'
 
 const FIELD_DELAY = 600
 
@@ -100,7 +102,7 @@ function CombatTask(props) {
         <Col
           className='pt-4 mx-auto'
           style={{
-            height: isMobileDisplay ? 'auto' : '94vh',
+            height: isMobileDisplay ? 'auto' : '86vh',
             width: '90%',
             backgroundColor: props.theme.secondary,
             margin: isMobileDisplay ? '0 0 85px 0' : 0
@@ -122,7 +124,7 @@ function CombatTask(props) {
           <VerticalSpacer height={'2vh'} />
           <Row
             className='p-2 rounded mx-2'
-            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '50vh' }}
+            style={{ backgroundColor: props.theme.primary, height: isMobileDisplay ? 'auto' : '46vh' }}
           >
             <Col
               md={task.answer || answerWasSentNow ? MD_WHEN_TASK_SENT : MD_WHEN_TASK_NOT_SENT}
@@ -171,7 +173,7 @@ function CombatTask(props) {
                       onClick={sendAnswer}
                     >
                       {isFetching ? (
-                        <Spinner animation={'border'} />
+                        <Spinner animation={'border'} size={'sm'} />
                       ) : isReviewed() ? (
                         <span>Aktywność została oceniona</span>
                       ) : (
@@ -208,6 +210,7 @@ function CombatTask(props) {
             )}
           </Row>
         </Col>
+        <GoBackButton goTo={StudentRoutes.GAME_MAP.MAIN} />
         <HorizontalSpacer height={'3vh'} />
       </>
     )

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Button, Spinner, Tab, Tabs } from 'react-bootstrap'
+import { Button, Tab, Tabs } from 'react-bootstrap'
 import { ERROR_OCCURRED } from '../../../../utils/constants'
 import JSONEditor from '../../../general/jsonEditor/JSONEditor'
 import { getGraphElements, getNodeColor } from '../../../general/Graph/graphHelper'
@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import ExpeditionService from '../../../../services/expedition.service'
 import { connect } from 'react-redux'
+import Loader from '../../../general/Loader/Loader'
 
 function AddGraphTask(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
@@ -61,7 +62,7 @@ function AddGraphTask(props) {
       <Tabs defaultActiveKey={'editor'}>
         <Tab eventKey={'editor'} title={'Tryb edycji'}>
           {placeholderJson === undefined ? (
-            <Spinner animation={'border'} />
+            <Loader />
           ) : placeholderJson == null ? (
             <p>{errorMessage}</p>
           ) : (
