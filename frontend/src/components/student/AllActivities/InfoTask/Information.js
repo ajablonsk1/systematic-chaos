@@ -11,6 +11,8 @@ import CardHeader from 'react-bootstrap/CardHeader'
 import ImagesGallery from '../../../general/ImagesGallery/ImagesGallery'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import GoBackButton from '../../../general/GoBackButton/GoBackButton'
 import { StudentRoutes } from '../../../../routes/PageRoutes'
 
@@ -80,7 +82,7 @@ function Information(props) {
   return (
     <Content style={{ marginBottom: isMobileDisplay ? '85px' : 'auto' }}>
       <Row className={`m-0 ${isMobileDisplay ? 'h-auto' : 'vh-100'}`}>
-        <Col md={6} className={'py-2'}>
+        <Col md={6} className={'py-2 vh-100'}>
           <Row className={'m-0 w-100 pb-2'} style={{ height: isMobileDisplay ? 'auto' : '25%' }}>
             <CustomCard
               className={'p-0'}
@@ -104,13 +106,13 @@ function Information(props) {
               <CardHeader>
                 <h5>Wytyczne</h5>
               </CardHeader>
-              <Card.Body className={'overflow-auto'} style={{ maxHeight: '70vh' }}>
+              <Card.Body className={'overflow-auto'} style={{ height: '70vh' }}>
                 {information === undefined ? (
                   <Loader />
                 ) : information == null ? (
                   <p>{ERROR_OCCURRED}</p>
                 ) : (
-                  <p>{information.content}</p>
+                  <ReactMarkdown children={information.content} remarkPlugins={[remarkGfm]} />
                 )}
               </Card.Body>
             </CustomCard>

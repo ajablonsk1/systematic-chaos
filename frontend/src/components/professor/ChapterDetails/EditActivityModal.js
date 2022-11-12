@@ -34,6 +34,7 @@ function EditActivityModal(props) {
           <h4 className={'text-center w-100'}>{props.modalHeader}</h4>
         </ModalHeader>
         <ModalBody>
+          <p className={'fw-bold text-center'}> W polu "infoContent" możesz wpisywać tekst markdown. </p>
           <JSONEditor ref={jsonEditorRef} jsonConfig={props.jsonConfig} />
         </ModalBody>
         <ModalFooter className={'d-flex justify-content-center'}>
