@@ -175,6 +175,7 @@ public class ChapterService {
         List<? extends RequirementDTO<?>> requirements = chapter.getRequirements()
                 .stream()
                 .map(Requirement::getResponse)
+                .sorted(Comparator.comparingLong(RequirementDTO::getId))
                 .toList();
         return new RequirementResponse(chapter.getIsBlocked(), requirements);
     }

@@ -38,10 +38,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
@@ -146,6 +143,7 @@ public class TaskService {
         List<? extends RequirementDTO<?>> requirements = activity.getRequirements()
                 .stream()
                 .map(Requirement::getResponse)
+                .sorted(Comparator.comparingLong(RequirementDTO::getId))
                 .toList();
         return new RequirementResponse(activity.getIsBlocked(), requirements);
     }
