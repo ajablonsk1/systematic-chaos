@@ -10,6 +10,7 @@ function AddSurveyTask(props) {
       chapterId={props.chapterId}
       onSuccess={props.onSuccess}
       onCancel={props.onCancel}
+      fileName={'survey-task-configuration.json'}
     />
   )
 }

@@ -32,6 +32,10 @@ const JSONEditor = forwardRef((props, ref) => {
   }))
 
   useEffect(() => {
+    setEditedJson(props.jsonConfig)
+  }, [props.jsonConfig])
+
+  useEffect(() => {
     if (cursorPosition) {
       jsonInputRef.current?.setCursorPosition(cursorPosition.pos)
     }

@@ -10,6 +10,7 @@ function AddCombatTask(props) {
       chapterId={props.chapterId}
       onSuccess={props.onSuccess}
       onCancel={props.onCancel}
+      fileName={'combat-task-configuration.json'}
     />
   )
 }

@@ -10,6 +10,7 @@ function AddInfoTask(props) {
       chapterId={props.chapterId}
       onSuccess={props.onSuccess}
       onCancel={props.onCancel}
+      fileName={'info-task-configuration.json'}
     />
   )
 }

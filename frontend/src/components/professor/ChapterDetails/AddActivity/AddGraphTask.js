@@ -8,11 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 import ExpeditionService from '../../../../services/expedition.service'
 import { connect } from 'react-redux'
+import FileUpload from './FileUpload'
 
 function AddGraphTask(props) {
   const [placeholderJson, setPlaceholderJson] = useState(undefined)
   const [errorMessage, setErrorMessage] = useState('')
   const [graphElements, setGraphElements] = useState(null)
+
   const jsonEditorRef = useRef()
 
   useEffect(() => {
@@ -67,6 +69,13 @@ function AddGraphTask(props) {
           ) : (
             <JSONEditor ref={jsonEditorRef} jsonConfig={placeholderJson} />
           )}
+        </Tab>
+        <Tab eventKey={'file-upload'} title={'Dodawanie pliku'}>
+          <FileUpload
+            jsonToDownload={jsonEditorRef.current?.getJson()}
+            setPlaceholderJson={setPlaceholderJson}
+            fileName={'graph-task-configuration.json'}
+          />
         </Tab>
         <Tab eventKey={'preview'} title={'Podgląd grafu'}>
           <Graph elements={graphElements} height={'60vh'} layoutName={'klay'} onNodeClick={() => {}} />
