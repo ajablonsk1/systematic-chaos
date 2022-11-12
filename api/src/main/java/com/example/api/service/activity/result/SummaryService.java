@@ -346,7 +346,7 @@ public class SummaryService {
 
 
     private boolean isProfessorActivity(Activity activity, User professor) {
-        return activity.getProfessor() == null || activity.getProfessor().equals(professor); // assumption that when activity has no professor it means it is everyones
+        return activity.getProfessor() != null && activity.getProfessor().equals(professor);
 
     }
 
