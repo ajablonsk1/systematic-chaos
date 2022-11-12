@@ -20,7 +20,10 @@ function GameCardView(props) {
 
   useEffect(() => {
     StudentService.getDashboardStats()
-      .then((response) => setDashboardStats(response))
+      .then((response) => {
+        setDashboardStats(response)
+        localStorage.setItem('heroType', response.heroTypeStats.heroType)
+      })
       .catch(() => setDashboardStats(null))
   }, [])
 

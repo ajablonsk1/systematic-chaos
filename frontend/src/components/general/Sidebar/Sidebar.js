@@ -74,7 +74,9 @@ function Sidebar(props) {
                   <FontAwesomeIcon icon={link.icon} />
                 </div>
                 {isExpanded && <span className={'ps-2'}>{link.name}</span>}
-                {link.action === 'BADGE' && <Badge $badgeColor={props.theme.danger}>{assessmentsNumber}</Badge>}
+                {link.action === 'BADGE' && assessmentsNumber ? (
+                  <Badge $badgeColor={props.theme.danger}>{assessmentsNumber}</Badge>
+                ) : null}
               </NavLinkStyles>
 
               {link.subpages && (

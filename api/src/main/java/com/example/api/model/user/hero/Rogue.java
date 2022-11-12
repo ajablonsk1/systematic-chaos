@@ -49,7 +49,7 @@ public class Rogue extends Hero{
     public Boolean canPowerBeUsed(User user, GraphTaskResult result) {
         int level = user.getLevel();
         double points = result.getCurrQuestion().getPoints();
-        if (canSkipQuestion(level, points)) {
+        if (!canSkipQuestion(level, points)) {
             return false;
         }
         return super.canPowerBeUsed(user, result);

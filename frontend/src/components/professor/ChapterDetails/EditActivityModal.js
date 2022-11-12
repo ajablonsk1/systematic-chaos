@@ -53,7 +53,7 @@ function EditActivityModal(props) {
             disabled={isSending}
             onClick={sendJsonConfig}
           >
-            {isSending ? <Spinner animation={'border'} /> : <span>Zapisz zmiany</span>}
+            {isSending ? <Spinner animation={'border'} size={'sm'} /> : <span>Zapisz zmiany</span>}
           </Button>
         </ModalFooter>
         {errorMessage && (

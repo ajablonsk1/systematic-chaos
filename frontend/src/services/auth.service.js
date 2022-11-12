@@ -23,6 +23,9 @@ class AuthService {
 
   logout() {
     localStorage.removeItem('user')
+    localStorage.removeItem('heroType')
+    localStorage.removeItem('questionPoints')
+    localStorage.removeItem('questionType')
   }
 
   register({ firstName, lastName, email, password, accountType, heroType, index, token }) {

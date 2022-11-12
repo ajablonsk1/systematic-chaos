@@ -126,19 +126,16 @@ export const RegistrationLabelsAndTypes = {
 
 export const HeroDescriptions = {
   [HeroType.WARRIOR]: `Skupiony na zdolnościach walki, całkowicie pozbawiony magicznych zdolności. 
-            Łatwiej mu pokonać trudnego przeciwnika (daje raz w miesiącu możliwość podmiany 
-            treści pytania trudnego na treść pytania łatwego w ekspedycji bez zmiany ilości puntków za zadanie).
-            W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz.`,
-  [HeroType.WIZARD]: `Przejawiający zdolności magiczne, lecz fizycznie słaby. Dzięki swoim czarom może cofnąć się w grafie
-            ekspedycji do wyboru pytania (anulować ostatni wybór) i wybrać inne (umiejętność dostępna raz na miesiąc).
-            W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz.`,
-  [HeroType.PRIEST]: `Specjalizujący się w uzdrawianiu. Dzięki swoim umiejętnościom uzdrawiania może dodać sobie 5pkt po zakończeniu
-            ekspedycji. Umiejętność ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
-            lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`,
+            Łatwiej mu pokonać trudnego przeciwnika. Pozwala na odkrycie typu pytania kilka razy w jednej ekspedycji (umiejętność dostępna raz na tydzień).
+            W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz oraz porównanie z osobą przed Tobą i za Tobą w rankingu.`,
+  [HeroType.WIZARD]: `Przejawiający zdolności magiczne, lecz fizycznie słaby. Dzięki swoim czarom może kilka razy w jednek ekspedycji
+            poznać punktację dowolnego pytania przed przejściem do tego pytania (umiejętność dostępna raz na tydzień).
+            W karcie gry widzisz informację w jakim % graczy się znajdujesz.`,
+  [HeroType.PRIEST]: `Specjalizujący się w uzdrawianiu. Dzięki swoim umiejętnościom uzdrawiania może jednorazowo w ekspedycji wydłużyć czas jej trwania 
+            (umiejętność dostępna raz na tydzień). W karcie gry widzisz informację w jakim % graczy się znajdujesz.`,
   [HeroType.ROGUE]: `Potrafi poruszać się bezszelestnie, skradanie to jego dominująca umiejętność. Dzięki swoim zdolnościom 
-            umożliwi Ci pominąć jedno pytanie w ekspedycji na poziomie łatwym warte nie więcej niż 5pkt. Umiejętność
-            ta jest dostępna raz w miesiącu. W karcie gry widzisz informację jaki % graczy jest
-            lepszych od Ciebie i od jakiego % graczy Ty jesteś wyżej w rankingu.`
+            umożliwi Ci pominąć jedno pytanie w ekspedycji na poziomie łatwym warte nie więcej niż 5pkt. 
+            W karcie gry widzisz informację, na którym miejscu w rankingu się znajdujesz oraz porównanie z osobą przed Tobą i za Tobą w rankingu.`
 }
 
 export const HeroImg = {
@@ -269,3 +266,25 @@ export const BadgeType = {
 }
 
 export const sidebarExcludedPaths = [GeneralRoutes.HOME, GeneralRoutes.PASSWORD_RESET]
+
+export const getSpecifyDescription = (heroType) => {
+  const baseInfo = `Wartość mocy postaci na poziomie 1. <br/> Dla wybranej postaci: ${getHeroName(
+    heroType
+  )} wartość ta oznacza <br/>`
+
+  const MAX_NUMBER_OF_USAGE = 'maksymalną liczbę możliwych wykorzystań umiejętności w jednej ekspedycji.'
+
+  const heroTypeSuperPowerDescription = {
+    [HeroType.PRIEST]: 'liczbę ms o jaką gracz wydłuży sobie czas. Umiejętność jest dostępna raz na ekspedycję.',
+    [HeroType.ROGUE]:
+      'maksymalną liczbę punktów, którą może mieć zadanie, aby gracz mógł je pominąć. Umiejętność jest dostępna raz na ekspedycję.',
+    [HeroType.WARRIOR]: MAX_NUMBER_OF_USAGE,
+    [HeroType.WIZARD]: MAX_NUMBER_OF_USAGE
+  }
+
+  return baseInfo + heroTypeSuperPowerDescription[heroType]
+}
+
+export const coolDownDescription = (heroType) =>
+  `Wartość ta (podana w minutach) oznacza po jakim czasie bohater o wybranym typie: ${getHeroName(heroType)} <br/> 
+   będzie mógł użyć swojej mocy ponownie w tej samej ekspedycji.`

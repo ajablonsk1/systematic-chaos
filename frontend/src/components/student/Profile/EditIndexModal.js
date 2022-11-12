@@ -14,6 +14,7 @@ import { validateIndex } from '../../general/LoginAndRegistrationPage/Registrati
 import { debounce } from 'lodash/function'
 import StudentService from '../../../services/student.service'
 import { connect } from 'react-redux'
+import { successToast } from '../../../utils/toasts'
 
 function EditIndexModal(props) {
   const [validatorMessage, setValidatorMessage] = useState(null)
@@ -33,6 +34,7 @@ function EditIndexModal(props) {
         props.setIndexNumber(response)
         props.setModalOpen(false)
         setIsFetching(false)
+        successToast('Numer indeksu został zmieniony.')
       })
       .catch((error) => {
         setIsFetching(false)
@@ -68,7 +70,7 @@ function EditIndexModal(props) {
           onClick={onIndexSubmit}
           disabled={validatorMessage !== ''}
         >
-          {isFetching ? <Spinner animation={'border'} /> : <span>Zapisz</span>}
+          {isFetching ? <Spinner animation={'border'} size='sm' /> : <span>Zapisz</span>}
         </Button>
       </ModalFooter>
       {errorMessage && (

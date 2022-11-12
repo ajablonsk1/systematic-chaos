@@ -4,6 +4,7 @@ import { TimerContainer } from './InfoContainerStyle'
 import GraphPreview from './GraphPreview'
 import { PercentageBar } from '../../../BadgesPage/BadgesStyle'
 import { isMobileView } from '../../../../../utils/mobileHelper'
+import SuperPower from '../SuperPower/SuperPower'
 
 const mobileViewStyle = {
   right: '50%',
@@ -26,17 +27,23 @@ export default function InfoContainer(props) {
   const [timer, setTimer] = useState('')
   const [timerInterval, setTimerInterval] = useState(null)
 
+  const setIntervalForTimer = () => {
+    setTimerInterval(
+      setInterval(function () {
+        setRemainingTime((prevState) => prevState - 1)
+      }, 1000)
+    )
+  }
+
   useEffect(() => {
     const timeInSeconds = timeToSolveMillis / 1000
     setRemainingTime(timeInSeconds)
     if (timerInterval == null) {
-      setTimerInterval(
-        setInterval(function () {
-          setRemainingTime((prevState) => prevState - 1)
-        }, 1000)
-      )
+      setIntervalForTimer()
     }
-  }, [timeToSolveMillis, timerInterval])
+
+    // eslint-disable-next-line
+  }, [timeToSolveMillis])
 
   // complete the expedition and record user responses if the expedition has not been completed
   // before the timer runs out
@@ -48,6 +55,12 @@ export default function InfoContainer(props) {
       setTimer(getTimer(remainingTime))
     }
   }, [activityId, remainingTime, timerInterval, endAction])
+
+  const changeRemainingTime = (updatedRemainingTime) => {
+    clearInterval(timerInterval)
+    setRemainingTime(updatedRemainingTime)
+    setIntervalForTimer()
+  }
 
   const percentageBar = useMemo(() => {
     const PERCENTAGE_BAR_WIDTH = 300
@@ -61,7 +74,9 @@ export default function InfoContainer(props) {
         $height={PERCENTAGE_BAR_HEIGHT}
         style={isMobileView() ? mobileViewStyle : desktopViewStyle}
       >
-        <strong className={'d-flex justify-content-center'}>{`${props.actualPoints}/${props.maxPoints}`}</strong>
+        <strong className={'d-flex justify-content-center'}>{`${props.actualPoints?.toFixed(2)}/${
+          props.maxPoints
+        }`}</strong>
       </PercentageBar>
     )
   }, [props.actualPoints, props.maxPoints])
@@ -74,6 +89,12 @@ export default function InfoContainer(props) {
         activityId={props.activityId}
         currentQuestionsPath={props.questionsPath}
         actualQuestionId={props.actualQuestionId}
+      />
+      <SuperPower
+        setRemainingTime={changeRemainingTime}
+        activityId={activityId}
+        questions={props.questions}
+        status={props.status}
       />
       {React.cloneElement(props.children, {
         remainingTime: remainingTime

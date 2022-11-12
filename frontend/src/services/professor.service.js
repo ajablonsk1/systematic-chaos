@@ -1,5 +1,12 @@
 import { parseJwt } from '../utils/Api'
-import { axiosApiGet, axiosApiGetFile, axiosApiPost, axiosApiMultipartPost, axiosApiDelete } from '../utils/axios'
+import {
+  axiosApiGet,
+  axiosApiGetFile,
+  axiosApiPost,
+  axiosApiMultipartPost,
+  axiosApiDelete,
+  axiosApiPut
+} from '../utils/axios'
 import {
   POST_TASK_RESULT_CSV,
   GET_TASK_EVALUATE_ALL,
@@ -11,7 +18,8 @@ import {
   GET_PROFESSOR_REGISTER_TOKEN,
   GET_GRADES,
   DELETE_USER_PROFESSOR,
-  GET_PROFESSOR_EMAILS
+  GET_PROFESSOR_EMAILS,
+  PUT_HERO
 } from './urls'
 
 class ProfessorService {
@@ -98,6 +106,16 @@ class ProfessorService {
 
   getProfessorsEmails() {
     return axiosApiGet(GET_PROFESSOR_EMAILS).catch((error) => {
+      throw error
+    })
+  }
+
+  editHeroSuperPower(heroType, powerBaseValue, coolDownMs) {
+    return axiosApiPut(PUT_HERO, {
+      type: heroType,
+      value: powerBaseValue,
+      coolDownMillis: coolDownMs
+    }).catch((error) => {
       throw error
     })
   }
