@@ -6,7 +6,7 @@ import { getSortIcon, nextSortingOrder, sortArray } from './sortHelper'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfo } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
-import ReactTooltip from 'react-tooltip'
+import Tooltip from '../Tooltip/Tooltip'
 
 const headersWithSortedInfo = [
   { headerName: 'Pozycja', sortedVar1: 'position' },
@@ -133,16 +133,7 @@ function Ranking(props) {
                       data-for={'info-icon'}
                       data-tip={'Tabela punktów studenta'}
                     />
-                    {/*TODO: if SC-349 is already merged, replace it with <Tooltip/>*/}
-                    <ReactTooltip
-                      id={'info-icon'}
-                      place='top'
-                      type='dark'
-                      effect='solid'
-                      multiline
-                      event='mouseover mouseenter'
-                      eventOff='mouseleave mouseout scroll mousewheel blur'
-                    />
+                    <Tooltip id={'info-icon'} />
                   </td>
                 )}
               </TableRow>

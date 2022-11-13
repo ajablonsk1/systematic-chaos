@@ -55,7 +55,7 @@ function ActivityField(props) {
       { name: 'Nazwa aktywności', value: activity?.title },
       { name: 'Typ aktywności', value: getActivityTypeName(activity?.type) },
       { name: 'Punkty', value: activity?.points },
-      { name: 'Data utworzenia', value: moment(Date.now()).format('DD.MM.YYYY, HH:mm') }, // TODO: replace with activity?.creationDate
+      { name: 'Data utworzenia', value: moment(activity?.creationTime).format('DD.MM.YYYY, HH:mm') },
       {
         name: 'Stan aktywności',
         value: activity?.isCompleted ? (
