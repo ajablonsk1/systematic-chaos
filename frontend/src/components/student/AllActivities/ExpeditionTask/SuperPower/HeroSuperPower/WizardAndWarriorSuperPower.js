@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import SuperPowerTrigger from '../SuperPowerTrigger'
 import { ShootingPanel } from '../SuperPowerStyle'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowsToDot } from '@fortawesome/free-solid-svg-icons'
+import { faCrosshairs } from '@fortawesome/free-solid-svg-icons'
 import { Button, Col, Row } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { useQuestionInfoSuperPowerCheck } from '../../../../../../hooks/useSuperPowerCheck'
@@ -53,7 +53,7 @@ function WizardAndWarriorSuperPower(props) {
         <Row className='m-0 justify-content-between w-100'>
           {props.questions?.map((question) => (
             <Col className={'text-center'} key={question.id}>
-              <FontAwesomeIcon icon={faArrowsToDot} onClick={() => showQuestionPoint(question.id)} />
+              <FontAwesomeIcon icon={faCrosshairs} onClick={() => showQuestionPoint(question.id)} />
             </Col>
           ))}
         </Row>
