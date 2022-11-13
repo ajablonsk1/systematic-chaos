@@ -1,0 +1,9 @@
+{
+  "activityType": "TASK",
+  "title": "TYTUŁ TASKA ZNOWU",
+  "description": "Przykładowy opis",
+  "posX": 2,
+  "posY": 1,
+  "requiredKnowledge": "Wymagana wiedza",
+  "maxPoints": 30
+}

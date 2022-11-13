@@ -1,0 +1,64 @@
+{
+  "activityType": "EXPEDITION",
+  "title": "UNIKALNY TYTUŁ ZNOWU",
+  "description": "UNIKALNY OPIS ZNOWU",
+  "posX": 1,
+  "posY": 1,
+  "requiredKnowledge": "Wymagana wiedza",
+  "questions": [
+    {
+      "questionNum": 0,
+      "questionType": null,
+      "content": null,
+      "hint": null,
+      "difficulty": null,
+      "answers": null,
+      "points": null,
+      "nextQuestions": [1, 2],
+      "answerForOpenedQuestion": null
+    },
+    {
+      "questionNum": 1,
+      "questionType": "OPENED",
+      "content": "W którym roku odbyła się bitwa pod Grunwaldem?",
+      "hint": "Lipiec",
+      "difficulty": "EASY",
+      "answers": [],
+      "points": 10,
+      "nextQuestions": [3],
+      "answerForOpenedQuestion": "1410"
+    },
+    {
+      "questionNum": 2,
+      "questionType": "SINGLE_CHOICE",
+      "content": "Jakiego dnia odbyła się bitwa pod Grunwaldem?",
+      "hint": "XV wiek",
+      "difficulty": "MEDIUM",
+      "answers": [
+        { "content": "15 lipca", "isCorrect": true },
+        { "content": "21 lipca", "isCorrect": false },
+        { "content": "23 czerwca", "isCorrect": false }
+      ],
+      "points": 20,
+      "nextQuestions": [3],
+      "answerForOpenedQuestion": ""
+    },
+    {
+      "questionNum": 3,
+      "questionType": "MULTIPLE_CHOICE",
+      "content": "Jak nazywali się dowódcy armii Krzyżaków?",
+      "hint": "Jeden z nich ma nazwisko jak dzisiejsze państwo",
+      "difficulty": "HARD",
+      "answers": [
+        { "content": "Urlich von Jungingen", "isCorrect": true },
+        { "content": "Kuno von Lichtenstein", "isCorrect": true },
+        { "content": "Fryderyk von Wallenrode", "isCorrect": true },
+        { "content": "Władysław Jagiełło", "isCorrect": false }
+      ],
+      "points": 30,
+      "nextQuestions": [],
+      "answerForOpenedQuestion": ""
+    }
+  ],
+  "timeToSolve": "00:30:00"
+}
