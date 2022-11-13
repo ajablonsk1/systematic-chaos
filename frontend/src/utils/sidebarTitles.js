@@ -7,7 +7,6 @@ import {
   faGear,
   faHouse,
   faListCheck,
-  faPalette,
   faRankingStar,
   faRightFromBracket,
   faStar,
@@ -86,12 +85,12 @@ export const ProfessorSidebarTitles = [
         name: 'Rangi i odznaki',
         icon: faCertificate,
         navigateTo: TeacherRoutes.GAME_MANAGEMENT.RANKS_AND_BADGES
-      },
-      {
-        name: 'Ustawienia gry',
-        icon: faPalette,
-        navigateTo: TeacherRoutes.GAME_MANAGEMENT.GAME_SETTINGS
       }
+      // {
+      //   name: 'Ustawienia gry',
+      //   icon: faPalette,
+      //   navigateTo: TeacherRoutes.GAME_MANAGEMENT.GAME_SETTINGS
+      // }
     ]
   },
   {

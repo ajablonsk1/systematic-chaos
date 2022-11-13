@@ -14,6 +14,7 @@ import { TeacherRoutes } from '../../../routes/PageRoutes'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../utils/mobileHelper'
 import { CustomTooltip } from '../ChapterDetails/ChapterDetailsStyles'
+import SuperPowerEditionModal from './GameSettings/SuperPowerEditionModal'
 
 const chapterBlockedInfo =
   'Ten rozdział został ukryty dla studentów i nie mogą go zobaczyć. Aby przywrócić widoczność, przejdź do ustawień wymagań dla rozdziału.'
@@ -24,6 +25,7 @@ function GameManagement(props) {
   const [showAddChapterModal, setShowAddChapterModal] = useState(false)
   const [chapterList, setChapterList] = useState(undefined)
   const [shouldLoadAddChapterModal, setShouldLoadAddChapterModal] = useState(false)
+  const [isSuperpowerModalVisible, setIsSuperpowerModalVisible] = useState(false)
 
   useEffect(() => {
     fetchChaptersList()
@@ -149,16 +151,21 @@ function GameManagement(props) {
             />
           </Col>
           <Col md={4} className={'py-2'}>
+            {/*<ManagementCard*/}
+            {/*  header={'Ustawienia gry'}*/}
+            {/*  description={'Dopasuj temat fabuły i wygląd całej gry oraz całego systemu.'}*/}
+            {/*  routePath={TeacherRoutes.GAME_MANAGEMENT.GAME_SETTINGS}*/}
+            {/*/>*/}
             <ManagementCard
-              header={'Ustawienia gry'}
-              description={'Dopasuj temat fabuły i wygląd całej gry oraz całego systemu.'}
-              routePath={TeacherRoutes.GAME_MANAGEMENT.GAME_SETTINGS}
+              header={'Umiejętności postaci'}
+              description={'Zmiana ustawienia umiejętności postaci .'}
+              callback={() => setIsSuperpowerModalVisible(true)}
             />
           </Col>
           <Col md={4} className={'py-2'}>
             <ManagementCard
               header={'Wczytaj konfigurację gry'}
-              description={'Wyczyść cały stan bazy danych i wczytaj stan od nowa.'}
+              description={'Wyczyść cały stan bazy danych i wczytaj stan od nowa podając plik zawierający backup.'}
               callback={() => setShowConfigModal(true)}
             />
           </Col>
@@ -185,6 +192,7 @@ function GameManagement(props) {
         onSuccess={fetchChaptersList}
         isLoaded={shouldLoadAddChapterModal}
       />
+      <SuperPowerEditionModal isModalVisible={isSuperpowerModalVisible} setModalVisible={setIsSuperpowerModalVisible} />
     </Content>
   )
 }
