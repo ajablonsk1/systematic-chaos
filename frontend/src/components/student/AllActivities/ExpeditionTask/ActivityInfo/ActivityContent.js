@@ -30,9 +30,9 @@ function ActivityContent(props) {
       .catch(() => {
         setActivityScore(null)
       })
-    const startDateGiven = props.activity.requirements?.find((el) => el.dateFromMillis)
+    const startDateGiven = props.activity.requirements?.find((el) => el.dateFromMillis && el.selected)
     setStartDate(startDateGiven?.dateFromMillis ?? null)
-    const endDateGiven = props.activity.requirements?.find((el) => el.dateToMillis) ?? null
+    const endDateGiven = props.activity.requirements?.find((el) => el.dateToMillis && el.selected) ?? null
     setEndDate(endDateGiven?.dateToMillis ?? null)
   }, [activityId, props])
 
@@ -131,8 +131,7 @@ function ActivityContent(props) {
 
     const tableElements = [
       { name: 'Obecna liczba punktów', value: pointsReceived !== '' ? pointsReceived : 0 },
-      { name: 'Maksymalna liczba punktów do zdobycia', value: props.activity.maxPoints },
-      { name: 'Liczba punktów licząca się jako 100%', value: props.activity.maxPoints100 ?? '-' }
+      { name: 'Maksymalna liczba punktów do zdobycia', value: props.activity.maxPoints }
     ]
 
     return (
