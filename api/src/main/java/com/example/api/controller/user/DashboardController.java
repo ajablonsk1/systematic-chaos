@@ -2,6 +2,7 @@ package com.example.api.controller.user;
 
 import com.example.api.dto.response.user.dashboard.DashboardResponse;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.service.user.DashboardService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -19,7 +20,7 @@ public class DashboardController {
     private final DashboardService dashboardService;
 
     @GetMapping
-    public ResponseEntity<DashboardResponse> getStudentDashboard() throws WrongUserTypeException, EntityNotFoundException {
+    public ResponseEntity<DashboardResponse> getStudentDashboard() throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         return ResponseEntity.ok().body(dashboardService.getStudentDashboard());
     }
 }

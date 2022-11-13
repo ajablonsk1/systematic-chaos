@@ -145,7 +145,7 @@ public class SummaryService {
     }
 
     public Integer getAssessedActivitiesCounter(User professor, List<NotAssessedActivity> notAssessedActivitiesTable) {
-        return getAllProfessorActivities(professor).size() - notAssessedActivitiesTable.size();
+        return getAllProfessorActivitiesToAssess(professor).size() - notAssessedActivitiesTable.size();
     }
 
 
@@ -303,6 +303,10 @@ public class SummaryService {
                 .toList();
     }
 
+    private List<? extends Activity> getAllProfessorActivitiesToAssess(User professor) { // without Info
+        return fileTaskRepo.findAll().stream().filter(activity -> isProfessorActivity(activity, professor)).toList();
+    }
+
 
     private List<? extends Activity> getAllProfessorChapterActivities(Chapter chapter, User professor) { // without Info
         return getAllActivities()
@@ -346,7 +350,7 @@ public class SummaryService {
 
 
     private boolean isProfessorActivity(Activity activity, User professor) {
-        return activity.getProfessor() == null || activity.getProfessor().equals(professor); // assumption that when activity has no professor it means it is everyones
+        return activity.getProfessor() != null && activity.getProfessor().equals(professor);
 
     }
 

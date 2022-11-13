@@ -4,6 +4,7 @@ import com.example.api.dto.response.map.task.ActivityType;
 import com.example.api.dto.response.ranking.RankingResponse;
 import com.example.api.dto.response.user.dashboard.*;
 import com.example.api.error.exception.EntityNotFoundException;
+import com.example.api.error.exception.MissingAttributeException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.result.FileTaskResult;
 import com.example.api.model.activity.result.GraphTaskResult;
@@ -58,13 +59,16 @@ public class DashboardService {
     private final InfoService infoService;
     private final ChapterService chapterService;
     private final RankService rankService;
+    private final BadgeService badgeService;
 
     private final long MAX_LAST_ACTIVITIES_IN_DASHBOARD = 8;
 
-    public DashboardResponse getStudentDashboard() throws WrongUserTypeException, EntityNotFoundException {
+    public DashboardResponse getStudentDashboard() throws WrongUserTypeException, EntityNotFoundException, MissingAttributeException {
         String studentEmail = authService.getAuthentication().getName();
         User student = userRepo.findUserByEmail(studentEmail);
         userValidator.validateStudentAccount(student, studentEmail);
+        badgeService.checkAllBadges();
+
         return new DashboardResponse(
                 getHeroTypeStats(student),
                 getGeneralStats(student),
@@ -240,7 +244,7 @@ public class DashboardService {
     private Double getNexLvlPoints(User student) {
         List<Rank> sortedRanks = rankService.getSortedRanksForHeroType(student.getHeroType());
         for (int i=sortedRanks.size()-1; i >= 0; i--) {
-            if (student.getPoints() > sortedRanks.get(i).getMinPoints()) {
+            if (student.getPoints() >= sortedRanks.get(i).getMinPoints()) {
                 if (i == sortedRanks.size() - 1) return null;
                 else return sortedRanks.get(i+1).getMinPoints();
             }

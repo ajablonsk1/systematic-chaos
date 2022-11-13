@@ -14,4 +14,5 @@ public abstract class MapTask {
     private ActivityType type;
     private String title;
     private Double points;
+    private Long creationTime;
 }

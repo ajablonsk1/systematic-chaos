@@ -368,6 +368,7 @@ public class DatabaseConfig {
             graphTask.setExperience(20D);
             graphTask.setTimeToSolveMillis(12 * 60 * 1000L);
             graphTask.setRequirements(createDefaultRequirements());
+            graphTask.setProfessor(professor);
             graphTask.setPosX(5);
             graphTask.setPosY(4);
             graphTaskService.saveGraphTask(graphTask);
@@ -433,6 +434,7 @@ public class DatabaseConfig {
             graphTaskTwo.setMaxPoints(60.0);
             graphTaskTwo.setExperience(25D);
             graphTaskTwo.setTimeToSolveMillis(12 * 60 * 1000L);
+            graphTaskTwo.setProfessor(professor);
             graphTaskTwo.setPosX(2);
             graphTaskTwo.setPosY(2);
             graphTaskTwo.setRequirements(graphTaskTwoReq);
