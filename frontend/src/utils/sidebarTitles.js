@@ -7,7 +7,6 @@ import {
   faGear,
   faHouse,
   faListCheck,
-  faPalette,
   faRankingStar,
   faRightFromBracket,
   faStar,
