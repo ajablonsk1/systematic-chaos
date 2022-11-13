@@ -132,8 +132,7 @@ function ActivityContent(props) {
 
     const tableElements = [
       { name: 'Obecna liczba punktów', value: pointsReceived !== '' ? pointsReceived : 0 },
-      { name: 'Maksymalna liczba punktów do zdobycia', value: props.activity.maxPoints },
-      { name: 'Liczba punktów licząca się jako 100%', value: props.activity.maxPoints100 ?? '-' }
+      { name: 'Maksymalna liczba punktów do zdobycia', value: props.activity.maxPoints }
     ]
 
     return (
