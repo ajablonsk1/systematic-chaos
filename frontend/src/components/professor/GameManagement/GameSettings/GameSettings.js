@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Content } from '../../../App/AppGeneralStyles'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import gameMap from '../../../../utils/resources/gameMap/map1.png'
@@ -7,12 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import { TeacherRoutes } from '../../../../routes/PageRoutes'
 import { connect } from 'react-redux'
 import { isMobileView } from '../../../../utils/mobileHelper'
-import ManagementCard from '../ManagementCard'
-import SuperPowerEditionModal from './SuperPowerEditionModal'
 
 function GameSettings(props) {
   const navigate = useNavigate()
-  const [isSuperpowerModalVisible, setIsSuperpowerModalVisible] = useState(false)
 
   const colorPickerElements = [
     { header: 'Kolor wiodący', colors: ['#001542', 'white', 'black'] },
@@ -38,13 +35,6 @@ function GameSettings(props) {
                   <ColorPicker key={index} header={pickerSet.header} colors={pickerSet.colors} selectedColorId={0} />
                 ))}
               </div>
-            </Row>
-            <Row className={'m-0 text-center'}>
-              <ManagementCard
-                header={'Umiejętności postaci'}
-                description={'Zmiana ustawienia umiejętności postaci .'}
-                callback={() => setIsSuperpowerModalVisible(true)}
-              />
             </Row>
           </Col>
           <Col md={6}>
@@ -74,7 +64,6 @@ function GameSettings(props) {
           </Col>
         </Row>
       </Content>
-      <SuperPowerEditionModal isModalVisible={isSuperpowerModalVisible} setModalVisible={setIsSuperpowerModalVisible} />
     </>
   )
 }
