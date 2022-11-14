@@ -49,10 +49,6 @@ function GameManagement(props) {
     // TODO: use endpoint and download.js
   }
 
-  const downloadLogsFile = () => {
-    // TODO: use endpoint and download.js
-  }
-
   return (
     <Content>
       <h4 className='text-center pt-3'>Witaj w panelu zarządzania grą!</h4>
@@ -180,7 +176,7 @@ function GameManagement(props) {
             <ManagementCard
               header={'Lista logów serwera'}
               description={'Pobierz listę logów z serwera zbieranych od początku istnienia aplikacji.'}
-              callback={downloadLogsFile}
+              routePath={TeacherRoutes.GAME_MANAGEMENT.LOGS}
             />
           </Col>
         </Row>

@@ -37,7 +37,8 @@ export const TeacherRoutes = {
       REQUIREMENTS: '/game-management/chapter/:name/:id/requirements'
     },
     RANKS_AND_BADGES: '/game-management/ranks-and-badges',
-    GAME_SETTINGS: '/game-management/game-settings'
+    GAME_SETTINGS: '/game-management/game-settings',
+    LOGS: '/game-management/logs'
   },
   PARTICIPANTS: '/participants',
   ACTIVITY_ASSESSMENT: {

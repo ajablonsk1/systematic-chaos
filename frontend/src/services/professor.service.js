@@ -19,7 +19,8 @@ import {
   GET_GRADES,
   DELETE_USER_PROFESSOR,
   GET_PROFESSOR_EMAILS,
-  PUT_HERO
+  PUT_HERO,
+  GET_FILE_LOG
 } from './urls'
 
 class ProfessorService {
@@ -116,6 +117,12 @@ class ProfessorService {
       value: powerBaseValue,
       coolDownMillis: coolDownMs
     }).catch((error) => {
+      throw error
+    })
+  }
+
+  getLogsFile() {
+    return axiosApiGet(GET_FILE_LOG).catch((error) => {
       throw error
     })
   }
