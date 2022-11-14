@@ -15,7 +15,6 @@ import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.user.UserService;
-import com.example.api.service.validator.QuestionValidator;
 import com.example.api.service.validator.ResultValidator;
 import com.example.api.service.validator.UserValidator;
 import com.example.api.service.validator.activity.ActivityValidator;
