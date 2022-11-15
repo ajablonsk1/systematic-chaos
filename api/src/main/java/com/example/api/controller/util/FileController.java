@@ -39,6 +39,7 @@ public class FileController {
     @GetMapping("/log")
     public ResponseEntity<ByteArrayResource> getLogFile() throws IOException {
         File file = new File(RequestInterceptor.REQUEST_LOGGING_FILE_PATH);
+        file.createNewFile();
         return ResponseEntity.ok().body(new ByteArrayResource(Files.readAllBytes(file.toPath())));
     }
 }
