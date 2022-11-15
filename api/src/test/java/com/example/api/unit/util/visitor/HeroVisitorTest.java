@@ -60,7 +60,6 @@ public class HeroVisitorTest {
         currTime = System.currentTimeMillis();
         result = new GraphTaskResult(graphTask, user, currTime, ResultStatus.CHOOSE, firstQuestion);
         result.setFinished(false);
-        result.setMaxPoints100(0d);
     }
 
     @Test

@@ -116,27 +116,6 @@ public class FileTaskResultServiceTest {
     }
 
     @Test
-    public void saveFileToFileTaskResultThrowEntityNotFoundException() {
-        //given
-        User user = new User();
-        user.setEmail("random@email.com");
-        SaveFileToFileTaskResultForm form = new SaveFileToFileTaskResultForm(
-                fileTask.getId(),
-                "",
-                new MockMultipartFile("randomName", new byte[1024]),
-                null
-        );
-        given(authService.getAuthentication()).willReturn(authentication);
-        given(authentication.getName()).willReturn("random@email.com");
-
-        //when
-        //then
-        assertThatThrownBy(() -> fileTaskResultService.saveFileToFileTaskResult(form))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("File task with given id " + fileTask.getId() + " does not exist");
-    }
-
-    @Test
     public void saveFileToFileTaskResultWhenResultIsNull() throws WrongUserTypeException, EntityNotFoundException, IOException {
         //given
         User user = new User();
@@ -247,17 +226,5 @@ public class FileTaskResultServiceTest {
         verify(fileRepo).findFileById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(file.getId());
-    }
-
-    @Test
-    public void getFileByIdThrowEntityNotFoundException() {
-        //given
-        File file = new File();
-
-        //when
-        //then
-        assertThatThrownBy(() -> fileTaskResultService.getFileById(file.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("File with given id " + file.getId() + " does not exist");
     }
 }

@@ -7,12 +7,16 @@ import com.example.api.error.exception.WrongPointsNumberException;
 import com.example.api.error.exception.WrongUserTypeException;
 import com.example.api.model.activity.feedback.ProfessorFeedback;
 import com.example.api.model.activity.result.FileTaskResult;
+import com.example.api.model.activity.task.FileTask;
+import com.example.api.model.user.User;
 import com.example.api.repo.activity.feedback.ProfessorFeedbackRepo;
 import com.example.api.repo.activity.result.FileTaskResultRepo;
 import com.example.api.repo.activity.task.FileTaskRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.service.activity.feedback.ProfessorFeedbackService;
 import com.example.api.service.validator.FeedbackValidator;
+import com.example.api.service.validator.UserValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -36,6 +40,8 @@ public class ProfessorFeedbackServiceTest {
     @Mock private FileTaskResultRepo fileTaskResultRepo;
     @Mock private FileTaskRepo fileTaskRepo;
     @Mock private UserRepo userRepo;
+    @Mock private ActivityValidator activityValidator;
+    @Mock private UserValidator userValidator;
     @Captor private ArgumentCaptor<ProfessorFeedback> professorFeedbackArgumentCaptor;
     @Captor private ArgumentCaptor<SaveProfessorFeedbackForm> formArgumentCaptor;
     @Captor private ArgumentCaptor<Long> idArgumentCaptor;
@@ -50,15 +56,25 @@ public class ProfessorFeedbackServiceTest {
                 feedbackValidator,
                 fileTaskResultRepo,
                 fileTaskRepo,
-                userRepo);
+                userRepo,
+                activityValidator,
+                userValidator);
     }
 
     @Test
-    @Disabled
     public void saveProfessorFeedback() throws MissingAttributeException, EntityNotFoundException {
         //given
         ProfessorFeedback feedback = new ProfessorFeedback();
-        given(feedback.getFileTaskResult()).willReturn(new FileTaskResult());
+        User user = new User();
+        user.setEmail("email");
+        FileTask fileTask = new FileTask();
+        fileTask.setId(1L);
+        FileTaskResult fileTaskResult = new FileTaskResult();
+        fileTaskResult.setUser(user);
+        fileTaskResult.setFileTask(fileTask);
+        feedback.setFileTaskResult(fileTaskResult);
+
+        given(professorFeedbackRepo.save(feedback)).willReturn(feedback);
 
         //when
         professorFeedbackService.saveProfessorFeedback(feedback);
@@ -70,7 +86,6 @@ public class ProfessorFeedbackServiceTest {
     }
 
     @Test
-    @Disabled
     public void saveProfessorFeedbackForm() throws WrongUserTypeException, EntityNotFoundException, IOException, MissingAttributeException, WrongPointsNumberException {
         //given
         SaveProfessorFeedbackForm form = new SaveProfessorFeedbackForm();
@@ -78,7 +93,16 @@ public class ProfessorFeedbackServiceTest {
         form.setPoints(10.0);
         form.setFileTaskResultId(2L);
         ProfessorFeedback feedback = new ProfessorFeedback();
+        User user = new User();
+        user.setEmail("email");
+        FileTask fileTask = new FileTask();
+        fileTask.setId(1L);
+        FileTaskResult fileTaskResult = new FileTaskResult();
+        fileTaskResult.setUser(user);
+        fileTaskResult.setFileTask(fileTask);
+        feedback.setFileTaskResult(fileTaskResult);
         given(feedbackValidator.validateAndSetProfessorFeedbackTaskForm(form)).willReturn(feedback);
+        given(professorFeedbackRepo.save(feedback)).willReturn(feedback);
 
         //when
         professorFeedbackService.saveProfessorFeedback(form);
@@ -93,7 +117,6 @@ public class ProfessorFeedbackServiceTest {
     }
 
     @Test
-    @Disabled
     public void getProfessorFeedbackForFileTask() throws EntityNotFoundException, MissingAttributeException {
         //given
         Long id = 1L;
@@ -112,16 +135,4 @@ public class ProfessorFeedbackServiceTest {
         assertThat(capturedResult).isEqualTo(result);
     }
 
-    @Test
-    @Disabled
-    public void getProfessorFeedbackForFileTaskThrowEntityNotFoundException() throws EntityNotFoundException {
-        //given
-        Long id = 1L;
-
-        //when
-        //then
-        assertThatThrownBy(() -> professorFeedbackService.getProfessorFeedbackForFileTaskResult(id))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("File task result with given id " + id + " does not exist");
-    }
 }

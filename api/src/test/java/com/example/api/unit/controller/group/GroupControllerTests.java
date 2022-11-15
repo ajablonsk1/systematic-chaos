@@ -56,20 +56,20 @@ public class GroupControllerTests {
         group2.setInvitationCode("Code 2");
     }
 
-    @Test
-    @Disabled
-    public void saveGroupTest() throws Exception {
-        when(service.saveGroup((Group) any())).thenReturn(group1);
-
-        mockMvc.perform(
-                    post("/group")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonWriter.writeValueAsString(group1))
-                )
-                .andExpect(status().isOk())
-                // TODO: fix tests to return body
-                // .andExpect(content().string(containsString(group1.getName())))
-                // .andExpect(content().string(containsString(group1.getInvitationCode())))
-                .andReturn();
-    }
+//    @Test
+//    @Disabled
+//    public void saveGroupTest() throws Exception {
+//        when(service.saveGroup((Group) any())).thenReturn(group1);
+//
+//        mockMvc.perform(
+//                    post("/group")
+//                            .contentType(MediaType.APPLICATION_JSON)
+//                            .content(jsonWriter.writeValueAsString(group1))
+//                )
+//                .andExpect(status().isOk())
+//                // TODO: fix tests to return body
+//                // .andExpect(content().string(containsString(group1.getName())))
+//                // .andExpect(content().string(containsString(group1.getInvitationCode())))
+//                .andReturn();
+//    }
 }
