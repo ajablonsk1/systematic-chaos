@@ -11,8 +11,10 @@ import com.example.api.model.user.badge.TopScoreBadge;
 import com.example.api.model.user.badge.UnlockedBadge;
 import com.example.api.repo.user.BadgeRepo;
 import com.example.api.repo.user.UnlockedBadgeRepo;
+import com.example.api.repo.util.FileRepo;
 import com.example.api.service.user.BadgeService;
 import com.example.api.service.user.UserService;
+import com.example.api.service.validator.BadgeValidator;
 import com.example.api.util.visitor.BadgeVisitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,8 @@ public class BadgeServiceTest {
     @Mock private UnlockedBadgeRepo unlockedBadgeRepo;
     @Mock private UserService userService;
     @Mock private BadgeVisitor badgeVisitor;
+    @Mock private FileRepo fileRepo;
+    @Mock private BadgeValidator badgeValidator;
 
     private User user;
     List<Badge> badges = new LinkedList<>();
@@ -44,7 +48,9 @@ public class BadgeServiceTest {
         badgeService = new BadgeService(
                 badgeRepo,
                 unlockedBadgeRepo,
+                fileRepo,
                 userService,
+                badgeValidator,
                 badgeVisitor
         );
 

@@ -6,6 +6,7 @@ import com.example.api.dto.request.activity.result.SetSendDateMillisForm;
 import com.example.api.dto.request.activity.result.SetStartDateMillisForm;
 import com.example.api.error.exception.*;
 import com.example.api.model.activity.result.GraphTaskResult;
+import com.example.api.model.activity.result.ResultStatus;
 import com.example.api.model.activity.task.GraphTask;
 import com.example.api.model.question.Answer;
 import com.example.api.model.question.Question;
@@ -18,10 +19,13 @@ import com.example.api.repo.question.QuestionRepo;
 import com.example.api.repo.user.UserRepo;
 import com.example.api.security.AuthenticationService;
 import com.example.api.service.activity.result.GraphTaskResultService;
+import com.example.api.service.user.UserService;
 import com.example.api.service.validator.ResultValidator;
 import com.example.api.service.validator.UserValidator;
+import com.example.api.service.validator.activity.ActivityValidator;
 import com.example.api.util.calculator.PointsCalculator;
 import com.example.api.util.calculator.TimeCalculator;
+import com.example.api.util.visitor.HeroVisitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -31,6 +35,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.Authentication;
 
 import java.util.Calendar;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -44,12 +49,14 @@ public class GraphTaskResultServiceTest {
     @Mock private GraphTaskRepo graphTaskRepo;
     @Mock private UserRepo userRepo;
     @Mock private QuestionRepo questionRepo;
-    @Mock private AnswerRepo answerRepo;
     @Mock private ResultValidator answerFormValidator;
     @Mock private PointsCalculator pointsCalculator;
     @Mock private UserValidator userValidator;
     @Mock private TimeCalculator timeCalculator;
     @Mock private AuthenticationService authService;
+    @Mock private UserService userService;
+    @Mock private ActivityValidator activityValidator;
+    @Mock private HeroVisitor heroVisitor;
     @Mock private Authentication authentication;
     GraphTaskResult result;
     GraphTask graphTask;
@@ -70,15 +77,18 @@ public class GraphTaskResultServiceTest {
                 graphTaskRepo,
                 userRepo,
                 questionRepo,
-                answerRepo,
                 pointsCalculator,
                 answerFormValidator,
                 userValidator,
                 timeCalculator,
-                authService
+                authService,
+                userService,
+                activityValidator,
+                heroVisitor
         );
         graphTask = new GraphTask();
         graphTask.setId(2L);
+        graphTask.setQuestions(List.of(new Question()));
         result = new GraphTaskResult();
         result.setId(1L);
         result.setGraphTask(graphTask);
@@ -109,23 +119,6 @@ public class GraphTaskResultServiceTest {
     }
 
     @Test
-    public void getGraphTaskResultThrowEntityNotFoundException() {
-        // given
-        User user = new User();
-        user.setEmail("random@email.com");
-        user.setAccountType(AccountType.STUDENT);
-        given(authService.getAuthentication()).willReturn(authentication);
-        given(authentication.getName()).willReturn("random@email.com");
-        given(userRepo.findUserByEmail(user.getEmail())).willReturn(user);
-
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getGraphTaskResultId(graphTask.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
-    }
-
-    @Test
     public void saveGraphTaskResult() {
         // given
         GraphTaskResult result = new GraphTaskResult();
@@ -140,7 +133,7 @@ public class GraphTaskResultServiceTest {
     }
 
     @Test
-    public void saveGraphTaskResultForm() throws EntityNotFoundException {
+    public void saveGraphTaskResultForm() throws EntityNotFoundException, EntityAlreadyInDatabaseException, WrongUserTypeException {
         // given
         User user = new User();
         user.setEmail("random@email.com");
@@ -163,36 +156,6 @@ public class GraphTaskResultServiceTest {
     }
 
     @Test
-    public void saveGraphTaskResultFormThrowEntityNotFoundException() {
-        // given
-        User user = new User();
-        user.setEmail("random@email.com");
-        given(authService.getAuthentication()).willReturn(authentication);
-        given(authentication.getName()).willReturn("random@email.com");
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.startGraphTaskResult(graphTask.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task with given id " + graphTask.getId() + " does not exist");
-    }
-
-    @Test
-    public void saveGraphTaskResultFormThrowEntityNotFoundException2() {
-        // given
-        User user = new User();
-        user.setEmail("random@email.com");
-        given(authService.getAuthentication()).willReturn(authentication);
-        given(authentication.getName()).willReturn("random@email.com");
-        given(graphTaskRepo.findGraphTaskById(graphTask.getId())).willReturn(graphTask);
-
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.startGraphTaskResult(graphTask.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("User" + user.getEmail() + " not found in database");
-    }
-
-    @Test
     public void getPointsFromClosedQuestions() throws WrongAnswerTypeException, EntityNotFoundException {
         //given
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
@@ -204,15 +167,6 @@ public class GraphTaskResultServiceTest {
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
-    }
-
-    @Test
-    public void getPointsFromClosedQuestionsThrowEntityNotFoundException() {
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getPointsFromClosedQuestions(result.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
     }
 
     @Test
@@ -230,40 +184,6 @@ public class GraphTaskResultServiceTest {
     }
 
     @Test
-    public void getPointsFromOpenedQuestionsThrowEntityNotFoundException() {
-        // given
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getPointsFromOpenedQuestions(result.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
-    }
-
-    @Test
-    public void getAndSetAllPoints() throws WrongAnswerTypeException, EntityNotFoundException {
-        //given
-        given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
-
-        // when
-        graphTaskResultService.getAndSetAllPoints(result.getId());
-
-        // then
-        verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
-        Long capturedId = idArgumentCaptor.getValue();
-        assertThat(capturedId).isEqualTo(result.getId());
-    }
-
-    @Test
-    public void getAndSetAllPointsThrowEntityNotFoundException() {
-        //given
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getAndSetAllPoints(result.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
-    }
-
-    @Test
     public void getMaxAvailablePoints() throws EntityNotFoundException {
         //given
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
@@ -275,16 +195,6 @@ public class GraphTaskResultServiceTest {
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
-    }
-
-    @Test
-    public void getMaxAvailablePointsThrowEntityNotFoundException() {
-        //given
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getMaxAvailablePoints(result.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
     }
 
     @Test
@@ -302,16 +212,6 @@ public class GraphTaskResultServiceTest {
     }
 
     @Test
-    public void getMaxClosedPointsThrowEntityNotFoundException() {
-        //given
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getMaxClosedPoints(result.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
-    }
-
-    @Test
     public void getMaxOpenedPoints() throws EntityNotFoundException {
         //given
         given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
@@ -323,148 +223,6 @@ public class GraphTaskResultServiceTest {
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
-    }
-
-    @Test
-    public void getMaxOpenedPointsThrowEntityNotFoundException() {
-        //given
-        // when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getMaxOpenedPoints(result.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
-    }
-
-    @Test
-    public void addAnswerToGraphTaskResult() throws WrongBodyParametersNumberException, EntityRequiredAttributeNullException, EntityNotFoundException {
-        // given
-        AnswerForm answerForm = new AnswerForm();
-        answerForm.setOpenAnswer("random answer");
-        QuestionActionForm form = new QuestionActionForm(
-                result.getId(),
-                1L,
-                answerForm
-        );
-        Answer answer = new Answer();
-        Question question = new Question();
-        question.setId(1L);
-        result.setStartDateMillis(System.currentTimeMillis());
-        graphTask.setTimeToSolveMillis(1_000_000L);
-        given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
-        given(answerFormValidator.validateAndCreateAnswer(form.getAnswerForm())).willReturn(answer);
-        given(questionRepo.findQuestionById(form.getQuestionId())).willReturn(question);
-
-        //when
-        graphTaskResultService.addAnswerToGraphTaskResult(form);
-
-        // then
-        verify(graphTaskResultRepo, times(2)).findGraphTaskResultById(resultIdArgumentCaptor.capture());
-        verify(answerFormValidator).validateAndCreateAnswer(answerFormArgumentCaptor.capture());
-        verify(questionRepo).findQuestionById(questionIdArgumentCaptor.capture());
-        Long capturedResultId = resultIdArgumentCaptor.getValue();
-        AnswerForm capturedAnswerForm = answerFormArgumentCaptor.getValue();
-        Long capturedQuestionId = questionIdArgumentCaptor.getValue();
-        assertThat(capturedResultId).isEqualTo(result.getId());
-        assertThat(capturedAnswerForm).isEqualTo(answerForm);
-        assertThat(capturedQuestionId).isEqualTo(question.getId());
-    }
-
-    @Test
-    public void addAnswerToGraphTaskResultTimeRemaining() throws WrongBodyParametersNumberException, EntityRequiredAttributeNullException, EntityNotFoundException, InterruptedException {
-        // given
-        Answer answer = new Answer();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2022, Calendar.APRIL, 21);
-        AnswerForm answerForm = new AnswerForm();
-        answerForm.setOpenAnswer("random answer");
-        QuestionActionForm form = new QuestionActionForm(
-                result.getId(),
-                1L,
-                answerForm
-        );
-        result.setStartDateMillis(calendar.getTimeInMillis());
-        graphTask.setTimeToSolveMillis(1_000L);
-        given(graphTaskResultRepo.findGraphTaskResultById(form.getResultId())).willReturn(result);
-        given(answerFormValidator.validateAndCreateAnswer(form.getAnswerForm())).willReturn(answer);
-        given(timeCalculator.getTimeRemaining(result.getStartDateMillis(), graphTask.getTimeToSolveMillis()))
-                .willReturn(graphTask.getTimeToSolveMillis() - (System.currentTimeMillis() -result.getStartDateMillis()));
-
-        //when
-        long timeRemaining = graphTaskResultService.addAnswerToGraphTaskResult(form);
-
-        // then
-        assertThat(timeRemaining).isLessThan(0);
-    }
-
-    @Test
-    public void addAnswerToGraphTaskResultThrowEntityNotFoundException() throws WrongBodyParametersNumberException, EntityRequiredAttributeNullException, EntityNotFoundException, InterruptedException {
-        // given
-        AnswerForm answerForm = new AnswerForm();
-        answerForm.setOpenAnswer("random answer");
-        QuestionActionForm form = new QuestionActionForm(
-                result.getId(),
-                1L,
-                answerForm
-        );
-        //when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.addAnswerToGraphTaskResult(form))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
-    }
-
-    @Test
-    public void setSendDateMillis() throws EntityNotFoundException {
-        // given
-        SetSendDateMillisForm form = new SetSendDateMillisForm(result.getId(), 120L);
-        given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
-
-        //when
-        graphTaskResultService.setSendDateMillis(form);
-
-        // then
-        verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
-        Long capturedId = idArgumentCaptor.getValue();
-        assertThat(capturedId).isEqualTo(result.getId());
-    }
-
-    @Test
-    public void setTimeSpentThrowEntityNotFoundException() {
-        // given
-        SetSendDateMillisForm form = new SetSendDateMillisForm(result.getId(), 120L);
-
-        //when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.setSendDateMillis(form))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
-    }
-
-    @Test
-    public void setTimeStart() throws EntityNotFoundException {
-        // given
-        SetStartDateMillisForm form = new SetStartDateMillisForm(result.getId(), 120L);
-        given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
-
-        //when
-        graphTaskResultService.setStartDateMillis(form);
-
-        // then
-        verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
-        Long capturedId = idArgumentCaptor.getValue();
-        assertThat(capturedId).isEqualTo(result.getId());
-    }
-
-    @Test
-    public void setStartTimeThrowEntityNotFoundException() {
-        // given
-        SetStartDateMillisForm form = new SetStartDateMillisForm(result.getId(), 120L);
-
-        //when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.setStartDateMillis(form))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
     }
 
     @Test
@@ -481,29 +239,5 @@ public class GraphTaskResultServiceTest {
         verify(graphTaskResultRepo).findGraphTaskResultById(idArgumentCaptor.capture());
         Long capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(result.getId());
-    }
-
-    @Test
-    public void getTimeRemainingThrowEntityNotFoundException() {
-        // given
-        //when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getTimeRemaining(result.getId()))
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessageContaining("Graph task result with given id " + result.getId() + " does not exist");
-    }
-
-    @Test
-    public void getTimeRemainingThrowEntityRequiredAttributeNullException() {
-        // given
-        given(graphTaskResultRepo.findGraphTaskResultById(result.getId())).willReturn(result);
-        graphTask.setTimeToSolveMillis(1_000_000L);
-
-        //when
-        // then
-        assertThatThrownBy(() -> graphTaskResultService.getTimeRemaining(result.getId()))
-                .isInstanceOf(EntityRequiredAttributeNullException.class)
-                .hasMessageContaining("Required attribute startTimeMillis is null for " +
-                        "graph task result with id " + result.getId());
     }
 }

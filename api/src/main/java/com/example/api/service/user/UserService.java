@@ -68,8 +68,7 @@ public class UserService implements UserDetailsService {
         return userRepo.save(user);
     }
 
-    public Long registerUser(RegisterUserForm form)
-            throws RequestValidationException {
+    public Long registerUser(RegisterUserForm form) throws RequestValidationException {
         String email = form.getEmail();
         log.info("Registering user {}", email);
         User dbUser = userRepo.findUserByEmail(email);

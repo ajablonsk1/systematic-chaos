@@ -72,18 +72,19 @@ public class BadgeVisitorTest {
         surveyResult = new SurveyResult();
         additionalPoints = new AdditionalPoints();
 
-        graphTaskResult1.setPointsReceived(100d);
-        graphTaskResult2.setPointsReceived(20d);
-        fileTaskResult1.setPointsReceived(80d);
-        fileTaskResult2.setPointsReceived(30d);
-        surveyResult.setPointsReceived(5d);
-        additionalPoints.setPointsReceived(10d);
         graphTaskResult1.setUser(user);
         graphTaskResult2.setUser(user);
         fileTaskResult1.setUser(user);
         fileTaskResult2.setUser(user);
         surveyResult.setUser(user);
         additionalPoints.setUser(user);
+        graphTaskResult1.setPointsReceived(100d);
+        graphTaskResult2.setPointsReceived(20d);
+        fileTaskResult1.setPointsReceived(80d);
+        fileTaskResult2.setPointsReceived(30d);
+        surveyResult.setPointsReceived(5d);
+        additionalPoints.setPointsReceived(10d);
+        surveyResult.setSendDateMillis(System.currentTimeMillis());
 
         results = List.of(
                 graphTaskResult1,
@@ -337,6 +338,7 @@ public class BadgeVisitorTest {
         results.remove(surveyResult);
         results.remove(additionalPoints);
         GraphTaskResult graphTaskResult = new GraphTaskResult();
+        graphTaskResult.setUser(user);
         graphTaskResult.setPointsReceived(20d);
         results.add(graphTaskResult);
 
@@ -365,6 +367,7 @@ public class BadgeVisitorTest {
         results.remove(surveyResult);
         results.remove(additionalPoints);
         GraphTaskResult graphTaskResult = new GraphTaskResult();
+        graphTaskResult.setUser(user);
         graphTaskResult.setPointsReceived(20d);
         results.add(graphTaskResult);
 
@@ -393,6 +396,7 @@ public class BadgeVisitorTest {
         results.remove(surveyResult);
         results.remove(additionalPoints);
         GraphTaskResult graphTaskResult = new GraphTaskResult();
+        graphTaskResult.setUser(user);
         graphTaskResult.setPointsReceived(20d);
         results.add(graphTaskResult);
 
@@ -420,6 +424,7 @@ public class BadgeVisitorTest {
         results.remove(surveyResult);
         results.remove(additionalPoints);
         GraphTaskResult graphTaskResult = new GraphTaskResult();
+        graphTaskResult.setUser(user);
         graphTaskResult.setPointsReceived(20d);
         results.add(graphTaskResult);
 
