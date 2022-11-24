@@ -9,6 +9,7 @@ import RankAndBadgesManagement from '../../../components/professor/GameManagemen
 import ActivityDetails from '../../../components/professor/GameManagement/ActivityDetails/ActivityDetails'
 // import GameSettings from '../../../components/professor/GameManagement/GameSettings/GameSettings'
 import ChapterRequirements from '../../../components/professor/ChapterDetails/ChapterRequirements/ChapterRequirements'
+import Logs from '../../../components/professor/GameManagement/Logs/Logs'
 
 export default function GameManagementRoutes() {
   return (
@@ -27,6 +28,15 @@ export default function GameManagementRoutes() {
         element={
           <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
             <Groups />
+          </PageGuard>
+        }
+      />
+
+      <Route
+        path={'logs'}
+        element={
+          <PageGuard role={Role.LOGGED_IN_AS_TEACHER}>
+            <Logs />
           </PageGuard>
         }
       />
